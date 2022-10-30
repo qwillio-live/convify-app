@@ -107,7 +107,11 @@ State if you are open to contributions and what your requirements are for accept
 
 A list of things not working right now:
 
+<<<<<<< HEAD
 > > > > > > > b2bb7ce (docs: update README)
+=======
+1. GitHub authentication (use email)
+>>>>>>> a82ef82 (docs: update README)
 
 You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
