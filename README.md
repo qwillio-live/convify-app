@@ -20,18 +20,33 @@ git push -uf origin main
 
 ## Integrate with your tools
 
+## About this project
+
+This project as an experiment to see how a modern app (with features like authentication, subscriptions, API routes, static pages for docs ...etc) would work in Next.js 13 and server components.
+
+**This is not a starter template.**
+
 - [ ] [Set up project integrations](https://gitlab.com/romawork99/convify-app/-/settings/integrations)
 
 ## Collaborate with your team
+
+<<<<<<< HEAD
 
 - [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
 - [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
 - [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
 - [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- [ ] # [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+  > **Warning**
+  > This app is using the unstable releases for Next.js 13 and React 18. The new router and app dir is still in beta and not production-ready.
+  > **Expect some performance hits when testing the dashboard**.
+  > If you see something broken, you can ping me [@shadcn](https://twitter.com/shadcn).
+  >
+  > > > > > > > c606420 (feat: update to Next 13.3)
 
 ## Test and Deploy
 
+<<<<<<< HEAD
 Use the built-in continuous integration in GitLab.
 
 - [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
@@ -80,13 +95,49 @@ Tell people where they can go to for help. It can be any combination of an issue
 
 ## Roadmap
 
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# If you have ideas for releases in the future, it is a good idea to list them in the README.
+
+- New `/app` dir,
+- Routing, Layouts, Nested Layouts and Layout Groups
+- Data Fetching, Caching and Mutation
+- Loading UI
+- Route handlers
+- Metadata files
+- Server and Client Components
+- API Routes and Middlewares
+- Authentication using **NextAuth.js**
+- ORM using **Prisma**
+- Database on **PlanetScale**
+- UI Components built using **Radix UI**
+- Documentation and blog using **MDX** and **Contentlayer**
+- Subscriptions using **Stripe**
+- Styled using **Tailwind CSS**
+- Validations using **Zod**
+- Written in **TypeScript**
+
+## Roadmap
+
+- [x] ~Add MDX support for basic pages~
+- [x] ~Build marketing pages~
+- [x] ~Subscriptions using Stripe~
+- [x] ~Responsive styles~
+- [x] ~Add OG image for blog using @vercel/og~
+- [x] Dark mode
+  > > > > > > > c606420 (feat: update to Next 13.3)
 
 ## Contributing
 
 State if you are open to contributions and what your requirements are for accepting them.
 
+<<<<<<< HEAD
 For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+=======
+
+1. ~GitHub authentication (use email)~
+2. ~[Prisma: Error: ENOENT: no such file or directory, open '/var/task/.next/server/chunks/schema.prisma'](https://github.com/prisma/prisma/issues/16117)~
+3. ~[Next.js 13: Client side navigation does not update head](https://github.com/vercel/next.js/issues/42414)~
+4. [Cannot use opengraph-image.tsx inside catch-all routes](https://github.com/vercel/next.js/issues/48162)
+   > > > > > > > c606420 (feat: update to Next 13.3)
 
 You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
