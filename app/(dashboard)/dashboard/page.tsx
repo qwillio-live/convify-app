@@ -1,6 +1,11 @@
 "use client"
 
+import { redirect } from "next/navigation"
+
 import { useState } from "react"
+import { authOptions } from "@/lib/auth"
+import { db } from "@/lib/db"
+import { getCurrentUser } from "@/lib/session"
 import Link from "next/link"
 import {
   Bell,
@@ -28,12 +33,38 @@ import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import CreateNewFlow from "@/components/products"
 
-export default function DashboardPage() {
+export const metadata = {
+  title: "Dashboard",
+}
+
+export default async function DashboardPage() {
+
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
 
   const handleOpenCreateFlow = () => {
     setOpenCreatedFlow(true)
   }
+
+  const user = await getCurrentUser()
+
+  if (!user) {
+    redirect(authOptions?.pages?.signIn || "/login")
+  }
+
+  const posts = await db.post.findMany({
+    where: {
+      authorId: user.id,
+    },
+    select: {
+      id: true,
+      title: true,
+      published: true,
+      createdAt: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  })
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
