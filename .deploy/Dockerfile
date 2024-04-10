@@ -7,7 +7,7 @@ WORKDIR /usr/src/admin
 # install app dependencies
 COPY package.json ./
 # COPY package-lock.json ./
-RUN npm install --silent
+RUN pnpm install
 
 # Copying all the files in our project
 COPY . .
