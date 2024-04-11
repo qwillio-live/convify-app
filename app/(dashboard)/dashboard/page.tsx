@@ -1,12 +1,5 @@
-"use client"
-
-import { redirect } from "next/navigation"
-
-import { useState } from "react"
-import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
-import { getCurrentUser } from "@/lib/session"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import {
   Bell,
   Home,
@@ -19,6 +12,8 @@ import {
   Users,
 } from "lucide-react"
 
+import { authOptions } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/session"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,40 +26,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import CreateNewFlow from "@/components/products"
-
-export const metadata = {
-  title: "Dashboard",
-}
+import MainDashboard from "@/components/main-dashboard"
 
 export default async function DashboardPage() {
-
-  const [openCreateFlow, setOpenCreatedFlow] = useState(false)
-
-  const handleOpenCreateFlow = () => {
-    setOpenCreatedFlow(true)
-  }
-
   const user = await getCurrentUser()
 
   if (!user) {
     redirect(authOptions?.pages?.signIn || "/login")
   }
-
-  const posts = await db.post.findMany({
-    where: {
-      authorId: user.id,
-    },
-    select: {
-      id: true,
-      title: true,
-      published: true,
-      createdAt: true,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  })
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -231,31 +200,7 @@ export default async function DashboardPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex flex-1 flex-col p-4 lg:p-6">
-          <div className="flex items-center">
-            <h1 className="text-lg font-semibold md:text-lg">My workspace</h1>
-          </div>
-          <div
-            className="flex flex-1 items-center justify-center rounded-lg shadow-sm"
-            x-chunk="dashboard-02-chunk-1"
-          >
-            {openCreateFlow ? (
-              <CreateNewFlow />
-            ) : (
-              <div className="flex flex-col items-center gap-1 text-center">
-                <h3 className="text-2xl font-bold tracking-tight">
-                  You have no products
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  You can start selling as soon as you add a product.
-                </p>
-                <Button className="mt-4" onClick={handleOpenCreateFlow}>
-                  Add Product
-                </Button>
-              </div>
-            )}
-          </div>
-        </main>
+        <MainDashboard />
       </div>
     </div>
   )
