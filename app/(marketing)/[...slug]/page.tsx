@@ -8,7 +8,6 @@ import { Metadata } from "next"
 
 import { env } from "@/env.mjs"
 import { siteConfig } from "@/config/site"
-import { absoluteUrl } from "@/lib/utils"
 
 interface PageProps {
   params: {
@@ -50,7 +49,7 @@ export async function generateMetadata({
       title: page.title,
       description: page.description,
       type: "article",
-      url: absoluteUrl(page.slug),
+      url: page.slug,
       images: [
         {
           url: ogUrl.toString(),

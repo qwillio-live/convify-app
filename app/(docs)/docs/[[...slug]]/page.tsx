@@ -11,7 +11,6 @@ import "@/styles/mdx.css"
 import { Metadata } from "next"
 
 import { env } from "@/env.mjs"
-import { absoluteUrl } from "@/lib/utils"
 
 interface DocPageProps {
   params: {
@@ -53,7 +52,7 @@ export async function generateMetadata({
       title: doc.title,
       description: doc.description,
       type: "article",
-      url: absoluteUrl(doc.slug),
+      url: doc.slug,
       images: [
         {
           url: ogUrl.toString(),

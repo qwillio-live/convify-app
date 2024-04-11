@@ -12,7 +12,7 @@ import "@/styles/mdx.css"
 import { Metadata } from "next"
 
 import { env } from "@/env.mjs"
-import { absoluteUrl, cn } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
 interface GuidePageProps {
@@ -55,7 +55,7 @@ export async function generateMetadata({
       title: guide.title,
       description: guide.description,
       type: "article",
-      url: absoluteUrl(guide.slug),
+      url: guide.slug,
       images: [
         {
           url: ogUrl.toString(),

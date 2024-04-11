@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { UserSubscriptionPlan } from "types"
-import { cn, formatDate } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
@@ -80,7 +80,7 @@ export function BillingForm({
               {subscriptionPlan.isCanceled
                 ? "Your plan will be canceled on "
                 : "Your plan renews on "}
-              {formatDate(subscriptionPlan.stripeCurrentPeriodEnd)}.
+              {subscriptionPlan.stripeCurrentPeriodEnd}.
             </p>
           ) : null}
         </CardFooter>
