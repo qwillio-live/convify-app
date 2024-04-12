@@ -5,8 +5,9 @@ import { proPlan } from "@/config/subscriptions"
 import { authOptions } from "@/lib/auth"
 import { stripe } from "@/lib/stripe"
 import { getUserSubscriptionPlan } from "@/lib/subscription"
+import { absoluteUrl } from "@/lib/utils"
 
-const billingUrl = "/dashboard/billing"
+const billingUrl = absoluteUrl("/dashboard/billing")
 
 export async function GET(req: Request) {
   try {

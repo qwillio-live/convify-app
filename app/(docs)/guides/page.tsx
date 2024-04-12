@@ -2,6 +2,7 @@ import Link from "next/link"
 import { allGuides } from "contentlayer/generated"
 import { compareDesc } from "date-fns"
 
+import { formatDate } from "@/lib/utils"
 import { DocsPageHeader } from "@/components/page-header"
 
 export const metadata = {
@@ -46,7 +47,7 @@ export default function GuidesPage() {
                 </div>
                 {guide.date && (
                   <p className="text-sm text-muted-foreground">
-                    {guide.date}
+                    {formatDate(guide.date)}
                   </p>
                 )}
               </div>

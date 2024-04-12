@@ -3,6 +3,8 @@ import Link from "next/link"
 import { allPosts } from "contentlayer/generated"
 import { compareDesc } from "date-fns"
 
+import { formatDate } from "@/lib/utils"
+
 export const metadata = {
   title: "Blog",
 }
@@ -50,7 +52,7 @@ export default async function BlogPage() {
               )}
               {post.date && (
                 <p className="text-sm text-muted-foreground">
-                  {post.date}
+                  {formatDate(post.date)}
                 </p>
               )}
               <Link href={post.slug} className="absolute inset-0">
