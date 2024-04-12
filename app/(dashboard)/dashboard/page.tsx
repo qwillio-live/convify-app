@@ -1,7 +1,5 @@
 "use client"
 
-import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
 import { useState } from "react"
 import Link from "next/link"
 import {
@@ -29,12 +27,21 @@ import {
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import CreateNewFlow from "@/components/products"
+import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
+  const router = useRouter()
 
   const handleOpenCreateFlow = () => {
     setOpenCreatedFlow(true)
+  }
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false })
+    // document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    router.push("/login")
   }
 
   return (
@@ -198,7 +205,7 @@ export default function DashboardPage() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
