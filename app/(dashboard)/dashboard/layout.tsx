@@ -22,8 +22,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen flex-col space-y-6">
-      <header className="sticky top-0 z-40 border-b bg-background"></header>
-      <main className="container">{children}</main>
+      <main>{children}</main>
       <SiteFooter className="border-t" />
     </div>
   )
