@@ -2,8 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   Bell,
+  ChevronDown,
   Home,
   LineChart,
   Menu,
@@ -11,8 +13,10 @@ import {
   Package2,
   Search,
   ShoppingCart,
+  User,
   Users,
 } from "lucide-react"
+import { signOut } from "next-auth/react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -25,10 +29,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import CreateNewFlow from "@/components/products"
-import { signOut } from "next-auth/react"
-import { useRouter } from "next/navigation"
 
 export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
@@ -60,14 +63,27 @@ export default function DashboardPage() {
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+              <form>
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search products..."
+                    className="w-full appearance-none bg-background pl-8 shadow-none "
+                  />
+                </div>
+              </form>
+              <Separator className="my-4" />
               <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <Home className="h-4 w-4" />
-                Dashboard
+                <ChevronDown className="h-4 w-4" />
+                {/* <User className="h-4 w-4" /> */}
+                Your Workspace
               </Link>
-              <Link
+
+              {/* <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
@@ -76,15 +92,18 @@ export default function DashboardPage() {
                 <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
                   6
                 </Badge>
-              </Link>
+              </Link> */}
               <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
               >
                 <Package className="h-4 w-4" />
-                Products{" "}
+                Flows{" "}
+                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                  1
+                </Badge>
               </Link>
-              <Link
+              {/* <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
@@ -97,7 +116,7 @@ export default function DashboardPage() {
               >
                 <LineChart className="h-4 w-4" />
                 Analytics
-              </Link>
+              </Link> */}
             </nav>
           </div>
         </div>
@@ -166,7 +185,7 @@ export default function DashboardPage() {
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1">
-            <form>
+            {/* <form>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -175,7 +194,7 @@ export default function DashboardPage() {
                   className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
                 />
               </div>
-            </form>
+            </form> */}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

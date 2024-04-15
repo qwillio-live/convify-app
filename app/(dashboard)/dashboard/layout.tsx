@@ -23,7 +23,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-col space-y-6">
       <main>{children}</main>
-      <SiteFooter className="border-t" />
+      {/* <SiteFooter className="border-t" /> */}
     </div>
   )
 }
