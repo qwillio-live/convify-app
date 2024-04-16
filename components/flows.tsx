@@ -21,18 +21,21 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "./ui/badge"
+import Link from "next/link"
 
-export default function CreateNewFlow() {
+export function FlowsList() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="sm:py-0 md:gap-8">
         <div>
-          <Button size="sm" className="my-4 h-8 gap-1">
-            <Plus className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Create new flow
-            </span>
-          </Button>
+        <Link className="flex items-center" href="/dashboard/flows/create-flow">
+          <Button size="sm" className="my-4 h-8 gap-1 py-2">
+              <Plus className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Create new flow
+              </span>
+            </Button>
+          </Link>
           <Card>
             <CardHeader>
               <CardTitle>Products</CardTitle>

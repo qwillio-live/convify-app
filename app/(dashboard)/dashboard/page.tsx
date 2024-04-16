@@ -11,6 +11,7 @@ import {
   Menu,
   Package,
   Package2,
+  Plus,
   Search,
   ShoppingCart,
   User,
@@ -31,7 +32,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import CreateNewFlow from "@/components/products"
+import {FlowsList} from "@/components/flows"
 
 export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
@@ -81,6 +82,7 @@ export default function DashboardPage() {
                 {/* <User className="h-4 w-4" /> */}
                 Your Workspace
               </div>
+
               {/* <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -91,16 +93,17 @@ export default function DashboardPage() {
                   6
                 </Badge>
               </Link> */}
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
+              <div
+              onClick={() => setOpenCreatedFlow(true)}
+                // href="/dashboard/flows"
+                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:cursor-pointer hover:text-primary"
               >
                 <Package className="h-4 w-4" />
                 Flows{" "}
                 <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
                   1
                 </Badge>
-              </Link>
+              </div>
               {/* <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -238,7 +241,7 @@ export default function DashboardPage() {
             x-chunk="dashboard-02-chunk-1"
           >
             {openCreateFlow ? (
-              <CreateNewFlow />
+              <FlowsList />
             ) : (
               <div className="flex flex-col items-center gap-1 text-center">
                 <h3 className="text-2xl font-bold tracking-tight">
