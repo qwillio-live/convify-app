@@ -56,8 +56,8 @@ export default function CreateFlowsPage() {
   return (
     <div className="min-h-screen w-full">
       <Tabs defaultValue="create">
-        <div className="sticky top-0">
-          <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+        <div className="sticky top-0 z-0 ">
+          <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/20 px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
                 <BreadCrumbs />
@@ -157,54 +157,12 @@ export default function CreateFlowsPage() {
             </div>
           </header>
         </div>
-        <main className="content px-4 lg:px-6">
+        <main className="content relative z-50 overflow-hidden px-4 lg:px-6">
           <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
               <CreateFlowComponent />
             </TabsContent>
             <TabsContent className="mt-0" value="connect">
-              {/* <div className="flex justify-center pt-6 w-full">
-                <div
-                  className="flex  flex-col"
-                  style={{
-                    width: "50%",
-                  }}
-                >
-                  <div className="w-full mb-6">
-                    <Search className="h-3.5 w-3.5" />
-                    <input type="text" className="py-4 w-full rounded-md" />
-                  </div>
-                  <div className="flex ">
-                    <div>
-                      <div className="h-10 w-10 rounded"></div>
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex">
-                        <h1>Email</h1>
-                        <span>active</span>
-                      </div>
-                      <p>Enter your email</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <div>
-                      <div className="h-10 w-10 rounded"></div>
-                    </div>
-                    <div className="flex">
-                      <div className="flex flex-col">
-                        <div className="flex">
-                          <h1>Email</h1>
-                          <span>active</span>
-                        </div>
-                        <p>Enter your email</p>
-                      </div>
-                    </div>
-                    <button className="rounded bg-black p-2 text-white">
-                      Coonect
-                    </button>
-                  </div>
-                </div>
-              </div> */}
               <ConnectFlowComponents />
             </TabsContent>
             <TabsContent className="mt-0" value="share">
