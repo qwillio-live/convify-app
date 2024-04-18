@@ -37,6 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
 import { FlowsList } from "@/components/flows"
+import ConnectFlowComponents from "@/components/sections/connect/Connect"
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
@@ -162,7 +163,49 @@ export default function CreateFlowsPage() {
               <CreateFlowComponent />
             </TabsContent>
             <TabsContent className="mt-0" value="connect">
-              Conenct your flows.
+              {/* <div className="flex justify-center pt-6 w-full">
+                <div
+                  className="flex  flex-col"
+                  style={{
+                    width: "50%",
+                  }}
+                >
+                  <div className="w-full mb-6">
+                    <Search className="h-3.5 w-3.5" />
+                    <input type="text" className="py-4 w-full rounded-md" />
+                  </div>
+                  <div className="flex ">
+                    <div>
+                      <div className="h-10 w-10 rounded"></div>
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex">
+                        <h1>Email</h1>
+                        <span>active</span>
+                      </div>
+                      <p>Enter your email</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <div>
+                      <div className="h-10 w-10 rounded"></div>
+                    </div>
+                    <div className="flex">
+                      <div className="flex flex-col">
+                        <div className="flex">
+                          <h1>Email</h1>
+                          <span>active</span>
+                        </div>
+                        <p>Enter your email</p>
+                      </div>
+                    </div>
+                    <button className="rounded bg-black p-2 text-white">
+                      Coonect
+                    </button>
+                  </div>
+                </div>
+              </div> */}
+              <ConnectFlowComponents />
             </TabsContent>
             <TabsContent className="mt-0" value="share">
               Share your flows.
