@@ -12,7 +12,7 @@ interface IntegrationCardProps {
 }
 
 const IntegrationCard = ({ Integrationitem }: IntegrationCardProps) => {
-  const { title, description, image, status, alt } = Integrationitem
+  const { title, description, image, status, alt, id } = Integrationitem
   return (
     <div className="mb-6 flex items-center rounded-md bg-white px-4 py-6">
       <div>
