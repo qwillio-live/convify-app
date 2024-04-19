@@ -162,6 +162,7 @@ export default function CreateFlowsPage() {
             <TabsContent className="mt-0" value="create">
               <CreateFlowComponent />
             </TabsContent>
+
             <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />
             </TabsContent>
