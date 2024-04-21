@@ -29,3 +29,15 @@ export const DummyIntregationCardData: TIntegrationCardData[] = [
     alt: "intregation option",
   },
 ]
+
+
+export const NothingFound: TIntegrationCardData[] = [
+  {
+    id: 0,
+    title: "Sorry",
+    description: "Nothing Found",
+    image: '',
+    status: "none",
+    alt: "",
+  }
+]
