@@ -1,5 +1,5 @@
 import { LocalIcons } from "@/public/icons"
-import { TIntegrationCardData } from "@/types"
+import { TIntegrationCardData, TSelectOptions } from "@/types"
 
 export const DummyIntregationCardData: TIntegrationCardData[] = [
   {
@@ -30,14 +30,25 @@ export const DummyIntregationCardData: TIntegrationCardData[] = [
   },
 ]
 
-
-export const NothingFound: TIntegrationCardData[] = [
+export const InsightsDevices: TSelectOptions[] = [
   {
-    id: 0,
-    title: "Sorry",
-    description: "Nothing Found",
-    image: '',
-    status: "none",
-    alt: "",
-  }
+    id: 1,
+    value: "All Devices",
+    label: "All Devices",
+  },
+  {
+    id: 2,
+    value: "Desktop",
+    label: "Desktop",
+  },
+  {
+    id: 3,
+    value: "Mobile",
+    label: "Mobile",
+  },
+  {
+    id: 4,
+    value: "Tablet",
+    label: "Tablet",
+  },
 ]

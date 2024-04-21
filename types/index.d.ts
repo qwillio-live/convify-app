@@ -72,3 +72,9 @@ export type TIntegrationCardData = {
   alt: string
   id: number
 }
+
+export type TSelectOptions = {
+  id: number
+  value: string
+  label: string
+}
