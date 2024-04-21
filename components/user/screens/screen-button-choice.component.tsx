@@ -109,14 +109,3 @@ ButtonChoiceScreen.craft = {
   },
 };
 
-export const TextDefaultProps = {
-  text: "Your text here",
-  fontSize: 20,
-}
-
-UserText.craft = {
-  props: TextDefaultProps,
-  related: {
-    settings: UserTextSettings,
-  },
-}

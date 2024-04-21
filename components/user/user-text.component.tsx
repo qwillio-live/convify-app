@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import { Controller } from "./settings/controller.component"
 
 export const UserText = ({
   text = "",
@@ -23,10 +24,12 @@ export const UserText = ({
   const {
     connectors: { connect, drag },
     selected,
+    isHovered,
     actions: { setProp },
   } = useNode((state) => ({
     selected: state.events.selected,
     dragged: state.events.dragged,
+    isHovered: state.events.hovered,
   }))
   const [editable, setEditable] = useState(false)
 
@@ -39,10 +42,12 @@ export const UserText = ({
   }, [selected])
   return (
     <div
+      className="relative border border-dashed border-transparent transition-all duration-200 hover:border-blue-400 focus:border-blue-400"
       {...props}
       ref={(ref: HTMLElement | null) => ref && connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >
+      {isHovered && <Controller nameOfComponent={"TEXT"}/>}
       <ContentEditable
         html={text}
         disabled={!editable}

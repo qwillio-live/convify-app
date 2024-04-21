@@ -71,6 +71,7 @@ export function CreateFlowComponent() {
                   padding={5}
                   background="#ad2121"
                   canvas
+                  expanded={true}
                   className="min-h-screen min-w-full"
                 >
                   {/* <ButtonChoiceScreen /> */}
@@ -102,5 +103,6 @@ export function CreateFlowComponent() {
     </div>
   )
 }
+
 
 CreateFlowComponent
