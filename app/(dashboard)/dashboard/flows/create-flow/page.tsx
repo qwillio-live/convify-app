@@ -62,10 +62,17 @@ export default function CreateFlowsPage() {
   }
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen w-full">
       <Tabs defaultValue="create" onValueChange={onTabChange}>
         <div className="sticky top-0 z-0 ">
           <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/20 px-4 lg:h-[60px] lg:px-6">
+=======
+    <div className="max-h-screen min-h-screen w-full overflow-hidden">
+      <Tabs defaultValue="create" className="tabs-doc flex flex-col">
+        <div className="sticky top-0">
+          <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+>>>>>>> 8f8420a799fe39d75f04d82c071e76497c636ad2
             <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
                 <BreadCrumbs />
@@ -84,25 +91,25 @@ export default function CreateFlowsPage() {
             <div className="tabs-list-container flex h-full">
               <TabsList className="flex h-full bg-inherit py-0 ">
                 <TabsTrigger
-                  className="h-full rounded-none border-b border-transparent data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                  className="h-full rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="create"
                 >
                   Create
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none  border-b border-transparent data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                  className="h-full rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="connect"
                 >
                   Connect
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full  rounded-none border-b border-transparent data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                  className="h-full  rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="share"
                 >
                   Share
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full  rounded-none border-b border-transparent data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                  className="h-full  rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="results"
                 >
                   Results
@@ -165,12 +172,17 @@ export default function CreateFlowsPage() {
             </div>
           </header>
         </div>
+<<<<<<< HEAD
         <main
           className={`content relative z-50 overflow-hidden ${
             tab === "results" ? "" : "px-4 lg:px-6"
           }`}
         >
           <div className="tabs-content">
+=======
+        <main className="content flex-1 overflow-y-hidden pl-4 lg:pl-6">
+          <div className="tabs-content overflow-y-auto">
+>>>>>>> 8f8420a799fe39d75f04d82c071e76497c636ad2
             <TabsContent className="mt-0" value="create">
               <CreateFlowComponent />
             </TabsContent>
