@@ -59,26 +59,19 @@ export function CreateFlowComponent() {
               </Button>
             </div>
             <div className="section-body">
-              <UserToolbox />
-            </div>
-          </ScrollArea>
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">
-            <div className="section-header flex items-center justify-between"></div>
-            <div className="section-body">
-              <SettingsPanel />
+              <ScreensList />
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
-            <div className="section-header flex items-center justify-between">
-              <h4 className="text-base font-normal tracking-tight"></h4>
-            </div>
+            <div className="section-header flex items-center justify-between"></div>
             <div className="section-body">
-              <Frame>
+            <Frame>
                 <Element
                   is={"div"}
                   padding={5}
                   background="#ad2121"
                   canvas
+                  expanded={true}
                   className="min-h-screen min-w-full"
                 >
                   {/* <ButtonChoiceScreen /> */}
@@ -88,12 +81,21 @@ export function CreateFlowComponent() {
               </Frame>
             </div>
           </ScrollArea>
+          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">
+            <div className="section-header flex items-center justify-between">
+              <h4 className="text-base font-normal tracking-tight"></h4>
+            </div>
+            <div className="section-body">
+              <UserToolbox />
+            </div>
+          </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pr-4 lg:pr-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
             <div className="section-body overflow-y-auto">
-              <ScreensList />
+              <SettingsPanel />
+
             </div>
           </ScrollArea>
         </div>
@@ -101,5 +103,6 @@ export function CreateFlowComponent() {
     </div>
   )
 }
+
 
 CreateFlowComponent

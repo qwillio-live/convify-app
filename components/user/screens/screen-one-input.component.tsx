@@ -19,7 +19,7 @@ export const ScreenOneInput = ({ ...props }) => {
         background="#ad2121"
         canvas
         className="min-w-ful min-h-screen max-w-md"
-        id="button-choice-screens"
+        id="one-input-screens"
       >
         <Element
           is={"div"}
@@ -86,23 +86,11 @@ export const ScreenOneInput = ({ ...props }) => {
 }
 
 ScreenOneInput.craft = {
-  displayName: "One Choice",
+  displayName: "One Input",
   props: {},
   rules: {
     canDrag: (self: Node, helper) => true,
     canMoveIn: (incoming: Node[], self: Node, helper) => true,
     canMoveOut: (outgoing: Node[], self: Node, helper) => true,
-  },
-}
-
-export const TextDefaultProps = {
-  text: "Your text here",
-  fontSize: 20,
-}
-
-UserText.craft = {
-  props: TextDefaultProps,
-  related: {
-    settings: UserTextSettings,
   },
 }

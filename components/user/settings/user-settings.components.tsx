@@ -3,6 +3,7 @@ import { useEditor } from "@craftjs/core"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Layers } from '@craftjs/layers';
 
 export const SettingsPanel = () => {
   const { actions, selected, isEnabled } = useEditor((state, query) => {
@@ -54,7 +55,10 @@ export const SettingsPanel = () => {
           >
             Delete
           </Button>
-        ) : null}
+        ) :
+        null
+        }
+        <Layers expandRootOnLoad={true} />
       </div>
     </div>
   ) : null
