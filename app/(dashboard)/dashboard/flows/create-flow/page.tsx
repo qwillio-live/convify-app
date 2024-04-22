@@ -37,9 +37,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
 import { FlowsList } from "@/components/flows"
-// sections
-import ResultFlowComponents from "@/components/sections/createFlow/Result/Result"
 import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
+// sections
+import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
