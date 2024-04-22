@@ -27,4 +27,4 @@ RUN NODE_OPTIONS=--max_old_space_size=1024 npm run build
 EXPOSE 3000
 
 # start app
-CMD [ "pnpm", "dev" ]
+CMD [ "pnpm", "postinstall" ]
