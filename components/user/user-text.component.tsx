@@ -44,7 +44,7 @@ export const UserText = ({
     <div
       className="relative border border-dashed border-transparent transition-all duration-200 hover:border-blue-400 focus:border-blue-400"
       {...props}
-      ref={(ref: HTMLElement | null) => ref && connect(drag(ref))}
+      ref={(ref: any) => ref && connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >
       {isHovered && <Controller nameOfComponent={"TEXT"}/>}

@@ -16,7 +16,8 @@ export const UserToolbox = () => {
         <div className="w-full flex-col">
           <div
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-            ref={(ref: HTMLDivElement | null) => ref && connectors.create(ref, <UserText text="Your text" />)}
+            //eslint-disable-next-line
+            ref={(ref: any) => ref && connectors.create(ref, <UserText text="Your text" />)}
             data-cy="toolbox-text"
           >
             Text field
