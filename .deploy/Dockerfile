@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
 # create destination directory
-RUN mkdir -p /usr/src/convify-app
+RUN mkdir -p /usr/src/convify-app && chmod -R 777 /usr/src/convify-app
 WORKDIR /usr/src/convify-app
 
 # install app dependencies
