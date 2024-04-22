@@ -7,7 +7,8 @@ WORKDIR /usr/src/convify-app
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm install --silent
+RUN ls -al
+RUN npm install --force
 
 # Copying all the files in our project
 COPY . .
