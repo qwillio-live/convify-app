@@ -18,13 +18,14 @@ RUN pnpm install
 # Copying all the files in our project
 COPY . .
 
-RUN NODE_OPTIONS=--max_old_space_size=1024 npm run build
+#RUN NODE_OPTIONS=--max_old_space_size=1024 npm run build
+RUN NODE_OPTIONS=--max_old_space_size=1024 pnpm run postinstall
 
 
 # Build the Next.js application
-# RUN npm run build
+RUN pnpm run build
 
 EXPOSE 3000
 
 # start app
-CMD [ "pnpm", "dev" ]
+CMD [ "pnpm", "start" ]
