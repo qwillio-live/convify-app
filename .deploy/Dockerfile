@@ -20,7 +20,6 @@ COPY . .
 
 RUN NODE_OPTIONS=--max_old_space_size=1024 npm run build
 
-RUN prisma generate --schema=./prisma/schema.prisma
 
 # Build the Next.js application
 # RUN npm run build
@@ -28,4 +27,4 @@ RUN prisma generate --schema=./prisma/schema.prisma
 EXPOSE 3000
 
 # start app
-CMD [ "pnpm", "start" ]
+CMD [ "pnpm", "dev" ]
