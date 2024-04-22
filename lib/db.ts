@@ -1,6 +1,6 @@
-// import { PrismaClient } from "../node_modules/.prisma/client/index.js"
+import { PrismaClient } from "../node_modules/.prisma/client/index.js"
 
-import { PrismaClient } from "@prisma/client"
+//import { PrismaClient } from "@prisma/client"
 
 declare global {
   // eslint-disable-next-line no-var

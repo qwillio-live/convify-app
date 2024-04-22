@@ -6,6 +6,9 @@
     "name": "shadcn",
     "url": "https://twitter.com/shadcn"
   },
+  "engines": {
+    "node": "<=18.0.0"
+  },
   "scripts": {
     "dev": "concurrently \"contentlayer dev\" \"next dev\"",
     "build": "contentlayer build && next build",
