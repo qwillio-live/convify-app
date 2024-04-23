@@ -25,6 +25,9 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
+import { Button as UserButton } from "../user/button/user-button.component"
+import { Container,UserContainer } from "../user/container/user-container.component"
+import { Card,CardTop } from "../user/card/user-card.component"
 
 export function CreateFlowComponent() {
   return (
@@ -32,6 +35,7 @@ export function CreateFlowComponent() {
       <Editor
         resolver={{
           UserText,
+          UserButton,
           ButtonChoiceScreen,
           ScreenHeader,
           ScreenFooter,
@@ -48,6 +52,10 @@ export function CreateFlowComponent() {
           Github,
           Globe,
           Linkedin,
+          Container,
+          Card,
+          CardTop,
+          UserContainer,
         }}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
@@ -64,7 +72,7 @@ export function CreateFlowComponent() {
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
             <div className="section-header flex items-center justify-between"></div>
-            <div className="section-body">
+            <div className="section-body pt-8">
             <Frame>
                 <Element
                   is={"div"}
@@ -74,9 +82,7 @@ export function CreateFlowComponent() {
                   expanded={true}
                   className="min-h-screen min-w-full"
                 >
-                  {/* <ButtonChoiceScreen /> */}
-                  {/* <ScreenOneChoice /> */}
-                  <ScreenOneInput />
+
                 </Element>
               </Frame>
             </div>

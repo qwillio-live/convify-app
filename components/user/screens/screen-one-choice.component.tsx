@@ -17,7 +17,7 @@ export const ScreenOneChoice = ({ ...props }) => {
         padding={5}
         background="#ad2121"
         canvas
-        className="min-w-ful min-h-screen"
+        className="min-h-screen min-w-full"
         id="one-choice-screens"
       >
         <Element

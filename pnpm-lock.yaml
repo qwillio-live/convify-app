@@ -149,6 +149,9 @@ dependencies:
   class-variance-authority:
     specifier: ^0.4.0
     version: 0.4.0(typescript@4.7.4)
+  classnames:
+    specifier: ^2.5.1
+    version: 2.5.1
   clsx:
     specifier: ^1.2.1
     version: 1.2.1
@@ -227,6 +230,9 @@ dependencies:
   stripe:
     specifier: ^11.18.0
     version: 11.18.0
+  styled-components:
+    specifier: ^6.1.8
+    version: 6.1.8(react-dom@18.2.0)(react@18.2.0)
   tailwind-merge:
     specifier: ^1.12.0
     version: 1.12.0
@@ -3616,6 +3622,10 @@ packages:
         optional: true
     dependencies:
       typescript: 4.7.4
+    dev: false
+
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
     dev: false
 
   /client-only@0.0.1:
