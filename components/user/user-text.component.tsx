@@ -8,11 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
@@ -26,8 +21,8 @@ import {
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 
-import { Controller } from "./settings/controller.component"
 import { Input } from "../ui/input"
+import { Controller } from "./settings/controller.component"
 
 export const UserText = ({
   text = "",
@@ -39,6 +34,7 @@ export const UserText = ({
   marginTop = 0,
   marginBottom = 0,
   textColor,
+  tagType,
   ...props
 }) => {
   const {
@@ -78,7 +74,7 @@ export const UserText = ({
             500
           )
         }
-        tagName="p"
+        tagName={tagType}
         className={`${fontWeight}`}
         style={{
           fontSize: `${fontSize}px`,
@@ -87,7 +83,7 @@ export const UserText = ({
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
-          color: `${textColor}`
+          color: `${textColor}`,
         }}
       />
     </div>
@@ -106,6 +102,7 @@ export const UserTextSettings = () => {
     marginTop,
     marginBottom,
     textColor,
+    tagType,
   } = useNode((node) => ({
     text: node.data.props.text,
     fontSize: node.data.props.fontSize,
@@ -116,6 +113,7 @@ export const UserTextSettings = () => {
     marginTop: node.data.props.marginTop,
     marginBottom: node.data.props.marginBottom,
     textColor: node.data.props.textColor,
+    tagType: node.data.props.tagType,
   }))
 
   return (
@@ -126,6 +124,31 @@ export const UserTextSettings = () => {
             <span className="text-sm font-medium">Typography </span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-2 p-2">
+            <div className="style-control flex flex-col gap-2 pb-4 pt-2">
+              <p className="text-md text-muted-foreground">Type</p>
+              <Select
+                defaultValue={tagType}
+                onValueChange={(e) => {
+                  setProp((props) => (props.tagType = e), 1000)
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select text type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="h1">Heading 1</SelectItem>
+                    <SelectItem value="h2">Heading 2</SelectItem>
+                    <SelectItem value="h3">Heading 3</SelectItem>
+                    <SelectItem value="h4">Heading 4</SelectItem>
+                    <SelectItem value="h5">Heading 5</SelectItem>
+                    <SelectItem value="h6">Heading 6</SelectItem>
+                    <SelectItem value="p">Paragraph</SelectItem>
+                    <SelectItem value="span">Span</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Size</p>
               <Slider
@@ -256,7 +279,6 @@ export const UserTextSettings = () => {
                   setProp((props) => (props.textColor = e.target.value), 1000)
                 }}
               />
-
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -275,6 +297,7 @@ export const TextDefaultProps = {
   marginRight: 0,
   marginTop: 0,
   marginBottom: 0,
+  tagType: "p",
 }
 
 UserText.craft = {
