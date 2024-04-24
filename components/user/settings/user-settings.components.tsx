@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Layers } from '@craftjs/layers';
 
+
 export const SettingsPanel = () => {
   const { actions, selected, isEnabled } = useEditor((state, query) => {
     const currentNodeId = query.getEvent("selected").last()
@@ -35,7 +36,7 @@ export const SettingsPanel = () => {
           <div className="pb-2">
             <div className="flex flex-row items-center">
               <h4 className="mr-2 text-lg font-medium leading-none">
-                Customize {selected.name}
+                Customize
               </h4>
             </div>
           </div>
@@ -52,6 +53,7 @@ export const SettingsPanel = () => {
               actions.delete(selected.id)
             }}
             variant="destructive"
+            className="mb-4"
           >
             Delete
           </Button>

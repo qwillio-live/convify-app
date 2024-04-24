@@ -20,6 +20,13 @@ import { UserText } from "@/components/user/user-text.component"
 import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
+import { Button as UserButton } from "../user/button/user-button.component"
+import { Card, CardTop } from "../user/card/user-card.component"
+import {
+  Container,
+  UserContainer,
+} from "../user/container/user-container.component"
+import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { ButtonChoiceScreen } from "../user/screens/screen-button-choice.component"
 import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
@@ -32,6 +39,7 @@ export function CreateFlowComponent() {
       <Editor
         resolver={{
           UserText,
+          UserButton,
           ButtonChoiceScreen,
           ScreenHeader,
           ScreenFooter,
@@ -48,6 +56,11 @@ export function CreateFlowComponent() {
           Github,
           Globe,
           Linkedin,
+          Container,
+          Card,
+          CardTop,
+          UserContainer,
+          IconButton,
         }}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
@@ -64,8 +77,8 @@ export function CreateFlowComponent() {
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
             <div className="section-header flex items-center justify-between"></div>
-            <div className="section-body">
-            <Frame>
+            <div className="section-body pt-8">
+              <Frame>
                 <Element
                   is={"div"}
                   padding={5}
@@ -73,11 +86,7 @@ export function CreateFlowComponent() {
                   canvas
                   expanded={true}
                   className="min-h-screen min-w-full"
-                >
-                  {/* <ButtonChoiceScreen /> */}
-                  {/* <ScreenOneChoice /> */}
-                  <ScreenOneInput />
-                </Element>
+                ></Element>
               </Frame>
             </div>
           </ScrollArea>
@@ -95,7 +104,6 @@ export function CreateFlowComponent() {
             </div>
             <div className="section-body overflow-y-auto">
               <SettingsPanel />
-
             </div>
           </ScrollArea>
         </div>
@@ -103,6 +111,5 @@ export function CreateFlowComponent() {
     </div>
   )
 }
-
 
 CreateFlowComponent

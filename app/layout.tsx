@@ -8,8 +8,12 @@ import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@/components/analytics"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const fontSans = FontSans({
-  subsets: ["latin"],
+// const fontSans = FontSans({
+//   subsets: ["latin"],
+//   variable: "--font-sans",
+// })
+const fontSans = localFont({
+  src: "../assets/fonts/Inter-Regular.ttf",
   variable: "--font-sans",
 })
 

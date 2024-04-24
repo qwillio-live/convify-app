@@ -42,14 +42,12 @@ export const ScreenOneInput = ({ ...props }) => {
             text="Two more steps."
             fontSize={45}
             textAlign="center"
-            fontWeight="font-bold"
-          />
+            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}          />
           <UserText
             text="Last few details required"
             fontSize={22}
             textAlign="center"
-            fontWeight="font-light"
-          />
+            fontWeight="font-light" textColor={"inherit"} tagType={"p"}          />
           <Element
             is={"div"}
             background="#ad2121"

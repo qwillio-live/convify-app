@@ -17,7 +17,7 @@ export const ScreenOneChoice = ({ ...props }) => {
         padding={5}
         background="#ad2121"
         canvas
-        className="min-w-ful min-h-screen"
+        className="min-h-screen min-w-full"
         id="one-choice-screens"
       >
         <Element
@@ -41,8 +41,7 @@ export const ScreenOneChoice = ({ ...props }) => {
             text="Which marketing channels do you use?"
             fontSize={40}
             textAlign="center"
-            fontWeight="font-bold"
-          />
+            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}          />
           <Element
             is={"div"}
             background="#ad2121"
