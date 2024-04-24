@@ -2,10 +2,12 @@ import React from "react"
 import { Element, useEditor } from "@craftjs/core"
 
 import { Button } from "@/components/ui/button"
+import { Button as UserButton } from "@/components/user/button/user-button.component"
 import { UserText } from "@/components/user/user-text.component"
-import {Button as UserButton} from "@/components/user/button/user-button.component"
-import { Container } from "../container/user-container.component"
+
 import { Card } from "../card/user-card.component"
+import { Container } from "../container/user-container.component"
+import { IconButton } from "../icon-button/user-icon-button.component"
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
@@ -20,7 +22,9 @@ export const UserToolbox = () => {
           <div
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
-            ref={(ref: any) => ref && connectors.create(ref, <UserText text="Your text" />)}
+            ref={(ref: any) =>
+              ref && connectors.create(ref, <UserText text="Your text" />)
+            }
             data-cy="toolbox-text"
           >
             Text field
@@ -29,7 +33,18 @@ export const UserToolbox = () => {
           <div
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
-            ref={(ref: any) => ref && connectors.create(ref, <UserButton size={"small"} variant={"outline"} color={"#ff235"} text={"Button"} />)}
+            ref={(ref: any) =>
+              ref &&
+              connectors.create(
+                ref,
+                <UserButton
+                  size={"small"}
+                  variant={"outline"}
+                  color={"#ff235"}
+                  text={"Button"}
+                />
+              )
+            }
             data-cy="toolbox-text"
           >
             Button
@@ -53,6 +68,14 @@ export const UserToolbox = () => {
             Container
           </div>
 
+          <div
+            className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            //eslint-disable-next-line
+            ref={(ref: any) => ref && connectors.create(ref, <IconButton />)}
+            data-cy="toolbox-text"
+          >
+            Icon Button
+          </div>
         </div>
       </div>
     </div>

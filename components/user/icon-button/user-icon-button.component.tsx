@@ -1,5 +1,14 @@
 import React from "react"
-import { Element, Node, NodeHelpers, useNode } from "@craftjs/core"
+import { useNode } from "@craftjs/core"
+import {
+  Activity,
+  Anchor,
+  Aperture,
+  Disc,
+  DollarSign,
+  Mountain,
+} from "lucide-react"
+import ContentEditable from "react-contenteditable"
 
 import {
   Accordion,
@@ -7,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button as CustomButton } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -24,108 +34,126 @@ import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
 
-export const UserContainer = ({
-  padding,
-  width,
-  height,
-  background,
+const IconsList = {
+  aperture: <Aperture />,
+  activity: <Activity />,
+  dollarsign: <DollarSign />,
+  anchor: <Anchor />,
+  disc: <Disc />,
+  mountain: <Mountain />,
+}
+export const IconButton = ({
+  size,
+  variant,
   color,
-  marginLeft,
-  marginTop,
-  marginRight,
-  marginBottom,
+  text,
+  marginLeft = 0,
+  width: width,
+  height: height,
+  marginRight = 0,
+  marginTop = 0,
+  marginBottom = 0,
+  background,
+  custom,
+  icon,
   paddingLeft,
   paddingTop,
   paddingRight,
   paddingBottom,
   radius,
-  shadow,
   flexDirection,
-  fillSpace,
   alignItems,
   justifyContent,
-  flexWrap,
-  children,
-  overflowY,
-  overflowX,
   gap,
   border,
   borderColor,
   ...props
 }) => {
   const {
+    actions: { setProp },
     connectors: { connect, drag },
-  } = useNode()
+    selected,
+    isHovered,
+  } = useNode((state) => ({
+    selected: state.events.selected,
+    isHovered: state.events.hovered,
+  }))
   return (
-    <div
-      {...props}
+    <CustomButton
       ref={(ref: any) => connect(drag(ref))}
+      // size={size}
+      className="relative  gap-2  border border-dashed border-transparent transition-all duration-200 hover:border-blue-400 focus:border-blue-400"
+      variant={variant}
       style={{
-        width: `${width}`,
-        height: `${height}`,
-        backgroundColor: `${background}`,
-        color: `${color}`,
+        ...(custom
+          ? { color: `${color}`, backgroundColor: `${background}` }
+          : null),
         marginLeft: `${marginLeft}px`,
-        marginTop: `${marginTop}px`,
+        width,
+        height,
         marginRight: `${marginRight}px`,
+        marginTop: `${marginTop}px`,
         marginBottom: `${marginBottom}px`,
         paddingLeft: `${paddingLeft}px`,
         paddingTop: `${paddingTop}px`,
         paddingRight: `${paddingRight}px`,
         paddingBottom: `${paddingBottom}px`,
         borderRadius: `${radius}px`,
-        flexDirection,
-        alignItems: `${alignItems}`,
-        justifyContent: `${justifyContent}`,
-        flexWrap,
-        padding: `${padding}px`,
-        boxShadow:
-          shadow === 0
-            ? "none"
-            : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
-        flex: fillSpace == "1" ? 1 : "unset",
-        display: "flex",
-        overflowY,
-        overflowX,
+        flexDirection: flexDirection,
+        alignItems: alignItems,
+        justifyContent: justifyContent,
         gap: `${gap}px`,
         border: `${border}px solid ${borderColor}`,
       }}
+      {...props}
     >
-      {children}
-    </div>
+      {isHovered && <Controller nameOfComponent={"BUTTON"} />}
+      <ContentEditable
+        html={text}
+        onChange={(e) =>
+          setProp(
+            (props) =>
+              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
+            500
+          )
+        }
+        tagName="span"
+      />
+      {IconsList[icon]}
+    </CustomButton>
   )
 }
 
-export const UserContainerSettings = () => {
+export const IconButtonSettings = () => {
   const {
+    actions: { setProp },
     props: {
-      padding,
-      width,
-      height,
+      props,
+      size,
+      variant,
       background,
       color,
-      marginLeft,
-      marginTop,
-      marginRight,
-      marginBottom,
+      text,
+      custom,
+      icon,
       paddingLeft,
       paddingTop,
       paddingRight,
       paddingBottom,
       radius,
-      shadow,
       flexDirection,
-      fillSpace,
       alignItems,
       justifyContent,
-      flexWrap,
-      overflowY,
-      overflowX,
       gap,
-      borderColor,
       border,
+      borderColor,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      width,
+      height,
     },
-    actions: { setProp },
   } = useNode((node) => ({
     props: node.data.props,
   }))
@@ -134,6 +162,48 @@ export const UserContainerSettings = () => {
     <>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Button content </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+              <p className="text-md flex-1 text-muted-foreground">Icon</p>
+              <Select
+                defaultValue={icon}
+                onValueChange={(e) => {
+                  setProp((props) => (props.icon = e), 1000)
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select icon" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="aperture">
+                      <Aperture />
+                    </SelectItem>
+                    <SelectItem value="activity">
+                      <Activity />
+                    </SelectItem>
+                    <SelectItem value="dollarsign">
+                      <DollarSign />
+                    </SelectItem>
+                    <SelectItem value="anchor">
+                      <Anchor />
+                    </SelectItem>
+                    <SelectItem value="disc">
+                      <Disc />
+                    </SelectItem>
+                    <SelectItem value="mountain">
+                      <Mountain />
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-7">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Dimensions </span>
           </AccordionTrigger>
@@ -158,78 +228,13 @@ export const UserContainerSettings = () => {
                 className="w-full"
               />
             </div>
-            <div className="style-control col-span-2 flex grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Overflow X</p>
-              <Select
-                onValueChange={(e) => {
-                  setProp((props) => (props.overflowX = e), 1000)
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue className="capitalize" placeholder={overflowY} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="hidden">Hidden</SelectItem>
-                    <SelectItem value="auto">Auto</SelectItem>
-                    <SelectItem value="scroll">Scroll</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="style-control col-span-2 flex grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Overflow Y</p>
-              <Select
-                onValueChange={(e) => {
-                  setProp((props) => (props.overflowY = e), 1000)
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue className="capitalize" placeholder={overflowY} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="hidden">Hidden</SelectItem>
-                    <SelectItem value="auto">Auto</SelectItem>
-                    <SelectItem value="scroll">Scroll</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Colors </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="style-control flex flex-col gap-2">
-              <p className="text-md text-muted-foreground">Text</p>
-              <Input
-                type="color"
-                value={color}
-                onChange={(e) => {
-                  setProp((props) => (props.color = e.target.value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control flex flex-col gap-2">
-              <p className="text-md text-muted-foreground">Background</p>
-              <Input
-                type="color"
-                value={background}
-                onChange={(e) => {
-                  setProp((props) => (props.background = e.target.value), 1000)
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Margin </span>
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
               <Slider
@@ -281,8 +286,7 @@ export const UserContainerSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item-4">
+        <AccordionItem value="item-6">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Padding </span>
           </AccordionTrigger>
@@ -338,72 +342,89 @@ export const UserContainerSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item-5">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Decoration </span>
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
+            <span className="text-sm font-medium">Appearance</span>
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Border</p>
-              <Slider
-                defaultValue={[border]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.border = value), 1000)
+          <AccordionContent className="flex flex-col gap-y-2 p-2">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="custom"
+                checked={custom}
+                onCheckedChange={(e) => {
+                  setProp((props) => (props.custom = e), 1000)
                 }}
               />
+              <label
+                htmlFor="custom"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Custom button
+              </label>
             </div>
-            <div className="style-control col-span-2 flex flex-col gap-2">
-              <p className="text-md text-muted-foreground">Border color</p>
-              <Input
-                type="color"
-                value={borderColor}
-                onChange={(e) => {
-                  setProp((props) => (props.borderColor = e.target.value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Radius</p>
-              <Slider
-                defaultValue={[radius]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.radius = value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Shadow</p>
-              <Slider
-                defaultValue={[shadow]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.shadow = value), 1000)
-                }}
-              />
-            </div>
+
+            {!custom ? (
+              <div className="style-control flex flex-col gap-2 pb-4 pt-2">
+                <p className="text-md text-muted-foreground">Variant</p>
+                <Select
+                  onValueChange={(e) => {
+                    setProp((props) => (props.variant = e), 1000)
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select style" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Style variant</SelectLabel>
+                      <SelectItem value="primary">Primary</SelectItem>
+                      <SelectItem value="secondary">Secondary</SelectItem>
+                      <SelectItem value="destructive">Destructive</SelectItem>
+                      <SelectItem value="outline">Outline</SelectItem>
+                      <SelectItem value="ghost">Ghost</SelectItem>
+                      <SelectItem value="link">Link</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <>
+                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+                  <p className="text-md text-muted-foreground">Text</p>
+                  <Input
+                    type="color"
+                    value={color}
+                    onChange={(e) => {
+                      setProp((props) => (props.color = e.target.value), 1000)
+                    }}
+                  />
+                </div>
+                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+                  <p className="text-md text-muted-foreground">Background</p>
+                  <Input
+                    type="color"
+                    value={background}
+                    onChange={(e) => {
+                      setProp(
+                        (props) => (props.background = e.target.value),
+                        1000
+                      )
+                    }}
+                  />
+                </div>
+              </>
+            )}
           </AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item-6">
+        <AccordionItem value="item-4">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Alignment </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="style-control col-span-1 flex w-full flex-col gap-2">
+            <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Direction</p>
               <RadioGroup
-                defaultValue="column"
+                defaultValue={flexDirection}
                 onValueChange={(value) => {
                   setProp((props) => (props.flexDirection = value), 1000)
                 }}
@@ -416,24 +437,13 @@ export const UserContainerSettings = () => {
                   <RadioGroupItem value="row" id="r3" />
                   <Label htmlFor="r3">Row</Label>
                 </div>
-              </RadioGroup>
-            </div>
-
-            <div className="style-control col-span-1 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Fill Space</p>
-              <RadioGroup
-                defaultValue={fillSpace}
-                onValueChange={(value) => {
-                  setProp((props) => (props.fillSpace = value), 1000)
-                }}
-              >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"1"} id="r2" />
-                  <Label htmlFor="r2">Yes</Label>
+                  <RadioGroupItem value="column-reverse" id="r4" />
+                  <Label htmlFor="r4">Column reverse</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"0"} id="r3" />
-                  <Label htmlFor="r3">No</Label>
+                  <RadioGroupItem value="row-reverse" id="r5" />
+                  <Label htmlFor="r5">Row reverse</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -499,75 +509,84 @@ export const UserContainerSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value="item-5">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Decoration </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
+            <div className="style-control col-span-2 flex w-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Border</p>
+              <Slider
+                defaultValue={[border]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.border = value), 1000)
+                }}
+              />
+            </div>
+            <div className="style-control col-span-2 flex flex-col gap-2">
+              <p className="text-md text-muted-foreground">Border color</p>
+              <Input
+                type="color"
+                value={borderColor}
+                onChange={(e) => {
+                  setProp((props) => (props.borderColor = e.target.value), 1000)
+                }}
+              />
+            </div>
+            <div className="style-control col-span-2 flex w-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Radius</p>
+              <Slider
+                defaultValue={[radius]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.radius = value), 1000)
+                }}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </>
   )
 }
 
-export const ContainerDefaultProps = {
-  padding: 40,
+export const IconButtonDefaultProps = {
   width: "auto",
   height: "auto",
+  size: "small",
+  variant: "primary",
+  custom: false,
   background: "inherit",
   color: "inherit",
-  marginLeft: "2",
-  marginTop: "2",
-  marginRight: "2",
-  marginBottom: "2",
+  text: "Click me",
+  marginLeft: 0,
+  marginTop: 0,
+  marginRight: 0,
+  marginBottom: 0,
+  icon: "aperture",
   paddingLeft: "4",
   paddingTop: "4",
   paddingRight: "4",
   paddingBottom: "4",
   radius: "none",
-  shadow: "none",
-  flexDirection: "column",
-  fillSpace: "1",
+  flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
-  flexWrap: "nowrap",
-  overflowY: "hidden",
-  overflowX: "hidden",
-  gap: 0,
+  gap: 4,
   border: 0,
   borderColor: "inherit",
 }
 
-UserContainer.craft = {
-  props: ContainerDefaultProps,
+IconButton.craft = {
+  props: IconButtonDefaultProps,
   related: {
-    settings: UserContainerSettings,
-  },
-}
-
-export const Container = ({ ...props }) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-    isHovered,
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    isHovered: state.events.hovered,
-  }))
-  return (
-    <div
-      className="relative border border-dashed border-transparent transition-all duration-200 selection:border-blue-400 hover:border-blue-400 focus:border-blue-400"
-      {...props}
-      ref={(ref: any) => ref && connect(drag(ref))}
-    >
-      {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
-      <Element
-        canvas
-        id="user-container"
-        is={UserContainer}
-        data-cy="user-container"
-      ></Element>
-    </div>
-  )
-}
-
-Container.craft = {
-  props: ContainerDefaultProps,
-  related: {
-    settings: UserContainerSettings,
+    settings: IconButtonSettings,
   },
 }

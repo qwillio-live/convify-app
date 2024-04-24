@@ -4,11 +4,7 @@ import { useEditor } from "@craftjs/core"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Layers } from '@craftjs/layers';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+
 
 export const SettingsPanel = () => {
   const { actions, selected, isEnabled } = useEditor((state, query) => {
