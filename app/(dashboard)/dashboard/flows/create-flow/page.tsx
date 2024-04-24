@@ -37,9 +37,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
 import { FlowsList } from "@/components/flows"
+import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
+// sections
+import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
+  const [tab, setTab] = useState("create")
+
+  // store the current tab value
+  const onTabChange = (value: string) => {
+    setTab(value)
+  }
   const router = useRouter()
 
   const handleOpenCreateFlow = () => {
@@ -53,10 +62,10 @@ export default function CreateFlowsPage() {
   }
 
   return (
-    <div className="max-h-screen min-h-screen w-full overflow-hidden">
-      <Tabs defaultValue="create" className="tabs-doc flex flex-col">
-        <div className="sticky top-0">
-          <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+    <div className="min-h-screen w-full">
+      <Tabs defaultValue="create" onValueChange={onTabChange}>
+        <div className="sticky top-0 z-0 ">
+          <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/20 px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
                 <BreadCrumbs />
@@ -156,19 +165,24 @@ export default function CreateFlowsPage() {
             </div>
           </header>
         </div>
-        <main className="content flex-1 overflow-y-hidden pl-4 lg:pl-6">
-          <div className="tabs-content overflow-y-auto">
+        <main
+          className={`content relative z-50 overflow-hidden ${
+            tab === "results" ? "" : "px-4 lg:px-6"
+          }`}
+        >
+          <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
               <CreateFlowComponent />
             </TabsContent>
+
             <TabsContent className="mt-0" value="connect">
-              Conenct your flows.
+              <ConnectFlowComponents />
             </TabsContent>
             <TabsContent className="mt-0" value="share">
               Share your flows.
             </TabsContent>
             <TabsContent className="mt-0" value="results">
-              Results of your flows.
+              <ResultFlowComponents />
             </TabsContent>
           </div>
         </main>

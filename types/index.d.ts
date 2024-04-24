@@ -63,3 +63,18 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     stripeCurrentPeriodEnd: number
     isPro: boolean
   }
+
+export type TIntegrationCardData = {
+  title: string
+  description: string
+  image: string | StaticImageData
+  status: string
+  alt: string
+  id: number
+}
+
+export type TSelectOptions = {
+  id: number
+  value: string
+  label: string
+}
