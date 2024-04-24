@@ -555,6 +555,7 @@ export const Container = ({ ...props }) => {
       ref={(ref: any) => ref && connect(drag(ref))}
     >
       {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
+      {/** @ts-ignore */}
       <Element
         canvas
         id="user-container"
