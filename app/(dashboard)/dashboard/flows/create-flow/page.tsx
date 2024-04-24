@@ -167,7 +167,7 @@ export default function CreateFlowsPage() {
         </div>
         <main
           className={`content relative z-50 overflow-hidden ${
-            tab === "results" ? "" : "px-4 lg:px-6"
+            tab === "results" ? "" :` "px-4 lg:px-6"`
           }`}
         >
           <div className="tabs-content">
