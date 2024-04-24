@@ -41,8 +41,7 @@ export const ScreenOneChoice = ({ ...props }) => {
             text="Which marketing channels do you use?"
             fontSize={40}
             textAlign="center"
-            fontWeight="font-bold"
-          />
+            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}          />
           <Element
             is={"div"}
             background="#ad2121"

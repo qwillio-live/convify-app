@@ -23,7 +23,7 @@ export const UserToolbox = () => {
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
             ref={(ref: any) =>
-              ref && connectors.create(ref, <UserText text="Your text" />)
+              ref && connectors.create(ref, <UserText text="Your text" textColor={"inherit"} tagType={"p"} />)
             }
             data-cy="toolbox-text"
           >
@@ -41,8 +41,7 @@ export const UserToolbox = () => {
                   size={"small"}
                   variant={"outline"}
                   color={"#ff235"}
-                  text={"Button"}
-                />
+                  text={"Button"} background={undefined} custom={undefined}                />
               )
             }
             data-cy="toolbox-text"
@@ -53,7 +52,7 @@ export const UserToolbox = () => {
           <div
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
-            ref={(ref: any) => ref && connectors.create(ref, <Card />)}
+            ref={(ref: any) => ref && connectors.create(ref, <Card background={undefined} />)}
             data-cy="toolbox-text"
           >
             Card
@@ -71,7 +70,7 @@ export const UserToolbox = () => {
           <div
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
-            ref={(ref: any) => ref && connectors.create(ref, <IconButton />)}
+            ref={(ref: any) => ref && connectors.create(ref, <IconButton size={undefined} variant={undefined} color={undefined} text={undefined} width={undefined} height={undefined} background={undefined} custom={undefined} icon={undefined} paddingLeft={undefined} paddingTop={undefined} paddingRight={undefined} paddingBottom={undefined} radius={undefined} flexDirection={undefined} alignItems={undefined} justifyContent={undefined} gap={undefined} border={undefined} borderColor={undefined} />)}
             data-cy="toolbox-text"
           >
             Icon Button
