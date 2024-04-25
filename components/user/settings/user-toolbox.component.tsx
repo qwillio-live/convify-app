@@ -70,7 +70,7 @@ export const UserToolbox = () => {
           <div
             className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
-            ref={(ref: any) => ref && connectors.create(ref, <IconButton size={undefined} variant={undefined} color={undefined} text={undefined} width={undefined} height={undefined} background={undefined} custom={undefined} icon={undefined} paddingLeft={undefined} paddingTop={undefined} paddingRight={undefined} paddingBottom={undefined} radius={undefined} flexDirection={undefined} alignItems={undefined} justifyContent={undefined} gap={undefined} border={undefined} borderColor={undefined} />)}
+            ref={(ref: any) => ref && connectors.create(ref, <IconButton size={undefined} variant={undefined} color={undefined} text={"Click me"} width={undefined} height={undefined} background={undefined} custom={undefined} icon={undefined} paddingLeft={undefined} paddingTop={undefined} paddingRight={undefined} paddingBottom={undefined} radius={undefined} flexDirection={undefined} alignItems={undefined} justifyContent={undefined} gap={undefined} border={undefined} borderColor={undefined} />)}
             data-cy="toolbox-text"
           >
             Icon Button
