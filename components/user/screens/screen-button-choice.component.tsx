@@ -72,11 +72,11 @@ export const ButtonChoiceScreen = ({...props}) => {
             className="flex min-w-full max-w-md flex-row items-center justify-center gap-2 px-4"
             id="button-choice-buttons"
           >
-            <Button className="flex h-24 w-24 max-w-md flex-col items-center justify-center gap-2 px-2 text-center">
+            <Button className="flex size-24 max-w-md flex-col items-center justify-center gap-2 px-2 text-center">
                <Check /><span>Yes</span>
             </Button>
 
-            <Button className="flex h-24 w-24 max-w-md flex-col items-center justify-center gap-2 px-2 text-center">
+            <Button className="flex size-24 max-w-md flex-col items-center justify-center gap-2 px-2 text-center">
               <Cross /> <span>No</span>
             </Button>
           </Element>

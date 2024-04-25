@@ -12,8 +12,8 @@ interface SearchBarProps {
 
 const SearchBar = ({ search, setSearch }: SearchBarProps) => {
   return (
-    <div className="flex w-full items-center rounded-md border-[1px] border-solid border-gray-400 px-3">
-      <Search className="h-3.5 w-3.5" />
+    <div className="flex w-full items-center rounded-md border-DEFAULT border-solid border-gray-400 px-3">
+      <Search className="size-3.5" />
       <div className="relative w-full">
         <Input
           type="text"
@@ -27,7 +27,7 @@ const SearchBar = ({ search, setSearch }: SearchBarProps) => {
         {search && (
           <X
             onClick={() => setSearch("")}
-            className="pointer absolute right-0 top-[32%] h-3.5 w-3.5"
+            className="pointer absolute right-0 top-[32%] size-3.5"
           />
         )}
       </div>

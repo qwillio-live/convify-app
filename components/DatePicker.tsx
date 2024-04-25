@@ -97,7 +97,7 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
               !date && "text-muted-foreground"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="mr-2 size-4" />
             {date?.from ? (
               date.to ? (
                 <>
@@ -110,7 +110,7 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
             ) : (
               <span>All time</span>
             )}
-             <ChevronDown className="ml-2 h-4 w-4" color="gray" />
+             <ChevronDown className="ml-2 size-4" color="gray" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">

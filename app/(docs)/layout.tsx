@@ -30,7 +30,7 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Icons.google className="h-7 w-7" />
+                <Icons.google className="size-7" />
                 <span className="sr-only">Google</span>
               </Link>
             </nav>

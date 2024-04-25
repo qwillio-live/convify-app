@@ -12,10 +12,10 @@ const InsightsFlowComponents = () => {
   return (
     <div className="flex  flex-col">
       <div className="flex gap-3 border-b py-4">
-        <div className="w-[40%]">
+        <div className="w-2/5">
           <DatePicker date={date} setDate={setDate} />
         </div>
-        <div className="w-[40%] ">
+        <div className="w-2/5 ">
           <CustomSelect
             selectedOptions={InsightsDevices}
             setSelected={setSelected}
@@ -28,23 +28,23 @@ const InsightsFlowComponents = () => {
 
       <div className="mt-10 text-2xl">Big picture</div>
       <div className="flex gap-10 py-4">
-        <div className="w-[40%]">
+        <div className="w-2/5">
           <div>Views</div>
           <div className="text-5xl">0</div>
         </div>
-        <div className="w-[40%]">
+        <div className="w-2/5">
           <div>Starts</div>
           <div className="text-5xl">0</div>
         </div>
-        <div className="w-[40%]">
+        <div className="w-2/5">
           <div>Submissions</div>
           <div className="text-5xl">0</div>
         </div>
-        <div className="w-[40%]">
+        <div className="w-2/5">
           <div>Completion rate</div>
           <div className="text-5xl">-</div>
         </div>
-        <div className="w-[40%]">
+        <div className="w-2/5">
           <div>Time To Complete</div>
           <div className="text-5xl">-</div>
         </div>

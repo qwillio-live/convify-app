@@ -15,6 +15,7 @@
     "turbo": "next dev --turbo",
     "start": "next start",
     "lint": "next lint",
+    "lintFix": "next lint --fix",
     "preview": "next build && next start",
     "postinstall": "prisma generate"
   },

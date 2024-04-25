@@ -12,5 +12,5 @@ export function ProgressBar() {
     return () => clearTimeout(timer)
   }, [])
 
-  return <Progress value={progress} className="h-1 w-[60%]" />
+  return <Progress value={progress} className="h-1 w-3/5" />
 }

@@ -87,8 +87,8 @@ export default function CreateFlowsPage() {
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
                     Content
                   </h4>
-                  <Button size="icon" className="h-8 w-8">
-                    <Plus className="h-3.5 w-3.5" />
+                  <Button size="icon" className="size-8">
+                    <Plus className="size-3.5" />
                   </Button>
                 </div>
               </div>
@@ -128,7 +128,7 @@ export default function CreateFlowsPage() {
                   size="sm"
                   className="my-4 h-8 gap-1 p-2"
                 >
-                  <Eye className="h-3.5 w-3.5" />
+                  <Eye className="size-3.5" />
                 </Button>
               </div>
               <div className="">
@@ -251,7 +251,7 @@ export default function CreateFlowsPage() {
                           </div>
                           <button
                             type="button"
-                            className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-bl-none rounded-tl-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]"
+                            className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]"
                           >
                             Copy link
                           </button>

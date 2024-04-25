@@ -67,8 +67,8 @@ export function CreateFlowComponent() {
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight">Content</h4>
-              <Button size="icon" className="h-6 w-6">
-                <Plus className="h-3.5 w-3.5" />
+              <Button size="icon" className="size-6">
+                <Plus className="size-3.5" />
               </Button>
             </div>
             <div className="section-body">
