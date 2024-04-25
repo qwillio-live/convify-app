@@ -25,9 +25,9 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative z-50  flex items-start justify-center overflow-hidden px-4 lg:px-6">
-          <div className="tabs-content flex w-[60%] items-center justify-start">
-            <TabsContent className="mt-0 w-full" value="insights">
+        <main className="content relative  z-50 flex  items-start justify-center overflow-hidden bg-gray-100   px-4 lg:px-6 ">
+          <div className="tabs-content flex w-[60%] items-center justify-start ">
+            <TabsContent className="mt-0 w-full " value="insights" style={{height:"87.3vh"}}>
               <InsightsFlowComponents />
             </TabsContent>
             <TabsContent className="mt-0 h-full w-full" value="responses">

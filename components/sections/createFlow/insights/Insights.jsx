@@ -15,7 +15,7 @@ const InsightsFlowComponents = () => {
         <div className="w-[40%]">
           <DatePicker date={date} setDate={setDate} />
         </div>
-        <div className="w-[40%]">
+        <div className="w-[40%] ">
           <CustomSelect
             selectedOptions={InsightsDevices}
             setSelected={setSelected}

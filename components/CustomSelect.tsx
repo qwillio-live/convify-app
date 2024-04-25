@@ -25,7 +25,7 @@ export function CustomSelect({
   const { value } = selected // Optional
   return (
     <Select defaultValue={value} onValueChange={setSelected}>
-      <SelectTrigger className="focus:ring-none w-[180px] outline-none focus:outline-none focus:ring-0 focus:ring-offset-0">
+      <SelectTrigger className="focus:ring-none w-[180px] bg-gray-200 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 ">
         <MonitorSpeaker />
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

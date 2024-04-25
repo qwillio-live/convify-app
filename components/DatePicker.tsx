@@ -93,7 +93,7 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
             id="date"
             variant={"outline"}
             className={cn(
-              "justify-start text-left font-normal",
+              "justify-start bg-gray-200 text-left font-normal ",
               !date && "text-muted-foreground"
             )}
           >

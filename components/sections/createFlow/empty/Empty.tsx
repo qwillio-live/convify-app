@@ -7,10 +7,10 @@ const EmptyResponse = () => {
     <div
       className="flex  min-w-full items-center justify-center"
     >
-      <div className="mt-56 flex h-full w-full items-center justify-center ">
+      <div className="mb-60 mt-56  flex h-full w-full items-center justify-center ">
         <div className="max-w-[360px]">
           <div className="mb-2 flex items-center justify-center ">
-            <Image src={LocalImages.noresponse} alt="no response" className="w-56"/>
+            <Image src={LocalImages.noresponse} alt="no response" className="mt-8 w-56 "/>
           </div>
           <span className="leading-32 block text-center text-xl font-light  ">
             No signs of movement...
