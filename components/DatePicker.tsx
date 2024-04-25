@@ -113,13 +113,25 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
+          {/* <Calendar
             initialFocus
             mode="range"
             defaultMonth={date?.from}
             selected={date}
             onSelect={(range) => {
               (range.from && range.to) && setDate({ from: range.from, to: range.to });
+            }}
+            numberOfMonths={2}
+          /> */}
+          <Calendar
+            initialFocus
+            mode="range"
+            defaultMonth={date?.from}
+            selected={date}
+            onSelect={(range) => {
+              if (range && range.from && range.to) {
+                setDate({ from: range.from, to: range.to });
+              }
             }}
             numberOfMonths={2}
           />

@@ -7,12 +7,12 @@ const EmptyResponse = () => {
     <div
       className="flex  min-w-full items-center justify-center"
     >
-      <div className="flex h-full w-full items-center justify-center mt-56">
+      <div className="mt-56 flex h-full w-full items-center justify-center ">
         <div className="max-w-[360px]">
-          <div className="flex items-center justify-center mb-2">
+          <div className="mb-2 flex items-center justify-center ">
             <Image src={LocalImages.noresponse} alt="no response" className="w-56"/>
           </div>
-          <span className="text-xl leading-32 block text-center font-light">
+          <span className="leading-32 block text-center text-xl font-light  ">
             No signs of movement...
           </span>
           <div className="mt-2">
@@ -27,7 +27,7 @@ const EmptyResponse = () => {
               color="#737373"
               href="/"
               target="_blank"
-              className="relative text-center opacity-90 leading-5 underline outline-none"
+              className="relative text-center leading-5  underline  opacity-90 outline-none  "
             >
               How to set up notifications
             </a>
