@@ -1,38 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { Eye, Plus } from "lucide-react"
+import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import {
-  Bell,
-  ChevronDown,
-  Eye,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Plus,
-  Search,
-  ShoppingCart,
-  User,
-  Users,
-} from "lucide-react"
-import { signOut } from "next-auth/react"
+import { useState } from "react"
 
+import { BreadCrumbs } from "@/components/breadcrumbs"
+import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
+import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,14 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BreadCrumbs } from "@/components/breadcrumbs"
-import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
-import { FlowsList } from "@/components/flows"
-import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 
@@ -76,7 +46,7 @@ export default function CreateFlowsPage() {
   return (
     <div className="min-h-screen w-full">
       <Tabs defaultValue="create" onValueChange={onTabChange}>
-        <div className="sticky top-0 z-0 ">
+        <div className="sticky top-0 z-50 bg-[#070e1f]">
           <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/20 px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
@@ -87,8 +57,8 @@ export default function CreateFlowsPage() {
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
                     Content
                   </h4>
-                  <Button size="icon" className="h-8 w-8">
-                    <Plus className="h-3.5 w-3.5" />
+                  <Button size="icon" className="size-8">
+                    <Plus className="size-3.5" />
                   </Button>
                 </div>
               </div>
@@ -128,7 +98,7 @@ export default function CreateFlowsPage() {
                   size="sm"
                   className="my-4 h-8 gap-1 p-2"
                 >
-                  <Eye className="h-3.5 w-3.5" />
+                  <Eye className="size-3.5" />
                 </Button>
               </div>
               <div className="">
@@ -178,7 +148,7 @@ export default function CreateFlowsPage() {
           </header>
         </div>
         <main
-          className={`content relative z-50 overflow-hidden ${
+          className={`content relative z-40 overflow-hidden ${
             tab === "results" ? "" : ` "px-4 lg:px-6"`
           }`}
         >
@@ -251,7 +221,7 @@ export default function CreateFlowsPage() {
                           </div>
                           <button
                             type="button"
-                            className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-bl-none rounded-tl-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]"
+                            className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]"
                           >
                             Copy link
                           </button>
