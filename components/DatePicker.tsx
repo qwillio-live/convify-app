@@ -58,7 +58,7 @@
 "use client"
 
 import * as React from "react"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { ArrowDown, Calendar as CalendarIcon, ChevronDown } from "lucide-react"
 import { addDays, format } from "date-fns"
 import { DateRange } from "react-day-picker"
 
@@ -93,7 +93,7 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
+              "justify-start text-left font-normal",
               !date && "text-muted-foreground"
             )}
           >
@@ -108,8 +108,9 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
                 format(date?.from, "LLL dd, y")
               )
             ) : (
-              <span>Pick a date</span>
+              <span>All time</span>
             )}
+             <ChevronDown className="ml-2 h-4 w-4" color="gray" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -129,11 +130,10 @@ export function DatePicker({ date, setDate, className }: DatePickerProps) {
             defaultMonth={date?.from}
             selected={date}
             onSelect={(range) => {
-              if (range && range.from && range.to) {
-                setDate({ from: range.from, to: range.to });
-              }
+              // if (range && range.from && range.to) {
+              setDate({ from: range?.from, to: range?.to });
+              // }
             }}
-            numberOfMonths={2}
           />
         </PopoverContent>
       </Popover>

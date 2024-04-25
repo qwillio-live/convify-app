@@ -96,25 +96,25 @@ export default function CreateFlowsPage() {
             <div className="tabs-list-container flex h-full ">
               <TabsList className="flex h-full bg-inherit py-0 ">
                 <TabsTrigger
-                  className="h-full rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full  rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="create"
                 >
                   Create
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full  rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="connect"
                 >
                   Connect
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full  rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full   rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="share"
                 >
                   Share
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full  rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full   rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="results"
                 >
                   Results
@@ -178,8 +178,8 @@ export default function CreateFlowsPage() {
           </header>
         </div>
         <main
-          className={`content relative  z-50 overflow-hidden ${
-            tab === "results" ? "" : "px-4 lg:px-6"
+          className={`content relative z-50 overflow-hidden ${
+            tab === "results" ? "" : ` "px-4 lg:px-6"`
           }`}
         >
           <div className="tabs-content ">
