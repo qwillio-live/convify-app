@@ -56,17 +56,15 @@ export const ButtonChoiceScreen = ({...props}) => {
           id="one-choice-content"
         >
             <UserText
-              text="See how much you can save with Convify."
-              fontSize={45}
-              textAlign="center"
-              fontWeight="font-bold"
-            />
+            text="See how much you can save with Convify."
+            fontSize={45}
+            textAlign="center"
+            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}            />
             <UserText
-              text="Does your business have a website"
-              fontSize={32}
-              textAlign="center"
-              fontWeight="font-medium"
-            />
+            text="Does your business have a website"
+            fontSize={32}
+            textAlign="center"
+            fontWeight="font-medium" textColor={"inherit"} tagType={"p"}            />
             <Element
             is={"div"}
             background="#ad2121"
