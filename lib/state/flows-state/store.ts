@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import screensReducer from './features/placeholderScreensSlice';
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {},
+    reducer: {
+      screen: screensReducer,
+    },
   })
 }
 

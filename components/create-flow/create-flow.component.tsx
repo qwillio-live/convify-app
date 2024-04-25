@@ -1,5 +1,5 @@
 import React from "react"
-import { Editor, Element, Frame } from "@craftjs/core"
+import { Editor, Element, Frame, useEditor } from "@craftjs/core"
 import {
   ArrowRight,
   Check,
@@ -33,7 +33,12 @@ import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 
+const SaveButton = () => {
+  const { query } = useEditor();
+  return <a className="fixed left-3 top-3 z-10 bg-black p-3 text-white" onClick={() => console.log(query.serialize()) }>Get JSON</a>
+}
 export function CreateFlowComponent() {
+
   return (
     <div className="min-h-screen w-full">
       <Editor
@@ -61,6 +66,7 @@ export function CreateFlowComponent() {
           CardTop,
           UserContainer,
           IconButton,
+          // ScreenFrames,
         }}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
@@ -73,6 +79,7 @@ export function CreateFlowComponent() {
             </div>
             <div className="section-body">
               <ScreensList />
+              {/* <ScreenFrames /> */}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
@@ -84,10 +91,11 @@ export function CreateFlowComponent() {
                   padding={5}
                   background="#ad2121"
                   canvas
-                  expanded={true}
                   className="min-h-screen min-w-full"
-                ></Element>
+                >
+                </Element>
               </Frame>
+              <SaveButton />
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">
