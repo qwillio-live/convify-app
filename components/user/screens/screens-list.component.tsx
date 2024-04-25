@@ -12,8 +12,8 @@ import { ButtonChoiceScreen } from './screen-button-choice.component';
 import { useAppSelector, useAppDispatch } from '@/lib/state/flows-state/hooks';
 import { reorderScreens, setSelectedScreen } from '@/lib/state/flows-state/features/placeholderScreensSlice';
 import { Editor,useEditor } from '@craftjs/core';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { DragDrop } from './drag-drop-screens.component';
+import { Element } from '@craftjs/core';
 
 
 
@@ -33,6 +33,15 @@ const ScreensList = () => {
   }, [actions, selectedScreen]);
 
   return (
+    <>
+    <Element
+        is={"div"}
+        padding={5}
+        background="#ad2121"
+        canvas
+        className="min-w-ful min-h-screen max-w-md"
+        id="one-input-screens"
+      >
     <Accordion type="single" collapsible className="w-full overflow-x-hidden" defaultValue="item-2">
       <AccordionItem value="item-1">
         <AccordionTrigger className="uppercase hover:no-underline">Header & Footer</AccordionTrigger>
@@ -61,7 +70,8 @@ const ScreensList = () => {
 
         </AccordionContent>
       </AccordionItem>
-    </Accordion>
+    </Accordion></Element>
+    </>
   );
 };
 

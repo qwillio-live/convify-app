@@ -66,7 +66,6 @@ export function CreateFlowComponent() {
           CardTop,
           UserContainer,
           IconButton,
-          // ScreenFrames,
         }}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
@@ -79,7 +78,6 @@ export function CreateFlowComponent() {
             </div>
             <div className="section-body">
               <ScreensList />
-              {/* <ScreenFrames /> */}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
