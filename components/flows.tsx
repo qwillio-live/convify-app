@@ -30,7 +30,7 @@ export function FlowsList() {
         <div>
         <Link className="flex items-center" href="/dashboard/flows/create-flow">
           <Button size="sm" className="my-4 h-8 gap-1 py-2">
-              <Plus className="size-3.5" />
+              <Plus className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Create new flow
               </span>
@@ -88,7 +88,7 @@ export function FlowsList() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="size-4" />
+                            <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -125,7 +125,7 @@ export function FlowsList() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="size-4" />
+                            <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -160,7 +160,7 @@ export function FlowsList() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="size-4" />
+                            <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -197,7 +197,7 @@ export function FlowsList() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="size-4" />
+                            <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -234,7 +234,7 @@ export function FlowsList() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="size-4" />
+                            <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -269,7 +269,7 @@ export function FlowsList() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="size-4" />
+                            <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
