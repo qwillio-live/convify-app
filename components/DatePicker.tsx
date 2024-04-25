@@ -71,18 +71,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-
+interface dateDetails {
+  from: Date | undefined,
+  to: Date | undefined,
+}
 
 interface DatePickerProps {
-  date: Date
-  setDate: (date: Date) => void
-  className?: string
+  date: dateDetails;
+  setDate: (date: dateDetails) => void;
+  className?: string;
 }
 
 
-export function DatePicker({date,setDate,className}:DatePickerProps) {
-  console.log("🚀 ~ file: DatePicker.tsx:84 ~ DatePicker ~ date:", date)
-  
+export function DatePicker({ date, setDate, className }: DatePickerProps) {
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -100,11 +101,11 @@ export function DatePicker({date,setDate,className}:DatePickerProps) {
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date?.from, "LLL dd, y")} -{" "}
+                  {format(date?.to, "LLL dd, y")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date?.from, "LLL dd, y")
               )
             ) : (
               <span>Pick a date</span>
@@ -117,7 +118,9 @@ export function DatePicker({date,setDate,className}:DatePickerProps) {
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={(range) => {
+              (range.from && range.to) && setDate({ from: range.from, to: range.to });
+            }}
             numberOfMonths={2}
           />
         </PopoverContent>
