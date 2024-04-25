@@ -11,13 +11,13 @@ const ResultFlowComponents = () => {
           <div className="tabs-list-container flex h-full w-[60%] items-center justify-start">
             <TabsList className="flex h-full bg-inherit py-0 ">
               <TabsTrigger
-                className="h-full rounded-none border-b border-transparent uppercase data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit "
                 value="insights"
               >
                 insights
               </TabsTrigger>
               <TabsTrigger
-                className="h-full rounded-none  border-b border-transparent uppercase data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                className="h-full rounded-none  border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
                 value="responses"
               >
                 responses
