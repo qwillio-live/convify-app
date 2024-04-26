@@ -52,6 +52,7 @@ const ScreensList = () => {
       <AccordionItem value="item-2">
         <AccordionTrigger className="uppercase hover:no-underline">Screens</AccordionTrigger>
         <AccordionContent className='flex flex-col gap-2'>
+
           {screens.map((screen, index) => (
             <div key={index}>
               <Card className='flex h-28 w-full flex-col items-center justify-center p-4 hover:cursor-pointer' onClick={() => dispatch(setSelectedScreen(index))}><span>Screen {index+1}</span></Card>
