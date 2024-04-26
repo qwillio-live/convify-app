@@ -4,7 +4,14 @@ import { MoreHorizontal, Plus } from "lucide-react"
 import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,17 +27,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Badge } from "./ui/badge"
 import Link from "next/link"
+import { Badge } from "./ui/badge"
 
 export function FlowsList() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="sm:py-0 md:gap-8">
         <div>
-        <Link className="flex items-center" href="/dashboard/flows/create-flow">
-          <Button size="sm" className="my-4 h-8 gap-1 py-2">
-              <Plus className="h-3.5 w-3.5" />
+          <Link
+            className="flex items-center"
+            href="/dashboard/flows/create-flow"
+          >
+            <Button size="sm" className="my-4 h-8 gap-1 py-2">
+              <Plus className="size-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Create new flow
               </span>
@@ -38,9 +48,9 @@ export function FlowsList() {
           </Link>
           <Card>
             <CardHeader>
-              <CardTitle>Products</CardTitle>
+              <CardTitle>My flows</CardTitle>
               <CardDescription>
-                Manage your products and view their sales performance.
+                Manage your flows and view their performance.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -56,7 +66,9 @@ export function FlowsList() {
                     <TableHead className="hidden md:table-cell">
                       Total Sales
                     </TableHead>
-                    <TableHead className="hidden md:table-cell">Created at</TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Created at
+                    </TableHead>
                     <TableHead>
                       <span className="sr-only">Actions</span>
                     </TableHead>
@@ -87,8 +99,12 @@ export function FlowsList() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -124,8 +140,12 @@ export function FlowsList() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -147,7 +167,9 @@ export function FlowsList() {
                         width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">AeroGlow Desk Lamp</TableCell>
+                    <TableCell className="font-medium">
+                      AeroGlow Desk Lamp
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline">Active</Badge>
                     </TableCell>
@@ -159,8 +181,12 @@ export function FlowsList() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -196,8 +222,12 @@ export function FlowsList() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -233,8 +263,12 @@ export function FlowsList() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
@@ -256,7 +290,9 @@ export function FlowsList() {
                         width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">Luminous VR Headset</TableCell>
+                    <TableCell className="font-medium">
+                      Luminous VR Headset
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline">Active</Badge>
                     </TableCell>
@@ -268,8 +304,12 @@ export function FlowsList() {
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
