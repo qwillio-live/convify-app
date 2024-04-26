@@ -94,6 +94,7 @@ export const UserToolbox = () => {
                 connectors.create(
                   ref,
                   <IconButton
+                    disabled={false}
                     size={undefined}
                     variant={undefined}
                     color={undefined}
