@@ -1,5 +1,4 @@
 import React from "react"
-import { useNode } from "@/lib/craftjs"
 import {
   Activity,
   Anchor,
@@ -10,6 +9,7 @@ import {
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
+import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
@@ -43,6 +43,7 @@ const IconsList = {
   mountain: <Mountain />,
 }
 export const IconButton = ({
+  disabled,
   size,
   variant,
   color,
@@ -108,8 +109,10 @@ export const IconButton = ({
       {...props}
     >
       {isHovered && <Controller nameOfComponent={"BUTTON"} />}
+
       <ContentEditable
         html={text}
+        disabled={disabled}
         onChange={(e) =>
           setProp(
             (props) =>

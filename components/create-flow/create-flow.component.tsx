@@ -35,10 +35,10 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { DragDrop } from "../user/screens/drag-drop-screens.component"
 
-// const SaveButton = () => {
-//   const { query } = useEditor();
-//   return <a className="fixed left-3 top-3 z-10 bg-black p-3 text-white" onClick={() => console.log(query.serialize()) }>Get JSON</a>
-// }
+const SaveButton = () => {
+  const { query } = useEditor();
+  return <a className="fixed left-3 top-3 z-10 bg-black p-3 text-white" onClick={() => console.log(query.serialize()) }>Get JSON</a>
+}
 export function CreateFlowComponent() {
   const currentScreen = useAppSelector((state) => state.screen.screens[state.screen.selectedScreen])
   return (
@@ -69,6 +69,7 @@ export function CreateFlowComponent() {
           UserContainer,
           IconButton,
           DragDrop,
+          UserToolbox,
         }}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
@@ -88,7 +89,9 @@ export function CreateFlowComponent() {
             <div className="section-header flex items-center justify-between"></div>
             <div className="section-body pt-8">
               <Frame data={currentScreen}>
-                {/* <Element
+              <ScreensList />
+
+                <Element
                   is={"div"}
                   id="create-flow-canvas"
                   padding={5}
@@ -96,9 +99,9 @@ export function CreateFlowComponent() {
                   canvas
                   className="min-h-screen min-w-full"
                 >
-                </Element> */}
+                </Element>
               </Frame>
-              {/* <SaveButton /> */}
+              <SaveButton />
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">
