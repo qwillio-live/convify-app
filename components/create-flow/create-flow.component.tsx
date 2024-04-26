@@ -10,6 +10,12 @@ import {
   Linkedin,
   Plus,
 } from "lucide-react"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 import { Button } from "@/components/ui/button"
 import ScreensList from "@/components/user/screens/screens-list.component"
@@ -34,12 +40,17 @@ import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { DragDrop } from "../user/screens/drag-drop-screens.component"
-
+import { cn } from "@/lib/utils"
+enum VIEWS{
+  MOBILE = "mobile",
+  DESKTOP = "desktop"
+}
 const SaveButton = () => {
   const { query } = useEditor();
   return <a className="fixed left-3 top-3 z-10 bg-black p-3 text-white" onClick={() => console.log(query.serialize()) }>Get JSON</a>
 }
 export function CreateFlowComponent() {
+  const [view, setView] = React.useState<string>(VIEWS.DESKTOP);
   const currentScreen = useAppSelector((state) => state.screen.screens[state.screen.selectedScreen])
   return (
     <div className="min-h-screen w-full">
@@ -87,21 +98,33 @@ export function CreateFlowComponent() {
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
             <div className="section-header flex items-center justify-between"></div>
-            <div className="section-body pt-8">
-              <Frame data={currentScreen}>
-              <ScreensList />
+            <div className="section-body">
+            <Tabs defaultValue={VIEWS.DESKTOP} className="w-full" onValueChange={(value) => setView(value)}>
+            <TabsContent
+                    className={cn(
+                      "mx-auto box-content min-h-screen bg-background font-sans antialiased ",
+                      view == VIEWS.DESKTOP ? 'w-full border-0' : 'w-96 border px-4'
+                    )}
+            value={view}
+            >
+                <Frame data={currentScreen}>
+                  <Element
+                    is={"div"}
+                    id="create-flow-canvas"
+                    background="#ad2121"
+                    canvas
+                    className="min-w-full"
+                  >
+                  </Element>
+                </Frame>
+              </TabsContent>
+              <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2">
+                <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
+                <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
+              </TabsList>
+            </Tabs>
 
-                <Element
-                  is={"div"}
-                  id="create-flow-canvas"
-                  padding={5}
-                  background="#ad2121"
-                  canvas
-                  className="min-h-screen min-w-full"
-                >
-                </Element>
-              </Frame>
-              <SaveButton />
+              {/* <SaveButton /> */}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">

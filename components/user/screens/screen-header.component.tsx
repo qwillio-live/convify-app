@@ -5,7 +5,7 @@ import { Element } from '@/lib/craftjs'
 export const ScreenHeader = ({scale=1}) => {
   return (
 
-    <div className={`mt-12 flex basis-full flex-col py-3 text-center text-base`} style={{
+    <div className={`flex basis-full flex-col py-3 text-center text-base`} style={{
       transform: `scale(${scale})`
      }}>
       <h2>Convify</h2>
