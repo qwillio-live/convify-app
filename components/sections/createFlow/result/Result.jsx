@@ -8,16 +8,16 @@ const ResultFlowComponents = () => {
     <div className="w-full">
       <Tabs defaultValue="insights">
         <header className="flex h-14 items-center justify-center gap-4 border-b bg-muted/20 px-4 lg:h-[60px]">
-          <div className="tabs-list-container flex h-full w-[80%] items-center justify-start">
+          <div className="tabs-list-container flex h-full w-[60%] items-center justify-start">
             <TabsList className="flex h-full bg-inherit py-0 ">
               <TabsTrigger
-                className="h-full rounded-none border-b border-transparent uppercase data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit "
                 value="insights"
               >
                 insights
               </TabsTrigger>
               <TabsTrigger
-                className="h-full rounded-none  border-b border-transparent uppercase data-[state=active]:border-gray-950 data-[state=active]:bg-inherit"
+                className="h-full rounded-none  border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
                 value="responses"
               >
                 responses
@@ -25,9 +25,9 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative z-50  flex items-start justify-center overflow-hidden px-4 lg:px-6">
-          <div className="tabs-content flex w-[80%] items-center justify-start">
-            <TabsContent className="mt-0 w-full" value="insights">
+        <main className="content relative  z-50 flex  items-start justify-center overflow-hidden bg-gray-100   px-4 lg:px-6 ">
+          <div className="tabs-content flex w-[60%] items-center justify-start ">
+            <TabsContent className="mt-0 w-full " value="insights" style={{height:"87.3vh"}}>
               <InsightsFlowComponents />
             </TabsContent>
             <TabsContent className="mt-0 h-full w-full" value="responses">
