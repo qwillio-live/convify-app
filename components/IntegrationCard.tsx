@@ -24,7 +24,7 @@ const IntegrationCard = ({ Integrationitem }: IntegrationCardProps) => {
             {status === "active" && (
               <small className="ml-3 flex items-center rounded-2xl bg-[#EBF9F1] px-4  py-1 text-sm text-[#34AC68]">
                 Active
-                <Check className="ml-1 size-4" />
+                <Check className="size-4 ml-1" />
               </small>
             )}
           </div>
