@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { Element } from '@craftjs/core'
+import { Element } from '@/lib/craftjs'
 
 export const ScreenHeader = ({scale=1}) => {
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Element, Frame, useNode } from "@craftjs/core"
+import { Element, Frame, useNode } from "@/lib/craftjs"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -87,8 +87,8 @@ ScreenOneInput.craft = {
   displayName: "One Input",
   props: {},
   rules: {
-    canDrag: (self: Node, helper) => true,
-    canMoveIn: (incoming: Node[], self: Node, helper) => true,
-    canMoveOut: (outgoing: Node[], self: Node, helper) => true,
+    canDrag: () => true,
+    canMoveIn: () => true,
+    canMoveOut: () => true,
   },
 }

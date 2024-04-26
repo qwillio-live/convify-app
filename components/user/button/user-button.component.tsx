@@ -1,5 +1,5 @@
 import React from "react"
-import { useNode } from "@craftjs/core"
+import { useNode } from "@/lib/craftjs"
 import ContentEditable from "react-contenteditable"
 
 import {

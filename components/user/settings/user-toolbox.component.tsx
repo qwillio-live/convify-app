@@ -1,5 +1,5 @@
 import React from "react"
-import { Element, useEditor } from "@craftjs/core"
+import { Element, useEditor } from "@/lib/craftjs"
 
 import { Button } from "@/components/ui/button"
 import { Button as UserButton } from "@/components/user/button/user-button.component"

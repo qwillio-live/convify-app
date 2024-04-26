@@ -1,4 +1,4 @@
-import { Element } from '@craftjs/core'
+import { Element } from '@/lib/craftjs'
 import Link from 'next/link'
 import React from 'react'
 

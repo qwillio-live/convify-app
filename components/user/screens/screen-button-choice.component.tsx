@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
-import { Element, Frame, useNode } from "@craftjs/core"
+import { Element, Frame, useNode } from "@/lib/craftjs"
 import { UserText,UserTextSettings } from "../user-text.component"
 import { ProgressBar } from "@/components/progress-bar.component"
 import { Check, Cross } from "lucide-react"
@@ -101,9 +101,9 @@ ButtonChoiceScreen.craft = {
   props: {
   },
   rules: {
-    canDrag: (self: Node, helper) => true,
-    canMoveIn: (incoming: Node[], self: Node, helper) => true,
-    canMoveOut: (outgoing: Node[], self: Node, helper) => true
+    canDrag: () => true,
+    canMoveIn: () => true,
+    canMoveOut: () => true
   },
 };
 

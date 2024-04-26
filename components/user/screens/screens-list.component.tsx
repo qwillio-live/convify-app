@@ -11,9 +11,9 @@ import { Separator } from '@/components/ui/separator';
 import { ButtonChoiceScreen } from './screen-button-choice.component';
 import { useAppSelector, useAppDispatch } from '@/lib/state/flows-state/hooks';
 import { reorderScreens, setSelectedScreen } from '@/lib/state/flows-state/features/placeholderScreensSlice';
-import { Editor,useEditor } from '@craftjs/core';
+import { useEditor } from '@/lib/craftjs';
 import { DragDrop } from './drag-drop-screens.component';
-import { Element } from '@craftjs/core';
+import { Card } from '@/components/ui/card';
 
 
 
@@ -33,15 +33,7 @@ const ScreensList = () => {
   }, [actions, selectedScreen]);
 
   return (
-    <>
-    <Element
-        is={"div"}
-        padding={5}
-        background="#ad2121"
-        canvas
-        className="min-w-ful min-h-screen max-w-md"
-        id="one-input-screens"
-      >
+
     <Accordion type="single" collapsible className="w-full overflow-x-hidden" defaultValue="item-2">
       <AccordionItem value="item-1">
         <AccordionTrigger className="uppercase hover:no-underline">Header & Footer</AccordionTrigger>
@@ -59,19 +51,18 @@ const ScreensList = () => {
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger className="uppercase hover:no-underline">Screens</AccordionTrigger>
-        <AccordionContent>
+        <AccordionContent className='flex flex-col gap-2'>
           {screens.map((screen, index) => (
             <div key={index}>
-              <li onClick={() => dispatch(setSelectedScreen(index))}>Screen {index}</li>
+              <Card className='flex h-28 w-full flex-col items-center justify-center p-4 hover:cursor-pointer' onClick={() => dispatch(setSelectedScreen(index))}><span>Screen {index+1}</span></Card>
 
             </div>
           ))}
-          <DragDrop />
+          {/* <DragDrop /> */}
 
         </AccordionContent>
       </AccordionItem>
-    </Accordion></Element>
-    </>
+    </Accordion>
   );
 };
 

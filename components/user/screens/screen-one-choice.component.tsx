@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Element, Frame, useNode } from "@craftjs/core"
+import { Element, Frame, useNode } from "@/lib/craftjs"
 import { ArrowRight, Facebook, Github, Globe, Linkedin } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -108,8 +108,8 @@ ScreenOneChoice.craft = {
   displayName: "One Choice",
   props: {},
   rules: {
-    canDrag: (self: Node, helper) => true,
-    canMoveIn: (incoming: Node[], self: Node, helper) => true,
-    canMoveOut: (outgoing: Node[], self: Node, helper) => true,
+    canDrag: () => true,
+    canMoveIn: () => true,
+    canMoveOut: () => true,
   },
 }

@@ -1,4 +1,4 @@
-import { Element, useNode } from '@craftjs/core';
+import { Element, useNode } from '@/lib/craftjs';
 import React from 'react';
 
 import { Button } from '../button/user-button.component';

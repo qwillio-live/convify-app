@@ -1,9 +1,10 @@
 import React from "react"
-import { useEditor } from "@craftjs/core"
+import { useEditor } from "@/lib/craftjs"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Layers } from '@craftjs/layers';
+// import { Layers } from '@craftjs/layers';
+import {Layers} from "@craftjs/layers/";
 
 
 export const SettingsPanel = () => {

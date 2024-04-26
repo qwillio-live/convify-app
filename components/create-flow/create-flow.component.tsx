@@ -1,5 +1,5 @@
 import React from "react"
-import { Editor, Element, Frame, useEditor } from "@craftjs/core"
+import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
   ArrowRight,
   Check,
@@ -32,13 +32,15 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { DragDrop } from "../user/screens/drag-drop-screens.component"
 
-const SaveButton = () => {
-  const { query } = useEditor();
-  return <a className="fixed left-3 top-3 z-10 bg-black p-3 text-white" onClick={() => console.log(query.serialize()) }>Get JSON</a>
-}
+// const SaveButton = () => {
+//   const { query } = useEditor();
+//   return <a className="fixed left-3 top-3 z-10 bg-black p-3 text-white" onClick={() => console.log(query.serialize()) }>Get JSON</a>
+// }
 export function CreateFlowComponent() {
-
+  const currentScreen = useAppSelector((state) => state.screen.screens[state.screen.selectedScreen])
   return (
     <div className="min-h-screen w-full">
       <Editor
@@ -66,6 +68,7 @@ export function CreateFlowComponent() {
           CardTop,
           UserContainer,
           IconButton,
+          DragDrop,
         }}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
@@ -78,22 +81,24 @@ export function CreateFlowComponent() {
             </div>
             <div className="section-body">
               <ScreensList />
+
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
             <div className="section-header flex items-center justify-between"></div>
             <div className="section-body pt-8">
-              <Frame>
-                <Element
+              <Frame data={currentScreen}>
+                {/* <Element
                   is={"div"}
+                  id="create-flow-canvas"
                   padding={5}
                   background="#ad2121"
                   canvas
                   className="min-h-screen min-w-full"
                 >
-                </Element>
+                </Element> */}
               </Frame>
-              <SaveButton />
+              {/* <SaveButton /> */}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">

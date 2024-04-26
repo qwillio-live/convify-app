@@ -1,5 +1,5 @@
 import React from "react"
-import { Element, Node, NodeHelpers, useNode } from "@craftjs/core"
+import { Element, Node, NodeHelpers, useNode } from "@/lib/craftjs"
 
 import {
   Accordion,
