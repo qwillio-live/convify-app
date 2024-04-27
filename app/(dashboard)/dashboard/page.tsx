@@ -1,8 +1,5 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import {
   Bell,
   ChevronDown,
@@ -11,14 +8,16 @@ import {
   Menu,
   Package,
   Package2,
-  Plus,
   Search,
   ShoppingCart,
-  User,
   Users,
 } from "lucide-react"
 import { signOut } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
+import { FlowsList } from "@/components/flows"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -32,7 +31,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {FlowsList} from "@/components/flows"
 
 export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
@@ -57,8 +55,8 @@ export default function DashboardPage() {
               <Package2 className="h-6 w-6" />
               <span>Convify</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-              <Bell className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="ml-auto size-8">
+              <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
@@ -66,7 +64,7 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder="Search products..."
@@ -75,10 +73,8 @@ export default function DashboardPage() {
                 </div>
               </form>
               <Separator className="my-4" />
-              <div
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground"
-              >
-                <ChevronDown className="h-4 w-4" />
+              <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground">
+                <ChevronDown className="size-4" />
                 {/* <User className="h-4 w-4" /> */}
                 Your Workspace
               </div>
@@ -94,13 +90,13 @@ export default function DashboardPage() {
                 </Badge>
               </Link> */}
               <div
-              onClick={() => setOpenCreatedFlow(true)}
+                onClick={() => setOpenCreatedFlow(true)}
                 // href="/dashboard/flows"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:cursor-pointer hover:text-primary"
               >
-                <Package className="h-4 w-4" />
+                <Package className="size-4" />
                 Flows{" "}
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
                   1
                 </Badge>
               </div>
@@ -123,71 +119,71 @@ export default function DashboardPage() {
         </div>
       </div>
       <div className="flex flex-col">
-        <div className="sticky top-0">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="flex flex-col">
-              <nav className="grid gap-2 text-lg font-medium">
-                <Link
-                  href="#"
-                  className="flex items-center gap-2 text-lg font-semibold"
+        <div className="sticky top-0 z-20">
+          <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="shrink-0 md:hidden"
                 >
-                  <Package2 className="h-6 w-6" />
-                  <span className="sr-only">Convify</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Orders
-                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                    6
-                  </Badge>
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Products
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Users className="h-5 w-5" />
-                  Customers
-                </Link>
-                <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Analytics
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <div className="w-full flex-1">
-            {/* <form>
+                  <Menu className="size-5" />
+                  <span className="sr-only">Toggle navigation menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="flex flex-col">
+                <nav className="grid gap-2 text-lg font-medium">
+                  <Link
+                    href="#"
+                    className="flex items-center gap-2 text-lg font-semibold"
+                  >
+                    <Package2 className="size-6" />
+                    <span className="sr-only">Convify</span>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                  >
+                    <Home className="size-5" />
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="#"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+                  >
+                    <ShoppingCart className="size-5" />
+                    Orders
+                    <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
+                      6
+                    </Badge>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                  >
+                    <Package className="size-5" />
+                    Products
+                  </Link>
+                  <Link
+                    href="#"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                  >
+                    <Users className="size-5" />
+                    Customers
+                  </Link>
+                  <Link
+                    href="#"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                  >
+                    <LineChart className="size-5" />
+                    Analytics
+                  </Link>
+                </nav>
+              </SheetContent>
+            </Sheet>
+            <div className="w-full flex-1">
+              {/* <form>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -197,39 +193,41 @@ export default function DashboardPage() {
                 />
               </div>
             </form> */}
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="sm" className="rounded-full">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-circle-user"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <circle cx="12" cy="10" r="3" />
-                  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                </svg>
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </header>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" size="sm" className="rounded-full">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-circle-user"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                  </svg>
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </header>
         </div>
 
         <main className="flex flex-1 flex-col p-4 lg:p-6">
