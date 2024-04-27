@@ -55,7 +55,7 @@ export default function DashboardPage() {
               <Package2 className="size-6" />
               <span className="">Convify</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto size-8">
+            <Button variant="outline" size="icon" className="size-8 ml-auto">
               <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
@@ -64,7 +64,7 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+                  <Search className="size-4 absolute left-2.5 top-2.5 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder="Search products..."
@@ -96,7 +96,7 @@ export default function DashboardPage() {
               >
                 <Package className="size-4" />
                 Flows{" "}
-                <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
+                <Badge className="size-6 ml-auto flex shrink-0 items-center justify-center rounded-full">
                   1
                 </Badge>
               </div>
@@ -154,7 +154,7 @@ export default function DashboardPage() {
                   >
                     <ShoppingCart className="size-5" />
                     Orders
-                    <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
+                    <Badge className="size-6 ml-auto flex shrink-0 items-center justify-center rounded-full">
                       6
                     </Badge>
                   </Link>
