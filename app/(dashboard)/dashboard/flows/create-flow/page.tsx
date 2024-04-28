@@ -231,7 +231,6 @@ export default function CreateFlowsPage() {
                               <div className="flex-1">
                                 <input
                                   type="text"
-                                  aria-label="copy link input"
                                   className="m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none"
                                   value="https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
                                 />
@@ -280,7 +279,6 @@ export default function CreateFlowsPage() {
                             <a
                               href="https://www.linkedin.com/shareArticle?url=https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dlinkedin-button&amp;title=My%20new%20form"
                               target="_blank"
-                              aria-label="linkedin"
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                               rel="noreferrer"
                             >
