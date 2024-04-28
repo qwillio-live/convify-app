@@ -8,6 +8,7 @@ import {
   Menu,
   Package,
   Package2,
+  Plus,
   Search,
   ShoppingCart,
   Users,
@@ -15,7 +16,7 @@ import {
 import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { FlowsList } from "@/components/flows"
 import { Badge } from "@/components/ui/badge"
@@ -32,9 +33,26 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
+interface User {
+  name: string
+  email: string
+  image: string
+  id: string
+}
+
 export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
+  const [userData, setUserData] = useState<User>()
   const router = useRouter()
+
+  console.log(userData)
+
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => setUserData(data))
+      .catch((error) => console.error("Error fetching user data:", error))
+  }, [])
 
   const handleOpenCreateFlow = () => {
     setOpenCreatedFlow(true)
@@ -49,34 +67,34 @@ export default function DashboardPage() {
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
-        <div className="fixed flex h-full max-h-screen flex-col gap-2">
+        <div className="fixed flex h-full max-h-screen flex-col gap-2 md:w-[220px] lg:w-[280px]">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Package2 className="size-6" />
               <span className="">Convify</span>
             </Link>
-            <Button variant="outline" size="icon" className="size-8 ml-auto">
+            <Button variant="outline" size="icon" className="ml-auto size-8">
               <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
           <div className="flex-1 overflow-y-auto overflow-x-hidden">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="size-4 absolute left-2.5 top-2.5 text-muted-foreground" />
+                  <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
                   <Input
                     type="search"
-                    placeholder="Search products..."
+                    placeholder="Find workspace or typeform"
                     className="w-full appearance-none bg-background pl-8 shadow-none "
                   />
                 </div>
               </form>
               <Separator className="my-4" />
-              <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground">
+              <div className="flex items-center gap-3 rounded-lg px-3 py-2 uppercase text-muted-foreground">
                 <ChevronDown className="size-4" />
                 {/* <User className="h-4 w-4" /> */}
-                Your Workspace
+                Private
               </div>
 
               {/* <Link
@@ -95,8 +113,8 @@ export default function DashboardPage() {
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:cursor-pointer hover:text-primary"
               >
                 <Package className="size-4" />
-                Flows{" "}
-                <Badge className="size-6 ml-auto flex shrink-0 items-center justify-center rounded-full">
+                My workspace{" "}
+                <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full bg-transparent text-black hover:bg-transparent hover:text-black">
                   1
                 </Badge>
               </div>
@@ -154,7 +172,7 @@ export default function DashboardPage() {
                   >
                     <ShoppingCart className="size-5" />
                     Orders
-                    <Badge className="size-6 ml-auto flex shrink-0 items-center justify-center rounded-full">
+                    <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
                       6
                     </Badge>
                   </Link>
@@ -196,23 +214,12 @@ export default function DashboardPage() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="sm" className="rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-circle-user"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <circle cx="12" cy="10" r="3" />
-                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                  </svg>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="rounded-full bg-[#eaeaec] font-bold hover:bg-[#eaeaec]"
+                >
+                  {userData && userData?.name.charAt(0).toUpperCase()}
                   <span className="sr-only">Toggle user menu</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -235,7 +242,9 @@ export default function DashboardPage() {
             <h1 className="text-lg font-semibold md:text-lg">My workspace</h1>
           </div>
           <div
-            className="flex flex-1 items-center justify-center rounded-lg shadow-sm"
+            className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
+              openCreateFlow ? "border-none" : "border"
+            }`}
             x-chunk="dashboard-02-chunk-1"
           >
             {openCreateFlow ? (
@@ -243,13 +252,17 @@ export default function DashboardPage() {
             ) : (
               <div className="flex flex-col items-center gap-1 text-center">
                 <h3 className="text-2xl font-bold tracking-tight">
-                  You have no products
+                  There&apos;s not a form in sight
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  You can start selling as soon as you add a product.
+                  Click on &quot;Create new form&quot; or use one of the
+                  AI-powered <br /> form suggestions above to get started
                 </p>
-                <Button className="mt-4" onClick={handleOpenCreateFlow}>
-                  Add Product
+                <Button
+                  className="itmes-center mt-4 flex gap-2"
+                  onClick={handleOpenCreateFlow}
+                >
+                  <Plus size={16} /> Create new form
                 </Button>
               </div>
             )}
