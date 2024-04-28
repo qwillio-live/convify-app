@@ -11,7 +11,7 @@ import {
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -36,6 +36,7 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
+import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -57,6 +58,7 @@ export function CreateFlowComponent() {
   const currentScreen = useAppSelector(
     (state) => state.screen.screens[state.screen.selectedScreen]
   )
+  const dispatch = useAppDispatch();
   return (
     <div className="min-h-screen w-full">
       <Editor
@@ -91,9 +93,8 @@ export function CreateFlowComponent() {
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
             <div className="section-header flex items-center justify-between">
-              <h4 className="text-base font-normal tracking-tight">Content</h4>
-              <Button size="icon" className="h-6 w-6">
-                <Plus className="h-3.5 w-3.5" />
+              <Button variant={"secondary"} className="" onClick={() => dispatch(addScreen(""))}>
+                Add Screen
               </Button>
             </div>
             <div className="section-body">
@@ -117,7 +118,9 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  <Frame data={currentScreen}>
+                  <Frame
+                  data={currentScreen}
+                  >
                     <Element
                       is={"div"}
                       id="create-flow-canvas"

@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import buttonChoiceData from '@/components/user/screens/button-choice-screen.json'
 import oneChoiceData from '@/components/user/screens/one-choice-screen.json'
 import oneInputData from '@/components/user/screens/one-input-screen.json'
-
+import emptyScreenData from '@/components/user/screens/empty-screen.json'
 export interface ScreensState {
   selectedScreen:number;
   screens: string[];
@@ -44,11 +44,15 @@ export const screensSlice = createSlice({
       result.splice(endIndex, 0, removed);
 
       state.screens = result;
-    }
+    },
+    addScreen: (state, action: PayloadAction<string>) => {
+      //add screen after selectedScreen index
+      state.screens.splice(state.selectedScreen + 1, 0, emptyScreenData)
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setSelectedScreen,reorderScreens } = screensSlice.actions
+export const { setSelectedScreen,reorderScreens,addScreen } = screensSlice.actions
 
 export default screensSlice.reducer
