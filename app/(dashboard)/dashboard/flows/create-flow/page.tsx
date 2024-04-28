@@ -43,8 +43,6 @@ import ResultFlowComponents from "@/components/sections/createFlow/result/Result
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
-  const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
-
   const [tab, setTab] = useState("create")
 
   // store the current tab value
@@ -77,8 +75,8 @@ export default function CreateFlowsPage() {
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
                     Content
                   </h4>
-                  <Button size="icon" className="size-8">
-                    <Plus className="size-3.5" />
+                  <Button size="icon" className="h-8 w-8">
+                    <Plus className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               </div>
@@ -118,7 +116,7 @@ export default function CreateFlowsPage() {
                   size="sm"
                   className="my-4 h-8 gap-1 p-2"
                 >
-                  <Eye className="size-3.5" />
+                  <Eye className="h-3.5 w-3.5" />
                 </Button>
               </div>
               <div className="">
