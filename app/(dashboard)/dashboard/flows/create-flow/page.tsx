@@ -262,7 +262,6 @@ export default function CreateFlowsPage() {
                               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dfacebook-button"
                               target="_blank"
                               rel="noreferrer"
-                              aria-label="facebook"
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                             >
                               <svg
@@ -293,8 +292,8 @@ export default function CreateFlowsPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M1.7778 0.888916C1.28689 0.888916 0.888916 1.28689 0.888916 1.7778V14.2222C0.888916 14.7132 1.28689 15.1111 1.7778 15.1111H14.2222C14.7132 15.1111 15.1111 14.7132 15.1111 14.2222V1.7778C15.1111 1.28689 14.7132 0.888916 14.2222 0.888916H1.7778ZM8.22149 6.30691H6.30691V13.0794H8.33865V9.82657C8.33865 8.6915 8.82559 8.00003 9.84688 8.00003C10.688 8.00003 11.0476 8.79038 11.0476 9.69112V13.0794H13.0794V9.32066C13.0794 7.30856 12.5085 6.22225 10.4625 6.22225C9.39652 6.22225 8.53438 6.7566 8.24248 7.28282H8.22149V6.30691ZM4.95241 13.0794H2.92066V6.30691H4.95241V13.0794ZM3.93653 5.20638C4.63816 5.20638 5.20638 4.63816 5.20638 3.93653C5.20638 3.23491 4.63816 2.66669 3.93653 2.66669C3.23491 2.66669 2.66669 3.23491 2.66669 3.93653C2.66669 4.63816 3.23491 5.20638 3.93653 5.20638Z"
                                   fill="currentColor"
                                 ></path>
@@ -303,7 +302,6 @@ export default function CreateFlowsPage() {
                             <a
                               href="https://twitter.com/intent/tweet?text=Could%20you%20take%20a%20moment%20to%20fill%20in%20this%20typeform%3F%0A%E2%86%92%20https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dtwitter-button%20%0A%0A%20We%20would%20really%20appreciate%20it!"
                               target="_blank"
-                              aria-label="twitter"
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                               rel="noreferrer"
                             >
@@ -315,8 +313,8 @@ export default function CreateFlowsPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16ZM6.536 12.22C10.084 12.22 12.024 9.28 12.024 6.732C12.024 6.64801 12.024 6.56398 12.02 6.484C12.396 6.212 12.724 5.872 12.984 5.484C12.64 5.636 12.268 5.74 11.876 5.788C12.276 5.548 12.58 5.172 12.724 4.72C12.352 4.94 11.94 5.1 11.5 5.188C11.148 4.812 10.648 4.58 10.092 4.58C9.028 4.58 8.164 5.444 8.164 6.508C8.164 6.66 8.18 6.808 8.216 6.948C6.612 6.868 5.192 6.1 4.24 4.932C4.076 5.216 3.98 5.548 3.98 5.9C3.98 6.568 4.32 7.16 4.84 7.504C4.524 7.496 4.228 7.408 3.968 7.264V7.288C3.968 8.224 4.632 9 5.516 9.18C5.356 9.224 5.184 9.248 5.008 9.248C4.884 9.248 4.764 9.236 4.644 9.212C4.888 9.98 5.6 10.536 6.444 10.552C5.784 11.068 4.952 11.376 4.048 11.376C3.892 11.376 3.74 11.368 3.588 11.348C4.432 11.9 5.448 12.22 6.536 12.22Z"
                                   fill="currentColor"
                                 ></path>
@@ -325,7 +323,6 @@ export default function CreateFlowsPage() {
                             <a
                               href="https://bufferapp.com/add?text=Could%20you%20take%20a%20moment%20to%20fill%20in%20this%20typeform%3F%0A%E2%86%92%20https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dbuffer-button%20%0A%0A%20We%20would%20really%20appreciate%20it!"
                               target="_blank"
-                              aria-label="buffer"
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                               rel="noreferrer"
                             >
@@ -353,7 +350,6 @@ export default function CreateFlowsPage() {
                             <a
                               href="https://linktr.ee/admin?action=create-link&amp;linkType=typeform&amp;utm_channel=typeform&amp;title=My%20new%20form&amp;url=https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dlinktree-button"
                               target="_blank"
-                              aria-label="linktree"
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                               rel="noreferrer"
                             >
@@ -376,7 +372,6 @@ export default function CreateFlowsPage() {
                               rel="noreferrer"
                               href="mailto:?subject=Could%20you%20take%20a%20moment%20to%20fill%20in%20this%20typeform%3F&amp;body=We%20would%20really%20appreciate%20it%20if%20you%20filled%20in%20this%20typeform%3A%0A%E2%86%92%20https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Demail-button%20%0A%0AThank%20you!"
                               target="_blank"
-                              aria-label="email"
                               className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline  hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                             >
                               <svg
@@ -397,10 +392,7 @@ export default function CreateFlowsPage() {
                               </svg>
                               Email link
                             </a>
-                            <button
-                              aria-label="qr code"
-                              className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                            >
+                            <button className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
                               <svg
                                 width="14"
                                 height="14"
@@ -409,14 +401,14 @@ export default function CreateFlowsPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M0.777832 6.11117V0.777832H6.11117V6.11117H0.777832ZM2.55561 2.55561H4.33339V4.33339H2.55561V2.55561Z"
                                   fill="currentColor"
                                 ></path>
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M7.88894 6.11117V0.777832H13.2223V6.11117H7.88894ZM9.66672 2.55561H11.4445V4.33339H9.66672V2.55561Z"
                                   fill="currentColor"
                                 ></path>
@@ -433,8 +425,8 @@ export default function CreateFlowsPage() {
                                   fill="currentColor"
                                 ></path>
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M0.777832 13.2223V7.88894H6.11117V13.2223H0.777832ZM2.55561 9.66672H4.33339V11.4445H2.55561V9.66672Z"
                                   fill="currentColor"
                                 ></path>
@@ -521,10 +513,10 @@ export default function CreateFlowsPage() {
                 viewBox="0 0 8 12"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <g fill-rule="evenodd">
+                <g fillRule="evenodd">
                   <path
                     d="M0 5h2v.088H0V5zm0-1.25C0 1.494 1.626 0 4 0c2.377 0 4 1.488 4 3.75 0 1.462-.636 2.323-1.885 3.164l-.44.29c-.33.221-.482.355-.54.455C5.068 7.774 4.999 8.25 5 9l-2 .003c-.002-1.083.108-1.835.405-2.347.255-.439.59-.732 1.158-1.113l.435-.287C5.75 4.748 6 4.41 6 3.75 6 2.633 5.309 2 4 2c-1.305 0-2 .638-2 1.75v1.338H0V3.75z"
-                    fill-rule="nonzero"
+                    fillRule="nonzero"
                   ></path>
                   <path d="M3 10h2v2H3z"></path>
                 </g>
@@ -570,9 +562,7 @@ export default function CreateFlowsPage() {
             </div>
           </div>
           <button
-            aria-label="Close dialog"
             color="#737373"
-            data-qa="upgrade-nag-screen-close-button"
             className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
           >
             <div className="flex size-auto items-center justify-center ">
@@ -589,8 +579,8 @@ export default function CreateFlowsPage() {
                   fill="#000000"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
                   />
                 </svg>
