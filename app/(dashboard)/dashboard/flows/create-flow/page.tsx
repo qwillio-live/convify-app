@@ -43,6 +43,7 @@ import ResultFlowComponents from "@/components/sections/createFlow/result/Result
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
+  const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [tab, setTab] = useState("create")
 
   // store the current tab value
