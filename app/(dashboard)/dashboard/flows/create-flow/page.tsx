@@ -185,7 +185,8 @@ export default function CreateFlowsPage() {
                   <nav className="grid items-start  text-sm font-medium ">
                     <Link
                       href="#"
-                      className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] bg-[rgb(227,227,227)] px-4 py-2 font-medium leading-8 text-[rgb(38,38,39)] no-underline transition-[background] delay-0 duration-200 ease-in hover:bg-[rgb(240,240,240)]"
+                      className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] bg-[rgb(227,227,227)] px-4 py-2 font-medium leading-8 text-[rgb(38,38,39)] no-underline transition-[background] delay-0 duration-200 ease-in hover:bg-[rgb(240,240,240)]
+"
                     >
                       Share the link
                     </Link>
@@ -203,7 +204,7 @@ export default function CreateFlowsPage() {
                     </Link>
                   </nav>
 
-                  <div className=" flex min-h-0 min-w-0 flex-1 pt-3"></div>
+                  <div className=" flex  min-h-0 min-w-0 flex-1 pt-3"></div>
                 </div>
 
                 {/* Middle part */}
@@ -222,7 +223,7 @@ export default function CreateFlowsPage() {
                   </div>
 
                   {/* Content */}
-                  <div className="flex h-full flex-col text-sm text-[rgb(38,38,39)] ">
+                  <div className="flex h-full flex-col  text-sm text-[rgb(38,38,39)] ">
                     <div className="[:not(:last-child)]:mb-0 m-auto w-full max-w-[608px] flex-[0_0_auto]">
                       <div className="flex flex-row items-center justify-between ">
                         <div className="flex">
@@ -435,9 +436,9 @@ export default function CreateFlowsPage() {
                         </div>
                       </div>
                     </div>
-
                     {/* Main Content */}
-                    <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center pt-6">
+
+                    <div className="flex min-w-0 !flex-[1_0_auto] flex-col  items-center  pt-6  ">
                       <div className="w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]">
                         <div className="flex size-full items-center justify-center text-sm text-[rgb(38,38,39)]">
                           <div className="flex flex-col items-center gap-2">

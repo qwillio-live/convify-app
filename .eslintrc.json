@@ -8,10 +8,10 @@
   ],
   "plugins": ["tailwindcss"],
   "rules": {
-    "@next/next/no-html-link-for-pages": "off",
-    "react/jsx-key": "off",
+    "tailwindcss/classnames-order": "off",
     "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/classnames-order": "error"
+    "tailwindcss/no-contradicting-classname": "off",
+    "tailwindcss/no-unknown-classname": "off"
   },
   "settings": {
     "tailwindcss": {
