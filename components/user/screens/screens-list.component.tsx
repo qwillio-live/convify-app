@@ -1,11 +1,22 @@
 "use client"
 
 import React, { use } from "react"
-import { ClipboardCopy,Clipboard, Delete, Edit, MousePointer, PlusCircle, Scissors, Trash2 } from "lucide-react"
+import {
+  Clipboard,
+  ClipboardCopy,
+  Delete,
+  Edit,
+  MousePointer,
+  PlusCircle,
+  Scissors,
+  Trash2,
+} from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
   addScreen,
+  deleteScreen,
+  duplicateScreen,
   reorderScreens,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -97,9 +108,25 @@ const ScreensList = () => {
                 </Card>
               </ContextMenuTrigger>
               <ContextMenuContent>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer" onClick={() => dispatch(addScreen(index))}><PlusCircle size={18} /><span>Add screen</span></ContextMenuItem>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><ClipboardCopy size={18} /><span>Duplicate</span></ContextMenuItem>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><Trash2 size={18} /><span>Delete</span></ContextMenuItem>
+                <ContextMenuItem
+                  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
+                  onClick={() => dispatch(addScreen(index))}
+                >
+                  <PlusCircle size={18} />
+                  <span>Add screen</span>
+                </ContextMenuItem>
+                <ContextMenuItem className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
+                  onClick={() => dispatch(duplicateScreen(index))}
+                >
+                  <ClipboardCopy size={18} />
+                  <span>Duplicate</span>
+                </ContextMenuItem>
+                <ContextMenuItem className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
+                  onClick={() => dispatch(deleteScreen(index))}
+                >
+                  <Trash2 size={18} />
+                  <span>Delete</span>
+                </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
           ))}
