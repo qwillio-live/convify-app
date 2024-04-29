@@ -2,7 +2,7 @@
 
 import { MoreHorizontal, Plus } from "lucide-react"
 import Image from "next/image"
-
+import placeholder  from "@/assets/placeholder.svg";
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -62,9 +62,9 @@ export function FlowsList() {
                     </TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Price</TableHead>
+                    <TableHead>Steps</TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Total Sales
+                      Responses
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
                       Created at
@@ -81,7 +81,7 @@ export function FlowsList() {
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src="/placeholder.svg"
+                        src={placeholder.src}
                         width="64"
                       />
                     </TableCell>
@@ -91,7 +91,7 @@ export function FlowsList() {
                     <TableCell>
                       <Badge variant="outline">Draft</Badge>
                     </TableCell>
-                    <TableCell>$499.99</TableCell>
+                    <TableCell>499</TableCell>
                     <TableCell className="hidden md:table-cell">25</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2023-07-12 10:42 AM
@@ -122,7 +122,7 @@ export function FlowsList() {
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src="/placeholder.svg"
+                        src={placeholder.src}
                         width="64"
                       />
                     </TableCell>
@@ -132,7 +132,7 @@ export function FlowsList() {
                     <TableCell>
                       <Badge variant="outline">Active</Badge>
                     </TableCell>
-                    <TableCell>$129.99</TableCell>
+                    <TableCell>129</TableCell>
                     <TableCell className="hidden md:table-cell">100</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2023-10-18 03:21 PM
@@ -163,7 +163,7 @@ export function FlowsList() {
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src="/placeholder.svg"
+                        src={placeholder.src}
                         width="64"
                       />
                     </TableCell>
@@ -173,7 +173,7 @@ export function FlowsList() {
                     <TableCell>
                       <Badge variant="outline">Active</Badge>
                     </TableCell>
-                    <TableCell>$39.99</TableCell>
+                    <TableCell>39</TableCell>
                     <TableCell className="hidden md:table-cell">50</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2023-11-29 08:15 AM
@@ -204,7 +204,7 @@ export function FlowsList() {
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src="/placeholder.svg"
+                        src={placeholder.src}
                         width="64"
                       />
                     </TableCell>
@@ -214,7 +214,7 @@ export function FlowsList() {
                     <TableCell>
                       <Badge variant="secondary">Draft</Badge>
                     </TableCell>
-                    <TableCell>$2.99</TableCell>
+                    <TableCell>2</TableCell>
                     <TableCell className="hidden md:table-cell">0</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2023-12-25 11:59 PM
@@ -245,7 +245,7 @@ export function FlowsList() {
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src="/placeholder.svg"
+                        src={placeholder.src}
                         width="64"
                       />
                     </TableCell>
@@ -255,7 +255,7 @@ export function FlowsList() {
                     <TableCell>
                       <Badge variant="outline">Active</Badge>
                     </TableCell>
-                    <TableCell>$59.99</TableCell>
+                    <TableCell>59</TableCell>
                     <TableCell className="hidden md:table-cell">75</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2024-01-01 12:00 AM
@@ -286,7 +286,7 @@ export function FlowsList() {
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="64"
-                        src="/placeholder.svg"
+                        src={placeholder.src}
                         width="64"
                       />
                     </TableCell>
@@ -296,7 +296,7 @@ export function FlowsList() {
                     <TableCell>
                       <Badge variant="outline">Active</Badge>
                     </TableCell>
-                    <TableCell>$199.99</TableCell>
+                    <TableCell>199</TableCell>
                     <TableCell className="hidden md:table-cell">30</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2024-02-14 02:14 PM
