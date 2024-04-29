@@ -6,7 +6,7 @@ import oneInputData from '@/components/user/screens/one-input-screen.json'
 import emptyScreenData from '@/components/user/screens/empty-screen.json'
 export interface ScreensState {
   selectedScreen:number;
-  screens: string[];
+  screens: any[];
 }
 
 const initialState: ScreensState = {
