@@ -59,8 +59,10 @@ const ScreensList = () => {
   }))
 
   React.useEffect(() => {
-    actions.deserialize(selectedScreen)
-  }, [actions, selectedScreen])
+    if(screens.length >= 0) {
+      actions.deserialize(selectedScreen || emptyScreenData)
+    }
+  }, [actions, selectedScreen,screens])
 
   return (
     <Accordion
@@ -87,7 +89,7 @@ const ScreensList = () => {
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
-          {screens.map((screen: any, index) => (
+          {screens?.map((screen: any, index) => (
             <ContextMenu key={index}>
               <ContextMenuTrigger>
                 {" "}

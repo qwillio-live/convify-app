@@ -48,7 +48,8 @@ export const screensSlice = createSlice({
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
       //delete screen at index
-      state.screens.splice(action.payload, 1)
+      state.screens.splice(action.payload, 1);
+      state.selectedScreen = Math.min(action.payload, state.screens.length - 1);
     },
   },
 })
