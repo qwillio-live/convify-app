@@ -32,10 +32,10 @@ export const screensSlice = createSlice({
 
       state.screens = result;
     },
-    addScreen: (state, action: PayloadAction<string>) => {
+    addScreen: (state, action: PayloadAction<number>) => {
       //add screen after selectedScreen index
-      state.screens.splice(state.selectedScreen + 1, 0, emptyScreenData)
-      state.selectedScreen = state.selectedScreen + 1;
+      state.screens.splice(action.payload + 1, 0, emptyScreenData)
+      state.selectedScreen = action.payload + 1;
     },
   },
 })

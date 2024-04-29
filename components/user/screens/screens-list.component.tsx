@@ -5,6 +5,7 @@ import { ClipboardCopy,Clipboard, Delete, Edit, MousePointer, PlusCircle, Scisso
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
+  addScreen,
   reorderScreens,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -96,11 +97,8 @@ const ScreensList = () => {
                 </Card>
               </ContextMenuTrigger>
               <ContextMenuContent>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><PlusCircle size={18} /><span>Add screen</span></ContextMenuItem>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><Edit size={18} /><span>Rename</span></ContextMenuItem>
+                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer" onClick={() => dispatch(addScreen(index))}><PlusCircle size={18} /><span>Add screen</span></ContextMenuItem>
                 <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><ClipboardCopy size={18} /><span>Duplicate</span></ContextMenuItem>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><Scissors size={18} /><span>Cut screen</span></ContextMenuItem>
-                <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><Clipboard size={18} /><span>Copy screen</span></ContextMenuItem>
                 <ContextMenuItem  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"><Trash2 size={18} /><span>Delete</span></ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>

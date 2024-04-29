@@ -59,6 +59,7 @@ export function CreateFlowComponent() {
   const currentScreen = useAppSelector(
     (state) => state.screen.screens[state.screen.selectedScreen]
   )
+  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
   const dispatch = useAppDispatch();
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -94,7 +95,7 @@ export function CreateFlowComponent() {
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
             <div className="section-header flex items-center justify-end">
-              <Button variant={"secondary"} className="" onClick={() => dispatch(addScreen(""))}>
+              <Button variant={"secondary"} className="" onClick={() => dispatch(addScreen(selectedScreen))}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Screen
               </Button>
