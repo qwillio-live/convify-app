@@ -25,7 +25,6 @@ export const screensSlice = createSlice({
       state.selectedScreen = action.payload
     },
     reorderScreens: (state, action: PayloadAction<{ startIndex: number; endIndex: number }>) => {
-      console.log("REORDER CALLED: ", action.payload)
       const { startIndex, endIndex } = action.payload;
       const result = state.screens;
       const [removed] = result.splice(startIndex, 1);

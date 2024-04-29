@@ -8,6 +8,7 @@ import {
   Globe,
   Linkedin,
   Plus,
+  PlusCircle,
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
@@ -60,7 +61,7 @@ export function CreateFlowComponent() {
   )
   const dispatch = useAppDispatch();
   return (
-    <div className="min-h-screen w-full">
+    <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
         resolver={{
           UserText,
@@ -92,8 +93,9 @@ export function CreateFlowComponent() {
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
-            <div className="section-header flex items-center justify-between">
+            <div className="section-header flex items-center justify-end">
               <Button variant={"secondary"} className="" onClick={() => dispatch(addScreen(""))}>
+                <PlusCircle className="mr-2 h-4 w-4" />
                 Add Screen
               </Button>
             </div>
