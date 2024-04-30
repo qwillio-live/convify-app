@@ -12,6 +12,8 @@ RUN npm install -g pnpm
 
 # Install application dependencies
 RUN pnpm install
+RUN pnpx prisma migrate dev --name add-password-hash
+RUN pnpx prisma generate
 
 #RUN npm install --force
 
