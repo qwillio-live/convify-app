@@ -564,7 +564,7 @@ export const IconButtonDefaultProps = {
   width: "auto",
   height: "auto",
   size: "small",
-  variant: "primary",
+  variant: "secondary",
   custom: false,
   background: "inherit",
   color: "inherit",

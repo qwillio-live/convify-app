@@ -1,5 +1,5 @@
 import React from "react"
-import { Bookmark } from "lucide-react"
+import { Bookmark, Image } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { Button } from "@/components/ui/button"
@@ -13,7 +13,8 @@ import { UserText } from "@/components/user/user-text.component"
 
 import { Card } from "../card/user-card.component"
 import { Container } from "../container/user-container.component"
-import { IconButton } from "../icon-button/user-icon-button.component"
+import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
+import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
@@ -95,26 +96,7 @@ export const UserToolbox = () => {
                 ref,
                 <IconButton
                   disabled={false}
-                  size={undefined}
-                  variant={undefined}
-                  color={undefined}
-                  text={"Click me"}
-                  width={undefined}
-                  height={undefined}
-                  background={undefined}
-                  custom={undefined}
-                  icon={undefined}
-                  paddingLeft={undefined}
-                  paddingTop={undefined}
-                  paddingRight={undefined}
-                  paddingBottom={undefined}
-                  radius={undefined}
-                  flexDirection={undefined}
-                  alignItems={undefined}
-                  justifyContent={undefined}
-                  gap={undefined}
-                  border={undefined}
-                  borderColor={undefined}
+                  {...IconButtonDefaultProps}
                 />
               )
             }
@@ -131,29 +113,36 @@ export const UserToolbox = () => {
                   <Frame>
                     <IconButton
                       disabled={true}
-                      size={undefined}
-                      variant={undefined}
-                      color={undefined}
-                      text={"Click me"}
-                      width={undefined}
-                      height={undefined}
-                      background={undefined}
-                      custom={undefined}
-                      icon={undefined}
-                      paddingLeft={undefined}
-                      paddingTop={undefined}
-                      paddingRight={undefined}
-                      paddingBottom={undefined}
-                      radius={undefined}
-                      flexDirection={undefined}
-                      alignItems={undefined}
-                      justifyContent={undefined}
-                      gap={undefined}
-                      border={undefined}
-                      borderColor={undefined}
+                      {...IconButtonDefaultProps}
                     />
                   </Frame>
                 </Editor>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+
+          <div
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            //eslint-disable-next-line
+            ref={(ref: any) =>
+              ref &&
+              connectors.create(
+                ref,
+                <Logo
+                  {...LogoDefaultProps}
+                />
+              )
+            }
+            data-cy="toolbox-text"
+          >
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline">
+                  Logo
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                     <Image className="h-10 w-10" />
               </HoverCardContent>
             </HoverCard>
           </div>

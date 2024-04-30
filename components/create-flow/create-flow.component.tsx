@@ -9,6 +9,7 @@ import {
   Linkedin,
   Plus,
   PlusCircle,
+  Image,
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
@@ -38,6 +39,8 @@ import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { RenderNode } from "../user/settings/render-node"
+import { Logo } from "../user/logo/user-logo.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -65,6 +68,7 @@ export function CreateFlowComponent() {
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
         resolver={{
+          Logo,
           UserText,
           UserButton,
           ButtonChoiceScreen,
@@ -90,7 +94,9 @@ export function CreateFlowComponent() {
           IconButton,
           DragDrop,
           UserToolbox,
+          Image,
         }}
+        // onRender={RenderNode}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
