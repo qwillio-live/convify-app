@@ -1,18 +1,20 @@
 "use client"
 
 import * as React from "react"
+import { useRouter } from "next/navigation"
+import { signUp } from "@/actions/users/signUp"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+
 import { cn } from "@/lib/utils"
+import { userSignUpSchema } from "@/lib/validations/auth"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
-import { userSignUpSchema } from "@/lib/validations/auth"
-import { signUp } from "@/actions/users/signUp"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -29,13 +31,12 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
+  const router = useRouter()
 
   async function onSubmit(data: FormData) {
     setIsLoading(true)
 
-    // const hashedPassword = await bcrypt.hash(data.password, 10)
-
-    const signUpResult = await signUp(data)
+    const signUpResult = await signUp(data) // This should ideally return user data if successful
 
     setIsLoading(false)
 
@@ -44,14 +45,37 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         title: "Sign Up Failed",
         description: signUpResult.error,
         variant: "destructive",
-      });
-      return; // Stop further execution if there is an error
+      })
+      return // Stop further execution if there is an error
     }
 
-    return toast({
-      title: "Sign up successful",
-      description: "You have successfully signed up. Please log in.",
+    // Display a toast message for successful signup and redirection
+    toast({
+      title: "Sign Up Successful",
+      description: "Redirecting you to the dashboard...",
+      duration: 3000, // Display the toast for 4 seconds before redirecting
     })
+
+    // Attempt to log in the user
+    try {
+      const signInResult = await signIn("credentials", {
+        redirect: false,
+        username: data.email,
+        password: data.password,
+      })
+
+      if (signInResult?.status === 200) {
+        setTimeout(() => router.push("/dashboard"), 3000) // Delay the redirection to allow the user to read the toast
+      } else {
+        throw new Error("Failed to log in")
+      }
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: error.message || "Please try to log in manually.",
+        variant: "destructive",
+      })
+    }
   }
 
   return (
