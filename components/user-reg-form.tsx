@@ -34,30 +34,22 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter()
 
   async function onSubmit(data: FormData) {
-    setIsLoading(true)
+    setIsLoading(true) // Start loading when form is submitted
 
-    const signUpResult = await signUp(data) // This should ideally return user data if successful
-
-    setIsLoading(false)
-
-    if (signUpResult.error) {
-      toast({
-        title: "Sign Up Failed",
-        description: signUpResult.error,
-        variant: "destructive",
-      })
-      return // Stop further execution if there is an error
-    }
-
-    // Display a toast message for successful signup and redirection
-    toast({
-      title: "Sign Up Successful",
-      description: "Redirecting you to the dashboard...",
-      duration: 3000, // Display the toast for 4 seconds before redirecting
-    })
-
-    // Attempt to log in the user
     try {
+      const signUpResult = await signUp(data) // Sign up the user
+
+      if (signUpResult.error) {
+        setIsLoading(false) // Stop loading if there's an error
+        toast({
+          title: "Sign Up Failed",
+          description: signUpResult.error,
+          variant: "destructive",
+        })
+        return // Stop further execution if there is an error
+      }
+
+      // Log in the user immediately after successful signup
       const signInResult = await signIn("credentials", {
         redirect: false,
         username: data.email,
@@ -65,11 +57,12 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
       })
 
       if (signInResult?.status === 200) {
-        setTimeout(() => router.push("/dashboard"), 3000) // Delay the redirection to allow the user to read the toast
+        router.push("/dashboard") // Redirect immediately to the dashboard on successful login
       } else {
         throw new Error("Failed to log in")
       }
     } catch (error) {
+      setIsLoading(false) // Stop loading on error
       toast({
         title: "Login Failed",
         description: error.message || "Please try to log in manually.",
@@ -115,7 +108,10 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading}>
+          <button
+            className={cn(buttonVariants(), "flex items-center justify-center")}
+            disabled={isLoading}
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
@@ -133,7 +129,10 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
       </div>
       <button
         type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "flex items-center justify-center"
+        )}
         onClick={() => {
           setIsGoogleLoading(true)
           signIn("google")
@@ -144,7 +143,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           ""
-        )}{" "}
+        )}
         Sign Up with Google
       </button>
     </div>
