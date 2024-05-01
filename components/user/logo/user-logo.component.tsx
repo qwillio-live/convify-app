@@ -1,5 +1,5 @@
 import React from "react"
-import { Image } from "lucide-react"
+import { Image, UploadCloud } from "lucide-react"
 
 import { useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
@@ -90,6 +90,8 @@ export const Logo = ({
 }
 
 export const LogoSettings = () => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [setUploadedFile,uploadedFile] = React.useState<string | null>(null);
   const {
     actions: { setProp },
     props: {
@@ -108,6 +110,12 @@ export const LogoSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProp((props) => (props.src = URL.createObjectURL(file)), 1000);
+    }
+  };
 
   return (
     <>
@@ -122,8 +130,16 @@ export const LogoSettings = () => {
             className="w-full text-xs p-2"
             onChange={(e) => setProp((props) => (props.src = e.target.value))}
           />
-          <div>
-            <img src={src} alt={alt} className="w-20" />
+          <span className="text-muted-foreground">Upload logo</span>
+          <Input type="file" className="hidden" ref={inputRef}
+          onChange={handleInputChange} />
+          <div
+          onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+          className="relative flex flex-row justify-center hover:cursor-pointer w-full">
+            <div className="bg-white bg-opacity-60 absolute w-full h-full flex flex-row items-center justify-center">
+              <UploadCloud />
+            </div>
+            <img src={src} alt={alt} className="w-30" />
           </div>
         </CardContent>
       </Card>
