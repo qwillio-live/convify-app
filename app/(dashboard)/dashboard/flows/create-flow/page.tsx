@@ -44,6 +44,9 @@ import ResultFlowComponents from "@/components/sections/createFlow/result/Result
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
+  const [link, setLink] = useState(
+    "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
+  )
   const [tab, setTab] = useState("create")
 
   // store the current tab value
@@ -168,7 +171,7 @@ export default function CreateFlowsPage() {
         </div>
         <main
           className={`content relative z-50 overflow-hidden ${
-            tab === "results" ? "" : "px-4 lg:px-6"
+            tab === "results" ? "" : tab === "share" ? "" : "px-4 lg:px-6"
           }`}
         >
           <div className="tabs-content">
@@ -185,34 +188,34 @@ export default function CreateFlowsPage() {
                   <nav className="grid items-start  text-sm font-medium ">
                     <Link
                       href="#"
-                      className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] bg-[rgb(227,227,227)] px-4 py-2 font-medium leading-8 text-[rgb(38,38,39)] no-underline transition-[background] duration-200 delay-0 ease-in hover:bg-[rgb(240,240,240)]"
+                      className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] bg-[rgb(227,227,227)] px-4 py-2 font-medium leading-8 text-[rgb(38,38,39)] no-underline transition-[background]  delay-0 duration-200 ease-in hover:bg-[rgb(240,240,240)]"
                     >
                       Share the link
                     </Link>
-                    <Link
-                      href="#"
-                      className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background] duration-200 delay-0  ease-in hover:bg-[rgb(240,240,240)]"
+                    <div
+                      onClick={() => setIsCustomLinkOpen(true)}
+                      className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background]  delay-0 duration-200  ease-in hover:bg-[rgb(240,240,240)]"
                     >
                       Embed in an email
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background] duration-200 delay-0  ease-in hover:bg-[rgb(240,240,240)]"
+                    </div>
+                    <div
+                      onClick={() => setIsCustomLinkOpen(true)}
+                      className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background] delay-0 duration-200   ease-in hover:bg-[rgb(240,240,240)]"
                     >
                       Embed in a webpage
-                    </Link>
+                    </div>
                   </nav>
 
                   <div className=" flex min-h-0 min-w-0 flex-1 pt-3"></div>
                 </div>
 
                 {/* Middle part */}
-                <div className="h-full flex-1 overflow-y-auto bg-[#FAFAFA] px-10 py-8">
+                <div className="h-full flex-1 overflow-hidden  bg-[#FAFAFA] px-10 py-8">
                   {/* Warning  */}
-                  <div className="min-w-0 pb-6">
-                    <div className="rounded-[8px] bg-[rgb(255,250,235)] p-4 text-[rgb(100,82,22)]">
-                      <span className="text-sm text-[rgb(100,82,22)]">
-                        ⚠️ This typeform is not published yet.
+                  <div className="max-h-[4.75rem] min-w-0 pb-6">
+                    <div className="flex max-h-[3.25rem] items-center rounded-[8px] bg-[rgb(255,250,235)] p-4 text-[rgb(100,82,22)]">
+                      <span className="block w-full text-sm text-[rgb(100,82,22)]">
+                        ⚠️ This typeform is not published yet.{" "}
                         <Link className="underline" href="#">
                           Click here to publish the latest version
                         </Link>{" "}
@@ -222,16 +225,19 @@ export default function CreateFlowsPage() {
                   </div>
 
                   {/* Content */}
-                  <div className="flex h-full flex-col text-sm text-[rgb(38,38,39)] ">
-                    <div className="[:not(:last-child)]:mb-0 m-auto w-full max-w-[608px] flex-[0_0_auto]">
+                  {/* max-h-[753px] to make it look more like typeform to reduce the scrollbar */}
+                  <div className="flex  h-full flex-col text-sm text-[rgb(38,38,39)] ">
+                    {/* [:not(:last-child)]:mb-0 */}
+                    <div className="m-auto w-full max-w-[608px] flex-[0_0_auto]">
                       <div className="flex flex-row items-center justify-between ">
-                        <div className="flex">
+                        <div className="flex w-full max-w-[267.3px]">
                           <div className="inline-block w-full max-w-[350px] flex-[0_0_auto]">
                             <div className="ease durationease-in flex items-center rounded-[4px] rounded-r-none border border-solid border-[rgb(187,187,187)] bg-white text-[rgb(38,38,38)]  transition-all">
                               <div className="flex-1">
                                 <input
                                   type="text"
                                   aria-label="copy link input"
+                                  // onChange={(e) => setLink(e.target.value)}
                                   className="m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none"
                                   value="https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
                                 />
@@ -240,7 +246,8 @@ export default function CreateFlowsPage() {
                           </div>
                           <button
                             type="button"
-                            className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]"
+                            onClick={() => navigator.clipboard.writeText(link)}
+                            className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)] "
                           >
                             Copy link
                           </button>
@@ -445,11 +452,10 @@ export default function CreateFlowsPage() {
                         </div>
                       </div>
                     </div>
-
                     {/* Main Content */}
-                    <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center pt-6">
-                      <div className="w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] will-change-[width] duration-300 ease-in">
-                        <div className="size-full flex items-center justify-center text-sm text-[rgb(38,38,39)]">
+                    <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center  pt-6">
+                      <div className="max-h-[585px] w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]">
+                        <div className="flex size-full items-center justify-center text-sm text-[rgb(38,38,39)]">
                           <div className="flex flex-col items-center gap-2">
                             <svg
                               width="64"
@@ -491,7 +497,7 @@ export default function CreateFlowsPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="relative mt-6 flex w-full items-end justify-center">
+                      <div className="relative mt-5  flex w-full items-end justify-center">
                         <Tabs defaultValue="desktop" className="w-[200px]">
                           <TabsList className="grid w-full grid-cols-2">
                             <TabsTrigger value="desktop">Desktop</TabsTrigger>{" "}
@@ -510,9 +516,9 @@ export default function CreateFlowsPage() {
           </div>
         </main>
       </Tabs>
-      <div className="fixed bottom-4 right-12 z-50 flex flex-col items-end transition-all duration-200 delay-0 ease-in-out">
-        <button className="size-8 relative cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
-          <div className="size-auto flex cursor-pointer items-center justify-center">
+      <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
+        <button className="relative size-8 cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
+          <div className="flex size-auto cursor-pointer items-center justify-center">
             <span className="SVGInline">
               <svg
                 className="SVGInline-svg"
@@ -534,8 +540,8 @@ export default function CreateFlowsPage() {
         </button>
       </div>
       {isCustomLinkOpen && (
-        <div className="size-full fixed left-0 top-0 z-50 flex items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
-          <div className="size-full flex items-center justify-center  from-white/0 to-white/90">
+        <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
+          <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
             <div className="z-[1] flex w-[512px] flex-col items-center p-8">
               <div className="min-h-0 min-w-0 shrink-0 pb-6">
                 <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
@@ -558,7 +564,7 @@ export default function CreateFlowsPage() {
                   Available on these plans: Plus, Business, Enterprise
                 </span>
               </div>
-              <div className="size-full flex items-center justify-center">
+              <div className="flex size-full items-center justify-center">
                 <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
                   <div className="flex">
                     <span className="block flex-[0_0_auto]">
@@ -573,9 +579,9 @@ export default function CreateFlowsPage() {
             aria-label="Close dialog"
             color="#737373"
             data-qa="upgrade-nag-screen-close-button"
-            className="size-10 fixed right-2 top-2 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+            className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
           >
-            <div className="size-auto flex items-center justify-center ">
+            <div className="flex size-auto items-center justify-center ">
               <span
                 onClick={() => setIsCustomLinkOpen(false)}
                 className="cursor-pointer"
