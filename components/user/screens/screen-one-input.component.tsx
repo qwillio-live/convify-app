@@ -7,7 +7,7 @@ import { ProgressBar } from "@/components/progress-bar.component"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
-import { UserText, UserTextSettings } from "../user-text.component"
+import { TextDefaultProps, UserText, UserTextSettings } from "../user-text.component"
 import { ArrowRight } from "lucide-react"
 
 export const ScreenOneInput = ({ ...props }) => {
@@ -42,7 +42,8 @@ export const ScreenOneInput = ({ ...props }) => {
             text="Two more steps."
             fontSize={45}
             textAlign="center"
-            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}          />
+            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}
+            />
           <UserText
             text="Last few details required"
             fontSize={22}

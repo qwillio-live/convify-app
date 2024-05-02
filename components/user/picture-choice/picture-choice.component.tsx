@@ -1,6 +1,19 @@
+import { DefaultSerializer } from "v8"
 import React from "react"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
-import { GripVertical, Image, ListOrdered, UploadCloud } from "lucide-react"
+import {
+  Anchor,
+  Aperture,
+  ArrowBigUp,
+  BellRing,
+  CheckCircle,
+  GripVertical,
+  Image,
+  ListOrdered,
+  ShieldCheck,
+  UploadCloud,
+} from "lucide-react"
+import ContentEditable from "react-contenteditable"
 
 import { Element, useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
@@ -30,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import {
   CardTop,
@@ -43,54 +57,27 @@ import {
   UserContainerSettings,
 } from "../container/user-container.component"
 import { Controller } from "../settings/controller.component"
+import {
+  TextDefaultProps,
+  UserText,
+  UserTextSettings,
+} from "../user-text.component"
 
-export const PictureContainer = ({ children, ...props }) => {
-  const {
-    connectors: { connect, drag },
-  } = useNode()
-  return (
-    <div
-      className="relative w-full h-full flex flex-row items-center justify-center"
-      ref={(ref: any) => connect(drag(ref))}
-      {...ContainerDefaultProps}
-    >
-      {children}
-    </div>
-  )
-}
-
-export const PictureContainerSettings = () => {
-  return (
-    <Card className="p-2">
-      <CardHeader className="p-2">
-        <CardTitle>Container</CardTitle>
-        <CardDescription>Container settings</CardDescription>
-      </CardHeader>
-      <CardContent className="p-2">
-        <Checkbox />
-      </CardContent>
-    </Card>
-  )
-}
-
-PictureContainer.craft = {
-  related: {
-    settings: PictureContainerSettings,
-  },
+const ICONS = {
+  image: Image,
+  listOrdered: ListOrdered,
+  uploadCloud: UploadCloud,
+  aperture: Aperture,
+  arrowBigUp: ArrowBigUp,
+  anchor: Anchor,
+  bellingRing: BellRing,
+  checkCircle: CheckCircle,
+  shieldCheck: ShieldCheck,
 }
 
 export const PictureChoice = ({
-  alt,
-  marginTop,
-  marginBottom,
-  marginLeft,
-  marginRight,
-  background,
-  radius,
-  align,
-  width,
-  height,
-  src,
+  containerStyles,
+  pictureItemsStyles,
   pictureItems,
   ...props
 }) => {
@@ -105,31 +92,103 @@ export const PictureChoice = ({
   }))
 
   return (
-    <div
-      ref={(ref: any) => connect(drag(ref))}
-      className={cn(
-        `relative flex flex-row justify-${align} w-full border border-transparent`,
-        isHovered && "border-blue-400 border-dotted"
-      )}
-    >
+    <>
       {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
-      {pictureItems.map((item, index) => (
-        <div
-          key={index}
-          className="flex flex-col items-center justify-center border border-gray-400 w-40 h-40"
-        >
-          <img src={src} alt={item.alt || ""} />
-          <p>{item.text}</p>
-        </div>
-      ))}
-    </div>
+      <Element
+        id="picture-choice-tagline"
+        is={UserText}
+        {...TextDefaultProps}
+        text="Get your sales up"
+      />
+      <div
+        ref={(ref: any) => connect(drag(ref))}
+        style={{
+          display: "flex",
+          marginTop: `${containerStyles.marginTop}px`,
+          marginBottom: `${containerStyles.marginBottom}px`,
+          marginLeft: `${containerStyles.marginLeft}px`,
+          marginRight: `${containerStyles.marginRight}px`,
+          background: containerStyles.background,
+          borderRadius: `${containerStyles.radius}px`,
+          alignItems: containerStyles.align,
+          flexDirection: containerStyles.flexDirection,
+          justifyContent: containerStyles.justifyContent,
+          gap: `${containerStyles.gap}px`,
+          padding: `${containerStyles.padding}px`,
+          border: `${containerStyles.border}px solid ${containerStyles.borderColor}`,
+        }}
+        className={cn(isHovered && "border-blue-400 border-dotted")}
+      >
+        {pictureItems.map((item, index) => (
+          <div
+            key={index}
+            style={{
+              minWidth: `${pictureItemsStyles.itemWidth}px`,
+              minHeight: `${pictureItemsStyles.itemHeight}px`,
+              fontSize: `${pictureItemsStyles.fontSize}px`,
+              display: "flex",
+              borderRadius: `${pictureItemsStyles.radius}px`,
+              alignItems: pictureItemsStyles.align,
+              flexDirection: pictureItemsStyles.flexDirection,
+              justifyContent: pictureItemsStyles.justifyContent,
+              gap: `${pictureItemsStyles.gap}px`,
+              padding: `${pictureItemsStyles.padding}px`,
+              border: `${pictureItemsStyles.border}px solid ${pictureItemsStyles.borderColor}`,
+            }}
+            className={cn(
+              `text-[${pictureItemsStyles.textColor}] bg-[${pictureItemsStyles.background}] hover:text-[${pictureItemsStyles.textHover}] hover:bg-[${pictureItemsStyles.backgroundHover}] hover:cursor-pointer`,
+            )}
+          >
+            {item.itemType === ItemType.ICON ? (
+              <item.pic
+                className="shrink-0"
+                style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}
+              />
+            ) : (
+              <img
+                src={item.pic}
+                alt={item.alt || ""}
+                style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}
+              />
+            )}
+            <p>{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
 
-export const PictureChoiceItem = ({ item }) => {
+export const PictureChoiceItem = ({ item, index }) => {
   const y = useMotionValue(0)
   const controls = useDragControls()
-
+  const inputRef = React.useRef<HTMLInputElement>(null)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setProp(
+        (props) => (props.pictureItems[index].pic = URL.createObjectURL(file)),
+        1000
+      )
+      setProp(
+        (props) => (
+          (props.pictureItems[index].itemType = ItemType.PICTURE), 1000
+        )
+      )
+    }
+  }
+  const {
+    actions: { setProp },
+    props: { pictureItems, tagLine, containerStyles, pictureItemsStyles },
+  } = useNode((node) => ({
+    props: node.data.props,
+  }))
   return (
     <Reorder.Item
       dragListener={false}
@@ -140,9 +199,39 @@ export const PictureChoiceItem = ({ item }) => {
       key={item}
       className="flex flex-row gap-3  p-4 items-center border justify-between w-full h-20"
     >
-      <div className="flex flex-row items-center gap-3">
-        <img src={item.pic} alt={item.alt || ""} className="w-10 h-10" />
-        <p>{item.text}</p>
+      <Input
+        type="file"
+        className="hidden"
+        ref={inputRef}
+        onChange={handleInputChange}
+      />
+      <div className="flex flex-row items-center gap-3 flex-wrap">
+        <div
+          onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+          className="pic-container hover:cursor-pointer"
+        >
+          {item.itemType === ItemType.ICON ? (
+            <item.pic size={20} className="shrink-0" />
+          ) : (
+            <img src={item.pic} alt={item.alt || ""} className="w-10 h-10" />
+          )}
+        </div>
+        <ContentEditable
+          html={item.text}
+          disabled={false}
+          onChange={(e) =>
+            setProp(
+              (props) =>
+                (props.pictureItems[index].text = e.target.value.replace(
+                  /<\/?[^>]+(>|$)/g,
+                  ""
+                )),
+              500
+            )
+          }
+          className="overflow-hidden max-w-[100px] truncate min-w-[100px]"
+          tagName={"p"}
+        />
       </div>
       <div
         onPointerDown={(e) => controls.start(e)}
@@ -159,224 +248,143 @@ export const PictureChoiceSettings = () => {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const {
     actions: { setProp },
-    props: {
-      alt,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      background,
-      radius,
-      align,
-      width,
-      height,
-      src,
-      pictureItems,
-    },
+    props: { pictureItemsStyles, containerStyles, pictureItems },
   } = useNode((node) => ({
     props: node.data.props,
   }))
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
-    }
-  }
 
   return (
     <>
       <Card className="p-2">
-        <div>
+        <CardHeader className="p-2">
+          <CardTitle>Content</CardTitle>
+          <CardDescription>Drag to re-arrange click to edit</CardDescription>
+        </CardHeader>
+        <CardContent className="px-0">
           <Reorder.Group
             axis="y"
             values={pictureItems}
             className="py-4 gap-2 flex flex-col w-full"
             onReorder={(e) => setProp((props) => (props.pictureItems = e))}
           >
-            {pictureItems.map((item) => (
-              <PictureChoiceItem key={item.id} item={item} />
+            {pictureItems.map((item, index) => (
+              <PictureChoiceItem key={item.id} item={item} index={index} />
             ))}
           </Reorder.Group>
-        </div>
-        <CardHeader className="p-2">
-          <CardTitle>Logo</CardTitle>
-          <CardDescription>Add url of logo</CardDescription>
-        </CardHeader>
-        <CardContent className="p-2 flex flex-col gap-2">
-          <Input
-            defaultValue={src}
-            className="w-full text-xs p-2"
-            onChange={(e) => setProp((props) => (props.src = e.target.value))}
-          />
-          <span className="text-muted-foreground">Upload logo</span>
-          <Input
-            type="file"
-            className="hidden"
-            ref={inputRef}
-            onChange={handleInputChange}
-          />
-          <div
-            onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-            className="relative flex flex-row justify-center hover:cursor-pointer w-full"
-          >
-            <div className="bg-white bg-opacity-60 absolute w-full h-full flex flex-row items-center justify-center">
-              <UploadCloud />
-            </div>
-            <img src={src} alt={alt} className="w-30" />
-          </div>
         </CardContent>
       </Card>
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-2">
+        <AccordionItem value="item-1">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">General </span>
+            <span className="text-sm font-medium">Colors</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Alt label</p>
+              <p className="text-sm text-muted-foreground">Text</p>
               <Input
+                type={"color"}
                 className="text-sm p-2"
-                value={alt}
-                placeholder={alt}
+                value={pictureItemsStyles.textColor}
+                placeholder={pictureItemsStyles.textColor}
                 onChange={(e) => {
-                  setProp((props) => (props.alt = e.target.value), 1000)
+                  setProp((props) => (props.pictureItemsStyles.textColor = e.target.value), 1000)
+                }}
+              />
+
+              <p className="text-sm text-muted-foreground">Hover</p>
+              <Input
+              type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.textHover}
+                placeholder={pictureItemsStyles.textHover}
+                onChange={(e) => {
+                  setProp((props) => (props.pictureItemsStyles.textHover = e.target.value), 1000)
                 }}
               />
             </div>
 
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Width</p>
-              <Input
-                defaultValue={width}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.width = e.target.value))
-                }
-              />
-            </div>
+            <Separator className="my-4" />
 
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Height</p>
-              <Input
-                defaultValue={height}
-                className="w-full"
-                onChange={(e) => {
-                  setProp((props) => (props.height = e.target.value), 1000)
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Spacing</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Top</Label>
-              <Slider
-                defaultValue={[0]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                value={[marginTop]}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginTop = value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Bottom</Label>
-              <Slider
-                defaultValue={[0]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                value={[marginBottom]}
-                onValueChange={(value) =>
-                  setProp((props) => (props.marginBottom = value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Left</Label>
-              <Slider
-                defaultValue={[0]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                value={[marginLeft]}
-                onValueChange={(value) =>
-                  setProp((props) => (props.marginLeft = value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Right</Label>
-              <Slider
-                defaultValue={[0]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                value={[marginRight]}
-                onValueChange={(value) =>
-                  setProp((props) => (props.marginRight = value), 1000)
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-4">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Appearance </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Background</p>
               <Input
-                type="color"
-                value={background}
+              type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.background}
+                placeholder={pictureItemsStyles.background}
                 onChange={(e) => {
-                  setProp((props) => (props.background = e.target.value), 1000)
+                  setProp((props) => (props.pictureItemsStyles.background = e.target.value), 1000)
                 }}
               />
             </div>
+
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Align</p>
-              <RadioGroup
-                value={align}
-                onValueChange={(value) =>
-                  setProp((props) => (props.align = value))
-                }
-              >
-                <div className="flex flex-row gap-2">
-                  <RadioGroupItem value="start" id="al-1" />
-                  <Label htmlFor="al-1">Left</Label>
-                </div>
-                <div className="flex flex-row gap-2">
-                  <RadioGroupItem value="center" id="al-2" />
-                  <Label htmlFor="al-1">Center</Label>
-                </div>
-                <div className="flex flex-row gap-2">
-                  <RadioGroupItem value="end" id="al-3" />
-                  <Label htmlFor="al-1">Right</Label>
-                </div>
-              </RadioGroup>
+              <p className="text-sm text-muted-foreground">Background hover</p>
+              <Input
+                            type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.backgroundHover}
+                placeholder={pictureItemsStyles.backgroundHover}
+                onChange={(e) => {
+                  setProp((props) => (props.pictureItemsStyles.backgroundHover = e.target.value), 1000)
+                }}
+              />
             </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Padding</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Radius</p>
-              <Slider
-                defaultValue={[radius]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.radius = value), 1000)
+              <p className="text-sm text-muted-foreground">Text</p>
+              <Input
+                type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.textColor}
+                placeholder={pictureItemsStyles.textColor}
+                onChange={(e) => {
+                  setProp((props) => (props.pictureItemsStyles.textColor = e.target.value), 1000)
+                }}
+              />
+
+              <p className="text-sm text-muted-foreground">Hover</p>
+              <Input
+              type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.textHover}
+                placeholder={pictureItemsStyles.textHover}
+                onChange={(e) => {
+                  setProp((props) => (props.pictureItemsStyles.textHover = e.target.value), 1000)
+                }}
+              />
+            </div>
+
+            <Separator className="my-4" />
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Background</p>
+              <Input
+              type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.background}
+                placeholder={pictureItemsStyles.background}
+                onChange={(e) => {
+                  setProp((props) => (props.pictureItemsStyles.background = e.target.value), 1000)
+                }}
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Background hover</p>
+              <Input
+                            type={"color"}
+                className="text-sm p-2"
+                value={pictureItemsStyles.backgroundHover}
+                placeholder={pictureItemsStyles.backgroundHover}
+                onChange={(e) => {
+                  setProp((props) => (props.pictureItemsStyles.backgroundHover = e.target.value), 1000)
                 }}
               />
             </div>
@@ -393,43 +401,68 @@ enum ItemType {
 }
 
 export const PictureChoiceDefaultProps = {
-  tagLine: "Picture Choice",
-  marginTop: 0,
-  marginBottom: 0,
-  marginLeft: 0,
-  marginRight: 0,
-  background: "inherit",
-  radius: "none",
-  align: "center",
+  containerStyles: {
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    background: "#ffffff",
+    radius: 0,
+    align: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    padding: 20,
+    border: 0,
+    borderColor: "#a1a1a1",
+  },
+  pictureItemsStyles: {
+    itemWidth: 120,
+    itemHeight: 120,
+    fontSize: 24,
+    picWidth: 46,
+    picHeight: 46,
+    background: "#ffffff",
+    backgroundHover: "#000000",
+    radius: 0,
+    textColor: "#000000",
+    textHover: "#ffffff",
+    align: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    padding: 30,
+    border: 2,
+    borderColor: "#747070",
+  },
   pictureItems: [
     {
       id: 1,
       text: "Achieve",
-      pic: "https://shorturl.at/cikG1",
-      itemType: ItemType.PICTURE,
+      pic: ICONS.bellingRing,
+      itemType: ItemType.ICON,
     },
     {
       id: 2,
       text: "Target",
-      pic: "https://shorturl.at/cikG1",
-      itemType: ItemType.PICTURE,
+      pic: ICONS.shieldCheck,
+      itemType: ItemType.ICON,
     },
     {
       id: 3,
       text: "Launch",
-      pic: "https://shorturl.at/cikG1",
-      itemType: ItemType.PICTURE,
+      pic: ICONS.checkCircle,
+      itemType: ItemType.ICON,
     },
     {
       id: 4,
-      text: "Dont agree",
-      pic: "https://shorturl.at/cikG1",
-      itemType: ItemType.PICTURE,
+      text: "Agree",
+      pic: ICONS.uploadCloud,
+      itemType: ItemType.ICON,
     },
   ],
-  width: 80,
-  height: 80,
-  src: "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
 }
 
 PictureChoice.craft = {

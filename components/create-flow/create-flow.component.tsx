@@ -41,7 +41,7 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
-import { PictureChoice, PictureContainer } from "../user/picture-choice/picture-choice.component"
+import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -96,8 +96,7 @@ export function CreateFlowComponent() {
           DragDrop,
           UserToolbox,
           Image,
-          PictureChoice,
-          PictureContainer,
+          PictureChoice
         }}
         // onRender={RenderNode}
       >

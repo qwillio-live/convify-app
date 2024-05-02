@@ -25,14 +25,14 @@ import { Input } from "../ui/input"
 import { Controller } from "./settings/controller.component"
 
 export const UserText = ({
-  text = "",
-  fontSize = 20,
-  textAlign = "left",
-  fontWeight = "font-normal",
-  marginLeft = 0,
-  marginRight = 0,
-  marginTop = 0,
-  marginBottom = 0,
+  text,
+  fontSize,
+  textAlign,
+  fontWeight,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
   textColor,
   tagType,
   ...props
@@ -289,15 +289,15 @@ export const UserTextSettings = () => {
 
 export const TextDefaultProps = {
   text: "Your text here",
-  fontSize: 20,
+  fontSize: 42,
   textColor: "inherit",
-  fontWeight: "font-normal",
+  fontWeight: "font-bold",
   textAlign: "left",
   marginLeft: 0,
   marginRight: 0,
   marginTop: 0,
   marginBottom: 0,
-  tagType: "p",
+  tagType: "h1",
 }
 
 UserText.craft = {
