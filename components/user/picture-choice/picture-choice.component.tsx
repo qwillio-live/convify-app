@@ -110,7 +110,6 @@ export const PictureChoice = ({
           marginRight: `${containerStyles.marginRight}px`,
           background: `${containerStyles.background}`,
           borderRadius: `${containerStyles.radius}px`,
-          flexWrap: "wrap",
           alignItems: containerStyles.align,
           flexDirection: containerStyles.flexDirection,
           justifyContent: containerStyles.justifyContent,
@@ -138,6 +137,9 @@ export const PictureChoice = ({
               justifyContent: pictureItemsStyles.justifyContent,
               gap: `${pictureItemsStyles.gap}px`,
               padding: `${pictureItemsStyles.padding}px`,
+              flexWrap: "wrap",
+              maxWidth: "100%",
+              overflow: "hidden",
               border: `${pictureItemsStyles.border}px solid ${pictureItemsStyles.borderColor}`,
             }}
           >
