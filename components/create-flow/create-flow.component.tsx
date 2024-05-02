@@ -41,6 +41,7 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
+import { PictureChoice, PictureContainer } from "../user/picture-choice/picture-choice.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -95,6 +96,8 @@ export function CreateFlowComponent() {
           DragDrop,
           UserToolbox,
           Image,
+          PictureChoice,
+          PictureContainer,
         }}
         // onRender={RenderNode}
       >
@@ -145,7 +148,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {/* <SaveButton /> */}
+              <SaveButton />
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">

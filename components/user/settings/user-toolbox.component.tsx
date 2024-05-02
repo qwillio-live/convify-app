@@ -15,6 +15,7 @@ import { Card } from "../card/user-card.component"
 import { Container } from "../container/user-container.component"
 import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
+import { PictureChoice, PictureChoiceDefaultProps } from "../picture-choice/picture-choice.component"
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
@@ -139,6 +140,30 @@ export const UserToolbox = () => {
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline">
                   Logo
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                     <Image className="h-10 w-10" />
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+
+          <div
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            //eslint-disable-next-line
+            ref={(ref: any) =>
+              ref &&
+              connectors.create(
+                ref,
+                <PictureChoice {...PictureChoiceDefaultProps} />
+              )
+            }
+            data-cy="toolbox-text"
+          >
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline">
+                  Picture Choice
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>

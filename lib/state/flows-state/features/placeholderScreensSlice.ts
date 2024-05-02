@@ -21,6 +21,10 @@ export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
+    setScreens: (state, action: PayloadAction<any[]>) => {
+      console.log("Payload", action.payload)
+      state.screens = [...action.payload]
+    },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.selectedScreen = action.payload
     },
@@ -60,6 +64,7 @@ export const {
   reorderScreens,
   addScreen,
   duplicateScreen,
+  setScreens,
   deleteScreen,
 } = screensSlice.actions
 
