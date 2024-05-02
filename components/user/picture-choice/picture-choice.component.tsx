@@ -12,6 +12,7 @@ import {
   ListOrdered,
   ShieldCheck,
   UploadCloud,
+  XCircle,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
@@ -73,6 +74,7 @@ const ICONS = {
   bellingRing: BellRing,
   checkCircle: CheckCircle,
   shieldCheck: ShieldCheck,
+  circleX: XCircle,
 }
 
 export const PictureChoice = ({
@@ -122,6 +124,7 @@ export const PictureChoice = ({
         {pictureItems.map((item, index) => (
           <div
             key={index}
+            className="hover:cursor-pointer hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
             style={{
               minWidth: `${pictureItemsStyles.itemWidth}px`,
               minHeight: `${pictureItemsStyles.itemHeight}px`,
@@ -567,15 +570,15 @@ export const PictureChoiceDefaultProps = {
     borderColor: "#a1a1a1",
   },
   pictureItemsStyles: {
-    itemWidth: 120,
-    itemHeight: 120,
+    itemWidth: 185,
+    itemHeight: 160,
     fontSize: 24,
-    picWidth: 46,
-    picHeight: 46,
+    picWidth: 75,
+    picHeight: 75,
     background: "#ffffff",
     backgroundHover: "#000000",
-    radius: 0,
-    textColor: "#000000",
+    radius: 15,
+    textColor: "#4050ff",
     textHover: "#ffffff",
     align: "center",
     flexDirection: "column",
@@ -583,34 +586,22 @@ export const PictureChoiceDefaultProps = {
     justifyContent: "center",
     gap: 6,
     padding: 30,
-    border: 2,
-    borderColor: "#747070",
+    border: 3,
+    borderColor: "#eaeaeb",
   },
   pictureItems: [
     {
       id: 1,
-      text: "Achieve",
-      pic: ICONS.bellingRing,
-      itemType: ItemType.ICON,
-    },
-    {
-      id: 2,
-      text: "Target",
-      pic: ICONS.shieldCheck,
-      itemType: ItemType.ICON,
-    },
-    {
-      id: 3,
-      text: "Launch",
+      text: "Yes",
       pic: ICONS.checkCircle,
       itemType: ItemType.ICON,
     },
     {
-      id: 4,
-      text: "Agree",
-      pic: ICONS.uploadCloud,
+      id: 2,
+      text: "No",
+      pic: ICONS.circleX,
       itemType: ItemType.ICON,
-    },
+    }
   ],
 }
 

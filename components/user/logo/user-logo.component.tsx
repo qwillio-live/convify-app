@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button as CustomButton } from "@/components/ui/button"
+import ConvifyLogo from "@/assets/convify_logo_black.svg"
 import {
   Card,
   CardContent,
@@ -313,9 +314,9 @@ export const LogoDefaultProps = {
   background: "inherit",
   radius: "none",
   align: "center",
-  width: 80,
-  height: 80,
-  src: "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+  width: 156,
+  height: 50,
+  src: ConvifyLogo.src,
 }
 
 Logo.craft = {
