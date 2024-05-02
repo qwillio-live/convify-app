@@ -9,13 +9,19 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { Button as UserButton } from "@/components/user/button/user-button.component"
-import { UserText } from "@/components/user/user-text.component"
+import { TextDefaultProps, UserText } from "@/components/user/user-text.component"
 
 import { Card } from "../card/user-card.component"
 import { Container } from "../container/user-container.component"
-import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
+import {
+  IconButton,
+  IconButtonDefaultProps,
+} from "../icon-button/user-icon-button.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
-import { PictureChoice, PictureChoiceDefaultProps } from "../picture-choice/picture-choice.component"
+import {
+  PictureChoice,
+  PictureChoiceDefaultProps,
+} from "../picture-choice/picture-choice.component"
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
@@ -35,9 +41,11 @@ export const UserToolbox = () => {
               connectors.create(
                 ref,
                 <UserText
+                {...TextDefaultProps}
                   text="Your text"
                   textColor={"inherit"}
                   tagType={"p"}
+
                 />
               )
             }
@@ -95,10 +103,7 @@ export const UserToolbox = () => {
               ref &&
               connectors.create(
                 ref,
-                <IconButton
-                  disabled={false}
-                  {...IconButtonDefaultProps}
-                />
+                <IconButton disabled={false} {...IconButtonDefaultProps} />
               )
             }
             data-cy="toolbox-text"
@@ -112,10 +117,7 @@ export const UserToolbox = () => {
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
                 <Editor enabled={false} resolver={{ IconButton }}>
                   <Frame>
-                    <IconButton
-                      disabled={true}
-                      {...IconButtonDefaultProps}
-                    />
+                    <IconButton disabled={true} {...IconButtonDefaultProps} />
                   </Frame>
                 </Editor>
               </HoverCardContent>
@@ -126,13 +128,7 @@ export const UserToolbox = () => {
             className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
             ref={(ref: any) =>
-              ref &&
-              connectors.create(
-                ref,
-                <Logo
-                  {...LogoDefaultProps}
-                />
-              )
+              ref && connectors.create(ref, <Logo {...LogoDefaultProps} />)
             }
             data-cy="toolbox-text"
           >
@@ -143,7 +139,7 @@ export const UserToolbox = () => {
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
-                     <Image className="h-10 w-10" />
+                <Image className="h-10 w-10" />
               </HoverCardContent>
             </HoverCard>
           </div>
@@ -167,7 +163,13 @@ export const UserToolbox = () => {
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
-                     <Image className="h-10 w-10" />
+                <div className="grid grid-cols-2 gap-2">
+                <Image className="h-10 w-10 col-span-1" />
+                <Image className="h-10 w-10 col-span-1" />
+                <Image className="h-10 w-10 col-span-1" />
+                <Image className="h-10 w-10 col-span-1" />
+                </div>
+
               </HoverCardContent>
             </HoverCard>
           </div>

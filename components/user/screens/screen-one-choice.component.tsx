@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react"
-import { Element, Frame, useNode } from "@/lib/craftjs"
 import { ArrowRight, Facebook, Github, Globe, Linkedin } from "lucide-react"
 
+import { Element, Frame, useNode } from "@/lib/craftjs"
 import { Button } from "@/components/ui/button"
 import { ProgressBar } from "@/components/progress-bar.component"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
-import { UserText, UserTextSettings } from "../user-text.component"
+import {
+  TextDefaultProps,
+  UserText,
+  UserTextSettings,
+} from "../user-text.component"
 
 export const ScreenOneChoice = ({ ...props }) => {
   return (
@@ -38,10 +42,14 @@ export const ScreenOneChoice = ({ ...props }) => {
           id="one-choice-content"
         >
           <UserText
+            {...TextDefaultProps}
             text="Which marketing channels do you use?"
             fontSize={40}
             textAlign="center"
-            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}          />
+            fontWeight="font-bold"
+            textColor={"inherit"}
+            tagType={"p"}
+          />
           <Element
             is={"div"}
             background="#ad2121"

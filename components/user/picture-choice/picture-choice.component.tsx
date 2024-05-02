@@ -108,8 +108,9 @@ export const PictureChoice = ({
           marginBottom: `${containerStyles.marginBottom}px`,
           marginLeft: `${containerStyles.marginLeft}px`,
           marginRight: `${containerStyles.marginRight}px`,
-          background: containerStyles.background,
+          background: `${containerStyles.background}`,
           borderRadius: `${containerStyles.radius}px`,
+          flexWrap: "wrap",
           alignItems: containerStyles.align,
           flexDirection: containerStyles.flexDirection,
           justifyContent: containerStyles.justifyContent,
@@ -127,6 +128,10 @@ export const PictureChoice = ({
               minHeight: `${pictureItemsStyles.itemHeight}px`,
               fontSize: `${pictureItemsStyles.fontSize}px`,
               display: "flex",
+              backgroundColor: `${pictureItemsStyles.background}`,
+              width:"100%",
+              height:"100%",
+              color: pictureItemsStyles.textColor,
               borderRadius: `${pictureItemsStyles.radius}px`,
               alignItems: pictureItemsStyles.align,
               flexDirection: pictureItemsStyles.flexDirection,
@@ -135,13 +140,9 @@ export const PictureChoice = ({
               padding: `${pictureItemsStyles.padding}px`,
               border: `${pictureItemsStyles.border}px solid ${pictureItemsStyles.borderColor}`,
             }}
-            className={cn(
-              `text-[${pictureItemsStyles.textColor}] bg-[${pictureItemsStyles.background}] hover:text-[${pictureItemsStyles.textHover}] hover:bg-[${pictureItemsStyles.backgroundHover}] hover:cursor-pointer`,
-            )}
           >
             {item.itemType === ItemType.ICON ? (
               <item.pic
-                className="shrink-0"
                 style={{
                   width: `${pictureItemsStyles.picWidth}px`,
                   height: `${pictureItemsStyles.picHeight}px`,
@@ -157,7 +158,9 @@ export const PictureChoice = ({
                 }}
               />
             )}
-            <p>{item.text}</p>
+            <p style={{
+              color: `${pictureItemsStyles.textColor}`,
+             }}>{item.text}</p>
           </div>
         ))}
       </div>
@@ -287,18 +290,26 @@ export const PictureChoiceSettings = () => {
                 value={pictureItemsStyles.textColor}
                 placeholder={pictureItemsStyles.textColor}
                 onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.textColor = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.textColor = e.target.value),
+                    1000
+                  )
                 }}
               />
 
               <p className="text-sm text-muted-foreground">Hover</p>
               <Input
-              type={"color"}
+                type={"color"}
                 className="text-sm p-2"
                 value={pictureItemsStyles.textHover}
                 placeholder={pictureItemsStyles.textHover}
                 onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.textHover = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.textHover = e.target.value),
+                    1000
+                  )
                 }}
               />
             </div>
@@ -308,12 +319,16 @@ export const PictureChoiceSettings = () => {
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Background</p>
               <Input
-              type={"color"}
+                type={"color"}
                 className="text-sm p-2"
                 value={pictureItemsStyles.background}
                 placeholder={pictureItemsStyles.background}
                 onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.background = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.background = e.target.value),
+                    1000
+                  )
                 }}
               />
             </div>
@@ -321,12 +336,17 @@ export const PictureChoiceSettings = () => {
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Background hover</p>
               <Input
-                            type={"color"}
+                type={"color"}
                 className="text-sm p-2"
                 value={pictureItemsStyles.backgroundHover}
                 placeholder={pictureItemsStyles.backgroundHover}
                 onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.backgroundHover = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.backgroundHover =
+                        e.target.value),
+                    1000
+                  )
                 }}
               />
             </div>
@@ -337,54 +357,181 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Padding</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Text</p>
-              <Input
-                type={"color"}
-                className="text-sm p-2"
-                value={pictureItemsStyles.textColor}
-                placeholder={pictureItemsStyles.textColor}
-                onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.textColor = e.target.value), 1000)
-                }}
-              />
-
-              <p className="text-sm text-muted-foreground">Hover</p>
-              <Input
-              type={"color"}
-                className="text-sm p-2"
-                value={pictureItemsStyles.textHover}
-                placeholder={pictureItemsStyles.textHover}
-                onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.textHover = e.target.value), 1000)
+          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Container</p>
+              <Slider
+                defaultValue={[containerStyles.padding]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.padding = value), 1000)
                 }}
               />
             </div>
 
             <Separator className="my-4" />
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Item</p>
+              <Slider
+                defaultValue={[pictureItemsStyles.padding]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.pictureItemsStyles.padding = value), 1000)
+                }}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
 
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background</p>
-              <Input
-              type={"color"}
-                className="text-sm p-2"
-                value={pictureItemsStyles.background}
-                placeholder={pictureItemsStyles.background}
-                onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.background = e.target.value), 1000)
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Margin container</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Left</p>
+              <Slider
+                defaultValue={[containerStyles.marginLeft]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.marginLeft = value), 1000)
                 }}
               />
             </div>
 
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background hover</p>
-              <Input
-                            type={"color"}
-                className="text-sm p-2"
-                value={pictureItemsStyles.backgroundHover}
-                placeholder={pictureItemsStyles.backgroundHover}
-                onChange={(e) => {
-                  setProp((props) => (props.pictureItemsStyles.backgroundHover = e.target.value), 1000)
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Top</p>
+              <Slider
+                defaultValue={[containerStyles.marginTop]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.marginTop = value), 1000)
+                }}
+              />
+            </div>
+
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Right</p>
+              <Slider
+                defaultValue={[containerStyles.marginRight]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.marginRight = value), 1000)
+                }}
+              />
+            </div>
+
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Bottom</p>
+              <Slider
+                defaultValue={[containerStyles.marginBottom]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.marginBottom = value), 1000)
+                }}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-4">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Alignment </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
+            <div className="style-control col-span-1 flex w-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Direction</p>
+              <RadioGroup
+                defaultValue={containerStyles.flexDirection}
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.flexDirection = value), 1000)
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="column" id="r2" />
+                  <Label htmlFor="r2">Column</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="row" id="r3" />
+                  <Label htmlFor="r3">Row</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+
+            <div className="style-control col-span-1 flex w-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Align</p>
+              <RadioGroup
+                defaultValue={containerStyles.alignItems}
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.alignItems = value), 1000)
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"start"} id="r2" />
+                  <Label htmlFor="r2">Start</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"center"} id="r3" />
+                  <Label htmlFor="r3">Center</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"end"} id="r4" />
+                  <Label htmlFor="r4">End</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div className="style-control col-span-1 flex w-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Justify</p>
+              <RadioGroup
+                defaultValue={containerStyles.justifyContent}
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.justifyContent = value), 1000)
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"start"} id="r2" />
+                  <Label htmlFor="r2">Start</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"center"} id="r3" />
+                  <Label htmlFor="r3">Center</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"end"} id="r4" />
+                  <Label htmlFor="r4">End</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Gap</p>
+              <Slider
+                defaultValue={[containerStyles.gap]}
+                max={100}
+                min={0}
+                step={1}
+                className="w-full"
+                onValueChange={(value) => {
+                  setProp((props) => (props.containerStyles.gap = value), 1000)
                 }}
               />
             </div>

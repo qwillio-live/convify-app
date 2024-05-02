@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react"
+import { Check, Cross } from "lucide-react"
 
+import { Element, Frame, useNode } from "@/lib/craftjs"
+import { Button } from "@/components/ui/button"
+import { ProgressBar } from "@/components/progress-bar.component"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
-import { Element, Frame, useNode } from "@/lib/craftjs"
-import { UserText,UserTextSettings } from "../user-text.component"
-import { ProgressBar } from "@/components/progress-bar.component"
-import { Check, Cross } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
-export const ButtonChoiceScreen = ({...props}) => {
+import {
+  TextDefaultProps,
+  UserText,
+  UserTextSettings,
+} from "../user-text.component"
+
+export const ButtonChoiceScreen = ({ ...props }) => {
   // const {
   //   connectors: { connect, drag },
   //   selected,
@@ -28,17 +33,16 @@ export const ButtonChoiceScreen = ({...props}) => {
   //   setEditable(false);
   // }, [selected]);
   return (
-    <div
-    className="flex flex-col items-center justify-center gap-6 py-6">
+    <div className="flex flex-col items-center justify-center gap-6 py-6">
+      <Element
+        is={"div"}
+        padding={5}
+        background="#ad2121"
+        canvas
+        className="min-h-screen min-w-full"
+        id="button-choice-screens"
+      >
         <Element
-          is={"div"}
-          padding={5}
-          background="#ad2121"
-          canvas
-          className="min-h-screen min-w-full"
-          id="button-choice-screens"
-        >
-          <Element
           is={"div"}
           background="#ad2121"
           canvas
@@ -47,25 +51,33 @@ export const ButtonChoiceScreen = ({...props}) => {
         >
           <ScreenHeader />
           <ProgressBar />
-          </Element>
-          <Element
+        </Element>
+        <Element
           is={"div"}
           background="#ad2121"
           canvas
           className="flex min-w-full flex-col items-center justify-center gap-6 py-6"
           id="one-choice-content"
         >
-            <UserText
+          <UserText
+            {...TextDefaultProps}
             text="See how much you can save with Convify."
             fontSize={45}
             textAlign="center"
-            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}            />
-            <UserText
+            fontWeight="font-bold"
+            textColor={"inherit"}
+            tagType={"p"}
+          />
+          <UserText
+            {...TextDefaultProps}
             text="Does your business have a website"
             fontSize={32}
             textAlign="center"
-            fontWeight="font-medium" textColor={"inherit"} tagType={"p"}            />
-            <Element
+            fontWeight="font-medium"
+            textColor={"inherit"}
+            tagType={"p"}
+          />
+          <Element
             is={"div"}
             background="#ad2121"
             canvas
@@ -73,15 +85,16 @@ export const ButtonChoiceScreen = ({...props}) => {
             id="button-choice-buttons"
           >
             <Button className="flex h-24 w-24 max-w-md flex-col items-center justify-center gap-2 px-2 text-center">
-               <Check /><span>Yes</span>
+              <Check />
+              <span>Yes</span>
             </Button>
 
             <Button className="flex h-24 w-24 max-w-md flex-col items-center justify-center gap-2 px-2 text-center">
               <Cross /> <span>No</span>
             </Button>
           </Element>
-            </Element>
-          <Element
+        </Element>
+        <Element
           is={"div"}
           background="#ad2121"
           canvas
@@ -89,21 +102,18 @@ export const ButtonChoiceScreen = ({...props}) => {
           id="button-choice-footer"
         >
           <ScreenFooter />
-          </Element>
         </Element>
+      </Element>
     </div>
   )
 }
 
-
 ButtonChoiceScreen.craft = {
-  displayName: 'Button Choice',
-  props: {
-  },
+  displayName: "Button Choice",
+  props: {},
   rules: {
     canDrag: () => true,
     canMoveIn: () => true,
-    canMoveOut: () => true
+    canMoveOut: () => true,
   },
-};
-
+}

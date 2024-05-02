@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react"
-import { Element, Frame, useNode } from "@/lib/craftjs"
+import { ArrowRight } from "lucide-react"
 
+import { Element, Frame, useNode } from "@/lib/craftjs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ProgressBar } from "@/components/progress-bar.component"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
-import { TextDefaultProps, UserText, UserTextSettings } from "../user-text.component"
-import { ArrowRight } from "lucide-react"
+import {
+  TextDefaultProps,
+  UserText,
+  UserTextSettings,
+} from "../user-text.component"
 
 export const ScreenOneInput = ({ ...props }) => {
   return (
@@ -39,16 +43,23 @@ export const ScreenOneInput = ({ ...props }) => {
           id="one-choice-content"
         >
           <UserText
+            {...TextDefaultProps}
+            textColor={"inherit"}
+            tagType={"p"}
             text="Two more steps."
             fontSize={45}
             textAlign="center"
-            fontWeight="font-bold" textColor={"inherit"} tagType={"p"}
-            />
+            fontWeight="font-bold"
+          />
           <UserText
+            {...TextDefaultProps}
             text="Last few details required"
             fontSize={22}
             textAlign="center"
-            fontWeight="font-light" textColor={"inherit"} tagType={"p"}          />
+            fontWeight="font-light"
+            textColor={"inherit"}
+            tagType={"p"}
+          />
           <Element
             is={"div"}
             background="#ad2121"
