@@ -100,7 +100,8 @@ export const PictureChoice = ({
         id="picture-choice-tagline"
         is={UserText}
         {...TextDefaultProps}
-        text="Get your sales up"
+        fontWeight="800"
+        text="Does your business have a website?"
       />
       <div
         ref={(ref: any) => connect(drag(ref))}

@@ -75,10 +75,11 @@ export const UserText = ({
           )
         }
         tagName={tagType}
-        className={`${fontWeight}`}
+        className={`font-[${fontWeight}]`}
         style={{
           fontSize: `${fontSize}px`,
           textAlign,
+          fontWeight: `${fontWeight}`,
           marginLeft: `${marginLeft}px`,
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
@@ -174,12 +175,12 @@ export const UserTextSettings = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Font Weight</SelectLabel>
-                    <SelectItem value="font-light">Thin</SelectItem>
-                    <SelectItem value="font-normal">Normal</SelectItem>
-                    <SelectItem value="font-medium">Medium</SelectItem>
-                    <SelectItem value=" font-semibold">Semi-bold</SelectItem>
-                    <SelectItem value="font-bold">Bold</SelectItem>
-                    <SelectItem value="font-extrabold">Extra bold</SelectItem>
+                    <SelectItem value="100">Thin</SelectItem>
+                    <SelectItem value="400">Normal</SelectItem>
+                    <SelectItem value="500">Medium</SelectItem>
+                    <SelectItem value="600">Semi-bold</SelectItem>
+                    <SelectItem value="700">Bold</SelectItem>
+                    <SelectItem value="800">Extra bold</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -291,7 +292,7 @@ export const TextDefaultProps = {
   text: "Your text here",
   fontSize: 42,
   textColor: "inherit",
-  fontWeight: "font-bold",
+  fontWeight: "400",
   textAlign: "left",
   marginLeft: 0,
   marginRight: 0,

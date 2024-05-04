@@ -16,6 +16,7 @@ import { ContainerDefaultProps, UserContainer } from "../container/user-containe
 import { DefaultSerializer } from "v8"
 import { CardTop } from "../card/user-card.component"
 import { PictureChoice, PictureChoiceDefaultProps } from "../picture-choice/picture-choice.component"
+import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
 
 export const ButtonChoiceScreen = ({ ...props }) => {
   // const {
@@ -62,31 +63,36 @@ export const ButtonChoiceScreen = ({ ...props }) => {
           className="flex min-w-full flex-col items-center justify-center gap-6 py-6"
           id="one-choice-content"
         >
-          <ProgressBar />
           <UserText
             {...TextDefaultProps}
             text="See how much you can save with Convify."
             fontSize={45}
+            marginBottom={12}
             textAlign="center"
-            fontWeight="font-bold"
+            fontWeight="800"
             textColor={"inherit"}
             tagType={"p"}
           />
-          <UserText
-            {...TextDefaultProps}
-            text="Does your business have a website"
-            fontSize={32}
-            textAlign="center"
-            fontWeight="font-medium"
-            textColor={"inherit"}
-            tagType={"p"}
-          />
+          <ProgressBar />
         <Element
         is={PictureChoice}
         canvas
         {...PictureChoiceDefaultProps}
         />
         </Element>
+        <Element
+          disabled={false} is={IconButton}
+          {...IconButtonDefaultProps}
+          id="button-choice-icon-button"
+          text={"Get quote"}
+          background={"#4050ff"}
+          color={"#ffffff"}
+          paddingTop={14}
+          paddingBottom={14}
+          paddingLeft={16}
+          paddingRight={16}
+          width={366}
+          custom={{ }} />
         <Element
           is={"div"}
           background="#ad2121"
