@@ -1,14 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { signUp } from "@/actions/users/signUp"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { cn } from "@/lib/utils"
-import { userSignInSchema } from "@/lib/validations/auth"
+import { userSignUpSchema } from "@/lib/validations/auth"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,48 +18,57 @@ import { Icons } from "@/components/icons"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type FormData = z.infer<typeof userSignInSchema>
+type FormData = z.infer<typeof userSignUpSchema>
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(userSignInSchema),
+    resolver: zodResolver(userSignUpSchema),
   })
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
-  const searchParams = useSearchParams()
+  const router = useRouter()
 
   async function onSubmit(data: FormData) {
-    setIsLoading(true)
+    setIsLoading(true) // Start loading when form is submitted
 
-    const signInResult = await signIn("credentials", {
-      username: data.email,
-      password: data.password,
-      redirect: false, // Continue with no auto-redirect
-      callbackUrl: searchParams?.get("from") || "/dashboard",
-    })
+    try {
+      const signUpResult = await signUp(data) // Sign up the user
 
-    setIsLoading(false)
+      if (signUpResult.error) {
+        setIsLoading(false) // Stop loading if there's an error
+        toast({
+          title: "Sign Up Failed",
+          description: signUpResult.error,
+          variant: "destructive",
+        })
+        return // Stop further execution if there is an error
+      }
 
-    if (!signInResult?.ok) {
+      // Log in the user immediately after successful signup
+      const signInResult = await signIn("credentials", {
+        redirect: false,
+        username: data.email,
+        password: data.password,
+      })
+
+      if (signInResult?.status === 200) {
+        router.push("/dashboard") // Redirect immediately to the dashboard on successful login
+      } else {
+        throw new Error("Failed to log in")
+      }
+    } catch (error) {
+      setIsLoading(false) // Stop loading on error
       toast({
-        title: "Something went wrong.",
-        description: "Your sign in request failed. Please try again.",
+        title: "Login Failed",
+        description: error.message || "Please try to log in manually.",
         variant: "destructive",
       })
-      return
     }
-
-    toast({
-      title: "Login Successful",
-      description: "You are being redirected...",
-    })
-
-    // Redirecting manually after successful login
-    window.location.href = signInResult.url || "/dashboard"
   }
 
   return (
@@ -91,20 +101,21 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               type="password"
               id="password"
               placeholder="password"
-              disabled={isLoading || isGoogleLoading}
+              disabled={isLoading}
               {...register("password")}
             />
             {errors.password && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.password.message}
-              </p>
+              <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading}>
+          <button
+            className={cn(buttonVariants(), "flex items-center justify-center")}
+            disabled={isLoading}
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Sign Up with Email
           </button>
         </div>
       </form>
@@ -118,7 +129,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       </div>
       <button
         type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "flex items-center justify-center"
+        )}
         onClick={() => {
           setIsGoogleLoading(true)
           signIn("google")
@@ -129,8 +143,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           ""
-        )}{" "}
-        Sign In with Google
+        )}
+        Sign Up with Google
       </button>
     </div>
   )

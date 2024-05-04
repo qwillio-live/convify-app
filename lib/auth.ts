@@ -1,12 +1,13 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { NextAuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 import EmailProvider from "next-auth/providers/email"
-import GoogleProvider from "next-auth/providers/google";
+import GoogleProvider from "next-auth/providers/google"
 import { Client } from "postmark"
-
 import { env } from "@/env.mjs"
 import { siteConfig } from "@/config/site"
 import { db } from "@/lib/db"
+import bcrypt from "bcryptjs"
 
 const postmarkClient = new Client(env.POSTMARK_API_TOKEN)
 
@@ -25,6 +26,34 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    // crednetials provider for login and sign up with email and password
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        username: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        console.log("Received credentials:", credentials)
+        if (!credentials) {
+          console.log("Credentials are missing")
+          return null
+        }
+
+        const user = await db.user.findUnique({
+          where: { email: credentials.username },
+        })
+
+        if (
+          user &&
+          bcrypt.compareSync(credentials.password, user.passwordHash)
+        ) {
+          return { id: user.id, name: user.email, email: user.email }
+        } else {
+          throw new Error("Invalid email or password")
+        }
+      },
     }),
     EmailProvider({
       from: env.SMTP_FROM,
