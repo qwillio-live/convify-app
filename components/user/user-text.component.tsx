@@ -25,14 +25,14 @@ import { Input } from "../ui/input"
 import { Controller } from "./settings/controller.component"
 
 export const UserText = ({
-  text = "",
-  fontSize = 20,
-  textAlign = "left",
-  fontWeight = "font-normal",
-  marginLeft = 0,
-  marginRight = 0,
-  marginTop = 0,
-  marginBottom = 0,
+  text,
+  fontSize,
+  textAlign,
+  fontWeight,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
   textColor,
   tagType,
   ...props
@@ -63,7 +63,7 @@ export const UserText = ({
       ref={(ref: any) => ref && connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >
-      {isHovered && <Controller nameOfComponent={"TEXT"} />}
+      {/* {isHovered && <Controller nameOfComponent={"TEXT"} />} */}
       <ContentEditable
         html={text}
         disabled={!editable}
@@ -75,10 +75,11 @@ export const UserText = ({
           )
         }
         tagName={tagType}
-        className={`${fontWeight}`}
+        className={`font-[${fontWeight}]`}
         style={{
           fontSize: `${fontSize}px`,
           textAlign,
+          fontWeight: `${fontWeight}`,
           marginLeft: `${marginLeft}px`,
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
@@ -174,12 +175,12 @@ export const UserTextSettings = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Font Weight</SelectLabel>
-                    <SelectItem value="font-light">Thin</SelectItem>
-                    <SelectItem value="font-normal">Normal</SelectItem>
-                    <SelectItem value="font-medium">Medium</SelectItem>
-                    <SelectItem value=" font-semibold">Semi-bold</SelectItem>
-                    <SelectItem value="font-bold">Bold</SelectItem>
-                    <SelectItem value="font-extrabold">Extra bold</SelectItem>
+                    <SelectItem value="100">Thin</SelectItem>
+                    <SelectItem value="400">Normal</SelectItem>
+                    <SelectItem value="500">Medium</SelectItem>
+                    <SelectItem value="600">Semi-bold</SelectItem>
+                    <SelectItem value="700">Bold</SelectItem>
+                    <SelectItem value="800">Extra bold</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -289,15 +290,15 @@ export const UserTextSettings = () => {
 
 export const TextDefaultProps = {
   text: "Your text here",
-  fontSize: 20,
+  fontSize: 42,
   textColor: "inherit",
-  fontWeight: "font-normal",
+  fontWeight: "400",
   textAlign: "left",
   marginLeft: 0,
   marginRight: 0,
   marginTop: 0,
   marginBottom: 0,
-  tagType: "p",
+  tagType: "h1",
 }
 
 UserText.craft = {

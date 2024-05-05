@@ -11,6 +11,7 @@ import {
   Scissors,
   Trash2,
 } from "lucide-react"
+import {AnimatePresence, Reorder} from "framer-motion";
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
@@ -18,6 +19,7 @@ import {
   deleteScreen,
   duplicateScreen,
   reorderScreens,
+  setScreens,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -57,13 +59,17 @@ const ScreensList = () => {
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
+  const [orderScreens, setOrderScreens] = React.useState<any[]>(screens);
 
   React.useEffect(() => {
     if(screens.length >= 0) {
       actions.deserialize(selectedScreen || emptyScreenData)
     }
-  }, [actions, selectedScreen,screens])
 
+  }, [actions, selectedScreen,screens])
+  const handleReorder = (data) => {
+    dispatch(setScreens(data))
+  }
   return (
     <Accordion
       type="single"
@@ -89,14 +95,16 @@ const ScreensList = () => {
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
+
+          <Reorder.Group values={screens} onReorder={handleReorder}>
           {screens?.map((screen: any, index) => (
-            <ContextMenu key={index}>
+            <Reorder.Item key={screen?.ROOT?.nodes[0]} id={screen?.ROOT?.nodes[0]} value={screen} className="relative">
+            <ContextMenu>
               <ContextMenuTrigger>
                 {" "}
                 <Card
-                  key={index}
                   className={cn(
-                    "flex h-28 w-full flex-col items-center justify-center border p-4 hover:cursor-pointer",
+                    "flex h-28 w-full mt-6 flex-col items-center justify-center border p-4 hover:cursor-pointer",
                     {
                       "border-blue-500": selectedScreenIndex === index,
                     }
@@ -131,7 +139,9 @@ const ScreensList = () => {
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
+            </Reorder.Item>
           ))}
+          </Reorder.Group>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

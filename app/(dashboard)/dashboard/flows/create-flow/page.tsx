@@ -88,25 +88,25 @@ export default function CreateFlowsPage() {
             <div className="tabs-list-container flex h-full">
               <TabsList className="flex h-full bg-inherit py-0 ">
                 <TabsTrigger
-                  className="h-full rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="create"
                 >
                   Create
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="connect"
                 >
                   Connect
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full  rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="share"
                 >
                   Share
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full  rounded-sm border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="results"
                 >
                   Results

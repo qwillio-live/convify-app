@@ -6,6 +6,7 @@ import {
   Disc,
   DollarSign,
   Mountain,
+  ArrowRight,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
@@ -41,6 +42,7 @@ const IconsList = {
   anchor: <Anchor />,
   disc: <Disc />,
   mountain: <Mountain />,
+  arrowright: <ArrowRight />,
 }
 export const IconButton = ({
   disabled,
@@ -182,6 +184,9 @@ export const IconButtonSettings = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
+                  <SelectItem value="arrowright">
+                      <ArrowRight />
+                    </SelectItem>
                     <SelectItem value="aperture">
                       <Aperture />
                     </SelectItem>
@@ -564,8 +569,8 @@ export const IconButtonDefaultProps = {
   width: "auto",
   height: "auto",
   size: "small",
-  variant: "primary",
-  custom: false,
+  variant: "secondary",
+  custom: true,
   background: "inherit",
   color: "inherit",
   text: "Click me",
@@ -573,7 +578,7 @@ export const IconButtonDefaultProps = {
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  icon: "aperture",
+  icon: "arrowright",
   paddingLeft: "4",
   paddingTop: "4",
   paddingRight: "4",
