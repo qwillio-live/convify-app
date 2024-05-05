@@ -37,6 +37,7 @@ import {
   PictureChoice,
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
+import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 
 const MultipleChoiceOptions = [
   {
@@ -250,6 +251,36 @@ export const UserToolbox = () => {
               </HoverCardContent>
             </HoverCard>
           </div>
+
+          <div
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            //eslint-disable-next-line
+            ref={(ref: any) =>
+              ref &&
+              connectors.create(
+                ref,
+                <LogoBar {...LogoBarDefaultProps} />
+              )
+            }
+            data-cy="toolbox-text"
+          >
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline">
+                  Logo Bar
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                <div className="flex flex-row gap-2 justify-center items-center p-4 border">
+                  <Image className="h-10 w-10 col-span-1" />
+                  <Image className="h-10 w-10 col-span-1" />
+                  <Image className="h-10 w-10 col-span-1" />
+                  <Image className="h-10 w-10 col-span-1" />
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+
         </div>
       </div>
     </div>

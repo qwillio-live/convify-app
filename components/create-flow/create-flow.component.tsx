@@ -41,6 +41,7 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
+import { LogoBar } from "../user/logo-bar/logo-bar.component"
 import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 
@@ -99,6 +100,8 @@ export function CreateFlowComponent() {
           Image,
           PictureChoice,
           MultipleChoice,
+          LogoBar,
+
         }}
         // onRender={RenderNode}
       >
