@@ -23,6 +23,8 @@ const MultipleChoiceItem = styled.div<{
   gap: string | number;
   hoverBackground: string;
 }>`
+  min-width: 100%;
+  flex-basis: 100%;
   font-size: ${({ fontSize }) => `${fontSize}px`};
   background-color: ${({ background,selected,hoverBackground }) => selected ? hoverBackground : background};
   border-radius: ${({ radius }) => `${radius}px`};
@@ -51,12 +53,13 @@ const MultipleChoiceItemInner = ({
   optionLabel,
   selected,
   multipleChoiceStyles,
-  hovered,
   index
 }) => {
   const {
     actions: { setProp },
     props:{
+      singleChoice,
+      lastSelectedChoice,
       multipleChoices
     },
   } = useNode((node) => ({
@@ -66,9 +69,29 @@ const MultipleChoiceItemInner = ({
     console.log("multipleChoices", multipleChoices)
   },[multipleChoices])
   const handleSelected = () => {
-    setProp((props) => {
-      props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
-    })
+    if(singleChoice && lastSelectedChoice !== null){
+      setProp((props) => {
+        //remove previous lastSelectedChoice
+        props.multipleChoices[lastSelectedChoice].optionSelected = false
+        //set new lastSelectedChoice
+        props.lastSelectedChoice = index
+        //set new optionSelected
+        props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
+      })
+
+    }else if(singleChoice && lastSelectedChoice === null){
+      setProp((props) => {
+        //set new lastSelectedChoice
+        props.lastSelectedChoice = index
+        //set new optionSelected
+        props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
+      })
+    }else{
+
+      setProp((props) => {
+        props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
+      })
+    }
   }
   return (
     <MultipleChoiceItem
@@ -76,13 +99,12 @@ const MultipleChoiceItemInner = ({
     {...multipleChoiceStyles} selected={selected}>
       <input type="radio" className="hidden" />
       {optionLogo}
-      <label>{optionLabel}</label>
+      <label className="hover:cursor-pointer">{optionLabel}</label>
     </MultipleChoiceItem>
   );
 };
 
 export const MultipleChoice = ({
-  tagLine,
   marginTop,
   marginBottom,
   marginLeft,
@@ -107,26 +129,29 @@ export const MultipleChoice = ({
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        backgroundColor: background,
+        borderRadius: `${radius}px`,
+        marginTop: `${marginTop}px`,
+        marginBottom: `${marginBottom}px`,
+        marginLeft: `${marginLeft}px`,
+        marginRight: `${marginRight}px`,
+        width: `${width}px`,
+       }}
       className={cn(
-        `flex flex-col overflow-hidden`,
         selected && `border border-blue-400 border-dashed`,
-        `bg-${background}`,
-        `rounded-${radius}`,
-        `mt-${marginTop}`,
-        `mb-${marginBottom}`,
-        `ml-${marginLeft}`,
-        `mr-${marginRight}`,
-        `w-[${width}px]`
       )}
     >
       {isHovered && <Controller nameOfComponent={"Multiple Choices"} />}
-      <div className="flex flex-col gap-2 w-[360px]">
+      <div className="flex flex-col gap-2">
         {multipleChoices.map((option, index) => (
           <MultipleChoiceItemInner
             key={index}
             index={index}
             multipleChoiceStyles={multipleChoiceStyles}
-            hovered={isHovered} // Pass hovered state here
             optionLogo={option.optionLogo}
             selected={option.optionSelected}
             optionLabel={option.optionLabel}
@@ -138,17 +163,17 @@ export const MultipleChoice = ({
 }
 
 export type MultipleChoiceProps = {
-  tagLine: string | null
   marginTop: number
   marginBottom: number
   marginLeft: number
   marginRight: number
   background: string
-  radius: string
+  radius: string | number
   width: number
   viewWithIcon: boolean
   singleChoice: boolean
-  choicesMade: string[],
+  lastSelectedChoice: string | null
+  choicesMade: string[]
   multipleChoiceStyles: {
     fontSize: string | number
     background: string
@@ -167,6 +192,7 @@ export type MultipleChoiceProps = {
     gap: string | number
   }
   multipleChoices: {
+    id: string | number
     optionLogo: string | null
     optionLabel: string
     optionValue: string
@@ -175,14 +201,14 @@ export type MultipleChoiceProps = {
 }
 
 export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
-  tagLine: "Please choose an option",
   marginTop: 0,
   marginBottom: 0,
   marginLeft: 0,
   marginRight: 0,
-  background: "inherit",
-  radius: "none",
+  background: "#ffffff",
+  radius: 0,
   width: 360,
+  lastSelectedChoice: null,
   singleChoice: true,
   viewWithIcon: true,
   choicesMade: [],
@@ -205,24 +231,28 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
   },
   multipleChoices: [
     {
+      id: "1",
       optionLogo: null,
       optionLabel: "Option 1 label",
       optionValue: "option1",
       optionSelected: false,
     },
     {
+      id: "2",
       optionLogo: null,
       optionLabel: "Option 2 label",
       optionValue: "option2",
       optionSelected: false,
     },
     {
+      id: "3",
       optionLogo: null,
       optionLabel: "Option 3 label",
       optionValue: "option3",
       optionSelected: false,
     },
     {
+      id: "4",
       optionLogo: null,
       optionLabel: "Option 4 label",
       optionValue: "option4",
