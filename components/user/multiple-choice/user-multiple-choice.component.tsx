@@ -65,9 +65,6 @@ const MultipleChoiceItemInner = ({
   } = useNode((node) => ({
     props: node.data.props,
   }));
-  React.useEffect(() => {
-    console.log("multipleChoices", multipleChoices)
-  },[multipleChoices])
   const handleSelected = () => {
     if(singleChoice && lastSelectedChoice !== null){
       setProp((props) => {

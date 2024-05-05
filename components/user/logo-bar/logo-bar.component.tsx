@@ -45,12 +45,11 @@ const LogoBarInner = styled.div<{
   flex-wrap: wrap;
 `;
 
-
 const LogoBarItem = ({
   item,
 }) => {
   return (
-    <div className="flex relative overflow-hidden items-center justify-center ">
+    <div className="relative overflow-hidden">
       <img
         className="w-full"
         src={item.src}

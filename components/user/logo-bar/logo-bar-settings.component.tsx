@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { GripVertical, Image, UploadCloud } from "lucide-react"
+import { Circle, GripVertical, Image, Trash2, UploadCloud,PlusCircle } from "lucide-react"
 
 import { useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
@@ -9,7 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button as CustomButton } from "@/components/ui/button"
+import { Button, Button as CustomButton } from "@/components/ui/button"
 import ConvifyLogo from "@/assets/convify_logo_black.svg"
 import {
   Card,
@@ -37,6 +37,7 @@ import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import ContentEditable from "react-contenteditable"
 import { TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 enum SWITCH {
   SINGLE = "single",
   MULTIPLE = "multiple",
@@ -44,7 +45,8 @@ enum SWITCH {
 export const LogoBarSettings = () => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [setUploadedFile,uploadedFile] = React.useState<string | null>(null);
+  const [uploadFile,setUploadFile] = React.useState<string | null>(null);
+  const [altText,setAltText] = React.useState<string | null>(null);
   const {
     actions: { setProp },
     props: {
@@ -69,11 +71,19 @@ export const LogoBarSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setProp((props) => (props.src = URL.createObjectURL(file)), 1000);
+      setUploadFile(URL.createObjectURL(file));
     }
+  };
+
+  const handleAddFile = () => {
+    const tempArray=[...logoBarItems];
+    tempArray.push({id:logoBarItems.length+1,src:uploadFile,alt:altText});
+      setProp((props) => (props.logoBarItems = tempArray),1000);
+      setUploadFile(null);
+      setAltText(null);
   };
 
   return (
@@ -95,6 +105,55 @@ export const LogoBarSettings = () => {
             ))}
           </Reorder.Group>
         </CardContent>
+        <div className="add-logo flex flex-row justify-end items-center w-full mb-6">
+        <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-full">
+        <PlusCircle className="mr-4" />
+          Add Items</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Add logo item</h4>
+            <p className="text-sm text-muted-foreground">
+              Select image as logo and set alt text
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="grid grid-cols-3 items-center gap-2">
+              <Label htmlFor="media">Logo</Label>
+              <Input
+                id="media"
+                onChange={handleInputFileChange}
+                type={"file"}
+                className="col-span-2 h-8"
+              />
+            </div>
+
+            <div className="grid grid-cols-3 items-center gap-2">
+              <Label htmlFor="altText">Alt</Label>
+              <Input
+                id="altText"
+                onChange={(e) => {setAltText(e.target.value)}}
+                placeholder="Alt text for image"
+                className="col-span-2 h-8"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-2 mt-4">
+              <Button
+                id="altText"
+                onClick={handleAddFile}
+                className="col-span-2 h-8"
+              >Add</Button>
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+
+        </div>
       </Card>
       {/* <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
@@ -271,6 +330,11 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
       key={item}
       className="flex flex-row gap-3  p-4 items-center border justify-between w-full h-20"
     >
+      <Button
+      onClick={() => setProp((props) => (props.logoBarItems = logoBarItems.filter((_, i) => i !== index)), 1000)}
+      className="p-2" variant={"outline"}>
+        <Trash2 className="w-5 h-5" />
+      </Button>
       <Input
         type="file"
         className="hidden"
