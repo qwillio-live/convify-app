@@ -1,5 +1,15 @@
 import React, { useState } from "react"
-import { Circle, GripVertical, Image, Trash2, UploadCloud,PlusCircle } from "lucide-react"
+import ConvifyLogo from "@/assets/convify_logo_black.svg"
+import { Reorder, useDragControls, useMotionValue } from "framer-motion"
+import {
+  Circle,
+  GripVertical,
+  Image,
+  PlusCircle,
+  Trash2,
+  UploadCloud,
+} from "lucide-react"
+import ContentEditable from "react-contenteditable"
 
 import { useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
@@ -10,7 +20,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button, Button as CustomButton } from "@/components/ui/button"
-import ConvifyLogo from "@/assets/convify_logo_black.svg"
 import {
   Card,
   CardContent,
@@ -21,6 +30,11 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Select,
@@ -31,22 +45,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
-import { Reorder, useDragControls, useMotionValue } from "framer-motion"
-import ContentEditable from "react-contenteditable"
-import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 enum SWITCH {
   SINGLE = "single",
   MULTIPLE = "multiple",
 }
 export const LogoBarSettings = () => {
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [uploadFile,setUploadFile] = React.useState<string | null>(null);
-  const [altText,setAltText] = React.useState<string | null>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [uploadFile, setUploadFile] = React.useState<string | null>(null)
+  const [altText, setAltText] = React.useState<string | null>(null)
   const {
     actions: { setProp },
     props: {
@@ -56,6 +67,10 @@ export const LogoBarSettings = () => {
         marginBottom,
         marginLeft,
         marginRight,
+        paddingTop,
+        paddingBottom,
+        paddingLeft,
+        paddingRight,
         background,
         width,
         fullWidth,
@@ -66,29 +81,33 @@ export const LogoBarSettings = () => {
         alignItems,
         gap,
         radius,
-      }
+      },
     },
   } = useNode((node) => ({
     props: node.data.props,
   }))
   const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      setUploadFile(URL.createObjectURL(file));
+      setUploadFile(URL.createObjectURL(file))
     }
-  };
+  }
 
   const handleAddFile = () => {
-    const tempArray=[...logoBarItems];
-    tempArray.push({id:logoBarItems.length+1,src:uploadFile,alt:altText});
-      setProp((props) => (props.logoBarItems = tempArray),1000);
-      setUploadFile(null);
-      setAltText(null);
-  };
+    const tempArray = [...logoBarItems]
+    tempArray.push({
+      id: logoBarItems.length + 1,
+      src: uploadFile,
+      alt: altText,
+    })
+    setProp((props) => (props.logoBarItems = tempArray), 1000)
+    setUploadFile(null)
+    setAltText(null)
+  }
 
   return (
     <>
-    <Card className="p-2">
+      <Card className="p-2">
         <CardHeader className="p-2">
           <CardTitle>Content</CardTitle>
           <CardDescription>Drag to re-arrange click to edit</CardDescription>
@@ -101,66 +120,89 @@ export const LogoBarSettings = () => {
             onReorder={(e) => setProp((props) => (props.logoBarItems = e))}
           >
             {logoBarItems?.map((item, index) => (
-              <MultipleChoiceSettingsItem key={item.id} item={item} index={index} />
+              <MultipleChoiceSettingsItem
+                key={item.id}
+                item={item}
+                index={index}
+              />
             ))}
           </Reorder.Group>
         </CardContent>
         <div className="add-logo flex flex-row justify-end items-center w-full mb-6">
-        <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full">
-        <PlusCircle className="mr-4" />
-          Add Items</Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Add logo item</h4>
-            <p className="text-sm text-muted-foreground">
-              Select image as logo and set alt text
-            </p>
-          </div>
-          <div className="grid gap-2">
-            <div className="grid grid-cols-3 items-center gap-2">
-              <Label htmlFor="media">Logo</Label>
-              <Input
-                id="media"
-                onChange={handleInputFileChange}
-                type={"file"}
-                className="col-span-2 h-8"
-              />
-            </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full">
+                <PlusCircle className="mr-4" />
+                Add Items
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">Add logo item</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Select image as logo and set alt text
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="grid grid-cols-3 items-center gap-2">
+                    <Label htmlFor="media">Logo</Label>
+                    <Input
+                      id="media"
+                      onChange={handleInputFileChange}
+                      type={"file"}
+                      className="col-span-2 h-8"
+                    />
+                  </div>
 
-            <div className="grid grid-cols-3 items-center gap-2">
-              <Label htmlFor="altText">Alt</Label>
-              <Input
-                id="altText"
-                onChange={(e) => {setAltText(e.target.value)}}
-                placeholder="Alt text for image"
-                className="col-span-2 h-8"
-              />
-            </div>
+                  <div className="grid grid-cols-3 items-center gap-2">
+                    <Label htmlFor="altText">Alt</Label>
+                    <Input
+                      id="altText"
+                      onChange={(e) => {
+                        setAltText(e.target.value)
+                      }}
+                      placeholder="Alt text for image"
+                      className="col-span-2 h-8"
+                    />
+                  </div>
 
-            <div className="grid grid-cols-4 items-center gap-2 mt-4">
-              <Button
-                id="altText"
-                onClick={handleAddFile}
-                className="col-span-2 h-8"
-              >Add</Button>
-            </div>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
-
+                  <div className="grid grid-cols-4 items-center gap-2 mt-4">
+                    <Button
+                      id="altText"
+                      onClick={handleAddFile}
+                      className="col-span-2 h-8"
+                    >
+                      Add
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </Card>
-      {/* <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">General </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Full-width</p>
+              <Input
+                type={"checkbox"}
+                defaultValue={fullWidth}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) =>
+                      (props.logoBarStyles.fullWidth =
+                        !props.logoBarStyles.fullWidth)
+                  )
+                }
+              />
+            </div>
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Width</p>
@@ -170,12 +212,14 @@ export const LogoBarSettings = () => {
                 placeholder={width}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.width = e.target.value))
+                  setProp(
+                    (props) => (props.logoBarStyles.width = e.target.value)
+                  )
                 }
               />
             </div>
 
-              <Separator className="my-4 w-full basis-full" />
+            <Separator className="my-4 w-full basis-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Background</p>
@@ -185,12 +229,14 @@ export const LogoBarSettings = () => {
                 placeholder={background}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.background = e.target.value))
+                  setProp(
+                    (props) => (props.logoBarStyles.background = e.target.value)
+                  )
                 }
               />
             </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Border Radius</p>
@@ -200,108 +246,233 @@ export const LogoBarSettings = () => {
                 placeholder={radius}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.radius = e.target.value))
+                  setProp(
+                    (props) => (props.logoBarStyles.radius = e.target.value)
+                  )
                 }
-              /></div>
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Colors</span>
+            <span className="text-sm font-medium">Margin</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Text</p>
+              <p className="text-sm text-muted-foreground">Top</p>
               <Input
-                type={"color"}
-                defaultValue={`#${multipleChoices.textColor}`}
-                placeholder={multipleChoices.textColor}
+                type={"number"}
+                defaultValue={marginTop}
+                placeholder={marginTop}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.textColor = e.target.value))
+                  setProp(
+                    (props) => (props.logoBarStyles.marginTop = e.target.value)
+                  )
                 }
               />
             </div>
 
-              <Separator className="my-4 w-full" />
-
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background</p>
+              <p className="text-sm text-muted-foreground">Bottom</p>
               <Input
-                type={"color"}
-                defaultValue={multipleChoices.background}
-                placeholder={multipleChoices.background}
+                type={"number"}
+                defaultValue={marginBottom}
+                placeholder={marginBottom}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.background = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.logoBarStyles.marginBottom = e.target.value)
+                  )
                 }
-              /></div>
-
-              <Separator className="my-4 w-full" />
+              />
+            </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Border</p>
+              <p className="text-sm text-muted-foreground">Left</p>
               <Input
-                type={"color"}
-                defaultValue={multipleChoices.borderColor}
-                placeholder={multipleChoices.borderColor}
+                type={"number"}
+                defaultValue={marginLeft}
+                placeholder={marginLeft}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.borderColor = e.target.value))
+                  setProp(
+                    (props) => (props.logoBarStyles.marginLeft = e.target.value)
+                  )
                 }
-              /></div>
-
-              <Separator className="my-4 w-full" />
-
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Hover Text</p>
-              <Input
-               type="color"
-               value={multipleChoices.hoverTextColor}
-               placeholder={multipleChoices.hoverTextColor}
-               onChange={(e) =>
-                 setProp((props) => (props.multipleChoiceStyles.hoverTextColor = e.target.value))
-               }
-              /></div>
-
-              <Separator className="my-4 w-full" />
+              />
+            </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Hover Background</p>
+              <p className="text-sm text-muted-foreground">Right</p>
               <Input
-                type={"color"}
-                defaultValue={multipleChoices.hoverBackground}
-                placeholder={multipleChoices.hoverBackground}
+                type={"number"}
+                defaultValue={marginRight}
+                placeholder={marginRight}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.hoverBackground = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.logoBarStyles.marginRight = e.target.value)
+                  )
                 }
-              /></div>
-
-              <Separator className="my-4 w-full" />
-
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Hover Border</p>
-              <Input
-                type={"color"}
-                defaultValue={`#${multipleChoices.hoverBorderColor}`}
-                placeholder={multipleChoices.hoverBorderColor}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.hoverBorderColor = e.target.value))
-                }
-              /></div>
-
-
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
-      </Accordion> */}
+
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Padding</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Top</p>
+              <Input
+                type={"number"}
+                defaultValue={paddingTop}
+                placeholder={paddingTop}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) => (props.logoBarStyles.paddingTop = e.target.value)
+                  )
+                }
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Bottom</p>
+              <Input
+                type={"number"}
+                defaultValue={paddingBottom}
+                placeholder={paddingBottom}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) =>
+                      (props.logoBarStyles.paddingBottom = e.target.value)
+                  )
+                }
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Left</p>
+              <Input
+                type={"number"}
+                defaultValue={paddingLeft}
+                placeholder={paddingLeft}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) =>
+                      (props.logoBarStyles.paddingLeft = e.target.value)
+                  )
+                }
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Right</p>
+              <Input
+                type={"number"}
+                defaultValue={paddingRight}
+                placeholder={paddingRight}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) =>
+                      (props.logoBarStyles.paddingRight = e.target.value)
+                  )
+                }
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-4">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Alignment</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Direction</p>
+              <Select
+                defaultValue={flexDirection}
+                onValueChange={(e) => {
+                  setProp(
+                    (props) => (props.logoBarStyles.flexDirection = e),
+                    1000
+                  )
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Direction" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="row">Row</SelectItem>
+                    <SelectItem value="column">Column</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Justify</p>
+              <Select
+                defaultValue={justifyContent}
+                onValueChange={(e) => {
+                  setProp(
+                    (props) => (props.logoBarStyles.justifyContent = e),
+                    1000
+                  )
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Justify" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="flex-start">Start</SelectItem>
+                    <SelectItem value="center">Center</SelectItem>
+                    <SelectItem value="flex-end">End</SelectItem>
+                    <SelectItem value="space-between">Between</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col">
+              <p className="text-sm text-muted-foreground">Align</p>
+              <Select
+                defaultValue={alignItems}
+                onValueChange={(e) => {
+                  setProp((props) => (props.logoBarStyles.alignItems = e), 1000)
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Align" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="flex-start">Start</SelectItem>
+                    <SelectItem value="center">Center</SelectItem>
+                    <SelectItem value="flex-end">End</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   )
 }
-
 
 export const MultipleChoiceSettingsItem = ({ item, index }) => {
   const y = useMotionValue(0)
@@ -311,7 +482,9 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
     const file = e.target.files?.[0]
     if (file) {
       setProp(
-        (props) => (props.logoBarItems[index].src = URL.createObjectURL(file)),1000)
+        (props) => (props.logoBarItems[index].src = URL.createObjectURL(file)),
+        1000
+      )
     }
   }
   const {
@@ -331,8 +504,16 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
       className="flex flex-row gap-3  p-4 items-center border justify-between w-full h-20"
     >
       <Button
-      onClick={() => setProp((props) => (props.logoBarItems = logoBarItems.filter((_, i) => i !== index)), 1000)}
-      className="p-2" variant={"outline"}>
+        onClick={() =>
+          setProp(
+            (props) =>
+              (props.logoBarItems = logoBarItems.filter((_, i) => i !== index)),
+            1000
+          )
+        }
+        className="p-2"
+        variant={"outline"}
+      >
         <Trash2 className="w-5 h-5" />
       </Button>
       <Input
@@ -346,7 +527,7 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
           onClick={() => (inputRef.current as HTMLInputElement)?.click()}
           className="pic-container hover:cursor-pointer"
         >
-            <img src={item.src} alt={item.alt || ""} className="w-20 h-auto" />
+          <img src={item.src} alt={item.alt || ""} className="w-20 h-auto" />
         </div>
       </div>
       <div

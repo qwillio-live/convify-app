@@ -26,14 +26,22 @@ const LogoBarInner = styled.div<{
   alignItems: string
   gap: number
   radius: number
+  paddingTop: number
+  paddingBottom: number
+  paddingLeft: number
+  paddingRight: number
 }>`
   margin-top: ${({marginTop}) => `${marginTop}px`};
   margin-bottom: ${({marginBottom}) => `${marginBottom}px`};
   margin-left: ${({marginLeft}) => `${marginLeft}px`};
   margin-right: ${({marginRight}) => `${marginRight}px`};
   background-color: ${({background}) => background};
+  padding-top: ${({paddingTop}) => `${paddingTop}px`};
+  padding-bottom: ${({paddingBottom}) => `${paddingBottom}px`};
+  padding-left: ${({paddingLeft}) => `${paddingLeft}px`};
+  padding-right: ${({paddingRight}) => `${paddingRight}px`};
   min-width: ${({width, fullWidth}) => fullWidth ? "100%" : `${width}px`};
-  min-height: ${({height}) => `${height}px`};
+  min-height: auto;
   display: ${({flex}) => flex};
   flex-direction: ${({flexDirection}) => flexDirection};
   justify-content: ${({justifyContent}) => justifyContent};
@@ -46,10 +54,14 @@ const LogoBarInner = styled.div<{
 `;
 
 const LogoBarItem = ({
+  logoBarItemStyles,
   item,
 }) => {
   return (
-    <div className="relative overflow-hidden">
+    <div
+      style={{ width: `${logoBarItemStyles.width}px` }}
+      className="relative max-w-[100px] overflow-hidden"
+    >
       <img
         className="w-full"
         src={item.src}
@@ -61,6 +73,7 @@ const LogoBarItem = ({
 
 export const LogoBar = ({
 logoBarStyles,
+logoBarItemStyles,
   logoBarItems,
   ...props
 }) => {
@@ -83,6 +96,7 @@ logoBarStyles,
       {isHovered && <Controller nameOfComponent={"Logo Bar"} />}
         {logoBarItems.map((item, index) => (
           <LogoBarItem
+          logoBarItemStyles={logoBarItemStyles}
           key={index}
           item={item}
           />
@@ -97,16 +111,23 @@ logoBarStyles:{
   marginBottom: number
   marginLeft: number
   marginRight: number
+  paddingTop: number
+  paddingBottom: number
+  paddingLeft: number
+  paddingRight: number
   background: string
   width: number
   fullWidth: boolean
   height: number
   flex: string
-  flexDirection: string
-  justifyContent: string
-  alignItems: string
+  flexDirection: "row" | "column"
+  justifyContent: "space-between" | "center" | "flex-start" | "flex-end"
+  alignItems: "center" | "flex-start" | "flex-end"
   gap: number
   radius: number
+},
+logoBarItemStyles:{
+  width: number
 },
   logoBarItems: {
     id: string | number
@@ -121,16 +142,23 @@ logoBarStyles:{
   marginBottom: 0,
   marginLeft: 0,
   marginRight: 0,
+  paddingTop: 20,
+  paddingBottom: 20,
+  paddingLeft: 0,
+  paddingRight: 0,
   background: "#ffffff",
-  width: 500,
-  fullWidth: true,
+  width: 800,
+  fullWidth: false,
   height: 300,
   flex: "flex",
   flexDirection: "row",
-  justifyContent: "center",
+  justifyContent: "space-between",
   alignItems: "center",
-  gap: 10,
+  gap: 70,
   radius: 0,
+},
+logoBarItemStyles:{
+  width: 100,
 },
   logoBarItems: [
     {

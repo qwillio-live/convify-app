@@ -3,10 +3,10 @@ import {
   Activity,
   Anchor,
   Aperture,
+  ArrowRight,
   Disc,
   DollarSign,
   Mountain,
-  ArrowRight,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
@@ -184,7 +184,7 @@ export const IconButtonSettings = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                  <SelectItem value="arrowright">
+                    <SelectItem value="arrowright">
                       <ArrowRight />
                     </SelectItem>
                     <SelectItem value="aperture">

@@ -1,5 +1,8 @@
 import React, { useState } from "react"
+import ConvifyLogo from "@/assets/convify_logo_black.svg"
+import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import { GripVertical, Image, UploadCloud } from "lucide-react"
+import ContentEditable from "react-contenteditable"
 
 import { useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
@@ -10,7 +13,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button as CustomButton } from "@/components/ui/button"
-import ConvifyLogo from "@/assets/convify_logo_black.svg"
 import {
   Card,
   CardContent,
@@ -31,20 +33,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { Separator } from "@/components/ui/separator"
-import { Reorder, useDragControls, useMotionValue } from "framer-motion"
-import ContentEditable from "react-contenteditable"
-import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
+import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 enum SWITCH {
   SINGLE = "single",
   MULTIPLE = "multiple",
 }
 export const MultipleChoiceSettings = () => {
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [setUploadedFile,uploadedFile] = React.useState<string | null>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [setUploadedFile, uploadedFile] = React.useState<string | null>(null)
   const {
     actions: { setProp },
     props: {
@@ -61,15 +61,15 @@ export const MultipleChoiceSettings = () => {
     props: node.data.props,
   }))
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      setProp((props) => (props.src = URL.createObjectURL(file)), 1000);
+      setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
     }
-  };
+  }
 
   return (
     <>
-    <Card className="p-2">
+      <Card className="p-2">
         <CardHeader className="p-2">
           <CardTitle>Content</CardTitle>
           <CardDescription>Drag to re-arrange click to edit</CardDescription>
@@ -77,13 +77,16 @@ export const MultipleChoiceSettings = () => {
           <Separator className="my-4 w-full" />
           <span>Selection</span>
           <div className="flex items-center space-x-2">
-      <Label htmlFor="selection">Single </Label>
+            <Label htmlFor="selection">Single </Label>
 
-      <Switch
-      onCheckedChange={(e) => setProp((props) => (props.singleChoice = !props.singleChoice))}
-      id="selection" />
-      <Label htmlFor="selection">Multiple</Label>
-    </div>
+            <Switch
+              onCheckedChange={(e) =>
+                setProp((props) => (props.singleChoice = !props.singleChoice))
+              }
+              id="selection"
+            />
+            <Label htmlFor="selection">Multiple</Label>
+          </div>
         </CardHeader>
         <CardContent className="px-0">
           <Reorder.Group
@@ -93,7 +96,11 @@ export const MultipleChoiceSettings = () => {
             onReorder={(e) => setProp((props) => (props.multipleChoices = e))}
           >
             {multipleChoices?.map((item, index) => (
-              <MultipleChoiceSettingsItem key={item.id} item={item} index={index} />
+              <MultipleChoiceSettingsItem
+                key={item.id}
+                item={item}
+                index={index}
+              />
             ))}
           </Reorder.Group>
         </CardContent>
@@ -104,7 +111,6 @@ export const MultipleChoiceSettings = () => {
             <span className="text-sm font-medium">General </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Width</p>
               <Input
@@ -118,7 +124,7 @@ export const MultipleChoiceSettings = () => {
               />
             </div>
 
-              <Separator className="my-4 w-full basis-full" />
+            <Separator className="my-4 w-full basis-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Background</p>
@@ -133,7 +139,7 @@ export const MultipleChoiceSettings = () => {
               />
             </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Border Radius</p>
@@ -145,7 +151,8 @@ export const MultipleChoiceSettings = () => {
                 onChange={(e) =>
                   setProp((props) => (props.radius = e.target.value))
                 }
-              /></div>
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -154,7 +161,6 @@ export const MultipleChoiceSettings = () => {
             <span className="text-sm font-medium">Colors</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Text</p>
               <Input
@@ -163,12 +169,15 @@ export const MultipleChoiceSettings = () => {
                 placeholder={multipleChoices.textColor}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.textColor = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.multipleChoiceStyles.textColor = e.target.value)
+                  )
                 }
               />
             </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Background</p>
@@ -178,11 +187,15 @@ export const MultipleChoiceSettings = () => {
                 placeholder={multipleChoices.background}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.background = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.multipleChoiceStyles.background = e.target.value)
+                  )
                 }
-              /></div>
+              />
+            </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Border</p>
@@ -192,24 +205,33 @@ export const MultipleChoiceSettings = () => {
                 placeholder={multipleChoices.borderColor}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.borderColor = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.multipleChoiceStyles.borderColor = e.target.value)
+                  )
                 }
-              /></div>
+              />
+            </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Hover Text</p>
               <Input
-               type="color"
-               value={multipleChoices.hoverTextColor}
-               placeholder={multipleChoices.hoverTextColor}
-               onChange={(e) =>
-                 setProp((props) => (props.multipleChoiceStyles.hoverTextColor = e.target.value))
-               }
-              /></div>
+                type="color"
+                value={multipleChoices.hoverTextColor}
+                placeholder={multipleChoices.hoverTextColor}
+                onChange={(e) =>
+                  setProp(
+                    (props) =>
+                      (props.multipleChoiceStyles.hoverTextColor =
+                        e.target.value)
+                  )
+                }
+              />
+            </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Hover Background</p>
@@ -219,11 +241,16 @@ export const MultipleChoiceSettings = () => {
                 placeholder={multipleChoices.hoverBackground}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.hoverBackground = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.multipleChoiceStyles.hoverBackground =
+                        e.target.value)
+                  )
                 }
-              /></div>
+              />
+            </div>
 
-              <Separator className="my-4 w-full" />
+            <Separator className="my-4 w-full" />
 
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Hover Border</p>
@@ -233,18 +260,20 @@ export const MultipleChoiceSettings = () => {
                 placeholder={multipleChoices.hoverBorderColor}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.multipleChoiceStyles.hoverBorderColor = e.target.value))
+                  setProp(
+                    (props) =>
+                      (props.multipleChoiceStyles.hoverBorderColor =
+                        e.target.value)
+                  )
                 }
-              /></div>
-
-
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
     </>
   )
 }
-
 
 export const MultipleChoiceSettingsItem = ({ item, index }) => {
   const y = useMotionValue(0)
@@ -303,10 +332,8 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
           onChange={(e) =>
             setProp(
               (props) =>
-                (props.multipleChoices[index].optionLabel = e.target.value.replace(
-                  /<\/?[^>]+(>|$)/g,
-                  ""
-                )),
+                (props.multipleChoices[index].optionLabel =
+                  e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
               500
             )
           }
