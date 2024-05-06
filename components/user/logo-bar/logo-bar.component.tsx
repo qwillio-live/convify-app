@@ -9,6 +9,7 @@ import firstLogo from "@/assets/images/first-logo.png";
 import secondLogo from "@/assets/images/second-logo.png";
 import thirdLogo from "@/assets/images/third-logo.png";
 import fourthLogo from "@/assets/images/fourth-logo.png";
+import { Element } from "@/lib/craftjs";
 
 
 const LogoBarInner = styled.div<{
@@ -53,6 +54,7 @@ const LogoBarInner = styled.div<{
   flex-wrap: wrap;
 `;
 
+
 const LogoBarItem = ({
   logoBarItemStyles,
   item,
@@ -62,7 +64,9 @@ const LogoBarItem = ({
       style={{ width: `${logoBarItemStyles.width}px` }}
       className="relative max-w-[100px] overflow-hidden"
     >
-      <img
+      <Element
+        is={"img"}
+        id={`logo-bar-item-image-${item.id}`}
         className="w-full"
         src={item.src}
         alt={item.alt}
