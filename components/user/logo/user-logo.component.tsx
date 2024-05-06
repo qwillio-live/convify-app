@@ -1,16 +1,13 @@
+import { UploadCloud } from "lucide-react"
 import React from "react"
-import { Image, UploadCloud } from "lucide-react"
 
-import { useNode } from "@/lib/craftjs"
-import { cn } from "@/lib/utils"
+import ConvifyLogo from "@/assets/convify_logo_black.svg"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button as CustomButton } from "@/components/ui/button"
-import ConvifyLogo from "@/assets/convify_logo_black.svg"
 import {
   Card,
   CardContent,
@@ -18,20 +15,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import { useNode } from "@/lib/craftjs"
+import { cn } from "@/lib/utils"
 
 import { Controller } from "../settings/controller.component"
 
@@ -63,7 +52,7 @@ export const Logo = ({
       ref={(ref: any) => connect(drag(ref))}
       className={cn(
         `relative flex flex-row justify-${align} w-full border border-transparent`,
-        isHovered && "border border-blue-400 border-dotted"
+        isHovered && "border border-dotted border-blue-400"
       )}
     >
       {isHovered && <Controller nameOfComponent={"Logo"} />}
@@ -91,8 +80,8 @@ export const Logo = ({
 }
 
 export const LogoSettings = () => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [setUploadedFile,uploadedFile] = React.useState<string | null>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [setUploadedFile, uploadedFile] = React.useState<string | null>(null)
   const {
     actions: { setProp },
     props: {
@@ -112,11 +101,11 @@ export const LogoSettings = () => {
     props: node.data.props,
   }))
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      setProp((props) => (props.src = URL.createObjectURL(file)), 1000);
+      setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
     }
-  };
+  }
 
   return (
     <>
@@ -125,19 +114,24 @@ export const LogoSettings = () => {
           <CardTitle>Logo</CardTitle>
           <CardDescription>Add url of logo</CardDescription>
         </CardHeader>
-        <CardContent className="p-2 flex flex-col gap-2">
+        <CardContent className="flex flex-col gap-2 p-2">
           <Input
             defaultValue={src}
-            className="w-full text-xs p-2"
+            className="w-full p-2 text-xs"
             onChange={(e) => setProp((props) => (props.src = e.target.value))}
           />
           <span className="text-muted-foreground">Upload logo</span>
-          <Input type="file" className="hidden" ref={inputRef}
-          onChange={handleInputChange} />
+          <Input
+            type="file"
+            className="hidden"
+            ref={inputRef}
+            onChange={handleInputChange}
+          />
           <div
-          onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-          className="relative flex flex-row justify-center hover:cursor-pointer w-full">
-            <div className="bg-white bg-opacity-60 absolute w-full h-full flex flex-row items-center justify-center">
+            onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+            className="relative flex w-full flex-row justify-center hover:cursor-pointer"
+          >
+            <div className="absolute flex size-full flex-row items-center justify-center bg-white bg-opacity-60">
               <UploadCloud />
             </div>
             <img src={src} alt={alt} className="w-30" />
@@ -153,7 +147,7 @@ export const LogoSettings = () => {
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Alt label</p>
               <Input
-                className="text-sm p-2"
+                className="p-2 text-sm"
                 value={alt}
                 placeholder={alt}
                 onChange={(e) => {
