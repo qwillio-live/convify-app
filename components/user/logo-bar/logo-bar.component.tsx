@@ -101,7 +101,7 @@ logoBarItemStyles,
         {logoBarItems.map((item, index) => (
           <LogoBarItem
           logoBarItemStyles={logoBarItemStyles}
-          key={index}
+          key={`logo-bar-item-image-${item.id}`}
           item={item}
           />
         ))}

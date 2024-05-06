@@ -96,7 +96,7 @@ export const LogoBarSettings = () => {
   const handleAddFile = () => {
     const tempArray = [...logoBarItems]
     tempArray.push({
-      id: logoBarItems.length + 1,
+      id: `logo-bar-item-image-+${logoBarItems.length + 1}`,
       src: uploadFile,
       alt: altText,
     })
@@ -121,7 +121,7 @@ export const LogoBarSettings = () => {
           >
             {logoBarItems?.map((item, index) => (
               <MultipleChoiceSettingsItem
-                key={item.id}
+                key={`logo-bar-item-image-${item.id}`}
                 item={item}
                 index={index}
               />
@@ -498,9 +498,9 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
       dragListener={false}
       dragControls={controls}
       value={item}
-      id={item.id}
+      id={`logo-bar-item-image-${item.id}`}
       style={{ y }}
-      key={item}
+      key={`logo-bar-item-image-${item.id}`}
       className="flex flex-row gap-3  p-4 items-center border justify-between w-full h-20"
     >
       <Button
