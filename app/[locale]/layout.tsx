@@ -1,30 +1,31 @@
-import { Inter as FontSans } from "next/font/google"
 import localFont from "next/font/local"
 
-import "@/styles/globals.css"
-import { siteConfig } from "@/config/site"
-import { absoluteUrl, cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@/components/analytics"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
+import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import "@/styles/globals.css"
+import { NextIntlClientProvider, useMessages } from "next-intl"
 
 // const fontSans = FontSans({
 //   subsets: ["latin"],
 //   variable: "--font-sans",
 // })
 const fontSans = localFont({
-  src: "../assets/fonts/Inter-Regular.ttf",
+  src: "../../assets/fonts/Inter-Regular.ttf",
   variable: "--font-sans",
 })
 
 // Font files can be colocated inside of `pages`
 const fontHeading = localFont({
-  src: "../assets/fonts/CalSans-SemiBold.woff2",
+  src: "../../assets/fonts/CalSans-SemiBold.woff2",
   variable: "--font-heading",
 })
 
 interface RootLayoutProps {
   children: React.ReactNode
+  params: { locale: string }
 }
 
 export const metadata = {
@@ -74,9 +75,20 @@ export const metadata = {
   manifest: `${siteConfig.url}/site.webmanifest`,
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+// const locales = ["en", "pt"]
+
+// export function generateStaticParams() {
+//   return locales.map((locale) => ({ locale }))
+// }
+
+export default function RootLayout({
+  children,
+  params: { locale },
+}: RootLayoutProps) {
+  const messages = useMessages()
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -85,7 +97,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          {children}
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            {children}
+          </NextIntlClientProvider>
           <Analytics />
           <Toaster />
         </ThemeProvider>

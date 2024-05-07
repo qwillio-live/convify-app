@@ -1,18 +1,15 @@
 import { notFound } from "next/navigation"
 
-import { dashboardConfig } from "@/config/dashboard"
 import { getCurrentUser } from "@/lib/session"
-import { MainNav } from "@/components/main-nav"
-import { DashboardNav } from "@/components/nav"
-import { SiteFooter } from "@/components/site-footer"
-import { UserAccountNav } from "@/components/user-account-nav"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
+  params: { locale: string }
 }
 
 export default async function DashboardLayout({
   children,
+  params: { locale },
 }: DashboardLayoutProps) {
   const user = await getCurrentUser()
 

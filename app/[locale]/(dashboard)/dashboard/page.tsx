@@ -32,6 +32,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useTranslations } from "next-intl"
 
 interface User {
   name: string
@@ -44,6 +45,7 @@ export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
   const [userData, setUserData] = useState<User>()
   const router = useRouter()
+  const t = useTranslations("Dashboard")
 
   console.log(userData)
 
@@ -316,7 +318,7 @@ export default function DashboardPage() {
                   className="mb-4 h-[104px]"
                 />
                 <h3 className="text-2xl font-bold tracking-tight">
-                  There&apos;s not a flow in sight
+                  {t("There's not a flow in sight")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   Click on &quot;Create new flow&quot; or use one of flow <br />{" "}
@@ -326,7 +328,7 @@ export default function DashboardPage() {
                   className="itmes-center mt-4 flex gap-2"
                   onClick={handleOpenCreateFlow}
                 >
-                  <Plus size={16} /> Create new flow
+                  <Plus size={16} />
                 </Button>
               </div>
             )}

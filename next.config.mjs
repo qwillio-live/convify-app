@@ -1,6 +1,8 @@
 import { withContentlayer } from "next-contentlayer"
-
+import createNextIntlPlugin from "next-intl/plugin"
 import "./env.mjs"
+
+const withNextIntl = createNextIntlPlugin()
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,4 +16,4 @@ const nextConfig = {
   },
 }
 
-export default withContentlayer(nextConfig)
+export default withNextIntl(withContentlayer(nextConfig))

@@ -1,0 +1,13 @@
+{
+  "Landing": {
+    "Follow along on Twitter": "Acompanhe no Twitter",
+    "text": "Um aplicativo de exemplo criado usando componentes de servidor Next.js 13.",
+    "subtext": "Estou construindo um aplicativo da web com Next.js 13 e abrindo o código de tudo. Acompanhe enquanto descobrimos isso juntos."
+  },
+  "Login": {
+    "Welcome back": "bem vindo de volta"
+  },
+  "Dashboard": {
+    "There's not a flow in sight": "Não há um fluxo à vista"
+  }
+}
