@@ -128,7 +128,7 @@ export const UserToolbox = () => {
         <HelperInformation />
 
         <ScrollArea className="overflow-y-auto pt-4 pb-8 w-full">
-          <Accordion type="single" collapsible defaultValue="item-1">
+          <Accordion type="multiple" defaultValue={["item-1","item-2","item-3","item-4"]}>
             <AccordionItem value="item-1">
               <AccordionTrigger className="hover:no-underline uppercase">
                 Text
@@ -214,7 +214,7 @@ export const UserToolbox = () => {
                 Input
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
-                Input component here needs to be added
+                Input component is needed here
               </AccordionContent>
             </AccordionItem>
 
