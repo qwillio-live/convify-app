@@ -5,7 +5,6 @@ import { GripVertical, Image, UploadCloud } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
 import { useNode } from "@/lib/craftjs"
-import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -20,7 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -92,7 +90,7 @@ export const MultipleChoiceSettings = () => {
           <Reorder.Group
             axis="y"
             values={multipleChoices}
-            className="py-4 gap-2 flex flex-col w-full"
+            className="flex w-full flex-col gap-2 py-4"
             onReorder={(e) => setProp((props) => (props.multipleChoices = e))}
           >
             {multipleChoices?.map((item, index) => (
@@ -307,7 +305,7 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex flex-row gap-3  p-4 items-center border justify-between w-full h-20"
+      className="flex h-20 w-full  flex-row items-center justify-between gap-3 border p-4"
     >
       <Input
         type="file"
@@ -315,7 +313,7 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
         ref={inputRef}
         // onChange={handleInputChange}
       />
-      <div className="flex flex-row items-center gap-3 flex-wrap">
+      <div className="flex flex-row flex-wrap items-center gap-3">
         <div
           // onClick={() => (inputRef.current as HTMLInputElement)?.click()}
           className="pic-container hover:cursor-pointer"
@@ -337,7 +335,7 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
               500
             )
           }
-          className="overflow-hidden max-w-[100px] truncate min-w-[100px]"
+          className="min-w-[100px] max-w-[100px] overflow-hidden truncate"
           tagName={"p"}
         />
       </div>
