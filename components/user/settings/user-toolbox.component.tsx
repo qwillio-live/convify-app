@@ -11,6 +11,7 @@ import {
   Facebook,
   Globe,
   GripVertical,
+  Hand,
   Image as ImageIcon,
   ImagePlus,
   Layout,
@@ -103,7 +104,7 @@ function HelperInformation() {
       )}
     >
       <div className="flex flex-row items-start gap-1 text-left">
-        <MousePointer2 className="shrink-0" />
+        <Hand className="shrink-0" />
         <div>
           <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
             Drag and drop
@@ -149,7 +150,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Type className="mr-2 w-3 h-3" /> Headline{" "}
@@ -184,7 +185,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Pencil className="mr-2 w-3 h-3" /> Text{" "}
@@ -241,7 +242,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Navigation className="mr-2 w-3 h-3" />
@@ -279,7 +280,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <PlusSquare className="mr-2 w-3 h-3" /> Button{" "}
@@ -317,7 +318,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Diamond className="mr-2 w-3 h-3" /> Card{" "}
@@ -351,7 +352,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Layout className="mr-2 w-3 h-3" /> Container{" "}
@@ -382,7 +383,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Dice2 className="mr-2 w-3 h-3" /> Logo{" "}
@@ -416,7 +417,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <ImagePlus className="mr-2 w-3 h-3" /> Picture Choice{" "}
@@ -455,7 +456,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Copy className="mr-2 w-3 h-3" /> Multiple Choice
@@ -503,7 +504,7 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline flex flex-row items-center text-lg w-full justify-between"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Columns className="mr-2 w-3 h-3" /> Logo Bar{" "}
