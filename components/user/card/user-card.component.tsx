@@ -7,7 +7,7 @@ import {
   UserContainerSettings,
   ContainerDefaultProps,
 } from '../container/user-container.component';
-import { UserText } from '../user-text.component';
+import { UserText } from '../text/user-text.component';
 
 export const CardTop = ({ children, ...props }) => {
   const {

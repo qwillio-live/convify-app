@@ -60,9 +60,9 @@ import {
 import { Controller } from "../settings/controller.component"
 import {
   TextDefaultProps,
-  UserText,
-  UserTextSettings,
-} from "../user-text.component"
+  UserText
+} from "../text/user-text.component"
+import { UserTextSettings } from "../text/user-text-settings"
 import { PictureChoiceSettings } from "./picture-choice-settings.component"
 
 

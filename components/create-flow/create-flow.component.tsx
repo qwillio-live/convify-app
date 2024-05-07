@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
-import { UserText } from "@/components/user/user-text.component"
+import { UserText } from "@/components/user/text/user-text.component"
 
 import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
@@ -44,6 +44,7 @@ import { Logo } from "../user/logo/user-logo.component"
 import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
+import { HeadlineText } from "../user/headline-text/headline-text.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -72,6 +73,7 @@ export function CreateFlowComponent() {
       <Editor
         resolver={{
           Logo,
+          HeadlineText,
           UserText,
           UserButton,
           ButtonChoiceScreen,

@@ -3,7 +3,7 @@ import { Element, useEditor } from "@/lib/craftjs"
 
 import { Button } from "@/components/ui/button"
 import { Button as UserButton } from "@/components/user/button/user-button.component"
-import { UserText } from "@/components/user/user-text.component"
+import { UserText } from "@/components/user/text/user-text.component"
 
 import { Card } from "@/components/user/card/user-card.component"
 import { Container } from "@/components/user/container/user-container.component"

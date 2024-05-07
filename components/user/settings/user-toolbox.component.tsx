@@ -1,11 +1,23 @@
 import React from "react"
 import {
   Bookmark,
+  Box,
   Chrome,
+  Columns,
+  Copy,
+  Diamond,
+  Dice2,
   Facebook,
   Globe,
   Image,
+  ImagePlus,
+  Layout,
   Linkedin,
+  Navigation,
+  Pencil,
+  PlusSquare,
+  Square,
+  Type,
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
@@ -16,14 +28,14 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { Button as UserButton } from "@/components/user/button/user-button.component"
+import { Button as UserButton, ButtonDefaultProps } from "@/components/user/button/user-button.component"
 import {
   TextDefaultProps,
   UserText,
-} from "@/components/user/user-text.component"
+} from "@/components/user/text/user-text.component"
 
 import { Card } from "../card/user-card.component"
-import { Container } from "../container/user-container.component"
+import { Container, ContainerDefaultProps } from "../container/user-container.component"
 import {
   IconButton,
   IconButtonDefaultProps,
@@ -38,6 +50,8 @@ import {
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
+import { HeadlineText, HeadlineTextDefaultProps } from "../headline-text/headline-text.component"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const MultipleChoiceOptions = [
   {
@@ -71,67 +85,131 @@ export const UserToolbox = () => {
         <div className="pb-2">
           <p>Drag to add</p>
         </div>
-        <div className="flex w-full  flex-col gap-2">
-          <div
-            className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+
+        <ScrollArea className="overflow-y-auto py-4 w-full">
+        <div className="flex w-full basis-full flex-col gap-2">
+        <div
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
             ref={(ref: any) =>
               ref &&
               connectors.create(
                 ref,
-                <UserText
-                  {...TextDefaultProps}
-                  text="Your text"
-                  textColor={"inherit"}
-                  tagType={"p"}
-                />
+                <UserText {...TextDefaultProps} />
               )
             }
             data-cy="toolbox-text"
           >
-            Text field
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Pencil className="mr-4" /> Text
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                <div className="flex flex-row gap-2 justify-center items-center p-4 border">
+                  <p className="font-normal text-base">A good description of your cause</p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </div>
 
           <div
-            className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
             ref={(ref: any) =>
               ref &&
               connectors.create(
                 ref,
-                <UserButton
-                  size={"small"}
-                  variant={"outline"}
-                  color={"#ff235"}
-                  text={"Button"}
-                  background={undefined}
-                  custom={undefined}
-                />
+                <HeadlineText {...HeadlineTextDefaultProps} />
               )
             }
             data-cy="toolbox-text"
           >
-            Button
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Type className="mr-4" /> Headline
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                <div className="flex flex-row gap-2 justify-center items-center p-4 border">
+                  <h1 className="font-semibold text-lg">Headline for your business</h1>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </div>
 
           <div
-            className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
             ref={(ref: any) =>
-              ref && connectors.create(ref, <Card background={undefined} />)
+              ref &&
+              connectors.create(
+                ref,
+                <UserButton {...ButtonDefaultProps} />
+              )
             }
             data-cy="toolbox-text"
           >
-            Card
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <PlusSquare className="mr-4" /> Button
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                <Button variant="secondary">Register</Button>
+              </HoverCardContent>
+            </HoverCard>
           </div>
 
           <div
-            className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
-            ref={(ref: any) => ref && connectors.create(ref, <Container />)}
+            ref={(ref: any) =>
+              ref &&
+              connectors.create(
+                ref,
+                <Card {...ContainerDefaultProps} />
+              )
+            }
             data-cy="toolbox-text"
           >
-            Container
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Diamond className="mr-4" /> Card
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                <Square className="h-10 w-10" />
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+
+          <div
+            className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            //eslint-disable-next-line
+            ref={(ref: any) =>
+              ref &&
+              connectors.create(
+                ref,
+                <Container {...ContainerDefaultProps} />
+              )
+            }
+            data-cy="toolbox-text"
+          >
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Layout className="mr-4" /> Container
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-full" side="left" sideOffset={18}>
+                <Square className="h-10 w-16" />
+              </HoverCardContent>
+            </HoverCard>
           </div>
 
           <div
@@ -148,16 +226,15 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline">
-                  Icon Button
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Navigation className="mr-4" /> Button
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
-                <Editor enabled={false} resolver={{ IconButton }}>
-                  <Frame>
-                    <IconButton disabled={true} {...IconButtonDefaultProps} />
-                  </Frame>
-                </Editor>
+                <Button variant="secondary">
+                  Register
+                  <Bookmark  className="ml-2" />
+                </Button>
               </HoverCardContent>
             </HoverCard>
           </div>
@@ -172,8 +249,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline">
-                  Logo
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Dice2 className="mr-4" /> Logo
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -196,8 +273,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline">
-                  Picture Choice
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <ImagePlus className="mr-4" /> Picture Choice
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -225,8 +302,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline">
-                  Multiple Choice
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Copy className="mr-4" /> Multiple Choice
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -266,8 +343,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline">
-                  Logo Bar
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
+                  <Columns className="mr-4" /> Logo Bar
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -281,7 +358,9 @@ export const UserToolbox = () => {
             </HoverCard>
           </div>
 
-        </div>
+          </div>{/* End of Container */}
+
+          </ScrollArea>
       </div>
     </div>
   )

@@ -9,9 +9,9 @@ import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
 import {
   TextDefaultProps,
-  UserText,
-  UserTextSettings,
-} from "../user-text.component"
+  UserText
+} from "../text/user-text.component"
+import { UserTextSettings } from "../text/user-text-settings"
 
 export const ScreenOneChoice = ({ ...props }) => {
   return (

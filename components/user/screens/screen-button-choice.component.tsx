@@ -9,9 +9,9 @@ import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
 import {
   TextDefaultProps,
-  UserText,
-  UserTextSettings,
-} from "../user-text.component"
+  UserText
+} from "../text/user-text.component"
+import { UserTextSettings } from "../text/user-text-settings"
 import { ContainerDefaultProps, UserContainer } from "../container/user-container.component"
 import { DefaultSerializer } from "v8"
 import { CardTop } from "../card/user-card.component"
