@@ -53,6 +53,6 @@ export const InsightsDevices: TSelectOptions[] = [
   },
 ]
 
-export const locales = ["en", "pt", "de"]
+export const locales = ["en", "pt"]
 
-export const defaultLocale = "pt"
+export const defaultLocale = "en"
