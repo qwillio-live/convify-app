@@ -49,13 +49,13 @@ const LogoBarInner = styled.div<{
   align-items: ${({alignItems}) => alignItems};
   gap: ${({gap}) => `${gap}px`};
   border-radius: ${({radius}) => `${radius}px`};
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   flex-wrap: wrap;
 `;
 
 
-const LogoBarItem = ({
+export const LogoBarItem = ({
   logoBarItemStyles,
   item,
 }) => {
@@ -64,7 +64,7 @@ const LogoBarItem = ({
       style={{ width: `${logoBarItemStyles.width}px` }}
       className="relative max-w-[100px] overflow-hidden"
     >
-      <Element
+      <img
         is={"img"}
         id={`logo-bar-item-image-${item.id}`}
         className="w-full"
@@ -74,6 +74,12 @@ const LogoBarItem = ({
     </div>
   );
 };
+
+LogoBarItem.craft = {
+  related: {
+    settings: LogoBarSettings,
+  },
+}
 
 export const LogoBar = ({
 logoBarStyles,
@@ -94,16 +100,24 @@ logoBarItemStyles,
   return (
     <LogoBarInner
       ref={(ref: any) => connect(drag(ref))}
+      className={cn("border border-transparent", (isHovered && "border border-blue-400 border-dotted"))}
       {...logoBarStyles}
       {...props}
     >
       {isHovered && <Controller nameOfComponent={"Logo Bar"} />}
         {logoBarItems.map((item, index) => (
-          <LogoBarItem
+          <Element
+          is={LogoBarItem}
+          id={`logo-bar-item-image-${item.id}`}
           logoBarItemStyles={logoBarItemStyles}
           key={`logo-bar-item-image-${item.id}`}
           item={item}
           />
+          // <LogoBarItem
+          // logoBarItemStyles={logoBarItemStyles}
+          // key={`logo-bar-item-image-${item.id}`}
+          // item={item}
+          // />
         ))}
     </LogoBarInner>
   )

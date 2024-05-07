@@ -63,7 +63,6 @@ export const Logo = ({
       ref={(ref: any) => connect(drag(ref))}
       className={cn(
         `relative flex flex-row justify-${align} w-full border border-transparent`,
-        isHovered && "border border-blue-400 border-dotted"
       )}
     >
       {isHovered && <Controller nameOfComponent={"Logo"} />}

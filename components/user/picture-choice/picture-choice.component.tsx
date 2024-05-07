@@ -101,7 +101,6 @@ export const PictureChoice = ({
 
   return (
     <>
-      {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
       <div
         ref={(ref: any) => connect(drag(ref))}
         style={{
@@ -119,8 +118,9 @@ export const PictureChoice = ({
           padding: `${containerStyles.padding}px`,
           border: `${containerStyles.border}px solid ${containerStyles.borderColor}`,
         }}
-        className={cn(isHovered && "border-blue-400 border-dotted")}
       >
+      {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
+
         {pictureItems.map((item, index) => (
           <div
             key={index}

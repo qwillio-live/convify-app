@@ -63,7 +63,7 @@ export const UserText = ({
       ref={(ref: any) => ref && connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >
-      {/* {isHovered && <Controller nameOfComponent={"TEXT"} />} */}
+      {isHovered && <Controller nameOfComponent={"TEXT"} />}
       <ContentEditable
         html={text}
         disabled={!editable}
