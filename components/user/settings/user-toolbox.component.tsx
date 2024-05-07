@@ -9,6 +9,7 @@ import {
   Dice2,
   Facebook,
   Globe,
+  GripVertical,
   Image,
   ImagePlus,
   Layout,
@@ -102,8 +103,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Pencil className="mr-4" /> Text
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Pencil className="mr-4" /> Text </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -128,8 +129,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Type className="mr-4" /> Headline
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Type className="mr-4" /> Headline </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -154,8 +155,9 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <PlusSquare className="mr-4" /> Button
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><PlusSquare className="mr-4" /> Button </span> <GripVertical />
+
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -178,8 +180,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Diamond className="mr-4" /> Card
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Diamond className="mr-4" /> Card </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -202,8 +204,9 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Layout className="mr-4" /> Container
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Layout className="mr-4" /> Container </span> <GripVertical />
+
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -226,8 +229,9 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Navigation className="mr-4" /> Button
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Navigation className="mr-4" /> Button </span> <GripVertical />
+
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -249,8 +253,9 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Dice2 className="mr-4" /> Logo
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Dice2 className="mr-4" /> Logo </span> <GripVertical />
+
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -273,8 +278,8 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <ImagePlus className="mr-4" /> Picture Choice
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><ImagePlus className="mr-4" /> Picture Choice </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -302,8 +307,9 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Copy className="mr-4" /> Multiple Choice
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Copy className="mr-4" /> Multiple Choice</span> <GripVertical />
+
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -343,8 +349,9 @@ export const UserToolbox = () => {
           >
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg">
-                  <Columns className="mr-4" /> Logo Bar
+                <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
+                  <span className="flex flex-row items-center"><Columns className="mr-4" /> Logo Bar </span> <GripVertical />
+
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
