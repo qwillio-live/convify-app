@@ -14,12 +14,15 @@ import {
   ImagePlus,
   Layout,
   Linkedin,
+  MousePointer2,
   Navigation,
   Pencil,
   PlusSquare,
   Square,
   Type,
 } from "lucide-react"
+import cn from "classnames"
+import { Card as UiCard } from "@/components/ui/card"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { Button } from "@/components/ui/button"
@@ -77,15 +80,33 @@ const MultipleChoiceOptions = [
   },
 ]
 
+function HelperInformation() {
+  return (
+    <UiCard
+      className={cn(
+        "flex flex-col items-center justify-center border border-gray-500 px-2 py-3"
+      )}
+    >
+      <div className="flex flex-row items-start gap-1 text-left">
+        <MousePointer2 className="shrink-0" />
+        <div>
+          <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
+            Drag and drop
+          </h2>
+          <p className="text-sm font-light text-justify">Click and hold a block from list, move it to the panel to the left and release it above the drop zone to add it.</p>
+        </div>
+      </div>
+    </UiCard>
+  )
+}
+
 export const UserToolbox = () => {
   const { connectors } = useEditor()
 
   return (
     <div className="p-y">
       <div className="flex flex-col items-center justify-center space-y-1">
-        <div className="pb-2">
-          <p>Drag to add</p>
-        </div>
+        <HelperInformation />
 
         <ScrollArea className="overflow-y-auto py-4 w-full">
         <div className="flex w-full basis-full flex-col gap-2">
@@ -104,7 +125,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Pencil className="mr-4" /> Text </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Pencil className="mr-2 w-3 h-3" /> Text </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -130,7 +151,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Type className="mr-4" /> Headline </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Type className="mr-2 w-3 h-3" /> Headline </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -156,7 +177,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><PlusSquare className="mr-4" /> Button </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><PlusSquare className="mr-2 w-3 h-3" /> Button </span> <GripVertical />
 
                 </Button>
               </HoverCardTrigger>
@@ -181,7 +202,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Diamond className="mr-4" /> Card </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Diamond className="mr-2 w-3 h-3" /> Card </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -205,7 +226,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Layout className="mr-4" /> Container </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Layout className="mr-2 w-3 h-3" /> Container </span> <GripVertical />
 
                 </Button>
               </HoverCardTrigger>
@@ -230,7 +251,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Navigation className="mr-4" /> Button </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Navigation className="mr-2 w-3 h-3" /> Button </span> <GripVertical />
 
                 </Button>
               </HoverCardTrigger>
@@ -254,7 +275,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Dice2 className="mr-4" /> Logo </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Dice2 className="mr-2 w-3 h-3" /> Logo </span> <GripVertical />
 
                 </Button>
               </HoverCardTrigger>
@@ -279,7 +300,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><ImagePlus className="mr-4" /> Picture Choice </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><ImagePlus className="mr-2 w-3 h-3" /> Picture Choice </span> <GripVertical />
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-full" side="left" sideOffset={18}>
@@ -308,7 +329,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Copy className="mr-4" /> Multiple Choice</span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Copy className="mr-2 w-3 h-3" /> Multiple Choice</span> <GripVertical />
 
                 </Button>
               </HoverCardTrigger>
@@ -350,7 +371,7 @@ export const UserToolbox = () => {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="link" className="hover:no-underline flex flex-row items-center text-lg w-full justify-between">
-                  <span className="flex flex-row items-center"><Columns className="mr-4" /> Logo Bar </span> <GripVertical />
+                  <span className="flex flex-row items-center text-sm"><Columns className="mr-2 w-3 h-3" /> Logo Bar </span> <GripVertical />
 
                 </Button>
               </HoverCardTrigger>

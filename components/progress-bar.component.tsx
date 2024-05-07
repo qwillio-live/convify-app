@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "./user/settings/controller.component"
 import { Settings } from "lucide-react"
+import { ContainerDefaultProps, UserContainer } from "./user/container/user-container.component"
 
 export function ProgressBar() {
   const {
@@ -25,12 +26,12 @@ export function ProgressBar() {
   }, [])
 
   return(
-  <>
+  <UserContainer {...ContainerDefaultProps}>
   {isHovered && <Controller nameOfComponent={"Progress Bar"} />}
   <Progress
   ref={(ref: any) => connect(drag(ref))}
-  value={progress} className="h-1 w-[60%] text-[#4050ff]" />
-  </>
+  value={progress} className="h-1 w-full min-w-[200px] text-[#4050ff]" />
+  </UserContainer>
   )
 
 }

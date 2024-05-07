@@ -142,7 +142,7 @@ export function CreateFlowComponent() {
                   >
                     <Element
                       is={"div"}
-                      id="create-flow-canvas"
+                      id="create-flow-canvas hover:dragged"
                       background="#ad2121"
                       canvas
                       className="min-w-full craftjs-renderer"
