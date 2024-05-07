@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import ConvifyLogo from "@/assets/convify_logo_blue.png"
+import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import { GripVertical, Image, UploadCloud } from "lucide-react"
 import ContentEditable from "react-contenteditable"

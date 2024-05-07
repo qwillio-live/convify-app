@@ -1,7 +1,7 @@
 import { UploadCloud } from "lucide-react"
 import React from "react"
 
-import ConvifyLogo from "@/assets/convify_logo_blue.png"
+import ConvifyLogo from "@/assets/convify_logo_black.png"
 import {
   Accordion,
   AccordionContent,
