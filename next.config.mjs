@@ -16,4 +16,4 @@ const nextConfig = {
   },
 }
 
-export default withNextIntl(withContentlayer(nextConfig))
+export default withContentlayer(withNextIntl(nextConfig))

@@ -2,12 +2,11 @@ import { getToken } from "next-auth/jwt"
 import { withAuth } from "next-auth/middleware"
 import createMiddleware from "next-intl/middleware"
 import { NextRequest, NextResponse } from "next/server"
-
-export const locales = ["en", "pt"] as const
+import { defaultLocale, locales } from "./constant"
 
 const intlMiddleware = createMiddleware({
-  locales: locales,
-  defaultLocale: "en",
+  locales,
+  defaultLocale,
   localePrefix: "as-needed",
 })
 

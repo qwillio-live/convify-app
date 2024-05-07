@@ -52,3 +52,7 @@ export const InsightsDevices: TSelectOptions[] = [
     label: "Tablet",
   },
 ]
+
+export const locales = ["en", "pt", "de"]
+
+export const defaultLocale = "pt"
