@@ -55,7 +55,14 @@ export const UserContainer = ({
 }) => {
   const {
     connectors: { connect, drag },
-  } = useNode()
+    selected,
+    isHovered,
+    actions: { setProp },
+  } = useNode((state) => ({
+    selected: state.events.selected,
+    dragged: state.events.dragged,
+    isHovered: state.events.hovered,
+  }))
   return (
     <div
       {...props}
@@ -91,6 +98,8 @@ export const UserContainer = ({
         border: `${border}px solid ${borderColor}`,
       }}
     >
+
+    {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
       {children}
     </div>
   )
