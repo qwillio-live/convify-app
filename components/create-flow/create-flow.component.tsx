@@ -130,7 +130,7 @@ export function CreateFlowComponent() {
               >
                 <TabsContent
                   className={cn(
-                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased ",
+                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased z-20",
                     view == VIEWS.DESKTOP
                       ? "w-full border-0"
                       : "w-96 border px-4"
@@ -149,7 +149,7 @@ export function CreateFlowComponent() {
                     ></Element>
                   </Frame>
                 </TabsContent>
-                <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2">
+                <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2 z-20">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
                   <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>
