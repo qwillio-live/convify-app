@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
-import { UserText } from "@/components/user/user-text.component"
+import { UserText } from "@/components/user/text/user-text.component"
 
 import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
@@ -41,8 +41,10 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
+import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
+import { HeadlineText } from "../user/headline-text/headline-text.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -71,6 +73,7 @@ export function CreateFlowComponent() {
       <Editor
         resolver={{
           Logo,
+          HeadlineText,
           UserText,
           UserButton,
           ButtonChoiceScreen,
@@ -99,8 +102,11 @@ export function CreateFlowComponent() {
           Image,
           PictureChoice,
           MultipleChoice,
+          LogoBar,
+          LogoBarItem,
+
         }}
-        // onRender={RenderNode}
+        onRender={RenderNode}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
@@ -124,7 +130,7 @@ export function CreateFlowComponent() {
               >
                 <TabsContent
                   className={cn(
-                    "mx-auto box-content min-h-screen bg-background font-sans antialiased ",
+                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased ",
                     view == VIEWS.DESKTOP
                       ? "w-full border-0"
                       : "w-96 border px-4"
@@ -139,7 +145,7 @@ export function CreateFlowComponent() {
                       id="create-flow-canvas"
                       background="#ad2121"
                       canvas
-                      className="min-w-full"
+                      className="min-w-full craftjs-renderer"
                     ></Element>
                   </Frame>
                 </TabsContent>

@@ -1,12 +1,17 @@
-import { GripVertical } from "lucide-react"
-import React from "react"
+import React, { useState } from "react"
+import ConvifyLogo from "@/assets/convify_logo_black.svg"
+import { Reorder, useDragControls, useMotionValue } from "framer-motion"
+import { GripVertical, Image, UploadCloud } from "lucide-react"
+import ContentEditable from "react-contenteditable"
 
+import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button as CustomButton } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -16,11 +21,21 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import { useNode } from "@/lib/craftjs"
-import { Reorder, useDragControls, useMotionValue } from "framer-motion"
-import ContentEditable from "react-contenteditable"
+import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 enum SWITCH {
   SINGLE = "single",
   MULTIPLE = "multiple",

@@ -60,9 +60,9 @@ import {
 import { Controller } from "../settings/controller.component"
 import {
   TextDefaultProps,
-  UserText,
-  UserTextSettings,
-} from "../user-text.component"
+  UserText
+} from "../text/user-text.component"
+import { UserTextSettings } from "../text/user-text-settings"
 import { PictureChoiceSettings } from "./picture-choice-settings.component"
 
 
@@ -101,7 +101,6 @@ export const PictureChoice = ({
 
   return (
     <>
-      {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
       <div
         ref={(ref: any) => connect(drag(ref))}
         style={{
@@ -119,8 +118,9 @@ export const PictureChoice = ({
           padding: `${containerStyles.padding}px`,
           border: `${containerStyles.border}px solid ${containerStyles.borderColor}`,
         }}
-        className={cn(isHovered && "border-blue-400 border-dotted")}
       >
+      {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
+
         {pictureItems.map((item, index) => (
           <div
             key={index}

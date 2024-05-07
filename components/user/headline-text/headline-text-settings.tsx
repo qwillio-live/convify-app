@@ -21,77 +21,10 @@ import {
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 
-import { Input } from "../ui/input"
-import { Controller } from "./settings/controller.component"
+import { Input } from "@/components/ui/input"
+import { Controller } from "../settings/controller.component"
 
-export const UserText = ({
-  text,
-  fontSize,
-  textAlign,
-  fontWeight,
-  marginLeft,
-  marginRight,
-  marginTop,
-  marginBottom,
-  textColor,
-  tagType,
-  ...props
-}) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-    isHovered,
-    actions: { setProp },
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    dragged: state.events.dragged,
-    isHovered: state.events.hovered,
-  }))
-  const [editable, setEditable] = useState(false)
-
-  useEffect(() => {
-    if (selected) {
-      return
-    }
-
-    setEditable(false)
-  }, [selected])
-  return (
-    <div
-      className="relative border border-dashed border-transparent transition-all duration-200 hover:border-blue-400 focus:border-blue-400"
-      {...props}
-      ref={(ref: any) => ref && connect(drag(ref))}
-      onClick={() => selected && setEditable(true)}
-    >
-      {/* {isHovered && <Controller nameOfComponent={"TEXT"} />} */}
-      <ContentEditable
-        html={text}
-        disabled={!editable}
-        onChange={(e) =>
-          setProp(
-            (props) =>
-              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
-            500
-          )
-        }
-        tagName={tagType}
-        className={`font-[${fontWeight}]`}
-        style={{
-          fontSize: `${fontSize}px`,
-          textAlign,
-          fontWeight: `${fontWeight}`,
-          marginLeft: `${marginLeft}px`,
-          marginRight: `${marginRight}px`,
-          marginTop: `${marginTop}px`,
-          marginBottom: `${marginBottom}px`,
-          color: `${textColor}`,
-        }}
-      />
-    </div>
-  )
-}
-
-export const UserTextSettings = () => {
+export const HeadlineTextSettings = () => {
   const {
     actions: { setProp },
     fontSize,
@@ -144,8 +77,6 @@ export const UserTextSettings = () => {
                     <SelectItem value="h4">Heading 4</SelectItem>
                     <SelectItem value="h5">Heading 5</SelectItem>
                     <SelectItem value="h6">Heading 6</SelectItem>
-                    <SelectItem value="p">Paragraph</SelectItem>
-                    <SelectItem value="span">Span</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -286,24 +217,4 @@ export const UserTextSettings = () => {
       </Accordion>
     </>
   )
-}
-
-export const TextDefaultProps = {
-  text: "Your text here",
-  fontSize: 42,
-  textColor: "inherit",
-  fontWeight: "400",
-  textAlign: "left",
-  marginLeft: 0,
-  marginRight: 0,
-  marginTop: 0,
-  marginBottom: 0,
-  tagType: "h1",
-}
-
-UserText.craft = {
-  props: TextDefaultProps,
-  related: {
-    settings: UserTextSettings,
-  },
 }

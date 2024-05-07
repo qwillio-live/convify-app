@@ -1,35 +1,39 @@
-import React from "react";
-import styled from 'styled-components';
-import { Controller } from "../settings/controller.component";
-import { MultipleChoiceSettings } from "./user-multiple-choice-settings";
-import { cn } from "@/lib/utils";
-import {useNode} from "@/lib/craftjs"
+import React from "react"
+import styled from "styled-components"
 
+import { useNode } from "@/lib/craftjs"
+import { cn } from "@/lib/utils"
+
+import { Controller } from "../settings/controller.component"
+import { MultipleChoiceSettings } from "./user-multiple-choice-settings"
 
 const MultipleChoiceItem = styled.div<{
-  fontSize: string | number;
-  selected: boolean;
-  background: string;
-  radius: string | number;
-  border: string | number;
-  borderColor: string;
-  hoverBorderColor: string;
-  textColor: string;
-  hoverTextColor: string;
-  paddingTop: string | number;
-  paddingBottom: string | number;
-  paddingLeft: string | number;
-  paddingRight: string | number;
-  gap: string | number;
-  hoverBackground: string;
+  fontSize: string | number
+  selected: boolean
+  background: string
+  radius: string | number
+  border: string | number
+  borderColor: string
+  hoverBorderColor: string
+  textColor: string
+  hoverTextColor: string
+  paddingTop: string | number
+  paddingBottom: string | number
+  paddingLeft: string | number
+  paddingRight: string | number
+  gap: string | number
+  hoverBackground: string
 }>`
   min-width: 100%;
   flex-basis: 100%;
   font-size: ${({ fontSize }) => `${fontSize}px`};
-  background-color: ${({ background,selected,hoverBackground }) => selected ? hoverBackground : background};
+  background-color: ${({ background, selected, hoverBackground }) =>
+    selected ? hoverBackground : background};
   border-radius: ${({ radius }) => `${radius}px`};
-  border: ${({ border, borderColor, selected, hoverBorderColor }) => `${border}px solid ${selected ? hoverBorderColor : borderColor}`};
-  color: ${({ textColor,selected,hoverTextColor }) => selected ? hoverTextColor : textColor};
+  border: ${({ border, borderColor, selected, hoverBorderColor }) =>
+    `${border}px solid ${selected ? hoverBorderColor : borderColor}`};
+  color: ${({ textColor, selected, hoverTextColor }) =>
+    selected ? hoverTextColor : textColor};
   padding-top: ${({ paddingTop }) => `${paddingTop}px`};
   padding-bottom: ${({ paddingBottom }) => `${paddingBottom}px`};
   padding-left: ${({ paddingLeft }) => `${paddingLeft}px`};
@@ -45,64 +49,59 @@ const MultipleChoiceItem = styled.div<{
     border-color: ${({ hoverBorderColor }) => hoverBorderColor};
     color: ${({ hoverTextColor }) => hoverTextColor};
   }
-`;
-
+`
 
 const MultipleChoiceItemInner = ({
   optionLogo,
   optionLabel,
   selected,
   multipleChoiceStyles,
-  index
+  index,
 }) => {
   const {
     actions: { setProp },
-    props:{
-      singleChoice,
-      lastSelectedChoice,
-      multipleChoices
-    },
+    props: { singleChoice, lastSelectedChoice, multipleChoices },
   } = useNode((node) => ({
     props: node.data.props,
-  }));
-  React.useEffect(() => {
-    console.log("multipleChoices", multipleChoices)
-  },[multipleChoices])
+  }))
   const handleSelected = () => {
-    if(singleChoice && lastSelectedChoice !== null){
+    if (singleChoice && lastSelectedChoice !== null) {
       setProp((props) => {
         //remove previous lastSelectedChoice
         props.multipleChoices[lastSelectedChoice].optionSelected = false
         //set new lastSelectedChoice
         props.lastSelectedChoice = index
         //set new optionSelected
-        props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
+        props.multipleChoices[index].optionSelected =
+          !props.multipleChoices[index].optionSelected
       })
-
-    }else if(singleChoice && lastSelectedChoice === null){
+    } else if (singleChoice && lastSelectedChoice === null) {
       setProp((props) => {
         //set new lastSelectedChoice
         props.lastSelectedChoice = index
         //set new optionSelected
-        props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
+        props.multipleChoices[index].optionSelected =
+          !props.multipleChoices[index].optionSelected
       })
-    }else{
-
+    } else {
       setProp((props) => {
-        props.multipleChoices[index].optionSelected = !props.multipleChoices[index].optionSelected
+        props.multipleChoices[index].optionSelected =
+          !props.multipleChoices[index].optionSelected
       })
     }
   }
   return (
     <MultipleChoiceItem
-    onClick={() => handleSelected()}
-    {...multipleChoiceStyles} selected={selected}>
+      onClick={() => handleSelected()}
+      {...multipleChoiceStyles}
+      selected={selected}
+    >
       <input type="radio" className="hidden" />
       {optionLogo}
       <label className="hover:cursor-pointer">{optionLabel}</label>
     </MultipleChoiceItem>
-  );
-};
+  )
+}
 
 export const MultipleChoice = ({
   marginTop,
@@ -124,7 +123,7 @@ export const MultipleChoice = ({
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
-  }));
+  }))
 
   return (
     <div
@@ -140,10 +139,8 @@ export const MultipleChoice = ({
         marginLeft: `${marginLeft}px`,
         marginRight: `${marginRight}px`,
         width: `${width}px`,
-       }}
-      className={cn(
-        selected && `border border-blue-400 border-dashed`,
-      )}
+      }}
+      className={cn(selected && `border border-blue-400 border-dashed`)}
     >
       {isHovered && <Controller nameOfComponent={"Multiple Choices"} />}
       <div className="flex flex-col gap-2">
@@ -227,7 +224,7 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
     paddingBottom: 16,
     paddingLeft: 16,
     paddingRight: 16,
-    gap: 8
+    gap: 8,
   },
   multipleChoices: [
     {
