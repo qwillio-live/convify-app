@@ -72,10 +72,8 @@ export default function DashboardPage() {
         <div className="fixed flex h-full max-h-screen flex-col gap-2 md:w-[220px] lg:w-[280px]">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              {/* <Package2 className="size-6" /> */}
               <svg
-                width="24"
-                height="24"
+                className="size-7"
                 viewBox="0 0 720 524"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +141,7 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder="Find workspace or flow"
@@ -278,7 +276,7 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="!size-10 rounded-full bg-[#eaeaec] text-base font-bold hover:bg-[#eaeaec]"
+                  className="flex !size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec]"
                 >
                   {userData && userData?.name ? (
                     userData?.name?.charAt(0).toUpperCase()
@@ -347,7 +345,7 @@ export default function DashboardPage() {
                   className="itmes-center mt-4 flex gap-2"
                   onClick={handleOpenCreateFlow}
                 >
-                  <Plus size={16} />
+                  <Plus size={16} /> Create new flow
                 </Button>
               </div>
             )}
