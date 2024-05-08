@@ -50,8 +50,13 @@ enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
 }
-const SaveButton = () => {
-  const { query } = useEditor()
+const SaveButton =() => {
+  const { query,query: {node} } = useEditor();
+  const headerId= useAppSelector((state) => state.screen.headerId)
+  //screen header id is: HeT6HrWBxJ
+  const nodeTree = node(headerId).toNodeTree()
+  nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
+  console.log("NODE TREE IS: ",nodeTree)
   return (
     <a
       className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
@@ -60,6 +65,16 @@ const SaveButton = () => {
       Get JSON
     </a>
   )
+}
+const NodesToSerializedNodes = (nodes) =>  {
+  // getSerializedNodes is present in the useEditor hook
+  const {query: {getSerializedNodes}} = useEditor();
+  const serializedNodes = getSerializedNodes()
+const result = {}
+Object.keys(nodes).forEach(key => {
+result[key] = serializedNodes[key]
+})
+return result
 }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)

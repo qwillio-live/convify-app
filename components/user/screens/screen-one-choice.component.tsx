@@ -15,13 +15,12 @@ import { UserTextSettings } from "../text/user-text-settings"
 
 export const ScreenOneChoice = ({ ...props }) => {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 py-6">
       <Element
         is={"div"}
         padding={5}
         background="#ad2121"
         canvas
-        className="min-h-screen min-w-full"
+        className="min-h-screen min-w-full flex flex-col items-center justify-center gap-6 py-6"
         id="one-choice-screens"
       >
         <Element
@@ -108,7 +107,6 @@ export const ScreenOneChoice = ({ ...props }) => {
           <ScreenFooter />
         </Element>
       </Element>
-    </div>
   )
 }
 
