@@ -6,15 +6,19 @@ import { ContainerDefaultProps, UserContainer } from '../container/user-containe
 
 export const ScreenHeader = ({scale=1}) => {
   return (
-    <UserContainer
+    <Element
+    is={UserContainer}
     {...ContainerDefaultProps}
+    id="user_screen_header"
     >
+    <div>
     <Element
     canvas
     className="w-full"
     {...LogoDefaultProps}
     is={Logo} id="user_logo_header" />
-    </UserContainer>
+    </div>
+    </Element>
   )
 }
 

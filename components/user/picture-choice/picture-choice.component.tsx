@@ -13,6 +13,8 @@ import {
   ShieldCheck,
   UploadCloud,
   XCircle,
+  Check,
+  X,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
@@ -64,13 +66,11 @@ import {
 } from "../text/user-text.component"
 import { UserTextSettings } from "../text/user-text-settings"
 import { PictureChoiceSettings } from "./picture-choice-settings.component"
-
-
-
-
+import styled from "styled-components"
 
 const ICONS = {
   image: Image,
+  check: Check,
   listOrdered: ListOrdered,
   uploadCloud: UploadCloud,
   aperture: Aperture,
@@ -80,7 +80,87 @@ const ICONS = {
   checkCircle: CheckCircle,
   shieldCheck: ShieldCheck,
   circleX: XCircle,
+  x: X,
 }
+
+const PictureChoiceContainer = styled.div<{
+  marginTop: number;
+  marginBottom: number;
+  marginLeft: number;
+  marginRight: number;
+  background: string;
+  radius: number;
+  align: string;
+  flexDirection: string;
+  justifyContent: string;
+  gap: number;
+  padding: number;
+  border: number;
+  borderColor: string;
+  alignItems: string;
+}>`
+  margin-top: ${({ marginTop }) => `${marginTop}px`};
+  margin-bottom: ${({ marginBottom }) => `${marginBottom}px`};
+  margin-left: ${({ marginLeft }) => `${marginLeft}px`};
+  margin-right: ${({ marginRight }) => `${marginRight}px`};
+  background: ${({ background }) => background};
+  border-radius: ${({ radius }) => `${radius}px`};
+  align-items: ${({ align }) => align};
+  display: flex; /* Corrected from flex: flex; */
+  width: 100%;
+  flex-direction: ${({ flexDirection }) => flexDirection};
+  justify-content: ${({ justifyContent }) => justifyContent};
+  gap: ${({ gap }) => `${gap}px`};
+  padding: ${({ padding }) => `${padding}px`};
+  border: ${({ border, borderColor }) => `${border}px solid ${borderColor}`};
+`;
+
+const PictureChoiceItem = styled.div<{
+  itemWidth: number;
+  itemHeight: number;
+  fontSize: number;
+  picWidth: number;
+  picHeight: number;
+  background: string;
+  backgroundHover: string;
+  radius: number;
+  textColor: string;
+  textHover: string;
+  align: string;
+  flexDirection: string;
+  justifyContent: string;
+  gap: number;
+  padding: number;
+  alignItems: string;
+  border: number;
+  borderColor: string;
+}>`
+  min-width: ${({ itemWidth }) => `${itemWidth}px`};
+  min-height: ${({ itemHeight }) => `${itemHeight}px`};
+  font-size: ${({ fontSize }) => `${fontSize}px`};
+  display: flex;
+  background-color: ${({ background }) => background};
+  width: 100%;
+  height: 100%;
+  color: ${({ textColor }) => textColor};
+  border-radius: ${({ radius }) => `${radius}px`};
+  align-items: ${({ align }) => align};
+  flex-direction: ${({ flexDirection }) => flexDirection};
+  justify-content: ${({ justifyContent }) => justifyContent};
+  gap: ${({ gap }) => `${gap}px`};
+  padding: ${({ padding }) => `${padding}px`};
+  flex-wrap: wrap;
+  max-width: 100%;
+  overflow: hidden;
+  border: ${({ border, borderColor }) => `${border}px solid ${borderColor}`};
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    background-color: ${({ backgroundHover }) => backgroundHover};
+    color: ${({ textHover }) => textHover};
+  }
+`;
+
 
 
 export const PictureChoice = ({
@@ -101,50 +181,16 @@ export const PictureChoice = ({
 
   return (
     <>
-      <div
+      <PictureChoiceContainer
         ref={(ref: any) => connect(drag(ref))}
-        style={{
-          display: "flex",
-          marginTop: `${containerStyles.marginTop}px`,
-          marginBottom: `${containerStyles.marginBottom}px`,
-          marginLeft: `${containerStyles.marginLeft}px`,
-          marginRight: `${containerStyles.marginRight}px`,
-          background: `${containerStyles.background}`,
-          borderRadius: `${containerStyles.radius}px`,
-          alignItems: containerStyles.align,
-          flexDirection: containerStyles.flexDirection,
-          justifyContent: containerStyles.justifyContent,
-          gap: `${containerStyles.gap}px`,
-          padding: `${containerStyles.padding}px`,
-          border: `${containerStyles.border}px solid ${containerStyles.borderColor}`,
-        }}
+        {...containerStyles}
       >
       {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
 
         {pictureItems.map((item, index) => (
-          <div
+          <PictureChoiceItem
             key={index}
-            className="hover:cursor-pointer hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
-            style={{
-              minWidth: `${pictureItemsStyles.itemWidth}px`,
-              minHeight: `${pictureItemsStyles.itemHeight}px`,
-              fontSize: `${pictureItemsStyles.fontSize}px`,
-              display: "flex",
-              backgroundColor: `${pictureItemsStyles.background}`,
-              width:"100%",
-              height:"100%",
-              color: pictureItemsStyles.textColor,
-              borderRadius: `${pictureItemsStyles.radius}px`,
-              alignItems: pictureItemsStyles.align,
-              flexDirection: pictureItemsStyles.flexDirection,
-              justifyContent: pictureItemsStyles.justifyContent,
-              gap: `${pictureItemsStyles.gap}px`,
-              padding: `${pictureItemsStyles.padding}px`,
-              flexWrap: "wrap",
-              maxWidth: "100%",
-              overflow: "hidden",
-              border: `${pictureItemsStyles.border}px solid ${pictureItemsStyles.borderColor}`,
-            }}
+            {...pictureItemsStyles}
           >
             {item.itemType === ItemType.ICON ? (
               <item.pic
@@ -163,12 +209,10 @@ export const PictureChoice = ({
                 }}
               />
             )}
-            <p style={{
-              color: `${pictureItemsStyles.textColor}`,
-             }}>{item.text}</p>
-          </div>
+            <p>{item.text}</p>
+          </PictureChoiceItem>
         ))}
-      </div>
+      </PictureChoiceContainer>
     </>
   )
 }
@@ -177,8 +221,53 @@ enum ItemType {
   PICTURE = "picture",
   ICON = "icon",
 }
+interface PictureChoiceContainerProps {
+    marginTop: number;
+    marginBottom: number;
+    marginLeft: number;
+    marginRight: number;
+    background: string;
+    radius: number;
+    align: string;
+    flexDirection: string;
+    justifyContent: string;
+    gap: number;
+    padding: number;
+    border: number;
+    borderColor: string;
+    alignItems: string;
+}
+type PictureChoiceTypes = {
+  containerStyles: PictureChoiceContainerProps,
+  pictureItemsStyles: {
+    itemWidth: number
+    itemHeight: number
+    fontSize: number
+    picWidth: number
+    picHeight: number
+    background: string
+    backgroundHover: string
+    radius: number
+    textColor: string
+    textHover: string
+    align: string
+    flexDirection: string
+    justifyContent: string
+    gap: number
+    padding: number
+    alignItems: string
+    border: number
+    borderColor: string
+  }
+  pictureItems: {
+    id: number
+    text: string
+    pic: any
+    itemType: ItemType
+  }[]
 
-export const PictureChoiceDefaultProps = {
+}
+export const PictureChoiceDefaultProps:PictureChoiceTypes = {
   containerStyles: {
     marginTop: 0,
     marginBottom: 0,
@@ -202,7 +291,7 @@ export const PictureChoiceDefaultProps = {
     picWidth: 75,
     picHeight: 75,
     background: "#ffffff",
-    backgroundHover: "#000000",
+    backgroundHover: "#4050ff",
     radius: 15,
     textColor: "#4050ff",
     textHover: "#ffffff",
@@ -219,13 +308,13 @@ export const PictureChoiceDefaultProps = {
     {
       id: 1,
       text: "Yes",
-      pic: ICONS.checkCircle,
+      pic: ICONS.check,
       itemType: ItemType.ICON,
     },
     {
       id: 2,
       text: "No",
-      pic: ICONS.circleX,
+      pic: ICONS.x,
       itemType: ItemType.ICON,
     }
   ],
