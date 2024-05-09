@@ -15,14 +15,15 @@ import { UserTextSettings } from "../text/user-text-settings"
 
 export const ScreenOneChoice = ({ ...props }) => {
   return (
-      <Element
+    <>
+      {/* <Element
         is={"div"}
         padding={5}
         background="#ad2121"
         canvas
         className="min-h-screen min-w-full flex flex-col items-center justify-center gap-6 py-6"
         id="one-choice-screens"
-      >
+      > */}
         <Element
           is={"div"}
           background="#ad2121"
@@ -33,6 +34,7 @@ export const ScreenOneChoice = ({ ...props }) => {
           <ScreenHeader />
           <ProgressBar />
         </Element>
+        {/* Start of element */}
         <Element
           is={"div"}
           background="#ad2121"
@@ -97,6 +99,7 @@ export const ScreenOneChoice = ({ ...props }) => {
             </Button>
           </Element>
         </Element>
+        {/* End of element */}
         <Element
           is={"div"}
           background="#ad2121"
@@ -106,7 +109,8 @@ export const ScreenOneChoice = ({ ...props }) => {
         >
           <ScreenFooter />
         </Element>
-      </Element>
+      {/* </Element> */}
+      </>
   )
 }
 

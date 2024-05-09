@@ -159,13 +159,13 @@ export function CreateFlowComponent() {
                   <Frame
                   data={currentScreen}
                   >
-                    <Element
+                    {/* <Element
                       is={"div"}
                       id="create-flow-canvas hover:dragged"
                       background="#ad2121"
                       canvas
                       className="min-w-full craftjs-renderer"
-                    ></Element>
+                    ></Element> */}
                   </Frame>
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2 z-20">

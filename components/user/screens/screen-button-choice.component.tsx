@@ -38,7 +38,7 @@ export const ButtonChoiceScreen = ({ ...props }) => {
   //   setEditable(false);
   // }, [selected]);
   return (
-    <div className="flex flex-col items-center justify-center gap-6 py-6">
+    // <div className="flex flex-col items-center justify-center gap-6 py-6">
       <Element
         is={UserContainer}
         {...ContainerDefaultProps}
@@ -94,7 +94,7 @@ export const ButtonChoiceScreen = ({ ...props }) => {
           <ScreenFooter />
         </Element>
       </Element>
-    </div>
+    // </div>
   )
 }
 
