@@ -1,6 +1,7 @@
 import React from "react"
 import cn from "classnames"
 import {
+  ArrowRight,
   Bookmark,
   Box,
   Chrome,
@@ -85,22 +86,22 @@ import Image from "next/image"
 const MultipleChoiceOptions = [
   {
     id: "1",
-    text: "Google",
+    text: "Option 1",
     icon: <Chrome className="w-6 h-6 text-lg" />,
   },
   {
     id: "2",
-    text: "Facebook",
+    text: "Option 2",
     icon: <Facebook className="w-6 h-6" />,
   },
   {
     id: "3",
-    text: "Linkedin",
+    text: "Option 3",
     icon: <Linkedin className="w-6 h-6" />,
   },
   {
     id: "4",
-    text: "Other",
+    text: "Option 4",
     icon: <Globe className="w-6 h-6" />,
   },
 ]
@@ -342,7 +343,7 @@ export const UserToolbox = () => {
                       hover:text-white option flex flex-row p-4 gap-2 items-center"
                           >
                             <input type="radio" className="hidden" />
-                            {option.icon}
+                            {/* {option.icon} */}
                             <label>{option.text}</label>
                           </div>
                         ))}
@@ -391,9 +392,9 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <Button variant="secondary">
-                        Register
-                        <Bookmark className="ml-2" />
+                      <Button className="w-[360px] bg-[#4050ff] text-white hover:bg-[#3041ff] px-4 py-6">
+                        Get quote
+                        <ArrowRight className="ml-2" />
                       </Button>
                     </HoverCardContent>
                   </HoverCard>
