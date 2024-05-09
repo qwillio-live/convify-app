@@ -366,8 +366,8 @@ export const UserToolbox = () => {
                     connectors.create(
                       ref,
                       <IconButton
-                        disabled={false}
                         {...IconButtonDefaultProps}
+                        disabled={false}
                       />
                     )
                   }
@@ -381,7 +381,7 @@ export const UserToolbox = () => {
                       >
                         <span className="flex flex-row items-center text-sm">
                           <Navigation className="mr-2 w-3 h-3" />
-                          Continue Button{" "}
+                          Button{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -395,40 +395,6 @@ export const UserToolbox = () => {
                         Register
                         <Bookmark className="ml-2" />
                       </Button>
-                    </HoverCardContent>
-                  </HoverCard>
-                </div>
-
-                <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(
-                      ref,
-                      <UserButton {...ButtonDefaultProps} />
-                    )
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <PlusSquare className="mr-2 w-3 h-3" /> Button{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <Button variant="secondary">Register</Button>
                     </HoverCardContent>
                   </HoverCard>
                 </div>

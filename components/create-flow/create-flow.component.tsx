@@ -86,6 +86,10 @@ export function CreateFlowComponent() {
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
+      onNodesChange={(nodes) => {
+        console.log("NODES CHANGED: ",nodes)
+        console.log("New nodes are: ", JSON.stringify(nodes.getSerializedNodes()));
+      }}
         resolver={{
           Logo,
           HeadlineText,

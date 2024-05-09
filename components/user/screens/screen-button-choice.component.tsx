@@ -81,18 +81,9 @@ export const ButtonChoiceScreen = ({ ...props }) => {
         />
         </Element>
         <Element
-          disabled={false} is={IconButton}
+           is={IconButton}
           {...IconButtonDefaultProps}
-          id="button-choice-icon-button"
-          text={"Get quote"}
-          background={"#4050ff"}
-          color={"#ffffff"}
-          paddingTop={14}
-          paddingBottom={14}
-          paddingLeft={16}
-          paddingRight={16}
-          width={366}
-          custom={{ }} />
+          id="button-choice-icon-button" />
         <Element
           is={"div"}
           background="#ad2121"
