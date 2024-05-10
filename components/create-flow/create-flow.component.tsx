@@ -26,6 +26,8 @@ import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
+import {ProgressBar as UserProgressBar} from "../user/progress/user-progress.component"
+import { Progress } from "../ui/progress-custom"
 import { Card, CardTop } from "../user/card/user-card.component"
 import {
   Container,
@@ -96,13 +98,15 @@ export function CreateFlowComponent() {
           HeadlineText,
           UserText,
           UserButton,
+          ProgressBar,
+          Progress,
           ButtonChoiceScreen,
           ScreenHeader,
           UserInput,
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
-          ProgressBar,
+          UserProgressBar,
           ScreenOneInput,
           Input,
           Button,

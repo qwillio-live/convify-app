@@ -11,6 +11,7 @@ import {
   Bookmark,
   Box,
   Chrome,
+  CircleSlashed,
   Columns,
   Copy,
   Diamond,
@@ -86,7 +87,8 @@ import {
   PictureChoice,
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
-
+import { ProgressBar, ProgressBarDefaultProps } from "../progress/user-progress.component"
+import {Progress as CustomProgressBar} from "@/components/ui/progress-custom"
 const MultipleChoiceOptions = [
   {
     id: "1",
@@ -546,6 +548,44 @@ export const UserToolbox = () => {
                     </HoverCardContent>
                   </HoverCard>
                 </div>
+
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(ref, <ProgressBar {...ProgressBarDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <CircleSlashed className="mr-2 w-3 h-3" /> Progress bar{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
+                        <CustomProgressBar
+                          value={50}
+                          className="w-[60%]"
+                          indicatorColor="bg-blue-300"
+                        />
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+
               </AccordionContent>
             </AccordionItem>
           </Accordion>

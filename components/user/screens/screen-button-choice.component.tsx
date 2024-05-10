@@ -3,7 +3,6 @@ import { Check, Cross } from "lucide-react"
 
 import { Element, Frame, useNode } from "@/lib/craftjs"
 import { Button } from "@/components/ui/button"
-import { ProgressBar } from "@/components/progress-bar.component"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
@@ -17,6 +16,7 @@ import { DefaultSerializer } from "v8"
 import { CardTop } from "../card/user-card.component"
 import { PictureChoice, PictureChoiceDefaultProps } from "../picture-choice/picture-choice.component"
 import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
+import { ProgressBar,ProgressBarDefaultProps } from "../progress/user-progress.component"
 
 export const ButtonChoiceScreen = ({ ...props }) => {
   // const {
@@ -73,7 +73,12 @@ export const ButtonChoiceScreen = ({ ...props }) => {
             textColor={"inherit"}
             tagType={"p"}
           />
-          <ProgressBar />
+        <Element
+          is={ProgressBar}
+          {...ProgressBarDefaultProps}
+          id="button-choice-progress-bar"
+
+        />
         <Element
         is={PictureChoice}
         canvas
