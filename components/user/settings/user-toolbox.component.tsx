@@ -1,4 +1,10 @@
 import React from "react"
+import Image from "next/image"
+import ConvifyLogo from "@/assets/convify_logo_black.png"
+import FirstLogo from "@/assets/images/first-logo.png"
+import FourthLogo from "@/assets/images/fourth-logo.png"
+import SecondLogo from "@/assets/images/second-logo.png"
+import ThirdLogo from "@/assets/images/third-logo.png"
 import cn from "classnames"
 import {
   ArrowRight,
@@ -25,15 +31,12 @@ import {
   Rocket,
   Square,
   Target,
+  TextCursorInput,
   Trophy,
   Type,
 } from "lucide-react"
-import ConvifyLogo from "@/assets/convify_logo_black.png"
+
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import FirstLogo from "@/assets/images/first-logo.png"
-import SecondLogo from "@/assets/images/second-logo.png"
-import ThirdLogo from "@/assets/images/third-logo.png"
-import FourthLogo from "@/assets/images/fourth-logo.png"
 import {
   Accordion,
   AccordionContent,
@@ -47,6 +50,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
@@ -71,6 +75,7 @@ import {
   IconButton,
   IconButtonDefaultProps,
 } from "../icon-button/user-icon-button.component"
+import { UserInput, UserInputDefaultProps } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -81,7 +86,6 @@ import {
   PictureChoice,
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
-import Image from "next/image"
 
 const MultipleChoiceOptions = [
   {
@@ -234,6 +238,44 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
+                      <UserInput {...UserInputDefaultProps} />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <TextCursorInput className="mr-2 w-3 h-3" /> Input
+                          field{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <Input
+                        placeholder="Placeholder"
+                        className="focus-visible:ring-blue-600 ring-offset-0 focus-visible:ring-offset-0"
+                      />
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
                       <PictureChoice {...PictureChoiceDefaultProps} />
                     )
                   }
@@ -269,30 +311,36 @@ export const UserToolbox = () => {
                           <Target className="h-10 w-10" />
                           Target
                         </div>
-                        <div className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
                                       hover:cursor-pointer bg-white
                                     hover:bg-[#4050ff] rounded-[8px] border-2
                                     border-[#eaeaeb] hover:border-[#4050ff]
                                       font-bold
-                                    hover:text-white">
+                                    hover:text-white"
+                        >
                           <Rocket className="h-10 w-10" />
                           Launch
                         </div>
-                        <div className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
                                       hover:cursor-pointer bg-white
                                     hover:bg-[#4050ff] rounded-[8px] border-2
                                     border-[#eaeaeb] hover:border-[#4050ff]
                                       font-bold
-                                    hover:text-white">
+                                    hover:text-white"
+                        >
                           <HeartHandshake className="h-10 w-10" />
                           Agree
                         </div>
-                        <div className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
                                       hover:cursor-pointer bg-white
                                     hover:bg-[#4050ff] rounded-[8px] border-2
                                     border-[#eaeaeb] hover:border-[#4050ff]
                                       font-bold
-                                    hover:text-white">
+                                    hover:text-white"
+                        >
                           <Trophy className="h-10 w-10" />
                           Achieve
                         </div>
@@ -433,7 +481,12 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <Image src={ConvifyLogo.src} alt="Logo" width={120} height={42} />
+                      <Image
+                        src={ConvifyLogo.src}
+                        alt="Logo"
+                        width={120}
+                        height={42}
+                      />
                     </HoverCardContent>
                   </HoverCard>
                 </div>
@@ -465,10 +518,30 @@ export const UserToolbox = () => {
                       sideOffset={18}
                     >
                       <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
-                        <Image src={FirstLogo.src} alt="Logo" width={60} height={32} />
-                        <Image src={SecondLogo.src} alt="Logo" width={60} height={32} />
-                        <Image src={ThirdLogo.src} alt="Logo" width={60} height={32} />
-                        <Image src={FourthLogo.src} alt="Logo" width={60} height={32} />
+                        <Image
+                          src={FirstLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
+                        <Image
+                          src={SecondLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
+                        <Image
+                          src={ThirdLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
+                        <Image
+                          src={FourthLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
                       </div>
                     </HoverCardContent>
                   </HoverCard>

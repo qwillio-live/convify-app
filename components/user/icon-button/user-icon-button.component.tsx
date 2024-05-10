@@ -167,6 +167,7 @@ export const IconButton = ({
   border={border}
   borderColor={borderColor}
   {...props}
+  onClick={() => console.log("Button clicked", text)}
 >
   {isHovered && <Controller nameOfComponent="BUTTON" />}
 

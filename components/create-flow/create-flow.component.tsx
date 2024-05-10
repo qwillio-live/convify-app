@@ -45,6 +45,7 @@ import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
+import { UserInput } from "../user/input/user-input.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -97,6 +98,7 @@ export function CreateFlowComponent() {
           UserButton,
           ButtonChoiceScreen,
           ScreenHeader,
+          UserInput,
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
