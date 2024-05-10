@@ -3,7 +3,6 @@ import { Check, Cross } from "lucide-react"
 
 import { Element, Frame, useNode } from "@/lib/craftjs"
 import { Button } from "@/components/ui/button"
-import { ProgressBar } from "@/components/progress-bar.component"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
@@ -17,6 +16,7 @@ import { DefaultSerializer } from "v8"
 import { CardTop } from "../card/user-card.component"
 import { PictureChoice, PictureChoiceDefaultProps } from "../picture-choice/picture-choice.component"
 import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
+import { ProgressBar,ProgressBarDefaultProps } from "../progress/user-progress.component"
 
 export const ButtonChoiceScreen = ({ ...props }) => {
   // const {
@@ -38,7 +38,7 @@ export const ButtonChoiceScreen = ({ ...props }) => {
   //   setEditable(false);
   // }, [selected]);
   return (
-    <div className="flex flex-col items-center justify-center gap-6 py-6">
+    // <div className="flex flex-col items-center justify-center gap-6 py-6">
       <Element
         is={UserContainer}
         {...ContainerDefaultProps}
@@ -73,7 +73,12 @@ export const ButtonChoiceScreen = ({ ...props }) => {
             textColor={"inherit"}
             tagType={"p"}
           />
-          <ProgressBar />
+        <Element
+          is={ProgressBar}
+          {...ProgressBarDefaultProps}
+          id="button-choice-progress-bar"
+
+        />
         <Element
         is={PictureChoice}
         canvas
@@ -81,18 +86,9 @@ export const ButtonChoiceScreen = ({ ...props }) => {
         />
         </Element>
         <Element
-          disabled={false} is={IconButton}
+           is={IconButton}
           {...IconButtonDefaultProps}
-          id="button-choice-icon-button"
-          text={"Get quote"}
-          background={"#4050ff"}
-          color={"#ffffff"}
-          paddingTop={14}
-          paddingBottom={14}
-          paddingLeft={16}
-          paddingRight={16}
-          width={366}
-          custom={{ }} />
+          id="button-choice-icon-button" />
         <Element
           is={"div"}
           background="#ad2121"
@@ -103,7 +99,7 @@ export const ButtonChoiceScreen = ({ ...props }) => {
           <ScreenFooter />
         </Element>
       </Element>
-    </div>
+    // </div>
   )
 }
 

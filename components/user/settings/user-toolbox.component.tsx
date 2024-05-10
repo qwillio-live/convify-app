@@ -1,9 +1,17 @@
 import React from "react"
+import Image from "next/image"
+import ConvifyLogo from "@/assets/convify_logo_black.png"
+import FirstLogo from "@/assets/images/first-logo.png"
+import FourthLogo from "@/assets/images/fourth-logo.png"
+import SecondLogo from "@/assets/images/second-logo.png"
+import ThirdLogo from "@/assets/images/third-logo.png"
 import cn from "classnames"
 import {
+  ArrowRight,
   Bookmark,
   Box,
   Chrome,
+  CircleSlashed,
   Columns,
   Copy,
   Diamond,
@@ -12,6 +20,7 @@ import {
   Globe,
   GripVertical,
   Hand,
+  HeartHandshake,
   Image as ImageIcon,
   ImagePlus,
   Layout,
@@ -20,7 +29,11 @@ import {
   Navigation,
   Pencil,
   PlusSquare,
+  Rocket,
   Square,
+  Target,
+  TextCursorInput,
+  Trophy,
   Type,
 } from "lucide-react"
 
@@ -38,6 +51,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
@@ -62,6 +76,7 @@ import {
   IconButton,
   IconButtonDefaultProps,
 } from "../icon-button/user-icon-button.component"
+import { UserInput, UserInputDefaultProps } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -72,26 +87,27 @@ import {
   PictureChoice,
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
-
+import { ProgressBar, ProgressBarDefaultProps } from "../progress/user-progress.component"
+import {Progress as CustomProgressBar} from "@/components/ui/progress-custom"
 const MultipleChoiceOptions = [
   {
     id: "1",
-    text: "Google",
+    text: "Option 1",
     icon: <Chrome className="w-6 h-6 text-lg" />,
   },
   {
     id: "2",
-    text: "Facebook",
+    text: "Option 2",
     icon: <Facebook className="w-6 h-6" />,
   },
   {
     id: "3",
-    text: "Linkedin",
+    text: "Option 3",
     icon: <Linkedin className="w-6 h-6" />,
   },
   {
     id: "4",
-    text: "Other",
+    text: "Option 4",
     icon: <Globe className="w-6 h-6" />,
   },
 ]
@@ -127,8 +143,11 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
-        <ScrollArea className="overflow-y-auto pt-4 pb-8 w-full">
-          <Accordion type="multiple" defaultValue={["item-1","item-2","item-3","item-4"]}>
+        <ScrollArea className="overflow-y-auto pt-4 pb-32 w-full">
+          <Accordion
+            type="multiple"
+            defaultValue={["item-1", "item-2", "item-3", "item-4"]}
+          >
             <AccordionItem value="item-1">
               <AccordionTrigger className="hover:no-underline uppercase">
                 Text
@@ -214,15 +233,6 @@ export const UserToolbox = () => {
                 Input
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
-                Input component is needed here
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-3">
-              <AccordionTrigger className="hover:no-underline uppercase">
-                Button
-              </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
                   className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
@@ -230,173 +240,33 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
-                      <IconButton
-                        disabled={false}
-                        {...IconButtonDefaultProps}
+                      <UserInput {...UserInputDefaultProps} />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <TextCursorInput className="mr-2 w-3 h-3" /> Input
+                          field{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <Input
+                        placeholder="Placeholder"
+                        className="focus-visible:ring-blue-600 ring-offset-0 focus-visible:ring-offset-0"
                       />
-                    )
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Navigation className="mr-2 w-3 h-3" />
-                          Icon Button{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <Button variant="secondary">
-                        Register
-                        <Bookmark className="ml-2" />
-                      </Button>
-                    </HoverCardContent>
-                  </HoverCard>
-                </div>
-
-                <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(
-                      ref,
-                      <UserButton {...ButtonDefaultProps} />
-                    )
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <PlusSquare className="mr-2 w-3 h-3" /> Button{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <Button variant="secondary">Register</Button>
-                    </HoverCardContent>
-                  </HoverCard>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-4">
-              <AccordionTrigger className="hover:no-underline uppercase">
-                Display
-              </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
-                <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(ref, <Card {...ContainerDefaultProps} />)
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Diamond className="mr-2 w-3 h-3" /> Card{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <Square className="h-10 w-10" />
-                    </HoverCardContent>
-                  </HoverCard>
-                </div>
-
-                <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(
-                      ref,
-                      <Container {...ContainerDefaultProps} />
-                    )
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Layout className="mr-2 w-3 h-3" /> Container{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <Square className="h-10 w-16" />
-                    </HoverCardContent>
-                  </HoverCard>
-                </div>
-
-                <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(ref, <Logo {...LogoDefaultProps} />)
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Dice2 className="mr-2 w-3 h-3" /> Logo{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <ImageIcon className="h-10 w-10" />
                     </HoverCardContent>
                   </HoverCard>
                 </div>
@@ -431,10 +301,51 @@ export const UserToolbox = () => {
                       sideOffset={18}
                     >
                       <div className="grid grid-cols-2 gap-2">
-                        <ImageIcon className="h-10 w-10 col-span-1" />
-                        <ImageIcon className="h-10 w-10 col-span-1" />
-                        <ImageIcon className="h-10 w-10 col-span-1" />
-                        <ImageIcon className="h-10 w-10 col-span-1" />
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                                      hover:cursor-pointer bg-white
+                                    hover:bg-[#4050ff] rounded-[8px] border-2
+                                    border-[#eaeaeb] hover:border-[#4050ff]
+                                      font-bold
+                                    hover:text-white
+                        "
+                        >
+                          <Target className="h-10 w-10" />
+                          Target
+                        </div>
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                                      hover:cursor-pointer bg-white
+                                    hover:bg-[#4050ff] rounded-[8px] border-2
+                                    border-[#eaeaeb] hover:border-[#4050ff]
+                                      font-bold
+                                    hover:text-white"
+                        >
+                          <Rocket className="h-10 w-10" />
+                          Launch
+                        </div>
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                                      hover:cursor-pointer bg-white
+                                    hover:bg-[#4050ff] rounded-[8px] border-2
+                                    border-[#eaeaeb] hover:border-[#4050ff]
+                                      font-bold
+                                    hover:text-white"
+                        >
+                          <HeartHandshake className="h-10 w-10" />
+                          Agree
+                        </div>
+                        <div
+                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
+                                      hover:cursor-pointer bg-white
+                                    hover:bg-[#4050ff] rounded-[8px] border-2
+                                    border-[#eaeaeb] hover:border-[#4050ff]
+                                      font-bold
+                                    hover:text-white"
+                        >
+                          <Trophy className="h-10 w-10" />
+                          Achieve
+                        </div>
                       </div>
                     </HoverCardContent>
                   </HoverCard>
@@ -482,11 +393,102 @@ export const UserToolbox = () => {
                       hover:text-white option flex flex-row p-4 gap-2 items-center"
                           >
                             <input type="radio" className="hidden" />
-                            {option.icon}
+                            {/* {option.icon} */}
                             <label>{option.text}</label>
                           </div>
                         ))}
                       </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="hover:no-underline uppercase">
+                Button
+              </AccordionTrigger>
+              <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
+                      <IconButton
+                        {...IconButtonDefaultProps}
+                        disabled={false}
+                      />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <Navigation className="mr-2 w-3 h-3" />
+                          Button{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <Button className="w-[360px] bg-[#4050ff] text-white hover:bg-[#3041ff] px-4 py-6">
+                        Get quote
+                        <ArrowRight className="ml-2" />
+                      </Button>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-4">
+              <AccordionTrigger className="hover:no-underline uppercase">
+                Display
+              </AccordionTrigger>
+              <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(ref, <Logo {...LogoDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <Dice2 className="mr-2 w-3 h-3" /> Logo{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <Image
+                        src={ConvifyLogo.src}
+                        alt="Logo"
+                        width={120}
+                        height={42}
+                      />
                     </HoverCardContent>
                   </HoverCard>
                 </div>
@@ -517,15 +519,73 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <div className="flex flex-row gap-2 justify-center items-center p-4 border">
-                        <ImageIcon className="h-10 w-10 col-span-1" />
-                        <ImageIcon className="h-10 w-10 col-span-1" />
-                        <ImageIcon className="h-10 w-10 col-span-1" />
-                        <ImageIcon className="h-10 w-10 col-span-1" />
+                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
+                        <Image
+                          src={FirstLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
+                        <Image
+                          src={SecondLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
+                        <Image
+                          src={ThirdLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
+                        <Image
+                          src={FourthLogo.src}
+                          alt="Logo"
+                          width={60}
+                          height={32}
+                        />
                       </div>
                     </HoverCardContent>
                   </HoverCard>
                 </div>
+
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(ref, <ProgressBar {...ProgressBarDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <CircleSlashed className="mr-2 w-3 h-3" /> Progress bar{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
+                      <CustomProgressBar
+                        value={50}
+                        className="h-1 max-w-[366px]"
+                        indicatorColor={"#4050ff"}
+                      />
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+
               </AccordionContent>
             </AccordionItem>
           </Accordion>
