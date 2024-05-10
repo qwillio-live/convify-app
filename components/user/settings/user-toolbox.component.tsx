@@ -576,11 +576,11 @@ export const UserToolbox = () => {
                       sideOffset={18}
                     >
                       <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
-                        <CustomProgressBar
-                          value={50}
-                          className="w-[60%]"
-                          indicatorColor="bg-blue-300"
-                        />
+                      <CustomProgressBar
+                        value={50}
+                        className="h-1 max-w-[366px]"
+                        indicatorColor={"#4050ff"}
+                      />
                       </div>
                     </HoverCardContent>
                   </HoverCard>
