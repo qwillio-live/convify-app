@@ -134,6 +134,7 @@ const PictureChoiceItem = styled.div<{
   alignItems: string;
   border: number;
   borderColor: string;
+  borderHover: string;
 }>`
   min-width: ${({ itemWidth }) => `${itemWidth}px`};
   min-height: ${({ itemHeight }) => `${itemHeight}px`};
@@ -158,6 +159,7 @@ const PictureChoiceItem = styled.div<{
   &:hover {
     background-color: ${({ backgroundHover }) => backgroundHover};
     color: ${({ textHover }) => textHover};
+    border: ${({ border, borderHover }) => `${border}px solid ${borderHover}`};
   }
 `;
 
@@ -225,6 +227,7 @@ interface PictureChoiceContainerProps {
     marginTop: number;
     marginBottom: number;
     marginLeft: number;
+    maxWidth: number;
     marginRight: number;
     background: string;
     radius: number;
@@ -258,6 +261,7 @@ type PictureChoiceTypes = {
     alignItems: string
     border: number
     borderColor: string
+    borderHover: string
   }
   pictureItems: {
     id: number
@@ -273,6 +277,7 @@ export const PictureChoiceDefaultProps:PictureChoiceTypes = {
     marginBottom: 0,
     marginLeft: 0,
     marginRight: 0,
+    maxWidth: 0,
     background: "#ffffff",
     radius: 0,
     align: "center",
@@ -291,10 +296,10 @@ export const PictureChoiceDefaultProps:PictureChoiceTypes = {
     picWidth: 75,
     picHeight: 75,
     background: "#ffffff",
-    backgroundHover: "#4050ff",
+    backgroundHover: "rgba(64, 80, 255, 0.05)",
     radius: 15,
     textColor: "#4050ff",
-    textHover: "#ffffff",
+    textHover: "#3041ff",
     align: "center",
     flexDirection: "column",
     alignItems: "center",
@@ -303,6 +308,7 @@ export const PictureChoiceDefaultProps:PictureChoiceTypes = {
     padding: 30,
     border: 3,
     borderColor: "#eaeaeb",
+    borderHover: "rgba(64, 80, 255, 0.6)",
   },
   pictureItems: [
     {

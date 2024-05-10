@@ -26,6 +26,8 @@ import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
+import {ProgressBar as UserProgressBar} from "../user/progress/user-progress.component"
+import { Progress } from "../ui/progress-custom"
 import { Card, CardTop } from "../user/card/user-card.component"
 import {
   Container,
@@ -45,13 +47,19 @@ import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
+import { UserInput } from "../user/input/user-input.component"
 
 enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
 }
-const SaveButton = () => {
-  const { query } = useEditor()
+const SaveButton =() => {
+  const { query,query: {node} } = useEditor();
+  const headerId= useAppSelector((state) => state.screen.headerId)
+  //screen header id is: HeT6HrWBxJ
+  const nodeTree = node(headerId).toNodeTree()
+  nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
+  console.log("NODE TREE IS: ",nodeTree)
   return (
     <a
       className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
@@ -60,6 +68,16 @@ const SaveButton = () => {
       Get JSON
     </a>
   )
+}
+const NodesToSerializedNodes = (nodes) =>  {
+  // getSerializedNodes is present in the useEditor hook
+  const {query: {getSerializedNodes}} = useEditor();
+  const serializedNodes = getSerializedNodes()
+const result = {}
+Object.keys(nodes).forEach(key => {
+result[key] = serializedNodes[key]
+})
+return result
 }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
@@ -71,17 +89,24 @@ export function CreateFlowComponent() {
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
+      onNodesChange={(nodes) => {
+        console.log("NODES CHANGED: ",nodes)
+        console.log("New nodes are: ", JSON.stringify(nodes.getSerializedNodes()));
+      }}
         resolver={{
           Logo,
           HeadlineText,
           UserText,
           UserButton,
+          ProgressBar,
+          Progress,
           ButtonChoiceScreen,
           ScreenHeader,
+          UserInput,
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
-          ProgressBar,
+          UserProgressBar,
           ScreenOneInput,
           Input,
           Button,
@@ -140,13 +165,13 @@ export function CreateFlowComponent() {
                   <Frame
                   data={currentScreen}
                   >
-                    <Element
+                    {/* <Element
                       is={"div"}
                       id="create-flow-canvas hover:dragged"
                       background="#ad2121"
                       canvas
                       className="min-w-full craftjs-renderer"
-                    ></Element>
+                    ></Element> */}
                   </Frame>
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2 z-20">

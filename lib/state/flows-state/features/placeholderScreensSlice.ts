@@ -7,10 +7,12 @@ import oneInputData from "@/components/user/screens/one-input-screen.json"
 
 export interface ScreensState {
   selectedScreen: number
+  headerId: string
   screens: any[]
 }
 
 const initialState: ScreensState = {
+  headerId: "",
   selectedScreen: 0,
   /**Ignoring ts checks as this is placeholder solution for now */
   /** @ts-ignore */
@@ -21,6 +23,9 @@ export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
+    setHeaderId: (state, action: PayloadAction<string>) => {
+      state.headerId = action.payload
+    },
     setScreens: (state, action: PayloadAction<any[]>) => {
       console.log("Payload", action.payload)
       state.screens = [...action.payload]
@@ -66,6 +71,7 @@ export const {
   duplicateScreen,
   setScreens,
   deleteScreen,
+  setHeaderId,
 } = screensSlice.actions
 
 export default screensSlice.reducer

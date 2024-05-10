@@ -18,6 +18,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     dom,
     moveable,
     connectors: { drag },
+    fullWidth,
     parent,
     deletable,
     props,
@@ -27,6 +28,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     isSelected: node.events.selected,
     dom: node.dom,
     name: node.data.custom.displayName || node.data.displayName,
+    fullWidth: node.data.props.fullWidth,
     moveable: query.node(node.id).isDraggable(),
     deletable: query.node(node.id).isDeletable(),
     parent: node.data.parent,
@@ -49,6 +51,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     <div
       className={cn('relative border z-10 border-transparent border-dotted',
         (isHover || isActive) && 'border-blue-400',
+        fullWidth && 'w-full'
       )}
     >
       <div>

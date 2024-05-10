@@ -34,6 +34,8 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
+import { type } from "os"
+import styled from "styled-components"
 
 const IconsList = {
   aperture: <Aperture />,
@@ -44,10 +46,68 @@ const IconsList = {
   mountain: <Mountain />,
   arrowright: <ArrowRight />,
 }
+interface StyledCustomButtonProps {
+  color?: string;
+  background?: string;
+  backgroundHover?: string;
+  colorHover?: string;
+  marginLeft?: string | number;
+  width?: string | number;
+  height?: string | number;
+  marginRight?: string | number;
+  marginTop?: string | number;
+  marginBottom?: string | number;
+  paddingLeft?: string | number;
+  paddingTop?: string | number;
+  paddingRight?: string | number;
+  paddingBottom?: string | number;
+  radius?: number;
+  flexDirection?: string;
+  alignItems?: string;
+  justifyContent?: string;
+  gap?: number;
+  border?: number;
+  borderColor?: string;
+}
+const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+  position: relative;
+  gap: 2px;
+  border: 1px dashed transparent;
+  transition: all 0.2s ease;
+  &:hover {
+    border-style: solid;
+    border-color: #3182ce; /* Change to your desired hover border color */
+    background: ${(props) => props.backgroundHover};
+    color: ${(props) => props.colorHover};
+  }
+  &:focus {
+    border-color: #3182ce; /* Change to your desired focus border color */
+  }
+  background: ${(props) => props.background};
+  color: ${(props) => props.color};
+
+  margin-left: ${(props) => props.marginLeft}px;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
+  margin-right: ${(props) => props.marginRight}px;
+  margin-top: ${(props) => props.marginTop}px;
+  margin-bottom: ${(props) => props.marginBottom}px;
+  padding-left: ${(props) => props.paddingLeft}px;
+  padding-top: ${(props) => props.paddingTop}px;
+  padding-right: ${(props) => props.paddingRight}px;
+  padding-bottom: ${(props) => props.paddingBottom}px;
+  border-radius: ${(props) => props.radius}px;
+  flex-direction: ${(props) => props.flexDirection};
+  align-items: ${(props) => props.alignItems};
+  justify-content: ${(props) => props.justifyContent};
+  gap: ${(props) => props.gap}px;
+  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+`;
+
 export const IconButton = ({
   disabled,
+  enableIcon,
   size,
-  variant,
   color,
   text,
   marginLeft = 0,
@@ -57,7 +117,8 @@ export const IconButton = ({
   marginTop = 0,
   marginBottom = 0,
   background,
-  custom,
+  backgroundHover,
+  colorHover,
   icon,
   paddingLeft,
   paddingTop,
@@ -82,50 +143,49 @@ export const IconButton = ({
     isHovered: state.events.hovered,
   }))
   return (
-    <CustomButton
-      ref={(ref: any) => connect(drag(ref))}
-      // size={size}
-      className="relative  gap-2  border border-dashed border-transparent transition-all duration-200 hover:border-blue-400 focus:border-blue-400"
-      variant={variant}
-      style={{
-        ...(custom
-          ? { color: `${color}`, backgroundColor: `${background}` }
-          : null),
-        marginLeft: `${marginLeft}px`,
-        width,
-        height,
-        marginRight: `${marginRight}px`,
-        marginTop: `${marginTop}px`,
-        marginBottom: `${marginBottom}px`,
-        paddingLeft: `${paddingLeft}px`,
-        paddingTop: `${paddingTop}px`,
-        paddingRight: `${paddingRight}px`,
-        paddingBottom: `${paddingBottom}px`,
-        borderRadius: `${radius}px`,
-        flexDirection: flexDirection,
-        alignItems: alignItems,
-        justifyContent: justifyContent,
-        gap: `${gap}px`,
-        border: `${border}px solid ${borderColor}`,
-      }}
-      {...props}
-    >
-      {isHovered && <Controller nameOfComponent={"BUTTON"} />}
+<StyledCustomButton
+  ref={(ref:any) => connect(drag(ref))}
+  color={color}
+  background={background}
+  backgroundHover={backgroundHover}
+  colorHover={colorHover}
+  marginLeft={marginLeft}
+  width={width}
+  height={height}
+  marginRight={marginRight}
+  marginTop={marginTop}
+  marginBottom={marginBottom}
+  paddingLeft={paddingLeft}
+  paddingTop={paddingTop}
+  paddingRight={paddingRight}
+  paddingBottom={paddingBottom}
+  radius={radius}
+  flexDirection={flexDirection}
+  alignItems={alignItems}
+  justifyContent={justifyContent}
+  gap={gap}
+  border={border}
+  borderColor={borderColor}
+  {...props}
+  onClick={() => console.log("Button clicked", text)}
+>
+  {isHovered && <Controller nameOfComponent="BUTTON" />}
 
-      <ContentEditable
-        html={text}
-        disabled={disabled}
-        onChange={(e) =>
-          setProp(
-            (props) =>
-              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
-            500
-          )
-        }
-        tagName="span"
-      />
-      {IconsList[icon]}
-    </CustomButton>
+  <ContentEditable
+    html={text}
+    disabled={disabled}
+    onChange={(e) =>
+      setProp(
+        (props) =>
+          (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, '')),
+        500
+      )
+    }
+    tagName="span"
+  />
+  {enableIcon && IconsList[icon]}
+</StyledCustomButton>
+
   )
 }
 
@@ -133,10 +193,12 @@ export const IconButtonSettings = () => {
   const {
     actions: { setProp },
     props: {
+      enableIcon,
       props,
       size,
-      variant,
       background,
+      backgroundHover,
+      colorHover,
       color,
       text,
       custom,
@@ -171,43 +233,64 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Button content </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-              <p className="text-md flex-1 text-muted-foreground">Icon</p>
-              <Select
-                defaultValue={icon}
-                onValueChange={(e) => {
-                  setProp((props) => (props.icon = e), 1000)
-                }}
+          <div className="flex items-center col-span-2 space-x-2">
+              <Checkbox
+              checked={enableIcon}
+              onCheckedChange={(e) => {
+                setProp((props) => (props.enableIcon = e), 1000)
+              }}
+              id="enableIcon" />
+              <label
+                htmlFor="enableIcon"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select icon" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="arrowright">
-                      <ArrowRight />
-                    </SelectItem>
-                    <SelectItem value="aperture">
-                      <Aperture />
-                    </SelectItem>
-                    <SelectItem value="activity">
-                      <Activity />
-                    </SelectItem>
-                    <SelectItem value="dollarsign">
-                      <DollarSign />
-                    </SelectItem>
-                    <SelectItem value="anchor">
-                      <Anchor />
-                    </SelectItem>
-                    <SelectItem value="disc">
-                      <Disc />
-                    </SelectItem>
-                    <SelectItem value="mountain">
-                      <Mountain />
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                Enable icon
+              </label>
+            </div>
+            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+            {
+              enableIcon && (
+                <>
+                <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                <Select
+                  defaultValue={icon}
+                  onValueChange={(e) => {
+                    setProp((props) => (props.icon = e), 1000)
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select icon" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="arrowright">
+                        <ArrowRight />
+                      </SelectItem>
+                      <SelectItem value="aperture">
+                        <Aperture />
+                      </SelectItem>
+                      <SelectItem value="activity">
+                        <Activity />
+                      </SelectItem>
+                      <SelectItem value="dollarsign">
+                        <DollarSign />
+                      </SelectItem>
+                      <SelectItem value="anchor">
+                        <Anchor />
+                      </SelectItem>
+                      <SelectItem value="disc">
+                        <Disc />
+                      </SelectItem>
+                      <SelectItem value="mountain">
+                        <Mountain />
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                </>
+              )
+            }
+
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -355,48 +438,7 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Appearance</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="custom"
-                checked={custom}
-                onCheckedChange={(e) => {
-                  setProp((props) => (props.custom = e), 1000)
-                }}
-              />
-              <label
-                htmlFor="custom"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Custom button
-              </label>
-            </div>
 
-            {!custom ? (
-              <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-                <p className="text-md text-muted-foreground">Variant</p>
-                <Select
-                  onValueChange={(e) => {
-                    setProp((props) => (props.variant = e), 1000)
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select style" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Style variant</SelectLabel>
-                      <SelectItem value="primary">Primary</SelectItem>
-                      <SelectItem value="secondary">Secondary</SelectItem>
-                      <SelectItem value="destructive">Destructive</SelectItem>
-                      <SelectItem value="outline">Outline</SelectItem>
-                      <SelectItem value="ghost">Ghost</SelectItem>
-                      <SelectItem value="link">Link</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              <>
                 <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
                   <p className="text-md text-muted-foreground">Text</p>
                   <Input
@@ -420,8 +462,30 @@ export const IconButtonSettings = () => {
                     }}
                   />
                 </div>
-              </>
-            )}
+
+                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+                  <p className="text-md text-muted-foreground">Text Hover</p>
+                  <Input
+                    type="color"
+                    value={colorHover}
+                    onChange={(e) => {
+                      setProp((props) => (props.colorHover = e.target.value), 1000)
+                    }}
+                  />
+                </div>
+                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+                  <p className="text-md text-muted-foreground">Background Hover</p>
+                  <Input
+                    type="color"
+                    value={backgroundHover}
+                    onChange={(e) => {
+                      setProp(
+                        (props) => (props.backgroundHover = e.target.value),
+                        1000
+                      )
+                    }}
+                  />
+                </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-4">
@@ -565,24 +629,55 @@ export const IconButtonSettings = () => {
   )
 }
 
-export const IconButtonDefaultProps = {
-  width: "auto",
+type IconButtonProps = {
+  disabled: boolean
+  enableIcon: boolean
+  size: string
+  background: string
+  backgroundHover: string
+  color: string
+  colorHover: string
+  text: string
+  icon: string
+  paddingLeft: string | number
+  paddingTop: string | number
+  paddingRight: string | number
+  paddingBottom: string | number
+  radius: string
+  flexDirection: string
+  alignItems: string
+  justifyContent: string
+  gap: number
+  border: number
+  borderColor: string
+  marginLeft: number | number
+  marginTop: number | number
+  marginRight: number | number
+  marginBottom: number | number
+  width: string | number
+  height: string | number
+}
+
+export const IconButtonDefaultProps:IconButtonProps = {
+  disabled: false,
+  enableIcon: true,
+  width: "366",
   height: "auto",
   size: "small",
-  variant: "secondary",
-  custom: true,
-  background: "inherit",
-  color: "inherit",
-  text: "Click me",
+  background: "#4050ff",
+  color: "#ffffff",
+  backgroundHover: "#3041ff",
+  colorHover: "#ffffff",
+  text: "Get quote",
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
   icon: "arrowright",
-  paddingLeft: "4",
-  paddingTop: "4",
-  paddingRight: "4",
-  paddingBottom: "4",
+  paddingLeft: "16",
+  paddingTop: "26",
+  paddingRight: "16",
+  paddingBottom: "26",
   radius: "none",
   flexDirection: "row",
   alignItems: "center",
