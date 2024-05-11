@@ -9,8 +9,7 @@ import { Slider } from "@/components/ui/slider"
 import { useDragControls, Reorder, useMotionValue } from "framer-motion"
 import React from "react"
 import { Card } from "@/components/ui/card"
-
-import { GripVertical } from "lucide-react"
+import { GripVertical,Check as IconCheck, X as IconX } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
 export const PictureChoiceSettings = () => {
@@ -126,30 +125,30 @@ export const PictureChoiceSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Container</p>
-              <Slider
-                defaultValue={[containerStyles.padding]}
+              <Input
+                type="number"
+                placeholder={containerStyles.padding}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.padding = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.padding = e.target.value), 1000)
+                }
               />
             </div>
 
             <Separator className="my-4" />
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Item</p>
-              <Slider
-                defaultValue={[pictureItemsStyles.padding]}
+              <Input
+                type="number"
+                placeholder={pictureItemsStyles.padding}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.pictureItemsStyles.padding = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.pictureItemsStyles.padding = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -162,57 +161,57 @@ export const PictureChoiceSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[containerStyles.marginLeft]}
+              <Input
+                type="number"
+                placeholder={containerStyles.marginLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginLeft = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginLeft = e.target.value), 1000)
+                }
               />
             </div>
 
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[containerStyles.marginTop]}
+              <Input
+                type="number"
+                placeholder={containerStyles.marginTop}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginTop = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginTop = e.target.value), 1000)
+                }
               />
             </div>
 
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[containerStyles.marginRight]}
+              <Input
+                type="number"
+                placeholder={containerStyles.marginRight}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginRight = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginRight = e.target.value), 1000)
+                }
               />
             </div>
 
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[containerStyles.marginBottom]}
+              <Input
+                type="number"
+                placeholder={containerStyles.marginBottom}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginBottom = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginBottom = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -291,15 +290,15 @@ export const PictureChoiceSettings = () => {
 
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Gap</p>
-              <Slider
-                defaultValue={[containerStyles.gap]}
+              <Input
+                type="number"
+                placeholder={containerStyles.gap}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.gap = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.gap = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -358,7 +357,16 @@ export const PictureChoiceItem = ({ item, index }) => {
           className="pic-container hover:cursor-pointer"
         >
           {item.itemType === ItemType.ICON ? (
-            <item.pic size={20} className="shrink-0" />
+            // <img src={item.icon} className="shrink-0 w-20 h-20" />
+            item.icon === 'check' ? (
+              <IconCheck
+                className="w-5 h-5 shrink-0"
+              />
+            ) : item.icon === 'x' ? (
+              <IconX
+              className="w-5 h-5 shrink-0"
+              />
+            ) : null
           ) : (
             <img src={item.pic} alt={item.alt || ""} className="w-10 h-10" />
           )}

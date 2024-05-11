@@ -8,13 +8,13 @@ import {
   BellRing,
   CheckCircle,
   GripVertical,
-  Image,
+  Image as IconImage,
   ListOrdered,
   ShieldCheck,
   UploadCloud,
   XCircle,
-  Check,
-  X,
+  Check as IconCheck,
+  X as IconX,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
@@ -52,7 +52,8 @@ import {
   CardTop,
   Card as UserCard,
 } from "@/components/user/card/user-card.component"
-
+import CrossIcon from "@/assets/icons/x.svg";
+import CheckIcon from "@/assets/icons/check.svg";
 import {
   Container,
   ContainerDefaultProps,
@@ -69,18 +70,8 @@ import { PictureChoiceSettings } from "./picture-choice-settings.component"
 import styled from "styled-components"
 
 const ICONS = {
-  image: Image,
-  check: Check,
-  listOrdered: ListOrdered,
-  uploadCloud: UploadCloud,
-  aperture: Aperture,
-  arrowBigUp: ArrowBigUp,
-  anchor: Anchor,
-  bellingRing: BellRing,
-  checkCircle: CheckCircle,
-  shieldCheck: ShieldCheck,
-  circleX: XCircle,
-  x: X,
+  check: CheckIcon.src,
+  x: CrossIcon.src,
 }
 
 const PictureChoiceContainer = styled.div<{
@@ -195,14 +186,34 @@ export const PictureChoice = ({
             {...pictureItemsStyles}
           >
             {item.itemType === ItemType.ICON ? (
-              <item.pic
+              <>
+              {/* <img
+                src={item.icon}
                 style={{
+                  color: `${pictureItemsStyles.textColor}`,
                   width: `${pictureItemsStyles.picWidth}px`,
                   height: `${pictureItemsStyles.picHeight}px`,
                 }}
-              />
+              /> */}
+
+{item.icon === 'check' ? (
+      <IconCheck
+        style={{
+          width: `${pictureItemsStyles.picWidth}px`,
+          height: `${pictureItemsStyles.picHeight}px`,
+        }}
+      />
+    ) : item.icon === 'x' ? (
+      <IconX
+        style={{
+          width: `${pictureItemsStyles.picWidth}px`,
+          height: `${pictureItemsStyles.picHeight}px`,
+        }}
+      />
+    ) : null}
+              </>
             ) : (
-              <img
+               <img
                 src={item.pic}
                 alt={item.alt || ""}
                 style={{
@@ -210,7 +221,7 @@ export const PictureChoice = ({
                   height: `${pictureItemsStyles.picHeight}px`,
                 }}
               />
-            )}
+             )}
             <p>{item.text}</p>
           </PictureChoiceItem>
         ))}
@@ -267,6 +278,7 @@ type PictureChoiceTypes = {
     id: number
     text: string
     pic: any
+    icon: any
     itemType: ItemType
   }[]
 
@@ -314,13 +326,15 @@ export const PictureChoiceDefaultProps:PictureChoiceTypes = {
     {
       id: 1,
       text: "Yes",
-      pic: ICONS.check,
+      pic: null,
+      icon: "check",
       itemType: ItemType.ICON,
     },
     {
       id: 2,
       text: "No",
-      pic: ICONS.x,
+      pic: null,
+      icon: "x",
       itemType: ItemType.ICON,
     }
   ],

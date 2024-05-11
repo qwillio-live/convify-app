@@ -23,6 +23,7 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
+import styled from "styled-components"
 
 export const UserContainer = ({
   padding,
@@ -241,51 +242,54 @@ export const UserContainerSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginLeft = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.marginLeft = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginTop}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginTop = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginRight}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginRight = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginRight = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginBottom}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginBottom = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -298,51 +302,54 @@ export const UserContainerSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[paddingLeft]}
+              <Input
+                type="number"
+                placeholder={paddingLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingLeft = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.paddingLeft = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[paddingTop]}
+              <Input
+                type="number"
+                placeholder={paddingTop}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingTop = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.paddingTop = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[paddingRight]}
+              <Input
+                type="number"
+                placeholder={paddingRight}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingRight = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.paddingRight = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[paddingBottom]}
+              <Input
+                type="number"
+                placeholder={paddingBottom}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingBottom = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.paddingBottom = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -355,15 +362,15 @@ export const UserContainerSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Border</p>
-              <Slider
-                defaultValue={[border]}
+              <Input
+                type="number"
+                placeholder={border}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.border = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.border = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-2 flex flex-col gap-2">
@@ -378,27 +385,28 @@ export const UserContainerSettings = () => {
             </div>
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Radius</p>
-              <Slider
-                defaultValue={[radius]}
+              <Input
+                type="number"
+                placeholder={radius}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.radius = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.radius = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Shadow</p>
-              <Slider
-                defaultValue={[shadow]}
+              <Input
+                type="number"
+                placeholder={shadow}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.shadow = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.shadow = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -495,15 +503,15 @@ export const UserContainerSettings = () => {
 
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Gap</p>
-              <Slider
-                defaultValue={[gap]}
+              <Input
+                type="number"
+                placeholder={gap}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.gap = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.gap = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>

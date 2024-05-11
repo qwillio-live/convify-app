@@ -22,15 +22,16 @@ import { SettingsPanel } from "@/components/user/settings/user-settings.componen
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
 import { UserText } from "@/components/user/text/user-text.component"
 
-import { ProgressBar } from "../progress-bar.component"
+// import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import {ProgressBar as UserProgressBar} from "../user/progress/user-progress.component"
+import {ProgressBar} from "../user/progress/user-progress.component"
 import { Progress } from "../ui/progress-custom"
 import { Card, CardTop } from "../user/card/user-card.component"
 import {
   Container,
+  ContainerDefaultProps,
   UserContainer,
 } from "../user/container/user-container.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
@@ -106,7 +107,7 @@ export function CreateFlowComponent() {
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
-          UserProgressBar,
+          // UserProgressBar,
           ScreenOneInput,
           Input,
           Button,
@@ -155,7 +156,7 @@ export function CreateFlowComponent() {
               >
                 <TabsContent
                   className={cn(
-                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased z-20",
+                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased z-20 py-20",
                     view == VIEWS.DESKTOP
                       ? "w-full border-0"
                       : "w-96 border px-4"

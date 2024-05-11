@@ -48,6 +48,7 @@ import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
 
 const ScreensList = () => {
+  const screenNames = ["Button Choice", "One Choice", "One Input"];
   const screens = useAppSelector((state) => state.screen.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
@@ -112,8 +113,13 @@ const ScreensList = () => {
                   onClick={() => dispatch(setSelectedScreen(index))}
                 >
                   <div className="text-sm text-muted-foreground">
-                    {screen[screen?.ROOT?.nodes[0]]?.displayName ??
-                      "New Screen"}
+                    {
+                      index <= 2 ? (
+                        <span className="text-sm text-muted-foreground">{screenNames[index]}</span>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">New Screen {index + 1}</span>
+                      )
+                    }
                   </div>
                 </Card>
               </ContextMenuTrigger>
