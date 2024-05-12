@@ -1,26 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { Eye, Plus } from "lucide-react"
+import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import {
-  Bell,
-  ChevronDown,
-  Eye,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Plus,
-  Search,
-  ShoppingCart,
-  User,
-  Users,
-} from "lucide-react"
-import { signOut } from "next-auth/react"
+import { useState } from "react"
 
-import { Badge } from "@/components/ui/badge"
+import { BreadCrumbs } from "@/components/breadcrumbs"
+import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
+import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -30,14 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BreadCrumbs } from "@/components/breadcrumbs"
-import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
-import { FlowsList } from "@/components/flows"
-import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 
@@ -68,8 +49,8 @@ export default function CreateFlowsPage() {
   return (
     <div className="min-h-screen w-full">
       <Tabs defaultValue="create" onValueChange={onTabChange}>
-        <div className="sticky top-0 z-0 ">
-          <header className="flex h-14 items-center justify-between gap-4 border-b bg-muted/20 px-4 lg:h-[60px] lg:px-6">
+        <div className="sticky top-0 z-[60]">
+          <header className="flex h-14 items-center justify-between gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
                 <BreadCrumbs />
@@ -79,8 +60,8 @@ export default function CreateFlowsPage() {
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
                     Content
                   </h4>
-                  <Button size="icon" className="h-8 w-8">
-                    <Plus className="h-3.5 w-3.5" />
+                  <Button size="icon" className="size-8">
+                    <Plus className="size-3.5" />
                   </Button>
                 </div>
               </div>
@@ -88,25 +69,25 @@ export default function CreateFlowsPage() {
             <div className="tabs-list-container flex h-full">
               <TabsList className="flex h-full bg-inherit py-0 ">
                 <TabsTrigger
-                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="create"
                 >
                   Create
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="connect"
                 >
                   Connect
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="share"
                 >
                   Share
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full border-b-4 rounded-none border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
                   value="results"
                 >
                   Results
@@ -120,7 +101,7 @@ export default function CreateFlowsPage() {
                   size="sm"
                   className="my-4 h-8 gap-1 p-2"
                 >
-                  <Eye className="h-3.5 w-3.5" />
+                  <Eye className="size-3.5" />
                 </Button>
               </div>
               <div className="">

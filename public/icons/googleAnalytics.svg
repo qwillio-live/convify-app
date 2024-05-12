@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>googleAnalytics</title>
+    <desc>Created with Sketch.</desc>
+    <g id="googleAnalytics" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ic_analytics">
+            <rect id="Rectangle" x="0" y="0" width="200" height="200"></rect>
+            <g id="Group" transform="translate(21.000000, 9.000000)">
+                <path d="M114.342105,21.8352273 L114.342105,159.085227 C114.342105,174.44267 124.934342,183 136.171053,183 C146.565789,183 158,175.721591 158,159.085227 L158,22.875 C158,8.79647727 147.605263,0 136.171053,0 C124.736842,0 114.342105,9.70107955 114.342105,21.8352273 Z" id="Path" fill="#F9AB00"></path>
+                <path d="M57.1710526,91.5 L57.1710526,159.085227 C57.1710526,174.44267 67.7632895,183 79,183 C89.3947368,183 100.828947,175.721591 100.828947,159.085227 L100.828947,92.5397727 C100.828947,78.46125 90.4342105,69.6647727 79,69.6647727 C67.5657895,69.6647727 57.1710526,79.3658523 57.1710526,91.5 Z" id="Path" fill="#E37400"></path>
+                <ellipse id="Oval" fill="#E37400" cx="21.8289474" cy="161.164773" rx="21.8289474" ry="21.8352273"></ellipse>
+            </g>
+        </g>
+    </g>
+</svg>
