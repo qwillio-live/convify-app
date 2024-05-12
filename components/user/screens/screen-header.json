@@ -1,0 +1,54 @@
+{
+	"ROOT": {
+		"type": "UserContainer",
+		"isCanvas": true,
+		"props": {
+			"padding": 5,
+			"background": "#ad2121",
+			"expanded": "true",
+			"className": "min-h-screen min-w-full flex flex-col items-center"
+		},
+		"displayName": "Header Screen",
+		"custom": {
+
+		},
+		"hidden": false,
+		"nodes": [
+			"ZGR8kQEDP5"
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"ZGR8kQEDP5": {
+		"type": {
+			"resolvedName": "Logo"
+		},
+		"isCanvas": false,
+		"props": {
+			"alt": "Logo",
+			"marginTop": 0,
+			"marginBottom": "40",
+			"marginLeft": 0,
+			"marginRight": 0,
+			"background": "inherit",
+			"radius": "none",
+			"align": "center",
+			"width": 156,
+			"height": 50,
+			"src": "/_next/static/media/convify_logo_black.0085e885.png"
+		},
+		"displayName": "Logo",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	}
+}

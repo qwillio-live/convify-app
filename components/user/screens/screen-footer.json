@@ -1,0 +1,45 @@
+{
+	"ROOT": {
+		"type": "UserContainer",
+		"isCanvas": true,
+		"props": {
+			"padding": 5,
+			"background": "#ad2121",
+			"expanded": "true",
+			"className": "min-h-screen min-w-full flex flex-col items-center"
+		},
+		"displayName": "Screen Footer",
+		"custom": {
+
+		},
+		"hidden": false,
+		"nodes": [
+      "footer-node"
+		],
+		"linkedNodes": {
+
+		}
+	},"footer-node": {
+    "type": {
+      "resolvedName": "ScreenFooter"
+    },
+    "isCanvas": false,
+    "props": {
+
+    },
+    "displayName": "Footer",
+    "custom": {
+
+    },
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [
+
+    ],
+    "linkedNodes": {
+
+    }
+  }
+
+
+}

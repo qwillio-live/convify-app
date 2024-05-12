@@ -4,19 +4,26 @@ import buttonChoiceData from "@/components/user/screens/button-choice-screen.jso
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import oneChoiceData from "@/components/user/screens/one-choice-screen.json"
 import oneInputData from "@/components/user/screens/one-input-screen.json"
-
+import footerScreenData from "@/components/user/screens/screen-footer.json"
+import headerScreenData from "@/components/user/screens/screen-header.json"
 export interface ScreensState {
   selectedScreen: number
   headerId: string
+  headerFooterMode: boolean
+  screensHeader: any
+  screensFooter: any
   screens: any[]
 }
 
 const initialState: ScreensState = {
   headerId: "",
   selectedScreen: 0,
+  screensHeader: headerScreenData,
+  headerFooterMode: false,
   /**Ignoring ts checks as this is placeholder solution for now */
   /** @ts-ignore */
   screens: [buttonChoiceData, oneChoiceData, oneInputData],
+  screensFooter: footerScreenData,
 }
 
 export const screensSlice = createSlice({
@@ -25,6 +32,9 @@ export const screensSlice = createSlice({
   reducers: {
     setHeaderId: (state, action: PayloadAction<string>) => {
       state.headerId = action.payload
+    },
+    setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
+      state.headerFooterMode = action.payload
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
       console.log("Payload", action.payload)
@@ -66,6 +76,7 @@ export const screensSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setSelectedScreen,
+  setHeaderFooterMode,
   reorderScreens,
   addScreen,
   duplicateScreen,

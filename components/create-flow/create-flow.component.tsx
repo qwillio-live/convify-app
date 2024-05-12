@@ -49,7 +49,8 @@ import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { UserInput } from "../user/input/user-input.component"
-
+import { Controller } from "../user/settings/controller.component"
+import screensFooterData from "@/components/user/screens/screen-footer.json"
 enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
@@ -82,10 +83,11 @@ return result
 }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
+  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
   const currentScreen = useAppSelector(
     (state) => state.screen.screens[state.screen.selectedScreen]
   )
-  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
+
   const dispatch = useAppDispatch();
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -95,11 +97,13 @@ export function CreateFlowComponent() {
         console.log("New nodes are: ", JSON.stringify(nodes.getSerializedNodes()));
       }}
         resolver={{
+          Controller,
           Logo,
           HeadlineText,
           UserText,
           UserButton,
           ProgressBar,
+          Element,
           Progress,
           ButtonChoiceScreen,
           ScreenHeader,
@@ -166,13 +170,6 @@ export function CreateFlowComponent() {
                   <Frame
                   data={currentScreen}
                   >
-                    {/* <Element
-                      is={"div"}
-                      id="create-flow-canvas hover:dragged"
-                      background="#ad2121"
-                      canvas
-                      className="min-w-full craftjs-renderer"
-                    ></Element> */}
                   </Frame>
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2 z-20">
