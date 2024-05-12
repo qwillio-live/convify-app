@@ -24,6 +24,7 @@ import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
 import styled from "styled-components"
+import { ScreenFooter } from "../screens/screen-footer.component"
 
 export const UserContainer = ({
   padding,
@@ -102,6 +103,7 @@ export const UserContainer = ({
 
     {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
       {children}
+      <ScreenFooter />
     </div>
   )
 }
