@@ -100,7 +100,7 @@ logoBarItemStyles,
   return (
     <LogoBarInner
       ref={(ref: any) => connect(drag(ref))}
-      className={cn("border border-transparent", (isHovered && "border border-blue-400 border-dotted"))}
+      className={cn("border border-transparent")}
       {...logoBarStyles}
       {...props}
     >
