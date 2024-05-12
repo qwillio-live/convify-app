@@ -112,14 +112,10 @@ const ScreensList = () => {
                   )}
                   onClick={() => dispatch(setSelectedScreen(index))}
                 >
-                  <div className="text-sm text-muted-foreground">
-                    {
-                      index <= 2 ? (
-                        <span className="text-sm text-muted-foreground">{screenNames[index]}</span>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">New Screen {index + 1}</span>
-                      )
-                    }
+                  <div className="text-xs text-muted-foreground">
+                  {screen.ROOT.displayName ??
+                      "New Screen"}
+
                   </div>
                 </Card>
               </ContextMenuTrigger>
