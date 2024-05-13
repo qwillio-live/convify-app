@@ -12,13 +12,13 @@ const ResultFlowComponents = () => {
           <div className="tabs-list-container flex h-full w-3/5 items-center justify-start">
             <TabsList className="flex h-full bg-inherit py-0 ">
               <TabsTrigger
-                className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit "
+                className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
                 value="insights"
               >
                 insights
               </TabsTrigger>
               <TabsTrigger
-                className="h-full rounded-none  border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
+                className="h-full rounded-none  border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
                 value="responses"
               >
                 responses
@@ -27,7 +27,7 @@ const ResultFlowComponents = () => {
           </div>
         </header>
         <main className="content relative  z-50 flex  items-start justify-center overflow-hidden bg-gray-100 px-4 lg:px-6 ">
-          <div className="tabs-content flex w-full items-center justify-start">
+          <div className="tabs-content flex w-full items-center">
             <TabsContent
               className="mt-0 w-full "
               value="insights"
@@ -35,7 +35,7 @@ const ResultFlowComponents = () => {
             >
               <InsightsFlowComponents />
             </TabsContent>
-            <TabsContent className="mt-0 size-full" value="responses">
+            <TabsContent className="mt-0 w-full" value="responses">
               <ResponseFlowComponents />
             </TabsContent>
           </div>
