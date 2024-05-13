@@ -1,14 +1,11 @@
 "use client"
 
-import { Eye, Plus } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { Eye, Plus } from "lucide-react"
+import { signOut } from "next-auth/react"
 
-import { BreadCrumbs } from "@/components/breadcrumbs"
-import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
-import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -19,6 +16,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { BreadCrumbs } from "@/components/breadcrumbs"
+import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
+import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 
@@ -115,7 +115,7 @@ export default function CreateFlowsPage() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="rounded-full"
+                    className="rounded-full w-10 h-10"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

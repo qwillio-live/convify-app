@@ -34,7 +34,7 @@ const IntegrationCard = ({
       className="mb-2.5 rounded-md border bg-white shadow dark:bg-[#070e1f]"
     >
       <AccordionTrigger
-        className="flex items-center px-5 py-2.5 hover:no-underline"
+        className="flex items-center px-4 py-6 hover:no-underline h-32"
         noIcon={true}
       >
         <div>
@@ -47,7 +47,7 @@ const IntegrationCard = ({
               {status === "active" && (
                 <small className="ml-3 flex items-center rounded-2xl bg-[#EBF9F1] px-2 py-0.5 text-[11px] font-semibold leading-4 text-[#34AC68]">
                   Active
-                  <Check className="ml-1 size-3" />
+                  <Check className="ml-1 w-3 h-3" strokeWidth={3} />
                 </small>
               )}
             </div>

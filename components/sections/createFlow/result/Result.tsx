@@ -1,8 +1,8 @@
+import { TabsList, TabsTrigger } from "@radix-ui/react-tabs"
+
 import { Tabs, TabsContent } from "@/components/ui/tabs"
-// sections components
 import InsightsFlowComponents from "@/components/sections/createFlow/insights/Insights"
 import ResponseFlowComponents from "@/components/sections/createFlow/response/Response"
-import { TabsList, TabsTrigger } from "@radix-ui/react-tabs"
 
 const ResultFlowComponents = () => {
   return (

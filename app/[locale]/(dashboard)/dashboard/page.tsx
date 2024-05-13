@@ -1,5 +1,8 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   Bell,
   ChevronDown,
@@ -14,11 +17,8 @@ import {
   Users,
 } from "lucide-react"
 import { signOut } from "next-auth/react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 
-import { FlowsList } from "@/components/flows"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -32,7 +32,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useTranslations } from "next-intl"
+import { FlowsList } from "@/components/flows"
 
 interface User {
   name: string
@@ -73,7 +73,7 @@ export default function DashboardPage() {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <svg
-                className="size-7"
+                className="w-7 h-7"
                 viewBox="0 0 720 524"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -132,8 +132,8 @@ export default function DashboardPage() {
               </svg>
               <span className="">Convify</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto size-8">
-              <Bell className="size-4" />
+            <Button variant="outline" size="icon" className="ml-auto w-8 h-8">
+              <Bell className="w-4 h-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
@@ -141,7 +141,7 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="absolute left-2.5 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder="Find workspace or flow"
@@ -276,7 +276,7 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex !size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec]"
+                  className="flex w-10 h-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec]"
                 >
                   {userData && userData?.name ? (
                     userData?.name?.charAt(0).toUpperCase()
