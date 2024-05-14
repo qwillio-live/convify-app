@@ -160,7 +160,7 @@ export function CreateFlowComponent() {
               >
                 <TabsContent
                   className={cn(
-                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased z-20 py-20",
+                    "mx-auto page-container box-content bg-background font-sans antialiased z-20",
                     view == VIEWS.DESKTOP
                       ? "w-full border-0"
                       : "w-96 border px-4"

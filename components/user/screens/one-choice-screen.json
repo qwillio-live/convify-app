@@ -63,7 +63,7 @@
 		"isCanvas": false,
 		"props": {
 			"color": "#4050ff",
-			"maxWidth": "400",
+			"maxWidth": "366",
 			"fullWidth": false
 		},
 		"displayName": "ProgressBar",

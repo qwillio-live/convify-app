@@ -11,6 +11,7 @@ import {
   Bookmark,
   Box,
   Chrome,
+  Circle,
   CircleSlashed,
   Columns,
   Copy,
@@ -52,8 +53,10 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { Input } from "@/components/ui/input"
+import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+// import { Toggle, ToggleItem } from "@/components/ui/toggle-group"
+import { Toggle } from "@/components/ui/toggle"
 import {
   ButtonDefaultProps,
   Button as UserButton,
@@ -87,8 +90,12 @@ import {
   PictureChoice,
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
-import { ProgressBar, ProgressBarDefaultProps } from "../progress/user-progress.component"
-import {Progress as CustomProgressBar} from "@/components/ui/progress-custom"
+import {
+  ProgressBar,
+  ProgressBarDefaultProps,
+} from "../progress/user-progress.component"
+import { is } from "date-fns/locale"
+
 const MultipleChoiceOptions = [
   {
     id: "1",
@@ -111,7 +118,6 @@ const MultipleChoiceOptions = [
     icon: <Globe className="w-6 h-6" />,
   },
 ]
-
 function HelperInformation() {
   return (
     <UiCard
@@ -135,11 +141,88 @@ function HelperInformation() {
   )
 }
 
+// const DragOverlay = ({ children }) => {
+//   const [isDragging, setIsDragging] = React.useState(false)
+//   const [dragPosition, setDragPosition] = React.useState({ x: 0, y: 0 })
+
+//   const handleMouseDown = (e) => {
+//     setIsDragging(true)
+//     setDragPosition({ x: e.clientX, y: e.clientY })
+//   }
+
+//   const handleMouseMove = (e) => {
+//     if (isDragging) {
+//       setDragPosition({ x: e.clientX, y: e.clientY })
+//     }
+//   }
+
+//   const handleMouseUp = () => {
+//     setIsDragging(false)
+//   }
+
+//   React.useEffect(() => {
+//     document.addEventListener("mousemove", handleMouseMove)
+//     document.addEventListener("mouseup", handleMouseUp)
+
+//     return () => {
+//       document.removeEventListener("mousemove", handleMouseMove)
+//       document.removeEventListener("mouseup", handleMouseUp)
+//     }
+//   }, [isDragging])
+
+//   return (
+//     <div
+//       className="drag-overlay flex flex-row items-center text-lg w-full justify-between"
+//       style={{
+//         position: `${isDragging ? "relative" : "relative"}`,
+//         // top: `${dragPosition.y}px`,
+//         // left: `${dragPosition.x}px`,
+//         top: "0",
+//         left: "0",
+//         cursor: "move",
+//       }}
+//       onMouseDown={handleMouseDown}
+//     >
+//       {children}
+//     </div>
+//   )
+// }
+
+const HoverCardComponent = ({ title, icon, children }) => {
+  const [openCard, setOpenCard] = React.useState(false)
+  return (
+    <>
+    <div
+    onMouseOver={() => setOpenCard(true)}
+    onMouseLeave={() => setOpenCard(false)}
+    onMouseDown={() => setOpenCard(!openCard)}
+    className="hover:cursor-move flex flex-row items-center text-lg w-full justify-between"><span className="flex flex-row items-center text-sm gap-2">{icon} {title}</span> <GripVertical className="shrink-0 right-4" /></div>
+    {openCard && (
+    <HoverCard
+      openDelay={0}
+    >
+      <HoverCardTrigger
+      asChild={false}
+      className="w-full">
+      </HoverCardTrigger>
+      <HoverCardContent
+      className="flex flex-row justify-center items-center"
+      forceMount={true}
+      avoidCollisions side="left" sideOffset={18}>
+        {children}
+      </HoverCardContent>
+    </HoverCard>
+    )}
+    </>
+  )
+}
+
 export const UserToolbox = () => {
+
   const { connectors } = useEditor()
 
   return (
-    <div className="p-y">
+    <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
@@ -154,7 +237,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -163,36 +246,22 @@ export const UserToolbox = () => {
                       <HeadlineText {...HeadlineTextDefaultProps} />
                     )
                   }
-                  data-cy="toolbox-text"
+                  data-cy="toolbox-headline"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Type className="mr-2 w-3 h-3" /> Headline{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <div className="flex flex-row gap-2 justify-center items-center p-4 border">
-                        <h1 className="font-semibold text-lg">
-                          Headline for your business
-                        </h1>
-                      </div>
-                    </HoverCardContent>
-                  </HoverCard>
+                  <HoverCardComponent
+                    title="Headline"
+                    icon={<Type className="mr-2 w-3 h-3" />}
+                  >
+                    <div className="flex w-fit flex-row gap-2 justify-center items-center p-4 border">
+                      <h1 className="font-semibold text-lg">
+                        Headline for your business
+                      </h1>
+                    </div>
+                  </HoverCardComponent>
                 </div>
 
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -200,30 +269,16 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Pencil className="mr-2 w-3 h-3" /> Text{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <div className="flex flex-row gap-2 justify-center items-center p-4 border">
-                        <p className="font-normal text-base">
-                          A good description of your cause
-                        </p>
-                      </div>
-                    </HoverCardContent>
-                  </HoverCard>
+                  <HoverCardComponent
+                    title="Text"
+                    icon={<Pencil className="mr-2 w-3 h-3" />}
+                  >
+                    <div className="flex w-fit flex-row gap-2 justify-center items-center p-4 border">
+                      <h1 className="font-semibold text-lg">
+                      A good description of your cause
+                      </h1>
+                    </div>
+                  </HoverCardComponent>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -234,7 +289,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -245,34 +300,19 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <TextCursorInput className="mr-2 w-3 h-3" /> Input
-                          field{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
+                                    <HoverCardComponent
+                    title="Input field"
+                    icon={<TextCursorInput className="mr-2 w-3 h-3" />}
+                  >
                       <Input
                         placeholder="Placeholder"
                         className="focus-visible:ring-blue-600 ring-offset-0 focus-visible:ring-offset-0"
                       />
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
 
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -283,23 +323,10 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <ImagePlus className="mr-2 w-3 h-3" /> Picture Choice{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
+                      <HoverCardComponent
+                    title="Picture Choice"
+                    icon={<ImagePlus className="mr-2 w-3 h-3" />}
+                  >
                       <div className="grid grid-cols-2 gap-2">
                         <div
                           className="flex flex-col gap-4 p-4 items-center justify-center text-lg
@@ -347,12 +374,11 @@ export const UserToolbox = () => {
                           Achieve
                         </div>
                       </div>
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
 
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -363,24 +389,11 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Copy className="mr-2 w-3 h-3" /> Multiple Choice
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <div className="flex flex-col gap-2 w-[360px]">
+                                    <HoverCardComponent
+                    title="Multiple Choice"
+                    icon={<Copy className="mr-2 w-3 h-3" />}
+                  >
+                      <div className="flex flex-col gap-2 w-full">
                         {MultipleChoiceOptions.map((option, index) => (
                           <div
                             key={index}
@@ -398,8 +411,7 @@ export const UserToolbox = () => {
                           </div>
                         ))}
                       </div>
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -410,7 +422,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -424,30 +436,15 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Navigation className="mr-2 w-3 h-3" />
-                          Button{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <Button className="w-[360px] bg-[#4050ff] text-white hover:bg-[#3041ff] px-4 py-6">
+                                    <HoverCardComponent
+                    title="Button"
+                    icon={<Navigation className="mr-2 w-3 h-3" />}
+                  >
+                      <Button className="w-full bg-[#4050ff] text-white hover:bg-[#3041ff] px-4 py-6">
                         Get quote
                         <ArrowRight className="ml-2" />
                       </Button>
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -458,7 +455,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -466,35 +463,21 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Dice2 className="mr-2 w-3 h-3" /> Logo{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
+                                    <HoverCardComponent
+                    title="Logo"
+                    icon={<Dice2 className="mr-2 w-3 h-3" />}
+                  >
                       <Image
                         src={ConvifyLogo.src}
                         alt="Logo"
                         width={120}
                         height={42}
                       />
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
 
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -502,90 +485,64 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <Columns className="mr-2 w-3 h-3" /> Logo Bar{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
-                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
+                                    <HoverCardComponent
+                    title="Logo Bar"
+                    icon={<Columns className="mr-2 w-3 h-3" />}
+                  >
+              <div className="flex flex-row justify-between items-center p-2 border w-[366px]">
                         <Image
                           src={FirstLogo.src}
                           alt="Logo"
-                          width={60}
-                          height={32}
+                          width={42}
+                          height={22}
                         />
                         <Image
                           src={SecondLogo.src}
                           alt="Logo"
-                          width={60}
-                          height={32}
+                          width={42}
+                          height={22}
                         />
                         <Image
                           src={ThirdLogo.src}
                           alt="Logo"
-                          width={60}
-                          height={32}
+                          width={42}
+                          height={22}
                         />
                         <Image
                           src={FourthLogo.src}
                           alt="Logo"
-                          width={60}
-                          height={32}
+                          width={42}
+                          height={22}
                         />
                       </div>
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
 
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className=" min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <ProgressBar {...ProgressBarDefaultProps} />)
+                    connectors.create(
+                      ref,
+                      <ProgressBar {...ProgressBarDefaultProps} />
+                    )
                   }
                   data-cy="toolbox-text"
                 >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Button
-                        variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
-                      >
-                        <span className="flex flex-row items-center text-sm">
-                          <CircleSlashed className="mr-2 w-3 h-3" /> Progress bar{" "}
-                        </span>{" "}
-                        <GripVertical />
-                      </Button>
-                    </HoverCardTrigger>
-                    <HoverCardContent
-                      className="w-full"
-                      side="left"
-                      sideOffset={18}
-                    >
+                                    <HoverCardComponent
+                    title="Progress"
+                    icon={<CircleSlashed className="mr-2 w-3 h-3" />}
+                  >
                       <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
-                      <CustomProgressBar
-                        value={50}
-                        className="h-1 max-w-[366px]"
-                        indicatorColor={"#4050ff"}
-                      />
+                        <CustomProgressBar
+                          value={50}
+                          className="h-1 max-w-[366px]"
+                          indicatorColor={"#4050ff"}
+                        />
                       </div>
-                    </HoverCardContent>
-                  </HoverCard>
+                  </HoverCardComponent>
                 </div>
-
               </AccordionContent>
             </AccordionItem>
           </Accordion>
