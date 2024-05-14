@@ -8,7 +8,7 @@ const ResultFlowComponents = () => {
   return (
     <div className="w-full">
       <Tabs defaultValue="insights">
-        <header className="flex h-14 items-center justify-center gap-4 border-b bg-muted/20 px-4 lg:h-[60px]">
+        <header className="flex h-14 items-center justify-center gap-4 border-b bg-muted/20 px-4 lg:h-[60px] bg-white">
           <div className="tabs-list-container flex h-full w-3/5 items-center justify-start">
             <TabsList className="flex h-full bg-inherit py-0 ">
               <TabsTrigger
@@ -26,16 +26,20 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative  z-50 flex  items-start justify-center overflow-hidden bg-gray-100 px-4 lg:px-6 ">
+        <main className="content relative  z-50 flex  items-start justify-center overflow-hidden bg-[#FAFAFA] px-4 lg:px-6 ">
           <div className="tabs-content flex w-full items-center">
             <TabsContent
-              className="mt-0 w-full "
+              className="mt-0 w-full"
               value="insights"
               style={{ height: "87.3vh" }}
             >
               <InsightsFlowComponents />
             </TabsContent>
-            <TabsContent className="mt-0 w-full" value="responses">
+            <TabsContent
+              className="mt-0 w-full"
+              value="responses"
+              style={{ height: "87.3vh" }}
+            >
               <ResponseFlowComponents />
             </TabsContent>
           </div>

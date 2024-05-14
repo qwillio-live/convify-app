@@ -91,7 +91,7 @@ const InsightsFlowComponents = () => {
           </TabsList>
         </div>
       </header>
-      <main className="content relative z-50 flex items-start overflow-hidden bg-gray-100 px-4 lg:px-6">
+      <main className="content relative z-50 flex items-start overflow-hidden bg-transparent px-4 lg:px-6">
         <div className="tabs-content flex w-full items-center justify-start">
           <TabsContent
             className="mt-0 w-full overflow-y-auto"
@@ -215,13 +215,21 @@ const InsightsFlowComponents = () => {
             </div>
             <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
               <Card className="">
-                <div className="p-4 flex gap-2">
-                  <Button variant="secondary" className="text-sm">
-                    Visits
-                  </Button>
-                  <Button variant="secondary" className="text-sm">
-                    Submits
-                  </Button>
+                <div className="p-3 flex justify-start">
+                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                    >
+                      Visits
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                    >
+                      Submits
+                    </Button>
+                  </div>
                 </div>
                 <div className="w-full" style={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -406,13 +414,21 @@ const InsightsFlowComponents = () => {
             </div>
             <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
               <Card className="">
-                <div className="p-4 flex gap-2">
-                  <Button variant="secondary" className="text-sm">
-                    Visits
-                  </Button>
-                  <Button variant="secondary" className="text-sm">
-                    Submits
-                  </Button>
+                <div className="p-3 flex justify-start">
+                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                    >
+                      Visits
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                    >
+                      Submits
+                    </Button>
+                  </div>
                 </div>
                 <div className="w-full" style={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -597,13 +613,21 @@ const InsightsFlowComponents = () => {
             </div>
             <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
               <Card className="">
-                <div className="p-4 flex gap-2">
-                  <Button variant="secondary" className="text-sm">
-                    Visits
-                  </Button>
-                  <Button variant="secondary" className="text-sm">
-                    Submits
-                  </Button>
+                <div className="p-3 flex justify-start">
+                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                    >
+                      Visits
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                    >
+                      Submits
+                    </Button>
+                  </div>
                 </div>
                 <div className="w-full" style={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -788,13 +812,21 @@ const InsightsFlowComponents = () => {
             </div>
             <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
               <Card className="">
-                <div className="p-4 flex gap-2">
-                  <Button variant="secondary" className="text-sm">
-                    Visits
-                  </Button>
-                  <Button variant="secondary" className="text-sm">
-                    Submits
-                  </Button>
+                <div className="p-3 flex justify-start">
+                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                    >
+                      Visits
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                    >
+                      Submits
+                    </Button>
+                  </div>
                 </div>
                 <div className="w-full" style={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
