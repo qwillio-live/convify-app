@@ -37,7 +37,7 @@ export const ProgressBar = ({ color, maxWidth, fullWidth, ...props }) => {
       {isHovered && <Controller nameOfComponent={"Progress bar"} />}
 
       <Progress
-        value={50}
+        value={20}
         style={{ minWidth: `${maxWidth}px` }}
         className={`h-1 ${fullWidth ? "w-full" : ""}`}
         indicatorColor={`${color}`}
@@ -55,7 +55,7 @@ export type ProgressBarProps = {
 export const ProgressBarDefaultProps: ProgressBarProps = {
   color: "#4050ff",
   maxWidth: 366,
-  fullWidth: true,
+  fullWidth: false,
 }
 
 ProgressBar.craft = {
