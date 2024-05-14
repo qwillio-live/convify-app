@@ -632,7 +632,7 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <CustomLoader />
+                      <CustomLoader size="small" />
                     </HoverCardContent>
                   </HoverCard>
                 </div>
