@@ -6,7 +6,7 @@
 			"padding": 5,
 			"background": "#ad2121",
 			"expanded": "true",
-			"className": "min-h-screen min-w-full flex flex-col items-center"
+			"className": "min-h-auto min-w-full flex flex-col items-center"
 		},
 		"displayName": "Header Screen",
 		"custom": {

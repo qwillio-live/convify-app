@@ -34,7 +34,6 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     parent: node.data.parent,
     props: node.data.props,
   }));
-
   useEffect(() => {
     if (dom && id !== 'ROOT') {
       if (isHover && !isSelected) {
@@ -50,11 +49,11 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   return (
     <div
       className={cn('relative border z-10 border-transparent border-dotted',
-        (isHover || isActive) && 'border-blue-400',
+        (isHover || isActive) && (id !== 'ROOT') && 'border-blue-400',
         fullWidth && 'w-full'
       )}
     >
-      <div className='flex flex-col justify-center items-center w-full shahid'>
+      <div className='flex flex-col justify-center items-center w-full'>
         {render}
       </div>
       {/* {(isActive || isHover) && (

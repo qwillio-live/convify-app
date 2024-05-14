@@ -1,0 +1,131 @@
+{
+	"ROOT": {
+		"type": "UserContainer",
+		"isCanvas": true,
+		"props": {
+			"padding": 5,
+			"background": "#ad2121",
+			"expanded": "true",
+			"className": "min-h-screen min-w-full flex flex-col items-center"
+		},
+		"displayName": "New Screen",
+		"custom": {
+
+		},
+		"hidden": false,
+		"nodes": [
+			"GVrzEG9z_Y",
+			"cEe52O09Wj",
+			"Ukj0O83zhF"
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"GVrzEG9z_Y": {
+		"type": {
+			"resolvedName": "HeadlineText"
+		},
+		"isCanvas": false,
+		"props": {
+			"text": "Headlines for your business",
+			"fontSize": 42,
+			"textColor": "inherit",
+			"fontWeight": "600",
+			"textAlign": "left",
+			"marginLeft": 0,
+			"marginRight": 0,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"tagType": "h1"
+		},
+		"displayName": "HeadlineText",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"cEe52O09Wj": {
+		"type": {
+			"resolvedName": "UserText"
+		},
+		"isCanvas": false,
+		"props": {
+			"text": "Your text here",
+			"fontSize": 24,
+			"textColor": "inherit",
+			"fontWeight": "400",
+			"textAlign": "left",
+			"marginLeft": 0,
+			"marginRight": 0,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"tagType": "p"
+		},
+		"displayName": "UserText",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"Ukj0O83zhF": {
+		"type": {
+			"resolvedName": "IconButton"
+		},
+		"isCanvas": false,
+		"props": {
+			"disabled": false,
+			"enableIcon": true,
+			"width": "366",
+			"height": "auto",
+			"size": "small",
+			"background": "#4050ff",
+			"color": "#ffffff",
+			"backgroundHover": "#3041ff",
+			"colorHover": "#ffffff",
+			"text": "Get quote",
+			"marginLeft": 0,
+			"marginTop": 0,
+			"marginRight": 0,
+			"marginBottom": 0,
+			"icon": "arrowright",
+			"paddingLeft": "16",
+			"paddingTop": "26",
+			"paddingRight": "16",
+			"paddingBottom": "26",
+			"radius": "none",
+			"flexDirection": "row",
+			"alignItems": "center",
+			"justifyContent": "center",
+			"gap": 4,
+			"border": 0,
+			"borderColor": "inherit"
+		},
+		"displayName": "IconButton",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	}
+}

@@ -114,7 +114,7 @@ export default function CreateFlowsPage() {
               </TabsList>
             </div>
             <div className="account-settings flex flex-row items-center justify-between gap-4">
-              <div className="">
+              <Link href="/dashboard/flows/preview-flow" target="_blank">
                 <Button
                   variant="outline"
                   size="sm"
@@ -122,7 +122,7 @@ export default function CreateFlowsPage() {
                 >
                   <Eye className="h-3.5 w-3.5" />
                 </Button>
-              </div>
+              </Link>
               <div className="">
                 <Button size="sm" className="my-4 h-8 gap-1 py-2">
                   Publish

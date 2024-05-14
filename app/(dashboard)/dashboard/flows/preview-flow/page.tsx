@@ -1,0 +1,11 @@
+import React,{ useState } from "react"
+import FlowPreview from "@/components/flow-preview/flow-preview.component"
+
+export default function PreviewFlows() {
+  return (
+    <div className="min-h-screen w-full flex flex-col justify-center items-center">
+      preview flows
+      <FlowPreview />
+    </div>
+  )
+}

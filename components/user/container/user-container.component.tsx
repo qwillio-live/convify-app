@@ -67,8 +67,10 @@ export const UserContainer = ({
   }))
   return (
     <div
+    ref={(ref: any) => connect(drag(ref))}
+    >
+<div
       {...props}
-      ref={(ref: any) => connect(drag(ref))}
       style={{
         width: `${width}`,
         height: `${height}`,
@@ -98,11 +100,10 @@ export const UserContainer = ({
         overflowX,
         gap: `${gap}px`,
         border: `${border}px solid ${borderColor}`,
-      }}
-    >
-
+      }}>
     {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
       {children}
+</div>
     </div>
   )
 }
@@ -568,7 +569,7 @@ export const Container = ({ ...props }) => {
   }))
   return (
     <div
-      className="relative border border-dashed border-transparent transition-all duration-200 selection:border-blue-400 hover:border-blue-400 focus:border-blue-400"
+      className="relative border border-dashed border-transparent min-h-[400px] transition-all duration-200"
       {...props}
       ref={(ref: any) => ref && connect(drag(ref))}
     >

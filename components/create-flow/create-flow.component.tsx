@@ -150,8 +150,8 @@ export function CreateFlowComponent() {
               <ScreensList />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-screen basis-[55%] overflow-y-auto border-r px-2 py-4 ">
-            <div className="section-header flex items-center justify-between"></div>
+          <ScrollArea className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-4 ">
+            <div className="mt-8 section-header flex items-center justify-between"></div>
             <div className="section-body">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
@@ -160,7 +160,7 @@ export function CreateFlowComponent() {
               >
                 <TabsContent
                   className={cn(
-                    "mx-auto page-container box-content bg-background font-sans antialiased z-20",
+                    "mx-auto page-container min-h-[400px] box-content bg-background font-sans antialiased z-20",
                     view == VIEWS.DESKTOP
                       ? "w-full border-0"
                       : "w-96 border px-4"
@@ -178,7 +178,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {/* {<SaveButton />} */}
+              {<SaveButton />}
 
             </div>
           </ScrollArea>

@@ -24,6 +24,41 @@ import { cn } from "@/lib/utils"
 
 import { Controller } from "../settings/controller.component"
 
+export const UserLogo = ({
+  alt,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  background,
+  radius,
+  align,
+  width,
+  height,
+  src,
+  ...props
+}) => {
+  return(
+    <>
+    <img
+          alt={alt}
+          src={src}
+          style={{
+            width: width,
+            height: height,
+            borderRadius: `${radius}px`,
+            backgroundColor: background,
+            marginLeft: `${marginLeft}px`,
+            marginRight: `${marginRight}px`,
+            marginTop: `${marginTop}px`,
+            marginBottom: `${marginBottom}px`,
+          }}
+          {...props}
+        />
+        </>
+  )
+}
+
 export const Logo = ({
   alt,
   marginTop,
@@ -57,20 +92,19 @@ export const Logo = ({
       {isHovered && <Controller nameOfComponent={"Logo"} />}
       {
         /* eslint-disable-next-line @next/next/no-img-element */
-        <img
+        <UserLogo
           alt={alt}
-          // className="aspect-square object-cover"
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          marginLeft={marginLeft}
+          marginRight={marginRight}
+          background={background}
+          radius={radius}
+          align={align}
+          width={width}
+          height={height}
           src={src}
-          style={{
-            width: width,
-            height: height,
-            borderRadius: `${radius}px`,
-            backgroundColor: background,
-            marginLeft: `${marginLeft}px`,
-            marginRight: `${marginRight}px`,
-            marginTop: `${marginTop}px`,
-            marginBottom: `${marginBottom}px`,
-          }}
+
           {...props}
         />
       }
