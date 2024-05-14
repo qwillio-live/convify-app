@@ -83,3 +83,12 @@ export type TSelectOptions = {
   value: string
   label: string
 }
+
+export type Template = {
+  id: number
+  name: string
+  isPopular: boolean
+  img: string
+  isRecommended: boolean
+  category: string
+}
