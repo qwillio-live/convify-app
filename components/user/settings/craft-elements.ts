@@ -1,8 +1,10 @@
 export const CRAFT_ELEMENTS = {
-  USERCONTAINER: 'UserContainer',
-  USERLOGO: 'UserLogo',
-  DIV: 'div',
-  ICONBUTTON: 'IconButton',
-  USERTEXT: 'UserText',
-  HEADLINETEXT: 'HeadlineText',
-};
+  USERCONTAINER: "UserContainer",
+  LOGO: "Logo",
+  DIV: "div",
+  LOGOBAR: "LogoBar",
+  LOGOBARITEM: "LogoBarItem",
+  PROGRESSBAR: "ProgressBar",
+  ICONBUTTON: "IconButton",
+  USERINPUT: "UserInput",
+}

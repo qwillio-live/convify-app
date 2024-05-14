@@ -1,6 +1,7 @@
 import React from "react"
-import { Element, Node, NodeHelpers, useNode } from "@/lib/craftjs"
+import styled from "styled-components"
 
+import { Element, Node, NodeHelpers, useNode } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
@@ -22,9 +23,8 @@ import {
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 
-import { Controller } from "../settings/controller.component"
-import styled from "styled-components"
 import { ScreenFooter } from "../screens/screen-footer.component"
+import { Controller } from "../settings/controller.component"
 
 export const UserContainer = ({
   padding,
@@ -66,44 +66,44 @@ export const UserContainer = ({
     isHovered: state.events.hovered,
   }))
   return (
-    <div
-    ref={(ref: any) => connect(drag(ref))}
-    >
-<div
-      {...props}
-      style={{
-        width: `${width}`,
-        height: `${height}`,
-        backgroundColor: `${background}`,
-        color: `${color}`,
-        marginLeft: `${marginLeft}px`,
-        marginTop: `${marginTop}px`,
-        marginRight: `${marginRight}px`,
-        marginBottom: `${marginBottom}px`,
-        paddingLeft: `${paddingLeft}px`,
-        paddingTop: `${paddingTop}px`,
-        paddingRight: `${paddingRight}px`,
-        paddingBottom: `${paddingBottom}px`,
-        borderRadius: `${radius}px`,
-        flexDirection,
-        alignItems: `${alignItems}`,
-        justifyContent: `${justifyContent}`,
-        flexWrap,
-        padding: `${padding}px`,
-        boxShadow:
-          shadow === 0
-            ? "none"
-            : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
-        flex: fillSpace == "1" ? 1 : "unset",
-        display: "flex",
-        overflowY,
-        overflowX,
-        gap: `${gap}px`,
-        border: `${border}px solid ${borderColor}`,
-      }}>
-    {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
-      {children}
-</div>
+    <div ref={(ref: any) => connect(drag(ref))}>
+      <div
+        {...props}
+        style={{
+          width: `${width}`,
+          height: `${height}`,
+          backgroundColor: `${background}`,
+          color: `${color}`,
+          marginLeft: `${marginLeft}px`,
+          marginTop: `${marginTop}px`,
+          marginRight: `${marginRight}px`,
+          marginBottom: `${marginBottom}px`,
+          paddingLeft: `${paddingLeft}px`,
+          paddingTop: `${paddingTop}px`,
+          paddingRight: `${paddingRight}px`,
+          paddingBottom: `${paddingBottom}px`,
+          borderRadius: `${radius}px`,
+          flexDirection,
+          alignItems: `${alignItems}`,
+          justifyContent: `${justifyContent}`,
+          flexWrap,
+          padding: `${padding}px`,
+          boxShadow:
+            shadow === 0
+              ? "none"
+              : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
+          flex: fillSpace == "1" ? 1 : "unset",
+          display: "flex",
+          overflowY,
+          overflowX,
+          gap: `${gap}px`,
+          border: `${border}px solid ${borderColor}`,
+          maxWidth: "100%",
+        }}
+      >
+        {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
+        {children}
+      </div>
     </div>
   )
 }
@@ -290,7 +290,10 @@ export const UserContainerSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -337,7 +340,10 @@ export const UserContainerSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.paddingRight = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.paddingRight = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -350,7 +356,10 @@ export const UserContainerSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.paddingBottom = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.paddingBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>

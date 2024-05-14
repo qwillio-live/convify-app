@@ -6,7 +6,7 @@
 			"padding": 5,
 			"background": "#ad2121",
 			"expanded": "true",
-			"className": "min-h-screen min-w-full flex flex-col items-center"
+			"className": "min-h-[400px] min-w-full flex flex-col items-center"
 		},
 		"displayName": "New Screen",
 		"custom": {
@@ -14,32 +14,35 @@
 		},
 		"hidden": false,
 		"nodes": [
-			"GVrzEG9z_Y",
-			"cEe52O09Wj",
-			"Ukj0O83zhF"
+			"vkWxReT0jw",
+			"JN2TGHjZOA",
+			"dYt3SzqoRV",
+			"pTyv4rZxbC",
+			"XC_5suF38P"
 		],
 		"linkedNodes": {
 
 		}
 	},
-	"GVrzEG9z_Y": {
+	"vkWxReT0jw": {
 		"type": {
-			"resolvedName": "HeadlineText"
+			"resolvedName": "Logo"
 		},
 		"isCanvas": false,
 		"props": {
-			"text": "Headlines for your business",
-			"fontSize": 42,
-			"textColor": "inherit",
-			"fontWeight": "600",
-			"textAlign": "left",
+			"alt": "Logo",
+			"marginTop": 0,
+			"marginBottom": "40",
 			"marginLeft": 0,
 			"marginRight": 0,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"tagType": "h1"
+			"background": "inherit",
+			"radius": "none",
+			"align": "center",
+			"width": 156,
+			"height": 50,
+			"src": "/_next/static/media/convify_logo_black.0085e885.png"
 		},
-		"displayName": "HeadlineText",
+		"displayName": "Logo",
 		"custom": {
 
 		},
@@ -52,24 +55,59 @@
 
 		}
 	},
-	"cEe52O09Wj": {
+	"XC_5suF38P": {
 		"type": {
-			"resolvedName": "UserText"
+			"resolvedName": "LogoBar"
 		},
 		"isCanvas": false,
 		"props": {
-			"text": "Your text here",
-			"fontSize": 24,
-			"textColor": "inherit",
-			"fontWeight": "400",
-			"textAlign": "left",
-			"marginLeft": 0,
-			"marginRight": 0,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"tagType": "p"
+			"logoBarStyles": {
+				"marginTop": 0,
+				"marginBottom": 0,
+				"marginLeft": 0,
+				"marginRight": 0,
+				"paddingTop": 20,
+				"paddingBottom": 20,
+				"paddingLeft": 0,
+				"paddingRight": 0,
+				"background": "#ffffff",
+				"width": 800,
+				"fullWidth": false,
+				"height": 300,
+				"flex": "flex",
+				"flexDirection": "row",
+				"justifyContent": "space-between",
+				"alignItems": "center",
+				"gap": 70,
+				"radius": 0
+			},
+			"logoBarItemStyles": {
+				"width": 100
+			},
+			"logoBarItems": [
+				{
+					"id": 1,
+					"src": "/_next/static/media/first-logo.e923305c.png",
+					"alt": "first logo"
+				},
+				{
+					"id": 2,
+					"src": "/_next/static/media/second-logo.cc5e13c5.png",
+					"alt": "second logo"
+				},
+				{
+					"id": 3,
+					"src": "/_next/static/media/third-logo.26ce4887.png",
+					"alt": "third logo"
+				},
+				{
+					"id": 4,
+					"src": "/_next/static/media/fourth-logo.5ea5e0e6.png",
+					"alt": "fourth logo"
+				}
+			]
 		},
-		"displayName": "UserText",
+		"displayName": "LogoBar",
 		"custom": {
 
 		},
@@ -82,7 +120,31 @@
 
 		}
 	},
-	"Ukj0O83zhF": {
+	"JN2TGHjZOA": {
+		"type": {
+			"resolvedName": "ProgressBar"
+		},
+		"isCanvas": false,
+		"props": {
+			"color": "#4050ff",
+			"maxWidth": 366,
+			"fullWidth": false,
+			"progressvalue": 20
+		},
+		"displayName": "ProgressBar",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"pTyv4rZxbC": {
 		"type": {
 			"resolvedName": "IconButton"
 		},
@@ -99,9 +161,9 @@
 			"colorHover": "#ffffff",
 			"text": "Get quote",
 			"marginLeft": 0,
-			"marginTop": 0,
+			"marginTop": "40",
 			"marginRight": 0,
-			"marginBottom": 0,
+			"marginBottom": "40",
 			"icon": "arrowright",
 			"paddingLeft": "16",
 			"paddingTop": "26",
@@ -116,6 +178,46 @@
 			"borderColor": "inherit"
 		},
 		"displayName": "IconButton",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"dYt3SzqoRV": {
+		"type": {
+			"resolvedName": "UserInput"
+		},
+		"isCanvas": false,
+		"props": {
+			"inputValue": "",
+			"fontSize": 16,
+			"textColor": "#000",
+			"width": 366,
+			"fontWeight": "normal",
+			"marginLeft": 0,
+			"marginRight": 0,
+			"marginTop": "40",
+			"marginBottom": 0,
+			"paddingLeft": 0,
+			"paddingRight": 0,
+			"paddingTop": 0,
+			"paddingBottom": 0,
+			"placeholder": "Placeholder",
+			"backgroundColor": "#fff",
+			"borderColor": "#eaeaeb",
+			"borderWidth": 1,
+			"borderRadius": 8,
+			"activeBorderColor": "#4050ff",
+			"isActive": false
+		},
+		"displayName": "User Input",
 		"custom": {
 
 		},

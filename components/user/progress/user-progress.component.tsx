@@ -13,7 +13,32 @@ import { Progress } from "@/components/ui/progress-custom"
 import { Controller } from "../settings/controller.component"
 import { ProgressBarSettings } from "./user-progress.settings"
 
-export const ProgressBar = ({ color, maxWidth, fullWidth, ...props }) => {
+export const ProgressBarGen = ({
+  color,
+  maxWidth,
+  fullWidth,
+  progressvalue,
+  ...props
+}) => {
+  return (
+    <div className={fullWidth && "w-full"} {...props}>
+      <Progress
+        value={progressvalue}
+        style={{ minWidth: `${maxWidth}px` }}
+        className={`h-1 ${fullWidth ? "w-full" : ""}`}
+        indicatorColor={`${color}`}
+      />
+    </div>
+  )
+}
+
+export const ProgressBar = ({
+  color,
+  maxWidth,
+  fullWidth,
+  progressvalue,
+  ...props
+}) => {
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -25,22 +50,14 @@ export const ProgressBar = ({ color, maxWidth, fullWidth, ...props }) => {
   }))
 
   return (
-    <div
-      ref={(ref: any) => connect(drag(ref))}
-      className={cn(
-        "border border-transparent",
-        isHovered && "border border-blue-400 border-dotted",
-        fullWidth && "w-full"
-      )}
-      {...props}
-    >
+    <div ref={(ref: any) => connect(drag(ref))}>
       {isHovered && <Controller nameOfComponent={"Progress bar"} />}
-
-      <Progress
-        value={20}
-        style={{ minWidth: `${maxWidth}px` }}
-        className={`h-1 ${fullWidth ? "w-full" : ""}`}
-        indicatorColor={`${color}`}
+      <ProgressBarGen
+        color={color}
+        maxWidth={maxWidth}
+        fullWidth={fullWidth}
+        progressvalue={progressvalue}
+        {...props}
       />
     </div>
   )
@@ -50,12 +67,14 @@ export type ProgressBarProps = {
   color: string
   maxWidth: number | string
   fullWidth: boolean
+  progressvalue: number
 }
 
 export const ProgressBarDefaultProps: ProgressBarProps = {
   color: "#4050ff",
   maxWidth: 366,
   fullWidth: false,
+  progressvalue: 20,
 }
 
 ProgressBar.craft = {

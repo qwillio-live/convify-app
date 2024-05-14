@@ -6,7 +6,8 @@
 			"padding": 5,
 			"background": "#ad2121",
 			"expanded": "true",
-			"className": "min-h-screen min-w-full flex flex-col items-center"
+      "maxWidth": "100%",
+			"className": "min-h-screen max-w-full flex flex-col items-center"
 		},
 		"displayName": "Button Choice Screen",
 		"custom": {

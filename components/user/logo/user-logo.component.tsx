@@ -1,7 +1,9 @@
-import { UploadCloud } from "lucide-react"
 import React from "react"
-
 import ConvifyLogo from "@/assets/convify_logo_black.png"
+import { UploadCloud } from "lucide-react"
+
+import { useNode } from "@/lib/craftjs"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -19,8 +21,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Slider } from "@/components/ui/slider"
-import { useNode } from "@/lib/craftjs"
-import { cn } from "@/lib/utils"
 
 import { Controller } from "../settings/controller.component"
 
@@ -38,24 +38,23 @@ export const UserLogo = ({
   src,
   ...props
 }) => {
-  return(
+  return (
     <>
-    <img
-          alt={alt}
-          src={src}
-          style={{
-            width: width,
-            height: height,
-            borderRadius: `${radius}px`,
-            backgroundColor: background,
-            marginLeft: `${marginLeft}px`,
-            marginRight: `${marginRight}px`,
-            marginTop: `${marginTop}px`,
-            marginBottom: `${marginBottom}px`,
-          }}
-          {...props}
-        />
-        </>
+      <img
+        alt={alt}
+        src={src}
+        style={{
+          width: width,
+          height: height,
+          borderRadius: `${radius}px`,
+          backgroundColor: background,
+          marginLeft: `${marginLeft}px`,
+          marginRight: `${marginRight}px`,
+          marginTop: `${marginTop}px`,
+          marginBottom: `${marginBottom}px`,
+        }}
+      />
+    </>
   )
 }
 
@@ -86,7 +85,7 @@ export const Logo = ({
     <div
       ref={(ref: any) => connect(drag(ref))}
       className={cn(
-        `relative flex flex-row justify-${align} w-full border border-transparent`,
+        `relative flex flex-row justify-${align} w-full border border-transparent`
       )}
     >
       {isHovered && <Controller nameOfComponent={"Logo"} />}
@@ -104,7 +103,6 @@ export const Logo = ({
           width={width}
           height={height}
           src={src}
-
           {...props}
         />
       }
@@ -239,7 +237,10 @@ export const LogoSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
