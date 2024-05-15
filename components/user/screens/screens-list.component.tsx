@@ -43,6 +43,7 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
+import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { DragDrop } from "./drag-drop-screens.component"
 import { ButtonChoiceScreen } from "./screen-button-choice.component"
 import { ScreenOneChoice } from "./screen-one-choice.component"
@@ -60,13 +61,13 @@ const ScreensList = () => {
   const selectedScreenIndex = useAppSelector(
     (state) => state.screen.selectedScreen
   )
-  const headerFooterMode = useAppSelector((state) => state.screen.headerFooterMode);
+  const headerFooterMode = useAppSelector(
+    (state) => state.screen.headerFooterMode
+  )
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
   const [orderScreens, setOrderScreens] = React.useState<any[]>(screens)
-
-
 
   React.useEffect(() => {
     if (screens.length >= 0 && !headerFooterMode) {
@@ -78,12 +79,12 @@ const ScreensList = () => {
   }
 
   const handleFooterScreenClick = () => {
-    dispatch(setHeaderFooterMode(true));
-    actions.deserialize(screensFooter|| emptyScreenData)
+    dispatch(setHeaderFooterMode(true))
+    actions.deserialize(screensFooter || emptyScreenData)
   }
   const handleHeaderScreenClick = () => {
-    dispatch(setHeaderFooterMode(true));
-    actions.deserialize(screensHeader|| emptyScreenData)
+    dispatch(setHeaderFooterMode(true))
+    actions.deserialize(screensHeader || emptyScreenData)
   }
   return (
     <Accordion
@@ -97,40 +98,46 @@ const ScreensList = () => {
           Header & Footer
         </AccordionTrigger>
         <AccordionContent className="w-full">
-          <p className="text-sm text-muted-foreground">Header</p>
+          <div className="mt-4">Header</div>
+
           <Card
             className={cn(
-              "flex h-28 w-full mt-6 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+              "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
               {
                 // "border-blue-500": selectedScreenIndex === index,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
-
           >
-            <div className="text-xs text-muted-foreground">Screen Header</div>
+            <div className="text-xs text-muted-foreground scale-[.50] relative">
+              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+              <ResolvedComponentsFromCraftState screen={screensHeader} />
+            </div>
           </Card>
-          {/* <ScreenHeader scale={0.6} /> */}
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">Footer</p>
 
           <Card
             className={cn(
-              "flex h-28 w-full mt-6 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+              "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
               {
                 // "border-blue-500": selectedScreenIndex === index,
               }
             )}
             onClick={() => handleFooterScreenClick()}
           >
-            <div className="text-xs text-muted-foreground">Screen Footer</div>
+            <div className="text-xs text-muted-foreground scale-[.50] relative">
+              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+              <ResolvedComponentsFromCraftState screen={screensFooter} />
+            </div>
           </Card>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger
-        onClick={() => dispatch(setHeaderFooterMode(false))}
-        className="uppercase hover:no-underline">
+          onClick={() => dispatch(setHeaderFooterMode(false))}
+          className="uppercase hover:no-underline"
+        >
           Screens
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
@@ -147,17 +154,22 @@ const ScreensList = () => {
                 <ContextMenu>
                   <ContextMenuTrigger>
                     {" "}
+                    <div className="mt-4">
+                      {screen?.ROOT?.displayName ?? "New Screen"}
+                    </div>
                     <Card
                       className={cn(
-                        "flex h-28 w-full mt-6 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+                        "h-60 w-[14vw] mt-2 flex  flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": selectedScreenIndex === index && !headerFooterMode,
+                          "border-blue-500":
+                            selectedScreenIndex === index && !headerFooterMode,
                         }
                       )}
                       onClick={() => dispatch(setSelectedScreen(index))}
                     >
-                      <div className="text-xs text-muted-foreground">
-                        {screen?.ROOT?.displayName ?? "New Screen"}
+                      <div className="text-xs text-muted-foreground scale-[.20] relative">
+                        <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+                        <ResolvedComponentsFromCraftState screen={screen} />
                       </div>
                     </Card>
                   </ContextMenuTrigger>

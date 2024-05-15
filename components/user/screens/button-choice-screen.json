@@ -97,7 +97,8 @@
 		"props": {
 			"color": "#4050ff",
 			"maxWidth": "366",
-			"fullWidth": false
+			"fullWidth": false,
+      "progressvalue" : "20"
 		},
 		"displayName": "ProgressBar",
 		"custom": {

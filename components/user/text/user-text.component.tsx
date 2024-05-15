@@ -25,6 +25,41 @@ import { Input } from "@/components/ui/input"
 import { Controller } from "../settings/controller.component"
 import { UserTextSettings } from "./user-text-settings"
 
+export const UserTextGen = ({
+  text,
+  fontSize,
+  textAlign,
+  fontWeight,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
+  textColor,
+  tagType,
+  ...props }) => {
+  return(
+    <>
+    <ContentEditable
+        html={text}
+        disabled={true}
+        tagName={tagType}
+        onChange={(e) => {console.log(e.target.value)}}
+        className={`font-[${fontWeight}]`}
+        style={{
+          fontSize: `${fontSize}px`,
+          textAlign,
+          fontWeight: `${fontWeight}`,
+          marginLeft: `${marginLeft}px`,
+          marginRight: `${marginRight}px`,
+          marginTop: `${marginTop}px`,
+          marginBottom: `${marginBottom}px`,
+          color: `${textColor}`,
+        }}
+      />
+    </>
+  )
+}
+
 export const UserText = ({
   text,
   fontSize,

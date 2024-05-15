@@ -1,17 +1,21 @@
+"use client"
 import React, { Suspense, useEffect, useState } from "react"
 
 import { UserContainer } from "@/components/user/container/user-container.component"
-import { HeadlineText } from "@/components/user/headline-text/headline-text.component"
+import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
 // import lz from "lzutf8";
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
-import { UserText } from "@/components/user/text/user-text.component"
+import { UserTextGen } from "@/components/user/text/user-text.component"
 
 import { UserInputGen } from "../input/user-input.component"
 import { LogoBarGen } from "../logo-bar/logo-bar.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
 import jsonData from "./parse.json"
+import { PictureChoiceGen } from "../picture-choice/picture-choice.component"
+import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
+import { ScreenFooterGen } from "../screens/screen-footer.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -21,20 +25,24 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
+  [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
+  [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
+  [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
+  [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
+  [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
 }
 
 interface Props {
   compressedCraftState: string
 }
 
-const ResolvedComponentsFromCraftState = (): React.ReactElement | null => {
+const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null => {
   const [toRender, setToRender] = useState<React.ReactElement | null>(null)
 
   useEffect(() => {
     try {
       // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');
-      const craftState = jsonData || "{}"
-      console.log("CRAFT STATE: ", craftState)
+      const craftState = screen || "{}"
 
       const resolveComponents = () => {
         const parse = (

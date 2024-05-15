@@ -154,6 +154,56 @@ const PictureChoiceItem = styled.div<{
   }
 `;
 
+export const PictureChoiceGen = ({
+  containerStyles,
+  pictureItemsStyles,
+  pictureItems,
+  ...props
+}) => {
+  return(
+    <PictureChoiceContainer
+    {...containerStyles}
+  >
+
+    {pictureItems.map((item, index) => (
+      <PictureChoiceItem
+        key={index}
+        {...pictureItemsStyles}
+      >
+        {item.itemType === ItemType.ICON ? (
+          <>
+{item.icon === 'check' ? (
+  <IconCheck
+    style={{
+      width: `${pictureItemsStyles.picWidth}px`,
+      height: `${pictureItemsStyles.picHeight}px`,
+    }}
+  />
+) : item.icon === 'x' ? (
+  <IconX
+    style={{
+      width: `${pictureItemsStyles.picWidth}px`,
+      height: `${pictureItemsStyles.picHeight}px`,
+    }}
+  />
+) : null}
+          </>
+        ) : (
+           <img
+            src={item.pic}
+            alt={item.alt || ""}
+            style={{
+              width: `${pictureItemsStyles.picWidth}px`,
+              height: `${pictureItemsStyles.picHeight}px`,
+            }}
+          />
+         )}
+        <p>{item.text}</p>
+      </PictureChoiceItem>
+    ))}
+  </PictureChoiceContainer>
+  )
+}
 
 
 export const PictureChoice = ({

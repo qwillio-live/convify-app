@@ -12,8 +12,8 @@ export default async function FlowsLayout({
 }: FlowsLayoutProps) {
 
   return (
-    <StoreProvider>
+    <>
       {children}
-    </StoreProvider>
+    </>
   )
 }

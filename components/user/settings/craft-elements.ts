@@ -7,4 +7,9 @@ export const CRAFT_ELEMENTS = {
   PROGRESSBAR: "ProgressBar",
   ICONBUTTON: "IconButton",
   USERINPUT: "UserInput",
+  USERTEXT: "UserText",
+  HEADLINETEXT: "HeadlineText",
+  PICTURECHOICE: "PictureChoice",
+  MULTIPLECHOICE: "MultipleChoice",
+  SCREENFOOTER: "ScreenFooter",
 }
