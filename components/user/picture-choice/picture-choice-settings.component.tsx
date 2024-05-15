@@ -1,16 +1,32 @@
-import { CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import React, { useEffect, useState } from "react"
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useNode } from "@/lib/craftjs"
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { Separator} from "@/components/ui/separator"
-import { RadioGroup,RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Button, Button as CustomButton } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@radix-ui/react-label"
 import { Slider } from "@/components/ui/slider"
 import { useDragControls, Reorder, useMotionValue } from "framer-motion"
-import React from "react"
 import { Card } from "@/components/ui/card"
 
-import { GripVertical } from "lucide-react"
+import { GripVertical, PlusCircle } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
 export const PictureChoiceSettings = () => {
@@ -23,6 +39,53 @@ export const PictureChoiceSettings = () => {
     props: node.data.props,
   }))
 
+  const [uploadFile, setUploadFile] = React.useState<string | null>(null)
+  const [text, setText] = React.useState<string | null>(null)
+  const [isPopoverOpen, setPopoverOpen] = useState(false)
+  const popoverRef = React.useRef<HTMLInputElement>(null)
+
+  const closePopover = () => {
+    setPopoverOpen(false)
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+        closePopover()
+      }
+    }
+
+    if (isPopoverOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isPopoverOpen, popoverRef])
+
+  const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setUploadFile(URL.createObjectURL(file))
+    }
+  }
+
+  const handleAddFile = () => {
+    const tempArray = [...pictureItems]
+    tempArray.push({
+      id: `${pictureItems.length + 1}`,
+      text: text,
+      pic: uploadFile,
+      itemType: ItemType.PICTURE,
+    })
+    setProp((props) => (props.pictureItems = tempArray), 1000)
+    setUploadFile(null)
+    setText(null)
+  }
+
   return (
     <>
       <Card className="p-2">
@@ -34,7 +97,7 @@ export const PictureChoiceSettings = () => {
           <Reorder.Group
             axis="y"
             values={pictureItems}
-            className="py-4 gap-2 flex flex-col w-full"
+            className="flex w-full flex-col gap-2 py-4"
             onReorder={(e) => setProp((props) => (props.pictureItems = e))}
           >
             {pictureItems.map((item, index) => (
@@ -42,6 +105,64 @@ export const PictureChoiceSettings = () => {
             ))}
           </Reorder.Group>
         </CardContent>
+        <div className="add-logo mb-6 flex w-full flex-row items-center justify-end">
+          <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full">
+                <PlusCircle className="mr-4" />
+                Add Items
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80" ref={popoverRef}>
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">
+                    Add Picture Choice
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Select image as Picture and set text
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  <div className="grid grid-cols-3 items-center gap-2">
+                    <Label htmlFor="media">Picture</Label>
+                    <Input
+                      id="media"
+                      onChange={handleInputFileChange}
+                      type={"file"}
+                      className="col-span-2 h-8"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-3 items-center gap-2">
+                    <Label htmlFor="altText">Text</Label>
+                    <Input
+                      id="altText"
+                      onChange={(e) => {
+                        setText(e.target.value)
+                      }}
+                      placeholder="Text for Picture Icon"
+                      className="col-span-2 h-8"
+                    />
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-4 items-center gap-2">
+                    <Button
+                      id="altText"
+                      onClick={() => {
+                        handleAddFile()
+                        closePopover()
+                      }}
+                      className="col-span-2 h-8"
+                    >
+                      Add
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </Card>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
@@ -53,7 +174,7 @@ export const PictureChoiceSettings = () => {
               <p className="text-sm text-muted-foreground">Text</p>
               <Input
                 type={"color"}
-                className="text-sm p-2"
+                className="p-2 text-sm"
                 value={pictureItemsStyles.textColor}
                 placeholder={pictureItemsStyles.textColor}
                 onChange={(e) => {
@@ -68,7 +189,7 @@ export const PictureChoiceSettings = () => {
               <p className="text-sm text-muted-foreground">Hover</p>
               <Input
                 type={"color"}
-                className="text-sm p-2"
+                className="p-2 text-sm"
                 value={pictureItemsStyles.textHover}
                 placeholder={pictureItemsStyles.textHover}
                 onChange={(e) => {
@@ -87,7 +208,7 @@ export const PictureChoiceSettings = () => {
               <p className="text-sm text-muted-foreground">Background</p>
               <Input
                 type={"color"}
-                className="text-sm p-2"
+                className="p-2 text-sm"
                 value={pictureItemsStyles.background}
                 placeholder={pictureItemsStyles.background}
                 onChange={(e) => {
@@ -104,7 +225,7 @@ export const PictureChoiceSettings = () => {
               <p className="text-sm text-muted-foreground">Background hover</p>
               <Input
                 type={"color"}
-                className="text-sm p-2"
+                className="p-2 text-sm"
                 value={pictureItemsStyles.backgroundHover}
                 placeholder={pictureItemsStyles.backgroundHover}
                 onChange={(e) => {
@@ -123,95 +244,37 @@ export const PictureChoiceSettings = () => {
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Padding</span>
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Container</p>
-              <Slider
-                defaultValue={[containerStyles.padding]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.padding = value), 1000)
-                }}
-              />
-            </div>
-
-            <Separator className="my-4" />
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Item</p>
-              <Slider
-                defaultValue={[pictureItemsStyles.padding]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.pictureItemsStyles.padding = value), 1000)
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Margin container</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[containerStyles.marginLeft]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginLeft = value), 1000)
-                }}
-              />
-            </div>
-
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+          <AccordionContent className="grid grid-cols-1 gap-y-2 p-2">
+            <div className="style-control col-span-1 flex flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
               <Slider
-                defaultValue={[containerStyles.marginTop]}
+                defaultValue={[containerStyles.paddingTop]}
                 max={100}
                 min={0}
                 step={1}
                 className="w-full"
                 onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginTop = value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.paddingTop = value),
+                    1000
+                  )
                 }}
               />
             </div>
 
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[containerStyles.marginRight]}
-                max={100}
-                min={0}
-                step={1}
-                className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginRight = value), 1000)
-                }}
-              />
-            </div>
-
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
               <Slider
-                defaultValue={[containerStyles.marginBottom]}
+                defaultValue={[containerStyles.paddingBottom]}
                 max={100}
                 min={0}
                 step={1}
                 className="w-full"
                 onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.marginBottom = value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.paddingBottom = value),
+                    1000
+                  )
                 }}
               />
             </div>
@@ -228,7 +291,10 @@ export const PictureChoiceSettings = () => {
               <RadioGroup
                 defaultValue={containerStyles.flexDirection}
                 onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.flexDirection = value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.flexDirection = value),
+                    1000
+                  )
                 }}
               >
                 <div className="flex items-center space-x-2">
@@ -242,13 +308,15 @@ export const PictureChoiceSettings = () => {
               </RadioGroup>
             </div>
 
-
             <div className="style-control col-span-1 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Align</p>
               <RadioGroup
                 defaultValue={containerStyles.alignItems}
                 onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.alignItems = value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.alignItems = value),
+                    1000
+                  )
                 }}
               >
                 <div className="flex items-center space-x-2">
@@ -271,7 +339,10 @@ export const PictureChoiceSettings = () => {
               <RadioGroup
                 defaultValue={containerStyles.justifyContent}
                 onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.justifyContent = value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.justifyContent = value),
+                    1000
+                  )
                 }}
               >
                 <div className="flex items-center space-x-2">
@@ -344,7 +415,7 @@ export const PictureChoiceItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex flex-row gap-3  p-4 items-center border justify-between w-full h-20"
+      className="flex h-20 w-full  flex-row items-center justify-between gap-3 border p-4"
     >
       <Input
         type="file"
@@ -352,7 +423,7 @@ export const PictureChoiceItem = ({ item, index }) => {
         ref={inputRef}
         onChange={handleInputChange}
       />
-      <div className="flex flex-row items-center gap-3 flex-wrap">
+      <div className="flex flex-row flex-wrap items-center gap-3">
         <div
           onClick={() => (inputRef.current as HTMLInputElement)?.click()}
           className="pic-container hover:cursor-pointer"
@@ -360,7 +431,7 @@ export const PictureChoiceItem = ({ item, index }) => {
           {item.itemType === ItemType.ICON ? (
             <item.pic size={20} className="shrink-0" />
           ) : (
-            <img src={item.pic} alt={item.alt || ""} className="w-10 h-10" />
+            <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
           )}
         </div>
         <ContentEditable
@@ -376,7 +447,7 @@ export const PictureChoiceItem = ({ item, index }) => {
               500
             )
           }
-          className="overflow-hidden max-w-[100px] truncate min-w-[100px]"
+          className="min-w-[80px] max-w-[100px] overflow-hidden truncate"
           tagName={"p"}
         />
       </div>
