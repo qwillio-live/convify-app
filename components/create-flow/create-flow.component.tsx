@@ -26,7 +26,7 @@ import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import {ProgressBar as UserProgressBar} from "../user/progress/user-progress.component"
+import { ProgressBar as UserProgressBar } from "../user/progress/user-progress.component"
 import { Progress } from "../ui/progress-custom"
 import { Card, CardTop } from "../user/card/user-card.component"
 import {
@@ -43,23 +43,27 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
-import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
+import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { PictureChoice } from "../user/picture-choice/picture-choice.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { UserInput } from "../user/input/user-input.component"
+import { Loader } from "../user/loader/user-loader.component"
 
 enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
 }
-const SaveButton =() => {
-  const { query,query: {node} } = useEditor();
-  const headerId= useAppSelector((state) => state.screen.headerId)
+const SaveButton = () => {
+  const {
+    query,
+    query: { node },
+  } = useEditor()
+  const headerId = useAppSelector((state) => state.screen.headerId)
   //screen header id is: HeT6HrWBxJ
   const nodeTree = node(headerId).toNodeTree()
   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
-  console.log("NODE TREE IS: ",nodeTree)
+  console.log("NODE TREE IS: ", nodeTree)
   return (
     <a
       className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
@@ -69,30 +73,35 @@ const SaveButton =() => {
     </a>
   )
 }
-const NodesToSerializedNodes = (nodes) =>  {
+const NodesToSerializedNodes = (nodes) => {
   // getSerializedNodes is present in the useEditor hook
-  const {query: {getSerializedNodes}} = useEditor();
+  const {
+    query: { getSerializedNodes },
+  } = useEditor()
   const serializedNodes = getSerializedNodes()
-const result = {}
-Object.keys(nodes).forEach(key => {
-result[key] = serializedNodes[key]
-})
-return result
+  const result = {}
+  Object.keys(nodes).forEach((key) => {
+    result[key] = serializedNodes[key]
+  })
+  return result
 }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const currentScreen = useAppSelector(
     (state) => state.screen.screens[state.screen.selectedScreen]
   )
-  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
-  const dispatch = useAppDispatch();
+  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen)
+  const dispatch = useAppDispatch()
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
-      onNodesChange={(nodes) => {
-        console.log("NODES CHANGED: ",nodes)
-        console.log("New nodes are: ", JSON.stringify(nodes.getSerializedNodes()));
-      }}
+        onNodesChange={(nodes) => {
+          console.log("NODES CHANGED: ", nodes)
+          console.log(
+            "New nodes are: ",
+            JSON.stringify(nodes.getSerializedNodes())
+          )
+        }}
         resolver={{
           Logo,
           HeadlineText,
@@ -129,14 +138,18 @@ export function CreateFlowComponent() {
           MultipleChoice,
           LogoBar,
           LogoBarItem,
-
+          Loader,
         }}
         onRender={RenderNode}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
             <div className="section-header flex items-center justify-end">
-              <Button variant={"secondary"} className="" onClick={() => dispatch(addScreen(selectedScreen))}>
+              <Button
+                variant={"secondary"}
+                className=""
+                onClick={() => dispatch(addScreen(selectedScreen))}
+              >
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Screen
               </Button>
@@ -155,16 +168,14 @@ export function CreateFlowComponent() {
               >
                 <TabsContent
                   className={cn(
-                    "mx-auto page-container box-content min-h-screen bg-background font-sans antialiased z-20",
+                    "page-container z-20 mx-auto box-content min-h-screen bg-background font-sans antialiased",
                     view == VIEWS.DESKTOP
                       ? "w-full border-0"
                       : "w-96 border px-4"
                   )}
                   value={view}
                 >
-                  <Frame
-                  data={currentScreen}
-                  >
+                  <Frame data={currentScreen}>
                     {/* <Element
                       is={"div"}
                       id="create-flow-canvas hover:dragged"
@@ -174,7 +185,7 @@ export function CreateFlowComponent() {
                     ></Element> */}
                   </Frame>
                 </TabsContent>
-                <TabsList className="fixed bottom-2 left-[37%] grid w-40 grid-cols-2 z-20">
+                <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
                   <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>
