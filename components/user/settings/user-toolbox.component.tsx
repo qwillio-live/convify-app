@@ -35,6 +35,7 @@ import {
   TextCursorInput,
   Trophy,
   Type,
+  Loader as LoaderIcon,
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
@@ -45,6 +46,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
+import CustomLoader from "@/components/ui/loader"
 import { Card as UiCard } from "@/components/ui/card"
 import {
   HoverCard,
@@ -58,6 +60,10 @@ import {
   ButtonDefaultProps,
   Button as UserButton,
 } from "@/components/user/button/user-button.component"
+import {
+  LoaderDefaultProps,
+  Loader,
+} from "@/components/user/loader/user-loader.component"
 import {
   TextDefaultProps,
   UserText,
@@ -87,28 +93,31 @@ import {
   PictureChoice,
   PictureChoiceDefaultProps,
 } from "../picture-choice/picture-choice.component"
-import { ProgressBar, ProgressBarDefaultProps } from "../progress/user-progress.component"
-import {Progress as CustomProgressBar} from "@/components/ui/progress-custom"
+import {
+  ProgressBar,
+  ProgressBarDefaultProps,
+} from "../progress/user-progress.component"
+import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 const MultipleChoiceOptions = [
   {
     id: "1",
     text: "Option 1",
-    icon: <Chrome className="w-6 h-6 text-lg" />,
+    icon: <Chrome className="h-6 w-6 text-lg" />,
   },
   {
     id: "2",
     text: "Option 2",
-    icon: <Facebook className="w-6 h-6" />,
+    icon: <Facebook className="h-6 w-6" />,
   },
   {
     id: "3",
     text: "Option 3",
-    icon: <Linkedin className="w-6 h-6" />,
+    icon: <Linkedin className="h-6 w-6" />,
   },
   {
     id: "4",
     text: "Option 4",
-    icon: <Globe className="w-6 h-6" />,
+    icon: <Globe className="h-6 w-6" />,
   },
 ]
 
@@ -125,7 +134,7 @@ function HelperInformation() {
           <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
             Drag and drop
           </h2>
-          <p className="text-sm font-light text-justify">
+          <p className="text-justify text-sm font-light">
             Click and hold a block from list, move it to the panel to the left
             and release it above the drop zone to add it.
           </p>
@@ -143,13 +152,13 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
-        <ScrollArea className="overflow-y-auto pt-4 pb-32 w-full">
+        <ScrollArea className="w-full overflow-y-auto pb-32 pt-4">
           <Accordion
             type="multiple"
-            defaultValue={["item-1", "item-2", "item-3", "item-4"]}
+            defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
           >
             <AccordionItem value="item-1">
-              <AccordionTrigger className="hover:no-underline uppercase">
+              <AccordionTrigger className="uppercase hover:no-underline">
                 Text
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
@@ -169,10 +178,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <Type className="mr-2 w-3 h-3" /> Headline{" "}
+                          <Type className="mr-2 h-3 w-3" /> Headline{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -182,8 +191,8 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <div className="flex flex-row gap-2 justify-center items-center p-4 border">
-                        <h1 className="font-semibold text-lg">
+                      <div className="flex flex-row items-center justify-center gap-2 border p-4">
+                        <h1 className="text-lg font-semibold">
                           Headline for your business
                         </h1>
                       </div>
@@ -204,10 +213,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <Pencil className="mr-2 w-3 h-3" /> Text{" "}
+                          <Pencil className="mr-2 h-3 w-3" /> Text{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -217,8 +226,8 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <div className="flex flex-row gap-2 justify-center items-center p-4 border">
-                        <p className="font-normal text-base">
+                      <div className="flex flex-row items-center justify-center gap-2 border p-4">
+                        <p className="text-base font-normal">
                           A good description of your cause
                         </p>
                       </div>
@@ -229,7 +238,7 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             <AccordionItem value="item-2">
-              <AccordionTrigger className="hover:no-underline uppercase">
+              <AccordionTrigger className="uppercase hover:no-underline">
                 Input
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
@@ -249,10 +258,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <TextCursorInput className="mr-2 w-3 h-3" /> Input
+                          <TextCursorInput className="mr-2 h-3 w-3" /> Input
                           field{" "}
                         </span>{" "}
                         <GripVertical />
@@ -265,7 +274,7 @@ export const UserToolbox = () => {
                     >
                       <Input
                         placeholder="Placeholder"
-                        className="focus-visible:ring-blue-600 ring-offset-0 focus-visible:ring-offset-0"
+                        className="ring-offset-0 focus-visible:ring-blue-600 focus-visible:ring-offset-0"
                       />
                     </HoverCardContent>
                   </HoverCard>
@@ -287,10 +296,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <ImagePlus className="mr-2 w-3 h-3" /> Picture Choice{" "}
+                          <ImagePlus className="mr-2 h-3 w-3" /> Picture Choice{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -302,11 +311,11 @@ export const UserToolbox = () => {
                     >
                       <div className="grid grid-cols-2 gap-2">
                         <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover:cursor-pointer bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
+                          className="flex flex-col items-center justify-center gap-4 rounded-[8px] border-2
+                                      border-[#eaeaeb] bg-white
+                                    p-4 text-lg font-bold
+                                    hover:cursor-pointer hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
                                     hover:text-white
                         "
                         >
@@ -314,33 +323,33 @@ export const UserToolbox = () => {
                           Target
                         </div>
                         <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover:cursor-pointer bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
+                          className="flex flex-col items-center justify-center gap-4 rounded-[8px] border-2
+                                      border-[#eaeaeb] bg-white
+                                    p-4 text-lg font-bold
+                                    hover:cursor-pointer hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
                                     hover:text-white"
                         >
                           <Rocket className="h-10 w-10" />
                           Launch
                         </div>
                         <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover:cursor-pointer bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
+                          className="flex flex-col items-center justify-center gap-4 rounded-[8px] border-2
+                                      border-[#eaeaeb] bg-white
+                                    p-4 text-lg font-bold
+                                    hover:cursor-pointer hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
                                     hover:text-white"
                         >
                           <HeartHandshake className="h-10 w-10" />
                           Agree
                         </div>
                         <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover:cursor-pointer bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
+                          className="flex flex-col items-center justify-center gap-4 rounded-[8px] border-2
+                                      border-[#eaeaeb] bg-white
+                                    p-4 text-lg font-bold
+                                    hover:cursor-pointer hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
                                     hover:text-white"
                         >
                           <Trophy className="h-10 w-10" />
@@ -367,10 +376,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <Copy className="mr-2 w-3 h-3" /> Multiple Choice
+                          <Copy className="mr-2 h-3 w-3" /> Multiple Choice
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -380,17 +389,17 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <div className="flex flex-col gap-2 w-[360px]">
+                      <div className="flex w-[360px] flex-col gap-2">
                         {MultipleChoiceOptions.map((option, index) => (
                           <div
                             key={index}
                             className="
-                      text-lg
-                      hover:cursor-pointer bg-white
-                      hover:bg-[#4050ff] rounded-[8px] border-2
-                      border-[#eaeaeb] hover:border-[#4050ff]
-                        font-bold
-                      hover:text-white option flex flex-row p-4 gap-2 items-center"
+                      option
+                      flex flex-row
+                      items-center gap-2 rounded-[8px]
+                      border-2 border-[#eaeaeb]
+                        bg-white
+                      p-4 text-lg font-bold hover:cursor-pointer hover:border-[#4050ff] hover:bg-[#4050ff] hover:text-white"
                           >
                             <input type="radio" className="hidden" />
                             {/* {option.icon} */}
@@ -405,7 +414,7 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             <AccordionItem value="item-3">
-              <AccordionTrigger className="hover:no-underline uppercase">
+              <AccordionTrigger className="uppercase hover:no-underline">
                 Button
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
@@ -428,10 +437,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <Navigation className="mr-2 w-3 h-3" />
+                          <Navigation className="mr-2 h-3 w-3" />
                           Button{" "}
                         </span>{" "}
                         <GripVertical />
@@ -442,7 +451,7 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <Button className="w-[360px] bg-[#4050ff] text-white hover:bg-[#3041ff] px-4 py-6">
+                      <Button className="w-[360px] bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                         Get quote
                         <ArrowRight className="ml-2" />
                       </Button>
@@ -453,7 +462,7 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             <AccordionItem value="item-4">
-              <AccordionTrigger className="hover:no-underline uppercase">
+              <AccordionTrigger className="uppercase hover:no-underline">
                 Display
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
@@ -470,10 +479,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <Dice2 className="mr-2 w-3 h-3" /> Logo{" "}
+                          <Dice2 className="mr-2 h-3 w-3" /> Logo{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -506,10 +515,10 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <Columns className="mr-2 w-3 h-3" /> Logo Bar{" "}
+                          <Columns className="mr-2 h-3 w-3" /> Logo Bar{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -519,7 +528,7 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
+                      <div className="flex w-[360px] flex-row items-center justify-between border p-4">
                         <Image
                           src={FirstLogo.src}
                           alt="Logo"
@@ -554,7 +563,10 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <ProgressBar {...ProgressBarDefaultProps} />)
+                    connectors.create(
+                      ref,
+                      <ProgressBar {...ProgressBarDefaultProps} />
+                    )
                   }
                   data-cy="toolbox-text"
                 >
@@ -562,10 +574,11 @@ export const UserToolbox = () => {
                     <HoverCardTrigger asChild>
                       <Button
                         variant="link"
-                        className="hover:no-underline hover:cursor-grab flex flex-row items-center text-lg w-full justify-between"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <CircleSlashed className="mr-2 w-3 h-3" /> Progress bar{" "}
+                          <CircleSlashed className="mr-2 h-3 w-3" /> Progress
+                          bar{" "}
                         </span>{" "}
                         <GripVertical />
                       </Button>
@@ -575,17 +588,54 @@ export const UserToolbox = () => {
                       side="left"
                       sideOffset={18}
                     >
-                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
-                      <CustomProgressBar
-                        value={50}
-                        className="h-1 max-w-[366px]"
-                        indicatorColor={"#4050ff"}
-                      />
+                      <div className="flex w-[360px] flex-row items-center justify-between border p-4">
+                        <CustomProgressBar
+                          value={50}
+                          className="h-1 max-w-[366px]"
+                          indicatorColor={"#4050ff"}
+                        />
                       </div>
                     </HoverCardContent>
                   </HoverCard>
                 </div>
-
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="uppercase hover:no-underline">
+                Navigation
+              </AccordionTrigger>
+              <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(ref, <Loader {...LoaderDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <LoaderIcon className="mr-2 size-3" />
+                          Loader{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full px-10 py-6"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <CustomLoader size="small" />
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
