@@ -21,7 +21,7 @@ import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
 import { UserText } from "@/components/user/text/user-text.component"
-
+import { List, ListItem } from "../user/list/list.component"
 import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
@@ -139,6 +139,8 @@ export function CreateFlowComponent() {
           LogoBar,
           LogoBarItem,
           Loader,
+          List,
+          ListItem
         }}
         onRender={RenderNode}
       >
