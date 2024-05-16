@@ -140,7 +140,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         ) : (
           ""
         )}{" "}
-        <Icons.googleSignup className="size-5" />
+        <Icons.googleSignup className="h-5 w-5" />
         <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
           Sign In with Google
         </span>
