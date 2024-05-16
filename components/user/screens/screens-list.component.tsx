@@ -75,11 +75,12 @@ const ScreensList = () => {
     enabled: state.options.enabled,
   }))
   React.useEffect(() => {
-    setHeaderFooterMode(false);
-  }, []);
+    dispatch(setHeaderFooterMode(false));
+  }, [dispatch]);
 
   React.useEffect(() => {
       if(editorLoad){
+        console.log("EDITOR LOAD CALLED AGAIN")
         actions.deserialize(editorLoad);
       }
   }, [actions, editorLoad]);

@@ -44,7 +44,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
         dom.classList.remove('component-hover');
       }
     }
-  }, [dom, isHover, isSelected]);
+  }, [dom, isHover, isSelected,id]);
 
   return (
     <div
