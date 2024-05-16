@@ -1,6 +1,5 @@
 "use client"
 import React, { Suspense, useEffect, useState } from "react"
-
 import { UserContainer } from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
@@ -38,7 +37,9 @@ interface Props {
 
 const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null => {
   const [toRender, setToRender] = useState<React.ReactElement | null>(null)
+  useEffect(() => {
 
+  }, [screen])
   useEffect(() => {
     try {
       // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');
@@ -93,7 +94,7 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
       console.error("Error parsing craft state: ", error)
       setToRender(<div>Error loading components.</div>)
     }
-  }, [jsonData])
+  }, [screen])
 
   return <Suspense fallback={<h2>Loading...</h2>}>{toRender}</Suspense>
 }

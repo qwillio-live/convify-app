@@ -34,9 +34,33 @@ export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
+    resetScreensState: (state) => {
+      state.selectedScreen = 0;
+      state.headerId = "";
+      state.headerMode = false;
+      state.footerMode = false;
+      state.screensHeader = headerScreenData;
+      state.screensFooter = footerScreenData;
+      state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
+      state.editorLoad = state.screens[state.selectedScreen];
+    },
     setEditorLoad: (state, action: PayloadAction<any>) => {
       console.log("EDITOR LOAD WAS CALLED WITH : ", action.payload);
-      state.editorLoad = action.payload;
+      state.editorLoad = {...action.payload};
+      if(state.headerMode === true){
+        state.screensHeader = {...action.payload};
+
+      }else if(state.footerMode === true){
+        state.screensFooter = {...action.payload};
+      }else{
+        state.screens[state.selectedScreen] = {...action.payload};
+      }
+    },
+    setScreenHeader: (state, action: PayloadAction<any>) => {
+      state.screensHeader = action.payload
+    },
+    setScreenFooter: (state, action: PayloadAction<any>) => {
+      state.screensHeader = action.payload
     },
     setHeaderId: (state, action: PayloadAction<string>) => {
       state.headerId = action.payload;
@@ -93,6 +117,9 @@ export const screensSlice = createSlice({
 
 export const {
   setHeaderMode,
+  resetScreensState,
+  setScreenHeader,
+  setScreenFooter,
   setFooterMode,
   setHeaderFooterMode,
   setSelectedScreen,

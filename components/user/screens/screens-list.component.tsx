@@ -25,6 +25,8 @@ import {
   setSelectedScreen,
   setHeaderFooterMode,
   setEditorLoad,
+  setScreenHeader,
+  setScreenFooter,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -72,31 +74,38 @@ const ScreensList = () => {
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
+  React.useEffect(() => {
+    setHeaderFooterMode(false);
+  }, []);
 
   React.useEffect(() => {
-    if (editorLoad) {
-      actions.deserialize(editorLoad)
-    }
-  }, [actions, editorLoad,headerMode,footerMode])
+      if(editorLoad){
+        actions.deserialize(editorLoad);
+      }
+  }, [actions, editorLoad]);
+
   const handleReorder = (data) => {
-    dispatch(setScreens(data))
-  }
+    dispatch(setScreens(data));
+  };
 
   const handleScreenClick = (index: number) => {
-    dispatch(setSelectedScreen(index))
-    dispatch(setHeaderFooterMode(false))
-    dispatch(setEditorLoad(screens[index]))
-  }
+    dispatch(setHeaderFooterMode(false));
+    dispatch(setSelectedScreen(index));
+    dispatch(setEditorLoad(screens[index]));
+  };
+
   const handleFooterScreenClick = () => {
-    dispatch(setHeaderFooterMode(false))
-    dispatch(setFooterMode(true))
-    dispatch(setEditorLoad(screensFooter))
-  }
+    dispatch(setHeaderFooterMode(false));
+    dispatch(setFooterMode(true));
+    dispatch(setEditorLoad(screensFooter));
+  };
+
   const handleHeaderScreenClick = () => {
-    dispatch(setHeaderFooterMode(false))
-    dispatch(setHeaderMode(true))
-    dispatch(setEditorLoad(screensHeader))
-  }
+    dispatch(setHeaderFooterMode(false));
+    dispatch(setHeaderMode(true));
+    dispatch(setEditorLoad(screensHeader));
+  };
+
   return (
     <Accordion
       type="single"
@@ -120,7 +129,7 @@ const ScreensList = () => {
             )}
             onClick={handleHeaderScreenClick}
           >
-            <div className="text-xs text-muted-foreground scale-[.50] relative">
+            <div className="text-xs text-muted-foreground scale-[.25] relative">
               <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
               <ResolvedComponentsFromCraftState screen={screensHeader} />
             </div>
@@ -137,7 +146,7 @@ const ScreensList = () => {
             )}
             onClick={handleFooterScreenClick}
           >
-            <div className="text-xs text-muted-foreground scale-[.50] relative">
+            <div className="text-xs text-muted-foreground scale-[.25] relative">
               <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
               <ResolvedComponentsFromCraftState screen={screensFooter} />
             </div>
@@ -146,7 +155,6 @@ const ScreensList = () => {
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger
-          onClick={() => dispatch(setHeaderFooterMode(false))}
           className="uppercase hover:no-underline"
         >
           Screens
@@ -170,10 +178,9 @@ const ScreensList = () => {
                     </div>
                     <Card
                       className={cn(
-                        "h-60 w-[14vw] mt-2 flex  flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500":
-                            selectedScreenIndex === index,
+                          "border-blue-500": (selectedScreenIndex === index) && !headerFooterMode,
                         }
                       )}
                       onClick={() => handleScreenClick(index)}

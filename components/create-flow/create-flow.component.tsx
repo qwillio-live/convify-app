@@ -42,7 +42,7 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
-import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { addScreen, resetScreensState, setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
 import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
@@ -51,7 +51,9 @@ import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.com
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { UserInput } from "../user/input/user-input.component"
 import { Controller } from "../user/settings/controller.component"
+import { setScreenHeader } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import screensFooterData from "@/components/user/screens/screen-footer.json"
+
 enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
@@ -90,12 +92,17 @@ export function CreateFlowComponent() {
 
   const firstScreen = useAppSelector((state) => state.screen.screens[0])
 
+  const headerMode = useAppSelector((state) => state.screen.headerMode)
+
+  React.useEffect(() => {
+    dispatch(resetScreensState())
+  },[])
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
-      onNodesChange={(nodes) => {
-        console.log("NODES CHANGED: ",nodes)
-        console.log("New nodes are: ", JSON.stringify(nodes.getSerializedNodes()));
+        onNodesChange={(nodes) => {
+          const newNodes = nodes.getSerializedNodes();
+          dispatch(setEditorLoad(newNodes))
       }}
         resolver={{
           Controller,
