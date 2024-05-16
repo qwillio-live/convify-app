@@ -12,6 +12,7 @@ import {
   Scissors,
   Trash2,
 } from "lucide-react"
+import lz from "lzutf8"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
@@ -74,16 +75,18 @@ const ScreensList = () => {
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
+  const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
   React.useEffect(() => {
     dispatch(setHeaderFooterMode(false));
   }, [dispatch]);
 
   React.useEffect(() => {
-      if(editorLoad){
-        console.log("EDITOR LOAD CALLED AGAIN")
-        actions.deserialize(editorLoad);
-      }
-  }, [actions, editorLoad]);
+    if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+      console.log("EDITOR LOAD CALLED AGAIN")
+      actions.deserialize(editorLoad);
+      setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+    }
+  }, [actions, editorLoad,compareLoad]);
 
   const handleReorder = (data) => {
     dispatch(setScreens(data));

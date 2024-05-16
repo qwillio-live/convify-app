@@ -90,8 +90,8 @@ export function CreateFlowComponent() {
 
   const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
 
-  const firstScreen = useAppSelector((state) => state.screen.screens[0])
-
+  // const firstScreen = useAppSelector((state) => state.screen.screens[0])
+  const editorLoad = useAppSelector((state) => state.screen.screens[0])
   const headerMode = useAppSelector((state) => state.screen.headerMode)
 
   React.useEffect(() => {
@@ -177,7 +177,7 @@ export function CreateFlowComponent() {
                   value={view}
                 >
                   <Frame
-                  data={firstScreen}
+                  data={editorLoad}
                   >
                   </Frame>
                 </TabsContent>

@@ -23,8 +23,6 @@ const initialState: ScreensState = {
   screensHeader: headerScreenData,
   headerMode: false,
   footerMode: false,
-  /**Ignoring ts checks as this is placeholder solution for now */
-  /** @ts-ignore */
   screens: [buttonChoiceData, oneChoiceData, oneInputData],
   screensFooter: footerScreenData,
   editorLoad: null,
@@ -45,21 +43,20 @@ export const screensSlice = createSlice({
       state.editorLoad = state.screens[state.selectedScreen];
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = {...action.payload};
-      if(state.headerMode === true){
-        state.screensHeader = {...action.payload};
-
-      }else if(state.footerMode === true){
-        state.screensFooter = {...action.payload};
-      }else{
-        state.screens[state.selectedScreen] = {...action.payload};
+      state.editorLoad = { ...action.payload };
+      if (state.headerMode === true) {
+        state.screensHeader = { ...action.payload };
+      } else if (state.footerMode === true) {
+        state.screensFooter = { ...action.payload };
+      } else {
+        state.screens[state.selectedScreen] = { ...action.payload };
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
-      state.screensHeader = action.payload
+      state.screensHeader = action.payload;
     },
     setScreenFooter: (state, action: PayloadAction<any>) => {
-      state.screensHeader = action.payload
+      state.screensFooter = action.payload;
     },
     setHeaderId: (state, action: PayloadAction<string>) => {
       state.headerId = action.payload;
@@ -75,7 +72,6 @@ export const screensSlice = createSlice({
       state.footerMode = action.payload;
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
-      console.log("Payload", action.payload);
       state.screens = [...action.payload];
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
