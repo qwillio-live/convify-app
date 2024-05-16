@@ -25,7 +25,7 @@ const initialState: ScreensState = {
   footerMode: false,
   screens: [buttonChoiceData, oneChoiceData, oneInputData],
   screensFooter: footerScreenData,
-  editorLoad: null,
+  editorLoad: buttonChoiceData,
 };
 
 export const screensSlice = createSlice({
@@ -43,9 +43,10 @@ export const screensSlice = createSlice({
       state.editorLoad = state.screens[state.selectedScreen];
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = { ...action.payload };
+      state.editorLoad = {...action.payload} ;
       if (state.headerMode === true) {
         state.screensHeader = { ...action.payload };
+
       } else if (state.footerMode === true) {
         state.screensFooter = { ...action.payload };
       } else {
@@ -53,19 +54,21 @@ export const screensSlice = createSlice({
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
-      state.screensHeader = action.payload;
+      state.screensHeader = {...action.payload};
     },
     setScreenFooter: (state, action: PayloadAction<any>) => {
-      state.screensFooter = action.payload;
+      state.screensFooter = {...action.payload};
     },
     setHeaderId: (state, action: PayloadAction<string>) => {
       state.headerId = action.payload;
     },
     setHeaderMode: (state, action: PayloadAction<boolean>) => {
       state.headerMode = action.payload;
+      state.editorLoad = { ...state.screensHeader }; // Ensure new reference
     },
     setFooterMode: (state, action: PayloadAction<boolean>) => {
       state.footerMode = action.payload;
+      state.editorLoad = { ...state.screensFooter }; // Ensure new reference
     },
     setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
       state.headerMode = action.payload;

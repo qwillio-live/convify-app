@@ -42,7 +42,7 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
-import { addScreen, resetScreensState, setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { addScreen, resetScreensState, setEditorLoad} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
 import { Logo } from "../user/logo/user-logo.component"
 import { LogoBar,LogoBarItem } from "../user/logo-bar/logo-bar.component"
@@ -53,6 +53,7 @@ import { UserInput } from "../user/input/user-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { setScreenHeader } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import screensFooterData from "@/components/user/screens/screen-footer.json"
+
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -89,21 +90,24 @@ export function CreateFlowComponent() {
   const dispatch = useAppDispatch();
 
   const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
-
+  const startScreen = useAppSelector((state) => state.screen.screens[0])
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
-  const editorLoad = useAppSelector((state) => state.screen.screens[0])
+  const editorLoad = useAppSelector((state) => state.screen.editorLoad)
   const headerMode = useAppSelector((state) => state.screen.headerMode)
 
-  React.useEffect(() => {
-    dispatch(resetScreensState())
-  },[dispatch])
+  // React.useEffect(() => {
+  //   dispatch(resetScreensState())
+  // },[dispatch])
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
-        onNodesChange={(nodes) => {
-          const newNodes = nodes.getSerializedNodes();
-          dispatch(setEditorLoad(newNodes))
+      // Save the updated JSON whenever the Nodes has been changed
+      onNodesChange={query => {
+        const json = query.serialize();
+        // save to server
+        dispatch(setEditorLoad(JSON.parse(json)))
+
       }}
         resolver={{
           Controller,

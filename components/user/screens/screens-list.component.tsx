@@ -76,17 +76,15 @@ const ScreensList = () => {
     enabled: state.options.enabled,
   }))
   const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
-  React.useEffect(() => {
-    dispatch(setHeaderFooterMode(false));
-  }, [dispatch]);
 
-  React.useEffect(() => {
-    if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
-      console.log("EDITOR LOAD CALLED AGAIN")
-      actions.deserialize(editorLoad);
-      setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
-    }
-  }, [actions, editorLoad,compareLoad]);
+
+  // React.useEffect(() => {
+  //   if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+  //     console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+  //     actions.deserialize(editorLoad);
+  //     setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+  //   }
+  // }, [actions, editorLoad,compareLoad]);
 
   const handleReorder = (data) => {
     dispatch(setScreens(data));
@@ -101,13 +99,11 @@ const ScreensList = () => {
   const handleFooterScreenClick = () => {
     dispatch(setHeaderFooterMode(false));
     dispatch(setFooterMode(true));
-    dispatch(setEditorLoad(screensFooter));
   };
 
   const handleHeaderScreenClick = () => {
     dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true));
-    dispatch(setEditorLoad(screensHeader));
   };
 
   return (
