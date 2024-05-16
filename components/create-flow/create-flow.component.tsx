@@ -75,16 +75,16 @@ enum VIEWS {
 //     </a>
 //   )
 // }
-const NodesToSerializedNodes = (nodes) =>  {
-  // getSerializedNodes is present in the useEditor hook
-  const {query: {getSerializedNodes}} = useEditor();
-  const serializedNodes = getSerializedNodes()
-const result = {}
-Object.keys(nodes).forEach(key => {
-result[key] = serializedNodes[key]
-})
-return result
-}
+// const NodesToSerializedNodes = (nodes) =>  {
+//   // getSerializedNodes is present in the useEditor hook
+//   const {query: {getSerializedNodes}} = useEditor();
+//   const serializedNodes = getSerializedNodes()
+// const result = {}
+// Object.keys(nodes).forEach(key => {
+// result[key] = serializedNodes[key]
+// })
+// return result
+// }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch();

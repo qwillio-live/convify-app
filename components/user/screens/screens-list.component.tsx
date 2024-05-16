@@ -93,7 +93,7 @@ const ScreensList = () => {
   const handleScreenClick = (index: number) => {
     dispatch(setHeaderFooterMode(false));
     dispatch(setSelectedScreen(index));
-    dispatch(setEditorLoad(screens[index]));
+    // dispatch(setEditorLoad(screens[index]));
   };
 
   const handleFooterScreenClick = () => {
