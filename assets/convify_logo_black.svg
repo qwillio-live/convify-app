@@ -4,11 +4,11 @@
 <rect x="113" y="5" width="22" height="12" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#mask0_1672_1616)">
-<path d="M115 19L120 11L115 3" stroke="white" strokeWidth="4"/>
-<path d="M115 19L120 11L115 3" stroke="#3945E3" strokeWidth="4"/>
-<path d="M121 19L126 11L121 3" stroke="white" strokeWidth="4"/>
-<path d="M121 19L126 11L121 3" stroke="#3945E3" strokeOpacity="0.6" strokeWidth="4"/>
+<path d="M115 19L120 11L115 3" stroke="white" stroke-width="4"/>
+<path d="M115 19L120 11L115 3" stroke="#3945E3" stroke-width="4"/>
+<path d="M121 19L126 11L121 3" stroke="white" stroke-width="4"/>
+<path d="M121 19L126 11L121 3" stroke="#3945E3" stroke-opacity="0.6" stroke-width="4"/>
 <path d="M127 19L132 11L127 3" stroke="white" stroke-width="4"/>
-<path d="M127 19L132 11L127 3" stroke="#3945E3" strokeOpacity="0.2" strokeWidth="4"/>
+<path d="M127 19L132 11L127 3" stroke="#3945E3" stroke-opacity="0.2" stroke-width="4"/>
 </g>
 </svg>
