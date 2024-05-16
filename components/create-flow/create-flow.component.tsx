@@ -96,7 +96,8 @@ export function CreateFlowComponent() {
 
   React.useEffect(() => {
     dispatch(resetScreensState())
-  },[])
+  },[dispatch])
+
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor

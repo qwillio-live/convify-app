@@ -45,7 +45,6 @@ export const screensSlice = createSlice({
       state.editorLoad = state.screens[state.selectedScreen];
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
-      console.log("EDITOR LOAD WAS CALLED WITH : ", action.payload);
       state.editorLoad = {...action.payload};
       if(state.headerMode === true){
         state.screensHeader = {...action.payload};
