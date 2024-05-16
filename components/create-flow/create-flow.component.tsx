@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import {
   ArrowRight,
@@ -83,12 +84,12 @@ return result
 }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
-  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
-  const currentScreen = useAppSelector(
-    (state) => state.screen.screens[state.screen.selectedScreen]
-  )
-
   const dispatch = useAppDispatch();
+
+  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
+
+  const firstScreen = useAppSelector((state) => state.screen.screens[0])
+
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -168,7 +169,7 @@ export function CreateFlowComponent() {
                   value={view}
                 >
                   <Frame
-                  data={currentScreen}
+                  data={firstScreen}
                   >
                   </Frame>
                 </TabsContent>

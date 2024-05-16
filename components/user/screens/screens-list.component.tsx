@@ -19,9 +19,12 @@ import {
   deleteScreen,
   duplicateScreen,
   reorderScreens,
-  setHeaderFooterMode,
+  setHeaderMode,
+  setFooterMode,
   setScreens,
   setSelectedScreen,
+  setHeaderFooterMode,
+  setEditorLoad,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -58,33 +61,41 @@ const ScreensList = () => {
   )
   const screensHeader = useAppSelector((state) => state.screen.screensHeader)
   const screensFooter = useAppSelector((state) => state.screen.screensFooter)
+  const headerMode = useAppSelector((state) => state.screen.headerMode)
+  const footerMode = useAppSelector((state) => state.screen.footerMode)
+
   const selectedScreenIndex = useAppSelector(
     (state) => state.screen.selectedScreen
   )
-  const headerFooterMode = useAppSelector(
-    (state) => state.screen.headerFooterMode
-  )
+  const editorLoad = useAppSelector((state) => state.screen.editorLoad)
+ const headerFooterMode = useAppSelector((state) => state.screen.headerMode || state.screen.footerMode);
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
-  const [orderScreens, setOrderScreens] = React.useState<any[]>(screens)
 
   React.useEffect(() => {
-    if (screens.length >= 0 && !headerFooterMode) {
-      actions.deserialize(selectedScreen || emptyScreenData)
+    if (editorLoad) {
+      actions.deserialize(editorLoad)
     }
-  }, [actions, selectedScreen, screens, headerFooterMode])
+  }, [actions, editorLoad,headerMode,footerMode])
   const handleReorder = (data) => {
     dispatch(setScreens(data))
   }
 
+  const handleScreenClick = (index: number) => {
+    dispatch(setSelectedScreen(index))
+    dispatch(setHeaderFooterMode(false))
+    dispatch(setEditorLoad(screens[index]))
+  }
   const handleFooterScreenClick = () => {
-    dispatch(setHeaderFooterMode(true))
-    actions.deserialize(screensFooter || emptyScreenData)
+    dispatch(setHeaderFooterMode(false))
+    dispatch(setFooterMode(true))
+    dispatch(setEditorLoad(screensFooter))
   }
   const handleHeaderScreenClick = () => {
-    dispatch(setHeaderFooterMode(true))
-    actions.deserialize(screensHeader || emptyScreenData)
+    dispatch(setHeaderFooterMode(false))
+    dispatch(setHeaderMode(true))
+    dispatch(setEditorLoad(screensHeader))
   }
   return (
     <Accordion
@@ -104,10 +115,10 @@ const ScreensList = () => {
             className={cn(
               "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
               {
-                // "border-blue-500": selectedScreenIndex === index,
+                "border-blue-500": headerMode,
               }
             )}
-            onClick={() => handleHeaderScreenClick()}
+            onClick={handleHeaderScreenClick}
           >
             <div className="text-xs text-muted-foreground scale-[.50] relative">
               <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
@@ -121,10 +132,10 @@ const ScreensList = () => {
             className={cn(
               "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
               {
-                // "border-blue-500": selectedScreenIndex === index,
+                "border-blue-500": footerMode,
               }
             )}
-            onClick={() => handleFooterScreenClick()}
+            onClick={handleFooterScreenClick}
           >
             <div className="text-xs text-muted-foreground scale-[.50] relative">
               <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
@@ -162,10 +173,10 @@ const ScreensList = () => {
                         "h-60 w-[14vw] mt-2 flex  flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500":
-                            selectedScreenIndex === index && !headerFooterMode,
+                            selectedScreenIndex === index,
                         }
                       )}
-                      onClick={() => dispatch(setSelectedScreen(index))}
+                      onClick={() => handleScreenClick(index)}
                     >
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>

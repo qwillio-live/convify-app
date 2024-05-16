@@ -1,88 +1,108 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import buttonChoiceData from "@/components/user/screens/button-choice-screen.json";
+import oneChoiceData from "@/components/user/screens/one-choice-screen.json";
+import oneInputData from "@/components/user/screens/one-input-screen.json";
+import footerScreenData from "@/components/user/screens/screen-footer.json";
+import headerScreenData from "@/components/user/screens/screen-header.json";
+import emptyScreenData from "@/components/user/screens/empty-screen.json";
 
-import buttonChoiceData from "@/components/user/screens/button-choice-screen.json"
-import emptyScreenData from "@/components/user/screens/empty-screen.json"
-import oneChoiceData from "@/components/user/screens/one-choice-screen.json"
-import oneInputData from "@/components/user/screens/one-input-screen.json"
-import footerScreenData from "@/components/user/screens/screen-footer.json"
-import headerScreenData from "@/components/user/screens/screen-header.json"
 export interface ScreensState {
-  selectedScreen: number
-  headerId: string
-  headerFooterMode: boolean
-  screensHeader: any
-  screensFooter: any
-  screens: any[]
+  selectedScreen: number;
+  headerId: string;
+  headerMode: boolean;
+  footerMode: boolean;
+  screensHeader: any;
+  screensFooter: any;
+  screens: any[];
+  editorLoad: any;
 }
 
 const initialState: ScreensState = {
   headerId: "",
   selectedScreen: 0,
   screensHeader: headerScreenData,
-  headerFooterMode: false,
+  headerMode: false,
+  footerMode: false,
   /**Ignoring ts checks as this is placeholder solution for now */
   /** @ts-ignore */
   screens: [buttonChoiceData, oneChoiceData, oneInputData],
   screensFooter: footerScreenData,
-}
+  editorLoad: null,
+};
 
 export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
+    setEditorLoad: (state, action: PayloadAction<any>) => {
+      console.log("EDITOR LOAD WAS CALLED WITH : ", action.payload);
+      state.editorLoad = action.payload;
+    },
     setHeaderId: (state, action: PayloadAction<string>) => {
-      state.headerId = action.payload
+      state.headerId = action.payload;
+    },
+    setHeaderMode: (state, action: PayloadAction<boolean>) => {
+      state.headerMode = action.payload;
+    },
+    setFooterMode: (state, action: PayloadAction<boolean>) => {
+      state.footerMode = action.payload;
     },
     setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
-      state.headerFooterMode = action.payload
+      state.headerMode = action.payload;
+      state.footerMode = action.payload;
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
-      console.log("Payload", action.payload)
-      state.screens = [...action.payload]
+      console.log("Payload", action.payload);
+      state.screens = [...action.payload];
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
-      state.selectedScreen = action.payload
+      state.selectedScreen = action.payload;
+      state.editorLoad = { ...state.screens[action.payload] }; // Ensure new reference
     },
     reorderScreens: (
       state,
       action: PayloadAction<{ startIndex: number; endIndex: number }>
     ) => {
-      const { startIndex, endIndex } = action.payload
-      const result = state.screens
-      const [removed] = result.splice(startIndex, 1)
-      result.splice(endIndex, 0, removed)
-
-      state.screens = result
+      const { startIndex, endIndex } = action.payload;
+      const result = [...state.screens]; // Create new array
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      state.screens = result;
     },
     addScreen: (state, action: PayloadAction<number>) => {
-      //add screen after selectedScreen index
-      state.screens.splice(action.payload + 1, 0, emptyScreenData)
-      state.selectedScreen = action.payload + 1
+      const newScreens = [...state.screens]; // Create new array
+      newScreens.splice(action.payload + 1, 0, emptyScreenData);
+      state.screens = newScreens;
+      state.selectedScreen = action.payload + 1;
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
-      //duplicate screen after selectedScreen index
-      const newScreen = state.screens[action.payload];
-      state.screens.splice(action.payload + 1, 0, newScreen);
+      const newScreens = [...state.screens]; // Create new array
+      const newScreen = { ...state.screens[action.payload] }; // Create new object
+      newScreens.splice(action.payload + 1, 0, newScreen);
+      state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
-      //delete screen at index
-      state.screens.splice(action.payload, 1);
+      const newScreens = [...state.screens]; // Create new array
+      newScreens.splice(action.payload, 1);
+      state.screens = newScreens;
       state.selectedScreen = Math.min(action.payload, state.screens.length - 1);
     },
   },
-})
+});
 
-// Action creators are generated for each case reducer function
 export const {
-  setSelectedScreen,
+  setHeaderMode,
+  setFooterMode,
   setHeaderFooterMode,
+  setSelectedScreen,
   reorderScreens,
   addScreen,
+  setEditorLoad,
   duplicateScreen,
   setScreens,
   deleteScreen,
   setHeaderId,
-} = screensSlice.actions
+} = screensSlice.actions;
 
-export default screensSlice.reducer
+export default screensSlice.reducer;

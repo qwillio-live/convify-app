@@ -15,14 +15,12 @@ export default function FlowPreview() {
     {
       screens.map((screen, index) => {
         return(
+          <div className="my-14 min-h-screen">
           <ResolvedComponentsFromCraftState key={index} screen={screen}  />
-
+          </div>
         )
-
       })
-
     }
     </>
   )
-
 }
