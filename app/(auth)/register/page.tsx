@@ -25,33 +25,14 @@ export default function RegisterPage() {
       <div className="hidden h-full bg-muted lg:block" />
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
-            <Icons.logo className="mx-auto h-6 w-6" />
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Create an account
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Enter your email below to create your account
-            </p>
+          <div className="flex flex-row justify-center text-center">
+            <Icons.logo className="mr-2 size-8" />
+            <h1 className="text-2xl font-semibold tracking-tight">Convify</h1>
           </div>
-          <UserRegForm />
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="hover:text-brand underline underline-offset-4"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="hover:text-brand underline underline-offset-4"
-            >
-              Privacy Policy
-            </Link>
-            .
+          <p className="font-600 text-center text-xl text-muted-foreground">
+            Welcome to Convify. Dirty up your hands
           </p>
+          <UserRegForm />
         </div>
       </div>
     </div>
