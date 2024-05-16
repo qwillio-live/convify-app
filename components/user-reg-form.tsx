@@ -196,8 +196,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 {isGoogleLoading && (
                   <Icons.spinner className="size-4 animate-spin" />
                 )}
-
-                <Icons.googleSignup className="size-5" />
+                <Icons.googleSignup className="h-5 w-5" />
                 <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
                   Sign Up with Google
                 </span>
