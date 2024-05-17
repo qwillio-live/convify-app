@@ -79,13 +79,13 @@ const ScreensList = () => {
 
 
   React.useEffect(() => {
-    // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+    if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
     //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
     console.log("DESERIALIZE CALLED: ")
       actions.deserialize(editorLoad);
-      // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
-    // }
-  }, [actions, editorLoad]);
+      setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+    }
+  }, [editorLoad]);
 
   const handleReorder = (data) => {
     dispatch(setScreens(data));
