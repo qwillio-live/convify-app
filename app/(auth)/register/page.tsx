@@ -21,8 +21,17 @@ export default function RegisterPage() {
           backgroundColor: "#0F172A",
         }}
       >
-        <img src={convifyBlue.src} alt="Convify Logo" className="mb-8 w-40" />
-        <img src={signupImage.src} alt="Signup" className="h-auto max-w-full" />
+        <img
+          src={convifyBlue.src}
+          alt="Convify Logo"
+          className="w-40"
+          style={{ position: "absolute", top: "5rem" }}
+        />
+        <img
+          src={signupImage.src}
+          alt="Signup"
+          className="mt-10 h-auto max-w-full px-10"
+        />
       </div>
       <Link
         href="/login"
