@@ -81,6 +81,7 @@ const ScreensList = () => {
   React.useEffect(() => {
     // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
     //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+    console.log("DESERIALIZE CALLED: ")
       actions.deserialize(editorLoad);
       // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
     // }
