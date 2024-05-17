@@ -1,9 +1,11 @@
 import email from "./envelope.png"
-import excel from "./excel.png"
-import googleSheets from "./sheets.png"
+import googleAnalytics from "./googleAnalytics.svg"
+import googleTagManager from "./googleTagManager.svg"
+import metaPixel from "./metaLogo.svg"
 
 export const LocalIcons = {
   email: email,
-  googleSheets: googleSheets,
-  excel: excel,
+  googleAnalytics: googleAnalytics,
+  googleTagManager: googleTagManager,
+  metaPixel: metaPixel,
 }

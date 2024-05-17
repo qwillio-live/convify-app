@@ -1,5 +1,4 @@
 import { User } from "@prisma/client"
-import type { Icon } from "lucide-react"
 
 import { Icons } from "@/components/icons"
 
@@ -64,6 +63,11 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     isPro: boolean
   }
 
+type ContentProps = {
+  handleStatusUpdate: (newStatus: string) => void
+  status: string
+}
+
 export type TIntegrationCardData = {
   title: string
   description: string
@@ -71,10 +75,20 @@ export type TIntegrationCardData = {
   status: string
   alt: string
   id: number
+  Content?: JSX.Element<ContentProps>
 }
 
 export type TSelectOptions = {
   id: number
   value: string
   label: string
+}
+
+export type Template = {
+  id: number
+  name: string
+  isPopular: boolean
+  img: string
+  isRecommended: boolean
+  category: string
 }

@@ -1,9 +1,17 @@
 import { getToken } from "next-auth/jwt"
 import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+import createMiddleware from "next-intl/middleware"
+import { NextRequest, NextResponse } from "next/server"
+import { defaultLocale, locales } from "./constant"
 
-export default withAuth(
-  async function middleware(req) {
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: "as-needed",
+})
+
+const authMiddleware = withAuth(
+  async (req) => {
     const token = await getToken({ req })
     const isAuth = !!token
     const isAuthPage =
@@ -19,15 +27,17 @@ export default withAuth(
     }
 
     if (!isAuth) {
-      let from = req.nextUrl.pathname;
+      let from = req.nextUrl.pathname
       if (req.nextUrl.search) {
-        from += req.nextUrl.search;
+        from += req.nextUrl.search
       }
 
       return NextResponse.redirect(
         new URL(`/login?from=${encodeURIComponent(from)}`, req.url)
-      );
+      )
     }
+
+    return intlMiddleware(req)
   },
   {
     callbacks: {
@@ -41,6 +51,19 @@ export default withAuth(
   }
 )
 
+export default function middleware(req: NextRequest) {
+  const excludePattern =
+    "^(/(" + locales.join("|") + "))?/(dashboard|editor)/?.*?$"
+  const publicPathnameRegex = RegExp(excludePattern, "i")
+  const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
+
+  if (isPublicPage) {
+    return intlMiddleware(req)
+  } else {
+    return (authMiddleware as any)(req)
+  }
+}
+
 export const config = {
-  matcher: ["/dashboard/:path*", "/editor/:path*", "/login", "/register"],
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 }
