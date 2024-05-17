@@ -47,27 +47,27 @@ const IconsList = {
   arrowright: <ArrowRight />,
 }
 interface StyledCustomButtonProps {
-  color?: string;
-  background?: string;
-  backgroundHover?: string;
-  colorHover?: string;
-  marginLeft?: string | number;
-  width?: string | number;
-  height?: string | number;
-  marginRight?: string | number;
-  marginTop?: string | number;
-  marginBottom?: string | number;
-  paddingLeft?: string | number;
-  paddingTop?: string | number;
-  paddingRight?: string | number;
-  paddingBottom?: string | number;
-  radius?: number;
-  flexDirection?: string;
-  alignItems?: string;
-  justifyContent?: string;
-  gap?: number;
-  border?: number;
-  borderColor?: string;
+  color?: string
+  background?: string
+  backgroundHover?: string
+  colorHover?: string
+  marginLeft?: string | number
+  width?: string | number
+  height?: string | number
+  marginRight?: string | number
+  marginTop?: string | number
+  marginBottom?: string | number
+  paddingLeft?: string | number
+  paddingTop?: string | number
+  paddingRight?: string | number
+  paddingBottom?: string | number
+  radius?: number
+  flexDirection?: string
+  alignItems?: string
+  justifyContent?: string
+  gap?: number
+  border?: number
+  borderColor?: string
 }
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   position: relative;
@@ -102,7 +102,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-`;
+`
 
 export const IconButton = ({
   disabled,
@@ -143,49 +143,48 @@ export const IconButton = ({
     isHovered: state.events.hovered,
   }))
   return (
-<StyledCustomButton
-  ref={(ref:any) => connect(drag(ref))}
-  color={color}
-  background={background}
-  backgroundHover={backgroundHover}
-  colorHover={colorHover}
-  marginLeft={marginLeft}
-  width={width}
-  height={height}
-  marginRight={marginRight}
-  marginTop={marginTop}
-  marginBottom={marginBottom}
-  paddingLeft={paddingLeft}
-  paddingTop={paddingTop}
-  paddingRight={paddingRight}
-  paddingBottom={paddingBottom}
-  radius={radius}
-  flexDirection={flexDirection}
-  alignItems={alignItems}
-  justifyContent={justifyContent}
-  gap={gap}
-  border={border}
-  borderColor={borderColor}
-  {...props}
-  onClick={() => console.log("Button clicked", text)}
->
-  {isHovered && <Controller nameOfComponent="BUTTON" />}
+    <StyledCustomButton
+      ref={(ref: any) => connect(drag(ref))}
+      color={color}
+      background={background}
+      backgroundHover={backgroundHover}
+      colorHover={colorHover}
+      marginLeft={marginLeft}
+      width={width}
+      height={height}
+      marginRight={marginRight}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
+      paddingLeft={paddingLeft}
+      paddingTop={paddingTop}
+      paddingRight={paddingRight}
+      paddingBottom={paddingBottom}
+      radius={radius}
+      flexDirection={flexDirection}
+      alignItems={alignItems}
+      justifyContent={justifyContent}
+      gap={gap}
+      border={border}
+      borderColor={borderColor}
+      {...props}
+      onClick={() => console.log("Button clicked", text)}
+    >
+      {isHovered && <Controller nameOfComponent="BUTTON" />}
 
-  <ContentEditable
-    html={text}
-    disabled={disabled}
-    onChange={(e) =>
-      setProp(
-        (props) =>
-          (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, '')),
-        500
-      )
-    }
-    tagName="span"
-  />
-  {enableIcon && IconsList[icon]}
-</StyledCustomButton>
-
+      <ContentEditable
+        html={text}
+        disabled={disabled}
+        onChange={(e) =>
+          setProp(
+            (props) =>
+              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
+            500
+          )
+        }
+        tagName="span"
+      />
+      {enableIcon && IconsList[icon]}
+    </StyledCustomButton>
   )
 }
 
@@ -233,13 +232,14 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Button content </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="flex items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex items-center space-x-2">
               <Checkbox
-              checked={enableIcon}
-              onCheckedChange={(e) => {
-                setProp((props) => (props.enableIcon = e), 1000)
-              }}
-              id="enableIcon" />
+                checked={enableIcon}
+                onCheckedChange={(e) => {
+                  setProp((props) => (props.enableIcon = e), 1000)
+                }}
+                id="enableIcon"
+              />
               <label
                 htmlFor="enableIcon"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -248,49 +248,46 @@ export const IconButtonSettings = () => {
               </label>
             </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-            {
-              enableIcon && (
+              {enableIcon && (
                 <>
-                <p className="text-md flex-1 text-muted-foreground">Icon</p>
-                <Select
-                  defaultValue={icon}
-                  onValueChange={(e) => {
-                    setProp((props) => (props.icon = e), 1000)
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select icon" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="arrowright">
-                        <ArrowRight />
-                      </SelectItem>
-                      <SelectItem value="aperture">
-                        <Aperture />
-                      </SelectItem>
-                      <SelectItem value="activity">
-                        <Activity />
-                      </SelectItem>
-                      <SelectItem value="dollarsign">
-                        <DollarSign />
-                      </SelectItem>
-                      <SelectItem value="anchor">
-                        <Anchor />
-                      </SelectItem>
-                      <SelectItem value="disc">
-                        <Disc />
-                      </SelectItem>
-                      <SelectItem value="mountain">
-                        <Mountain />
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <Select
+                    defaultValue={icon}
+                    onValueChange={(e) => {
+                      setProp((props) => (props.icon = e), 1000)
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select icon" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="arrowright">
+                          <ArrowRight />
+                        </SelectItem>
+                        <SelectItem value="aperture">
+                          <Aperture />
+                        </SelectItem>
+                        <SelectItem value="activity">
+                          <Activity />
+                        </SelectItem>
+                        <SelectItem value="dollarsign">
+                          <DollarSign />
+                        </SelectItem>
+                        <SelectItem value="anchor">
+                          <Anchor />
+                        </SelectItem>
+                        <SelectItem value="disc">
+                          <Disc />
+                        </SelectItem>
+                        <SelectItem value="mountain">
+                          <Mountain />
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </>
-              )
-            }
-
+              )}
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -438,54 +435,50 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Appearance</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Text</p>
+              <Input
+                type="color"
+                value={color}
+                onChange={(e) => {
+                  setProp((props) => (props.color = e.target.value), 1000)
+                }}
+              />
+            </div>
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Background</p>
+              <Input
+                type="color"
+                value={background}
+                onChange={(e) => {
+                  setProp((props) => (props.background = e.target.value), 1000)
+                }}
+              />
+            </div>
 
-                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-                  <p className="text-md text-muted-foreground">Text</p>
-                  <Input
-                    type="color"
-                    value={color}
-                    onChange={(e) => {
-                      setProp((props) => (props.color = e.target.value), 1000)
-                    }}
-                  />
-                </div>
-                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-                  <p className="text-md text-muted-foreground">Background</p>
-                  <Input
-                    type="color"
-                    value={background}
-                    onChange={(e) => {
-                      setProp(
-                        (props) => (props.background = e.target.value),
-                        1000
-                      )
-                    }}
-                  />
-                </div>
-
-                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-                  <p className="text-md text-muted-foreground">Text Hover</p>
-                  <Input
-                    type="color"
-                    value={colorHover}
-                    onChange={(e) => {
-                      setProp((props) => (props.colorHover = e.target.value), 1000)
-                    }}
-                  />
-                </div>
-                <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-                  <p className="text-md text-muted-foreground">Background Hover</p>
-                  <Input
-                    type="color"
-                    value={backgroundHover}
-                    onChange={(e) => {
-                      setProp(
-                        (props) => (props.backgroundHover = e.target.value),
-                        1000
-                      )
-                    }}
-                  />
-                </div>
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Text Hover</p>
+              <Input
+                type="color"
+                value={colorHover}
+                onChange={(e) => {
+                  setProp((props) => (props.colorHover = e.target.value), 1000)
+                }}
+              />
+            </div>
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Background Hover</p>
+              <Input
+                type="color"
+                value={backgroundHover}
+                onChange={(e) => {
+                  setProp(
+                    (props) => (props.backgroundHover = e.target.value),
+                    1000
+                  )
+                }}
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-4">
@@ -658,7 +651,7 @@ type IconButtonProps = {
   height: string | number
 }
 
-export const IconButtonDefaultProps:IconButtonProps = {
+export const IconButtonDefaultProps: IconButtonProps = {
   disabled: false,
   enableIcon: true,
   width: "366",
