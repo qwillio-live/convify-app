@@ -94,6 +94,10 @@ export function CreateFlowComponent() {
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state.screen.editorLoad)
   const headerMode = useAppSelector((state) => state.screen.headerMode)
+  const editorLoadLength = useAppSelector((state) => Object.keys(state.screen.editorLoad).length);
+  const checkToReload = () => {
+
+  }
 
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
@@ -104,9 +108,18 @@ export function CreateFlowComponent() {
       <Editor
       // Save the updated JSON whenever the Nodes has been changed
       onNodesChange={query => {
-        const json = query.serialize();
+        let json = query.getSerializedNodes();
+        let jsonLength = Object.keys(json).length;
+        // let editorLoadLength = Object.keys(editorLoad).length;
+        if(jsonLength !== editorLoadLength){
+          dispatch(setEditorLoad(json))
+          console.log(`RE-REnder called json length ${jsonLength} and editor load length: ${editorLoadLength}`)
+        }else{
+          console.log("RE-REnder NOT called")
+          console.log(`RE-REnder called json length ${jsonLength} and editor load length: ${editorLoadLength}`)
+          return;
+        }
         // save to server
-        dispatch(setEditorLoad(JSON.parse(json)))
 
       }}
         resolver={{
