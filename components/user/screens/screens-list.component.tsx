@@ -75,40 +75,38 @@ const ScreensList = () => {
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
-  const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+  // const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
 
 
-  React.useEffect(() => {
-    if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
-    //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
-    console.log("DESERIALIZE CALLED: ")
-      actions.deserialize(editorLoad);
-      setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
-    }
-  }, [editorLoad]);
+  // React.useEffect(() => {
+    // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+    // //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+    // console.log("DESERIALIZE CALLED: ")
+    //   actions.deserialize(editorLoad);
+    //   setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+    // }
+  // }, [editorLoad]);
 
   const handleReorder = (data) => {
     dispatch(setScreens(data));
   };
 
-  const handleScreenClick = (index: number) => {
-    dispatch(setHeaderFooterMode(false));
+  const handleScreenClick = async (index: number) => {
+    console.log("handleScreenClick called with index:", index);
     dispatch(setSelectedScreen(index));
-    dispatch(setEditorLoad(screens[index]));
-    // actions.deserialize(editorLoad);
-
+    await actions.deserialize(screens[index]);
   };
 
   const handleFooterScreenClick = () => {
-    dispatch(setHeaderFooterMode(false));
+    // dispatch(setHeaderFooterMode(false));
     dispatch(setFooterMode(true));
-    // actions.deserialize(editorLoad);
+    actions.deserialize(screensFooter);
   };
 
   const handleHeaderScreenClick = () => {
-    dispatch(setHeaderFooterMode(false));
+    // dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true));
-    // actions.deserialize(editorLoad);
+    actions.deserialize(screensHeader);
 
   };
 
@@ -133,7 +131,7 @@ const ScreensList = () => {
                 "border-blue-500": headerMode,
               }
             )}
-            onClick={handleHeaderScreenClick}
+            onClick={() => handleHeaderScreenClick()}
           >
             <div className="text-xs text-muted-foreground scale-[.25] relative">
               <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
@@ -150,7 +148,7 @@ const ScreensList = () => {
                 "border-blue-500": footerMode,
               }
             )}
-            onClick={handleFooterScreenClick}
+            onClick={() => handleFooterScreenClick()}
           >
             <div className="text-xs text-muted-foreground scale-[.25] relative">
               <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
@@ -167,7 +165,6 @@ const ScreensList = () => {
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
-
           <Reorder.Group values={screens} onReorder={handleReorder}>
             {screens?.map((screen: any, index) => (
               <Reorder.Item
@@ -186,7 +183,7 @@ const ScreensList = () => {
                       className={cn(
                         "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": (selectedScreenIndex === index) && !headerFooterMode,
+                          "border-blue-500": (selectedScreenIndex === index),
                         }
                       )}
                       onClick={() => handleScreenClick(index)}

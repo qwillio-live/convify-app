@@ -109,14 +109,13 @@ export function CreateFlowComponent() {
       // Save the updated JSON whenever the Nodes has been changed
       onNodesChange={query => {
         let json = query.getSerializedNodes();
-        let jsonLength = Object.keys(json).length;
+        let jsonString = JSON.stringify(json);
         // let editorLoadLength = Object.keys(editorLoad).length;
-        if(jsonLength !== editorLoadLength){
-          dispatch(setEditorLoad(json))
-          console.log(`RE-REnder called json length ${jsonLength} and editor load length: ${editorLoadLength}`)
+        if(jsonString !== editorLoad){
+          console.log("RE-REnder called")
+          dispatch(setEditorLoad(JSON.stringify(json)))
         }else{
           console.log("RE-REnder NOT called")
-          console.log(`RE-REnder called json length ${jsonLength} and editor load length: ${editorLoadLength}`)
           return;
         }
         // save to server
@@ -194,7 +193,7 @@ export function CreateFlowComponent() {
                   value={view}
                 >
                   <Frame
-                  data={editorLoad}
+                  data={JSON.parse(editorLoad)}
                   >
                   </Frame>
                 </TabsContent>

@@ -43,7 +43,7 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
   useEffect(() => {
     try {
       // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');
-      const craftState = screen || "{}"
+      const craftState = JSON.parse(screen) || "{}"
 
       const resolveComponents = () => {
         const parse = (

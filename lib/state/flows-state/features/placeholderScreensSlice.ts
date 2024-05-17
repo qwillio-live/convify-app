@@ -20,12 +20,12 @@ export interface ScreensState {
 const initialState: ScreensState = {
   headerId: "",
   selectedScreen: 0,
-  screensHeader: headerScreenData,
+  screensHeader: JSON.stringify(headerScreenData),
   headerMode: false,
   footerMode: false,
-  screens: [buttonChoiceData, oneChoiceData, oneInputData],
-  screensFooter: footerScreenData,
-  editorLoad: buttonChoiceData,
+  screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
+  screensFooter: JSON.stringify(footerScreenData),
+  editorLoad: JSON.stringify(buttonChoiceData),
 };
 
 export const screensSlice = createSlice({
@@ -43,43 +43,45 @@ export const screensSlice = createSlice({
       state.editorLoad = state.screens[state.selectedScreen];
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = {...action.payload};
+      state.editorLoad = action.payload;
       if (state.headerMode === true) {
-        state.screensHeader = { ...action.payload };
+        state.screensHeader = action.payload;
 
       } else if (state.footerMode === true) {
-        state.screensFooter = { ...action.payload };
+        state.screensFooter = action.payload;
       } else {
-        state.screens[state.selectedScreen] = { ...action.payload };
+        state.screens[state.selectedScreen] = action.payload ;
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
-      state.screensHeader = {...action.payload};
+      state.screensHeader = JSON.stringify(action.payload);
     },
     setScreenFooter: (state, action: PayloadAction<any>) => {
-      state.screensFooter = {...action.payload};
+      state.screensFooter = JSON.stringify(action.payload);
     },
     setHeaderId: (state, action: PayloadAction<string>) => {
       state.headerId = action.payload;
     },
     setHeaderMode: (state, action: PayloadAction<boolean>) => {
+      state.footerMode = false;
       state.headerMode = action.payload;
-      state.editorLoad = { ...state.screensHeader }; // Ensure new reference
+      state.editorLoad = state.screensHeader; // Ensure new reference
     },
     setFooterMode: (state, action: PayloadAction<boolean>) => {
+      state.headerMode = false;
       state.footerMode = action.payload;
-      state.editorLoad = { ...state.screensFooter }; // Ensure new reference
+      state.editorLoad = state.screensFooter; // Ensure new reference
     },
     setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
       state.headerMode = action.payload;
       state.footerMode = action.payload;
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
-      state.screens = [...action.payload];
+      // state.screens = [...action.payload];
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.selectedScreen = action.payload;
-      state.editorLoad = { ...state.screens[action.payload] }; // Ensure new reference
+      state.editorLoad = state.screens[action.payload] ; // Ensure new reference
     },
     reorderScreens: (
       state,
