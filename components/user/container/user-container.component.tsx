@@ -66,12 +66,12 @@ export const UserContainer = ({
     isHovered: state.events.hovered,
   }))
   return (
-    <div ref={(ref: any) => connect(drag(ref))}>
+    <div ref={(ref: any) => connect(drag(ref))} data-cy="toolbox-usercontainer">
       <div
         {...props}
         style={{
-          width: `${width}`,
-          height: `${height}`,
+          width: `${width}px`,
+          height: `${height}px`,
           backgroundColor: `${background}`,
           color: `${color}`,
           marginLeft: `${marginLeft}px`,
@@ -101,7 +101,7 @@ export const UserContainer = ({
           maxWidth: "100%",
         }}
       >
-        {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
+        {/* {isHovered && <Controller nameOfComponent={"CONTAINER"} />} */}
         {children}
       </div>
     </div>
@@ -534,8 +534,10 @@ export const UserContainerSettings = () => {
 
 export const ContainerDefaultProps = {
   padding: 40,
-  width: "auto",
-  height: "auto",
+  width: "400",
+  height: "200",
+  minHeight: "200px",
+  minWidth: "400px",
   background: "inherit",
   color: "inherit",
   marginLeft: "2",
@@ -578,9 +580,9 @@ export const Container = ({ ...props }) => {
   }))
   return (
     <div
-      className="relative border border-dashed border-transparent min-h-[400px] transition-all duration-200"
-      {...props}
-      ref={(ref: any) => ref && connect(drag(ref))}
+      className="relative border border-dashed border-transparent transition-all duration-200"
+      // {...props}
+      // ref={(ref: any) => ref && connect(drag(ref))}
     >
       {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
       {/** @ts-ignore */}

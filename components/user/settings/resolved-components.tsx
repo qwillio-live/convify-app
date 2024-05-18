@@ -19,6 +19,8 @@ import { ScreenFooterGen } from "../screens/screen-footer.component"
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: "div",
   [CRAFT_ELEMENTS.LOGO]: UserLogo,
+  [CRAFT_ELEMENTS.CARD]: "div",
+  [CRAFT_ELEMENTS.CARDTOP]: "div",
   [CRAFT_ELEMENTS.DIV]: "div",
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
@@ -46,44 +48,39 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
       const craftState = JSON.parse(screen) || "{}"
 
       const resolveComponents = () => {
-        const parse = (
-          nodeId: string,
-          parentNodeId?: string
-        ): React.ReactElement | null => {
-          if (!nodeId) return null
+
+        const parsedNodes = {}
+
+        const parse = (nodeId: string, parentNodeId?: string) => {
+          if (parsedNodes[nodeId]) return parsedNodes[nodeId]
 
           const nodeData = craftState[nodeId]
           if (!nodeData) return null
 
-          const { nodes: childNodeIds = [], type, props } = nodeData
+          const { type, props, nodes = [], linkedNodes = {} } = nodeData
           const resolvedName = type?.resolvedName
-          const ReactComponent = resolvedName
-            ? (CraftJsUserComponents as any)[resolvedName]
-            : null
+          const ReactComponent = resolvedName ? CraftJsUserComponents[resolvedName] : null
 
-          if (resolvedName && !ReactComponent) {
-            console.error(
-              `Component ${resolvedName} not found in CraftJsUserComponents.`
-            )
-            return null
-          }
+          const childNodes = nodes.map((childNodeId: string) => parse(childNodeId, nodeId))
+          const linkedNodesElements = nodes.concat(Object.values(linkedNodes)).map((linkedNodeData: any) => {
+            const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
+            return parse(linkedNodeId, nodeId)
+          })
 
-          const extendedProps = {
-            ...props,
-            parentNodeId,
-            nodeId,
-            key: nodeId,
-          }
-
-          const childNodes = childNodeIds
-            .map((childNodeId: string) => parse(childNodeId, nodeId))
-            .filter(Boolean)
-
-          return ReactComponent ? (
-            <ReactComponent {...extendedProps}>{childNodes}</ReactComponent>
+          const parsedNode = ReactComponent ? (
+            <ReactComponent {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
+              {/* {childNodes} */}
+              {linkedNodesElements}
+            </ReactComponent>
           ) : (
-            <div {...extendedProps}>{childNodes}</div>
+            <div {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
+              {/* {childNodes} */}
+              {linkedNodesElements}
+            </div>
           )
+
+          parsedNodes[nodeId] = parsedNode
+          return parsedNode
         }
 
         return parse("ROOT") || <></>

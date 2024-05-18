@@ -53,9 +53,9 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
         fullWidth && 'w-full'
       )}
     >
-      <div className='flex flex-col justify-center items-center w-full'>
+      {/* <div className='flex flex-col justify-center items-center w-full'> */}
         {render}
-      </div>
+      {/* </div> */}
       {/* {(isActive || isHover) && (
         <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white'>
           <span>{name}</span>

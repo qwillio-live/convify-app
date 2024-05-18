@@ -53,38 +53,39 @@ import { UserInput } from "../user/input/user-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { setScreenHeader } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import screensFooterData from "@/components/user/screens/screen-footer.json"
+import { LayoutContainer,LayoutContainerGen } from "../user/layout-container/layout-container.component"
 
 
 enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
 }
-// const SaveButton =() => {
-//   const { query,query: {node} } = useEditor();
-//   const headerId= useAppSelector((state) => state.screen.headerId)
-//   //screen header id is: HeT6HrWBxJ
-//   const nodeTree = node(headerId).toNodeTree()
-//   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
-//   console.log("NODE TREE IS: ",nodeTree)
-//   return (
-//     <a
-//       className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
-//       onClick={() => console.log(query.serialize())}
-//     >
-//       Get JSON
-//     </a>
-//   )
-// }
-// const NodesToSerializedNodes = (nodes) =>  {
-//   // getSerializedNodes is present in the useEditor hook
-//   const {query: {getSerializedNodes}} = useEditor();
-//   const serializedNodes = getSerializedNodes()
-// const result = {}
-// Object.keys(nodes).forEach(key => {
-// result[key] = serializedNodes[key]
-// })
-// return result
-// }
+const SaveButton =() => {
+  const { query,query: {node} } = useEditor();
+  const headerId= useAppSelector((state) => state.screen.headerId)
+  //screen header id is: HeT6HrWBxJ
+  const nodeTree = node(headerId).toNodeTree()
+  nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
+  console.log("NODE TREE IS: ",JSON.stringify(nodeTree))
+  return (
+    <a
+      className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
+      onClick={() => console.log(query.serialize())}
+    >
+      Get JSON
+    </a>
+  )
+}
+const NodesToSerializedNodes = (nodes) =>  {
+  // getSerializedNodes is present in the useEditor hook
+  const {query: {getSerializedNodes}} = useEditor();
+  const serializedNodes = getSerializedNodes()
+const result = {}
+Object.keys(nodes).forEach(key => {
+result[key] = serializedNodes[key]
+})
+return result
+}
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch();
@@ -111,13 +112,13 @@ export function CreateFlowComponent() {
         let json = query.getSerializedNodes();
         let jsonString = JSON.stringify(json);
         // let editorLoadLength = Object.keys(editorLoad).length;
-        if(jsonString !== editorLoad){
+        // if(jsonString !== editorLoad){
           console.log("RE-REnder called")
           dispatch(setEditorLoad(JSON.stringify(json)))
-        }else{
-          console.log("RE-REnder NOT called")
-          return;
-        }
+        // }else{
+          // console.log("RE-REnder NOT called")
+          // return;
+        // }
         // save to server
 
       }}
@@ -159,7 +160,8 @@ export function CreateFlowComponent() {
           MultipleChoice,
           LogoBar,
           LogoBarItem,
-
+          LayoutContainer,
+          LayoutContainerGen,
         }}
         onRender={RenderNode}
       >
@@ -203,7 +205,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {/* {<SaveButton />} */}
+              {<SaveButton />}
 
             </div>
           </ScrollArea>

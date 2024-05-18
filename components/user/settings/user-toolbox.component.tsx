@@ -66,10 +66,11 @@ import {
   UserText,
 } from "@/components/user/text/user-text.component"
 
-import { Card } from "../card/user-card.component"
+import { Card, CardTop } from "../card/user-card.component"
 import {
   Container,
   ContainerDefaultProps,
+  UserContainer,
 } from "../container/user-container.component"
 import {
   HeadlineText,
@@ -95,6 +96,7 @@ import {
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
 import { is } from "date-fns/locale"
+import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
 
 const MultipleChoiceOptions = [
   {
@@ -454,6 +456,27 @@ export const UserToolbox = () => {
                 Display
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
+              <div
+                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    connectors.create(ref, <Card {...ContainerDefaultProps} />)
+                  }
+                  data-cy="toolbox-layout-container"
+                >
+                                    <HoverCardComponent
+                    title="Container"
+                    icon={<Dice2 className="mr-2 w-3 h-3" />}
+                  >
+                      <Image
+                        src={ConvifyLogo.src}
+                        alt="Logo"
+                        width={120}
+                        height={42}
+                      />
+                  </HoverCardComponent>
+                </div>
+
                 <div
                   className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line

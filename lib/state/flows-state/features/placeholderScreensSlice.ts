@@ -95,7 +95,7 @@ export const screensSlice = createSlice({
     },
     addScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array
-      newScreens.splice(action.payload + 1, 0, emptyScreenData);
+      newScreens.splice(action.payload + 1, 0, JSON.stringify(emptyScreenData));
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
     },

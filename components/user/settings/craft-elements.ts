@@ -1,5 +1,9 @@
 export const CRAFT_ELEMENTS = {
   USERCONTAINER: "UserContainer",
+  LAYOUTCONTAINER: "LayoutContainer",
+  CARD: "Card",
+  CARDTOP: "CardTop",
+  CONTAINER: "Container",
   LOGO: "Logo",
   DIV: "div",
   LOGOBAR: "LogoBar",
