@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { UserRegForm } from "@/components/user-reg-form"
 import signupImage from "@/assets/images/signup.svg"
-import convifyBlue from "@/assets/images/convify_logo_blue.svg"
+import convifyBlue from "@/assets/images/convify_logo_icon.svg"
 
 export const metadata = {
   title: "Create an account",
@@ -21,17 +21,8 @@ export default function RegisterPage() {
           backgroundColor: "#0F172A",
         }}
       >
-        <img
-          src={convifyBlue.src}
-          alt="Convify Logo"
-          className="w-40"
-          style={{ position: "absolute", top: "5rem" }}
-        />
-        <img
-          src={signupImage.src}
-          alt="Signup"
-          className="mt-10 h-auto max-w-full px-10"
-        />
+        <img src={signupImage.src} alt="Signup" className="h-auto max-w-full" />
+        <img src={convifyBlue.src} alt="Convify Logo" className="w-15" />
       </div>
       <Link
         href="/login"
