@@ -98,6 +98,7 @@ export const screensSlice = createSlice({
       newScreens.splice(action.payload + 1, 0, JSON.stringify(emptyScreenData));
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
+      state.editorLoad = state.screens[action.payload + 1] ; // Ensure new reference
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array
