@@ -15,12 +15,13 @@ import jsonData from "./parse.json"
 import { PictureChoiceGen } from "../picture-choice/picture-choice.component"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
+import { CardContentGen } from "../card/user-card.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: "div",
   [CRAFT_ELEMENTS.LOGO]: UserLogo,
   [CRAFT_ELEMENTS.CARD]: "div",
-  [CRAFT_ELEMENTS.CARDTOP]: "div",
+  [CRAFT_ELEMENTS.CARDCONTENT]: CardContentGen,
   [CRAFT_ELEMENTS.DIV]: "div",
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,

@@ -50,7 +50,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     <div
       className={cn('relative border z-10 border-transparent border-dotted',
         (isHover || isActive) && (id !== 'ROOT') && 'border-blue-400',
-        fullWidth && 'w-full'
+        fullWidth && 'w-full',
       )}
     >
       {/* <div className='flex flex-col justify-center items-center w-full'> */}

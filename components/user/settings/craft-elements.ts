@@ -2,7 +2,7 @@ export const CRAFT_ELEMENTS = {
   USERCONTAINER: "UserContainer",
   LAYOUTCONTAINER: "LayoutContainer",
   CARD: "Card",
-  CARDTOP: "CardTop",
+  CARDCONTENT: "CardContent",
   CONTAINER: "Container",
   LOGO: "Logo",
   DIV: "div",

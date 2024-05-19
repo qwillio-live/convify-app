@@ -1,26 +1,26 @@
 
 import { useNode,Element } from '@/lib/craftjs';
 import React from 'react';
-import { Container } from '../container/user-container.component';
+import { Controller } from '../settings/controller.component';
 
-export const LayoutContainerGen = ({ children, props }) => {
-  // Render the container and its children
-  return (
-    <div {...props}>
-      {children}
-    </div>
-  );
-};
 export const LayoutContainer = ({ background, padding, children, ...props }) => {
-
   const {
+    actions: { setProp },
     connectors: { connect, drag },
-  } = useNode();
+    selected,
+    isHovered,
+  } = useNode((state) => ({
+    selected: state.events.selected,
+    isHovered: state.events.hovered,
+  }))
   return (
-    <div ref={(ref:any) => ref && connect(drag(ref))} {...props} style={{ background, padding }}>
-      <Element is={LayoutContainerGen} id="layout-container" props={props}>
-        {children}
-        </Element>
+    <div
+      {...props}
+      ref={(ref: any) => connect(drag(ref))}
+      style={{position: 'relative', margin: '5px 0', background, padding: `${padding}px`,minWidth:"300px", minHeight: "300px" }}
+    >
+      {isHovered && <Controller nameOfComponent={"LayoutContainer"} />}
+      {children}
     </div>
   );
 };
@@ -37,7 +37,7 @@ export const LayoutContainerSettings = () => {
 
   return (
     <div>
-      Layout container Settings
+      <h1>Layout LayoutContainer settings</h1>
     </div>
   );
 };
@@ -48,9 +48,6 @@ export const LayoutContainerDefaultProps = {
 };
 
 LayoutContainer.craft = {
-  rules: {
-    canMoveIn: () => true,
-  },
   props: LayoutContainerDefaultProps,
   related: {
     settings: LayoutContainerSettings,

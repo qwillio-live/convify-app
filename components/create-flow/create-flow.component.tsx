@@ -29,7 +29,7 @@ import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
 import {ProgressBar} from "../user/progress/user-progress.component"
 import { Progress } from "../ui/progress-custom"
-import { Card, CardTop } from "../user/card/user-card.component"
+import { Card, CardContent } from "../user/card/user-card.component"
 import {
   Container,
   ContainerDefaultProps,
@@ -53,7 +53,7 @@ import { UserInput } from "../user/input/user-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { setScreenHeader } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import screensFooterData from "@/components/user/screens/screen-footer.json"
-import { LayoutContainer,LayoutContainerGen } from "../user/layout-container/layout-container.component"
+import { LayoutContainer } from "../user/layout-container/layout-container.component"
 
 
 enum VIEWS {
@@ -150,7 +150,7 @@ export function CreateFlowComponent() {
           Linkedin,
           Container,
           Card,
-          CardTop,
+          CardContent,
           UserContainer,
           IconButton,
           DragDrop,
@@ -161,7 +161,6 @@ export function CreateFlowComponent() {
           LogoBar,
           LogoBarItem,
           LayoutContainer,
-          LayoutContainerGen,
         }}
         onRender={RenderNode}
       >

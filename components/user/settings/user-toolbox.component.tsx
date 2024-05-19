@@ -66,7 +66,7 @@ import {
   UserText,
 } from "@/components/user/text/user-text.component"
 
-import { Card, CardTop } from "../card/user-card.component"
+import { Card, CardContentDefaultProps } from "../card/user-card.component"
 import {
   Container,
   ContainerDefaultProps,
@@ -456,11 +456,12 @@ export const UserToolbox = () => {
                 Display
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
+
               <div
                   className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
-                    connectors.create(ref, <Card {...ContainerDefaultProps} />)
+                    connectors.create(ref, <Card {...CardContentDefaultProps} />)
                   }
                   data-cy="toolbox-layout-container"
                 >
