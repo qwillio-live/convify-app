@@ -39,10 +39,10 @@ export const Controller = ({nameOfComponent}) => {
     }
   })
   return (
-    <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white'>
+    <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white z-20'>
       <span className='hover:cursor-default'>{nameOfComponent}</span>
       <span className='hover:cursor-move'><Move /></span>
-      {(isHovered.isDeletable || isHovered?.name == "Card Content") && (
+      {(isHovered?.isDeletable || isHovered?.name == "Card Content") && (
           <button
             onClick={() => {
               actions.delete(selected.id)
