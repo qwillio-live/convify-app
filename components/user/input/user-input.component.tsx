@@ -73,17 +73,17 @@ export const UserInputGen = ({ ...props }) => {
         borderRadius={props.borderRadius}
         width={props.width}
         // {...props}
-        onFocus={() => setIsActive(true)}
         // 1.9em .6em .7em
         className={` font-semibold pt-5 px-3 pb-1 text-sm
-  ring-[${props.borderColor}]
-  focus-visible:ring-[${props.activeBorderColor}]
-  ring-opacity-/50
-   focus-visible:ring-1 focus-visible:ring-offset-0
-  `}
+        ring-[${props.borderColor}]
+        focus-visible:ring-[${props.activeBorderColor}]
+        ring-opacity-/50
+        focus-visible:ring-1 focus-visible:ring-offset-0
+        `}
         // placeholder={props.placeholder}
         onChange={(e) => {setInputValue(e.target.value), console.log("INPUT VALUE: ", inputValue)}}
         // onFocus={() => setProp((props) => (props.borderColor = props.activeBorderColor))}
+        onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
       />
     </div>

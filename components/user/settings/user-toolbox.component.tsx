@@ -461,17 +461,16 @@ export const UserToolbox = () => {
                   className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
+                    //@ts-ignore
                     connectors.create(ref, <Card {...CardContentDefaultProps} />)
                   }
                   data-cy="toolbox-layout-container"
                 >
                                     <HoverCardComponent
                     title="Container"
-                    icon={<Dice2 className="mr-2 w-3 h-3" />}
+                    icon={<Box className="mr-2 w-3 h-3" />}
                   >
-                      <Image
-                        src={ConvifyLogo.src}
-                        alt="Logo"
+                      <Box
                         width={120}
                         height={42}
                       />

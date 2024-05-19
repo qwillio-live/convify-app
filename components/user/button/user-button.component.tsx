@@ -246,6 +246,7 @@ export const ButtonDefaultProps = {
 Button.craft = {
   rules: {
     canMoveIn: () => true,
+
   },
   props: ButtonDefaultProps,
   related: {
