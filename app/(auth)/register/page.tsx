@@ -23,15 +23,22 @@ export default function RegisterPage() {
       >
         <img src={signupImage.src} alt="Signup" className="h-auto max-w-full" />
         <img src={convifyBlue.src} alt="Convify Logo" className="w-15" />
+        <p
+          className="font-600 text-md text-center text-muted-foreground"
+          style={{ position: "absolute", bottom: 50 }}
+        >
+          © Convify
+        </p>
       </div>
       <Link
         href="/login"
         className={cn(
-          buttonVariants({ variant: "ghost" }),
+          buttonVariants({ variant: "outline" }),
           "absolute right-4 top-4 md:right-8 md:top-8"
         )}
+        style={{ borderColor: "black" }}
       >
-        Login
+        Log in
       </Link>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -40,10 +47,10 @@ export default function RegisterPage() {
               <Icons.logo className="size-8" />
             </div>
             <h1 className="mt-2 text-center text-2xl font-semibold tracking-tight">
-              Create an account
+              Get started for free
             </h1>
             <p className="font-600 text-md mt-2 text-center text-muted-foreground">
-              Enter you email below to create your account
+              Get started – it’s free. No credit card needed
             </p>
           </div>
 

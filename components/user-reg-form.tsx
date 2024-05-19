@@ -87,7 +87,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
               </Label>
               <Input
                 id="email"
-                placeholder="name@example.com"
+                placeholder="Email"
                 type="email"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -158,7 +158,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
             <button
               className={cn(
                 buttonVariants(),
-                "mx-5 flex w-full items-center justify-center"
+                "flex w-full items-center justify-center"
               )}
               style={{ fontWeight: "600" }}
               type="submit"

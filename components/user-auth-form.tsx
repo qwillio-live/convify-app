@@ -71,7 +71,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </Label>
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="Email"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
@@ -90,7 +90,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <Input
               type="password"
               id="password"
-              placeholder="password"
+              placeholder="Password"
               disabled={isLoading || isGoogleLoading}
               {...register("password")}
             />
