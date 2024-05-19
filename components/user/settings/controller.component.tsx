@@ -31,7 +31,6 @@ export const Controller = ({nameOfComponent}) => {
         isDeletable: query.node(currentHoveredNodeId).isDeletable(),
       }
     }
-    console.log("SELECTED", selected)
     return {
       selected,
       isEnabled: state.options.enabled,
