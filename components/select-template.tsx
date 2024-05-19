@@ -22,33 +22,38 @@ const SelectTemplate = () => {
 
   return (
     <div>
-      <div className="flex gap-2 mb-8 overflow-x-auto">
+      <div className="flex gap-2 pb-4 overflow-x-auto items-center -mx-6 lg:mx-0">
         {["Recommended", ...categories].map((item) => (
-          <Button
-            className={`text-sm  rounded-full py-2.5 px-4 ${
-              item === selectedOption
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-            key={item}
-            onClick={() => setSelectedOption(item)}
-          >
-            {item}
-          </Button>
+          <>
+            <Button
+              className={`text-[13px]  rounded-full py-[0.85em] px-[1em] font-semibold leading-[1] h-auto first:ml-6 last:mr-6 ${
+                item === selectedOption
+                  ? "bg-[#4050ff] text-white hover:bg-[#3646ec]"
+                  : "bg-[#f2f2f2] text-[#3b3b3b] hover:bg-[#ebebeb]"
+              }`}
+              key={item}
+              onClick={() => setSelectedOption(item)}
+            >
+              {item}
+            </Button>
+            {item === "Recommended" && (
+              <div className="w-px h-[27px] bg-[hsl(0,0%,54%)] basis-px min-[720px]:block hidden"></div>
+            )}
+          </>
         ))}
       </div>
       {selectedOption === "Recommended" && (
         <div className="">
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+          <div className="grid lg:grid-cols-3 lg:grid-rows-2 gap-6">
+            <div className="lg:col-span-2 border border-solid border-[rgb(235,235,235)] rounded-[5px] overflow-hidden lg:row-[1/3]">
               <Image
                 src={templateImage["template-0"]}
                 alt="fachuki"
                 className="w-full"
               />
             </div>
-            <div className="lg:col-span-1">
-              <div className="flex items-center gap-0.5">
+            <div className="lg:col-span-1 order-first lg:order-none">
+              <div className="flex items-center gap-0.5 mb-4">
                 <svg
                   color="#4050FF"
                   height="22"
@@ -73,28 +78,33 @@ const SelectTemplate = () => {
                     fill="white"
                   ></path>
                 </svg>
-                <span className="text-gray-900 text-sm">
+                <span className="text-[#1a1a1a] text-sm leading-[1.36188] font-normal">
                   Recommended template
                 </span>
               </div>
-              <span className="text-[28px] text-black font-semibold mt-4">
+              <span className="text-[28px] text-black font-semibold mt-4 font-heading tracking-[0.4px] leading-[34px]">
                 B2B SaaS Demo
               </span>
               <div className="text-gray-900 text-sm">
                 Based on your profile and responses, we recommend the{" "}
                 <strong>B2B SaaS Demo</strong> template to start with.
               </div>
-              <div className="flex gap-3 mt-4">
-                <Button className="text-white bg-blue-600 hover:bg-blue-700">
-                  Start Building
-                </Button>
-                <Button variant="secondary" className="hover:bg-gray-200">
-                  Preview Template
-                </Button>
-              </div>
+            </div>
+            <div className="flex items-start gap-3 lg:col-[3/4]">
+              <Button className="text-white rounded-[3px] bg-[#4050ff] font-semibold hover:bg-[#3646ec] leading-[1] text-sm h-auto py-[0.85em] px-[1em] w-full lg:w-auto">
+                Start Building
+              </Button>
+              <Button
+                variant="secondary"
+                className="hover:bg-gray-200  rounded-[3px] h-auto font-semibold leading-[1] text-sm py-[0.85em] px-[1em] hidden lg:block"
+              >
+                Preview Template
+              </Button>
             </div>
           </div>
-          <p className="mt-8 text-base mb-2">Browse other relevant templates</p>
+          <p className="mt-8 text-base mb-2 leading-[1]">
+            Browse other relevant templates
+          </p>
         </div>
       )}
       <div className="grid lg:grid-cols-2 gap-12">
@@ -102,18 +112,20 @@ const SelectTemplate = () => {
           <div className="flex flex-col gap-2">
             <div className="w-full relative rounded-[5px] overflow-hidden border border-gray-100 group">
               <div className="flex flex-col h-full items-center justify-center absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity duration-200 ease-in-out">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-[#4050ff] leading-[1] hover:bg-[#3646ec] text-white  rounded-[3px] text-sm  h-auto py-[0.85em] px-[1em] font-semibold w-fit">
                   Start building
                 </Button>
               </div>
               <Image
                 src={templateImage[tem.img]}
                 alt={tem.name}
-                className="w-full"
+                className="w-full rounded-[5px] border border-solid border-[rgb(235,235,235)]"
               />
             </div>
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-base">{tem.name}</h3>
+              <h3 className="font-bold text-base text-black leading-[1.36188]">
+                {tem.name}
+              </h3>
               {tem.isPopular && (
                 <div className="flex gap-1 items-center">
                   <svg
@@ -129,7 +141,9 @@ const SelectTemplate = () => {
                       fill="currentColor"
                     ></path>
                   </svg>
-                  <div className="text-gray-900 font-bold text-xs">Popular</div>
+                  <span className="text-[rgb(26,26,26)] font-bold text-[11px] leading-[1.36188]">
+                    Popular
+                  </span>
                 </div>
               )}
             </div>

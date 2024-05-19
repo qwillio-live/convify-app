@@ -1,10 +1,11 @@
 import localFont from "next/font/local"
 
-import { Analytics } from "@/components/analytics"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/toaster"
+import { Analytics } from "@/components/analytics"
+import { ThemeProvider } from "@/components/theme-provider"
+
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
 
@@ -74,12 +75,6 @@ export const metadata = {
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
 }
-
-// const locales = ["en", "pt"]
-
-// export function generateStaticParams() {
-//   return locales.map((locale) => ({ locale }))
-// }
 
 export default function RootLayout({
   children,

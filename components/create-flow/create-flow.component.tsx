@@ -6,13 +6,13 @@ import {
   Facebook,
   Github,
   Globe,
-  Linkedin,
-  Plus,
-  PlusCircle,
   Image,
+  Linkedin,
+  PlusCircle,
 } from "lucide-react"
 
-import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
+import { Editor, Frame, useEditor } from "@/lib/craftjs"
+import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -21,34 +21,34 @@ import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
 import { UserText } from "@/components/user/text/user-text.component"
-import { List, ListItem } from "../user/list/list.component"
+
 import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
+import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import { ProgressBar as UserProgressBar } from "../user/progress/user-progress.component"
-import { Progress } from "../ui/progress-custom"
 import { Card, CardTop } from "../user/card/user-card.component"
 import {
   Container,
   UserContainer,
 } from "../user/container/user-container.component"
+import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { UserInput } from "../user/input/user-input.component"
+import { List, ListItem } from "../user/list/list.component"
+import { Loader } from "../user/loader/user-loader.component"
+import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
+import { Logo } from "../user/logo/user-logo.component"
+import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
+import { PictureChoice } from "../user/picture-choice/picture-choice.component"
+import { ProgressBar as UserProgressBar } from "../user/progress/user-progress.component"
 import { DragDrop } from "../user/screens/drag-drop-screens.component"
 import { ButtonChoiceScreen } from "../user/screens/screen-button-choice.component"
 import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
-import { addScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { RenderNode } from "../user/settings/render-node"
-import { Logo } from "../user/logo/user-logo.component"
-import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
-import { PictureChoice } from "../user/picture-choice/picture-choice.component"
-import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
-import { HeadlineText } from "../user/headline-text/headline-text.component"
-import { UserInput } from "../user/input/user-input.component"
-import { Loader } from "../user/loader/user-loader.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -140,7 +140,7 @@ export function CreateFlowComponent() {
           LogoBarItem,
           Loader,
           List,
-          ListItem
+          ListItem,
         }}
         onRender={RenderNode}
       >
