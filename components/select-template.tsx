@@ -26,7 +26,7 @@ const SelectTemplate = () => {
         {["Recommended", ...categories].map((item) => (
           <>
             <Button
-              className={`text-[13px]  rounded-full py-[0.85em] px-[1em] font-semibold leading-[1] h-auto first:ml-6 last:mr-6 ${
+              className={`text-[13px] rounded-full py-[0.85em] px-[1em] font-semibold leading-[1] h-auto first:ml-6 last:mr-6 lg:first:mx-0 ${
                 item === selectedOption
                   ? "bg-[#4050ff] text-white hover:bg-[#3646ec]"
                   : "bg-[#f2f2f2] text-[#3b3b3b] hover:bg-[#ebebeb]"
@@ -112,7 +112,7 @@ const SelectTemplate = () => {
           <div className="flex flex-col gap-2">
             <div className="w-full relative rounded-[5px] overflow-hidden border border-gray-100 group">
               <div className="flex flex-col h-full items-center justify-center absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity duration-200 ease-in-out">
-                <Button className="bg-[#4050ff] leading-[1] hover:bg-[#3646ec] text-white  rounded-[3px] text-sm  h-auto py-[0.85em] px-[1em] font-semibold w-fit">
+                <Button className="bg-[#4050ff] leading-[1] hover:bg-[#3646ec] text-white  rounded-[3px] text-sm  h-auto py-[0.85em] px-[calc(1em+18px)] font-semibold w-fit">
                   Start building
                 </Button>
               </div>
