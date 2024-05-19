@@ -25,7 +25,7 @@ export default function RegisterPage() {
         <img src={convifyBlue.src} alt="Convify Logo" className="w-15" />
         <p
           className="font-600 text-md text-center text-muted-foreground"
-          style={{ position: "absolute", bottom: 50 }}
+          style={{ position: "absolute", bottom: 50, color: "white" }}
         >
           © Convify
         </p>
