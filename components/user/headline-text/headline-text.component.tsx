@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react"
-import { useNode } from "@/lib/craftjs"
 import ContentEditable from "react-contenteditable"
 
+import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
@@ -21,9 +22,44 @@ import {
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 
-import { Input } from "@/components/ui/input"
 import { Controller } from "../settings/controller.component"
 import { HeadlineTextSettings } from "./headline-text-settings"
+
+export const HeadlineTextGen = ({
+  text,
+  fontSize,
+  textAlign,
+  fontWeight,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
+  textColor,
+  tagType,
+  ...props
+}) => {
+  return (
+    <ContentEditable
+      html={text}
+      disabled={true}
+      onChange={(e) => console.log("Headline Text: ", e.target.value)}
+      tagName={tagType}
+      className={`font-[${fontWeight}]`}
+      style={{
+        fontSize: `${fontSize}px`,
+        textAlign,
+        fontWeight: `${fontWeight}`,
+        marginLeft: `${marginLeft}px`,
+        marginRight: `${marginRight}px`,
+        marginTop: `${marginTop}px`,
+        marginBottom: `${marginBottom}px`,
+        color: `${textColor}`,
+        lineHeight: `${fontSize}px`,
+        minWidth: "max-content",
+      }}
+    />
+  )
+}
 
 export const HeadlineText = ({
   text,

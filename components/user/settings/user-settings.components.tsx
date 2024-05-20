@@ -61,7 +61,9 @@ export const SettingsPanel = () => {
         ) :
         null
         }
-        <Layers expandRootOnLoad={true} />
+        <Layers
+
+        expandRootOnLoad={true} />
       </div>
     </div>
   ) : null

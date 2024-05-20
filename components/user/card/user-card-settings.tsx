@@ -26,92 +26,11 @@ import { Slider } from "@/components/ui/slider"
 import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
 
-export const UserContainer = ({
-  padding,
-  width,
-  height,
-  background,
-  color,
-  marginLeft,
-  marginTop,
-  marginRight,
-  marginBottom,
-  paddingLeft,
-  paddingTop,
-  paddingRight,
-  paddingBottom,
-  radius,
-  shadow,
-  flexDirection,
-  fillSpace,
-  alignItems,
-  justifyContent,
-  flexWrap,
-  children,
-  overflowY,
-  overflowX,
-  gap,
-  border,
-  borderColor,
-  ...props
-}) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-    isHovered,
-    actions: { setProp },
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    dragged: state.events.dragged,
-    isHovered: state.events.hovered,
-  }))
-  return (
-    <div ref={(ref: any) => connect(drag(ref))} data-cy="toolbox-usercontainer">
-      <div
-        {...props}
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          backgroundColor: `${background}`,
-          color: `${color}`,
-          marginLeft: `${marginLeft}px`,
-          marginTop: `${marginTop}px`,
-          marginRight: `${marginRight}px`,
-          marginBottom: `${marginBottom}px`,
-          paddingLeft: `${paddingLeft}px`,
-          paddingTop: `${paddingTop}px`,
-          paddingRight: `${paddingRight}px`,
-          paddingBottom: `${paddingBottom}px`,
-          borderRadius: `${radius}px`,
-          flexDirection,
-          alignItems: `${alignItems}`,
-          justifyContent: `${justifyContent}`,
-          flexWrap,
-          padding: `${padding}px`,
-          boxShadow:
-            shadow === 0
-              ? "none"
-              : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
-          flex: fillSpace == "1" ? 1 : "unset",
-          display: "flex",
-          overflowY,
-          overflowX,
-          gap: `${gap}px`,
-          border: `${border}px solid ${borderColor}`,
-          maxWidth: "100%",
-        }}
-      >
-        {/* {isHovered && <Controller nameOfComponent={"CONTAINER"} />} */}
-        {children}
-      </div>
-    </div>
-  )
-}
-
-export const UserContainerSettings = () => {
+export const CardContainerSettings = () => {
   const {
     props: {
       padding,
+      fullWidth,
       width,
       height,
       background,
@@ -154,6 +73,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Width</p>
               <Input
                 defaultValue={width}
+                value={width}
                 className="w-full"
                 onChange={(e) =>
                   setProp((props) => (props.width = e.target.value))
@@ -164,6 +84,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Height</p>
               <Input
                 defaultValue={height}
+                value={height}
                 onChange={(e) =>
                   setProp((props) => (props.height = e.target.value))
                 }
@@ -173,6 +94,7 @@ export const UserContainerSettings = () => {
             <div className="style-control col-span-2 flex grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Overflow X</p>
               <Select
+                value={overflowX}
                 onValueChange={(e) => {
                   setProp((props) => (props.overflowX = e), 1000)
                 }}
@@ -192,6 +114,7 @@ export const UserContainerSettings = () => {
             <div className="style-control col-span-2 flex grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Overflow Y</p>
               <Select
+              value={overflowY}
                 onValueChange={(e) => {
                   setProp((props) => (props.overflowY = e), 1000)
                 }}
@@ -247,6 +170,7 @@ export const UserContainerSettings = () => {
               <Input
                 type="number"
                 placeholder={marginLeft}
+                value={marginLeft}
                 max={100}
                 min={0}
                 className="w-full"
@@ -259,6 +183,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Top</p>
               <Input
                 type="number"
+                value={marginTop}
                 placeholder={marginTop}
                 max={100}
                 min={0}
@@ -272,6 +197,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Right</p>
               <Input
                 type="number"
+                value={marginRight}
                 placeholder={marginRight}
                 max={100}
                 min={0}
@@ -285,6 +211,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Bottom</p>
               <Input
                 type="number"
+                value={marginBottom}
                 placeholder={marginBottom}
                 max={100}
                 min={0}
@@ -309,6 +236,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Left</p>
               <Input
                 type="number"
+                value={paddingLeft}
                 placeholder={paddingLeft}
                 max={100}
                 min={0}
@@ -322,6 +250,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Top</p>
               <Input
                 type="number"
+                value={paddingTop}
                 placeholder={paddingTop}
                 max={100}
                 min={0}
@@ -335,6 +264,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Right</p>
               <Input
                 type="number"
+                value={paddingRight}
                 placeholder={paddingRight}
                 max={100}
                 min={0}
@@ -351,6 +281,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Bottom</p>
               <Input
                 type="number"
+                value={paddingBottom}
                 placeholder={paddingBottom}
                 max={100}
                 min={0}
@@ -375,6 +306,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Border</p>
               <Input
                 type="number"
+                value={border}
                 placeholder={border}
                 max={100}
                 min={0}
@@ -398,6 +330,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Radius</p>
               <Input
                 type="number"
+                value={radius}
                 placeholder={radius}
                 max={100}
                 min={0}
@@ -411,6 +344,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Shadow</p>
               <Input
                 type="number"
+                value={shadow}
                 placeholder={shadow}
                 max={100}
                 min={0}
@@ -432,6 +366,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Direction</p>
               <RadioGroup
                 defaultValue="column"
+                value={flexDirection}
                 onValueChange={(value) => {
                   setProp((props) => (props.flexDirection = value), 1000)
                 }}
@@ -450,9 +385,10 @@ export const UserContainerSettings = () => {
             <div className="style-control col-span-1 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Fill Space</p>
               <RadioGroup
-                defaultValue={fillSpace}
+                defaultValue={fullWidth}
+                value={fullWidth}
                 onValueChange={(value) => {
-                  setProp((props) => (props.fillSpace = value), 1000)
+                  setProp((props) => (props.fullWidth = value), 1000)
                 }}
               >
                 <div className="flex items-center space-x-2">
@@ -470,6 +406,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Align</p>
               <RadioGroup
                 defaultValue={alignItems}
+                value={alignItems}
                 onValueChange={(value) => {
                   setProp((props) => (props.alignItems = value), 1000)
                 }}
@@ -493,6 +430,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Justify</p>
               <RadioGroup
                 defaultValue={justifyContent}
+                value={justifyContent}
                 onValueChange={(value) => {
                   setProp((props) => (props.justifyContent = value), 1000)
                 }}
@@ -516,6 +454,7 @@ export const UserContainerSettings = () => {
               <p className="text-md text-muted-foreground">Gap</p>
               <Input
                 type="number"
+                value={gap}
                 placeholder={gap}
                 max={100}
                 min={0}
@@ -530,75 +469,4 @@ export const UserContainerSettings = () => {
       </Accordion>
     </>
   )
-}
-
-export const ContainerDefaultProps = {
-  padding: 40,
-  width: "400",
-  height: "200",
-  minHeight: "200px",
-  minWidth: "400px",
-  background: "inherit",
-  color: "inherit",
-  marginLeft: "2",
-  marginTop: "2",
-  marginRight: "2",
-  marginBottom: "2",
-  paddingLeft: "4",
-  paddingTop: "4",
-  paddingRight: "4",
-  paddingBottom: "4",
-  radius: "none",
-  shadow: "none",
-  flexDirection: "column",
-  fillSpace: "1",
-  alignItems: "center",
-  justifyContent: "center",
-  flexWrap: "nowrap",
-  overflowY: "hidden",
-  overflowX: "hidden",
-  gap: 0,
-  border: 0,
-  borderColor: "inherit",
-}
-
-UserContainer.craft = {
-  props: ContainerDefaultProps,
-  related: {
-    settings: UserContainerSettings,
-  },
-}
-
-export const Container = ({ ...props }) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-    isHovered,
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    isHovered: state.events.hovered,
-  }))
-  return (
-    <div
-      className="relative border border-dashed border-transparent transition-all duration-200"
-      // {...props}
-      // ref={(ref: any) => ref && connect(drag(ref))}
-    >
-      {isHovered && <Controller nameOfComponent={"CONTAINER"} />}
-      {/** @ts-ignore */}
-      <Element
-        canvas
-        id="user-container"
-        is={UserContainer}
-        data-cy="user-container"
-      ></Element>
-    </div>
-  )
-}
-
-Container.craft = {
-  props: ContainerDefaultProps,
-  related: {
-    settings: UserContainerSettings,
-  },
 }

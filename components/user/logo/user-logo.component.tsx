@@ -1,7 +1,9 @@
-import { UploadCloud } from "lucide-react"
 import React from "react"
-
 import ConvifyLogo from "@/assets/convify_logo_black.png"
+import { UploadCloud } from "lucide-react"
+
+import { useNode } from "@/lib/craftjs"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -19,10 +21,42 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Slider } from "@/components/ui/slider"
-import { useNode } from "@/lib/craftjs"
-import { cn } from "@/lib/utils"
 
 import { Controller } from "../settings/controller.component"
+
+export const UserLogo = ({
+  alt,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  background,
+  radius,
+  align,
+  width,
+  height,
+  src,
+  ...props
+}) => {
+  return (
+    <>
+      <img
+        alt={alt}
+        src={src}
+        style={{
+          width: width,
+          height: height,
+          borderRadius: `${radius}px`,
+          backgroundColor: background,
+          marginLeft: `${marginLeft}px`,
+          marginRight: `${marginRight}px`,
+          marginTop: `${marginTop}px`,
+          marginBottom: `${marginBottom}px`,
+        }}
+      />
+    </>
+  )
+}
 
 export const Logo = ({
   alt,
@@ -51,26 +85,24 @@ export const Logo = ({
     <div
       ref={(ref: any) => connect(drag(ref))}
       className={cn(
-        `relative flex flex-row justify-${align} w-full border border-transparent`,
+        `relative flex flex-row justify-${align} w-full border border-transparent`
       )}
     >
       {isHovered && <Controller nameOfComponent={"Logo"} />}
       {
         /* eslint-disable-next-line @next/next/no-img-element */
-        <img
+        <UserLogo
           alt={alt}
-          // className="aspect-square object-cover"
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          marginLeft={marginLeft}
+          marginRight={marginRight}
+          background={background}
+          radius={radius}
+          align={align}
+          width={width}
+          height={height}
           src={src}
-          style={{
-            width: width,
-            height: height,
-            borderRadius: `${radius}px`,
-            backgroundColor: background,
-            marginLeft: `${marginLeft}px`,
-            marginRight: `${marginRight}px`,
-            marginTop: `${marginTop}px`,
-            marginBottom: `${marginBottom}px`,
-          }}
           {...props}
         />
       }
@@ -185,57 +217,56 @@ export const LogoSettings = () => {
           <AccordionContent className="flex flex-col gap-y-2 p-2">
             <div className="style-control flex flex-col gap-2">
               <Label className="text-sm text-muted-foreground">Top</Label>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                value={[marginTop]}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginTop = value), 1000)
+                placeholder={marginTop}
+                onChange={(e) => {
+                  setProp((props) => (props.marginTop = e.target.value), 1000)
                 }}
               />
             </div>
             <div className="style-control flex flex-col gap-2">
               <Label className="text-sm text-muted-foreground">Bottom</Label>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginBottom}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                value={[marginBottom]}
-                onValueChange={(value) =>
-                  setProp((props) => (props.marginBottom = value), 1000)
+                onChange={(e) =>
+                  setProp(
+                    (props) => (props.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
             <div className="style-control flex flex-col gap-2">
               <Label className="text-sm text-muted-foreground">Left</Label>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                value={[marginLeft]}
-                onValueChange={(value) =>
-                  setProp((props) => (props.marginLeft = value), 1000)
+                onChange={(e) =>
+                  setProp((props) => (props.marginLeft = e.target.value), 1000)
                 }
               />
             </div>
             <div className="style-control flex flex-col gap-2">
               <Label className="text-sm text-muted-foreground">Right</Label>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginRight}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                value={[marginRight]}
-                onValueChange={(value) =>
-                  setProp((props) => (props.marginRight = value), 1000)
+                onChange={(e) =>
+                  setProp((props) => (props.marginRight = e.target.value), 1000)
                 }
               />
             </div>
@@ -280,15 +311,15 @@ export const LogoSettings = () => {
             </div>
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">Radius</p>
-              <Slider
-                defaultValue={[radius]}
+              <Input
+                type="number"
+                placeholder={radius}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.radius = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.radius = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>

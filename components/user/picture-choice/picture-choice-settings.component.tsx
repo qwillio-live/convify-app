@@ -25,8 +25,7 @@ import { Label } from "@radix-ui/react-label"
 import { Slider } from "@/components/ui/slider"
 import { useDragControls, Reorder, useMotionValue } from "framer-motion"
 import { Card } from "@/components/ui/card"
-
-import { GripVertical, PlusCircle } from "lucide-react"
+import { GripVertical,Check as IconCheck, X as IconX, PlusCircle } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
 export const PictureChoiceSettings = () => {
@@ -244,38 +243,96 @@ export const PictureChoiceSettings = () => {
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Padding</span>
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-1 gap-y-2 p-2">
-            <div className="style-control col-span-1 flex flex-col gap-2">
-              <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[containerStyles.paddingTop]}
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Container</p>
+              <Input
+                type="number"
+                placeholder={containerStyles.padding}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp(
-                    (props) => (props.containerStyles.paddingTop = value),
-                    1000
-                  )
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.padding = e.target.value), 1000)
+                }
               />
             </div>
 
-            <div className="style-control col-span-1 flex flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[containerStyles.paddingBottom]}
+            <Separator className="my-4" />
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Item</p>
+              <Input
+                type="number"
+                placeholder={pictureItemsStyles.padding}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp(
-                    (props) => (props.containerStyles.paddingBottom = value),
-                    1000
-                  )
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.pictureItemsStyles.padding = e.target.value), 1000)
+                }
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Margin container</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Left</p>
+              <Input
+                type="number"
+                placeholder={containerStyles.marginLeft}
+                max={100}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginLeft = e.target.value), 1000)
+                }
+              />
+            </div>
+
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Top</p>
+              <Input
+                type="number"
+                placeholder={containerStyles.marginTop}
+                max={100}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginTop = e.target.value), 1000)
+                }
+              />
+            </div>
+
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Right</p>
+              <Input
+                type="number"
+                placeholder={containerStyles.marginRight}
+                max={100}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginRight = e.target.value), 1000)
+                }
+              />
+            </div>
+
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Bottom</p>
+              <Input
+                type="number"
+                placeholder={containerStyles.marginBottom}
+                max={100}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.marginBottom = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -362,15 +419,15 @@ export const PictureChoiceSettings = () => {
 
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Gap</p>
-              <Slider
-                defaultValue={[containerStyles.gap]}
+              <Input
+                type="number"
+                placeholder={containerStyles.gap}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.containerStyles.gap = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.containerStyles.gap = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -429,7 +486,16 @@ export const PictureChoiceItem = ({ item, index }) => {
           className="pic-container hover:cursor-pointer"
         >
           {item.itemType === ItemType.ICON ? (
-            <item.pic size={20} className="shrink-0" />
+            // <img src={item.icon} className="shrink-0 w-20 h-20" />
+            item.icon === 'check' ? (
+              <IconCheck
+                className="w-5 h-5 shrink-0"
+              />
+            ) : item.icon === 'x' ? (
+              <IconX
+              className="w-5 h-5 shrink-0"
+              />
+            ) : null
           ) : (
             <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
           )}

@@ -14,7 +14,7 @@ export const Controller = ({nameOfComponent}) => {
     if (currentNodeId) {
       selected = {
         id: currentNodeId,
-        name: state.nodes[currentNodeId].data.name,
+        name: state.nodes[currentNodeId].data.displayName,
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
@@ -24,14 +24,13 @@ export const Controller = ({nameOfComponent}) => {
     if(currentHoveredNodeId){
       hovered = {
         id: currentHoveredNodeId,
-        name: state.nodes[currentHoveredNodeId].data.name,
+        name: state.nodes[currentHoveredNodeId].data.displayName,
         settings:
           state.nodes[currentHoveredNodeId].related &&
           state.nodes[currentHoveredNodeId].related.settings,
         isDeletable: query.node(currentHoveredNodeId).isDeletable(),
       }
     }
-
     return {
       selected,
       isEnabled: state.options.enabled,
@@ -39,10 +38,10 @@ export const Controller = ({nameOfComponent}) => {
     }
   })
   return (
-    <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white'>
+    <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white z-20'>
       <span className='hover:cursor-default'>{nameOfComponent}</span>
       <span className='hover:cursor-move'><Move /></span>
-      {isHovered.isDeletable && (
+      {(isHovered?.isDeletable || isHovered?.name == "Card Content") && (
           <button
             onClick={() => {
               actions.delete(selected.id)

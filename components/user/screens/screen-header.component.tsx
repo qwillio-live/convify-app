@@ -7,11 +7,11 @@ import { setHeaderId } from '@/lib/state/flows-state/features/placeholderScreens
 import { useAppDispatch } from '@/lib/state/flows-state/hooks'
 
 export const ScreenHeader = ({scale=1}) => {
-  const { id } = useNode();
+  // const { id } = useNode();
   const dispatch = useAppDispatch();
-  React.useEffect(() => {
-    dispatch(setHeaderId(id))
-  },[id])
+  // React.useEffect(() => {
+  //   dispatch(setHeaderId(id))
+  // },[id])
   return (
     <Element
     canvas

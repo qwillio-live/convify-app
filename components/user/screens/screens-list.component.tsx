@@ -1,6 +1,7 @@
 "use client"
 
 import React, { use } from "react"
+import { AnimatePresence, Reorder } from "framer-motion"
 import {
   Clipboard,
   ClipboardCopy,
@@ -11,7 +12,7 @@ import {
   Scissors,
   Trash2,
 } from "lucide-react"
-import {AnimatePresence, Reorder} from "framer-motion";
+import lz from "lzutf8"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
@@ -19,8 +20,14 @@ import {
   deleteScreen,
   duplicateScreen,
   reorderScreens,
+  setHeaderMode,
+  setFooterMode,
   setScreens,
   setSelectedScreen,
+  setHeaderFooterMode,
+  setEditorLoad,
+  setScreenHeader,
+  setScreenFooter,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -42,34 +49,67 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
+import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { DragDrop } from "./drag-drop-screens.component"
 import { ButtonChoiceScreen } from "./screen-button-choice.component"
 import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
 
 const ScreensList = () => {
+  const screenNames = ["Button Choice", "One Choice", "One Input"]
   const screens = useAppSelector((state) => state.screen.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
     (state) => state.screen.screens[state.screen.selectedScreen]
   )
+  const screensHeader = useAppSelector((state) => state.screen.screensHeader)
+  const screensFooter = useAppSelector((state) => state.screen.screensFooter)
+  const headerMode = useAppSelector((state) => state.screen.headerMode)
+  const footerMode = useAppSelector((state) => state.screen.footerMode)
+
   const selectedScreenIndex = useAppSelector(
     (state) => state.screen.selectedScreen
   )
+  const editorLoad = useAppSelector((state) => state.screen.editorLoad)
+ const headerFooterMode = useAppSelector((state) => state.screen.headerMode || state.screen.footerMode);
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
-  const [orderScreens, setOrderScreens] = React.useState<any[]>(screens);
+  // const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
 
-  React.useEffect(() => {
-    if(screens.length >= 0) {
-      actions.deserialize(selectedScreen || emptyScreenData)
-    }
 
-  }, [actions, selectedScreen,screens])
+  // React.useEffect(() => {
+    // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+    // //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+    // console.log("DESERIALIZE CALLED: ")
+    //   actions.deserialize(editorLoad);
+    //   setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+    // }
+  // }, [editorLoad]);
+
   const handleReorder = (data) => {
-    dispatch(setScreens(data))
-  }
+    dispatch(setScreens(data));
+  };
+
+  const handleScreenClick = async (index: number) => {
+    console.log("handleScreenClick called with index:", index);
+    dispatch(setSelectedScreen(index));
+    await actions.deserialize(screens[index]);
+  };
+
+  const handleFooterScreenClick = () => {
+    // dispatch(setHeaderFooterMode(false));
+    dispatch(setFooterMode(true));
+    actions.deserialize(screensFooter);
+  };
+
+  const handleHeaderScreenClick = () => {
+    // dispatch(setHeaderFooterMode(false));
+    dispatch(setHeaderMode(true));
+    actions.deserialize(screensHeader);
+
+  };
+
   return (
     <Accordion
       type="single"
@@ -82,65 +122,104 @@ const ScreensList = () => {
           Header & Footer
         </AccordionTrigger>
         <AccordionContent className="w-full">
-          <p className="text-sm text-muted-foreground">Header</p>
-          <ScreenHeader scale={0.6} />
+          <div className="mt-4">Header</div>
+
+          <Card
+            className={cn(
+              "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+              {
+                "border-blue-500": headerMode,
+              }
+            )}
+            onClick={() => handleHeaderScreenClick()}
+          >
+            <div className="text-xs text-muted-foreground scale-[.25] relative">
+              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+              <ResolvedComponentsFromCraftState screen={screensHeader} />
+            </div>
+          </Card>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">Footer</p>
-          <ScreenFooter scale={0.6} />
+
+          <Card
+            className={cn(
+              "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+              {
+                "border-blue-500": footerMode,
+              }
+            )}
+            onClick={() => handleFooterScreenClick()}
+          >
+            <div className="text-xs text-muted-foreground scale-[.25] relative">
+              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+              <ResolvedComponentsFromCraftState screen={screensFooter} />
+            </div>
+          </Card>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
-        <AccordionTrigger className="uppercase hover:no-underline">
+        <AccordionTrigger
+          className="uppercase hover:no-underline"
+        >
           Screens
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
-
           <Reorder.Group values={screens} onReorder={handleReorder}>
-          {screens?.map((screen: any, index) => (
-            <Reorder.Item key={screen?.ROOT?.nodes[0]} id={screen?.ROOT?.nodes[0]} value={screen} className="relative">
-            <ContextMenu>
-              <ContextMenuTrigger>
-                {" "}
-                <Card
-                  className={cn(
-                    "flex h-28 w-full mt-6 flex-col items-center justify-center border p-4 hover:cursor-pointer",
-                    {
-                      "border-blue-500": selectedScreenIndex === index,
-                    }
-                  )}
-                  onClick={() => dispatch(setSelectedScreen(index))}
-                >
-                  <div className="text-sm text-muted-foreground">
-                    {screen[screen?.ROOT?.nodes[0]]?.displayName ??
-                      "New Screen"}
-                  </div>
-                </Card>
-              </ContextMenuTrigger>
-              <ContextMenuContent>
-                <ContextMenuItem
-                  className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
-                  onClick={() => dispatch(addScreen(index))}
-                >
-                  <PlusCircle size={18} />
-                  <span>Add screen</span>
-                </ContextMenuItem>
-                <ContextMenuItem className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
-                  onClick={() => dispatch(duplicateScreen(index))}
-                >
-                  <ClipboardCopy size={18} />
-                  <span>Duplicate</span>
-                </ContextMenuItem>
-                <ContextMenuItem className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
-                  onClick={() => dispatch(deleteScreen(index))}
-                >
-                  <Trash2 size={18} />
-                  <span>Delete</span>
-                </ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
-            </Reorder.Item>
-          ))}
+            {screens?.map((screen: any, index) => (
+              <Reorder.Item
+                key={screen?.ROOT?.nodes[0]}
+                id={screen?.ROOT?.nodes[0]}
+                value={screen}
+                className="relative"
+              >
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    {" "}
+                    <div className="mt-4">
+                      {screen?.ROOT?.displayName ?? "New Screen"}
+                    </div>
+                    <Card
+                      className={cn(
+                        "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        {
+                          "border-blue-500": (selectedScreenIndex === index),
+                        }
+                      )}
+                      onClick={() => handleScreenClick(index)}
+                    >
+                      <div className="text-xs text-muted-foreground scale-[.20] relative">
+                        <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+                        <ResolvedComponentsFromCraftState screen={screen} />
+                      </div>
+                    </Card>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem
+                      className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
+                      onClick={() => dispatch(addScreen(index))}
+                    >
+                      <PlusCircle size={18} />
+                      <span>Add screen</span>
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
+                      onClick={() => dispatch(duplicateScreen(index))}
+                    >
+                      <ClipboardCopy size={18} />
+                      <span>Duplicate</span>
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
+                      onClick={() => dispatch(deleteScreen(index))}
+                    >
+                      <Trash2 size={18} />
+                      <span>Delete</span>
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
+              </Reorder.Item>
+            ))}
           </Reorder.Group>
         </AccordionContent>
       </AccordionItem>

@@ -1,18 +1,41 @@
-import React from "react";
-import styled from 'styled-components';
-import { Controller } from "../settings/controller.component";
-import { cn } from "@/lib/utils";
-import {useNode} from "@/lib/craftjs"
-import { LogoBarSettings } from "./logo-bar-settings.component";
-import Image from "next/image";
-import firstLogo from "@/assets/images/first-logo.png";
-import secondLogo from "@/assets/images/second-logo.png";
-import thirdLogo from "@/assets/images/third-logo.png";
-import fourthLogo from "@/assets/images/fourth-logo.png";
-import { Element } from "@/lib/craftjs";
+import React from "react"
+import Image from "next/image"
+import firstLogo from "@/assets/images/first-logo.png"
+import fourthLogo from "@/assets/images/fourth-logo.png"
+import secondLogo from "@/assets/images/second-logo.png"
+import thirdLogo from "@/assets/images/third-logo.png"
+import styled from "styled-components"
 
+import { Element, useNode } from "@/lib/craftjs"
+import { cn } from "@/lib/utils"
 
-const LogoBarInner = styled.div<{
+import { Controller } from "../settings/controller.component"
+import { LogoBarSettings } from "./logo-bar-settings.component"
+
+export const LogoBarGen = ({
+  logoBarStyles,
+  logoBarItemStyles,
+  logoBarItems,
+  ...props
+}) => {
+  return (
+    <LogoBarInner
+      className={cn("border border-transparent")}
+      {...logoBarStyles}
+      {...props}
+    >
+      {logoBarItems.map((item, index) => (
+        <LogoBarItem
+          logoBarItemStyles={logoBarItemStyles}
+          key={`logo-bar-item-image-${item.id}`}
+          item={item}
+        />
+      ))}
+    </LogoBarInner>
+  )
+}
+
+export const LogoBarInner = styled.div<{
   marginTop: number
   marginBottom: number
   marginLeft: number
@@ -32,33 +55,29 @@ const LogoBarInner = styled.div<{
   paddingLeft: number
   paddingRight: number
 }>`
-  margin-top: ${({marginTop}) => `${marginTop}px`};
-  margin-bottom: ${({marginBottom}) => `${marginBottom}px`};
-  margin-left: ${({marginLeft}) => `${marginLeft}px`};
-  margin-right: ${({marginRight}) => `${marginRight}px`};
-  background-color: ${({background}) => background};
-  padding-top: ${({paddingTop}) => `${paddingTop}px`};
-  padding-bottom: ${({paddingBottom}) => `${paddingBottom}px`};
-  padding-left: ${({paddingLeft}) => `${paddingLeft}px`};
-  padding-right: ${({paddingRight}) => `${paddingRight}px`};
-  min-width: ${({width, fullWidth}) => fullWidth ? "100%" : `${width}px`};
+  margin-top: ${({ marginTop }) => `${marginTop}px`};
+  margin-bottom: ${({ marginBottom }) => `${marginBottom}px`};
+  margin-left: ${({ marginLeft }) => `${marginLeft}px`};
+  margin-right: ${({ marginRight }) => `${marginRight}px`};
+  background-color: ${({ background }) => background};
+  padding-top: ${({ paddingTop }) => `${paddingTop}px`};
+  padding-bottom: ${({ paddingBottom }) => `${paddingBottom}px`};
+  padding-left: ${({ paddingLeft }) => `${paddingLeft}px`};
+  padding-right: ${({ paddingRight }) => `${paddingRight}px`};
+  min-width: ${({ width, fullWidth }) => (fullWidth ? "100%" : `${width}px`)};
   min-height: auto;
-  display: ${({flex}) => flex};
-  flex-direction: ${({flexDirection}) => flexDirection};
-  justify-content: ${({justifyContent}) => justifyContent};
-  align-items: ${({alignItems}) => alignItems};
-  gap: ${({gap}) => `${gap}px`};
-  border-radius: ${({radius}) => `${radius}px`};
+  display: ${({ flex }) => flex};
+  flex-direction: ${({ flexDirection }) => flexDirection};
+  justify-content: ${({ justifyContent }) => justifyContent};
+  align-items: ${({ alignItems }) => alignItems};
+  gap: ${({ gap }) => `${gap}px`};
+  border-radius: ${({ radius }) => `${radius}px`};
   overflow: visible;
   position: relative;
   flex-wrap: wrap;
-`;
+`
 
-
-export const LogoBarItem = ({
-  logoBarItemStyles,
-  item,
-}) => {
+export const LogoBarItem = ({ logoBarItemStyles, item }) => {
   return (
     <div
       style={{ width: `${logoBarItemStyles.width}px` }}
@@ -72,8 +91,8 @@ export const LogoBarItem = ({
         alt={item.alt}
       />
     </div>
-  );
-};
+  )
+}
 
 LogoBarItem.craft = {
   related: {
@@ -82,8 +101,8 @@ LogoBarItem.craft = {
 }
 
 export const LogoBar = ({
-logoBarStyles,
-logoBarItemStyles,
+  logoBarStyles,
+  logoBarItemStyles,
   logoBarItems,
   ...props
 }) => {
@@ -95,58 +114,46 @@ logoBarItemStyles,
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
-  }));
+  }))
 
   return (
-    <LogoBarInner
-      ref={(ref: any) => connect(drag(ref))}
-      className={cn("border border-transparent", (isHovered && "border border-blue-400 border-dotted"))}
-      {...logoBarStyles}
-      {...props}
-    >
+    <div ref={(ref: any) => connect(drag(ref))}>
       {isHovered && <Controller nameOfComponent={"Logo Bar"} />}
-        {logoBarItems.map((item, index) => (
-          <Element
-          is={LogoBarItem}
-          id={`logo-bar-item-image-${item.id}`}
-          logoBarItemStyles={logoBarItemStyles}
-          key={`logo-bar-item-image-${item.id}`}
-          item={item}
-          />
-          // <LogoBarItem
-          // logoBarItemStyles={logoBarItemStyles}
-          // key={`logo-bar-item-image-${item.id}`}
-          // item={item}
-          // />
-        ))}
-    </LogoBarInner>
+
+      <LogoBarGen
+        logoBarItemStyles={logoBarItemStyles}
+        logoBarItems={logoBarItems}
+        logoBarStyles={logoBarStyles}
+        {...props}
+      />
+    </div>
   )
 }
 
 export type LogoBarProps = {
-logoBarStyles:{
-  marginTop: number
-  marginBottom: number
-  marginLeft: number
-  marginRight: number
-  paddingTop: number
-  paddingBottom: number
-  paddingLeft: number
-  paddingRight: number
-  background: string
-  width: number
-  fullWidth: boolean
-  height: number
-  flex: string
-  flexDirection: "row" | "column"
-  justifyContent: "space-between" | "center" | "flex-start" | "flex-end"
-  alignItems: "center" | "flex-start" | "flex-end"
-  gap: number
-  radius: number
-},
-logoBarItemStyles:{
-  width: number
-},
+  logoBarStyles: {
+    marginTop: number
+    marginBottom: number
+    marginLeft: number
+    marginRight: number
+    paddingTop: number
+    paddingBottom: number
+    paddingLeft: number
+    paddingRight: number
+    background: string
+    width: number
+    fullWidth: boolean
+    height: number
+    flex: string
+    flexDirection: "row" | "column"
+    justifyContent: "space-between" | "center" | "flex-start" | "flex-end"
+    alignItems: "center" | "flex-start" | "flex-end"
+    gap: number
+    radius: number
+  }
+  logoBarItemStyles: {
+    width: number
+  }
   logoBarItems: {
     id: string | number
     src: string | null
@@ -155,29 +162,29 @@ logoBarItemStyles:{
 }
 
 export const LogoBarDefaultProps: LogoBarProps = {
-logoBarStyles:{
-  marginTop: 0,
-  marginBottom: 0,
-  marginLeft: 0,
-  marginRight: 0,
-  paddingTop: 20,
-  paddingBottom: 20,
-  paddingLeft: 0,
-  paddingRight: 0,
-  background: "#ffffff",
-  width: 800,
-  fullWidth: false,
-  height: 300,
-  flex: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: 70,
-  radius: 0,
-},
-logoBarItemStyles:{
-  width: 100,
-},
+  logoBarStyles: {
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 0,
+    paddingRight: 0,
+    background: "#ffffff",
+    width: 800,
+    fullWidth: false,
+    height: 300,
+    flex: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 70,
+    radius: 0,
+  },
+  logoBarItemStyles: {
+    width: 100,
+  },
   logoBarItems: [
     {
       id: 1,

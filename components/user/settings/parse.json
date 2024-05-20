@@ -65,7 +65,7 @@
 			"color": "#4050ff",
 			"maxWidth": "366",
 			"fullWidth": false,
-      "progressvalue" : "20"
+			"progressvalue": 20
 		},
 		"displayName": "ProgressBar",
 		"custom": {
@@ -152,7 +152,7 @@
 					"optionLogo": null,
 					"optionLabel": "Google",
 					"optionValue": "option1",
-					"optionSelected": false
+					"optionSelected": true
 				},
 				{
 					"id": "2",

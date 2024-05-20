@@ -51,6 +51,112 @@ const MultipleChoiceItem = styled.div<{
   }
 `
 
+export const MultipleChoiceGen = ({
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  background,
+  radius,
+  width,
+  multipleChoices,
+  multipleChoiceStyles,
+  singleChoice,
+  lastSelectedChoice,
+  ...props
+}) => {
+  const [singleChoiceState, setSingleChoiceState] = React.useState(singleChoice);
+  const [lastSelectedChoiceState, setLastSelectedChoiceState] = React.useState(lastSelectedChoice);
+  const [multipleChoicesState, setMultipleChoicesState] = React.useState(multipleChoices);
+
+  const handleSelected = (index) => {
+    if (singleChoiceState && lastSelectedChoiceState !== null) {
+      setMultipleChoicesState((prev) => {
+        return prev.map((item, i) => {
+          if (i === lastSelectedChoiceState) {
+            return {
+              ...item,
+              optionSelected: !item.optionSelected,
+            };
+          }
+          return item;
+        });
+      });
+
+      setMultipleChoicesState((prev) => {
+        return prev.map((item, i) => {
+          if (i === index) {
+            return {
+              ...item,
+              optionSelected: !item.optionSelected,
+            };
+          }
+          return item;
+        });
+      });
+      setLastSelectedChoiceState(index);
+
+    } else if (singleChoiceState && lastSelectedChoiceState === null) {
+      setLastSelectedChoiceState(index);
+      setMultipleChoicesState((prev) => {
+        return prev.map((item, i) => {
+          if (i === index) {
+            return {
+              ...item,
+              optionSelected: !item.optionSelected,
+            };
+          }
+          return item;
+        });
+      });
+    } else {
+      setMultipleChoicesState((prev) => {
+        return prev.map((item, i) => {
+          if (i === index) {
+            return {
+              ...item,
+              optionSelected: !item.optionSelected,
+            };
+          }
+          return item;
+        });
+      });
+    }
+  }; // <-- This brace is added to close handleSelected function
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        backgroundColor: background,
+        borderRadius: `${radius}px`,
+        marginTop: `${marginTop}px`,
+        marginBottom: `${marginBottom}px`,
+        marginLeft: `${marginLeft}px`,
+        marginRight: `${marginRight}px`,
+        width: `${width}px`,
+      }}
+    >
+      <div className="flex flex-col gap-2">
+        {multipleChoicesState.map((option, index) => (
+          <MultipleChoiceItem
+            key={index}
+            onClick={() => handleSelected(index)}
+            {...multipleChoiceStyles}
+            selected={option.optionSelected}
+          >
+            <input type="radio" className="hidden" />
+            {option.optionLogo}
+            <label className="hover:cursor-pointer">{option.optionLabel}</label>
+          </MultipleChoiceItem>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const MultipleChoiceItemInner = ({
   optionLogo,
   optionLabel,

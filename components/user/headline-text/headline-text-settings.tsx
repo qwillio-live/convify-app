@@ -83,14 +83,15 @@ export const HeadlineTextSettings = () => {
             </div>
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Size</p>
-              <Slider
-                defaultValue={[33]}
+              <Input
+                type="number"
+                placeholder={fontSize}
                 max={100}
-                min={12}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.fontSize = value), 1000)
-                }}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.fontSize = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
@@ -148,51 +149,54 @@ export const HeadlineTextSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginLeft = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.marginLeft = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginTop}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginTop = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginRight}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginRight = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginRight = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginBottom}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginBottom = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
