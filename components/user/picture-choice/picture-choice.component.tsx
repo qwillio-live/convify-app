@@ -1,5 +1,5 @@
 import { DefaultSerializer } from "v8"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import {
   Anchor,
@@ -178,11 +178,23 @@ export const PictureChoice = ({
     isHovered: state.events.hovered,
   }))
 
+  const [editable, setEditable] = useState(false)
+  useEffect(() => {
+    if (selected) {
+      return
+    }
+
+    setEditable(false)
+  }, [selected])
+
   return (
     <>
       <PictureChoiceContainer
         ref={(ref: any) => connect(drag(ref))}
         {...containerStyles}
+        {...props}
+        onClick={() => selected && setEditable(true)}
+        className="relative"
       >
         {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
 
@@ -205,7 +217,24 @@ export const PictureChoice = ({
                 }}
               />
             )}
-            <p>{item.text}</p>
+            <ContentEditable
+              html={item?.text || ""}
+              disabled={!editable}
+              onChange={(e) =>
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].text = e.target.value.replace(
+                      /<\/?[^>]+(>|$)/g,
+                      ""
+                    )),
+                  500
+                )
+              }
+              tagName={"div"}
+              style={{
+                minWidth: "20px",
+              }}
+            />
           </PictureChoiceItem>
         ))}
       </PictureChoiceContainer>

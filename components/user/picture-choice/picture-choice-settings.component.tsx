@@ -40,7 +40,7 @@ export const PictureChoiceSettings = () => {
   }))
 
   const [uploadFile, setUploadFile] = React.useState<string | null>(null)
-  const [text, setText] = React.useState<string | null>(null)
+  const [text, setText] = React.useState<string | null>("")
   const [isPopoverOpen, setPopoverOpen] = useState(false)
   const popoverRef = React.useRef<HTMLInputElement>(null)
 
@@ -83,7 +83,7 @@ export const PictureChoiceSettings = () => {
     })
     setProp((props) => (props.pictureItems = tempArray), 1000)
     setUploadFile(null)
-    setText(null)
+    setText("")
   }
 
   return (
