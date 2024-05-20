@@ -73,6 +73,7 @@ export const UserInputGen = ({ ...props }) => {
         borderRadius={props.borderRadius}
         width={props.width}
         // {...props}
+        onFocus={() => setIsActive(true)}
         // 1.9em .6em .7em
         className={` font-semibold pt-5 px-3 pb-1 text-sm
         ring-[${props.borderColor}]
@@ -83,7 +84,6 @@ export const UserInputGen = ({ ...props }) => {
         // placeholder={props.placeholder}
         onChange={(e) => {setInputValue(e.target.value), console.log("INPUT VALUE: ", inputValue)}}
         // onFocus={() => setProp((props) => (props.borderColor = props.activeBorderColor))}
-        onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
       />
     </div>
@@ -152,6 +152,13 @@ export const UserInput = ({ ...props }) => {
       >
         {props.placeholder}
       </div>
+      {
+        true && (
+          <div className="relative top-0 left-0 pt-3 px-3 pb-1 text-sm">
+            This is a icon
+          </div>
+        )
+      }
       <UserInputSyled
         ref={inputRef}
         textColor={props.textColor}
@@ -165,7 +172,7 @@ export const UserInput = ({ ...props }) => {
         // {...props}
         onFocus={() => setProp((props) => (props.isActive = true))}
         // 1.9em .6em .7em
-        className={` font-semibold pt-5 px-3 pb-1 text-sm
+        className={` font-semibold pt-6 px-3 pb-2 text-base
       ring-[${props.borderColor}]
       focus-visible:ring-[${props.activeBorderColor}]
       ring-opacity-/50

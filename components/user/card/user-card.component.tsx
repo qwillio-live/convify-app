@@ -42,6 +42,9 @@ interface CardStyles {
 
 const CardContentInner=styled.div<CardStyles>`
   width: '100%';
+  flex-shrink: 0;
+  flex-basis: 100%;
+  min-width: 100%;
   height: ${(props) => props.height}px;
   background: ${(props) => props.background};
   color: ${(props) => props.color};
@@ -114,7 +117,30 @@ export const CardContent = ({ children, ...props }) => {
     ref={(ref: any) => connect(drag(ref))}
     className={`${isHovered ? 'border border-blue-500 border-dotted' : ''} border border-transparent relative`}>
       <CardContentGen
-      {...props}
+          fullWidth={props.fullWidth}
+          width={props.width}
+          height={props.height}
+          background={props.background}
+          color={props.color}
+          marginLeft={props.marginLeft}
+          marginTop={props.marginTop}
+          marginRight={props.marginRight}
+          marginBottom={props.marginBottom}
+          paddingLeft={props.paddingLeft}
+          paddingTop={props.paddingTop}
+          paddingRight={props.paddingRight}
+          paddingBottom={props.paddingBottom}
+          radius={props.radius}
+          flexDirection={props.flexDirection}
+          fillSpace={props.fillSpace}
+          alignItems={props.alignItems}
+          justifyContent={props.justifyContent}
+          flexWrap={props.flexWrap}
+          overflowY={props.overflowY}
+          overflowX={props.overflowX}
+          gap={props.gap}
+          border={props.border}
+          borderColor={props.borderColor}
     >
       {children}
     </CardContentGen>
@@ -164,6 +190,13 @@ CardContent.craft = {
   }
 };
 
+const CardContainer = styled.div<{
+background: string;
+}>`
+  background: ${({ background }) => background};
+  max-width: fit-content;
+  width: 100%;
+`;
 
 export const Card = ({ children, ...props }) => {
   const [hovered, setHovered] = React.useState(false)
@@ -178,14 +211,10 @@ export const Card = ({ children, ...props }) => {
   }))
 
   return (
-    <div
-      style={{
-        width: `100%`,
-        minWidth: '100%',
-        flexBasis: `100%`,
-        height: `auto`,
-      }}
-      className='card-container relative'
+
+    <CardContainer
+      background={props.background}
+      className='card-container relative shrink-0 basis-full min-w-full'
       ref={(ref: any) => connect(drag(ref))}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -197,7 +226,7 @@ export const Card = ({ children, ...props }) => {
       >
         {children}
       </Element>
-    </div>
+    </CardContainer>
   )
 }
 

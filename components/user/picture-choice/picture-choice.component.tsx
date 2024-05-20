@@ -49,7 +49,6 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import {
-  CardTop,
   Card as UserCard,
 } from "@/components/user/card/user-card.component"
 import CrossIcon from "@/assets/icons/x.svg";
@@ -98,6 +97,7 @@ const PictureChoiceContainer = styled.div<{
   border-radius: ${({ radius }) => `${radius}px`};
   align-items: ${({ align }) => align};
   display: flex; /* Corrected from flex: flex; */
+  max-width: fit-content;
   width: 100%;
   flex-direction: ${({ flexDirection }) => flexDirection};
   justify-content: ${({ justifyContent }) => justifyContent};

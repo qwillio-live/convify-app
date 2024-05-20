@@ -17,7 +17,10 @@ export default function FlowPreview() {
         return(
           <div
           key={index}
-          className="my-14 min-h-screen">
+          className="my-14 min-h-screen
+          shrink-0
+          basis-full
+          min-w-full">
           <ResolvedComponentsFromCraftState key={index} screen={screen}  />
           </div>
         )

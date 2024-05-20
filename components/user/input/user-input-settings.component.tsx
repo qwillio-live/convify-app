@@ -46,9 +46,61 @@ export const UserInputSettings = () => {
   return (
     <>
       <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-2">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">General </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <Checkbox id="required" />
+              <label
+                htmlFor="required"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
+              >
+                Required
+              </label>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <Checkbox id="floating-label" />
+              <label
+                htmlFor="floating-label"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
+              >
+                Floating label
+              </label>
+            </div>
+            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Right</p>
+              <Input
+                type="number"
+                placeholder={marginRight}
+                max={100}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginRight = e.target.value), 1000)
+                }
+              />
+            </div>
+            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Bottom</p>
+              <Input
+                type="number"
+                placeholder={marginBottom}
+                max={100}
+                min={0}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                }
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
         <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Margin </span>
+            <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
