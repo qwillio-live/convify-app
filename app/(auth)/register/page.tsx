@@ -44,7 +44,11 @@ export default function RegisterPage() {
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="mb-2 flex flex-col justify-center text-center">
             <div className="flex justify-center">
-              <Icons.logo className="size-8" />
+              <img
+                src={convifyBlue.src}
+                alt="Convify Logo"
+                className="mb-7 w-10"
+              />
             </div>
             <h1 className="mt-2 text-center text-2xl font-semibold tracking-tight">
               Get started for free

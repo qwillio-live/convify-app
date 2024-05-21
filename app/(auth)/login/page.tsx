@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { UserAuthForm } from "@/components/user-auth-form"
+import convifyBlue from "@/assets/images/convify_logo_icon.svg"
 
 export const metadata: Metadata = {
   title: "Login",
@@ -27,8 +28,10 @@ export default function LoginPage() {
         </>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="flex justify-center">
+          <img src={convifyBlue.src} alt="Convify Logo" className="w-10" />
+        </div>
         <div className="flex flex-col space-y-2 text-center">
-          <Icons.logo className="mx-auto h-6 w-6" />
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome back
           </h1>
