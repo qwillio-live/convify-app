@@ -1,10 +1,12 @@
 import { withContentlayer } from "next-contentlayer"
-
+import createNextIntlPlugin from "next-intl/plugin"
 import "./env.mjs"
+
+const withNextIntl = createNextIntlPlugin()
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
@@ -14,4 +16,4 @@ const nextConfig = {
   },
 }
 
-export default withContentlayer(nextConfig)
+export default withContentlayer(withNextIntl(nextConfig))

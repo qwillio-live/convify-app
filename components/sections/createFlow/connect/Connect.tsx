@@ -1,24 +1,38 @@
-import { useEffect, useState } from "react"
-import { DummyIntregationCardData } from "@/constant"
 import { TIntegrationCardData } from "@/types"
+import { useEffect, useState } from "react"
+import { DummyIntregationCardData } from "./collapsibleContents"
 
 // ui componnets
 import IntegrationCard from "@/components/IntegrationCard"
 import SearchBar from "@/components/SearchBar"
+import { Accordion } from "@/components/ui/accordion"
 
 const ConnectFlowComponents = () => {
   const [search, setSearch] = useState("")
-  const [filteredDatas, setFilteredData] = useState<TIntegrationCardData[]>([])
+  const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
+
+  // Define the update function
+  const updateStatus = (id, newStatus) => {
+    // Find the index of the object in the array
+    const index = filteredDatas.findIndex((item) => item.id === id)
+    if (index !== -1) {
+      // Update the status of the object
+      const updatedData = [...filteredDatas]
+      updatedData[index] = { ...updatedData[index], status: newStatus }
+      // Update the state with the new array
+      setFilteredDatas(updatedData)
+    }
+  }
 
   useEffect(() => {
     if (search === "") {
-      setFilteredData(DummyIntregationCardData)
+      setFilteredDatas(DummyIntregationCardData)
     } else if (search) {
       let filteredData = DummyIntregationCardData.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       )
 
-      setFilteredData(filteredData)
+      setFilteredDatas(filteredData)
     }
   }, [search])
 
@@ -31,12 +45,15 @@ const ConnectFlowComponents = () => {
         <SearchBar search={search} setSearch={setSearch} />
         <div className="mt-10 flex w-full flex-col">
           {filteredDatas?.length > 0 ? (
-            filteredDatas?.map((Integrationitem: TIntegrationCardData) => (
-              <IntegrationCard
-                key={Integrationitem.id}
-                Integrationitem={Integrationitem}
-              />
-            ))
+            <Accordion type="multiple">
+              {filteredDatas?.map((Integrationitem: TIntegrationCardData) => (
+                <IntegrationCard
+                  key={Integrationitem.id}
+                  Integrationitem={Integrationitem}
+                  updateStatus={updateStatus}
+                />
+              ))}
+            </Accordion>
           ) : (
             <div className="flex h-96 w-full items-center justify-center">
               <p className="text-lg font-normal text-gray-500">

@@ -13,7 +13,7 @@ import {
 import { UserTextSettings } from "../text/user-text-settings"
 import { ContainerDefaultProps, UserContainer } from "../container/user-container.component"
 import { DefaultSerializer } from "v8"
-import { CardTop } from "../card/user-card.component"
+import { CardContent as CardTop } from "../card/user-card.component"
 import { PictureChoice, PictureChoiceDefaultProps } from "../picture-choice/picture-choice.component"
 import { IconButton, IconButtonDefaultProps } from "../icon-button/user-icon-button.component"
 import { ProgressBar,ProgressBarDefaultProps } from "../progress/user-progress.component"

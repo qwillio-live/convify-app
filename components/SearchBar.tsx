@@ -1,4 +1,3 @@
-import React from "react"
 // icons
 import { Search, X } from "lucide-react"
 
@@ -12,7 +11,7 @@ interface SearchBarProps {
 
 const SearchBar = ({ search, setSearch }: SearchBarProps) => {
   return (
-    <div className="flex w-full items-center rounded-md border-[1px] border-solid border-gray-400 px-3">
+    <div className="flex w-full items-center rounded-md border-[1px] border-solid border-gray-400 px-3 bg-white">
       <Search className="h-3.5 w-3.5" />
       <div className="relative w-full">
         <Input

@@ -1,3 +1,4 @@
+import { type } from "os"
 import React from "react"
 import {
   Activity,
@@ -9,6 +10,7 @@ import {
   Mountain,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
+import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
 import {
@@ -34,8 +36,6 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
-import { type } from "os"
-import styled from "styled-components"
 
 const IconsList = {
   aperture: <Aperture />,
@@ -45,6 +45,67 @@ const IconsList = {
   disc: <Disc />,
   mountain: <Mountain />,
   arrowright: <ArrowRight />,
+}
+
+export const IconButtonGen = ({
+  disabled,
+  enableIcon,
+  size,
+  color,
+  text,
+  marginLeft = 0,
+  width: width,
+  height: height,
+  marginRight = 0,
+  marginTop = 0,
+  marginBottom = 0,
+  background,
+  backgroundHover,
+  colorHover,
+  icon,
+  paddingLeft,
+  paddingTop,
+  paddingRight,
+  paddingBottom,
+  radius,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  gap,
+  border,
+  borderColor,
+  ...props
+}) => {
+  return (
+    <StyledCustomButton
+      color={color}
+      background={background}
+      backgroundHover={backgroundHover}
+      colorHover={colorHover}
+      marginLeft={marginLeft}
+      width={width}
+      height={height}
+      marginRight={marginRight}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
+      paddingLeft={paddingLeft}
+      paddingTop={paddingTop}
+      paddingRight={paddingRight}
+      paddingBottom={paddingBottom}
+      radius={radius}
+      flexDirection={flexDirection}
+      alignItems={alignItems}
+      justifyContent={justifyContent}
+      gap={gap}
+      border={border}
+      borderColor={borderColor}
+      {...props}
+      onClick={() => console.log("Button clicked", text)}
+    >
+      <span>{text}</span>
+      {enableIcon && IconsList[icon]}
+    </StyledCustomButton>
+  )
 }
 interface StyledCustomButtonProps {
   color?: string
@@ -250,7 +311,7 @@ export const IconButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <p className="text-md text-muted-foreground flex-1">Icon</p>
                   <Select
                     defaultValue={icon}
                     onValueChange={(e) => {
@@ -325,51 +386,57 @@ export const IconButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginLeft = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.marginLeft = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginTop}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginTop = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginRight}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginRight = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.marginRight = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[0]}
+              <Input
+                type="number"
+                placeholder={marginBottom}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.marginBottom = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) => (props.marginBottom = e.target.value),
+                    1000
+                  )
+                }
               />
             </div>
           </AccordionContent>
@@ -381,51 +448,60 @@ export const IconButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
-              <Slider
-                defaultValue={[paddingLeft]}
+              <Input
+                type="number"
+                placeholder={paddingLeft}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingLeft = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.paddingLeft = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Top</p>
-              <Slider
-                defaultValue={[paddingTop]}
+              <Input
+                type="number"
+                placeholder={paddingTop}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingTop = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp((props) => (props.paddingTop = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Right</p>
-              <Slider
-                defaultValue={[paddingRight]}
+              <Input
+                type="number"
+                placeholder={paddingRight}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingRight = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) => (props.paddingRight = e.target.value),
+                    1000
+                  )
+                }
               />
             </div>
             <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Slider
-                defaultValue={[paddingBottom]}
+              <Input
+                type="number"
+                placeholder={paddingBottom}
                 max={100}
                 min={0}
-                step={1}
-                onValueChange={(value) => {
-                  setProp((props) => (props.paddingBottom = value), 1000)
-                }}
+                className="w-full"
+                onChange={(e) =>
+                  setProp(
+                    (props) => (props.paddingBottom = e.target.value),
+                    1000
+                  )
+                }
               />
             </div>
           </AccordionContent>
@@ -561,15 +637,15 @@ export const IconButtonSettings = () => {
 
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Gap</p>
-              <Slider
-                defaultValue={[gap]}
+              <Input
+                type="number"
+                placeholder={gap}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.gap = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.gap = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>
@@ -581,15 +657,15 @@ export const IconButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Border</p>
-              <Slider
-                defaultValue={[border]}
+              <Input
+                type="number"
+                placeholder={border}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.border = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.border = e.target.value), 1000)
+                }
               />
             </div>
             <div className="style-control col-span-2 flex flex-col gap-2">
@@ -604,15 +680,15 @@ export const IconButtonSettings = () => {
             </div>
             <div className="style-control col-span-2 flex w-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Radius</p>
-              <Slider
-                defaultValue={[radius]}
+              <Input
+                type="number"
+                placeholder={radius}
                 max={100}
                 min={0}
-                step={1}
                 className="w-full"
-                onValueChange={(value) => {
-                  setProp((props) => (props.radius = value), 1000)
-                }}
+                onChange={(e) =>
+                  setProp((props) => (props.radius = e.target.value), 1000)
+                }
               />
             </div>
           </AccordionContent>

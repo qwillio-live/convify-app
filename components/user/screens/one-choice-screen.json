@@ -1,1 +1,260 @@
-{"ROOT":{"type":"div","isCanvas":true,"props":{"padding":5,"background":"#ad2121","expanded":"true","className":"min-h-screen min-w-full"},"displayName":"div","custom":{},"hidden":false,"nodes":["JQr-DIeI5R"],"linkedNodes":{}},"JQr-DIeI5R":{"type":{"resolvedName":"ScreenOneChoice"},"isCanvas":false,"props":{},"displayName":"One Choice","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{"one-choice-screens":"Q9tvKDUt_x"}},"Q9tvKDUt_x":{"type":"div","isCanvas":true,"props":{"padding":5,"background":"#ad2121","className":"min-h-screen min-w-full"},"displayName":"div","custom":{},"parent":"JQr-DIeI5R","hidden":false,"nodes":["Afb77v8pKr","A9Em2IRnod","ohq030xZYZ"],"linkedNodes":{}},"Afb77v8pKr":{"type":"div","isCanvas":true,"props":{"background":"#ad2121","className":"flex min-w-full flex-col items-center justify-center gap-6 py-6","id":"button-choice-header"},"displayName":"div","custom":{},"parent":"Q9tvKDUt_x","hidden":false,"nodes":["P_fLGhZpcp","ps2yi3GZvs"],"linkedNodes":{}},"P_fLGhZpcp":{"type":{"resolvedName":"ScreenHeader"},"isCanvas":false,"props":{},"displayName":"ScreenHeader","custom":{},"parent":"Afb77v8pKr","hidden":false,"nodes":[],"linkedNodes":{}},"ps2yi3GZvs":{"type":{"resolvedName":"ProgressBar"},"isCanvas":false,"props":{},"displayName":"ProgressBar","custom":{},"parent":"Afb77v8pKr","hidden":false,"nodes":[],"linkedNodes":{}},"A9Em2IRnod":{"type":"div","isCanvas":true,"props":{"background":"#ad2121","className":"flex min-w-full flex-col items-center justify-center gap-6 py-6","id":"one-choice-content"},"displayName":"div","custom":{},"parent":"Q9tvKDUt_x","hidden":false,"nodes":["juMbk8ks4v","xtI3hG-aIz","Skj5BX--mv"],"linkedNodes":{}},"juMbk8ks4v":{"type":{"resolvedName":"UserText"},"isCanvas":false,"props":{"text":"Which marketing channels do you use?","fontSize":40,"textColor":"inherit","fontWeight":"font-bold","textAlign":"center","marginLeft":0,"marginRight":0,"marginTop":0,"marginBottom":0,"tagType":"p"},"displayName":"UserText","custom":{},"parent":"A9Em2IRnod","hidden":false,"nodes":[],"linkedNodes":{}},"xtI3hG-aIz":{"type":"div","isCanvas":true,"props":{"background":"#ad2121","className":"flex w-full max-w-md flex-col items-center justify-center gap-2 px-6","id":"one-choice-field"},"displayName":"div","custom":{},"parent":"A9Em2IRnod","hidden":false,"nodes":["_QbG37Xb8S","uM7pKJnxwZ","GB5DEcUJR3","QuuK35V3De"],"linkedNodes":{}},"_QbG37Xb8S":{"type":{"resolvedName":"Button"},"isCanvas":false,"props":{"variant":"outline","className":"flex w-full max-w-md flex-row items-center justify-start gap-2 p-6"},"displayName":"Button","custom":{},"parent":"xtI3hG-aIz","hidden":false,"nodes":["kA1HULFrGZ","J6x0Rxi9Op"],"linkedNodes":{}},"kA1HULFrGZ":{"type":{"resolvedName":"Github"},"isCanvas":false,"props":{},"displayName":"Github","custom":{},"parent":"_QbG37Xb8S","hidden":false,"nodes":[],"linkedNodes":{}},"J6x0Rxi9Op":{"type":"span","isCanvas":false,"props":{"children":"Google"},"displayName":"span","custom":{},"parent":"_QbG37Xb8S","hidden":false,"nodes":[],"linkedNodes":{}},"uM7pKJnxwZ":{"type":{"resolvedName":"Button"},"isCanvas":false,"props":{"variant":"outline","className":"flex w-full max-w-md flex-row items-center justify-start gap-2 p-6"},"displayName":"Button","custom":{},"parent":"xtI3hG-aIz","hidden":false,"nodes":["yMUOgvkKKF","FBll56zbTO"],"linkedNodes":{}},"yMUOgvkKKF":{"type":{"resolvedName":"Facebook"},"isCanvas":false,"props":{},"displayName":"Facebook","custom":{},"parent":"uM7pKJnxwZ","hidden":false,"nodes":[],"linkedNodes":{}},"FBll56zbTO":{"type":"span","isCanvas":false,"props":{"children":"Facebook"},"displayName":"span","custom":{},"parent":"uM7pKJnxwZ","hidden":false,"nodes":[],"linkedNodes":{}},"GB5DEcUJR3":{"type":{"resolvedName":"Button"},"isCanvas":false,"props":{"variant":"outline","className":"flex w-full max-w-md flex-row items-center justify-start gap-2 p-6"},"displayName":"Button","custom":{},"parent":"xtI3hG-aIz","hidden":false,"nodes":["MgK68Cd1F-","6Q9-23Khii"],"linkedNodes":{}},"MgK68Cd1F-":{"type":{"resolvedName":"Linkedin"},"isCanvas":false,"props":{},"displayName":"Linkedin","custom":{},"parent":"GB5DEcUJR3","hidden":false,"nodes":[],"linkedNodes":{}},"6Q9-23Khii":{"type":"span","isCanvas":false,"props":{"children":"Linkedin"},"displayName":"span","custom":{},"parent":"GB5DEcUJR3","hidden":false,"nodes":[],"linkedNodes":{}},"QuuK35V3De":{"type":{"resolvedName":"Button"},"isCanvas":false,"props":{"variant":"outline","className":"flex w-full max-w-md flex-row items-center justify-start gap-2 p-6"},"displayName":"Button","custom":{},"parent":"xtI3hG-aIz","hidden":false,"nodes":["F6zPvuWrWO","ZLErMf3K_T"],"linkedNodes":{}},"F6zPvuWrWO":{"type":{"resolvedName":"Globe"},"isCanvas":false,"props":{},"displayName":"Globe","custom":{},"parent":"QuuK35V3De","hidden":false,"nodes":[],"linkedNodes":{}},"ZLErMf3K_T":{"type":"span","isCanvas":false,"props":{"children":"Other"},"displayName":"span","custom":{},"parent":"QuuK35V3De","hidden":false,"nodes":[],"linkedNodes":{}},"Skj5BX--mv":{"type":"div","isCanvas":true,"props":{"background":"#ad2121","className":"flex min-w-full max-w-md flex-col items-center justify-center gap-6 px-4","id":"one-input-field"},"displayName":"div","custom":{},"parent":"A9Em2IRnod","hidden":false,"nodes":["iUhVanPd9p"],"linkedNodes":{}},"iUhVanPd9p":{"type":{"resolvedName":"Button"},"isCanvas":false,"props":{"className":"flex w-full max-w-md flex-row items-center justify-center gap-2 px-4"},"displayName":"Button","custom":{},"parent":"Skj5BX--mv","hidden":false,"nodes":["-r0h9-iAIR","zzx6yFhBk0"],"linkedNodes":{}},"-r0h9-iAIR":{"type":"span","isCanvas":false,"props":{"children":"Continue"},"displayName":"span","custom":{},"parent":"iUhVanPd9p","hidden":false,"nodes":[],"linkedNodes":{}},"zzx6yFhBk0":{"type":{"resolvedName":"ArrowRight"},"isCanvas":false,"props":{},"displayName":"ArrowRight","custom":{},"parent":"iUhVanPd9p","hidden":false,"nodes":[],"linkedNodes":{}},"ohq030xZYZ":{"type":"div","isCanvas":true,"props":{"background":"#ad2121","className":"flex min-w-full flex-col items-center justify-center gap-6 py-6","id":"button-choice-footer"},"displayName":"div","custom":{},"parent":"Q9tvKDUt_x","hidden":false,"nodes":["LBvuO3PWZv"],"linkedNodes":{}},"LBvuO3PWZv":{"type":{"resolvedName":"ScreenFooter"},"isCanvas":false,"props":{},"displayName":"ScreenFooter","custom":{},"parent":"ohq030xZYZ","hidden":false,"nodes":[],"linkedNodes":{}}}
+{
+	"ROOT": {
+		"type": "UserContainer",
+		"isCanvas": true,
+		"props": {
+			"padding": 5,
+			"background": "#ad2121",
+			"expanded": "true",
+			"className": "min-h-screen min-w-full flex flex-col items-center"
+		},
+		"displayName": "One Choice Screen",
+		"custom": {
+
+		},
+		"hidden": false,
+		"nodes": [
+			"ws9t9vvLKO",
+			"mdsAe2aBSM",
+			"HsVEwi1W0N",
+			"WyPGuBF4RD",
+			"Yj9p3YXY1L",
+			"footer-node"
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"ws9t9vvLKO": {
+		"type": {
+			"resolvedName": "Logo"
+		},
+		"isCanvas": false,
+		"props": {
+			"alt": "Logo",
+			"marginTop": 0,
+			"marginBottom": "40",
+			"marginLeft": 0,
+			"marginRight": 0,
+			"background": "inherit",
+			"radius": "none",
+			"align": "center",
+			"width": 156,
+			"height": 50,
+			"src": "/_next/static/media/convify_logo_black.0085e885.png"
+		},
+		"displayName": "Logo",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"mdsAe2aBSM": {
+		"type": {
+			"resolvedName": "ProgressBar"
+		},
+		"isCanvas": false,
+		"props": {
+			"color": "#4050ff",
+			"maxWidth": "366",
+			"fullWidth": false,
+      "progressvalue" : "20"
+		},
+		"displayName": "ProgressBar",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"HsVEwi1W0N": {
+		"type": {
+			"resolvedName": "HeadlineText"
+		},
+		"isCanvas": false,
+		"props": {
+			"text": "Which marketing channels do you use?",
+			"fontSize": 42,
+			"textColor": "inherit",
+			"fontWeight": "700",
+			"textAlign": "center",
+			"marginLeft": "58",
+			"marginRight": "58",
+			"marginTop": "40",
+			"marginBottom": "40",
+			"tagType": "h1"
+		},
+		"displayName": "HeadlineText",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"WyPGuBF4RD": {
+		"type": {
+			"resolvedName": "MultipleChoice"
+		},
+		"isCanvas": false,
+		"props": {
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"background": "#ffffff",
+			"radius": 0,
+			"width": 360,
+			"lastSelectedChoice": 0,
+			"singleChoice": false,
+			"viewWithIcon": true,
+			"choicesMade": [
+
+			],
+			"multipleChoiceStyles": {
+				"fontSize": 18,
+				"background": "#ffffff",
+				"hoverBackground": "#4050ff",
+				"radius": 8,
+				"fontWeight": "700",
+				"border": 2,
+				"borderColor": "#eaeaeb",
+				"hoverBorderColor": "#4050ff",
+				"textColor": "#000000",
+				"hoverTextColor": "#ffffff",
+				"paddingTop": 16,
+				"paddingBottom": 16,
+				"paddingLeft": 16,
+				"paddingRight": 16,
+				"gap": 8
+			},
+			"multipleChoices": [
+				{
+					"id": "1",
+					"optionLogo": null,
+					"optionLabel": "Google",
+					"optionValue": "option1",
+					"optionSelected": false
+				},
+				{
+					"id": "2",
+					"optionLogo": null,
+					"optionLabel": "Facebook",
+					"optionValue": "option2",
+					"optionSelected": false
+				},
+				{
+					"id": "3",
+					"optionLogo": null,
+					"optionLabel": "Linkedin",
+					"optionValue": "option3",
+					"optionSelected": false
+				},
+				{
+					"id": "4",
+					"optionLogo": null,
+					"optionLabel": "Other",
+					"optionValue": "option4",
+					"optionSelected": false
+				}
+			]
+		},
+		"displayName": "MultipleChoice",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"Yj9p3YXY1L": {
+		"type": {
+			"resolvedName": "IconButton"
+		},
+		"isCanvas": false,
+		"props": {
+			"disabled": false,
+			"enableIcon": true,
+			"width": "366",
+			"height": "auto",
+			"size": "small",
+			"background": "#4050ff",
+			"color": "#ffffff",
+			"backgroundHover": "#3041ff",
+			"colorHover": "#ffffff",
+			"text": "Continue",
+			"marginLeft": 0,
+			"marginTop": "40",
+			"marginRight": 0,
+			"marginBottom": "40",
+			"icon": "arrowright",
+			"paddingLeft": "16",
+			"paddingTop": "26",
+			"paddingRight": "16",
+			"paddingBottom": "26",
+			"radius": "none",
+			"flexDirection": "row",
+			"alignItems": "center",
+			"justifyContent": "center",
+			"gap": 4,
+			"border": 0,
+			"borderColor": "inherit"
+		},
+		"displayName": "IconButton",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"footer-node": {
+		"type": {
+			"resolvedName": "ScreenFooter"
+		},
+		"isCanvas": false,
+		"props": {
+
+		},
+		"displayName": "Footer",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	}
+}

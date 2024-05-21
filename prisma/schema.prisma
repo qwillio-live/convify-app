@@ -61,6 +61,8 @@ model User {
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
+  flows Flow[]
+
   @@map(name: "users")
 }
 
@@ -85,4 +87,86 @@ model Post {
   author User @relation(fields: [authorId], references: [id])
 
   @@map(name: "posts")
+}
+
+model Flow {
+  id               String   @id @default(cuid())
+  name             String
+  content          Json
+  templateSettings Json
+  steps            Json
+  isDeleted        Boolean  @default(false)
+  createdAt        DateTime @default(now()) @map(name: "created_at")
+  updatedAt        DateTime @default(now()) @map(name: "updated_at")
+  previewImage     String?
+  link             String?
+  status           String
+  numberOfSteps    Int
+  numberOfResponses Int
+  userId           String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  responses Response[]
+  visits Visit[]
+  integrations Integration[]
+
+  @@map(name: "flows")
+}
+
+model Integration {
+  id             String @id @default(cuid())
+  flowId         String
+  googleAnalyticsId String?
+  googleTagManagerId String?
+  metaPixelId    String?
+  metaPixelAccessToken String?
+  createdAt      DateTime @default(now()) @map(name: "created_at")
+  updatedAt      DateTime @default(now()) @map(name: "updated_at")
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@map(name: "integrations")
+}
+
+model Response {
+  id          String   @id @default(cuid())
+  flowId      String
+  ip          String
+  userAgent   String
+  isFinished  Boolean  @default(false)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @default(now()) @map(name: "updated_at")
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@map(name: "responses")
+}
+
+model Visit {
+  id          String   @id @default(cuid())
+  flowId      String
+  stepId      String
+  ip          String
+  userAgent   String
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@map(name: "visits")
+}
+
+model Template {
+  id             String   @id @default(cuid())
+  name           String
+  content        Json
+  templateSettings Json
+  tags           Json
+  isActive       Boolean  @default(true)
+  preview        String?
+  createdAt      DateTime @default(now()) @map(name: "created_at")
+  updatedAt      DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "templates")
 }

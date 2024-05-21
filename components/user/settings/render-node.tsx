@@ -33,8 +33,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     deletable: query.node(node.id).isDeletable(),
     parent: node.data.parent,
     props: node.data.props,
-  }))
-
+  }));
   useEffect(() => {
     if (dom && id !== "ROOT") {
       if (isHover && !isSelected) {
@@ -45,17 +44,18 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
         dom.classList.remove("component-hover")
       }
     }
-  }, [dom, isHover, isSelected])
+  }, [dom, isHover, isSelected,id]);
 
   return (
     <div
-      className={cn(
-        "relative z-10 border border-dotted border-transparent",
-        (isHover || isActive) && "border-blue-400",
-        fullWidth && "w-full"
+      className={cn('relative border z-10 border-transparent border-dotted',
+        (isHover || isActive) && (id !== 'ROOT') && 'border-blue-400',
+        fullWidth && 'w-full',
       )}
     >
-      <div>{render}</div>
+      {/* <div className='flex flex-col justify-center items-center w-full'> */}
+        {render}
+      {/* </div> */}
       {/* {(isActive || isHover) && (
         <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white'>
           <span>{name}</span>
