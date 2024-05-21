@@ -81,6 +81,7 @@ export const UserTextSettings = () => {
               <p className="text-md text-muted-foreground">Font Size</p>
               <Input
                 type="number"
+                value={fontSize}
                 placeholder={fontSize}
                 max={100}
                 min={0}
@@ -93,6 +94,7 @@ export const UserTextSettings = () => {
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Weight</p>
               <Select
+                value={fontWeight}
                 onValueChange={(e) => {
                   setProp((props) => (props.fontWeight = e), 1000)
                 }}
