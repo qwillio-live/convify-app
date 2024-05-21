@@ -71,7 +71,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </Label>
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="Email"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
@@ -90,7 +90,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <Input
               type="password"
               id="password"
-              placeholder="password"
+              placeholder="Password"
               disabled={isLoading || isGoogleLoading}
               {...register("password")}
             />
@@ -100,7 +100,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </p>
             )}
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading}>
+          <button
+            className={cn(buttonVariants())}
+            disabled={isLoading}
+            style={{ fontWeight: "600" }}
+          >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
@@ -124,13 +128,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           signIn("google")
         }}
         disabled={isLoading || isGoogleLoading}
+        style={{
+          flexDirection: "row",
+          gap: "0.5rem",
+          justifyContent: "flex-start",
+          borderColor: "black",
+        }}
       >
         {isGoogleLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           ""
         )}{" "}
-        Sign In with Google
+        <Icons.googleSignup className="h-5 w-5" />
+        <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
+          Sign In with Google
+        </span>
       </button>
     </div>
   )

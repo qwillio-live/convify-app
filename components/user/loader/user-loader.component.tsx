@@ -15,6 +15,7 @@ export const Loader = ({ ...props }) => {
   const {
     actions: { setProp },
     connectors: { connect, drag },
+    selected,
     isHovered,
   } = useNode((state) => ({
     selected: state.events.selected,
@@ -22,13 +23,13 @@ export const Loader = ({ ...props }) => {
   }))
 
   return (
-    <CustomLoader
+    <div
       ref={(ref: any) => connect(drag(ref))}
-      className="relative m-5 border border-dashed border-transparent transition-all duration-200"
-      {...props}
+      className="relative border border-dashed border-transparent transition-all duration-200"
     >
       {isHovered && <Controller nameOfComponent={"LOADER"} />}
-    </CustomLoader>
+      {<CustomLoader {...props}></CustomLoader>}
+    </div>
   )
 }
 

@@ -204,49 +204,48 @@ export const IconButton = ({
     isHovered: state.events.hovered,
   }))
   return (
-    <div ref={(ref: any) => connect(drag(ref))}>
-      <StyledCustomButton
-        color={color}
-        background={background}
-        backgroundHover={backgroundHover}
-        colorHover={colorHover}
-        marginLeft={marginLeft}
-        width={width}
-        height={height}
-        marginRight={marginRight}
-        marginTop={marginTop}
-        marginBottom={marginBottom}
-        paddingLeft={paddingLeft}
-        paddingTop={paddingTop}
-        paddingRight={paddingRight}
-        paddingBottom={paddingBottom}
-        radius={radius}
-        flexDirection={flexDirection}
-        alignItems={alignItems}
-        justifyContent={justifyContent}
-        gap={gap}
-        border={border}
-        borderColor={borderColor}
-        {...props}
-        onClick={() => console.log("Button clicked", text)}
-      >
-        {isHovered && <Controller nameOfComponent="BUTTON" />}
+    <StyledCustomButton
+      ref={(ref: any) => connect(drag(ref))}
+      color={color}
+      background={background}
+      backgroundHover={backgroundHover}
+      colorHover={colorHover}
+      marginLeft={marginLeft}
+      width={width}
+      height={height}
+      marginRight={marginRight}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
+      paddingLeft={paddingLeft}
+      paddingTop={paddingTop}
+      paddingRight={paddingRight}
+      paddingBottom={paddingBottom}
+      radius={radius}
+      flexDirection={flexDirection}
+      alignItems={alignItems}
+      justifyContent={justifyContent}
+      gap={gap}
+      border={border}
+      borderColor={borderColor}
+      {...props}
+      onClick={() => console.log("Button clicked", text)}
+    >
+      {isHovered && <Controller nameOfComponent="BUTTON" />}
 
-        <ContentEditable
-          html={text}
-          disabled={disabled}
-          onChange={(e) =>
-            setProp(
-              (props) =>
-                (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
-              500
-            )
-          }
-          tagName="span"
-        />
-        {enableIcon && IconsList[icon]}
-      </StyledCustomButton>
-    </div>
+      <ContentEditable
+        html={text}
+        disabled={disabled}
+        onChange={(e) =>
+          setProp(
+            (props) =>
+              (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
+            500
+          )
+        }
+        tagName="span"
+      />
+      {enableIcon && IconsList[icon]}
+    </StyledCustomButton>
   )
 }
 
@@ -294,7 +293,7 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Button content </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="flex items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex items-center space-x-2">
               <Checkbox
                 checked={enableIcon}
                 onCheckedChange={(e) => {
@@ -312,7 +311,7 @@ export const IconButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <p className="text-md text-muted-foreground flex-1">Icon</p>
                   <Select
                     defaultValue={icon}
                     onValueChange={(e) => {
