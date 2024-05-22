@@ -170,7 +170,7 @@ const ScreensList = () => {
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
-          <Reorder.Group values={screens} onReorder={handleReorder}>
+          <Reorder.Group values={screens || []} onReorder={handleReorder}>
             {screens?.map((screen: any, index) => (
               <Reorder.Item
                 key={screen?.ROOT?.nodes[0]}
