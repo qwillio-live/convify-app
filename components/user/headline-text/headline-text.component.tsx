@@ -135,8 +135,8 @@ export const HeadlineText = ({
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
-          // color: `${textColor}`,
-          color: `${primaryTextColor}`
+          color: `${textColor}`,
+          // color: `${primaryTextColor}`
         }}
       />
     </div>
