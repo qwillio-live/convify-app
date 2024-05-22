@@ -1,8 +1,12 @@
 import { configureStore,combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './features/sagas/rootSaga';
 import screensReducer from './features/placeholderScreensSlice';
 import themeReducer from './features/theme/globalThemeSlice';
+
+const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: 'root',
@@ -24,10 +28,11 @@ export const makeStore = () => {
             ignoredActions: ['persist/PERSIST'],
           },
         }
-      ),
+      ).concat(sagaMiddleware),
     reducer:persistedReducer,
   });
   const persistor = persistStore(store);
+  sagaMiddleware.run(rootSaga);
   return { store, persistor };
 };
 

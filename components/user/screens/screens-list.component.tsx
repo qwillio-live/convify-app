@@ -1,6 +1,6 @@
 "use client"
 
-import React, { use } from "react"
+import React, { use, useEffect } from "react"
 import { AnimatePresence, Reorder } from "framer-motion"
 import {
   Clipboard,
@@ -54,27 +54,29 @@ import { DragDrop } from "./drag-drop-screens.component"
 import { ButtonChoiceScreen } from "./screen-button-choice.component"
 import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
+import { RootState } from "@/lib/state/flows-state/store"
 
 const ScreensList = () => {
-  const screenNames = ["Button Choice", "One Choice", "One Input"]
-  const screens = useAppSelector((state) => state.screen.screens)
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
-    (state) => state.screen.screens[state.screen.selectedScreen]
+    (state) => state?.screen?.screens[state?.screen?.selectedScreen]
   )
-  const screensHeader = useAppSelector((state) => state.screen.screensHeader)
-  const screensFooter = useAppSelector((state) => state.screen.screensFooter)
-  const headerMode = useAppSelector((state) => state.screen.headerMode)
-  const footerMode = useAppSelector((state) => state.screen.footerMode)
+  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
+  const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+  const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
   const selectedScreenIndex = useAppSelector(
-    (state) => state.screen.selectedScreen
+    (state) => state?.screen?.selectedScreen
   )
-  const editorLoad = useAppSelector((state) => state.screen.editorLoad)
- const headerFooterMode = useAppSelector((state) => state.screen.headerMode || state.screen.footerMode);
+  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
+ const headerFooterMode = useAppSelector((state) => state?.screen?.headerMode || state?.screen?.footerMode);
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
+
+  const themeSettings = useAppSelector((state: RootState) => state.theme);
   // const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
 
 
@@ -91,11 +93,14 @@ const ScreensList = () => {
     dispatch(setScreens(data));
   };
 
+  useEffect(() => {
+    actions.deserialize(screens[selectedScreenIndex]);
+  },[selectedScreen])
   const handleScreenClick = async (index: number) => {
-    console.log("handleScreenClick called with index:", index);
     dispatch(setSelectedScreen(index));
     await actions.deserialize(screens[index]);
   };
+
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
@@ -107,8 +112,8 @@ const ScreensList = () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true));
     actions.deserialize(screensHeader);
-
   };
+
 
   return (
     <Accordion
@@ -248,12 +253,12 @@ function HelperInformation() {
 }
 
 function DisplayEditor() {
-  const screens = useAppSelector((state) => state.screen.screens)
+  const screens = useAppSelector((state) => state?.screen?.screens)
 
   return (
     <>
       <div>
-        {screens.map((item: any, index: any) => {
+        {screens?.map((item: any, index: any) => {
           console.log(item.libraryContent)
           const htmlContent = item.libraryContent.outerHTML
           return (

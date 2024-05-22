@@ -30,8 +30,8 @@ const initialState: GlobalThemeState = {
   text: {
     primaryFont: "--font-heading",
     secondaryFont: "--font-inter",
-    primaryColor: "black",
-    secondaryColor: "grey",
+    primaryColor: "#020817",
+    secondaryColor: "#020817",
   }
 };
 
@@ -40,12 +40,12 @@ export const themeSlice = createSlice({
   initialState,
   reducers: {
     setThemeStyles: (state,action: PayloadAction<GlobalThemeState>) => {
-      state.general = action.payload.general;
-      state.text = action.payload.text;
+      state.general = { ...action.payload.general };
+      state.text = { ...action.payload.text };
     },
-    setPartialStyles: (state,action: PayloadAction<GlobalThemeState>) => {
-      state.general = {...state.general, ...action.payload.general};
-      state.text = {...state.text, ...action.payload.text};
+    setPartialStyles: (state, action: PayloadAction<Partial<GlobalThemeState>>) => {
+      state.general = { ...state.general, ...action.payload.general };
+      state.text = { ...state.text, ...action.payload.text };
     }
   },
 });

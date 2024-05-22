@@ -24,7 +24,7 @@ import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
 import { HeadlineTextSettings } from "./headline-text-settings"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const HeadlineTextGen = ({
   text,
@@ -89,11 +89,16 @@ export const HeadlineText = ({
   }))
   const [editable, setEditable] = useState(false)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
 
   useEffect(() => {
-    setProp((props) => (props.fontFamily = primaryFont), 500)
+    setProp((props) => (props.fontFamily = primaryFont),500)
    },
   [primaryFont])
+
+  useEffect(() => {
+    setProp((props) => (props.textColor = primaryTextColor),200)
+  },[primaryTextColor])
 
   useEffect(() => {
     if (selected) {
@@ -130,7 +135,8 @@ export const HeadlineText = ({
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
-          color: `${textColor}`,
+          // color: `${textColor}`,
+          color: `${primaryTextColor}`
         }}
       />
     </div>
