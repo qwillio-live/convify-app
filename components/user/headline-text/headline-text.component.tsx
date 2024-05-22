@@ -24,6 +24,7 @@ import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
 import { HeadlineTextSettings } from "./headline-text-settings"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const HeadlineTextGen = ({
   text,
@@ -35,6 +36,7 @@ export const HeadlineTextGen = ({
   marginTop,
   marginBottom,
   textColor,
+  fontFamily,
   tagType,
   ...props
 }) => {
@@ -46,6 +48,7 @@ export const HeadlineTextGen = ({
       tagName={tagType}
       className={`font-[${fontWeight}]`}
       style={{
+        fontFamily: `var(${fontFamily})`,
         fontSize: `${fontSize}px`,
         textAlign,
         fontWeight: `${fontWeight}`,
@@ -85,6 +88,17 @@ export const HeadlineText = ({
     isHovered: state.events.hovered,
   }))
   const [editable, setEditable] = useState(false)
+  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
+
+  useEffect(() => {
+    setProp((props) => (props.fontFamily = primaryFont),500)
+   },
+  [primaryFont])
+
+  useEffect(() => {
+    setProp((props) => (props.textColor = primaryTextColor),200)
+  },[primaryTextColor])
 
   useEffect(() => {
     if (selected) {
@@ -112,8 +126,8 @@ export const HeadlineText = ({
           )
         }
         tagName={tagType}
-        className={`font-[${fontWeight}]`}
         style={{
+          fontFamily: `var(${primaryFont})`,
           fontSize: `${fontSize}px`,
           textAlign,
           fontWeight: `${fontWeight}`,
@@ -122,6 +136,7 @@ export const HeadlineText = ({
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
           color: `${textColor}`,
+          // color: `${primaryTextColor}`
         }}
       />
     </div>
@@ -131,6 +146,7 @@ export const HeadlineText = ({
 export const HeadlineTextDefaultProps = {
   text: "Headlines for your business",
   fontSize: 42,
+  fontFamily: "inherit",
   textColor: "inherit",
   fontWeight: "600",
   textAlign: "left",

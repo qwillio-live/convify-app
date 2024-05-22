@@ -24,6 +24,7 @@ import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
 import { Controller } from "../settings/controller.component"
 import { UserTextSettings } from "./user-text-settings"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const UserTextGen = ({
   text,
@@ -36,6 +37,7 @@ export const UserTextGen = ({
   marginBottom,
   textColor,
   tagType,
+  fontFamily,
   ...props }) => {
   return(
     <>
@@ -44,8 +46,8 @@ export const UserTextGen = ({
         disabled={true}
         tagName={tagType}
         onChange={(e) => {console.log(e.target.value)}}
-        className={`font-[${fontWeight}]`}
         style={{
+          fontFamily: `var(${fontFamily})`,
           fontSize: `${fontSize}px`,
           textAlign,
           fontWeight: `${fontWeight}`,
@@ -84,6 +86,11 @@ export const UserText = ({
     isHovered: state.events.hovered,
   }))
   const [editable, setEditable] = useState(false)
+  const secondaryFont = useAppSelector((state) => state.theme?.text?.secondaryFont)
+
+  useEffect(() => {
+    setProp((props) => (props.fontFamily = secondaryFont), 500)
+  },[secondaryFont])
 
   useEffect(() => {
     if (selected) {
@@ -111,8 +118,8 @@ export const UserText = ({
           )
         }
         tagName={tagType}
-        className={`font-[${fontWeight}]`}
         style={{
+          fontFamily: `var(${secondaryFont})`,
           fontSize: `${fontSize}px`,
           textAlign,
           fontWeight: `${fontWeight}`,
@@ -128,6 +135,7 @@ export const UserText = ({
 }
 
 export const TextDefaultProps = {
+  fontFamily: "inherit",
   text: "Your text here",
   fontSize: 24,
   textColor: "inherit",

@@ -16,6 +16,9 @@ import { PictureChoiceGen } from "../picture-choice/picture-choice.component"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen } from "../card/user-card.component"
+import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -40,9 +43,13 @@ interface Props {
 
 const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null => {
   const [toRender, setToRender] = useState<React.ReactElement | null>(null)
-  useEffect(() => {
+  // useEffect(() => {
 
-  }, [screen])
+  // }, [screen])
+
+  // useEffect(() => {
+  //   console.log("Screen rerendered from global theme change")
+  // },[globalTheme])
   useEffect(() => {
     try {
       // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');

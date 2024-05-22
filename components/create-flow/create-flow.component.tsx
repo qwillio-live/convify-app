@@ -67,9 +67,9 @@ const SaveButton = () => {
     query,
     query: { node },
   } = useEditor()
-  const headerId = useAppSelector((state) => state.screen.headerId)
+  const headerId = useAppSelector((state) => state?.screen?.headerId)
   //screen header id is: HeT6HrWBxJ
-  const nodeTree = node(headerId).toNodeTree()
+  const nodeTree = node(headerId || '').toNodeTree()
   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
   console.log("NODE TREE IS: ",JSON.stringify(nodeTree))
   return (
@@ -97,12 +97,12 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch();
 
-  const selectedScreen = useAppSelector((state) => state.screen.selectedScreen);
-  const startScreen = useAppSelector((state) => state.screen.screens[0])
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
+  const startScreen = useAppSelector((state) => state?.screen?.screens[0])
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
-  const editorLoad = useAppSelector((state) => state.screen.editorLoad)
-  const headerMode = useAppSelector((state) => state.screen.headerMode)
-  const editorLoadLength = useAppSelector((state) => Object.keys(state.screen.editorLoad).length);
+  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
+  const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+  const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
   const checkToReload = () => {
 
   }
@@ -180,7 +180,7 @@ export function CreateFlowComponent() {
               <Button
                 variant={"secondary"}
                 className=""
-                onClick={() => dispatch(addScreen(selectedScreen))}
+                onClick={() => dispatch(addScreen(selectedScreen || 0))}
               >
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Screen
@@ -218,7 +218,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {<SaveButton />}
+              {/* {<SaveButton />} */}
 
             </div>
           </ScrollArea>

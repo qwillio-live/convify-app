@@ -212,7 +212,7 @@ export const HeadlineTextSettings = () => {
                 type="color"
                 value={textColor}
                 onChange={(e) => {
-                  setProp((props) => (props.textColor = e.target.value), 1000)
+                  setProp((props) => (props.textColor = e.target.value))
                 }}
               />
             </div>
