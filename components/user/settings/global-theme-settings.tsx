@@ -121,7 +121,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   value={primaryFont}
                   onValueChange={(value) => {
                     dispatch(setPartialStyles({ text: { primaryFont: value } }))
-                    handleApplyTheme({text: { primaryFont: value}})
+                    // handleApplyTheme({text: { primaryFont: value}})
                   }
                   }
                 >
@@ -153,7 +153,7 @@ export const GlobalThemeSettings = (props: Props) => {
                     dispatch(
                       setPartialStyles({ text: { secondaryFont: value } })
                     )
-                    handleApplyTheme({text: { secondaryFont: value}})
+                    // handleApplyTheme({text: { secondaryFont: value}})
                   }
                   }
                 >
@@ -184,7 +184,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 onChange={(e) =>
                   {
                     dispatch(setPartialStyles({text: { primaryColor: e.target.value}}))
-                    handleApplyTheme({text: { primaryColor: e.target.value}})
+                    // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }
 
                 }
@@ -205,7 +205,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 value={secondaryTextColor}
                 onChange={(e) => {
                   dispatch(setPartialStyles({text: { secondaryColor: e.target.value}}))
-                  handleApplyTheme({text: { secondaryColor: e.target.value}})
+                  // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }
                 }
                   className=" basis-1/3"

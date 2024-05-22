@@ -129,8 +129,9 @@ export const HeadlineText = ({
         tagName={tagType}
         style={{
           fontFamily: `var(${fontFamily?.value})`,
+          // fontFamily: `var(${primaryFont})`,
           fontSize: `${fontSize.value}px`,
-          textAlign,
+          textAlign: `${textAlign.value}`,
           fontWeight: `${fontWeight.value}`,
           marginLeft: `${marginLeft.value}px`,
           marginRight: `${marginRight.value}px`,
