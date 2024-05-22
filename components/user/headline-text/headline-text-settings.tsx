@@ -90,7 +90,7 @@ export const HeadlineTextSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.fontSize = e.target.value), 1000)
+                  setProp((props) => (props.fontSize.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -98,7 +98,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Font Weight</p>
               <Select
                 onValueChange={(e) => {
-                  setProp((props) => (props.fontWeight = e), 1000)
+                  setProp((props) => (props.fontWeight.value = e), 1000)
                 }}
               >
                 <SelectTrigger className="w-full">
@@ -123,7 +123,7 @@ export const HeadlineTextSettings = () => {
               <RadioGroup
                 defaultValue="left"
                 onValueChange={(event) => {
-                  setProp((props) => (props.textAlign = event), 1000)
+                  setProp((props) => (props.textAlign.value = event), 1000)
                 }}
               >
                 <div className="flex items-center space-x-2">
@@ -156,7 +156,7 @@ export const HeadlineTextSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginLeft = e.target.value), 1000)
+                  setProp((props) => (props.marginLeft.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -169,7 +169,7 @@ export const HeadlineTextSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                  setProp((props) => (props.marginTop.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -182,7 +182,7 @@ export const HeadlineTextSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
+                  setProp((props) => (props.marginRight.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -195,7 +195,7 @@ export const HeadlineTextSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                  setProp((props) => (props.marginBottom.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -212,7 +212,7 @@ export const HeadlineTextSettings = () => {
                 type="color"
                 value={textColor}
                 onChange={(e) => {
-                  setProp((props) => (props.textColor = e.target.value))
+                  setProp((props) => (props.textColor.value = e.target.value))
                 }}
               />
             </div>

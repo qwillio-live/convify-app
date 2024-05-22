@@ -16,7 +16,7 @@ function* applyThemeAndCycleScreens(action: PayloadAction<any>) {
   for (let i = 0; i < screens.length; i++) {
     yield put(setSelectedScreen(i));
     yield put(setEditorLoad(screens[i])); // Ensure editor load is set for each screen
-    yield call(delay, 200); // Adding delay if needed to simulate the time taken for each screen update
+    yield call(delay, 500); // Adding delay if needed to simulate the time taken for each screen update
   }
 
   // Reset to the original selected screen

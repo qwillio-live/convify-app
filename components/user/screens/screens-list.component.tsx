@@ -94,11 +94,20 @@ const ScreensList = () => {
   };
 
   useEffect(() => {
-    actions.deserialize(screens[selectedScreenIndex]);
-  },[selectedScreen])
+    if (selectedScreenIndex !== undefined && screens && selectedScreenIndex >= 0 && selectedScreenIndex < screens.length) {
+      actions.deserialize(screens[selectedScreenIndex]);
+    } else {
+      console.error('selectedScreenIndex or screens is undefined, or selectedScreenIndex is out of bounds');
+    }
+  }, [selectedScreenIndex, screens]);
+
   const handleScreenClick = async (index: number) => {
-    dispatch(setSelectedScreen(index));
-    await actions.deserialize(screens[index]);
+    if (screens && screens[index]) {
+      dispatch(setSelectedScreen(index));
+      await actions.deserialize(screens[index]);
+    } else {
+      console.error('screens is undefined or index is out of bounds');
+    }
   };
 
 

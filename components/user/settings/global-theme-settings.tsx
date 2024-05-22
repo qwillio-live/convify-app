@@ -119,8 +119,10 @@ export const GlobalThemeSettings = (props: Props) => {
                 </label>
                 <Select
                   value={primaryFont}
-                  onValueChange={(value) =>
+                  onValueChange={(value) => {
                     dispatch(setPartialStyles({ text: { primaryFont: value } }))
+                    handleApplyTheme({text: { primaryFont: value}})
+                  }
                   }
                 >
                   <SelectTrigger className="basis-full self-start">
@@ -147,10 +149,12 @@ export const GlobalThemeSettings = (props: Props) => {
                 </label>
                 <Select
                   value={secondaryFont}
-                  onValueChange={(value) =>
+                  onValueChange={(value) => {
                     dispatch(
                       setPartialStyles({ text: { secondaryFont: value } })
                     )
+                    handleApplyTheme({text: { secondaryFont: value}})
+                  }
                   }
                 >
                   <SelectTrigger className="basis-full self-start">
@@ -199,8 +203,10 @@ export const GlobalThemeSettings = (props: Props) => {
                 </label>
                 <Input
                 value={secondaryTextColor}
-                onChange={(e) =>
+                onChange={(e) => {
                   dispatch(setPartialStyles({text: { secondaryColor: e.target.value}}))
+                  handleApplyTheme({text: { secondaryColor: e.target.value}})
+                  }
                 }
                   className=" basis-1/3"
                   type={"color"}

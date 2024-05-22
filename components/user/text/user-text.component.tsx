@@ -87,10 +87,14 @@ export const UserText = ({
   }))
   const [editable, setEditable] = useState(false)
   const secondaryFont = useAppSelector((state) => state.theme?.text?.secondaryFont)
+  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
+  useEffect(() => {
+    setProp((props) => (props.fontFamily = secondaryFont), 200)
+  },[secondaryFont])
 
   useEffect(() => {
-    setProp((props) => (props.fontFamily = secondaryFont), 500)
-  },[secondaryFont])
+    setProp((props) => (props.textColor = secondaryTextColor), 200)
+  },[secondaryTextColor])
 
   useEffect(() => {
     if (selected) {

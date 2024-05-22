@@ -25,6 +25,7 @@ import { Slider } from "@/components/ui/slider"
 import { Controller } from "../settings/controller.component"
 import { HeadlineTextSettings } from "./headline-text-settings"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { StyleProperty } from "../types/style.types"
 
 export const HeadlineTextGen = ({
   text,
@@ -46,18 +47,17 @@ export const HeadlineTextGen = ({
       disabled={true}
       onChange={(e) => console.log("Headline Text: ", e.target.value)}
       tagName={tagType}
-      className={`font-[${fontWeight}]`}
       style={{
-        fontFamily: `var(${fontFamily})`,
-        fontSize: `${fontSize}px`,
+        fontFamily: `var(${fontFamily?.value})`,
+        fontSize: `${fontSize.value}px`,
         textAlign,
-        fontWeight: `${fontWeight}`,
-        marginLeft: `${marginLeft}px`,
-        marginRight: `${marginRight}px`,
-        marginTop: `${marginTop}px`,
-        marginBottom: `${marginBottom}px`,
-        color: `${textColor}`,
-        lineHeight: `${fontSize}px`,
+        fontWeight: `${fontWeight.value}`,
+        marginLeft: `${marginLeft.value}px`,
+        marginRight: `${marginRight.value}px`,
+        marginTop: `${marginTop.value}px`,
+        marginBottom: `${marginBottom.value}px`,
+        color: `${textColor.value}`,
+        lineHeight: `${fontSize.value}px`,
         minWidth: "max-content",
       }}
     />
@@ -67,6 +67,7 @@ export const HeadlineTextGen = ({
 export const HeadlineText = ({
   text,
   fontSize,
+  fontFamily,
   textAlign,
   fontWeight,
   marginLeft,
@@ -92,12 +93,12 @@ export const HeadlineText = ({
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
 
   useEffect(() => {
-    setProp((props) => (props.fontFamily = primaryFont),500)
+    setProp((props) => props.fontFamily.value = primaryFont, 200);
    },
   [primaryFont])
 
   useEffect(() => {
-    setProp((props) => (props.textColor = primaryTextColor),200)
+    setProp((props) => props.textColor.value = primaryTextColor, 200)
   },[primaryTextColor])
 
   useEffect(() => {
@@ -127,15 +128,15 @@ export const HeadlineText = ({
         }
         tagName={tagType}
         style={{
-          fontFamily: `var(${primaryFont})`,
-          fontSize: `${fontSize}px`,
+          fontFamily: `var(${fontFamily?.value})`,
+          fontSize: `${fontSize.value}px`,
           textAlign,
-          fontWeight: `${fontWeight}`,
-          marginLeft: `${marginLeft}px`,
-          marginRight: `${marginRight}px`,
-          marginTop: `${marginTop}px`,
-          marginBottom: `${marginBottom}px`,
-          color: `${textColor}`,
+          fontWeight: `${fontWeight.value}`,
+          marginLeft: `${marginLeft.value}px`,
+          marginRight: `${marginRight.value}px`,
+          marginTop: `${marginTop.value}px`,
+          marginBottom: `${marginBottom.value}px`,
+          color: `${textColor.value}`,
           // color: `${primaryTextColor}`
         }}
       />
@@ -143,19 +144,34 @@ export const HeadlineText = ({
   )
 }
 
-export const HeadlineTextDefaultProps = {
-  text: "Headlines for your business",
-  fontSize: 42,
-  fontFamily: "inherit",
-  textColor: "inherit",
-  fontWeight: "600",
-  textAlign: "left",
-  marginLeft: 0,
-  marginRight: 0,
-  marginTop: 0,
-  marginBottom: 0,
-  tagType: "h1",
+interface HeadlineTextProps {
+  text: string;
+  fontSize: StyleProperty;
+  fontFamily: StyleProperty;
+  textColor: StyleProperty;
+  fontWeight: StyleProperty;
+  textAlign: StyleProperty;
+  marginLeft: StyleProperty;
+  marginRight: StyleProperty;
+  marginTop: StyleProperty;
+  marginBottom: StyleProperty;
+  tagType: string;
 }
+
+export const HeadlineTextDefaultProps: HeadlineTextProps = {
+  text: "Headlines for your business",
+  fontSize: { value: 42, isCustomized: false, globalStyled: false },
+  fontFamily: { value: "inherit", isCustomized: false, globalStyled: false },
+  textColor: { value: "inherit", isCustomized: false, globalStyled: false },
+  fontWeight: { value: "600", isCustomized: false, globalStyled: false },
+  textAlign: { value: "left", isCustomized: false, globalStyled: false },
+  marginLeft: { value: 0, isCustomized: false, globalStyled: false },
+  marginRight: { value: 0, isCustomized: false, globalStyled: false },
+  marginTop: { value: 0, isCustomized: false, globalStyled: false },
+  marginBottom: { value: 0, isCustomized: false, globalStyled: false },
+  tagType: "h1"
+};
+
 
 HeadlineText.craft = {
   props: HeadlineTextDefaultProps,
