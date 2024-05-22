@@ -16,15 +16,14 @@ export default function RegisterPage() {
   return (
     <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div
-        className="hidden h-full flex-col items-center justify-center bg-muted p-8 lg:flex"
+        className="bg-muted hidden h-full flex-col items-center justify-center p-8 lg:flex"
         style={{
           backgroundColor: "#0F172A",
         }}
       >
         <img src={signupImage.src} alt="Signup" className="h-auto max-w-full" />
-        <img src={convifyBlue.src} alt="Convify Logo" className="w-15" />
         <p
-          className="font-600 text-md text-center text-muted-foreground"
+          className="font-600 text-md text-muted-foreground text-center"
           style={{ position: "absolute", bottom: 50, color: "white" }}
         >
           © Convify
@@ -53,7 +52,7 @@ export default function RegisterPage() {
             <h1 className="mt-2 text-center text-2xl font-semibold tracking-tight">
               Get started for free
             </h1>
-            <p className="font-600 text-md mt-2 text-center text-muted-foreground">
+            <p className="font-600 text-md text-muted-foreground mt-2 text-center">
               Get started – it’s free. No credit card needed
             </p>
           </div>
