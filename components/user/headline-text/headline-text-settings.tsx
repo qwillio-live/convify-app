@@ -85,7 +85,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Font Size</p>
               <Input
                 type="number"
-                placeholder={fontSize}
+                placeholder={fontSize.value}
                 max={100}
                 min={0}
                 className="w-full"
@@ -151,7 +151,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Left</p>
               <Input
                 type="number"
-                placeholder={marginLeft}
+                placeholder={marginLeft.value}
                 max={100}
                 min={0}
                 className="w-full"
@@ -164,7 +164,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Top</p>
               <Input
                 type="number"
-                placeholder={marginTop}
+                placeholder={marginTop.value}
                 max={100}
                 min={0}
                 className="w-full"
@@ -177,7 +177,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Right</p>
               <Input
                 type="number"
-                placeholder={marginRight}
+                placeholder={marginRight.value}
                 max={100}
                 min={0}
                 className="w-full"
@@ -190,7 +190,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Bottom</p>
               <Input
                 type="number"
-                placeholder={marginBottom}
+                placeholder={marginBottom.value}
                 max={100}
                 min={0}
                 className="w-full"
@@ -210,7 +210,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Text</p>
               <Input
                 type="color"
-                value={textColor}
+                value={textColor.value}
                 onChange={(e) => {
                   setProp((props) => (props.textColor.value = e.target.value))
                 }}

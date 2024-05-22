@@ -23,8 +23,7 @@ const initialState: ScreensState = {
   screensHeader: JSON.stringify(headerScreenData),
   headerMode: false,
   footerMode: false,
-  screens: [JSON.stringify(buttonChoiceData)],
-  // , JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)
+  screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
   screensFooter: JSON.stringify(footerScreenData),
   editorLoad: JSON.stringify(buttonChoiceData),
 };

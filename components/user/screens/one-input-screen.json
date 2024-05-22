@@ -86,17 +86,54 @@
 		},
 		"isCanvas": false,
 		"props": {
-			"text": "How many employees does your company have?",
-			"fontSize": 42,
-			"textColor": "inherit",
-			"fontWeight": "700",
-			"textAlign": "center",
-			"marginLeft": "58",
-			"marginRight": "58",
-			"marginTop": "40",
-			"marginBottom": "40",
-			"tagType": "h1"
-		},
+      "text": "How many employees does your company have?",
+      "fontSize": {
+        "value": 42,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "fontFamily": {
+        "value": "--font-heading",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "textColor": {
+        "value": "inherit",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "fontWeight": {
+        "value": "700",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "textAlign": {
+        "value": "center",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginLeft": {
+        "value": 58,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginRight": {
+        "value": 58,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginTop": {
+        "value": 40,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginBottom": {
+        "value": 40,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "tagType": "h1"
+    },
 		"displayName": "HeadlineText",
 		"custom": {
 
