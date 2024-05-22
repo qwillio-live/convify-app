@@ -7,7 +7,7 @@ import { Check } from "lucide-react"
 const loaderVariants = cva("inline-flex items-center justify-center", {
   variants: {
     size: {
-      default: "h-28 w-28",
+      default: "h-32 w-32",
       small: "h-24 w-24",
     },
   },
@@ -84,7 +84,7 @@ const CustomLoader = React.forwardRef<HTMLDivElement, LoaderProps>(
             }}
           ></div>
           <div className="icon" style={iconStyles}>
-            <Check size={80} strokeWidth={size === "small" ? 0.4 : 0.7} />
+            <Check size={90} strokeWidth={size === "small" ? 0.4 : 0.55} />
           </div>
         </div>
       </Comp>

@@ -103,7 +103,10 @@ import {
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
 import { is } from "date-fns/locale"
-import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
+import {
+  LayoutContainer,
+  LayoutContainerDefaultProps,
+} from "../layout-container/layout-container.component"
 
 const MultipleChoiceOptions = [
   {
@@ -133,25 +136,153 @@ const ListOptions = [
     id: "1",
     text: "User Friendly",
     subText: "Saves time and frustation",
-    icon: <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.566 1.017a.486.486 0 0 1 .868 0l1.009 2.034a.483.483 0 0 0 .363.262l2.264.327a.481.481 0 0 1 .389.323.47.47 0 0 1-.121.487L14.7 6.044a.473.473 0 0 0-.138.419l.388 2.247a.474.474 0 0 1-.194.465.487.487 0 0 1-.509.035l-2.021-1.054a.482.482 0 0 0-.452 0L9.758 9.21a.487.487 0 0 1-.509-.035.474.474 0 0 1-.194-.465l.388-2.247a.473.473 0 0 0-.138-.419L7.662 4.45a.47.47 0 0 1-.121-.487.481.481 0 0 1 .389-.323l2.264-.327a.483.483 0 0 0 .363-.262ZM6.322 10.1l-.863-.45a.49.49 0 0 0-.453 0L2.991 10.7a.491.491 0 0 1-.51-.034.474.474 0 0 1-.193-.466l.387-2.246a.471.471 0 0 0-.137-.419L.894 5.944a.472.472 0 0 1-.12-.487.481.481 0 0 1 .389-.323l2.263-.327a.483.483 0 0 0 .364-.262L4.8 2.511a.484.484 0 0 1 .434-.267M17.678 10.1l.863-.451a.49.49 0 0 1 .453 0l2.015 1.051a.491.491 0 0 0 .51-.034.474.474 0 0 0 .193-.466l-.387-2.246a.471.471 0 0 1 .137-.419l1.644-1.595a.472.472 0 0 0 .12-.487.481.481 0 0 0-.389-.323l-2.263-.327a.483.483 0 0 1-.364-.262l-1.01-2.03a.484.484 0 0 0-.434-.267M17.027 23.243a6.678 6.678 0 0 0-10.052 0" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:'1.5px'}}/><circle cx="12" cy="15.336" r="4.125" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:"1.5px"}}/></svg>,
+    icon: (
+      <svg
+        className="h-6 w-6"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M11.566 1.017a.486.486 0 0 1 .868 0l1.009 2.034a.483.483 0 0 0 .363.262l2.264.327a.481.481 0 0 1 .389.323.47.47 0 0 1-.121.487L14.7 6.044a.473.473 0 0 0-.138.419l.388 2.247a.474.474 0 0 1-.194.465.487.487 0 0 1-.509.035l-2.021-1.054a.482.482 0 0 0-.452 0L9.758 9.21a.487.487 0 0 1-.509-.035.474.474 0 0 1-.194-.465l.388-2.247a.473.473 0 0 0-.138-.419L7.662 4.45a.47.47 0 0 1-.121-.487.481.481 0 0 1 .389-.323l2.264-.327a.483.483 0 0 0 .363-.262ZM6.322 10.1l-.863-.45a.49.49 0 0 0-.453 0L2.991 10.7a.491.491 0 0 1-.51-.034.474.474 0 0 1-.193-.466l.387-2.246a.471.471 0 0 0-.137-.419L.894 5.944a.472.472 0 0 1-.12-.487.481.481 0 0 1 .389-.323l2.263-.327a.483.483 0 0 0 .364-.262L4.8 2.511a.484.484 0 0 1 .434-.267M17.678 10.1l.863-.451a.49.49 0 0 1 .453 0l2.015 1.051a.491.491 0 0 0 .51-.034.474.474 0 0 0 .193-.466l-.387-2.246a.471.471 0 0 1 .137-.419l1.644-1.595a.472.472 0 0 0 .12-.487.481.481 0 0 0-.389-.323l-2.263-.327a.483.483 0 0 1-.364-.262l-1.01-2.03a.484.484 0 0 0-.434-.267M17.027 23.243a6.678 6.678 0 0 0-10.052 0"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+        <circle
+          cx="12"
+          cy="15.336"
+          r="4.125"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+      </svg>
+    ),
   },
   {
     id: "2",
     text: "Seamless and elegant",
     subText: "It's fun to work with",
-    icon: <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.621 17.879c1.589-1.9.1-4.338 1.513-5.981a2.759 2.759 0 1 1 4.179 3.6 6.5 6.5 0 0 1-5.692 2.381Z" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:"1.5px"}}/><path d="m16.6 12.291 6.231-8.253A2.038 2.038 0 1 0 19.377 1.9l-4.53 9.116M7.557 17.07c-5.3-1.343-3.222-4.116-5.557-4.116-3.036 0-.088 6.968 4.892 9.555a7.459 7.459 0 0 0 8.389-1.435l.081-.082" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:'1.5px'}}/></svg>,
+    icon: (
+      <svg
+        className="h-6 w-6"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M10.621 17.879c1.589-1.9.1-4.338 1.513-5.981a2.759 2.759 0 1 1 4.179 3.6 6.5 6.5 0 0 1-5.692 2.381Z"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+        <path
+          d="m16.6 12.291 6.231-8.253A2.038 2.038 0 1 0 19.377 1.9l-4.53 9.116M7.557 17.07c-5.3-1.343-3.222-4.116-5.557-4.116-3.036 0-.088 6.968 4.892 9.555a7.459 7.459 0 0 0 8.389-1.435l.081-.082"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+      </svg>
+    ),
   },
   {
     id: "3",
-    text:"Secure and private",
+    text: "Secure and private",
     subText: "Your data is protected",
-    icon: <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.25 3.923v7.614A11.907 11.907 0 0 0 9.882 22.65l1.041.4a3 3 0 0 0 2.154 0l1.041-.4a11.907 11.907 0 0 0 7.632-11.113V3.923a1.487 1.487 0 0 0-.868-1.362A21.7 21.7 0 0 0 12 .75a21.7 21.7 0 0 0-8.882 1.811 1.487 1.487 0 0 0-.868 1.362Z" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:'1.5px'}}/><path d="M17.2 11.25a5.25 5.25 0 1 1-5.2-6" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:'1.5px'}}/><path d="m17.25 6.562-4.786 4.786a.657.657 0 0 1-.928 0l-1.5-1.505" style={{"fill":'none',"stroke":'currentColor',strokeLinecap:'round',strokeLinejoin:'round',strokeWidth:'1.5px'}}/></svg>,
+    icon: (
+      <svg
+        className="h-6 w-6"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M2.25 3.923v7.614A11.907 11.907 0 0 0 9.882 22.65l1.041.4a3 3 0 0 0 2.154 0l1.041-.4a11.907 11.907 0 0 0 7.632-11.113V3.923a1.487 1.487 0 0 0-.868-1.362A21.7 21.7 0 0 0 12 .75a21.7 21.7 0 0 0-8.882 1.811 1.487 1.487 0 0 0-.868 1.362Z"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+        <path
+          d="M17.2 11.25a5.25 5.25 0 1 1-5.2-6"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+        <path
+          d="m17.25 6.562-4.786 4.786a.657.657 0 0 1-.928 0l-1.5-1.505"
+          style={{
+            fill: "none",
+            stroke: "currentColor",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "1.5px",
+          }}
+        />
+      </svg>
+    ),
   },
   {
     id: "4",
     text: "Anayltics and tracking",
     subText: "Understand your user's behavior",
-    icon: <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256"><path fill="none" d="M0 0h256v256H0z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="M224 208H32V48"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="m208 64-80 80-32-32-64 64"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="M208 104V64h-40"/></svg>,
+    icon: (
+      <svg
+        className="h-6 w-6"
+        xmlns="http://www.w3.org/2000/svg"
+        width="192"
+        height="192"
+        fill="currentColor"
+        viewBox="0 0 256 256"
+      >
+        <path fill="none" d="M0 0h256v256H0z" />
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+          d="M224 208H32V48"
+        />
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+          d="m208 64-80 80-32-32-64 64"
+        />
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="16"
+          d="M208 104V64h-40"
+        />
+      </svg>
+    ),
   },
 ]
 function HelperInformation() {
@@ -177,38 +308,43 @@ function HelperInformation() {
   )
 }
 
-
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
   return (
     <>
-    <div
-    onMouseOver={() => setOpenCard(true)}
-    onMouseLeave={() => setOpenCard(false)}
-    onMouseDown={() => setOpenCard(!openCard)}
-    className="hover:cursor-move flex flex-row items-center text-lg w-full justify-between"><span className="flex flex-row items-center text-sm gap-2">{icon} {title}</span> <GripVertical className="shrink-0 right-4" /></div>
-    {openCard && (
-    <HoverCard
-      openDelay={0}
-    >
-      <HoverCardTrigger
-      asChild={false}
-      className="w-full">
-      </HoverCardTrigger>
-      <HoverCardContent
-      className="flex flex-row justify-center items-center"
-      forceMount={true}
-      avoidCollisions side="left" sideOffset={18}>
-        {children}
-      </HoverCardContent>
-    </HoverCard>
-    )}
+      <div
+        onMouseOver={() => setOpenCard(true)}
+        onMouseLeave={() => setOpenCard(false)}
+        onMouseDown={() => setOpenCard(!openCard)}
+        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-move"
+      >
+        <span className="flex flex-row items-center gap-2 text-sm">
+          {icon} {title}
+        </span>{" "}
+        <GripVertical className="right-4 shrink-0" />
+      </div>
+      {openCard && (
+        <HoverCard openDelay={0}>
+          <HoverCardTrigger
+            asChild={false}
+            className="w-full"
+          ></HoverCardTrigger>
+          <HoverCardContent
+            className="flex flex-row items-center justify-center"
+            forceMount={true}
+            avoidCollisions
+            side="left"
+            sideOffset={18}
+          >
+            {children}
+          </HoverCardContent>
+        </HoverCard>
+      )}
     </>
   )
 }
 
 export const UserToolbox = () => {
-
   const { connectors } = useEditor()
 
   return (
@@ -240,10 +376,10 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Headline"
-                    icon={<Type className="mr-2 w-3 h-3" />}
+                    icon={<Type className="mr-2 h-3 w-3" />}
                   >
-                    <div className="flex w-fit flex-row gap-2 justify-center items-center p-4 border">
-                      <h1 className="font-semibold text-lg">
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
+                      <h1 className="text-lg font-semibold">
                         Headline for your business
                       </h1>
                     </div>
@@ -261,11 +397,11 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Text"
-                    icon={<Pencil className="mr-2 w-3 h-3" />}
+                    icon={<Pencil className="mr-2 h-3 w-3" />}
                   >
-                    <div className="flex w-fit flex-row gap-2 justify-center items-center p-4 border">
-                      <h1 className="font-semibold text-lg">
-                      A good description of your cause
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
+                      <h1 className="text-lg font-semibold">
+                        A good description of your cause
                       </h1>
                     </div>
                   </HoverCardComponent>
@@ -290,14 +426,14 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Input field"
-                    icon={<TextCursorInput className="mr-2 w-3 h-3" />}
+                    icon={<TextCursorInput className="mr-2 h-3 w-3" />}
                   >
-                      <Input
-                        placeholder="Placeholder"
-                        className="ring-offset-0 focus-visible:ring-blue-600 focus-visible:ring-offset-0"
-                      />
+                    <Input
+                      placeholder="Placeholder"
+                      className="ring-offset-0 focus-visible:ring-blue-600 focus-visible:ring-offset-0"
+                    />
                   </HoverCardComponent>
                 </div>
 
@@ -313,57 +449,57 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                      <HoverCardComponent
+                  <HoverCardComponent
                     title="Picture Choice"
-                    icon={<ImagePlus className="mr-2 w-3 h-3" />}
+                    icon={<ImagePlus className="mr-2 h-3 w-3" />}
                   >
-                      <div className="grid grid-cols-2 gap-2">
-                        <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover: bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
+                    <div className="grid grid-cols-2 gap-2">
+                      <div
+                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                                      border-2 border-[#eaeaeb]
+                                    bg-white p-4 text-lg
+                                    font-bold hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
                                     hover:text-white
                         "
-                        >
-                          <Target className="h-10 w-10" />
-                          Target
-                        </div>
-                        <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover: bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
-                                    hover:text-white"
-                        >
-                          <Rocket className="h-10 w-10" />
-                          Launch
-                        </div>
-                        <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover: bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
-                                    hover:text-white"
-                        >
-                          <HeartHandshake className="h-10 w-10" />
-                          Agree
-                        </div>
-                        <div
-                          className="flex flex-col gap-4 p-4 items-center justify-center text-lg
-                                      hover: bg-white
-                                    hover:bg-[#4050ff] rounded-[8px] border-2
-                                    border-[#eaeaeb] hover:border-[#4050ff]
-                                      font-bold
-                                    hover:text-white"
-                        >
-                          <Trophy className="h-10 w-10" />
-                          Achieve
-                        </div>
+                      >
+                        <Target className="h-10 w-10" />
+                        Target
                       </div>
+                      <div
+                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                                      border-2 border-[#eaeaeb]
+                                    bg-white p-4 text-lg
+                                    font-bold hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
+                                    hover:text-white"
+                      >
+                        <Rocket className="h-10 w-10" />
+                        Launch
+                      </div>
+                      <div
+                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                                      border-2 border-[#eaeaeb]
+                                    bg-white p-4 text-lg
+                                    font-bold hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
+                                    hover:text-white"
+                      >
+                        <HeartHandshake className="h-10 w-10" />
+                        Agree
+                      </div>
+                      <div
+                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                                      border-2 border-[#eaeaeb]
+                                    bg-white p-4 text-lg
+                                    font-bold hover:border-[#4050ff]
+                                      hover:bg-[#4050ff]
+                                    hover:text-white"
+                      >
+                        <Trophy className="h-10 w-10" />
+                        Achieve
+                      </div>
+                    </div>
                   </HoverCardComponent>
                 </div>
 
@@ -379,28 +515,28 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Multiple Choice"
-                    icon={<Copy className="mr-2 w-3 h-3" />}
+                    icon={<Copy className="mr-2 h-3 w-3" />}
                   >
-                      <div className="flex flex-col gap-2 w-full">
-                        {MultipleChoiceOptions.map((option, index) => (
-                          <div
-                            key={index}
-                            className="
-                      text-lg
-                      hover: bg-white
-                      hover:bg-[#4050ff] rounded-[8px] border-2
-                      border-[#eaeaeb] hover:border-[#4050ff]
-                        font-bold
-                      hover:text-white option flex flex-row p-4 gap-2 items-center"
-                          >
-                            <input type="radio" className="hidden" />
-                            {/* {option.icon} */}
-                            <label>{option.text}</label>
-                          </div>
-                        ))}
-                      </div>
+                    <div className="flex w-full flex-col gap-2">
+                      {MultipleChoiceOptions.map((option, index) => (
+                        <div
+                          key={index}
+                          className="
+                      hover:
+                      option flex
+                      flex-row items-center gap-2
+                      rounded-[8px] border-2
+                        border-[#eaeaeb]
+                      bg-white p-4 text-lg font-bold hover:border-[#4050ff] hover:bg-[#4050ff] hover:text-white"
+                        >
+                          <input type="radio" className="hidden" />
+                          {/* {option.icon} */}
+                          <label>{option.text}</label>
+                        </div>
+                      ))}
+                    </div>
                   </HoverCardComponent>
                 </div>
               </AccordionContent>
@@ -426,14 +562,14 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Button"
-                    icon={<Navigation className="mr-2 w-3 h-3" />}
+                    icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
-                      <Button className="w-full bg-[#4050ff] text-white hover:bg-[#3041ff] px-4 py-6">
-                        Get quote
-                        <ArrowRight className="ml-2" />
-                      </Button>
+                    <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
+                      Get quote
+                      <ArrowRight className="ml-2" />
+                    </Button>
                   </HoverCardComponent>
                 </div>
               </AccordionContent>
@@ -444,24 +580,23 @@ export const UserToolbox = () => {
                 Display
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
-
-              <div
+                <div
                   className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     //@ts-ignore
-                    connectors.create(ref, <Card {...CardContentDefaultProps} />)
+                    connectors.create(
+                      ref,
+                      <Card {...CardContentDefaultProps} />
+                    )
                   }
                   data-cy="toolbox-layout-container"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Container"
-                    icon={<Box className="mr-2 w-3 h-3" />}
+                    icon={<Box className="mr-2 h-3 w-3" />}
                   >
-                      <Box
-                        width={120}
-                        height={42}
-                      />
+                    <Box width={120} height={42} />
                   </HoverCardComponent>
                 </div>
 
@@ -474,16 +609,16 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Logo"
-                    icon={<Dice2 className="mr-2 w-3 h-3" />}
+                    icon={<Dice2 className="mr-2 h-3 w-3" />}
                   >
-                      <Image
-                        src={ConvifyLogo.src}
-                        alt="Logo"
-                        width={120}
-                        height={42}
-                      />
+                    <Image
+                      src={ConvifyLogo.src}
+                      alt="Logo"
+                      width={120}
+                      height={42}
+                    />
                   </HoverCardComponent>
                 </div>
 
@@ -496,36 +631,36 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Logo Bar"
-                    icon={<Columns className="mr-2 w-3 h-3" />}
+                    icon={<Columns className="mr-2 h-3 w-3" />}
                   >
-              <div className="flex flex-row justify-between items-center p-2 border w-[366px]">
-                        <Image
-                          src={FirstLogo.src}
-                          alt="Logo"
-                          width={42}
-                          height={22}
-                        />
-                        <Image
-                          src={SecondLogo.src}
-                          alt="Logo"
-                          width={42}
-                          height={22}
-                        />
-                        <Image
-                          src={ThirdLogo.src}
-                          alt="Logo"
-                          width={42}
-                          height={22}
-                        />
-                        <Image
-                          src={FourthLogo.src}
-                          alt="Logo"
-                          width={42}
-                          height={22}
-                        />
-                      </div>
+                    <div className="flex w-[366px] flex-row items-center justify-between border p-2">
+                      <Image
+                        src={FirstLogo.src}
+                        alt="Logo"
+                        width={42}
+                        height={22}
+                      />
+                      <Image
+                        src={SecondLogo.src}
+                        alt="Logo"
+                        width={42}
+                        height={22}
+                      />
+                      <Image
+                        src={ThirdLogo.src}
+                        alt="Logo"
+                        width={42}
+                        height={22}
+                      />
+                      <Image
+                        src={FourthLogo.src}
+                        alt="Logo"
+                        width={42}
+                        height={22}
+                      />
+                    </div>
                   </HoverCardComponent>
                 </div>
 
@@ -541,18 +676,56 @@ export const UserToolbox = () => {
                   }
                   data-cy="toolbox-text"
                 >
-                                    <HoverCardComponent
+                  <HoverCardComponent
                     title="Progress"
-                    icon={<CircleSlashed className="mr-2 w-3 h-3" />}
+                    icon={<CircleSlashed className="mr-2 h-3 w-3" />}
                   >
-                      <div className="flex flex-row justify-between items-center p-4 border w-[360px]">
-                        <CustomProgressBar
-                          value={50}
-                          className="h-1 max-w-[366px]"
-                          indicatorColor={"#4050ff"}
-                        />
-                      </div>
+                    <div className="flex w-[360px] flex-row items-center justify-between border p-4">
+                      <CustomProgressBar
+                        value={50}
+                        className="h-1 max-w-[366px]"
+                        indicatorColor={"#4050ff"}
+                      />
+                    </div>
                   </HoverCardComponent>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="uppercase hover:no-underline">
+                Navigation
+              </AccordionTrigger>
+              <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <div
+                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(ref, <Loader {...LoaderDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button
+                        variant="link"
+                        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
+                      >
+                        <span className="flex flex-row items-center text-sm">
+                          <LoaderIcon className="mr-2 size-3" />
+                          Loader{" "}
+                        </span>{" "}
+                        <GripVertical />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent
+                      className="w-full px-10 py-6"
+                      side="left"
+                      sideOffset={18}
+                    >
+                      <CustomLoader size="small" />
+                    </HoverCardContent>
+                  </HoverCard>
                 </div>
               </AccordionContent>
             </AccordionItem>
