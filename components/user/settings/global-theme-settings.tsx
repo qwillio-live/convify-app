@@ -23,14 +23,28 @@ type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
   const dispatch = useAppDispatch()
+
+  /** GENERAL STYLES */
+  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor)
+  const defaultPrimaryColor = useAppSelector((state) => state.theme?.defaultGeneral?.primaryColor)
+  const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor)
+  const defaultSecondaryColor = useAppSelector((state) => state.theme?.defaultGeneral?.secondaryColor)
+  const backgroundColor = useAppSelector((state) => state.theme?.general?.backgroundColor)
+  const defaultBackgroundColor = useAppSelector((state) => state.theme?.defaultGeneral?.backgroundColor)
+
+  /** TEXT STYLES */
   const primaryFonts = useAppSelector((state) => state.theme?.primaryFonts)
   const secondaryFonts = useAppSelector((state) => state.theme?.secondaryFonts)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const defaultPrimaryFont = useAppSelector((state) => state.theme?.defaultText?.primaryFont)
   const secondaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
+  const defaultSecondaryFont = useAppSelector((state) => state.theme?.defaultText?.secondaryFont)
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
+  const defaultPrimaryTextColor = useAppSelector((state) => state.theme?.defaultText?.primaryColor);
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
+  const defaultSecondaryTextColor = useAppSelector((state) => state.theme?.defaultText?.secondaryColor);
 
   const handleApplyTheme = (themeStyles) => {
     dispatch({ type: 'APPLY_THEME_AND_CYCLE_SCREENS', payload: themeStyles });
@@ -53,6 +67,10 @@ export const GlobalThemeSettings = (props: Props) => {
                   Primary Color
                 </label>
                 <Input
+                  value={primaryColor || defaultPrimaryColor}
+                  onChange={(e) => {
+                    dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
+                  }}
                   className=" basis-1/3"
                   type={"color"}
                   id="primarycolor"
@@ -67,6 +85,10 @@ export const GlobalThemeSettings = (props: Props) => {
                   Secondary Color
                 </label>
                 <Input
+                value={secondaryColor || defaultSecondaryColor}
+                onChange={(e) => {
+                  dispatch(setPartialStyles({general: { secondaryColor: e.target.value}}))
+                }}
                   className=" basis-1/3"
                   type={"color"}
                   id="secondarycolor"
@@ -81,6 +103,10 @@ export const GlobalThemeSettings = (props: Props) => {
                   Background Color
                 </label>
                 <Input
+                  value={backgroundColor || defaultBackgroundColor}
+                  onChange={(e) => {
+                    dispatch(setPartialStyles({general: { backgroundColor: e.target.value}}))
+                  }}
                   className=" basis-1/3"
                   type={"color"}
                   id="backgroundcolor"
@@ -118,7 +144,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   Primary Font
                 </label>
                 <Select
-                  value={primaryFont}
+                  value={primaryFont || defaultPrimaryFont}
                   onValueChange={(value) => {
                     dispatch(setPartialStyles({ text: { primaryFont: value } }))
                     // handleApplyTheme({text: { primaryFont: value}})
@@ -148,7 +174,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   Secondary Font
                 </label>
                 <Select
-                  value={secondaryFont}
+                  value={secondaryFont || defaultSecondaryFont}
                   onValueChange={(value) => {
                     dispatch(
                       setPartialStyles({ text: { secondaryFont: value } })
@@ -180,7 +206,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   Primary Text Color
                 </label>
                 <Input
-                value={primaryTextColor}
+                value={primaryTextColor || defaultPrimaryTextColor}
                 onChange={(e) =>
                   {
                     dispatch(setPartialStyles({text: { primaryColor: e.target.value}}))
@@ -202,7 +228,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   Secondary Text Color
                 </label>
                 <Input
-                value={secondaryTextColor}
+                value={secondaryTextColor || defaultSecondaryTextColor}
                 onChange={(e) => {
                   dispatch(setPartialStyles({text: { secondaryColor: e.target.value}}))
                   // handleApplyTheme({text: { secondaryColor: e.target.value}})

@@ -1,5 +1,4 @@
-import { type } from "os"
-import React from "react"
+import React, { useEffect,useRef } from "react"
 import {
   Activity,
   Anchor,
@@ -36,6 +35,9 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
+import { IconButtonSettings } from "./user-icon-button.settings"
+import { StyleProperty } from "../types/style.types"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 const IconsList = {
   aperture: <Aperture />,
@@ -49,6 +51,7 @@ const IconsList = {
 
 export const IconButtonGen = ({
   disabled,
+  fontFamily,
   enableIcon,
   size,
   color,
@@ -74,40 +77,44 @@ export const IconButtonGen = ({
   gap,
   border,
   borderColor,
+  borderHoverColor,
   ...props
 }) => {
   return (
-    <StyledCustomButton
-      color={color}
-      background={background}
-      backgroundHover={backgroundHover}
-      colorHover={colorHover}
-      marginLeft={marginLeft}
-      width={width}
-      height={height}
-      marginRight={marginRight}
-      marginTop={marginTop}
-      marginBottom={marginBottom}
-      paddingLeft={paddingLeft}
-      paddingTop={paddingTop}
-      paddingRight={paddingRight}
-      paddingBottom={paddingBottom}
-      radius={radius}
-      flexDirection={flexDirection}
-      alignItems={alignItems}
-      justifyContent={justifyContent}
-      gap={gap}
-      border={border}
-      borderColor={borderColor}
-      {...props}
-      onClick={() => console.log("Button clicked", text)}
-    >
+<StyledCustomButton
+        fontFamily={fontFamily?.value}
+        color={color.value}
+        background={background.value}
+        backgroundHover={backgroundHover.value}
+        borderHoverColor={borderHoverColor?.value}
+        colorHover={colorHover.value}
+        radius={radius.value}
+        flexDirection={flexDirection}
+        justifyContent={justifyContent}
+        borderColor={borderColor.value}
+        border={border}
+        marginLeft={marginLeft}
+        width={width}
+        height={height}
+        marginRight={marginRight}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        paddingLeft={paddingLeft}
+        paddingTop={paddingTop}
+        paddingRight={paddingRight}
+        paddingBottom={paddingBottom}
+        alignItems={alignItems}
+        gap={gap}
+        {...props}
+        onClick={() => console.log("Button clicked", text)}
+      >
       <span>{text}</span>
       {enableIcon && IconsList[icon]}
     </StyledCustomButton>
   )
 }
 interface StyledCustomButtonProps {
+  fontFamily?: string
   color?: string
   background?: string
   backgroundHover?: string
@@ -129,6 +136,7 @@ interface StyledCustomButtonProps {
   gap?: number
   border?: number
   borderColor?: string
+  borderHoverColor?: string
 }
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   position: relative;
@@ -137,7 +145,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   transition: all 0.2s ease;
   &:hover {
     border-style: solid;
-    border-color: #3182ce; /* Change to your desired hover border color */
+    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
     background: ${(props) => props.backgroundHover};
     color: ${(props) => props.colorHover};
   }
@@ -148,6 +156,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   color: ${(props) => props.color};
 
   margin-left: ${(props) => props.marginLeft}px;
+  max-width: 100%;
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
   margin-right: ${(props) => props.marginRight}px;
@@ -166,7 +175,9 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
 `
 
 export const IconButton = ({
+  fontFamily,
   disabled,
+  borderHoverColor,
   enableIcon,
   size,
   color,
@@ -203,13 +214,72 @@ export const IconButton = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
+  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
+  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
+  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
+  const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
+
+  useEffect(() => {
+    if(fontFamily.globalStyled && !fontFamily.isCustomized){
+      setProp((props) => props.fontFamily.value = primaryFont, 200);
+    }
+   },
+  [primaryFont])
+
+  // useEffect(() => {
+  //   if(color.globalStyled && !color.isCustomized){
+  //     setProp((props) => props.color.value = primaryTextColor, 200)
+  //   }
+  // },[primaryTextColor])
+
+  useEffect(() => {
+    if(color.globalStyled && !color.isCustomized){
+      setProp((props) => props.colorHover.value = secondaryTextColor, 200)
+    }
+  },[secondaryTextColor])
+
+  useEffect(() => {
+
+      if(background.globalStyled && !background.isCustomized){
+        setProp((props) => props.background.value = primaryColor, 200)
+      }
+        if(color.globalStyled && !color.isCustomized){
+      setProp((props) => props.color.value = primaryColor, 200)
+    }
+      if(borderColor.globalStyled && !borderColor.isCustomized){
+        setProp((props) => props.borderColor.value = primaryColor, 200)
+      }
+
+  },[primaryColor])
+
+  useEffect(() => {
+      if(backgroundHover.globalStyled && !backgroundHover.isCustomized){
+        setProp((props) => props.backgroundHover.value = secondaryColor, 200)
+      }
+      if(colorHover.globalStyled && !color.isCustomized){
+        setProp((props) => props.colorHover.value = primaryColor, 200)
+      }
+      if(borderHoverColor.globalStyled && !borderHoverColor.isCustomized){
+        setProp((props) => props.borderHoverColor.value = secondaryColor, 200)
+      }
+  },[secondaryColor])
+
+
   return (
     <div ref={(ref: any) => connect(drag(ref))}>
       <StyledCustomButton
-        color={color}
-        background={background}
-        backgroundHover={backgroundHover}
-        colorHover={colorHover}
+        fontFamily={fontFamily.value}
+        color={color.value}
+        background={background.value}
+        backgroundHover={backgroundHover.value}
+        colorHover={colorHover.value}
+        radius={radius.value}
+        flexDirection={flexDirection}
+        justifyContent={justifyContent}
+        borderColor={borderColor.value}
+        borderHoverColor={borderHoverColor.value}
+        border={border}
         marginLeft={marginLeft}
         width={width}
         height={height}
@@ -220,18 +290,12 @@ export const IconButton = ({
         paddingTop={paddingTop}
         paddingRight={paddingRight}
         paddingBottom={paddingBottom}
-        radius={radius}
-        flexDirection={flexDirection}
         alignItems={alignItems}
-        justifyContent={justifyContent}
         gap={gap}
-        border={border}
-        borderColor={borderColor}
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
         {isHovered && <Controller nameOfComponent="BUTTON" />}
-
         <ContentEditable
           html={text}
           disabled={disabled}
@@ -250,476 +314,31 @@ export const IconButton = ({
   )
 }
 
-export const IconButtonSettings = () => {
-  const {
-    actions: { setProp },
-    props: {
-      enableIcon,
-      props,
-      size,
-      background,
-      backgroundHover,
-      colorHover,
-      color,
-      text,
-      custom,
-      icon,
-      paddingLeft,
-      paddingTop,
-      paddingRight,
-      paddingBottom,
-      radius,
-      flexDirection,
-      alignItems,
-      justifyContent,
-      gap,
-      border,
-      borderColor,
-      marginLeft,
-      marginTop,
-      marginRight,
-      marginBottom,
-      width,
-      height,
-    },
-  } = useNode((node) => ({
-    props: node.data.props,
-  }))
 
-  return (
-    <>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Button content </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="flex items-center col-span-2 space-x-2">
-              <Checkbox
-                checked={enableIcon}
-                onCheckedChange={(e) => {
-                  setProp((props) => (props.enableIcon = e), 1000)
-                }}
-                id="enableIcon"
-              />
-              <label
-                htmlFor="enableIcon"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Enable icon
-              </label>
-            </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-              {enableIcon && (
-                <>
-                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
-                  <Select
-                    defaultValue={icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="arrowright">
-                          <ArrowRight />
-                        </SelectItem>
-                        <SelectItem value="aperture">
-                          <Aperture />
-                        </SelectItem>
-                        <SelectItem value="activity">
-                          <Activity />
-                        </SelectItem>
-                        <SelectItem value="dollarsign">
-                          <DollarSign />
-                        </SelectItem>
-                        <SelectItem value="anchor">
-                          <Anchor />
-                        </SelectItem>
-                        <SelectItem value="disc">
-                          <Disc />
-                        </SelectItem>
-                        <SelectItem value="mountain">
-                          <Mountain />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </>
-              )}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-7">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Dimensions </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Width</p>
-              <Input
-                defaultValue={width}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.width = e.target.value))
-                }
-              />
-            </div>
-            <div className="style-control col-span-2 flex grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Height</p>
-              <Input
-                defaultValue={height}
-                onChange={(e) =>
-                  setProp((props) => (props.height = e.target.value))
-                }
-                className="w-full"
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Margin </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Left</p>
-              <Input
-                type="number"
-                placeholder={marginLeft}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginLeft = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Top</p>
-              <Input
-                type="number"
-                placeholder={marginTop}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginTop = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
-              <Input
-                type="number"
-                placeholder={marginRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
-              <Input
-                type="number"
-                placeholder={marginBottom}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp(
-                    (props) => (props.marginBottom = e.target.value),
-                    1000
-                  )
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Padding </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Left</p>
-              <Input
-                type="number"
-                placeholder={paddingLeft}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.paddingLeft = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Top</p>
-              <Input
-                type="number"
-                placeholder={paddingTop}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.paddingTop = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
-              <Input
-                type="number"
-                placeholder={paddingRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp(
-                    (props) => (props.paddingRight = e.target.value),
-                    1000
-                  )
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
-              <Input
-                type="number"
-                placeholder={paddingBottom}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp(
-                    (props) => (props.paddingBottom = e.target.value),
-                    1000
-                  )
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Appearance</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Text</p>
-              <Input
-                type="color"
-                value={color}
-                onChange={(e) => {
-                  setProp((props) => (props.color = e.target.value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Background</p>
-              <Input
-                type="color"
-                value={background}
-                onChange={(e) => {
-                  setProp((props) => (props.background = e.target.value), 1000)
-                }}
-              />
-            </div>
 
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Text Hover</p>
-              <Input
-                type="color"
-                value={colorHover}
-                onChange={(e) => {
-                  setProp((props) => (props.colorHover = e.target.value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Background Hover</p>
-              <Input
-                type="color"
-                value={backgroundHover}
-                onChange={(e) => {
-                  setProp(
-                    (props) => (props.backgroundHover = e.target.value),
-                    1000
-                  )
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-4">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Alignment </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Direction</p>
-              <RadioGroup
-                defaultValue={flexDirection}
-                onValueChange={(value) => {
-                  setProp((props) => (props.flexDirection = value), 1000)
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="column" id="r2" />
-                  <Label htmlFor="r2">Column</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="row" id="r3" />
-                  <Label htmlFor="r3">Row</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="column-reverse" id="r4" />
-                  <Label htmlFor="r4">Column reverse</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="row-reverse" id="r5" />
-                  <Label htmlFor="r5">Row reverse</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            <div className="style-control col-span-1 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Align</p>
-              <RadioGroup
-                defaultValue={alignItems}
-                onValueChange={(value) => {
-                  setProp((props) => (props.alignItems = value), 1000)
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"start"} id="r2" />
-                  <Label htmlFor="r2">Start</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"center"} id="r3" />
-                  <Label htmlFor="r3">Center</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"end"} id="r4" />
-                  <Label htmlFor="r4">End</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            <div className="style-control col-span-1 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Justify</p>
-              <RadioGroup
-                defaultValue={justifyContent}
-                onValueChange={(value) => {
-                  setProp((props) => (props.justifyContent = value), 1000)
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"start"} id="r2" />
-                  <Label htmlFor="r2">Start</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"center"} id="r3" />
-                  <Label htmlFor="r3">Center</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"end"} id="r4" />
-                  <Label htmlFor="r4">End</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Gap</p>
-              <Input
-                type="number"
-                placeholder={gap}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.gap = e.target.value), 1000)
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-5">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Decoration </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Border</p>
-              <Input
-                type="number"
-                placeholder={border}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.border = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control col-span-2 flex flex-col gap-2">
-              <p className="text-md text-muted-foreground">Border color</p>
-              <Input
-                type="color"
-                value={borderColor}
-                onChange={(e) => {
-                  setProp((props) => (props.borderColor = e.target.value), 1000)
-                }}
-              />
-            </div>
-            <div className="style-control col-span-2 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Radius</p>
-              <Input
-                type="number"
-                placeholder={radius}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.radius = e.target.value), 1000)
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </>
-  )
-}
-
-type IconButtonProps = {
+export type IconButtonProps = {
+  fontFamily: StyleProperty
   disabled: boolean
   enableIcon: boolean
   size: string
-  background: string
-  backgroundHover: string
-  color: string
-  colorHover: string
+  background: StyleProperty
+  backgroundHover: StyleProperty
+  color: StyleProperty
+  colorHover: StyleProperty
   text: string
   icon: string
   paddingLeft: string | number
   paddingTop: string | number
   paddingRight: string | number
   paddingBottom: string | number
-  radius: string
+  radius: StyleProperty
   flexDirection: string
   alignItems: string
   justifyContent: string
   gap: number
   border: number
-  borderColor: string
+  borderColor: StyleProperty
+  borderHoverColor: StyleProperty
   marginLeft: number | number
   marginTop: number | number
   marginRight: number | number
@@ -729,15 +348,53 @@ type IconButtonProps = {
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
+  fontFamily: {
+    value: "inherit",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  background: {
+    value: "#4050ff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  color: {
+    value: "#ffffff",
+    globalStyled: false,
+  isCustomized: false,
+  },
+  backgroundHover: {
+    value: "#3182ce",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  colorHover: {
+    value: "#ffffff",
+    globalStyled: false,
+    isCustomized: false,
+
+  },
+  radius: {
+    value: "0",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  justifyContent: "center",
+  borderColor: {
+    value: "inherit",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  borderHoverColor: {
+    value: "inherit",
+    globalStyled: false,
+    isCustomized: false,
+  },
   disabled: false,
   enableIcon: true,
   width: "366",
   height: "auto",
   size: "small",
-  background: "#4050ff",
-  color: "#ffffff",
-  backgroundHover: "#3041ff",
-  colorHover: "#ffffff",
   text: "Get quote",
   marginLeft: 0,
   marginTop: 0,
@@ -748,13 +405,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   paddingTop: "26",
   paddingRight: "16",
   paddingBottom: "26",
-  radius: "none",
   flexDirection: "row",
   alignItems: "center",
-  justifyContent: "center",
   gap: 4,
   border: 0,
-  borderColor: "inherit",
 }
 
 IconButton.craft = {

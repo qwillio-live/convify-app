@@ -104,6 +104,7 @@ import {
 } from "../progress/user-progress.component"
 import { is } from "date-fns/locale"
 import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
+import { filledPreset, outLinePreset } from "../icon-button/user-icon-button-presets"
 
 const MultipleChoiceOptions = [
   {
@@ -419,7 +420,9 @@ export const UserToolbox = () => {
                     connectors.create(
                       ref,
                       <IconButton
-                        {...IconButtonDefaultProps}
+                        // {...IconButtonDefaultProps}
+                        // {...filledPreset}
+                        {...outLinePreset}
                         disabled={false}
                       />
                     )
