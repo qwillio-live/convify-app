@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button as CustomButton } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -35,9 +36,12 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
-import { Card } from "@/components/ui/card"
-import { IconButtonGen } from "./user-icon-button.component"
-import { filledPreset, outLinePreset } from "./user-icon-button-presets"
+import {
+  IconButtonDefaultProps,
+  IconButtonGen,
+} from "./user-icon-button.component"
+import useThemePresets from "./useThemePresets"
+
 export const IconButtonSettings = () => {
   const {
     actions: { setProp },
@@ -73,6 +77,14 @@ export const IconButtonSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+  const {filledPreset, outLinePreset} = useThemePresets();
+  const addPresetStyles = (preset) => {
+    setProp((props) => {
+      Object.keys(preset).forEach((key) => {
+        props[key] = preset[key]
+      })
+    }, 1000)
+  }
 
   return (
     <>
@@ -211,13 +223,16 @@ export const IconButtonSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
-                <Card>
-                  <IconButtonGen {...outLinePreset} />
-                </Card>
-                <Card>
-                  <IconButtonGen {...filledPreset} />
-                </Card>
-             </div>
+              <Card onClick={() => addPresetStyles(IconButtonDefaultProps)}>
+                <IconButtonGen {...IconButtonDefaultProps} />
+              </Card>
+              <Card onClick={() => addPresetStyles(outLinePreset)}>
+                <IconButtonGen {...outLinePreset} />
+              </Card>
+              <Card onClick={() => addPresetStyles(filledPreset)}>
+                <IconButtonGen {...filledPreset} />
+              </Card>
+            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -439,6 +454,10 @@ export const IconButtonSettings = () => {
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value={"end"} id="r4" />
                   <Label htmlFor="r4">End</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"space-between"} id="r5" />
+                  <Label htmlFor="r5">Space-between</Label>
                 </div>
               </RadioGroup>
             </div>

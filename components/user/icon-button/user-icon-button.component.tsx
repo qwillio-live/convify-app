@@ -139,6 +139,7 @@ interface StyledCustomButtonProps {
   borderHoverColor?: string
 }
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+  font-family: ${(props) => `var(${props?.fontFamily})`};
   position: relative;
   gap: 2px;
   border: 1px dashed transparent;
@@ -233,11 +234,9 @@ export const IconButton = ({
   //   }
   // },[primaryTextColor])
 
-  useEffect(() => {
-    if(color.globalStyled && !color.isCustomized){
-      setProp((props) => props.colorHover.value = secondaryTextColor, 200)
-    }
-  },[secondaryTextColor])
+  // useEffect(() => {
+
+  // },[secondaryTextColor])
 
   useEffect(() => {
 
@@ -262,6 +261,9 @@ export const IconButton = ({
       }
       if(borderHoverColor.globalStyled && !borderHoverColor.isCustomized){
         setProp((props) => props.borderHoverColor.value = secondaryColor, 200)
+      }
+      if(color.globalStyled && !color.isCustomized){
+        setProp((props) => props.colorHover.value = secondaryColor, 200)
       }
   },[secondaryColor])
 

@@ -186,33 +186,67 @@
 		},
 		"isCanvas": false,
 		"props": {
-			"disabled": false,
-			"enableIcon": true,
-			"width": "366",
-			"height": "auto",
-			"size": "small",
-			"background": "#4050ff",
-			"color": "#ffffff",
-			"backgroundHover": "#3041ff",
-			"colorHover": "#ffffff",
-			"text": "Get quote",
-			"marginLeft": 0,
-			"marginTop": 0,
-			"marginRight": 0,
-			"marginBottom": "40",
-			"icon": "arrowright",
-			"paddingLeft": "16",
-			"paddingTop": "26",
-			"paddingRight": "16",
-			"paddingBottom": "26",
-			"radius": "none",
-			"flexDirection": "row",
-			"alignItems": "center",
-			"justifyContent": "center",
-			"gap": 4,
-			"border": 0,
-			"borderColor": "inherit"
-		},
+      "fontFamily": {
+        "value": "inherit",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "background": {
+        "value": "#4050ff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "color": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "backgroundHover": {
+        "value": "#3041ff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "colorHover": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "radius": {
+        "value": "none",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "borderColor": {
+        "value": "inherit",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "borderHoverColor": {
+        "value": "inherit",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "justifyContent": "center",
+      "disabled": false,
+      "enableIcon": true,
+      "width": "366",
+      "height": "auto",
+      "size": "small",
+      "text": "Get quote",
+      "marginLeft": 0,
+      "marginTop": "40",
+      "marginRight": 0,
+      "marginBottom": "40",
+      "icon": "arrowright",
+      "paddingLeft": "16",
+      "paddingTop": "26",
+      "paddingRight": "16",
+      "paddingBottom": "26",
+      "flexDirection": "row",
+      "alignItems": "center",
+      "gap": 4,
+      "border": 0
+    },
 		"displayName": "IconButton",
 		"custom": {
 

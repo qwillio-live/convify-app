@@ -420,9 +420,9 @@ export const UserToolbox = () => {
                     connectors.create(
                       ref,
                       <IconButton
-                        // {...IconButtonDefaultProps}
+                        {...IconButtonDefaultProps}
                         // {...filledPreset}
-                        {...outLinePreset}
+                        // {...outLinePreset}
                         disabled={false}
                       />
                     )
