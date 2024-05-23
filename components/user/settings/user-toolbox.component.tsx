@@ -587,6 +587,7 @@ export const UserToolbox = () => {
                     //@ts-ignore
                     connectors.create(
                       ref,
+                      //@ts-ignore
                       <Card {...CardContentDefaultProps} />
                     )
                   }
