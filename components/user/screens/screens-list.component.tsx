@@ -120,6 +120,24 @@ const ScreensList = () => {
     }
   };
 
+  const handleDuplicateScreen =async (index: number) => {
+    if(screens){
+      dispatch(duplicateScreen(index));
+      await actions.deserialize(editorLoad);
+    }
+  }
+
+  const handleDeleteScreen =async (index: number) => {
+    if(screens && selectedScreenIndex !== undefined){
+      dispatch(deleteScreen(index))
+      if(index === 0){
+        await actions.deserialize(screens[1]);
+      }else{
+        await actions.deserialize(screens[index-1]);
+      }
+    }
+  }
+
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setFooterMode(true));
@@ -238,14 +256,14 @@ const ScreensList = () => {
                     </ContextMenuItem>
                     <ContextMenuItem
                       className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
-                      onClick={() => dispatch(duplicateScreen(index))}
+                      onClick={() => handleDuplicateScreen(index)}
                     >
                       <ClipboardCopy size={18} />
                       <span>Duplicate</span>
                     </ContextMenuItem>
                     <ContextMenuItem
                       className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
-                      onClick={() => dispatch(deleteScreen(index))}
+                      onClick={() => handleDeleteScreen(index)}
                     >
                       <Trash2 size={18} />
                       <span>Delete</span>
