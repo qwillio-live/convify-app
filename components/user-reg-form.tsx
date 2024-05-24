@@ -130,15 +130,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 {...register("termsAccepted")}
               />
               <span className="pl-1">
-                I agree to the{" "}
-                <Link href="/terms" style={{ textDecoration: "underline" }}>
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link href="/privacy" style={{ textDecoration: "underline" }}>
-                  Privacy Policy
-                </Link>
-                .
+                I agree to the Terms of Service and Privacy Policy.
               </span>
             </label>
             {errors.termsAccepted && (
