@@ -1,13 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:djafnwjgnrwjg@185.253.219.240:5015/convify?schema=public"
 }
 
 model Account {
@@ -23,13 +20,13 @@ model Account {
   scope             String?
   id_token          String?  @db.Text
   session_state     String?
-  createdAt         DateTime @default(now()) @map(name: "created_at")
-  updatedAt         DateTime @default(now()) @map(name: "updated_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @default(now()) @map("updated_at")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map(name: "accounts")
+  @@index([userId], map: "accounts_userId_fkey")
+  @@map("accounts")
 }
 
 model Session {
@@ -39,29 +36,29 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map(name: "sessions")
+  @@index([userId], map: "sessions_userId_fkey")
+  @@map("sessions")
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  passwordHash  String?
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  id                     String    @id @default(cuid())
+  name                   String?
+  email                  String?   @unique
+  emailVerified          DateTime?
+  image                  String?
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @default(now()) @map("updated_at")
+  stripeCurrentPeriodEnd DateTime? @map("stripe_current_period_end")
+  stripeCustomerId       String?   @unique @map("stripe_customer_id")
+  stripePriceId          String?   @map("stripe_price_id")
+  stripeSubscriptionId   String?   @unique @map("stripe_subscription_id")
+  passwordHash           String?
+  accounts               Account[]
+  flows                  Flow[]
+  Post                   Post[]
+  sessions               Session[]
 
-  accounts Account[]
-  sessions Session[]
-  Post     Post[]
-
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-
-  @@map(name: "users")
+  @@map("users")
 }
 
 model VerificationToken {
@@ -70,7 +67,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map(name: "verification_tokens")
+  @@map("verification_tokens")
 }
 
 model Post {
@@ -78,11 +75,92 @@ model Post {
   title     String
   content   Json?
   published Boolean  @default(false)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
   authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
 
-  author User @relation(fields: [authorId], references: [id])
+  @@index([authorId], map: "posts_authorId_fkey")
+  @@map("posts")
+}
 
-  @@map(name: "posts")
+model Flow {
+  id                String        @id @default(cuid())
+  name              String
+  content           Json
+  templateSettings  Json
+  steps             Json
+  isDeleted         Boolean       @default(false)
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @default(now()) @map("updated_at")
+  previewImage      String?
+  link              String?
+  status            String
+  numberOfSteps     Int
+  numberOfResponses Int
+  userId            String
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  integrations      Integration[]
+  responses         Response[]
+  visits            Visit[]
+
+  @@index([userId], map: "flows_userId_fkey")
+  @@map("flows")
+}
+
+model Integration {
+  id                   String   @id @default(cuid())
+  flowId               String
+  googleAnalyticsId    String?
+  googleTagManagerId   String?
+  metaPixelId          String?
+  metaPixelAccessToken String?
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @default(now()) @map("updated_at")
+  flow                 Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId], map: "integrations_flowId_fkey")
+  @@map("integrations")
+}
+
+model Response {
+  id         String   @id @default(cuid())
+  flowId     String
+  ip         String
+  userAgent  String
+  isFinished Boolean  @default(false)
+  isDeleted  Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  flow       Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId], map: "responses_flowId_fkey")
+  @@map("responses")
+}
+
+model Visit {
+  id        String   @id @default(cuid())
+  flowId    String
+  stepId    String
+  ip        String
+  userAgent String
+  createdAt DateTime @default(now()) @map("created_at")
+  flow      Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId], map: "visits_flowId_fkey")
+  @@map("visits")
+}
+
+model Template {
+  id               String   @id @default(cuid())
+  name             String
+  content          Json
+  templateSettings Json
+  tags             Json
+  isActive         Boolean  @default(true)
+  preview          String?
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @map("updated_at")
+
+  @@map("templates")
 }
