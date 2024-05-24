@@ -5,16 +5,14 @@ import { logError } from "@/lib/utils/logger"
 import { func } from "prop-types"
 
 export async function GET(req) {
-  const session = await getSession({ req })
+  const session = await `getSession`({ req })
 
   if (!session) {
     const statusCode = 401
-    await logError({
-      statusCode,
-      errorMessage: "User is not authenticated",
-      user_id: null,
-      request_url: req.url || "unknown",
-    })
+    const errorMessage = "User is not authenticated"
+    const userId = "unknown"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: "Unauthorized" }, { status: statusCode })
   }
 
@@ -45,14 +43,15 @@ export async function POST(req) {
   if (!session) {
     const statusCode = 401
     const errorMessage = "User is not authenticated"
-    await logError(statusCode, errorMessage, "unknown", req.url || "unknown")
-    return res.status(statusCode).json({ error: errorMessage })
+    const userId = "unknown"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 
   const userId = session.user.id
   const {
     templateId,
-    name,
     status,
     previewImage,
     link,
@@ -63,7 +62,8 @@ export async function POST(req) {
   if (!templateId) {
     const statusCode = 400
     const errorMessage = "Template ID is required"
-    await logError(statusCode, errorMessage, userId, req.url || "unknown")
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 
@@ -75,19 +75,20 @@ export async function POST(req) {
     if (!template) {
       const statusCode = 404
       const errorMessage = "Template not found"
-      await logError(statusCode, errorMessage, userId, req.url || "unknown")
+      const requestUrl = req.url
+      await logError({ statusCode, errorMessage, userId, requestUrl })
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
     const flow = await prisma.flow.create({
       data: {
-        name: name || template.name,
+        name: template.name,
         content: template.content,
         templateSettings: template.templateSettings,
         steps: template.steps,
+        status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",
-        status: status || "active",
         numberOfSteps: numberOfSteps || 0,
         numberOfResponses: numberOfResponses || 0,
         userId,
@@ -99,16 +100,63 @@ export async function POST(req) {
     console.error(error)
 
     const statusCode = 500
+    const errorMessage = error.message || "An unexpected error occurred"
+    const requestUrl = req.url
     await logError({
-      statusCode: statusCode,
-      errorMessage: error.message || "An unexpected error occurred",
-      userId: session.user.id,
-      requestUrl: req.url || "unknown",
+      statusCode,
+      errorMessage,
+      userId,
+      requestUrl,
     })
 
     return NextResponse.json(
       { error: "Failed to create a flow" },
       { status: statusCode }
     )
+  }
+}
+
+export async function PUT(req) {
+  const { id } = req.query
+  const session = await getSession({ req })
+
+  if (!session) {
+    const statusCode = 401
+    const errorMessage = "User is not authenticated"
+    const userId = "unknown"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
+    return NextResponse.json({ error: "Unauthorized" }, { status: statusCode })
+  }
+
+  const userId = session.user.id
+  try {
+    const existingFlow = await prisma.flow.findFirst({
+      where: {
+        id: String(id),
+        userId,
+      },
+    })
+
+    if (!existingFlow) {
+      const statusCode = 404
+      const errorMessage = "Flow not found"
+      const requestUrl = req.url
+      await logError({ statusCode, errorMessage, userId, requestUrl })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    const updatedFlow = await prisma.flow.update({
+      where: { id: String(id) },
+      data: req.body,
+    })
+
+    return NextResponse.json(updatedFlow)
+  } catch (error) {
+    const statusCode = 500
+    const errorMessage = error.message || "An unexpected error occurred"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 }
