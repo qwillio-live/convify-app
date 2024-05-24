@@ -80,6 +80,8 @@ export const screensSlice = createSlice({
       // state.screens = [...action.payload];
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
+      state.headerMode = false;
+      state.footerMode = false;
       state.selectedScreen = action.payload;
       state.editorLoad = state.screens[action.payload] ; // Ensure new reference
     },
@@ -98,7 +100,7 @@ export const screensSlice = createSlice({
       newScreens.splice(action.payload + 1, 0, JSON.stringify(emptyScreenData));
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
-      state.editorLoad = JSON.stringify(emptyScreenData) ; // Ensure new reference
+      state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array

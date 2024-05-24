@@ -55,6 +55,7 @@ import { ButtonChoiceScreen } from "./screen-button-choice.component"
 import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
 import { RootState } from "@/lib/state/flows-state/store"
+import { Button } from "@/components/ui/button"
 
 const ScreensList = () => {
   const screens = useAppSelector((state:RootState) => state?.screen?.screens)
@@ -110,6 +111,14 @@ const ScreensList = () => {
     }
   };
 
+  const handleAddScreen =async (index: number) => {
+    if(screens && screens[index]){
+    dispatch(addScreen(index));
+    await actions.deserialize(JSON.stringify(emptyScreenData));
+    } else {
+      console.error('screens is undefined or index is out of bounds');
+    }
+  };
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
@@ -174,11 +183,22 @@ const ScreensList = () => {
       <AccordionItem value="item-2">
         <AccordionTrigger
           className="uppercase hover:no-underline"
+          onClick={() => dispatch(setHeaderFooterMode(false))}
         >
           Screens
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
+          <div className="section-header flex items-center justify-end">
+              <Button
+                variant={"secondary"}
+                className=""
+                onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Screen
+              </Button>
+            </div>
           <Reorder.Group values={screens || []} onReorder={handleReorder}>
             {screens?.map((screen: any, index) => (
               <Reorder.Item
@@ -211,7 +231,7 @@ const ScreensList = () => {
                   <ContextMenuContent>
                     <ContextMenuItem
                       className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
-                      onClick={() => dispatch(addScreen(index))}
+                      onClick={() => handleAddScreen(index)}
                     >
                       <PlusCircle size={18} />
                       <span>Add screen</span>

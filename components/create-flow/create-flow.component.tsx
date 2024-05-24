@@ -176,16 +176,6 @@ export function CreateFlowComponent() {
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
-            <div className="section-header flex items-center justify-end">
-              <Button
-                variant={"secondary"}
-                className=""
-                onClick={() => dispatch(addScreen(selectedScreen || 0))}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Screen
-              </Button>
-            </div>
             <div className="section-body">
               <ScreensList />
             </div>
