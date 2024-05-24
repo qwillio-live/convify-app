@@ -1,0 +1,34 @@
+name: Trigger Webhooks on Push
+
+on:
+  push:
+    branches:
+      - dev/syed
+      - dev/habibur
+      - main
+      - dev/shahzaib
+
+jobs:
+  trigger-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Webhook for dev/syed
+        if: github.ref == 'refs/heads/dev/syed'
+        run: |
+          curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6IjliYTQ2YjBiLTNjOGEtNDM0Yi04ODlkLTI0OTJjMWE2ZDhhYyIsImFwcE5hbWUiOiJjb252aWZ5LXN5ZWQiLCJuYW1lc3BhY2UiOiJjYXB0YWluIn0sImlhdCI6MTcxNTI0MTUyNX0.BHHiz8bwnElT2GLITZXMh14uVzJgbmg0j0ZrkrRFA-U"
+
+      - name: Trigger Webhook for dev/habibur
+        if: github.ref == 'refs/heads/dev/habibur'
+        run: |
+          curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6ImEzNDMwMGI2LTgyYzQtNDNmNy05NGY0LTg2ZGNlMDkwMjZiZiIsImFwcE5hbWUiOiJjb252aWZ5LWhhYmlidXIiLCJuYW1lc3BhY2UiOiJjYXB0YWluIn0sImlhdCI6MTcxNTE1NjAyNX0.Cd1xoozMdGvN6WFt4FPmJ4MjbmHuc9g2ZHEJ6fzX7c8"
+
+      - name: Trigger Webhook for main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6IjE5ZTg5Y2MyLTZlZTMtNGE5Ni1iMWI3LTRjNzQwNGZjNzY3YiIsImFwcE5hbWUiOiJjb252aWZ5LW1haW4iLCJuYW1lc3BhY2UiOiJjYXB0YWluIn0sImlhdCI6MTcxNTI0MTYwNX0.6hWGcphpI1c265bcAUQiZES0CrQ8XY2i-o28tlCt_5A"
+
+      - name: Trigger Webhook for dev/shahzaib
+        if: github.ref == 'refs/heads/dev/shahzaib'
+        run: |
+          curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6ImYxNmI2YWI3LWUxZmQtNDYyMC04NmY0LTg4ZjY2ZTAwYThiYyIsImFwcE5hbWUiOiJjb252aWZ5LXNoYWh6YWliIiwibmFtZXNwYWNlIjoiY2FwdGFpbiJ9LCJpYXQiOjE3MTU2MDUwOTd9.Gp7sQutylR0SgStgmErpCwBhyjDHim8OtiJu1eCe-BM"
