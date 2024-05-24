@@ -156,6 +156,7 @@ model Template {
   name             String
   content          Json
   templateSettings Json
+  steps            Json      
   tags             Json
   isActive         Boolean  @default(true)
   preview          String?

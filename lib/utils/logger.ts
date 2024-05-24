@@ -1,8 +1,8 @@
 export async function logError({
-  error_code,
-  error_message,
-  user_id,
-  request_url,
+  statusCode,
+  errorMessage,
+  userId,
+  requestUrl,
 }) {
   const logUrl = process.env.LOG_URL
   const appKey = process.env.LOG_APP_KEY
@@ -13,10 +13,10 @@ export async function logError({
   }
 
   const logPayload = {
-    error_code,
-    error_message,
-    user_id,
-    request_url,
+    statusCode,
+    errorMessage,
+    userId,
+    requestUrl,
     appKey,
   }
 

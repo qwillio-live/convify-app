@@ -9,8 +9,8 @@ export async function GET(req) {
   if (!session) {
     const statusCode = 401
     await logError({
-      error_code: statusCode,
-      error_message: "User is not authenticated",
+      statusCode: statusCode,
+      errorMessage: "User is not authenticated",
       user_id: null,
       request_url: req.url,
     })
@@ -21,12 +21,10 @@ export async function GET(req) {
     const templates = await prisma.template.findMany()
     return NextResponse.json(templates)
   } catch (error) {
-    console.error(error)
-
     const statusCode = 500
     await logError({
-      error_code: statusCode,
-      error_message: error.message || "An unexpected error occurred",
+      statusCode: statusCode,
+      errorMessage: error.message || "An unexpected error occurred",
       user_id: session.user.id,
       request_url: req.url,
     })
