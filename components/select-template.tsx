@@ -1,24 +1,60 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { templates } from "@/constant"
 import { templateImage } from "@/public/images"
+import { Template } from "@/types"
 
 import { Button } from "./ui/button"
 
 const SelectTemplate = () => {
-  const [selectedOption, setSelectedOption] = useState<string>("Recommended")
+  const [selectedCategory, setSelectedCategory] = useState<string>()
+  const [recommendedTemplate, setRecommendedTemplate] =
+    useState<Template | null>()
+
+  const idParams = useSearchParams()
+  const id = idParams?.get("id")
 
   const categories = Array.from(new Set(templates.map((item) => item.category)))
 
   const filteredData = templates.filter((item) => {
-    if (selectedOption === "Recommended") {
+    if (selectedCategory === "Recommended") {
       return item.isRecommended
     } else {
-      return item.category === selectedOption
+      return item.category === selectedCategory
     }
   })
+
+  useEffect(() => {
+    const defaultCategory = "Recommended"
+    const defaultTemplate = templates[0]
+
+    const selectItem = (item) => {
+      if (item.isRecommended === false) {
+        setSelectedCategory(item.category)
+        setRecommendedTemplate(null)
+      } else {
+        setSelectedCategory(defaultCategory)
+        setRecommendedTemplate(item)
+      }
+    }
+
+    if (id) {
+      const selectedItem = templates.find((item) => item.id === +id)
+
+      if (selectedItem) {
+        selectItem(selectedItem)
+      } else {
+        setSelectedCategory(defaultCategory)
+        setRecommendedTemplate(defaultTemplate)
+      }
+    } else {
+      setSelectedCategory(defaultCategory)
+      setRecommendedTemplate(defaultTemplate)
+    }
+  }, [id])
 
   return (
     <div>
@@ -27,12 +63,12 @@ const SelectTemplate = () => {
           <>
             <Button
               className={`text-[13px] rounded-full py-[0.85em] px-[1em] font-semibold leading-[1] h-auto first:ml-6 last:mr-6 lg:first:mx-0 ${
-                item === selectedOption
+                item === selectedCategory
                   ? "bg-[#4050ff] text-white hover:bg-[#3646ec]"
                   : "bg-[#f2f2f2] text-[#3b3b3b] hover:bg-[#ebebeb]"
               }`}
               key={item}
-              onClick={() => setSelectedOption(item)}
+              onClick={() => setSelectedCategory(item)}
             >
               {item}
             </Button>
@@ -42,17 +78,17 @@ const SelectTemplate = () => {
           </>
         ))}
       </div>
-      {selectedOption === "Recommended" && (
-        <div className="">
+      {recommendedTemplate && selectedCategory === "Recommended" && (
+        <div>
           <div className="grid min-[960px]:grid-cols-[2fr_1fr] min-[960px]:grid-rows-[auto_1fr] min-[960px]:gap-y-4 min-[960px]:gap-x-6">
             <div className="border border-solid border-[rgb(235,235,235)] rounded-[5px] overflow-hidden min-[960px]:row-[1/3] mt-2 min-[721px]:mt-0">
               <Image
-                src={templateImage["template-0"]}
-                alt="fachuki"
+                src={templateImage[recommendedTemplate.img]}
+                alt={recommendedTemplate.name}
                 className="w-full"
               />
             </div>
-            <div className="order-first min-[960px]:order-none min-[721px]:mt-0 mt-2">
+            <div className="order-first min-[960px]:order-none my-2 min-[960px]:my-0">
               <div className="flex items-center gap-0.5 min-[960px]:mb-4 mb-2">
                 <svg
                   color="#4050FF"
@@ -83,11 +119,12 @@ const SelectTemplate = () => {
                 </span>
               </div>
               <span className="text-[28px] text-black font-semibold font-heading tracking-[0.4px] leading-[34px]">
-                B2B SaaS Demo
+                {recommendedTemplate.name}
               </span>
               <div className="text-gray-900 text-sm">
                 Based on your profile and responses, we recommend the{" "}
-                <strong>B2B SaaS Demo</strong> template to start with.
+                <strong>{recommendedTemplate.name}</strong> template to start
+                with.
               </div>
             </div>
             <div className="flex items-start gap-4 mt-2 min-[721px]:mt-0">
@@ -107,7 +144,7 @@ const SelectTemplate = () => {
           </p>
         </div>
       )}
-      <div className="grid lg:grid-cols-2 gap-12">
+      <div className="grid min-[696px]:grid-cols-2 gap-12">
         {filteredData.map((tem) => (
           <div className="flex flex-col gap-2">
             <div className="w-full relative rounded-[5px] overflow-hidden border border-gray-100 group">
@@ -116,7 +153,7 @@ const SelectTemplate = () => {
                   <Button className="bg-[#4050ff] leading-[1] hover:bg-[#3646ec] text-white  rounded-[3px] text-[13px] h-auto py-[0.85em] px-[1em] font-semibold w-full min-w-[150px] border border-solid border-[#4050ff] hover:border-[#3646ec]">
                     Start building
                   </Button>
-                  <Button className="bg-[rgb(242,242,242)] leading-[1] hover:bg-[rgb(235,235,235)] text-[rgb(59,59,59)] hover:text-[rgb(33,33,33)] rounded-[3px] text-[13px] h-auto py-[0.85em] px-[1em] font-semibold w-full min-w-[150px] border border-solid border-[rgb(242,242,242)] hover:border-[rgb(235,235,235)]">
+                  <Button className="bg-[rgb(242,242,242)] leading-[1] hover:bg-[rgb(235,235,235)] text-[rgb(59,59,59)] hover:text-[rgb(33,33,33)] rounded-[3px] text-[13px] h-auto py-[0.85em] px-[1em] font-semibold w-full min-w-[150px] border border-solid border-[rgb(242,242,242)] hover:border-[rgb(235,235,235)] hidden min-[696px]:block">
                     Preview template
                   </Button>
                 </div>
