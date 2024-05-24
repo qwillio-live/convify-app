@@ -25,6 +25,98 @@ import { Slider } from "@/components/ui/slider"
 
 import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+
+const UserContainerGenInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  padding: 40px;
+  border-radius: none;
+  box-shadow: none;
+  flex: 1;
+  background-color: "#000000";
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  gap: 0px;
+  border: 0px solid inherit;
+  max-width: 100%;
+`;
+
+export const UserContainerGen = ({
+  padding,
+  width,
+  height,
+  background,
+  color,
+  marginLeft,
+  marginTop,
+  marginRight,
+  marginBottom,
+  paddingLeft,
+  paddingTop,
+  paddingRight,
+  paddingBottom,
+  radius,
+  shadow,
+  flexDirection,
+  fillSpace,
+  alignItems,
+  justifyContent,
+  flexWrap,
+  children,
+  overflowY,
+  overflowX,
+  gap,
+  border,
+  borderColor,
+  ...props
+}) => {
+
+  return (
+      <UserContainerGenInner
+        // {...props}
+        // style={{
+        //   width: `${width}px`,
+        //   height: `${height}px`,
+        //   backgroundColor: `${background}`,
+        //   color: `${color}`,
+        //   marginLeft: `${marginLeft}px`,
+        //   marginTop: `${marginTop}px`,
+        //   marginRight: `${marginRight}px`,
+        //   marginBottom: `${marginBottom}px`,
+        //   paddingLeft: `${paddingLeft}px`,
+        //   paddingTop: `${paddingTop}px`,
+        //   paddingRight: `${paddingRight}px`,
+        //   paddingBottom: `${paddingBottom}px`,
+        //   borderRadius: `${radius}px`,
+        //   flexDirection,
+        //   alignItems: `${alignItems}`,
+        //   justifyContent: `${justifyContent}`,
+        //   flexWrap,
+        //   padding: `${padding}px`,
+        //   boxShadow:
+        //     shadow === 0
+        //       ? "none"
+        //       : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
+        //   flex: fillSpace == "1" ? 1 : "unset",
+        //   display: "flex",
+        //   overflowY,
+        //   overflowX,
+        //   gap: `${gap}px`,
+        //   border: `${border}px solid ${borderColor}`,
+        //   maxWidth: "100%",
+        // }}
+      >
+        {/* {isHovered && <Controller nameOfComponent={"CONTAINER"} />} */}
+        {children}
+      </UserContainerGenInner>
+  )
+}
+
 
 export const UserContainer = ({
   padding,
@@ -65,6 +157,7 @@ export const UserContainer = ({
     dragged: state.events.dragged,
     isHovered: state.events.hovered,
   }))
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   return (
     <div ref={(ref: any) => connect(drag(ref))} data-cy="toolbox-usercontainer">
       <div
@@ -72,7 +165,7 @@ export const UserContainer = ({
         style={{
           width: `${width}px`,
           height: `${height}px`,
-          backgroundColor: `${background}`,
+          backgroundColor: `${backgroundColor}`,
           color: `${color}`,
           marginLeft: `${marginLeft}px`,
           marginTop: `${marginTop}px`,

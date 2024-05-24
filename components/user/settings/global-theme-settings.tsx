@@ -1,7 +1,7 @@
 import React from "react"
 
 import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
-import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { setBackgroundColor, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 
 type Props = {}
 
@@ -105,7 +106,9 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                   value={backgroundColor || defaultBackgroundColor}
                   onChange={(e) => {
-                    dispatch(setPartialStyles({general: { backgroundColor: e.target.value}}))
+                    dispatch(setBackgroundColor(e.target.value))
+                    // dispatch(setPartialStyles({general: { backgroundColor: e.target.value}}))
+                    // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className=" basis-1/3"
                   type={"color"}

@@ -223,14 +223,11 @@ export const IconButtonSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
-              <Card onClick={() => addPresetStyles(IconButtonDefaultProps)}>
-                <IconButtonGen {...IconButtonDefaultProps} />
+            <Card onClick={() => addPresetStyles(filledPreset)}>
+                <IconButtonGen {...filledPreset} />
               </Card>
               <Card onClick={() => addPresetStyles(outLinePreset)}>
                 <IconButtonGen {...outLinePreset} />
-              </Card>
-              <Card onClick={() => addPresetStyles(filledPreset)}>
-                <IconButtonGen {...filledPreset} />
               </Card>
             </div>
           </AccordionContent>

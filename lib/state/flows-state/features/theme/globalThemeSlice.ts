@@ -11,10 +11,10 @@ export interface GlobalThemeState {
     backgroundImage?: string;
   },
   general?: {
-    primaryColor?: string | null;
-    secondaryColor?: string | null;
-    backgroundColor?: string | null;
-    backgroundImage?: string | null;
+    primaryColor?: string | undefined;
+    secondaryColor?: string | undefined;
+    backgroundColor?: string | undefined;
+    backgroundImage?: string | undefined;
   },
   defaultText? :{
     primaryFont?: string;
@@ -23,10 +23,10 @@ export interface GlobalThemeState {
     secondaryColor?: string;
   },
   text?: {
-    primaryFont?: string | null;
-    secondaryFont?: string | null;
-    primaryColor?: string | null;
-    secondaryColor?: string | null;
+    primaryFont?: string | undefined;
+    secondaryFont?: string | undefined;
+    primaryColor?: string | undefined;
+    secondaryColor?: string | undefined;
   }
 }
 
@@ -36,13 +36,13 @@ const initialState: GlobalThemeState = {
   defaultGeneral: {
     primaryColor: "#892A5F",
     secondaryColor: "#7f114e",
-    backgroundColor: "#0e0e0e",
+    backgroundColor: "#ffffff",
     backgroundImage: "",
   },
   general: {
     primaryColor: "#892A5F",
     secondaryColor: "#7f114e",
-    backgroundColor: "#0e0e0e",
+    backgroundColor: "#ffffff",
     backgroundImage: "",
   },
   defaultText: {
@@ -70,6 +70,11 @@ export const themeSlice = createSlice({
     setPartialStyles: (state, action: PayloadAction<Partial<GlobalThemeState>>) => {
       state.general = { ...state.general, ...action.payload.general };
       state.text = { ...state.text, ...action.payload.text };
+    },
+    setBackgroundColor: (state, action: PayloadAction<string>) => {
+      if(state.general){
+        state.general.backgroundColor = action.payload;
+      }
     }
   },
 });
@@ -77,6 +82,7 @@ export const themeSlice = createSlice({
 export const {
   setThemeStyles,
   setPartialStyles,
+  setBackgroundColor,
 } = themeSlice.actions;
 
 export default themeSlice.reducer;

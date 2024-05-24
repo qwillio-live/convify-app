@@ -68,6 +68,8 @@ const ScreensList = () => {
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor);
+
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
@@ -232,6 +234,7 @@ const ScreensList = () => {
                       {screen?.ROOT?.displayName ?? "New Screen"}
                     </div>
                     <Card
+                      style={{ backgroundColor: backgroundColor }}
                       className={cn(
                         "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {

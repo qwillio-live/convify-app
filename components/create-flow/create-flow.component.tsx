@@ -97,6 +97,7 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch();
 
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
   const startScreen = useAppSelector((state) => state?.screen?.screens[0])
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
@@ -189,10 +190,11 @@ export function CreateFlowComponent() {
                 onValueChange={(value) => setView(value)}
               >
                 <TabsContent
+                style={{ backgroundColor: backgroundColor }}
                   className={cn(
-                    "mx-auto page-container min-h-[400px] box-content bg-background font-sans antialiased z-20",
+                    "mx-auto page-container min-h-[400px] box-content font-sans antialiased z-20",
                     view == VIEWS.DESKTOP
-                      ? "w-full border-0"
+                      ? "w-full border-0 shahid"
                       : "w-96 border px-4"
                   )}
                   value={view}

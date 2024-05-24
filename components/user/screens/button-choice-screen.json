@@ -3,11 +3,12 @@
 		"type": "UserContainer",
 		"isCanvas": true,
 		"props": {
-			"padding": 5,
-			"background": "#ad2121",
-			"expanded": "true",
-      "maxWidth": "100%",
-			"className": "min-h-screen max-w-full flex flex-col items-center"
+      "style": {
+        "padding": "24px",
+        "expanded": "true",
+        "maxWidth": "100%"
+      },
+			"className": "min-h-screen max-w-full flex flex-col items-center py-5"
 		},
 		"displayName": "Button Choice Screen",
 		"custom": {

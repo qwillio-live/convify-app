@@ -104,7 +104,7 @@ import {
 } from "../progress/user-progress.component"
 import { is } from "date-fns/locale"
 import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
-import { filledPreset, outLinePreset } from "../icon-button/user-icon-button-presets"
+import useThemePresets from "../icon-button/useThemePresets"
 
 const MultipleChoiceOptions = [
   {
@@ -181,6 +181,7 @@ function HelperInformation() {
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
+
   return (
     <>
     <div
@@ -211,7 +212,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
 export const UserToolbox = () => {
 
   const { connectors } = useEditor()
-
+  const {filledPreset, outLinePreset} = useThemePresets();
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -420,8 +421,9 @@ export const UserToolbox = () => {
                     connectors.create(
                       ref,
                       <IconButton
-                        {...IconButtonDefaultProps}
+                        // {...IconButtonDefaultProps}
                         // {...filledPreset}
+                        {...filledPreset}
                         // {...outLinePreset}
                         disabled={false}
                       />
