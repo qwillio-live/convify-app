@@ -41,7 +41,7 @@ export async function PUT(
       where: { id: String(id) },
       data: {
         flowId: String(flowId),
-        ...req.body,
+        ...req.json(),
       },
     })
 

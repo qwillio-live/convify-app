@@ -40,7 +40,7 @@ export async function POST(
     const integration = await prisma.integration.create({
       data: {
         flowId: String(flowId),
-        ...req.body,
+        ...req.json(),
       },
     })
 

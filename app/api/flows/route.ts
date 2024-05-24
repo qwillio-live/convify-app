@@ -1,23 +1,28 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
-import { getSession } from "next-auth/react"
+import { getServerSession } from "next-auth"
 import { logError } from "@/lib/utils/logger"
-import { func } from "prop-types"
+import { authOptions } from "@/lib/auth"
 
-export async function GET(req) {
-  const session = await `getSession`({ req })
-
-  if (!session) {
+export async function GET(req: NextRequest) {
+  const data = await getServerSession(authOptions)
+  if (!data) {
     const statusCode = 401
     const errorMessage = "User is not authenticated"
     const userId = "unknown"
     const requestUrl = req.url
     await logError({ statusCode, errorMessage, userId, requestUrl })
-    return NextResponse.json({ error: "Unauthorized" }, { status: statusCode })
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 
+  const userId = data.user.id
   try {
-    const flows = await prisma.flow.findMany()
+    const flows = await prisma.flow.findMany({
+      where: {
+        userId,
+        isDeleted: false,
+      },
+    })
     return NextResponse.json(flows)
   } catch (error) {
     console.error(error)
@@ -26,7 +31,7 @@ export async function GET(req) {
     await logError({
       statusCode: statusCode,
       errorMessage: error.message || "An unexpected error occurred",
-      userId: session.user.id,
+      userId,
       requestUrl: req.url || "unknown",
     })
 
@@ -37,10 +42,9 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
-  const session = await getSession({ req })
-
-  if (!session) {
+export async function POST(req: NextRequest) {
+  const data = await getServerSession(authOptions)
+  if (!data) {
     const statusCode = 401
     const errorMessage = "User is not authenticated"
     const userId = "unknown"
@@ -49,7 +53,7 @@ export async function POST(req) {
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 
-  const userId = session.user.id
+  const userId = data.user.id
   const {
     templateId,
     status,
@@ -57,7 +61,7 @@ export async function POST(req) {
     link,
     numberOfSteps,
     numberOfResponses,
-  } = req.body
+  } = await req.json()
 
   if (!templateId) {
     const statusCode = 400
@@ -83,9 +87,9 @@ export async function POST(req) {
     const flow = await prisma.flow.create({
       data: {
         name: template.name,
-        content: template.content,
-        templateSettings: template.templateSettings,
-        steps: template.steps,
+        content: JSON.stringify(template.content),
+        templateSettings: JSON.stringify(template.templateSettings),
+        steps: JSON.stringify(template.steps),
         status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",

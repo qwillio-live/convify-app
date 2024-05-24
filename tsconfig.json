@@ -35,7 +35,7 @@
     ".contentlayer/generated",
     "middlewares/**/*.ts",
     "app/api/flows/[id].ts",
-    "app/api/flows/route.js"
+    "app/api/flows/route.ts"
   ],
   "exclude": ["node_modules"]
 }
