@@ -24,7 +24,8 @@
         "name": "next"
       }
     ],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": ["@prisma/client"]
   },
   "include": [
     "next-env.d.ts",
@@ -32,7 +33,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".contentlayer/generated",
-    "middlewares/**/*.ts"
+    "middlewares/**/*.ts",
+    "app/api/flows/[id].ts",
+    "app/api/flows/route.js"
   ],
   "exclude": ["node_modules"]
 }

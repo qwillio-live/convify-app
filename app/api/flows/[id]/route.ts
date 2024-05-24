@@ -3,7 +3,6 @@ import { logError } from "@/lib/utils/logger"
 import { authOptions } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
-import { func } from "prop-types"
 
 export async function GET(
   req: NextRequest,
