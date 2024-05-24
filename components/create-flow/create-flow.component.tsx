@@ -13,14 +13,14 @@ import {
   PlusCircle,
 } from "lucide-react"
 
-import { Editor, Frame, useEditor } from "@/lib/craftjs"
-// import { ProgressBar } from "../progress-bar.component"
+import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
   addScreen,
   setEditorLoad,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
+// import { ProgressBar } from "../progress-bar.component"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ScreensList from "@/components/user/screens/screens-list.component"
