@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import { templates } from "@/constant"
@@ -60,14 +60,13 @@ const SelectTemplate = () => {
     <div>
       <div className="flex gap-2 pb-4 min-[960px]:pb-8 overflow-x-auto items-center -mx-6 lg:mx-0">
         {["Recommended", ...categories].map((item) => (
-          <>
+          <React.Fragment key={item}>
             <Button
               className={`text-[13px] rounded-full py-[0.85em] px-[1em] font-semibold leading-[1] h-auto first:ml-6 last:mr-6 lg:first:mx-0 ${
                 item === selectedCategory
                   ? "bg-[#4050ff] text-white hover:bg-[#3646ec]"
                   : "bg-[#f2f2f2] text-[#3b3b3b] hover:bg-[#ebebeb]"
               }`}
-              key={item}
               onClick={() => setSelectedCategory(item)}
             >
               {item}
@@ -75,7 +74,7 @@ const SelectTemplate = () => {
             {item === "Recommended" && (
               <div className="w-px h-[27px] bg-[hsl(0,0%,54%)] basis-px min-[720px]:block hidden"></div>
             )}
-          </>
+          </React.Fragment>
         ))}
       </div>
       {recommendedTemplate && selectedCategory === "Recommended" && (
@@ -146,7 +145,7 @@ const SelectTemplate = () => {
       )}
       <div className="grid min-[696px]:grid-cols-2 gap-12">
         {filteredData.map((tem) => (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2" key={tem.id}>
             <div className="w-full relative rounded-[5px] overflow-hidden border border-gray-100 group">
               <div className="flex flex-col h-full items-center justify-center absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity duration-200 ease-in-out">
                 <div className="flex flex-col items-stretch gap-[0.6em]">
