@@ -259,7 +259,7 @@
         "isCustomized": false
       },
       "radius": {
-        "value": "none",
+        "value": "0",
         "globalStyled": false,
         "isCustomized": false
       },
