@@ -34,14 +34,14 @@ const initialState: GlobalThemeState = {
   primaryFonts: FONTS.primaryFonts,
   secondaryFonts: FONTS.secondaryFonts,
   defaultGeneral: {
-    primaryColor: "#892A5F",
-    secondaryColor: "#7f114e",
+    primaryColor: "#4050ff",
+    secondaryColor: "#4050ff",
     backgroundColor: "#ffffff",
     backgroundImage: "",
   },
   general: {
-    primaryColor: "#892A5F",
-    secondaryColor: "#7f114e",
+    primaryColor: "#4050ff",
+    secondaryColor: "#4050ff",
     backgroundColor: "#ffffff",
     backgroundImage: "",
   },

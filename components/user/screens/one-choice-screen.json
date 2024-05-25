@@ -235,28 +235,28 @@
 		"props": {
       "fontFamily": {
         "value": "inherit",
-        "globalStyled": false,
+        "globalStyled": true,
         "isCustomized": false
       },
       "background": {
         "value": "#4050ff",
-        "globalStyled": false,
+        "globalStyled": true,
         "isCustomized": false
       },
       "color": {
         "value": "#ffffff",
         "globalStyled": false,
-        "isCustomized": false
+        "isCustomized": true
       },
       "backgroundHover": {
         "value": "#3041ff",
-        "globalStyled": false,
+        "globalStyled": true,
         "isCustomized": false
       },
       "colorHover": {
         "value": "#ffffff",
         "globalStyled": false,
-        "isCustomized": false
+        "isCustomized": true
       },
       "radius": {
         "value": "0",
@@ -265,15 +265,15 @@
       },
       "borderColor": {
         "value": "inherit",
-        "globalStyled": false,
+        "globalStyled": true,
         "isCustomized": false
       },
       "borderHoverColor": {
         "value": "inherit",
-        "globalStyled": false,
+        "globalStyled": true,
         "isCustomized": false
       },
-      "justifyContent": "center",
+      "justifyContent": "space-between",
       "disabled": false,
       "enableIcon": true,
       "width": "366",
