@@ -85,12 +85,13 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Font Size</p>
               <Input
                 type="number"
-                placeholder={fontSize}
+                value={fontSize.value}
+                placeholder={fontSize.value}
                 max={100}
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.fontSize = e.target.value), 1000)
+                  setProp((props) => (props.fontSize.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -98,7 +99,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Font Weight</p>
               <Select
                 onValueChange={(e) => {
-                  setProp((props) => (props.fontWeight = e), 1000)
+                  setProp((props) => (props.fontWeight.value = e), 1000)
                 }}
               >
                 <SelectTrigger className="w-full">
@@ -123,7 +124,7 @@ export const HeadlineTextSettings = () => {
               <RadioGroup
                 defaultValue="left"
                 onValueChange={(event) => {
-                  setProp((props) => (props.textAlign = event), 1000)
+                  setProp((props) => (props.textAlign.value = event), 1000)
                 }}
               >
                 <div className="flex items-center space-x-2">
@@ -151,12 +152,12 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Left</p>
               <Input
                 type="number"
-                placeholder={marginLeft}
+                placeholder={marginLeft.value}
                 max={100}
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginLeft = e.target.value), 1000)
+                  setProp((props) => (props.marginLeft.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -164,12 +165,12 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Top</p>
               <Input
                 type="number"
-                placeholder={marginTop}
+                placeholder={marginTop.value}
                 max={100}
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                  setProp((props) => (props.marginTop.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -177,12 +178,12 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Right</p>
               <Input
                 type="number"
-                placeholder={marginRight}
+                placeholder={marginRight.value}
                 max={100}
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
+                  setProp((props) => (props.marginRight.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -190,12 +191,12 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Bottom</p>
               <Input
                 type="number"
-                placeholder={marginBottom}
+                placeholder={marginBottom.value}
                 max={100}
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                  setProp((props) => (props.marginBottom.value = e.target.value), 1000)
                 }
               />
             </div>
@@ -210,9 +211,9 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Text</p>
               <Input
                 type="color"
-                value={textColor}
+                value={textColor.value}
                 onChange={(e) => {
-                  setProp((props) => (props.textColor = e.target.value), 1000)
+                  setProp((props) => (props.textColor.value = e.target.value))
                 }}
               />
             </div>

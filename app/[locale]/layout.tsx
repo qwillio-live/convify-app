@@ -8,7 +8,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
-
+import {  inter,
+  roboto_mono,} from "./fonts-list"
 // const fontSans = FontSans({
 //   subsets: ["latin"],
 //   variable: "--font-sans",
@@ -88,7 +89,9 @@ export default function RootLayout({
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
-          fontHeading.variable
+          fontHeading.variable,
+          inter.variable,
+          roboto_mono.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
