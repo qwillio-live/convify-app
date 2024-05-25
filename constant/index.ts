@@ -249,7 +249,7 @@ export const templates: Template[] = [
     name: "B2C Pet Insurance",
     category: "B2C Lead-Gen",
     img: "template-26",
-    isRecommended: false,
+    isRecommended: true,
     isPopular: false,
   },
   {

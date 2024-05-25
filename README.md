@@ -30,7 +30,6 @@ This project as an experiment to see how a modern app (with features like authen
 
 ## Collaborate with your team
 
-<<<<<<< HEAD
 
 - [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
 - [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
@@ -41,12 +40,7 @@ This project as an experiment to see how a modern app (with features like authen
   > This app is using the unstable releases for Next.js 13 and React 18. The new router and app dir is still in beta and not production-ready.
   > **Expect some performance hits when testing the dashboard**.
   > If you see something broken, you can ping me [@shadcn](https://twitter.com/shadcn).
-  >
-  > > > > > > > c606420 (feat: update to Next 13.3)
 
-## Test and Deploy
-
-<<<<<<< HEAD
 Use the built-in continuous integration in GitLab.
 
 - [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)

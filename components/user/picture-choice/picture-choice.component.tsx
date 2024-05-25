@@ -1,5 +1,5 @@
 import { DefaultSerializer } from "v8"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import {
   Anchor,
@@ -48,11 +48,9 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
-import {
-  Card as UserCard,
-} from "@/components/user/card/user-card.component"
-import CrossIcon from "@/assets/icons/x.svg";
-import CheckIcon from "@/assets/icons/check.svg";
+import { Card as UserCard } from "@/components/user/card/user-card.component"
+import CrossIcon from "@/assets/icons/x.svg"
+import CheckIcon from "@/assets/icons/check.svg"
 import {
   Container,
   ContainerDefaultProps,
@@ -151,7 +149,7 @@ const PictureChoiceItem = styled.div<{
     color: ${({ textHover }) => textHover};
     border: ${({ border, borderHover }) => `${border}px solid ${borderHover}`};
   }
-`;
+`
 
 export const PictureChoiceGen = ({
   containerStyles,
@@ -159,51 +157,44 @@ export const PictureChoiceGen = ({
   pictureItems,
   ...props
 }) => {
-  return(
-    <PictureChoiceContainer
-    {...containerStyles}
-  >
-
-    {pictureItems.map((item, index) => (
-      <PictureChoiceItem
-        key={index}
-        {...pictureItemsStyles}
-      >
-        {item.itemType === ItemType.ICON ? (
-          <>
-{item.icon === 'check' ? (
-  <IconCheck
-    style={{
-      width: `${pictureItemsStyles.picWidth}px`,
-      height: `${pictureItemsStyles.picHeight}px`,
-    }}
-  />
-) : item.icon === 'x' ? (
-  <IconX
-    style={{
-      width: `${pictureItemsStyles.picWidth}px`,
-      height: `${pictureItemsStyles.picHeight}px`,
-    }}
-  />
-) : null}
-          </>
-        ) : (
-           <img
-            src={item.pic}
-            alt={item.alt || ""}
-            style={{
-              width: `${pictureItemsStyles.picWidth}px`,
-              height: `${pictureItemsStyles.picHeight}px`,
-            }}
-          />
-         )}
-        <p>{item.text}</p>
-      </PictureChoiceItem>
-    ))}
-  </PictureChoiceContainer>
+  return (
+    <PictureChoiceContainer {...containerStyles}>
+      {pictureItems.map((item, index) => (
+        <PictureChoiceItem key={index} {...pictureItemsStyles}>
+          {item.itemType === ItemType.ICON ? (
+            <>
+              {item.icon === "check" ? (
+                <IconCheck
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) : item.icon === "x" ? (
+                <IconX
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) : null}
+            </>
+          ) : (
+            <img
+              src={item.pic}
+              alt={item.alt || ""}
+              style={{
+                width: `${pictureItemsStyles.picWidth}px`,
+                height: `${pictureItemsStyles.picHeight}px`,
+              }}
+            />
+          )}
+          <p>{item.text}</p>
+        </PictureChoiceItem>
+      ))}
+    </PictureChoiceContainer>
   )
 }
-
 
 export const PictureChoice = ({
   containerStyles,
@@ -221,11 +212,23 @@ export const PictureChoice = ({
     isHovered: state.events.hovered,
   }))
 
+  const [editable, setEditable] = useState(false)
+  useEffect(() => {
+    if (selected) {
+      return
+    }
+
+    setEditable(false)
+  }, [selected])
+
   return (
     <>
       <PictureChoiceContainer
         ref={(ref: any) => connect(drag(ref))}
         {...containerStyles}
+        {...props}
+        onClick={() => selected && setEditable(true)}
+        className="relative"
       >
         {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
 
@@ -233,7 +236,7 @@ export const PictureChoice = ({
           <PictureChoiceItem key={index} {...pictureItemsStyles}>
             {item.itemType === ItemType.ICON ? (
               <>
-              {/* <img
+                {/* <img
                 src={item.icon}
                 style={{
                   color: `${pictureItemsStyles.textColor}`,
@@ -242,24 +245,24 @@ export const PictureChoice = ({
                 }}
               /> */}
 
-{item.icon === 'check' ? (
-      <IconCheck
-        style={{
-          width: `${pictureItemsStyles.picWidth}px`,
-          height: `${pictureItemsStyles.picHeight}px`,
-        }}
-      />
-    ) : item.icon === 'x' ? (
-      <IconX
-        style={{
-          width: `${pictureItemsStyles.picWidth}px`,
-          height: `${pictureItemsStyles.picHeight}px`,
-        }}
-      />
-    ) : null}
+                {item.icon === "check" ? (
+                  <IconCheck
+                    style={{
+                      width: `${pictureItemsStyles.picWidth}px`,
+                      height: `${pictureItemsStyles.picHeight}px`,
+                    }}
+                  />
+                ) : item.icon === "x" ? (
+                  <IconX
+                    style={{
+                      width: `${pictureItemsStyles.picWidth}px`,
+                      height: `${pictureItemsStyles.picHeight}px`,
+                    }}
+                  />
+                ) : null}
               </>
             ) : (
-               <img
+              <img
                 src={item.pic}
                 alt={item.alt || ""}
                 style={{
@@ -267,8 +270,25 @@ export const PictureChoice = ({
                   height: `${pictureItemsStyles.picHeight}px`,
                 }}
               />
-             )}
-            <p>{item.text}</p>
+            )}
+            <ContentEditable
+              html={item?.text || ""}
+              disabled={!editable}
+              onChange={(e) =>
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].text = e.target.value.replace(
+                      /<\/?[^>]+(>|$)/g,
+                      ""
+                    )),
+                  500
+                )
+              }
+              tagName={"div"}
+              style={{
+                minWidth: "20px",
+              }}
+            />
           </PictureChoiceItem>
         ))}
       </PictureChoiceContainer>
