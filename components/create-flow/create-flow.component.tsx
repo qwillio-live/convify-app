@@ -1,4 +1,5 @@
 "use client"
+
 import React from "react"
 import {
   ArrowRight,
@@ -7,15 +8,19 @@ import {
   Facebook,
   Github,
   Globe,
-  Linkedin,
-  Plus,
-  PlusCircle,
   Image,
+  Linkedin,
+  PlusCircle,
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
+import {
+  addScreen,
+  setEditorLoad,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
+// import { ProgressBar } from "../progress-bar.component"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ScreensList from "@/components/user/screens/screens-list.component"
@@ -23,40 +28,34 @@ import { SettingsPanel } from "@/components/user/settings/user-settings.componen
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
 import { UserText } from "@/components/user/text/user-text.component"
 
-// import { ProgressBar } from "../progress-bar.component"
 import { Input } from "../ui/input"
+import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import {ProgressBar} from "../user/progress/user-progress.component"
-import { Progress } from "../ui/progress-custom"
 import { Card, CardContent } from "../user/card/user-card.component"
 import {
   Container,
-  ContainerDefaultProps,
   UserContainer,
 } from "../user/container/user-container.component"
+import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { UserInput } from "../user/input/user-input.component"
+import { LayoutContainer } from "../user/layout-container/layout-container.component"
+import { List, ListItem } from "../user/list/list.component"
+import { Loader } from "../user/loader/user-loader.component"
+import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
+import { Logo } from "../user/logo/user-logo.component"
+import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
+import { PictureChoice } from "../user/picture-choice/picture-choice.component"
+import { ProgressBar } from "../user/progress/user-progress.component"
 import { DragDrop } from "../user/screens/drag-drop-screens.component"
 import { ButtonChoiceScreen } from "../user/screens/screen-button-choice.component"
 import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
-import { addScreen, resetScreensState, setEditorLoad} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { RenderNode } from "../user/settings/render-node"
-import { Logo } from "../user/logo/user-logo.component"
-import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
-import { PictureChoice } from "../user/picture-choice/picture-choice.component"
-import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
-import { HeadlineText } from "../user/headline-text/headline-text.component"
-import { UserInput } from "../user/input/user-input.component"
-import { Loader } from "../user/loader/user-loader.component"
 import { Controller } from "../user/settings/controller.component"
-import { setScreenHeader } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import screensFooterData from "@/components/user/screens/screen-footer.json"
-import { LayoutContainer } from "../user/layout-container/layout-container.component"
-import { List, ListItem } from "../user/list/list.component"
-
+import { RenderNode } from "../user/settings/render-node"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -71,7 +70,7 @@ const SaveButton = () => {
   //screen header id is: HeT6HrWBxJ
   const nodeTree = node(headerId || '').toNodeTree()
   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
-  console.log("NODE TREE IS: ",JSON.stringify(nodeTree))
+  console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
   return (
     <a
       className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
@@ -95,17 +94,16 @@ const NodesToSerializedNodes = (nodes) => {
 }
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
   const startScreen = useAppSelector((state) => state?.screen?.screens[0])
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
-  const checkToReload = () => {
-
-  }
+  
 
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
@@ -114,21 +112,20 @@ export function CreateFlowComponent() {
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
-      // Save the updated JSON whenever the Nodes has been changed
-      onNodesChange={query => {
-        let json = query.getSerializedNodes();
-        let jsonString = JSON.stringify(json);
-        // let editorLoadLength = Object.keys(editorLoad).length;
-        // if(jsonString !== editorLoad){
+        // Save the updated JSON whenever the Nodes has been changed
+        onNodesChange={(query) => {
+          let json = query.getSerializedNodes()
+          let jsonString = JSON.stringify(json)
+          // let editorLoadLength = Object.keys(editorLoad).length;
+          // if(jsonString !== editorLoad){
           console.log("RE-REnder called")
           dispatch(setEditorLoad(JSON.stringify(json)))
-        // }else{
+          // }else{
           // console.log("RE-REnder NOT called")
           // return;
-        // }
-        // save to server
-
-      }}
+          // }
+          // save to server
+        }}
         resolver={{
           Controller,
           Logo,
@@ -170,22 +167,12 @@ export function CreateFlowComponent() {
           LayoutContainer,
           Loader,
           List,
-          ListItem
+          ListItem,
         }}
         onRender={RenderNode}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
-            <div className="section-header flex items-center justify-end">
-              <Button
-                variant={"secondary"}
-                className=""
-                onClick={() => dispatch(addScreen(selectedScreen || 0))}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Screen
-              </Button>
-            </div>
             <div className="section-body">
               <ScreensList />
             </div>
@@ -199,18 +186,16 @@ export function CreateFlowComponent() {
                 onValueChange={(value) => setView(value)}
               >
                 <TabsContent
+                style={{ backgroundColor: backgroundColor }}
                   className={cn(
-                    "mx-auto page-container min-h-[400px] box-content bg-background font-sans antialiased z-20",
+                    "mx-auto page-container min-h-[400px] box-content font-sans antialiased z-20",
                     view == VIEWS.DESKTOP
-                      ? "w-full border-0"
+                      ? "w-full border-0 shahid"
                       : "w-96 border px-4"
                   )}
                   value={view}
                 >
-                  <Frame
-                  data={JSON.parse(editorLoad)}
-                  >
-                  </Frame>
+                  <Frame data={JSON.parse(editorLoad)}></Frame>
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -218,8 +203,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {/* {<SaveButton />} */}
-
+              {<SaveButton />}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">

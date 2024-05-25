@@ -7,6 +7,7 @@ export default function FlowPreview() {
   const selectedScreenIdex = useAppSelector((state) => state?.screen?.selectedScreen);
   const selectedScreen = useAppSelector((state) => state?.screen?.screens[selectedScreenIdex || 0]);
   const screens = useAppSelector((state) => state?.screen?.screens);
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   React.useEffect(() => {
     console.log(selectedScreen)
   }, [selectedScreen])
@@ -17,6 +18,7 @@ export default function FlowPreview() {
         return(
           <div
           key={index}
+          style={{backgroundColor: backgroundColor}}
           className="my-14 min-h-screen
           shrink-0
           basis-full

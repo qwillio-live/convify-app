@@ -80,6 +80,8 @@ export const screensSlice = createSlice({
       // state.screens = [...action.payload];
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
+      state.headerMode = false;
+      state.footerMode = false;
       state.selectedScreen = action.payload;
       state.editorLoad = state.screens[action.payload] ; // Ensure new reference
     },
@@ -98,20 +100,30 @@ export const screensSlice = createSlice({
       newScreens.splice(action.payload + 1, 0, JSON.stringify(emptyScreenData));
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
-      state.editorLoad = JSON.stringify(emptyScreenData) ; // Ensure new reference
+      state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array
-      const newScreen = { ...state.screens[action.payload] }; // Create new object
+      const newScreen = state.screens[action.payload]; // Create new object
       newScreens.splice(action.payload + 1, 0, newScreen);
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
+      state.editorLoad = newScreen; // Ensure new reference
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
+      if(state.screens.length === 1) return;
       const newScreens = [...state.screens]; // Create new array
       newScreens.splice(action.payload, 1);
       state.screens = newScreens;
-      state.selectedScreen = Math.min(action.payload, state.screens.length - 1);
+
+      // If 0th screen is deleted, move to the next screen; if > 0, move to the previous screen
+      if (action.payload === 0) {
+        state.selectedScreen = 0; // Move to the new first screen
+      } else {
+        state.selectedScreen = Math.max(0, action.payload - 1); // Move to the previous screen
+      }
+
+      state.editorLoad = state.screens[state.selectedScreen]; // Ensure new reference
     },
   },
 });

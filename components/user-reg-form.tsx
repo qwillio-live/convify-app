@@ -130,15 +130,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 {...register("termsAccepted")}
               />
               <span className="pl-1">
-                I agree to the{" "}
-                <Link href="/terms" style={{ textDecoration: "underline" }}>
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link href="/privacy" style={{ textDecoration: "underline" }}>
-                  Privacy Policy
-                </Link>
-                .
+                I agree to the Terms of Service and Privacy Policy.
               </span>
             </label>
             {errors.termsAccepted && (
@@ -160,9 +152,13 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 buttonVariants(),
                 "flex w-full items-center justify-center"
               )}
+              disabled={isLoading}
               style={{ fontWeight: "600" }}
               type="submit"
             >
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Create my Free Account
             </button>
           </div>
@@ -203,7 +199,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
               </button>
               <div className="relative">
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-sm text-muted-foreground">
+                  <span className="bg-background text-muted-foreground px-2 text-sm">
                     Or
                   </span>
                 </div>

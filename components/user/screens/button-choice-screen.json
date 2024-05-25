@@ -3,11 +3,12 @@
 		"type": "UserContainer",
 		"isCanvas": true,
 		"props": {
-			"padding": 5,
-			"background": "#ad2121",
-			"expanded": "true",
-      "maxWidth": "100%",
-			"className": "min-h-screen max-w-full flex flex-col items-center"
+      "style": {
+        "padding": "24px",
+        "expanded": "true",
+        "maxWidth": "100%"
+      },
+			"className": "min-h-screen max-w-full flex flex-col items-center py-5"
 		},
 		"displayName": "Button Choice Screen",
 		"custom": {
@@ -65,17 +66,54 @@
 		},
 		"isCanvas": false,
 		"props": {
-			"text": "See how much you can save with Convify.",
-			"fontSize": "46",
-			"textColor": "inherit",
-			"fontWeight": "600",
-			"textAlign": "center",
-			"marginLeft": 0,
-			"marginRight": 0,
-			"marginTop": 0,
-			"marginBottom": "40",
-			"tagType": "h1"
-		},
+      "text": "See how much you can save with Convify.",
+      "fontSize": {
+        "value": 46,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "fontFamily" : {
+        "value": "--font-heading",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "textColor": {
+        "value": "inherit",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "fontWeight": {
+        "value": "600",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "textAlign": {
+        "value": "center",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginLeft": {
+        "value": 0,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginRight": {
+        "value": 0,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginTop": {
+        "value": 0,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginBottom": {
+        "value": 40,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "tagType": "h1"
+    },
 		"displayName": "HeadlineText",
 		"custom": {
 
@@ -149,33 +187,67 @@
 		},
 		"isCanvas": false,
 		"props": {
-			"disabled": false,
-			"enableIcon": true,
-			"width": "366",
-			"height": "auto",
-			"size": "small",
-			"background": "#4050ff",
-			"color": "#ffffff",
-			"backgroundHover": "#3041ff",
-			"colorHover": "#ffffff",
-			"text": "Get quote",
-			"marginLeft": 0,
-			"marginTop": 0,
-			"marginRight": 0,
-			"marginBottom": "40",
-			"icon": "arrowright",
-			"paddingLeft": "16",
-			"paddingTop": "26",
-			"paddingRight": "16",
-			"paddingBottom": "26",
-			"radius": "none",
-			"flexDirection": "row",
-			"alignItems": "center",
-			"justifyContent": "center",
-			"gap": 4,
-			"border": 0,
-			"borderColor": "inherit"
-		},
+      "fontFamily": {
+        "value": "inherit",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "background": {
+        "value": "#4050ff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "color": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "backgroundHover": {
+        "value": "#3041ff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "colorHover": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "radius": {
+        "value": "0",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "borderColor": {
+        "value": "inherit",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "borderHoverColor": {
+        "value": "inherit",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "justifyContent": "center",
+      "disabled": false,
+      "enableIcon": true,
+      "width": "366",
+      "height": "auto",
+      "size": "small",
+      "text": "Get quote",
+      "marginLeft": 0,
+      "marginTop": "40",
+      "marginRight": 0,
+      "marginBottom": "40",
+      "icon": "arrowright",
+      "paddingLeft": "16",
+      "paddingTop": "26",
+      "paddingRight": "16",
+      "paddingBottom": "26",
+      "flexDirection": "row",
+      "alignItems": "center",
+      "gap": 4,
+      "border": 0
+    },
 		"displayName": "IconButton",
 		"custom": {
 
