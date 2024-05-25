@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
 import { IconButtonProps } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
+import { darken } from "polished";
 
 const useThemePresets = () => {
   const theme = useAppSelector((state) => state.theme);
-
+  const darkenedPrimaryColor = darken(0.1, theme?.general?.primaryColor || "#3182ce");
   const filledPreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -24,7 +25,7 @@ const useThemePresets = () => {
       isCustomized: true,
     },
     backgroundHover: {
-      value: theme?.general?.secondaryColor || "#3182ce",
+      value: darkenedPrimaryColor || "#3182ce",
       globalStyled: true,
       isCustomized: false,
     },
@@ -92,7 +93,7 @@ const useThemePresets = () => {
       isCustomized: true,
     },
     colorHover: {
-      value: theme?.general?.secondaryColor || "#3180ca",
+      value: darkenedPrimaryColor || "#3180ca",
       globalStyled: true,
       isCustomized: false,
     },
@@ -107,7 +108,7 @@ const useThemePresets = () => {
       isCustomized: false,
     },
     borderHoverColor: {
-      value: theme?.general?.secondaryColor || "#3182ce",
+      value: darkenedPrimaryColor || "#3182ce",
       globalStyled: true,
       isCustomized: false,
     },

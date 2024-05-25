@@ -12,6 +12,7 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
+import {darken} from "polished";
 import {
   Accordion,
   AccordionContent,
@@ -151,7 +152,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
     color: ${(props) => props.colorHover};
   }
   &:focus {
-    border-color: #3182ce; /* Change to your desired focus border color */
+    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
   }
   background: ${(props) => props.background};
   color: ${(props) => props.color};
@@ -238,34 +239,35 @@ export const IconButton = ({
 
   // },[secondaryTextColor])
 
+
   useEffect(() => {
 
-      if(background.globalStyled && !background.isCustomized){
-        setProp((props) => props.background.value = primaryColor, 200)
+      if(primaryColor){
+        const darkenedPrimaryColor = darken(0.1,primaryColor);
+        if(background.globalStyled && !background.isCustomized){
+          setProp((props) => props.background.value = primaryColor, 200)
+        }
+          if(color.globalStyled && !color.isCustomized){
+        setProp((props) => props.color.value = primaryColor, 200)
       }
-        if(color.globalStyled && !color.isCustomized){
-      setProp((props) => props.color.value = primaryColor, 200)
-    }
-      if(borderColor.globalStyled && !borderColor.isCustomized){
-        setProp((props) => props.borderColor.value = primaryColor, 200)
+        if(borderColor.globalStyled && !borderColor.isCustomized){
+          setProp((props) => props.borderColor.value = primaryColor, 200)
+        }
+
+        // hover colors
+
+        if(backgroundHover.globalStyled && !backgroundHover.isCustomized){
+          setProp((props) => props.backgroundHover.value = darkenedPrimaryColor, 200)
+        }
+        if(borderHoverColor.globalStyled && !borderHoverColor.isCustomized){
+          setProp((props) => props.borderHoverColor.value = darkenedPrimaryColor, 200)
+        }
+        if(colorHover.globalStyled && !colorHover.isCustomized){
+          setProp((props) => props.colorHover.value = darkenedPrimaryColor, 200)
+        }
       }
 
   },[primaryColor])
-
-  useEffect(() => {
-      if(backgroundHover.globalStyled && !backgroundHover.isCustomized){
-        setProp((props) => props.backgroundHover.value = secondaryColor, 200)
-      }
-      if(colorHover.globalStyled && !color.isCustomized){
-        setProp((props) => props.colorHover.value = primaryColor, 200)
-      }
-      if(borderHoverColor.globalStyled && !borderHoverColor.isCustomized){
-        setProp((props) => props.borderHoverColor.value = secondaryColor, 200)
-      }
-      if(color.globalStyled && !color.isCustomized){
-        setProp((props) => props.colorHover.value = secondaryColor, 200)
-      }
-  },[secondaryColor])
 
 
   return (

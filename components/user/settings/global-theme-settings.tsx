@@ -51,6 +51,14 @@ export const GlobalThemeSettings = (props: Props) => {
     dispatch({ type: 'APPLY_THEME_AND_CYCLE_SCREENS', payload: themeStyles });
   };
 
+  const handleFileChange = (e) => {
+    if (!e?.target?.files?.length) return;
+    const file = e?.target?.files[0];
+    const objectUrl = URL.createObjectURL(file);
+
+    dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }));
+  };
+
   return (
     <>
       <ScrollArea>
@@ -124,6 +132,8 @@ export const GlobalThemeSettings = (props: Props) => {
                   Background Image
                 </label>
                 <Input
+                  onChange={handleFileChange}
+                  multiple={false}
                   className="basis-full"
                   type={"file"}
                   placeholder="Upload Image"
