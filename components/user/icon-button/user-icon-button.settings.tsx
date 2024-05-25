@@ -7,9 +7,18 @@ import {
   Disc,
   DollarSign,
   Mountain,
+  MoveHorizontal,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalSpaceBetween
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components/ui/toggle-group"
 
 import { useNode } from "@/lib/craftjs"
 import {
@@ -41,6 +50,7 @@ import {
   IconButtonGen,
 } from "./user-icon-button.component"
 import useThemePresets from "./useThemePresets"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const IconButtonSettings = () => {
   const {
@@ -85,6 +95,8 @@ export const IconButtonSettings = () => {
       })
     }, 1000)
   }
+
+  const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
 
   return (
     <>
@@ -154,65 +166,144 @@ export const IconButtonSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
+        <AccordionItem value="item-9">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Design </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Width</p>
+              <ToggleGroup
+              defaultValue={size}
+              onValueChange={(value) => {
+                setProp((props) => (props.size = value), 1000)
+                if(value === 'full') {
+                  setProp((props) => (props.fullWidth = true), 1000)
+                }else{
+                  setProp((props) => (props.fullWidth = false), 1000)
+                }
+              }}
+              variant={"outline"}
+              value={size}
+              type="single">
+                <ToggleGroupItem value="small" aria-label="Toggle small">
+                  S
+                </ToggleGroupItem>
+                <ToggleGroupItem value="medium" aria-label="Toggle medium">
+                  M
+                </ToggleGroupItem>
+                <ToggleGroupItem value="large" aria-label="Toggle large">
+                  L
+                </ToggleGroupItem>
+                <ToggleGroupItem value="full" aria-label="Toggle full">
+                  <MoveHorizontal />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Content align</p>
+              <ToggleGroup
+              defaultValue={justifyContent}
+              onValueChange={(value) => {
+                setProp((props) => (props.justifyContent = value), 1000)
+              }}
+              variant={"outline"}
+              value={justifyContent}
+              type="single">
+                <ToggleGroupItem value="start" aria-label="Toggle start">
+                  <AlignHorizontalJustifyStart />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="center" aria-label="Toggle center">
+                  <AlignHorizontalJustifyCenter />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="end" aria-label="Toggle end">
+                  <AlignHorizontalJustifyEnd />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="space-between" aria-label="Toggle space between">
+                  <AlignHorizontalSpaceBetween />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+          </AccordionContent>
+        </AccordionItem>
+
         <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Left</p>
-              <Input
-                type="number"
-                placeholder={marginLeft}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginLeft = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <p className="text-md text-muted-foreground">Top</p>
-              <Input
-                type="number"
-                placeholder={marginTop}
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+              <Slider
+                className=""
+                defaultValue={[marginTop]}
+                value={[marginTop]}
                 max={100}
                 min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginTop = e), 1000)
                 }
               />
+              <span className="font-medium">{marginTop}</span>
+              </div>
             </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
-              <Input
-                type="number"
-                placeholder={marginRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <p className="text-md text-muted-foreground">Bottom</p>
-              <Input
-                type="number"
-                placeholder={marginBottom}
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+              <Slider
+                defaultValue={[marginBottom]}
+                value={[marginBottom]}
                 max={100}
                 min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp(
-                    (props) => (props.marginBottom = e.target.value),
-                    1000
-                  )
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginBottom = e), 1000)
                 }
               />
+              <span className="font-medium">{marginBottom}</span>
+              </div>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <p className="text-md text-muted-foreground">Right</p>
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+
+              <Slider
+                defaultValue={[marginRight]}
+                value={[marginRight]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginRight = e), 1000)
+                }
+              />
+              <span className="font-medium">{marginRight}</span>
+              </div>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <p className="text-md text-muted-foreground">Left</p>
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+
+              <Slider
+                defaultValue={[marginLeft]}
+                value={[marginLeft]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginLeft = e), 1000)
+                }
+              />
+              <span className="font-medium">{marginLeft}</span>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -224,10 +315,10 @@ export const IconButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
             <Card onClick={() => addPresetStyles(filledPreset)}>
-                <IconButtonGen {...filledPreset} />
+                <IconButtonGen {...filledPreset} size="full" />
               </Card>
               <Card onClick={() => addPresetStyles(outLinePreset)}>
-                <IconButtonGen {...outLinePreset} />
+                <IconButtonGen {...outLinePreset} size="full" />
               </Card>
             </div>
           </AccordionContent>
@@ -428,33 +519,6 @@ export const IconButtonSettings = () => {
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value={"end"} id="r4" />
                   <Label htmlFor="r4">End</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            <div className="style-control col-span-1 flex w-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Justify</p>
-              <RadioGroup
-                defaultValue={justifyContent}
-                onValueChange={(value) => {
-                  setProp((props) => (props.justifyContent = value), 1000)
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"start"} id="r2" />
-                  <Label htmlFor="r2">Start</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"center"} id="r3" />
-                  <Label htmlFor="r3">Center</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"end"} id="r4" />
-                  <Label htmlFor="r4">End</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"space-between"} id="r5" />
-                  <Label htmlFor="r5">Space-between</Label>
                 </div>
               </RadioGroup>
             </div>

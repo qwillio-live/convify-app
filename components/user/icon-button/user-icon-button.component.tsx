@@ -41,13 +41,20 @@ import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 const IconsList = {
-  aperture: <Aperture />,
-  activity: <Activity />,
-  dollarsign: <DollarSign />,
-  anchor: <Anchor />,
+  aperture: <Aperture className="shrink-0" />,
+  activity: <Activity className="shrink-0" />,
+  dollarsign: <DollarSign className="shrink-0" />,
+  anchor: <Anchor className="shrink-0" />,
   disc: <Disc />,
-  mountain: <Mountain />,
-  arrowright: <ArrowRight />,
+  mountain: <Mountain className="shrink-0" />,
+  arrowright: <ArrowRight className="shrink-0" />,
+}
+
+const IconButtonSizeValues={
+  small: "220px",
+  medium: "336px",
+  large: "532px",
+  full: "100%",
 }
 
 export const IconButtonGen = ({
@@ -96,6 +103,7 @@ export const IconButtonGen = ({
         border={border}
         marginLeft={marginLeft}
         width={width}
+        size={size}
         height={height}
         marginRight={marginRight}
         marginTop={marginTop}
@@ -120,6 +128,7 @@ interface StyledCustomButtonProps {
   background?: string
   backgroundHover?: string
   colorHover?: string
+  size?: string
   marginLeft?: string | number
   width?: string | number
   height?: string | number
@@ -156,10 +165,11 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   }
   background: ${(props) => props.background};
   color: ${(props) => props.color};
-
+  overflow: hidden;
   margin-left: ${(props) => props.marginLeft}px;
   max-width: 100%;
-  width: ${(props) => props.width}px;
+  width: ${(props) => IconButtonSizeValues[props.size || "medium"]};
+  min-width: ${(props) => IconButtonSizeValues[props.size || "medium"]};
   height: ${(props) => props.height}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-top: ${(props) => props.marginTop}px;
@@ -216,6 +226,7 @@ export const IconButton = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
@@ -271,7 +282,8 @@ export const IconButton = ({
 
 
   return (
-    <div ref={(ref: any) => connect(drag(ref))}>
+    <div
+    ref={(ref: any) => connect(drag(ref))}>
       <StyledCustomButton
         fontFamily={fontFamily.value}
         color={color.value}
@@ -296,6 +308,7 @@ export const IconButton = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         gap={gap}
+        size={size}
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
@@ -303,6 +316,10 @@ export const IconButton = ({
         <ContentEditable
           html={text}
           disabled={disabled}
+          style={{
+            maxWidth: IconButtonSizeValues[size || "medium"],
+           }}
+          className="text-ellipsis overflow-hidden whitespace-nowrap"
           onChange={(e) =>
             setProp(
               (props) =>
@@ -319,11 +336,20 @@ export const IconButton = ({
 }
 
 
+export enum IconButtonSizes {
+  small = "small",
+  medium = "medium",
+  large = "large",
+  full = "full",
+}
+
+
+
 export type IconButtonProps = {
   fontFamily: StyleProperty
   disabled: boolean
   enableIcon: boolean
-  size: string
+  size: IconButtonSizes
   background: StyleProperty
   backgroundHover: StyleProperty
   color: StyleProperty
@@ -348,6 +374,7 @@ export type IconButtonProps = {
   marginBottom: number | number
   width: string | number
   height: string | number
+  fullWidth: boolean
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -397,7 +424,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   enableIcon: true,
   width: "366",
   height: "auto",
-  size: "small",
+  size: IconButtonSizes.medium,
   text: "Get quote",
   marginLeft: 0,
   marginTop: 0,
@@ -412,6 +439,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   alignItems: "center",
   gap: 4,
   border: 0,
+  fullWidth: false,
 }
 
 IconButton.craft = {

@@ -1,7 +1,7 @@
 // useThemePresets.js
 import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
-import { IconButtonProps } from "./user-icon-button.component";
+import { IconButtonProps, IconButtonSizes } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken } from "polished";
 
@@ -52,9 +52,9 @@ const useThemePresets = () => {
     justifyContent: "space-between",
     disabled: false,
     enableIcon: true,
-    width: "366",
+    width: IconButtonSizes.medium,
     height: "auto",
-    size: "small",
+    size: IconButtonSizes.medium,
     text: "Get quote",
     marginLeft: 0,
     marginTop: 0,
@@ -69,6 +69,7 @@ const useThemePresets = () => {
     alignItems: "center",
     gap: 4,
     border: 0,
+    fullWidth: false,
   };
 
   const outLinePreset: IconButtonProps = {
@@ -115,9 +116,9 @@ const useThemePresets = () => {
     justifyContent: "space-between",
     disabled: false,
     enableIcon: true,
-    width: "366",
+    width: IconButtonSizes.medium,
     height: "auto",
-    size: "small",
+    size: IconButtonSizes.medium,
     text: "Get quote",
     marginLeft: 0,
     marginTop: 0,
@@ -132,6 +133,7 @@ const useThemePresets = () => {
     alignItems: "center",
     gap: 4,
     border: 2,
+    fullWidth: false,
   };
 
   return { filledPreset, outLinePreset };
