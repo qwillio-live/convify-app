@@ -51,9 +51,9 @@ const IconsList = {
 }
 
 const IconButtonSizeValues={
-  small: "220px",
-  medium: "336px",
-  large: "532px",
+  small: "260px",
+  medium: "376px",
+  large: "576px",
   full: "100%",
 }
 
@@ -239,17 +239,6 @@ export const IconButton = ({
     }
    },
   [primaryFont])
-
-  // useEffect(() => {
-  //   if(color.globalStyled && !color.isCustomized){
-  //     setProp((props) => props.color.value = primaryTextColor, 200)
-  //   }
-  // },[primaryTextColor])
-
-  // useEffect(() => {
-
-  // },[secondaryTextColor])
-
 
   useEffect(() => {
 

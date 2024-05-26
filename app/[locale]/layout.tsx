@@ -1,4 +1,5 @@
 import localFont from "next/font/local"
+import { Inter, Roboto_Mono } from 'next/font/google'
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -8,12 +9,26 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
-import {  inter,
-  roboto_mono,} from "./fonts-list"
+// import {  inter,
+//   roboto_mono,} from "./fonts-list"
 // const fontSans = FontSans({
 //   subsets: ["latin"],
 //   variable: "--font-sans",
 // })
+
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const roboto_mono = Roboto_Mono({
+  subsets: ['latin'],
+  variable: '--font-roboto-mono',
+  display: 'swap',
+})
+
 const fontSans = localFont({
   src: "../../assets/fonts/Inter-Regular.ttf",
   variable: "--font-sans",

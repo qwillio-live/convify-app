@@ -91,6 +91,7 @@ export const IconButtonSettings = () => {
   const addPresetStyles = (preset) => {
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
+        if(key !== "text" && key !== "icon" && key !== "enableIcon")
         props[key] = preset[key]
       })
     }, 1000)
