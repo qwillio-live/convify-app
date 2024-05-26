@@ -26,6 +26,7 @@ export async function PUT(
       where: {
         id: String(flowId),
         userId,
+        isDeleted: false,
       },
     })
 
@@ -37,11 +38,27 @@ export async function PUT(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
+    let reqBody
+    try {
+      reqBody = await req.json()
+    } catch (error) {
+      await logError({
+        statusCode: 500,
+        errorMessage: "Request body is empty",
+        userId,
+        requestUrl: req.url,
+      })
+      return NextResponse.json(
+        { error: "Request body is empty" },
+        { status: 500 }
+      )
+    }
+
     const updatedIntegration = await prisma.integration.update({
       where: { id: String(id) },
       data: {
         flowId: String(flowId),
-        ...req.json(),
+        ...reqBody,
       },
     })
 
@@ -77,6 +94,7 @@ export async function DELETE(
       where: {
         id: String(flowId),
         userId,
+        isDeleted: false,
       },
     })
 

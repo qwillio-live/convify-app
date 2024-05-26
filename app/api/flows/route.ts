@@ -52,8 +52,24 @@ export async function POST(req: NextRequest) {
     await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
-
   const userId = data.user.id
+
+  let reqBody
+  try {
+    reqBody = await req.json()
+  } catch (error) {
+    await logError({
+      statusCode: 500,
+      errorMessage: "Request body is empty",
+      userId,
+      requestUrl: req.url,
+    })
+    return NextResponse.json(
+      { error: "Request body is empty" },
+      { status: 500 }
+    )
+  }
+
   const {
     templateId,
     status,
@@ -61,7 +77,7 @@ export async function POST(req: NextRequest) {
     link,
     numberOfSteps,
     numberOfResponses,
-  } = await req.json()
+  } = reqBody
 
   if (!templateId) {
     const statusCode = 400

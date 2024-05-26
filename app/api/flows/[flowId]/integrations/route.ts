@@ -26,6 +26,7 @@ export async function POST(
       where: {
         id: String(flowId),
         userId,
+        isDeleted: false,
       },
     })
 
@@ -37,10 +38,26 @@ export async function POST(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
+    let reqBody
+    try {
+      reqBody = await req.json()
+    } catch (error) {
+      await logError({
+        statusCode: 500,
+        errorMessage: "Request body is empty",
+        userId,
+        requestUrl: req.url,
+      })
+      return NextResponse.json(
+        { error: "Request body is empty" },
+        { status: 500 }
+      )
+    }
+
     const integration = await prisma.integration.create({
       data: {
         flowId: String(flowId),
-        ...req.json(),
+        ...reqBody,
       },
     })
 
