@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { UserRegForm } from "@/components/user-reg-form"
 import signupImage from "@/assets/images/signup.svg"
-import convifyBlue from "@/assets/images/convify_logo_icon.svg"
+import convifyLogo from "@/assets/convify_logo_black.svg"
 
 export const metadata = {
   title: "Create an account",
@@ -29,24 +29,31 @@ export default function RegisterPage() {
           © Convify
         </p>
       </div>
-      <Link
-        href="/login"
-        className={cn(
-          buttonVariants({ variant: "outline" }),
-          "absolute right-4 top-4 md:right-8 md:top-8"
-        )}
-        style={{ borderColor: "black" }}
-      >
-        Log in
-      </Link>
+      <div className="absolute right-4 top-3 flex md:right-6 md:top-3">
+        <p className="mr-2 mt-1" style={{ fontSize: "0.8rem" }}>
+          Already have an account?
+        </p>
+        <Link
+          href="/login"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "md" }),
+            "h-7"
+          )}
+          style={{ borderColor: "black", fontSize: "0.7rem" }}
+        >
+          Log in
+        </Link>
+      </div>
+
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="mb-2 flex flex-col justify-center text-center">
             <div className="flex justify-center">
               <img
-                src={convifyBlue.src}
+                src={convifyLogo.src}
                 alt="Convify Logo"
-                className="mb-7 w-10"
+                className="mb-5"
+                style={{ width: "8rem" }}
               />
             </div>
             <h1 className="mt-2 text-center text-2xl font-semibold tracking-tight">
