@@ -6,9 +6,9 @@ import prisma from "@/lib/prisma"
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { flowId: string } }
 ) {
-  const { id } = params
+  const { flowId } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -24,7 +24,7 @@ export async function GET(
   try {
     const flow = await prisma.flow.findFirst({
       where: {
-        id: String(id),
+        id: String(flowId),
         userId,
         isDeleted: false,
       },
@@ -50,9 +50,9 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { flowId: string } }
 ) {
-  const { id } = params
+  const { flowId } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -68,7 +68,7 @@ export async function PUT(
   try {
     const existingFlow = await prisma.flow.findFirst({
       where: {
-        id: String(),
+        id: String(flowId),
         userId,
       },
     })
@@ -83,7 +83,7 @@ export async function PUT(
 
     const data = req.body || {}
     const updatedFlow = await prisma.flow.update({
-      where: { id: String(id) },
+      where: { id: String(flowId) },
       data,
     })
 
@@ -99,9 +99,9 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { flowId: string } }
 ) {
-  const { id } = params
+  const { flowId } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -117,7 +117,7 @@ export async function DELETE(
   try {
     const existingFlow = await prisma.flow.findFirst({
       where: {
-        id: String(),
+        id: String(flowId),
         userId,
       },
     })
@@ -131,7 +131,7 @@ export async function DELETE(
     }
 
     const updatedFlow = await prisma.flow.update({
-      where: { id: String(id) },
+      where: { id: String(flowId) },
       data: { isDeleted: true },
     })
 
