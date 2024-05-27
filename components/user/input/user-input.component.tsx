@@ -86,6 +86,7 @@ export const UserInputGen = ({ ...props }) => {
         backgroundColor={props.backgroundColor}
         borderColor={isActive ? props.activeBorderColor : props.borderColor}
         borderWidth={props.borderWidth}
+        placeholder={!props.floatingLabel && props.placeholder}
         borderRadius={props.borderRadius}
         width={props.width}
         size={props.size}
@@ -229,13 +230,7 @@ export const UserInput = ({ ...props }) => {
         borderRadius={props.borderRadius}
         width={props.width}
         size={props.size}
-        // {...props}
         onFocus={() => setProp((props) => (props.isActive = true))}
-        // 1.9em .6em .7em
-        // "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
-        //       {
-        //         "border-blue-500": headerMode,
-        //       }
         className={cn(
           {
             "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
@@ -247,11 +242,9 @@ export const UserInput = ({ ...props }) => {
           bg-white
           focus-visible:ring-1 focus-visible:ring-offset-0`
         )}
-        // placeholder={props.placeholder}
         onChange={(e) =>
           setProp((props) => (props.inputValue = e.target.value))
         }
-        // onFocus={() => setProp((props) => (props.borderColor = props.activeBorderColor))}
         onBlur={() => setProp((props) => (props.isActive = false))}
         autoFocus={props.isFocused}
       />

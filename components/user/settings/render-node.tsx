@@ -48,7 +48,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
 
   return (
     <div
-      className={cn('w-full flex justify-center relative border z-10 border-transparent border-dotted',
+      className={cn('relative border z-10 border-transparent border-dotted',
         (isHover || isActive) && (id !== 'ROOT') && 'border-blue-400',
         fullWidth && 'w-full',
       )}
