@@ -104,7 +104,8 @@ import {
 } from "../progress/user-progress.component"
 import { is } from "date-fns/locale"
 import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
-import useThemePresets from "../icon-button/useThemePresets"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
+import useInputThemePresets from "../input/useInputThemePresets"
 
 const MultipleChoiceOptions = [
   {
@@ -345,7 +346,8 @@ const HoverCardComponent = ({ title, icon, children }) => {
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
-  const {filledPreset, outLinePreset} = useThemePresets();
+  const {filledPreset, outLinePreset} = useButtonThemePresets();
+  const {outlinedPreset} = useInputThemePresets();
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -420,7 +422,7 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
-                      <UserInput {...UserInputDefaultProps} />
+                      <UserInput {...outlinedPreset} />
                     )
                   }
                   data-cy="toolbox-text"

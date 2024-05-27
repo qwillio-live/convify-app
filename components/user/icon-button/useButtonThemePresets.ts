@@ -1,11 +1,10 @@
-// useThemePresets.js
 import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
 import { IconButtonProps, IconButtonSizes } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken } from "polished";
 
-const useThemePresets = () => {
+const useButtonThemePresets = () => {
   const theme = useAppSelector((state) => state.theme);
   const darkenedPrimaryColor = darken(0.1, theme?.general?.primaryColor || "#3182ce");
   const filledPreset: IconButtonProps = {
@@ -139,4 +138,4 @@ const useThemePresets = () => {
   return { filledPreset, outLinePreset };
 };
 
-export default useThemePresets;
+export default useButtonThemePresets;

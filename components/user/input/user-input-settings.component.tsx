@@ -24,6 +24,8 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { MoveHorizontal } from "lucide-react"
 
 export const UserInputSettings = () => {
   const {
@@ -34,7 +36,9 @@ export const UserInputSettings = () => {
     marginBottom,
     textColor,
     width,
+    props,
   } = useNode((node) => ({
+    props: node.data.props,
     marginLeft: node.data.props.marginLeft,
     marginRight: node.data.props.marginRight,
     marginTop: node.data.props.marginTop,
@@ -46,13 +50,16 @@ export const UserInputSettings = () => {
   return (
     <>
       <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-2">
+      <AccordionItem value="item-1">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">General </span>
+            <span className="text-sm font-medium">Content Options </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
-            <Checkbox id="required" />
+            <Checkbox
+            value={props.inputRequired}
+            onChange={(e) => setProp((props) => (props.inputRequired = e),1000)}
+            id="required" />
               <label
                 htmlFor="required"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
@@ -62,7 +69,10 @@ export const UserInputSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
-            <Checkbox id="floating-label" />
+            <Checkbox
+            checked={props.floatingLabel}
+            onCheckedChange={(e) => setProp((props) => (props.floatingLabel = e),1000)}
+            id="floating-label" />
               <label
                 htmlFor="floating-label"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
@@ -70,30 +80,69 @@ export const UserInputSettings = () => {
                 Floating label
               </label>
             </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+              <label
+                htmlFor="label-text"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+              >
+                Label
+              </label>
               <Input
-                type="number"
-                placeholder={marginRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
-                }
+              value={props.label}
+              onChange={(e) => setProp((props) => (props.label = e.target.value), 1000)}
+              type={"text"}
+              placeholder={"Enter placeholder text"}
               />
             </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
+
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+              <label
+                htmlFor="placeholder-text"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+              >
+                Placeholder
+              </label>
               <Input
-                type="number"
-                placeholder={marginBottom}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
-                }
+              value={props.placeholder}
+              onChange={(e) => setProp((props) => (props.placeholder = e.target.value), 1000)}
+              type={"text"}
+              placeholder={"Enter placeholder text"}
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+              <label
+                htmlFor="placeholder-text"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+              >
+                Field name
+              </label>
+              <Input
+              value={props.fieldName}
+              onChange={(e) => setProp((props) => (props.fieldName = e.target.value), 1000)}
+              type={"text"}
+              placeholder={"Enter field name here"}
+              />
+
+            </div>
+
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
+            <span className="text-sm font-medium">Design</span>
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-y-2 p-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Background</p>
+              <Input
+                type="color"
+                value={props.backgroundColor}
+                onChange={(e) => {
+                  setProp((props) => (props.backgroundColor = e.target.value), 1000)
+                }}
               />
             </div>
           </AccordionContent>
@@ -103,86 +152,104 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Left</p>
-
-              <Input
-                type="number"
-                placeholder={marginLeft}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginLeft = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Top</p>
-              <Input
-                type="number"
-                placeholder={marginTop}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginTop = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
-              <Input
-                type="number"
-                placeholder={marginRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
-              <Input
-                type="number"
-                placeholder={marginBottom}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Appearance</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Width</p>
-              <Input
-                type="number"
-                value={width}
-                onChange={(e) => {
-                  setProp((props) => (props.width = e.target.value), 1000)
-                }}
+              <ToggleGroup
+              defaultValue={"size"}
+              onValueChange={(value) => {
+                setProp((props) => (props.size = value), 1000)
+                if(value === 'full') {
+                  setProp((props) => (props.fullWidth = true), 1000)
+                }else{
+                  setProp((props) => (props.fullWidth = false), 1000)
+                }
+              }}
+              variant={"outline"}
+              value={"size"}
+              type="single">
+                <ToggleGroupItem value="small" aria-label="Toggle small">
+                  S
+                </ToggleGroupItem>
+                <ToggleGroupItem value="medium" aria-label="Toggle medium">
+                  M
+                </ToggleGroupItem>
+                <ToggleGroupItem value="large" aria-label="Toggle large">
+                  L
+                </ToggleGroupItem>
+                <ToggleGroupItem value="full" aria-label="Toggle full">
+                  <MoveHorizontal />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <p className="text-md text-muted-foreground">Top</p>
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+              <Slider
+                className=""
+                defaultValue={[marginTop]}
+                value={[marginTop]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginTop = e), 1000)
+                }
               />
+              <span className="font-medium">{marginTop}</span>
+              </div>
             </div>
 
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Text</p>
-              <Input
-                type="color"
-                value={textColor}
-                onChange={(e) => {
-                  setProp((props) => (props.textColor = e.target.value), 1000)
-                }}
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <p className="text-md text-muted-foreground">Bottom</p>
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+              <Slider
+                defaultValue={[marginBottom]}
+                value={[marginBottom]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginBottom = e), 1000)
+                }
               />
+              <span className="font-medium">{marginBottom}</span>
+              </div>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <p className="text-md text-muted-foreground">Right</p>
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+
+              <Slider
+                defaultValue={[marginRight]}
+                value={[marginRight]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginRight = e), 1000)
+                }
+              />
+              <span className="font-medium">{marginRight}</span>
+              </div>
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <p className="text-md text-muted-foreground">Left</p>
+              <div className="flex w-full basis-full flex-row items-center gap-2">
+
+              <Slider
+                defaultValue={[marginLeft]}
+                value={[marginLeft]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  setProp((props) => (props.marginLeft = e), 1000)
+                }
+              />
+              <span className="font-medium">{marginLeft}</span>
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>

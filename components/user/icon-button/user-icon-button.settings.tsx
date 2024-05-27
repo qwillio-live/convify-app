@@ -49,7 +49,7 @@ import {
   IconButtonDefaultProps,
   IconButtonGen,
 } from "./user-icon-button.component"
-import useThemePresets from "./useThemePresets"
+import useButtonThemePresets from "./useButtonThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const IconButtonSettings = () => {
@@ -87,7 +87,7 @@ export const IconButtonSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
-  const {filledPreset, outLinePreset} = useThemePresets();
+  const {filledPreset, outLinePreset} = useButtonThemePresets();
   const addPresetStyles = (preset) => {
     setProp((props) => {
       Object.keys(preset).forEach((key) => {

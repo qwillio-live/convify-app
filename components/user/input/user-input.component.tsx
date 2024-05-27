@@ -26,6 +26,21 @@ import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
 import { UserInputSettings } from "./user-input-settings.component"
+import { cn } from "@/lib/utils"
+
+export enum UserInputSizes {
+  small = "small",
+  medium = "medium",
+  large = "large",
+  full = "full",
+}
+
+const UserInputSizeValues={
+  small: "260px",
+  medium: "376px",
+  large: "576px",
+  full: "100%",
+}
 
 export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState(props.inputValue)
@@ -48,6 +63,7 @@ export const UserInputGen = ({ ...props }) => {
         marginRight: `${props.marginRight}px`,
         marginTop: `${props.marginTop}px`,
         marginBottom: `${props.marginBottom}px`,
+        minWidth: UserInputSizeValues[props.size],
       }}
     >
       <div
@@ -72,6 +88,7 @@ export const UserInputGen = ({ ...props }) => {
         borderWidth={props.borderWidth}
         borderRadius={props.borderRadius}
         width={props.width}
+        size={props.size}
         // {...props}
         onFocus={() => setIsActive(true)}
         // 1.9em .6em .7em
@@ -97,13 +114,17 @@ const UserInputSyled = styled(Input)<{
   borderColor: string
   borderWidth: number
   borderRadius: number
+  size: UserInputSizes
 }>`
   color: ${(props) => props.textColor};
-  width: ${(props) => props.width}px;
-  background-color: ${(props) => props.backgroundColor};
+  width: ${(props) => UserInputSizeValues[props.size] || "medium"};
+  min-width: ${(props) => UserInputSizeValues[props.size || "medium"]};
+  max-width: 100%;
+  background-color: '#fff';
   border-color: ${(props) => props.borderColor};
   border-width: ${(props) => props.borderWidth}px;
   border-radius: ${(props) => props.borderRadius}px;
+  align-self: center;
 `
 
 export const UserInput = ({ ...props }) => {
@@ -128,16 +149,49 @@ export const UserInput = ({ ...props }) => {
   return (
     <div
       className="relative"
-      {...props}
       ref={(ref: any) => ref && connect(drag(ref))}
       style={{
-        marginLeft: `${props.marginLeft}px`,
-        marginRight: `${props.marginRight}px`,
-        marginTop: `${props.marginTop}px`,
-        marginBottom: `${props.marginBottom}px`,
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
       {isHovered && <Controller nameOfComponent={"INPUT FIELD"} />}
+      <div className="relative w-full"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: `${props.backgroundColor}`,
+        minWidth: '100%',
+        paddingTop: `${props.marginTop}px`,
+        paddingBottom: `${props.marginBottom}px`,
+        paddingLeft: `${props.marginLeft}px`,
+        paddingRight: `${props.marginRight}px`,
+       }}
+      >
+      <div className="relative overflow-hidden"
+      style={{
+        width: `${UserInputSizeValues[props.size]}`,
+       }}
+      >
+      {
+        !props.floatingLabel && (
+          <div
+            onClick={() => {
+              setProp((props) => (props.isActive = true)),
+                setProp((props) => (props.isFocused = true)),
+                focusInput()
+            }}
+            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out`}
+            style={{
+              minWidth: `${UserInputSizeValues[props.size]}`,
+              width: `${UserInputSizeValues[props.size]}`,
+            }}
+          >
+            {props.label}
+          </div>
+        )
+      }
       <div
         onClick={() => {
           setProp((props) => (props.isActive = true)),
@@ -145,19 +199,23 @@ export const UserInput = ({ ...props }) => {
             focusInput() // Focus the input when placeholder is clicked
         }}
         className={`hover:cursor-text absolute transition-all duration-200 ease-in-out ${
-          props.isActive || props.inputValue.length > 0
-            ? "top-0 text-sm pl-3 pt-0"
-            : "top-0 left-0 pt-3 px-3 pb-1 text-sm"
+          props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
+            ? "top-0 text-sm pl-3 pt-1"
+            : "top-1 left-0 pt-3 px-3 pb-1 text-sm"
         }`}
+        style={{
+          minWidth: `${UserInputSizeValues[props.size]}`,
+          width: `${UserInputSizeValues[props.size]}`,
+        }}
       >
-        {props.placeholder}
+        {props.floatingLabel && props.label}
       </div>
       {
-        true && (
-          <div className="relative top-0 left-0 pt-3 px-3 pb-1 text-sm">
-            This is a icon
-          </div>
-        )
+        // true && (
+        //   <div className="relative top-0 left-0 pt-3 px-3 pb-1 text-sm">
+        //     This is a icon
+        //   </div>
+        // )
       }
       <UserInputSyled
         ref={inputRef}
@@ -166,18 +224,29 @@ export const UserInput = ({ ...props }) => {
         borderColor={
           props.isActive ? props.activeBorderColor : props.borderColor
         }
+        placeholder={ !props.floatingLabel && props.placeholder}
         borderWidth={props.borderWidth}
         borderRadius={props.borderRadius}
         width={props.width}
+        size={props.size}
         // {...props}
         onFocus={() => setProp((props) => (props.isActive = true))}
         // 1.9em .6em .7em
-        className={` font-semibold pt-6 px-3 pb-2 text-base
-      ring-[${props.borderColor}]
-      focus-visible:ring-[${props.activeBorderColor}]
-      ring-opacity-/50
-       focus-visible:ring-1 focus-visible:ring-offset-0
-      `}
+        // "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+        //       {
+        //         "border-blue-500": headerMode,
+        //       }
+        className={cn(
+          {
+            "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
+            "font-semibold pt-4 px-3 pb-4 text-base": !props.floatingLabel,
+          },
+          `ring-[${props.borderColor}]
+          focus-visible:ring-[${props.activeBorderColor}]
+          ring-opacity-50
+          bg-white
+          focus-visible:ring-1 focus-visible:ring-offset-0`
+        )}
         // placeholder={props.placeholder}
         onChange={(e) =>
           setProp((props) => (props.inputValue = e.target.value))
@@ -186,11 +255,13 @@ export const UserInput = ({ ...props }) => {
         onBlur={() => setProp((props) => (props.isActive = false))}
         autoFocus={props.isFocused}
       />
+      </div>
+      </div>
     </div>
   )
 }
 
-type UserInputProps = {
+export type UserInputProps = {
   inputValue: string
   fontSize: number
   textColor: string
@@ -204,13 +275,19 @@ type UserInputProps = {
   paddingRight: number
   paddingTop: number
   paddingBottom: number
-  placeholder: string
   backgroundColor: string
   borderColor: string
   borderWidth: number
   borderRadius: number
   activeBorderColor: string
   isActive: boolean
+  fullWidth: boolean
+  size: UserInputSizes
+  inputRequired: boolean
+  label: string
+  placeholder: string
+  fieldName: string
+  floatingLabel: boolean
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
@@ -220,8 +297,8 @@ export const UserInputDefaultProps: UserInputProps = {
   fontWeight: "normal",
   marginLeft: 0,
   marginRight: 0,
-  marginTop: 0,
-  marginBottom: 0,
+  marginTop: 20,
+  marginBottom: 20,
   paddingLeft: 0,
   paddingRight: 0,
   paddingTop: 0,
@@ -233,6 +310,12 @@ export const UserInputDefaultProps: UserInputProps = {
   borderRadius: 8,
   activeBorderColor: "#4050ff",
   isActive: false,
+  inputRequired: false,
+  fullWidth: true,
+  size: UserInputSizes.medium,
+  label: "Label",
+  fieldName: "Field name",
+  floatingLabel: false,
 }
 
 UserInput.craft = {

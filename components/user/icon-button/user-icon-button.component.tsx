@@ -272,7 +272,10 @@ export const IconButton = ({
 
   return (
     <div
-    ref={(ref: any) => connect(drag(ref))}>
+    ref={(ref: any) => connect(drag(ref))}
+    className="w-full flex justify-center"
+    >
+        {isHovered && <Controller nameOfComponent="BUTTON" />}
       <StyledCustomButton
         fontFamily={fontFamily.value}
         color={color.value}
@@ -301,7 +304,6 @@ export const IconButton = ({
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
-        {isHovered && <Controller nameOfComponent="BUTTON" />}
         <ContentEditable
           html={text}
           disabled={disabled}
