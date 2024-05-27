@@ -247,7 +247,7 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginTop = e), 1000)
+                  setProp((props) => (props.marginTop = e),200)
                 }
               />
               <span className="font-medium">{marginTop}</span>
@@ -264,7 +264,7 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginBottom = e), 1000)
+                  setProp((props) => (props.marginBottom = e),200)
                 }
               />
               <span className="font-medium">{marginBottom}</span>
@@ -282,7 +282,7 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginRight = e), 1000)
+                  setProp((props) => (props.marginRight = e),200)
                 }
               />
               <span className="font-medium">{marginRight}</span>
@@ -300,7 +300,7 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginLeft = e), 1000)
+                  setProp((props) => (props.marginLeft = e),200)
                 }
               />
               <span className="font-medium">{marginLeft}</span>
