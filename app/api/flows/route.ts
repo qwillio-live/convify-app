@@ -59,14 +59,14 @@ export async function POST(req: NextRequest) {
     reqBody = await req.json()
   } catch (error) {
     await logError({
-      statusCode: 500,
+      statusCode: 400,
       errorMessage: "Request body is empty",
       userId,
       requestUrl: req.url,
     })
     return NextResponse.json(
       { error: "Request body is empty" },
-      { status: 500 }
+      { status: 400 }
     )
   }
 

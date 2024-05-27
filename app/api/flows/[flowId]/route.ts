@@ -87,14 +87,14 @@ export async function PUT(
       data = await req.json()
     } catch (error) {
       await logError({
-        statusCode: 500,
+        statusCode: 400,
         errorMessage: "Request body is empty",
-        userId,
         requestUrl: req.url,
+        userId,
       })
       return NextResponse.json(
         { error: "Request body is empty" },
-        { status: 500 }
+        { status: 400 }
       )
     }
 

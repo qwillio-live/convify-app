@@ -43,21 +43,20 @@ export async function PUT(
       reqBody = await req.json()
     } catch (error) {
       await logError({
-        statusCode: 500,
+        statusCode: 400,
         errorMessage: "Request body is empty",
         userId,
         requestUrl: req.url,
       })
       return NextResponse.json(
         { error: "Request body is empty" },
-        { status: 500 }
+        { status: 400 }
       )
     }
 
     const updatedIntegration = await prisma.integration.update({
       where: { id: String(id) },
       data: {
-        flowId: String(flowId),
         ...reqBody,
       },
     })
