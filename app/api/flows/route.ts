@@ -70,14 +70,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const {
-    templateId,
-    status,
-    previewImage,
-    link,
-    numberOfSteps,
-    numberOfResponses,
-  } = reqBody
+  const { templateId, status, previewImage, link, numberOfSteps } = reqBody
 
   if (!templateId) {
     const statusCode = 400
@@ -103,17 +96,30 @@ export async function POST(req: NextRequest) {
     const flow = await prisma.flow.create({
       data: {
         name: template.name,
-        content: JSON.stringify(template.content),
-        templateSettings: JSON.stringify(template.templateSettings),
-        steps: JSON.stringify(template.steps),
+        templateId: template.id,
         status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",
         numberOfSteps: numberOfSteps || 0,
-        numberOfResponses: numberOfResponses || 0,
+        numberOfResponses: 0,
         userId,
       },
     })
+    const flowId = flow.id
+
+    const templateSteps = await prisma.templateStep.findMany({
+      where: {
+        templateId: template.id,
+      },
+    })
+    const flowSteps = templateSteps.map((step) => ({
+      flowId,
+      name: step.name,
+      link: step.link,
+      content: step.content as any,
+      order: step.order,
+    }))
+    await prisma.flowStep.createMany({ data: flowSteps })
 
     return NextResponse.json({ id: flow.id })
   } catch (error) {

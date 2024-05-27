@@ -40,6 +40,12 @@ export async function POST(
       },
     })
 
+    // Increase number of responses in flow
+    await prisma.flow.update({
+      where: { id: String(flowId) },
+      data: { numberOfResponses: flow.numberOfResponses + 1 },
+    })
+
     return NextResponse.json(response)
   } catch (error) {
     const statusCode = 500

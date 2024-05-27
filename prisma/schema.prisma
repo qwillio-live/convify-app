@@ -1,4 +1,3 @@
-
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -69,7 +68,7 @@ model User {
 
 model VerificationToken {
   identifier String
-  token      String   @unique
+  token      String
   expires    DateTime
 
   @@unique([identifier, token])
@@ -78,53 +77,51 @@ model VerificationToken {
 
 model Post {
   id        String   @id @default(cuid())
-  title     String
-  content   Json?
-  published Boolean  @default(false)
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
-  authorId  String
+  title     String
+  content   String
 
-  author User @relation(fields: [authorId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map(name: "posts")
 }
 
 model Flow {
-  id               String   @id @default(cuid())
-  name             String
-  content          Json
-  templateSettings Json
-  steps            Json
-  isDeleted        Boolean  @default(false)
-  createdAt        DateTime @default(now()) @map(name: "created_at")
-  updatedAt        DateTime @default(now()) @map(name: "updated_at")
-  previewImage     String?
-  link             String?
-  status           String
-  numberOfSteps    Int
+  id                String   @id @default(cuid())
+  name              String
+  templateId        String?
+  isDeleted         Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map(name: "created_at")
+  updatedAt         DateTime @default(now()) @map(name: "updated_at")
+  previewImage      String?
+  link              String?
+  status            String
+  numberOfSteps     Int
   numberOfResponses Int
-  userId           String
+  userId            String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  responses Response[]
-  visits Visit[]
-  integrations Integration[]
+  responses   Response[]
+  visits      Visit[]
+  flowSteps   FlowStep[]
+  Integration Integration?
 
   @@map(name: "flows")
 }
 
 model Integration {
-  id             String @id @default(cuid())
-  flowId         String
-  googleAnalyticsId String?
-  googleTagManagerId String?
-  metaPixelId    String?
+  id                   String   @id @default(cuid())
+  flowId               String   @unique
+  googleAnalyticsId    String?
+  googleTagManagerId   String?
+  metaPixelId          String?
   metaPixelAccessToken String?
-  isDeleted        Boolean  @default(false)
-  createdAt      DateTime @default(now()) @map(name: "created_at")
-  updatedAt      DateTime @default(now()) @map(name: "updated_at")
+  isDeleted            Boolean  @default(false)
+  createdAt            DateTime @default(now()) @map(name: "created_at")
+  updatedAt            DateTime @default(now()) @map(name: "updated_at")
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -132,14 +129,14 @@ model Integration {
 }
 
 model Response {
-  id          String   @id @default(cuid())
-  flowId      String
-  ip          String
-  userAgent   String
-  isFinished  Boolean  @default(false)
-  isDeleted   Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map(name: "created_at")
-  updatedAt   DateTime @default(now()) @map(name: "updated_at")
+  id         String   @id @default(cuid())
+  flowId     String
+  ip         String
+  userAgent  String
+  isFinished Boolean  @default(false)
+  isDeleted  Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -147,12 +144,12 @@ model Response {
 }
 
 model Visit {
-  id          String   @id @default(cuid())
-  flowId      String
-  stepId      String
-  ip          String
-  userAgent   String
-  createdAt   DateTime @default(now()) @map(name: "created_at")
+  id        String   @id @default(cuid())
+  flowId    String
+  stepId    String
+  ip        String
+  userAgent String
+  createdAt DateTime @default(now()) @map(name: "created_at")
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -160,16 +157,45 @@ model Visit {
 }
 
 model Template {
-  id             String   @id @default(cuid())
-  name           String
-  content        Json
+  id               String   @id @default(cuid())
+  name             String
   templateSettings Json
-  steps          Json
-  tags           Json
-  isActive       Boolean  @default(true)
-  preview        String?
-  createdAt      DateTime @default(now()) @map(name: "created_at")
-  updatedAt      DateTime @default(now()) @map(name: "updated_at")
+  tags             Json
+  isActive         Boolean  @default(true)
+  preview          String?
+  createdAt        DateTime @default(now()) @map(name: "created_at")
+  updatedAt        DateTime @default(now()) @map(name: "updated_at")
+
+  templateSteps TemplateStep[]
 
   @@map(name: "templates")
+}
+
+model TemplateStep {
+  id         String @id @default(cuid())
+  templateId String
+  name       String
+  link       String
+  content    Json
+  order      Int
+
+  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@map(name: "templateSteps")
+}
+
+model FlowStep {
+  id        String   @id @default(cuid())
+  flowId    String
+  name      String
+  link      String
+  content   Json
+  order     Int
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@map(name: "flowSteps")
 }

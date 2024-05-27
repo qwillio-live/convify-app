@@ -4,11 +4,11 @@ import { authOptions } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
-export async function POST(
+export async function PUT(
   req: NextRequest,
-  { params }: { params: { flowId: string } }
+  { params }: { params: { flowId: string; id: String } }
 ) {
-  const { flowId } = params
+  const { flowId, id } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -22,7 +22,7 @@ export async function POST(
 
   const userId = data.user.id
   try {
-    const flow = await prisma.flow.findFirst({
+    const existingFlow = await prisma.flow.findFirst({
       where: {
         id: String(flowId),
         userId,
@@ -30,7 +30,7 @@ export async function POST(
       },
     })
 
-    if (!flow) {
+    if (!existingFlow) {
       const statusCode = 404
       const errorMessage = "Flow not found"
       const requestUrl = req.url
@@ -38,15 +38,30 @@ export async function POST(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
-    let reqBody
+    const flowStep = await prisma.flowStep.findFirst({
+      where: {
+        id: String(id),
+        isDeleted: false,
+      },
+    })
+
+    if (!flowStep) {
+      const statusCode = 404
+      const errorMessage = "Flow step not found"
+      const requestUrl = req.url
+      await logError({ statusCode, errorMessage, userId, requestUrl })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    let data
     try {
-      reqBody = await req.json()
+      data = await req.json()
     } catch (error) {
       await logError({
         statusCode: 400,
         errorMessage: "Request body is empty",
-        userId,
         requestUrl: req.url,
+        userId,
       })
       return NextResponse.json(
         { error: "Request body is empty" },
@@ -54,30 +69,12 @@ export async function POST(
       )
     }
 
-    const existingIntegration = await prisma.integration.findFirst({
-      where: {
-        flowId: String(flowId),
-        isDeleted: false,
-      },
+    const updatedFlowStep = await prisma.flowStep.update({
+      where: { id: String(id), isDeleted: false },
+      data,
     })
 
-    if (existingIntegration) {
-      const updatedIntegration = await prisma.integration.update({
-        where: { id: String(existingIntegration.id) },
-        data: {
-          ...reqBody,
-        },
-      })
-      return NextResponse.json(updatedIntegration)
-    } else {
-      const integration = await prisma.integration.create({
-        data: {
-          flowId: String(flowId),
-          ...reqBody,
-        },
-      })
-      return NextResponse.json(integration)
-    }
+    return NextResponse.json(updatedFlowStep)
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"
@@ -87,11 +84,11 @@ export async function POST(
   }
 }
 
-export async function GET(
+export async function DELETE(
   req: NextRequest,
-  { params }: { params: { flowId: string } }
+  { params }: { params: { flowId: string; id: string } }
 ) {
-  const { flowId } = params
+  const { flowId, id } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -105,7 +102,7 @@ export async function GET(
 
   const userId = data.user.id
   try {
-    const flow = await prisma.flow.findFirst({
+    const existingFlow = await prisma.flow.findFirst({
       where: {
         id: String(flowId),
         userId,
@@ -113,7 +110,7 @@ export async function GET(
       },
     })
 
-    if (!flow) {
+    if (!existingFlow) {
       const statusCode = 404
       const errorMessage = "Flow not found"
       const requestUrl = req.url
@@ -121,13 +118,27 @@ export async function GET(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
-    const integration = await prisma.integration.findFirst({
+    const flowStep = await prisma.flowStep.findFirst({
       where: {
-        flowId: String(flowId),
+        id: String(id),
         isDeleted: false,
       },
     })
-    return NextResponse.json(integration)
+
+    if (!flowStep) {
+      const statusCode = 404
+      const errorMessage = "Flow step not found"
+      const requestUrl = req.url
+      await logError({ statusCode, errorMessage, userId, requestUrl })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    const updatedFlowStep = await prisma.flowStep.update({
+      where: { id: String(id) },
+      data: { isDeleted: false },
+    })
+
+    return NextResponse.json(updatedFlowStep)
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"
