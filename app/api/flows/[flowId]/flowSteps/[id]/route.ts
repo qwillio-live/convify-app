@@ -144,12 +144,12 @@ export async function DELETE(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
-    const updatedFlowStep = await prisma.flowStep.update({
+    const deletedFlowStep = await prisma.flowStep.update({
       where: { id: String(id) },
-      data: { isDeleted: false },
+      data: { isDeleted: true },
     })
 
-    return NextResponse.json(updatedFlowStep)
+    return NextResponse.json(deletedFlowStep)
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"

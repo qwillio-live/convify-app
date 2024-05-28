@@ -51,11 +51,9 @@ export async function GET(req: NextRequest) {
     })
     const totalSubmits = submits.length
 
-    // Conversion Rate
     const conversionRate =
       totalVisits > 0 ? ((totalSubmits / totalVisits) * 100).toFixed(2) : 0
 
-    // Device Types
     let mobileVisits = 0
     let desktopVisits = 0
 

@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { logError } from "@/lib/utils/logger"
+import { z } from "zod"
+
+const ResponseUpdateRequestSchema = z
+  .object({
+    isFinished: z.boolean().optional(),
+  })
+  .strict()
 
 export async function PUT(
   req: NextRequest,
@@ -29,25 +36,26 @@ export async function PUT(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
-    let reqBody
+    let data
     try {
-      reqBody = await req.json()
+      data = await req.json()
+      ResponseUpdateRequestSchema.parse(data)
     } catch (error) {
       await logError({
         statusCode: 400,
-        errorMessage: "Request body is empty",
+        errorMessage: "Request body is empty or invalid",
         requestUrl: req.url,
         userId: "unknown",
       })
       return NextResponse.json(
-        { error: "Request body is empty" },
+        { error: "Request body is empty or invalid" },
         { status: 400 }
       )
     }
 
     const response = await prisma.response.update({
       where: { id: String(id) },
-      data: { ...reqBody },
+      data,
     })
 
     return NextResponse.json(response)

@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { logError } from "@/lib/utils/logger"
+import { z } from "zod"
+
+const ResponseCreateRequestSchema = z
+  .object({
+    isFinished: z.boolean().optional(),
+  })
+  .strict()
 
 export async function POST(
   req: NextRequest,
@@ -40,7 +47,6 @@ export async function POST(
       },
     })
 
-    // Increase number of responses in flow
     await prisma.flow.update({
       where: { id: String(flowId) },
       data: { numberOfResponses: flow.numberOfResponses + 1 },
