@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useCallback,useState } from "react"
 import ContentEditable from "react-contenteditable"
-
+import {throttle} from "lodash"
 import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
@@ -8,7 +8,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
+import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -21,9 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
+import { Slider } from "@/components/custom-slider"
 
 import { Controller } from "../settings/controller.component"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { MoveHorizontal } from "lucide-react"
 
 export const UserInputSettings = () => {
   const {
@@ -34,7 +37,9 @@ export const UserInputSettings = () => {
     marginBottom,
     textColor,
     width,
+    props,
   } = useNode((node) => ({
+    props: node.data.props,
     marginLeft: node.data.props.marginLeft,
     marginRight: node.data.props.marginRight,
     marginTop: node.data.props.marginTop,
@@ -42,17 +47,29 @@ export const UserInputSettings = () => {
     textColor: node.data.props.textColor,
     width: node.data.props.width,
   }))
+  const throttledSetProp = useCallback(
+    throttle((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }, 200), // Throttle to 50ms to 200ms
+    [setProp]
+  );
 
+  const handlePropChange = (property,value) => {
+    throttledSetProp(property,value);
+  };
   return (
     <>
       <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-2">
+      <AccordionItem value="item-1">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">General </span>
+            <span className="text-sm font-medium">Content Options </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
-            <Checkbox id="required" />
+            <Checkbox
+            value={props.inputRequired}
+            onChange={(e) => setProp((props) => (props.inputRequired = e),1000)}
+            id="required" />
               <label
                 htmlFor="required"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
@@ -62,7 +79,10 @@ export const UserInputSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
-            <Checkbox id="floating-label" />
+            <Checkbox
+            checked={props.floatingLabel}
+            onCheckedChange={(e) => setProp((props) => (props.floatingLabel = e),1000)}
+            id="floating-label" />
               <label
                 htmlFor="floating-label"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
@@ -70,30 +90,92 @@ export const UserInputSettings = () => {
                 Floating label
               </label>
             </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+              <label
+                htmlFor="label-text"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+              >
+                Label
+              </label>
               <Input
-                type="number"
-                placeholder={marginRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
-                }
+              value={props.label}
+              onChange={(e) => setProp((props) => (props.label = e.target.value), 1000)}
+              type={"text"}
+              placeholder={"Enter placeholder text"}
               />
             </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
+
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+              <label
+                htmlFor="placeholder-text"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+              >
+                Placeholder
+              </label>
               <Input
-                type="number"
-                placeholder={marginBottom}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
-                }
+              value={props.placeholder}
+              onChange={(e) => setProp((props) => (props.placeholder = e.target.value), 1000)}
+              type={"text"}
+              placeholder={"Enter placeholder text"}
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+              <label
+                htmlFor="placeholder-text"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+              >
+                Field name
+              </label>
+              <Input
+              value={props.fieldName}
+              onChange={(e) => setProp((props) => (props.fieldName = e.target.value), 1000)}
+              type={"text"}
+              placeholder={"Enter field name here"}
+              />
+
+            </div>
+
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
+            <span className="text-sm font-medium">Design</span>
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-y-2 p-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Width</p>
+              <Tabs
+                defaultValue={props.size}
+                value={props.size}
+                onValueChange={(value) => {
+                  setProp((props) => (props.size = value), 1000)
+                  if(value === 'full') {
+                    // setProp((props) => (props.fullWidth = true), 1000)
+                  }else{
+                    // setProp((props) => (props.fullWidth = false), 1000)
+                  }
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-4">
+                  <TabsTrigger  value="small">S</TabsTrigger>
+                  <TabsTrigger  value="medium">M</TabsTrigger>
+                  <TabsTrigger  value="large">L</TabsTrigger>
+                  <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Background</p>
+              <Input
+                type="color"
+                value={props.backgroundColor}
+                onChange={(e) => {
+                  // setProp((props) => (props.backgroundColor = e.target.value), 1000)
+                  handlePropChange('backgroundColor',e.target.value);
+                }}
               />
             </div>
           </AccordionContent>
@@ -103,85 +185,90 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Left</p>
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
-              <Input
-                type="number"
-                placeholder={marginLeft}
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Top</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginTop}
+              </span>
+              </div>
+              <Slider
+                className=""
+                defaultValue={[marginTop]}
+                value={[marginTop]}
                 max={100}
                 min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginLeft = e.target.value), 1000)
+                step={1}
+                onValueChange={(e) =>
+
+                  // setProp((props) => (props.marginTop = e),200)
+                  handlePropChange("marginTop",e)
                 }
               />
+
+
             </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Top</p>
-              <Input
-                type="number"
-                placeholder={marginTop}
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Bottom</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginBottom}
+              </span>
+              </div>
+              <Slider
+                defaultValue={[marginBottom]}
+                value={[marginBottom]}
                 max={100}
                 min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginTop = e.target.value), 1000)
+                step={1}
+                onValueChange={(e) =>
+                  // setProp((props) => (props.marginBottom = e),200)
+                  handlePropChange("marginBottom",e)
                 }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Right</p>
-              <Input
-                type="number"
-                placeholder={marginRight}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginRight = e.target.value), 1000)
-                }
-              />
-            </div>
-            <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Bottom</p>
-              <Input
-                type="number"
-                placeholder={marginBottom}
-                max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Appearance</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Width</p>
-              <Input
-                type="number"
-                value={width}
-                onChange={(e) => {
-                  setProp((props) => (props.width = e.target.value), 1000)
-                }}
               />
             </div>
 
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Text</p>
-              <Input
-                type="color"
-                value={textColor}
-                onChange={(e) => {
-                  setProp((props) => (props.textColor = e.target.value), 1000)
-                }}
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Right</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginRight}
+              </span>
+              </div>
+              <Slider
+                defaultValue={[marginRight]}
+                value={[marginRight]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  // setProp((props) => (props.marginRight = e),200)
+                  handlePropChange("marginRight",e)
+                }
+              />
+
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Left</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginLeft}
+              </span>
+              </div>
+              <Slider
+                defaultValue={[marginLeft]}
+                value={[marginLeft]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  // setProp((props) => (props.marginLeft = e),200)
+                  handlePropChange("marginLeft",e)
+                }
               />
             </div>
           </AccordionContent>

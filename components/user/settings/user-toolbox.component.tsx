@@ -86,6 +86,7 @@ import {
 import {
   IconButton,
   IconButtonDefaultProps,
+  IconButtonGen,
 } from "../icon-button/user-icon-button.component"
 import { UserInput, UserInputDefaultProps } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
@@ -104,7 +105,8 @@ import {
 } from "../progress/user-progress.component"
 import { is } from "date-fns/locale"
 import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
-import useThemePresets from "../icon-button/useThemePresets"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
+import useInputThemePresets from "../input/useInputThemePresets"
 
 const MultipleChoiceOptions = [
   {
@@ -329,11 +331,11 @@ const HoverCardComponent = ({ title, icon, children }) => {
             className="w-full"
           ></HoverCardTrigger>
           <HoverCardContent
-            className="flex flex-row items-center justify-center"
+            className="flex flex-row items-center justify-center px-10 min-w-[382px]"
             forceMount={true}
             avoidCollisions
             side="left"
-            sideOffset={18}
+            sideOffset={32}
           >
             {children}
           </HoverCardContent>
@@ -345,7 +347,8 @@ const HoverCardComponent = ({ title, icon, children }) => {
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
-  const {filledPreset, outLinePreset} = useThemePresets();
+  const {filledPreset, outLinePreset} = useButtonThemePresets();
+  const {outlinedPreset} = useInputThemePresets();
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -420,7 +423,7 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
-                      <UserInput {...UserInputDefaultProps} />
+                      <UserInput {...outlinedPreset} />
                     )
                   }
                   data-cy="toolbox-text"
@@ -565,13 +568,16 @@ export const UserToolbox = () => {
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Button"
+                    title="Continue Button"
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
-                    <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
+                    <IconButtonGen
+                    className="w-full"
+                    {...filledPreset} size="small" />
+                    {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />
-                    </Button>
+                    </Button> */}
                   </HoverCardComponent>
                 </div>
               </AccordionContent>

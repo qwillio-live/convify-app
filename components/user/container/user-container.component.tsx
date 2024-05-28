@@ -158,6 +158,7 @@ export const UserContainer = ({
     isHovered: state.events.hovered,
   }))
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
+  const backgroundImage = useAppSelector((state) => state?.theme?.general?.backgroundImage)
   return (
     <div ref={(ref: any) => connect(drag(ref))} data-cy="toolbox-usercontainer">
       <div

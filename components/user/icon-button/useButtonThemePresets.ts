@@ -1,11 +1,10 @@
-// useThemePresets.js
 import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
-import { IconButtonProps } from "./user-icon-button.component";
+import { IconButtonProps, IconButtonSizes } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken } from "polished";
 
-const useThemePresets = () => {
+const useButtonThemePresets = () => {
   const theme = useAppSelector((state) => state.theme);
   const darkenedPrimaryColor = darken(0.1, theme?.general?.primaryColor || "#3182ce");
   const filledPreset: IconButtonProps = {
@@ -35,7 +34,7 @@ const useThemePresets = () => {
       isCustomized: true,
     },
     radius:{
-      value: "0",
+      value: "8",
       globalStyled: false,
       isCustomized: false,
     },
@@ -52,14 +51,14 @@ const useThemePresets = () => {
     justifyContent: "space-between",
     disabled: false,
     enableIcon: true,
-    width: "366",
+    width: IconButtonSizes.medium,
     height: "auto",
-    size: "small",
+    size: IconButtonSizes.medium,
     text: "Get quote",
     marginLeft: 0,
-    marginTop: 0,
+    marginTop: 20,
     marginRight: 0,
-    marginBottom: 0,
+    marginBottom: 20,
     icon: "arrowright",
     paddingLeft: "16",
     paddingTop: "26",
@@ -69,6 +68,7 @@ const useThemePresets = () => {
     alignItems: "center",
     gap: 4,
     border: 0,
+    fullWidth: false,
   };
 
   const outLinePreset: IconButtonProps = {
@@ -115,14 +115,14 @@ const useThemePresets = () => {
     justifyContent: "space-between",
     disabled: false,
     enableIcon: true,
-    width: "366",
+    width: IconButtonSizes.medium,
     height: "auto",
-    size: "small",
+    size: IconButtonSizes.medium,
     text: "Get quote",
     marginLeft: 0,
-    marginTop: 0,
+    marginTop: 20,
     marginRight: 0,
-    marginBottom: 0,
+    marginBottom: 20,
     icon: "arrowright",
     paddingLeft: "16",
     paddingTop: "26",
@@ -132,9 +132,10 @@ const useThemePresets = () => {
     alignItems: "center",
     gap: 4,
     border: 2,
+    fullWidth: false,
   };
 
   return { filledPreset, outLinePreset };
 };
 
-export default useThemePresets;
+export default useButtonThemePresets;

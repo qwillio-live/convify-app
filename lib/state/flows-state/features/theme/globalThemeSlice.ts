@@ -37,13 +37,13 @@ const initialState: GlobalThemeState = {
     primaryColor: "#4050ff",
     secondaryColor: "#4050ff",
     backgroundColor: "#ffffff",
-    backgroundImage: "",
+    backgroundImage: undefined,
   },
   general: {
     primaryColor: "#4050ff",
     secondaryColor: "#4050ff",
     backgroundColor: "#ffffff",
-    backgroundImage: "",
+    backgroundImage: undefined,
   },
   defaultText: {
     primaryFont: "--font-heading",

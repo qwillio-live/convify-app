@@ -259,7 +259,7 @@
         "isCustomized": true
       },
       "radius": {
-        "value": "0",
+        "value": "8",
         "globalStyled": false,
         "isCustomized": false
       },
@@ -278,12 +278,12 @@
       "enableIcon": true,
       "width": "366",
       "height": "auto",
-      "size": "small",
+      "size": "medium",
       "text": "Get quote",
-      "marginLeft": 0,
-      "marginTop": "40",
-      "marginRight": 0,
-      "marginBottom": "40",
+      "marginLeft": "20",
+      "marginTop": "20",
+      "marginRight": "20",
+      "marginBottom": "20",
       "icon": "arrowright",
       "paddingLeft": "16",
       "paddingTop": "26",
@@ -292,7 +292,8 @@
       "flexDirection": "row",
       "alignItems": "center",
       "gap": 4,
-      "border": 0
+      "border": 0,
+      "fullWidth": false
     },
 		"displayName": "IconButton",
 		"custom": {

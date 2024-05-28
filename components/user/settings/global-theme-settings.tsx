@@ -1,5 +1,5 @@
-import React from "react"
-
+import React,{useCallback} from "react"
+import { throttle } from 'lodash';
 import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
 import { setBackgroundColor, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -58,11 +58,23 @@ export const GlobalThemeSettings = (props: Props) => {
 
     dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }));
   };
+  const throttledDispatch = useCallback(
+    throttle((value) => {
+      dispatch(setPartialStyles(value));
+    }, 200), // Throttle to 200ms
+    [dispatch]
+  );
+
+  const handleStyleChange = (style) => {
+    throttledDispatch(style);
+  };
 
   return (
     <>
       <ScrollArea>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single"
+        defaultValue="item-1"
+        className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
               <span className="text-sm font-medium">General </span>
@@ -78,7 +90,10 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                   value={primaryColor || defaultPrimaryColor}
                   onChange={(e) => {
-                    dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
+                    // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
+                    // handleColorChange(e)
+                    handleStyleChange({general: { primaryColor: e.target.value}})
+
                   }}
                   className=" basis-1/3"
                   type={"color"}
@@ -96,7 +111,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                 value={secondaryColor || defaultSecondaryColor}
                 onChange={(e) => {
-                  dispatch(setPartialStyles({general: { secondaryColor: e.target.value}}))
+                  handleStyleChange({general: { secondaryColor: e.target.value}})
                 }}
                   className=" basis-1/3"
                   type={"color"}
@@ -114,8 +129,8 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                   value={backgroundColor || defaultBackgroundColor}
                   onChange={(e) => {
-                    dispatch(setBackgroundColor(e.target.value))
-                    // dispatch(setPartialStyles({general: { backgroundColor: e.target.value}}))
+                    // dispatch(setBackgroundColor(e.target.value))
+                    handleStyleChange({general: { backgroundColor: e.target.value}})
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className=" basis-1/3"
@@ -159,7 +174,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Select
                   value={primaryFont || defaultPrimaryFont}
                   onValueChange={(value) => {
-                    dispatch(setPartialStyles({ text: { primaryFont: value } }))
+                    handleStyleChange({ text: { primaryFont: value } })
                     // handleApplyTheme({text: { primaryFont: value}})
                   }
                   }
@@ -189,9 +204,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Select
                   value={secondaryFont || defaultSecondaryFont}
                   onValueChange={(value) => {
-                    dispatch(
-                      setPartialStyles({ text: { secondaryFont: value } })
-                    )
+                    handleStyleChange({ text: { secondaryFont: value } })
                     // handleApplyTheme({text: { secondaryFont: value}})
                   }
                   }
@@ -222,7 +235,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 value={primaryTextColor || defaultPrimaryTextColor}
                 onChange={(e) =>
                   {
-                    dispatch(setPartialStyles({text: { primaryColor: e.target.value}}))
+                    handleStyleChange({text: { primaryColor: e.target.value}})
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }
 
@@ -243,7 +256,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                 value={secondaryTextColor || defaultSecondaryTextColor}
                 onChange={(e) => {
-                  dispatch(setPartialStyles({text: { secondaryColor: e.target.value}}))
+                  handleStyleChange({text: { secondaryColor: e.target.value}})
                   // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }
                 }
