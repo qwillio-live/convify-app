@@ -567,7 +567,7 @@ export const UserToolbox = () => {
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Button"
+                    title="Continue Button"
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
                     <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
