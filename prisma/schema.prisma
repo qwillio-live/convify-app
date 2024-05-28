@@ -77,13 +77,14 @@ model VerificationToken {
 
 model Post {
   id        String   @id @default(cuid())
+  title     String
+  content   Json?
+  published Boolean  @default(false)
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
-  title     String
-  content   String
+  authorId  String
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id])
 
   @@map(name: "posts")
 }
