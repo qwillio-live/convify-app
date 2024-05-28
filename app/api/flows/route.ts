@@ -22,6 +22,9 @@ export async function GET(req: NextRequest) {
         userId,
         isDeleted: false,
       },
+      include: {
+        flowSteps: true,
+      },
     })
     return NextResponse.json(flows)
   } catch (error) {

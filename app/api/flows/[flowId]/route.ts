@@ -3,6 +3,17 @@ import { logError } from "@/lib/utils/logger"
 import { authOptions } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
+import { z } from "zod"
+
+const FlowUpdateRequestSchema = z
+  .object({
+    name: z.string().optional(),
+    previewImage: z.string().optional(),
+    link: z.string().optional(),
+    status: z.string().optional(),
+    numberOfSteps: z.number().optional(),
+  })
+  .strict()
 
 export async function GET(
   req: NextRequest,
@@ -27,6 +38,9 @@ export async function GET(
         id: String(flowId),
         userId,
         isDeleted: false,
+      },
+      include: {
+        flowSteps: true,
       },
     })
 
@@ -85,15 +99,16 @@ export async function PUT(
     let data
     try {
       data = await req.json()
+      FlowUpdateRequestSchema.parse(data)
     } catch (error) {
       await logError({
         statusCode: 400,
-        errorMessage: "Request body is empty",
+        errorMessage: "Request body is empty or invalid",
         requestUrl: req.url,
         userId,
       })
       return NextResponse.json(
-        { error: "Request body is empty" },
+        { error: "Request body is empty or invalid" },
         { status: 400 }
       )
     }

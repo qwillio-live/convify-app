@@ -68,6 +68,9 @@ export async function GET(
         id: String(flowId),
         isDeleted: false,
       },
+      include: {
+        responses: true,
+      },
     })
 
     if (!flow) {
@@ -83,13 +86,7 @@ export async function GET(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
-    const responses = await prisma.response.findMany({
-      where: {
-        flowId: String(flowId),
-      },
-    })
-
-    return NextResponse.json(responses)
+    return NextResponse.json(flow.responses)
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"

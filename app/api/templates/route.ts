@@ -18,7 +18,11 @@ export async function GET(req: NextRequest) {
   const userId = data.user.id
 
   try {
-    const templates = await prisma.template.findMany()
+    const templates = await prisma.template.findMany({
+      include: {
+        templateSteps: true,
+      },
+    })
     return NextResponse.json(templates)
   } catch (error) {
     console.log(error)
