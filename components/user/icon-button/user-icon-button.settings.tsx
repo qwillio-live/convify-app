@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {
   Activity,
   Anchor,
@@ -13,6 +13,9 @@ import {
   AlignHorizontalJustifyCenter,
   AlignHorizontalSpaceBetween
 } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import { throttle } from 'lodash';
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 import {
@@ -97,6 +100,17 @@ export const IconButtonSettings = () => {
     }, 1000)
   }
 
+  const throttledSetProp = useCallback(
+    throttle((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }, 200), // Throttle to 50ms to 200ms
+    [setProp]
+  );
+
+  const handlePropChange = (property,value) => {
+    throttledSetProp(property,value);
+  };
+
   const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
 
   return (
@@ -111,7 +125,8 @@ export const IconButtonSettings = () => {
               <Checkbox
                 checked={enableIcon}
                 onCheckedChange={(e) => {
-                  setProp((props) => (props.enableIcon = e), 1000)
+                  // setProp((props) => (props.enableIcon = e), 1000)
+                  handlePropChange("enableIcon",e);
                 }}
                 id="enableIcon"
               />
@@ -175,57 +190,43 @@ export const IconButtonSettings = () => {
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Width</p>
-              <ToggleGroup
-              defaultValue={size}
-              onValueChange={(value) => {
-                setProp((props) => (props.size = value), 1000)
-                if(value === 'full') {
-                  setProp((props) => (props.fullWidth = true), 1000)
-                }else{
-                  setProp((props) => (props.fullWidth = false), 1000)
-                }
-              }}
-              variant={"outline"}
-              value={size}
-              type="single">
-                <ToggleGroupItem value="small" aria-label="Toggle small">
-                  S
-                </ToggleGroupItem>
-                <ToggleGroupItem value="medium" aria-label="Toggle medium">
-                  M
-                </ToggleGroupItem>
-                <ToggleGroupItem value="large" aria-label="Toggle large">
-                  L
-                </ToggleGroupItem>
-                <ToggleGroupItem value="full" aria-label="Toggle full">
-                  <MoveHorizontal />
-                </ToggleGroupItem>
-              </ToggleGroup>
+              <Tabs
+                value={size}
+                defaultValue={size}
+                onValueChange={(value) => {
+                  setProp((props) => (props.size = value), 1000)
+                  if(value === 'full') {
+                    setProp((props) => (props.fullWidth = true), 1000)
+                  }else{
+                    setProp((props) => (props.fullWidth = false), 1000)
+                  }
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-4 h-14">
+                  <TabsTrigger className="h-12"  value="small">S</TabsTrigger>
+                  <TabsTrigger  className="h-12" value="medium">M</TabsTrigger>
+                  <TabsTrigger  className="h-12" value="large">L</TabsTrigger>
+                  <TabsTrigger  className="h-12" value="full"><MoveHorizontal /></TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Content align</p>
-              <ToggleGroup
-              defaultValue={justifyContent}
-              onValueChange={(value) => {
-                setProp((props) => (props.justifyContent = value), 1000)
-              }}
-              variant={"outline"}
-              value={justifyContent}
-              type="single">
-                <ToggleGroupItem value="start" aria-label="Toggle start">
-                  <AlignHorizontalJustifyStart />
-                </ToggleGroupItem>
-                <ToggleGroupItem value="center" aria-label="Toggle center">
-                  <AlignHorizontalJustifyCenter />
-                </ToggleGroupItem>
-                <ToggleGroupItem value="end" aria-label="Toggle end">
-                  <AlignHorizontalJustifyEnd />
-                </ToggleGroupItem>
-                <ToggleGroupItem value="space-between" aria-label="Toggle space between">
-                  <AlignHorizontalSpaceBetween />
-                </ToggleGroupItem>
-              </ToggleGroup>
+              <Tabs
+                value={justifyContent}
+                defaultValue={justifyContent}
+                onValueChange={(value) => {
+                  setProp((props) => (props.justifyContent = value), 1000)
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-4 h-14">
+                  <TabsTrigger className="h-12"  value="start"><AlignHorizontalJustifyStart /></TabsTrigger>
+                  <TabsTrigger  className="h-12" value="center"><AlignHorizontalJustifyCenter /></TabsTrigger>
+                  <TabsTrigger  className="h-12" value="end"><AlignHorizontalJustifyEnd /></TabsTrigger>
+                  <TabsTrigger  className="h-12" value="space-between"><AlignHorizontalSpaceBetween /></TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
 
           </AccordionContent>
@@ -247,7 +248,8 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginTop = e),200)
+                  // setProp((props) => (props.marginTop = e),200)
+                  handlePropChange("marginTop",e)
                 }
               />
               <span className="font-medium">{marginTop}</span>
@@ -264,7 +266,8 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginBottom = e),200)
+                  // setProp((props) => (props.marginBottom = e),200)
+                  handlePropChange("marginBottom",e)
                 }
               />
               <span className="font-medium">{marginBottom}</span>
@@ -282,7 +285,8 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginRight = e),200)
+                  // setProp((props) => (props.marginRight = e),200)
+                  handlePropChange("marginRight",e)
                 }
               />
               <span className="font-medium">{marginRight}</span>
@@ -300,7 +304,8 @@ export const IconButtonSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginLeft = e),200)
+                  // setProp((props) => (props.marginLeft = e),200)
+                  handlePropChange("marginLeft",e)
                 }
               />
               <span className="font-medium">{marginLeft}</span>

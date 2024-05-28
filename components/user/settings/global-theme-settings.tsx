@@ -64,13 +64,17 @@ export const GlobalThemeSettings = (props: Props) => {
     }, 200), // Throttle to 200ms
     [dispatch]
   );
+
   const handleStyleChange = (style) => {
     throttledDispatch(style);
   };
+
   return (
     <>
       <ScrollArea>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single"
+        defaultValue="item-2"
+        className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
               <span className="text-sm font-medium">General </span>

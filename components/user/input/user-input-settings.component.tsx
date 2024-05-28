@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useCallback,useState } from "react"
 import ContentEditable from "react-contenteditable"
-
+import {throttle} from "lodash"
 import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
@@ -8,6 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -46,7 +47,16 @@ export const UserInputSettings = () => {
     textColor: node.data.props.textColor,
     width: node.data.props.width,
   }))
+  const throttledSetProp = useCallback(
+    throttle((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }, 200), // Throttle to 50ms to 200ms
+    [setProp]
+  );
 
+  const handlePropChange = (property,value) => {
+    throttledSetProp(property,value);
+  };
   return (
     <>
       <Accordion type="single" collapsible className="w-full">
@@ -135,13 +145,36 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">Design</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Width</p>
+              <Tabs
+                defaultValue={props.size}
+                value={props.size}
+                onValueChange={(value) => {
+                  setProp((props) => (props.size = value), 1000)
+                  if(value === 'full') {
+                    // setProp((props) => (props.fullWidth = true), 1000)
+                  }else{
+                    // setProp((props) => (props.fullWidth = false), 1000)
+                  }
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-4 h-14">
+                  <TabsTrigger className="h-12"  value="small">S</TabsTrigger>
+                  <TabsTrigger  className="h-12" value="medium">M</TabsTrigger>
+                  <TabsTrigger  className="h-12" value="large">L</TabsTrigger>
+                  <TabsTrigger  className="h-12" value="full"><MoveHorizontal /></TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
             <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Background</p>
               <Input
                 type="color"
                 value={props.backgroundColor}
                 onChange={(e) => {
-                  setProp((props) => (props.backgroundColor = e.target.value), 1000)
+                  // setProp((props) => (props.backgroundColor = e.target.value), 1000)
+                  handlePropChange('backgroundColor',e.target.value);
                 }}
               />
             </div>
@@ -152,35 +185,7 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Width</p>
-              <ToggleGroup
-              defaultValue={"size"}
-              onValueChange={(value) => {
-                setProp((props) => (props.size = value), 1000)
-                if(value === 'full') {
-                  setProp((props) => (props.fullWidth = true), 1000)
-                }else{
-                  setProp((props) => (props.fullWidth = false), 1000)
-                }
-              }}
-              variant={"outline"}
-              value={"size"}
-              type="single">
-                <ToggleGroupItem value="small" aria-label="Toggle small">
-                  S
-                </ToggleGroupItem>
-                <ToggleGroupItem value="medium" aria-label="Toggle medium">
-                  M
-                </ToggleGroupItem>
-                <ToggleGroupItem value="large" aria-label="Toggle large">
-                  L
-                </ToggleGroupItem>
-                <ToggleGroupItem value="full" aria-label="Toggle full">
-                  <MoveHorizontal />
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
+
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <p className="text-md text-muted-foreground">Top</p>
               <div className="flex w-full basis-full flex-row items-center gap-2">
