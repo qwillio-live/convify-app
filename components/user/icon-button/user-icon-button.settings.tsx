@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button as CustomButton } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -123,7 +123,7 @@ export const IconButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="flex flex-row items-center col-span-2 space-x-2">
               <Checkbox
-                className=""
+                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
                 checked={enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
