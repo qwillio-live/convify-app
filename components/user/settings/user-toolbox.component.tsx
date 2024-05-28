@@ -331,11 +331,11 @@ const HoverCardComponent = ({ title, icon, children }) => {
             className="w-full"
           ></HoverCardTrigger>
           <HoverCardContent
-            className="flex flex-row items-center justify-center"
+            className="flex flex-row items-center justify-center px-10 min-w-[382px]"
             forceMount={true}
             avoidCollisions
             side="left"
-            sideOffset={22}
+            sideOffset={32}
           >
             {children}
           </HoverCardContent>
@@ -571,7 +571,9 @@ export const UserToolbox = () => {
                     title="Continue Button"
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
-                    <IconButtonGen {...filledPreset} size="small" />
+                    <IconButtonGen
+                    className="w-full"
+                    {...filledPreset} size="small" />
                     {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />

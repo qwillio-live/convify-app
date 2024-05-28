@@ -159,11 +159,11 @@ export const UserInputSettings = () => {
                   }
                 }}
                className="flex-1">
-                <TabsList className="w-full grid grid-cols-4 h-14">
-                  <TabsTrigger className="h-12"  value="small">S</TabsTrigger>
-                  <TabsTrigger  className="h-12" value="medium">M</TabsTrigger>
-                  <TabsTrigger  className="h-12" value="large">L</TabsTrigger>
-                  <TabsTrigger  className="h-12" value="full"><MoveHorizontal /></TabsTrigger>
+                <TabsList className="w-full grid grid-cols-4">
+                  <TabsTrigger  value="small">S</TabsTrigger>
+                  <TabsTrigger  value="medium">M</TabsTrigger>
+                  <TabsTrigger  value="large">L</TabsTrigger>
+                  <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>

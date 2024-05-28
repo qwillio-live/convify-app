@@ -34,7 +34,7 @@ const useButtonThemePresets = () => {
       isCustomized: true,
     },
     radius:{
-      value: "0",
+      value: "8",
       globalStyled: false,
       isCustomized: false,
     },
