@@ -86,6 +86,7 @@ import {
 import {
   IconButton,
   IconButtonDefaultProps,
+  IconButtonGen,
 } from "../icon-button/user-icon-button.component"
 import { UserInput, UserInputDefaultProps } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
@@ -334,7 +335,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
             forceMount={true}
             avoidCollisions
             side="left"
-            sideOffset={18}
+            sideOffset={22}
           >
             {children}
           </HoverCardContent>
@@ -570,10 +571,11 @@ export const UserToolbox = () => {
                     title="Continue Button"
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
-                    <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
+                    <IconButtonGen {...filledPreset} size="small" />
+                    {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />
-                    </Button>
+                    </Button> */}
                   </HoverCardComponent>
                 </div>
               </AccordionContent>

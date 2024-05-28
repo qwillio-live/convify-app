@@ -73,7 +73,7 @@ export const GlobalThemeSettings = (props: Props) => {
     <>
       <ScrollArea>
         <Accordion type="single"
-        defaultValue="item-2"
+        defaultValue="item-1"
         className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
