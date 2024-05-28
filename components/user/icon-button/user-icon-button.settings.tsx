@@ -13,7 +13,7 @@ import {
   AlignHorizontalJustifyCenter,
   AlignHorizontalSpaceBetween
 } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { throttle } from 'lodash';
 import ContentEditable from "react-contenteditable"
@@ -44,8 +44,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
+} from "@/components/custom-select"
+import { Slider } from "@/components/custom-slider"
 
 import { Controller } from "../settings/controller.component"
 import {

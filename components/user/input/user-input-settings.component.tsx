@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
+import { Slider } from "@/components/custom-slider"
 
 import { Controller } from "../settings/controller.component"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
@@ -185,10 +185,14 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <p className="text-md text-muted-foreground">Top</p>
-              <div className="flex w-full basis-full flex-row items-center gap-2">
+
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Top</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginTop}
+              </span>
+              </div>
               <Slider
                 className=""
                 defaultValue={[marginTop]}
@@ -197,16 +201,23 @@ export const UserInputSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginTop = e), 1000)
+
+                  // setProp((props) => (props.marginTop = e),200)
+                  handlePropChange("marginTop",e)
                 }
               />
-              <span className="font-medium">{marginTop}</span>
-              </div>
+
+
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <p className="text-md text-muted-foreground">Bottom</p>
-              <div className="flex w-full basis-full flex-row items-center gap-2">
+
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Bottom</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginBottom}
+              </span>
+              </div>
               <Slider
                 defaultValue={[marginBottom]}
                 value={[marginBottom]}
@@ -214,17 +225,19 @@ export const UserInputSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginBottom = e), 1000)
+                  // setProp((props) => (props.marginBottom = e),200)
+                  handlePropChange("marginBottom",e)
                 }
               />
-              <span className="font-medium">{marginBottom}</span>
-              </div>
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <p className="text-md text-muted-foreground">Right</p>
-              <div className="flex w-full basis-full flex-row items-center gap-2">
-
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Right</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginRight}
+              </span>
+              </div>
               <Slider
                 defaultValue={[marginRight]}
                 value={[marginRight]}
@@ -232,17 +245,20 @@ export const UserInputSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginRight = e), 1000)
+                  // setProp((props) => (props.marginRight = e),200)
+                  handlePropChange("marginRight",e)
                 }
               />
-              <span className="font-medium">{marginRight}</span>
-              </div>
+
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <p className="text-md text-muted-foreground">Left</p>
-              <div className="flex w-full basis-full flex-row items-center gap-2">
-
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <Label htmlFor="marginTop">Left</Label>
+              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                {marginLeft}
+              </span>
+              </div>
               <Slider
                 defaultValue={[marginLeft]}
                 value={[marginLeft]}
@@ -250,11 +266,10 @@ export const UserInputSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-                  setProp((props) => (props.marginLeft = e), 1000)
+                  // setProp((props) => (props.marginLeft = e),200)
+                  handlePropChange("marginLeft",e)
                 }
               />
-              <span className="font-medium">{marginLeft}</span>
-              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
