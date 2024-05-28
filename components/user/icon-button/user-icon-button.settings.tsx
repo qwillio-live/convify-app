@@ -123,7 +123,7 @@ export const IconButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="flex flex-row items-center col-span-2 space-x-2">
               <Checkbox
-                className="bg-primary-foreground text-current data-[status=checked]:text-current data-[status=checked]:bg-primary"
+                className=""
                 checked={enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
