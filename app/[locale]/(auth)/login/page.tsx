@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/user-auth-form"
-import convifyBlue from "@/assets/images/convify_logo_icon.svg"
+import convifyLogo from "@/assets/convify_logo_black.svg"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 
@@ -32,7 +32,12 @@ export default function LoginPage() {
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex justify-center">
-          <img src={convifyBlue.src} alt="Convify Logo" className="w-10" />
+          <img
+            src={convifyLogo.src}
+            alt="Convify Logo"
+            className="w-10"
+            style={{ width: "7rem" }}
+          />
         </div>
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
