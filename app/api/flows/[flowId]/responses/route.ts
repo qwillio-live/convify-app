@@ -55,3 +55,46 @@ export async function POST(
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
 }
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { flowId: string } }
+) {
+  const { flowId } = params
+
+  try {
+    const flow = await prisma.flow.findFirst({
+      where: {
+        id: String(flowId),
+        isDeleted: false,
+      },
+    })
+
+    if (!flow) {
+      const statusCode = 404
+      const errorMessage = "Flow not found"
+      const requestUrl = req.url
+      await logError({
+        statusCode,
+        errorMessage,
+        requestUrl,
+        userId: "unknown",
+      })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    const responses = await prisma.response.findMany({
+      where: {
+        flowId: String(flowId),
+      },
+    })
+
+    return NextResponse.json(responses)
+  } catch (error) {
+    const statusCode = 500
+    const errorMessage = error.message || "An unexpected error occurred"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, requestUrl, userId: "unknown" })
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
+  }
+}
