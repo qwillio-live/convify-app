@@ -15,7 +15,7 @@ import {
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
-import { throttle } from 'lodash';
+import { throttle,debounce } from 'lodash';
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 import {
@@ -110,6 +110,15 @@ export const IconButtonSettings = () => {
   const handlePropChange = (property,value) => {
     throttledSetProp(property,value);
   };
+
+  const debouncedSetProp = useCallback(
+    debounce((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }),[setProp])
+
+  const handlePropChangeDebounced = (property,value) => {
+    debouncedSetProp(property,value);
+  }
 
   const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
 
@@ -256,7 +265,8 @@ export const IconButtonSettings = () => {
                 onValueChange={(e) =>
 
                   // setProp((props) => (props.marginTop = e),200)
-                  handlePropChange("marginTop",e)
+                  // handlePropChange("marginTop",e)
+                  handlePropChangeDebounced("marginTop",e)
                 }
               />
 
@@ -279,7 +289,8 @@ export const IconButtonSettings = () => {
                 step={1}
                 onValueChange={(e) =>
                   // setProp((props) => (props.marginBottom = e),200)
-                  handlePropChange("marginBottom",e)
+                  // handlePropChange("marginBottom",e)
+                  handlePropChangeDebounced("marginBottom",e)
                 }
               />
             </div>
@@ -299,7 +310,8 @@ export const IconButtonSettings = () => {
                 step={1}
                 onValueChange={(e) =>
                   // setProp((props) => (props.marginRight = e),200)
-                  handlePropChange("marginRight",e)
+                  // handlePropChange("marginRight",e)
+                  handlePropChangeDebounced("marginRight",e)
                 }
               />
 
@@ -320,7 +332,8 @@ export const IconButtonSettings = () => {
                 step={1}
                 onValueChange={(e) =>
                   // setProp((props) => (props.marginLeft = e),200)
-                  handlePropChange("marginLeft",e)
+                  // handlePropChange("marginLeft",e)
+                  handlePropChangeDebounced("marginLeft",e)
                 }
               />
             </div>

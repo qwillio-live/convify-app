@@ -1,5 +1,5 @@
 import React,{useCallback} from "react"
-import { throttle } from 'lodash';
+import { throttle,debounce } from 'lodash';
 import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
 import { setBackgroundColor, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -69,6 +69,17 @@ export const GlobalThemeSettings = (props: Props) => {
     throttledDispatch(style);
   };
 
+  const debouncedDispatch = useCallback(
+    debounce((value) => {
+      dispatch(setPartialStyles(value));
+    }, 200), // Throttle to 200ms
+    [dispatch]
+  );
+
+  const handleStyleChangeDebounced = (style) => {
+    debouncedDispatch(style);
+  }
+
   return (
     <>
       <ScrollArea>
@@ -93,7 +104,6 @@ export const GlobalThemeSettings = (props: Props) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
                     handleStyleChange({general: { primaryColor: e.target.value}})
-
                   }}
                   className=" basis-1/3"
                   type={"color"}
@@ -111,7 +121,8 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                 value={secondaryColor || defaultSecondaryColor}
                 onChange={(e) => {
-                  handleStyleChange({general: { secondaryColor: e.target.value}})
+                  // handleStyleChange({general: { secondaryColor: e.target.value}})
+                  handleStyleChangeDebounced({general: { secondaryColor: e.target.value}})
                 }}
                   className=" basis-1/3"
                   type={"color"}
