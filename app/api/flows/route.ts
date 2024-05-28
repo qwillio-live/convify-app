@@ -22,9 +22,6 @@ export async function GET(req: NextRequest) {
         userId,
         isDeleted: false,
       },
-      include: {
-        flowSteps: true,
-      },
     })
     return NextResponse.json(flows)
   } catch (error) {
@@ -73,7 +70,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { templateId, status, previewImage, link, numberOfSteps } = reqBody
+  const { templateId, status, previewImage, link } = reqBody
 
   if (!templateId) {
     const statusCode = 400
@@ -96,6 +93,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
+    const templateSteps = await prisma.templateStep.findMany({
+      where: {
+        templateId: template.id,
+      },
+    })
+
     const flow = await prisma.flow.create({
       data: {
         name: template.name,
@@ -103,18 +106,13 @@ export async function POST(req: NextRequest) {
         status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",
-        numberOfSteps: numberOfSteps || 0,
+        numberOfSteps: templateSteps.length,
         numberOfResponses: 0,
         userId,
       },
     })
-    const flowId = flow.id
 
-    const templateSteps = await prisma.templateStep.findMany({
-      where: {
-        templateId: template.id,
-      },
-    })
+    const flowId = flow.id
     const flowSteps = templateSteps.map((step) => ({
       flowId,
       name: step.name,
