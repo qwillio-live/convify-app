@@ -5,7 +5,8 @@ import { z } from "zod"
 
 const ResponseCreateRequestSchema = z
   .object({
-    isFinished: z.boolean().optional(),
+    isFinished: z.boolean(),
+    content: z.record(z.unknown()),
   })
   .strict()
 
@@ -36,6 +37,23 @@ export async function POST(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
+    let data
+    try {
+      data = await req.json()
+      ResponseCreateRequestSchema.parse(data)
+    } catch (error) {
+      await logError({
+        statusCode: 400,
+        errorMessage: "Request body is empty or invalid",
+        requestUrl: req.url,
+        userId: "unknown",
+      })
+      return NextResponse.json(
+        { error: "Request body is empty or invalid" },
+        { status: 400 }
+      )
+    }
+
     const userAgent = req.headers.get("user-agent") || "unknown"
     const ipAddr =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
@@ -44,6 +62,8 @@ export async function POST(
         flowId: String(flowId),
         ip: ipAddr,
         userAgent: userAgent,
+        content: data.content,
+        isFinished: data.isFinished,
       },
     })
 

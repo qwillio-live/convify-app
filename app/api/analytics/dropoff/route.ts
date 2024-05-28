@@ -32,6 +32,28 @@ export async function GET(req: NextRequest) {
     const startDateObj = new Date(startDate as string)
     const endDateObj = new Date(endDate as string)
 
+    const flow = await prisma.flow.findUnique({
+      where: { id: String(flowId), isDeleted: false },
+    })
+
+    if (!flow) {
+      const statusCode = 404
+      const errorMessage = "Flow not found"
+      const requestUrl = req.url
+      await logError({
+        statusCode,
+        errorMessage,
+        requestUrl,
+        userId: "unknown",
+      })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    const steps = await prisma.flowStep.findMany({
+      where: { flowId: String(flowId) },
+      orderBy: { order: "asc" },
+    })
+
     const visits = await prisma.visit.groupBy({
       by: ["stepId"],
       where: {
@@ -49,42 +71,25 @@ export async function GET(req: NextRequest) {
       },
     })
 
-    const flow = await prisma.flow.findUnique({
-      where: { id: String(flowId) },
-    })
-
-    if (!flow) {
-      const statusCode = 404
-      const errorMessage = "Flow not found"
-      const requestUrl = req.url
-      await logError({
-        statusCode,
-        errorMessage,
-        requestUrl,
-        userId: "unknown",
-      })
-      return NextResponse.json({ error: errorMessage }, { status: statusCode })
-    }
-
-    const steps = await prisma.flowStep.findMany({
-      where: { id: String(flowId) },
-    })
-
     const dropOffData: DropOffData[] = []
-    for (let i = 0; i < visits.length; i++) {
-      const currentStep = visits[i]
-      const nextStep = visits[i + 1]
-      const stepName =
-        steps.find((step) => step.id === currentStep.stepId)?.name ||
-        `Step ${currentStep.stepId}`
-      const dropOffRate = nextStep
-        ? ((currentStep._count.stepId - nextStep._count.stepId) /
-            currentStep._count.stepId) *
-          100
+    for (let i = 0; i < steps.length; i++) {
+      const currentStep = steps[i]
+      const currentStepVisits =
+        visits.find((visit) => visit.stepId === currentStep.id)?._count
+          .stepId || 0
+      const nextStep = steps[i + 1]
+      const nextStepVisits = nextStep
+        ? visits.find((visit) => visit.stepId === nextStep.id)?._count.stepId ||
+          0
         : 0
+      const dropOffRate =
+        currentStepVisits > 0
+          ? ((currentStepVisits - nextStepVisits) / currentStepVisits) * 100
+          : 0
+
       dropOffData.push({
-        stepName,
-        visits: currentStep._count.stepId,
+        stepName: currentStep.name,
+        visits: currentStepVisits,
         dropOffRate: dropOffRate.toFixed(2),
       })
     }

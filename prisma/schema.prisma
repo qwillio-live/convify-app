@@ -93,6 +93,7 @@ model Flow {
   id                String   @id @default(cuid())
   name              String
   templateId        String?
+  flowSettings      Json
   isDeleted         Boolean  @default(false)
   createdAt         DateTime @default(now()) @map(name: "created_at")
   updatedAt         DateTime @default(now()) @map(name: "updated_at")
@@ -132,6 +133,7 @@ model Integration {
 model Response {
   id         String   @id @default(cuid())
   flowId     String
+  content    Json
   ip         String
   userAgent  String
   isFinished Boolean  @default(false)

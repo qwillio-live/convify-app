@@ -6,6 +6,7 @@ import { z } from "zod"
 const ResponseUpdateRequestSchema = z
   .object({
     isFinished: z.boolean().optional(),
+    content: z.record(z.unknown()).optional(),
   })
   .strict()
 

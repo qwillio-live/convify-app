@@ -14,6 +14,65 @@ const FlowStepUpdateSchema = z
   })
   .strict()
 
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { flowId: string; id: String } }
+) {
+  const { flowId, id } = params
+  const data = await getServerSession(authOptions)
+
+  if (!data) {
+    const statusCode = 401
+    const errorMessage = "User is not authenticated"
+    const userId = "unknown"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
+  }
+
+  const userId = data.user.id
+  try {
+    const existingFlow = await prisma.flow.findFirst({
+      where: {
+        id: String(flowId),
+        userId,
+        isDeleted: false,
+      },
+    })
+
+    if (!existingFlow) {
+      const statusCode = 404
+      const errorMessage = "Flow not found"
+      const requestUrl = req.url
+      await logError({ statusCode, errorMessage, userId, requestUrl })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    const flowStep = await prisma.flowStep.findFirst({
+      where: {
+        id: String(id),
+        isDeleted: false,
+      },
+    })
+
+    if (!flowStep) {
+      const statusCode = 404
+      const errorMessage = "Flow step not found"
+      const requestUrl = req.url
+      await logError({ statusCode, errorMessage, userId, requestUrl })
+      return NextResponse.json({ error: errorMessage }, { status: statusCode })
+    }
+
+    return NextResponse.json(flowStep)
+  } catch (error) {
+    const statusCode = 500
+    const errorMessage = error.message || "An unexpected error occurred"
+    const requestUrl = req.url
+    await logError({ statusCode, errorMessage, userId, requestUrl })
+    return NextResponse.json({ error: errorMessage }, { status: statusCode })
+  }
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: { flowId: string; id: String } }
@@ -147,6 +206,12 @@ export async function DELETE(
     const deletedFlowStep = await prisma.flowStep.update({
       where: { id: String(id) },
       data: { isDeleted: true },
+    })
+
+    // Decrease number of steps in flow
+    await prisma.flow.update({
+      where: { id: String(flowId), userId, isDeleted: false },
+      data: { numberOfSteps: existingFlow.numberOfSteps - 1 },
     })
 
     return NextResponse.json(deletedFlowStep)

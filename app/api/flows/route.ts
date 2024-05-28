@@ -103,6 +103,7 @@ export async function POST(req: NextRequest) {
       data: {
         name: template.name,
         templateId: template.id,
+        flowSettings: template.templateSettings as any,
         status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",

@@ -12,6 +12,7 @@ const FlowUpdateRequestSchema = z
     link: z.string().optional(),
     status: z.string().optional(),
     numberOfSteps: z.number().optional(),
+    flowSettings: z.record(z.unknown()).optional(),
   })
   .strict()
 
