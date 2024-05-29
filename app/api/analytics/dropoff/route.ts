@@ -5,6 +5,7 @@ import { logError } from "@/lib/utils/logger"
 interface DropOffData {
   stepName: string
   visits: number
+  exits: number
   dropOffRate: string
 }
 
@@ -90,6 +91,7 @@ export async function GET(req: NextRequest) {
       dropOffData.push({
         stepName: currentStep.name,
         visits: currentStepVisits,
+        exits: nextStepVisits,
         dropOffRate: dropOffRate.toFixed(2),
       })
     }
