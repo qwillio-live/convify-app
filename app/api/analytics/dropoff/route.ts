@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
       dropOffData.push({
         stepName: currentStep.name,
         visits: currentStepVisits,
-        exits: nextStepVisits,
+        exits: (currentStepVisits - nextStepVisits),
         dropOffRate: dropOffRate.toFixed(2),
       })
     }
