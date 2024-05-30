@@ -67,10 +67,10 @@ const IconButtonMobileSizeValues={
 }
 
 const ButtonTextLimit = {
-  small: 36,
-  medium: 56,
-  large: 76,
-  full: 100,
+  small: 26,
+  medium: 36,
+  large: 46,
+  full: 96,
 }
 export const IconButtonGen = ({
   disabled,
@@ -344,6 +344,7 @@ export const IconButton = ({
     };
 
   }, [text, maxLength]);
+
   const debouncedSetProp = useCallback(
     debounce((property,value) => {
       setProp((prop) => {prop[property] = value},0);
@@ -355,7 +356,7 @@ export const IconButton = ({
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
-    className="relative overflow-hidden w-full"
+    className=""
     style={{
       width: "100%",
       display: "flex",
