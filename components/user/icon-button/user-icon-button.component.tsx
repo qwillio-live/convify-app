@@ -474,6 +474,7 @@ export type IconButtonProps = {
   height: string | number
   fullWidth: boolean
   preset: string
+  settingsTab: string
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -541,6 +542,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: 'filled',
+  settingsTab: 'content'
 }
 
 IconButton.craft = {

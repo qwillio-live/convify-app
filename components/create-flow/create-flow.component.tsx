@@ -203,7 +203,7 @@ export function CreateFlowComponent() {
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
+                  <TabsTrigger  value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>
               </Tabs>
 

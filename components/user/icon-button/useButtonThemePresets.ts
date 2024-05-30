@@ -71,7 +71,8 @@ const useButtonThemePresets = () => {
     gap: 4,
     border: 2,
     fullWidth: true,
-    preset: 'filled'
+    preset: 'filled',
+    settingsTab: 'content'
   };
 
   const outLinePreset: IconButtonProps = {
@@ -138,6 +139,7 @@ const useButtonThemePresets = () => {
     border: 2,
     fullWidth: true,
     preset: 'outline',
+    settingsTab: 'content',
   };
 
   return { filledPreset, outLinePreset };

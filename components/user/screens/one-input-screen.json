@@ -1,1 +1,338 @@
-{"ROOT":{"type":"UserContainer","isCanvas":true,"props":{"padding":5,"background":"#ad2121","expanded":"true","className":"min-h-screen min-w-full flex flex-col items-center py-5"},"displayName":"One Input Screen","custom":{},"hidden":false,"nodes":["ws9t9vvLKOne","mdsAe2aBSM","HsVEwi1W0N","WyPGuBF4RD","lWqDrGF2Nc","footer-node"],"linkedNodes":{}},"ws9t9vvLKOne":{"type":{"resolvedName":"Logo"},"isCanvas":false,"props":{"alt":"Logo","marginTop":0,"marginBottom":"40","marginLeft":0,"marginRight":0,"background":"inherit","radius":"none","align":"center","width":156,"height":50,"src":"/_next/static/media/convify_logo_black.0085e885.png"},"displayName":"Logo","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{}},"mdsAe2aBSM":{"type":{"resolvedName":"ProgressBar"},"isCanvas":false,"props":{"color":"#4050ff","maxWidth":"366","fullWidth":false,"progressvalue":"20"},"displayName":"ProgressBar","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{}},"HsVEwi1W0N":{"type":{"resolvedName":"HeadlineText"},"isCanvas":false,"props":{"text":"How many employees does your company have?","fontSize":{"value":42,"isCustomized":false,"globalStyled":false},"fontFamily":{"value":"--font-heading","isCustomized":false,"globalStyled":false},"textColor":{"value":"#0e0e0e","isCustomized":false,"globalStyled":false},"fontWeight":{"value":"700","isCustomized":false,"globalStyled":false},"textAlign":{"value":"center","isCustomized":false,"globalStyled":false},"marginLeft":{"value":58,"isCustomized":false,"globalStyled":false},"marginRight":{"value":58,"isCustomized":false,"globalStyled":false},"marginTop":{"value":40,"isCustomized":false,"globalStyled":false},"marginBottom":{"value":40,"isCustomized":false,"globalStyled":false},"tagType":"h1"},"displayName":"HeadlineText","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{}},"WyPGuBF4RD":{"type":{"resolvedName":"MultipleChoice"},"isCanvas":false,"props":{"marginTop":0,"marginBottom":0,"marginLeft":0,"marginRight":0,"background":"#ffffff","radius":0,"width":360,"lastSelectedChoice":1,"singleChoice":true,"viewWithIcon":true,"choicesMade":[],"multipleChoiceStyles":{"fontSize":18,"background":"#ffffff","hoverBackground":"#4050ff","radius":8,"fontWeight":"700","border":2,"borderColor":"#eaeaeb","hoverBorderColor":"#4050ff","textColor":"#000000","hoverTextColor":"#ffffff","paddingTop":16,"paddingBottom":16,"paddingLeft":16,"paddingRight":16,"gap":8},"multipleChoices":[{"id":"1","optionLogo":null,"optionLabel":"1 to 2","optionValue":"option1","optionSelected":false},{"id":"2","optionLogo":null,"optionLabel":"3 to 9","optionValue":"option2","optionSelected":true},{"id":"3","optionLogo":null,"optionLabel":"10 to 49","optionValue":"option3","optionSelected":false},{"id":"4","optionLogo":null,"optionLabel":"50 to 99","optionValue":"option4","optionSelected":false}]},"displayName":"MultipleChoice","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{}},"footer-node":{"type":{"resolvedName":"ScreenFooter"},"isCanvas":false,"props":{},"displayName":"Footers","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{}},"lWqDrGF2Nc":{"type":{"resolvedName":"IconButton"},"isCanvas":false,"props":{"fontFamily":{"value":"--font-heading","globalStyled":true,"isCustomized":false},"containerBackground":"#ffffff","background":{"value":"#4050ff","globalStyled":true,"isCustomized":false},"color":{"value":"#ffffff","globalStyled":false,"isCustomized":true},"backgroundHover":{"value":"#3142ff","globalStyled":true,"isCustomized":false},"colorHover":{"value":"#ffffff","globalStyled":false,"isCustomized":true},"radius":{"value":"8","globalStyled":false,"isCustomized":false},"justifyContent":"space-between","borderColor":{"value":"#4050ff","globalStyled":true,"isCustomized":false},"borderHoverColor":{"value":"#4050ff","globalStyled":true,"isCustomized":false},"disabled":false,"enableIcon":true,"width":"medium","height":"auto","size":"small","text":"Get quote","marginLeft":20,"marginTop":[40],"marginRight":20,"marginBottom":[40],"icon":"arrowright","paddingLeft":"16","paddingTop":"14","paddingRight":"16","paddingBottom":"14","flexDirection":"row","alignItems":"center","gap":4,"border":2,"fullWidth":true,"preset":"filled"},"displayName":"IconButton","custom":{},"parent":"ROOT","hidden":false,"nodes":[],"linkedNodes":{}}}
+{
+	"ROOT": {
+		"type": "UserContainer",
+		"isCanvas": true,
+		"props": {
+			"padding": 5,
+			"background": "#ad2121",
+			"expanded": "true",
+			"className": "min-h-screen min-w-full flex flex-col items-center py-5"
+		},
+		"displayName": "One Input Screen",
+		"custom": {
+
+		},
+		"hidden": false,
+		"nodes": [
+			"ws9t9vvLKOne",
+			"mdsAe2aBSM",
+			"HsVEwi1W0N",
+			"WyPGuBF4RD",
+			"lWqDrGF2Nc",
+			"footer-node"
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"ws9t9vvLKOne": {
+		"type": {
+			"resolvedName": "Logo"
+		},
+		"isCanvas": false,
+		"props": {
+			"alt": "Logo",
+			"marginTop": 0,
+			"marginBottom": "40",
+			"marginLeft": 0,
+			"marginRight": 0,
+			"background": "inherit",
+			"radius": "none",
+			"align": "center",
+			"width": 156,
+			"height": 50,
+			"src": "/_next/static/media/convify_logo_black.0085e885.png"
+		},
+		"displayName": "Logo",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"mdsAe2aBSM": {
+		"type": {
+			"resolvedName": "ProgressBar"
+		},
+		"isCanvas": false,
+		"props": {
+			"color": "#4050ff",
+			"maxWidth": "366",
+			"fullWidth": false,
+			"progressvalue": "20"
+		},
+		"displayName": "ProgressBar",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"HsVEwi1W0N": {
+		"type": {
+			"resolvedName": "HeadlineText"
+		},
+		"isCanvas": false,
+		"props": {
+			"text": "How many employees does your company have?",
+			"fontSize": {
+				"value": 42,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"fontFamily": {
+				"value": "--font-heading",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"textColor": {
+				"value": "#0e0e0e",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"fontWeight": {
+				"value": "700",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"textAlign": {
+				"value": "center",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginLeft": {
+				"value": 58,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginRight": {
+				"value": 58,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginTop": {
+				"value": 40,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginBottom": {
+				"value": 40,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"tagType": "h1"
+		},
+		"displayName": "HeadlineText",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"WyPGuBF4RD": {
+		"type": {
+			"resolvedName": "MultipleChoice"
+		},
+		"isCanvas": false,
+		"props": {
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"background": "#ffffff",
+			"radius": 0,
+			"width": 360,
+			"lastSelectedChoice": 1,
+			"singleChoice": true,
+			"viewWithIcon": true,
+			"choicesMade": [
+
+			],
+			"multipleChoiceStyles": {
+				"fontSize": 18,
+				"background": "#ffffff",
+				"hoverBackground": "#4050ff",
+				"radius": 8,
+				"fontWeight": "700",
+				"border": 2,
+				"borderColor": "#eaeaeb",
+				"hoverBorderColor": "#4050ff",
+				"textColor": "#000000",
+				"hoverTextColor": "#ffffff",
+				"paddingTop": 16,
+				"paddingBottom": 16,
+				"paddingLeft": 16,
+				"paddingRight": 16,
+				"gap": 8
+			},
+			"multipleChoices": [
+				{
+					"id": "1",
+					"optionLogo": null,
+					"optionLabel": "1 to 2",
+					"optionValue": "option1",
+					"optionSelected": false
+				},
+				{
+					"id": "2",
+					"optionLogo": null,
+					"optionLabel": "3 to 9",
+					"optionValue": "option2",
+					"optionSelected": true
+				},
+				{
+					"id": "3",
+					"optionLogo": null,
+					"optionLabel": "10 to 49",
+					"optionValue": "option3",
+					"optionSelected": false
+				},
+				{
+					"id": "4",
+					"optionLogo": null,
+					"optionLabel": "50 to 99",
+					"optionValue": "option4",
+					"optionSelected": false
+				}
+			]
+		},
+		"displayName": "MultipleChoice",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"footer-node": {
+		"type": {
+			"resolvedName": "ScreenFooter"
+		},
+		"isCanvas": false,
+		"props": {
+
+		},
+		"displayName": "Footers",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	},
+	"lWqDrGF2Nc": {
+		"type": {
+			"resolvedName": "IconButton"
+		},
+		"isCanvas": false,
+		"props": {
+			"fontFamily": {
+				"value": "--font-heading",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"containerBackground": "#ffffff",
+			"background": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"color": {
+				"value": "#ffffff",
+				"globalStyled": false,
+				"isCustomized": true
+			},
+			"backgroundHover": {
+				"value": "#3142ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"colorHover": {
+				"value": "#ffffff",
+				"globalStyled": false,
+				"isCustomized": true
+			},
+			"radius": {
+				"value": "8",
+				"globalStyled": false,
+				"isCustomized": false
+			},
+			"justifyContent": "space-between",
+			"borderColor": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"borderHoverColor": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"disabled": false,
+			"enableIcon": true,
+			"width": "medium",
+			"height": "auto",
+			"size": "medium",
+			"text": "Get quote",
+			"marginLeft": 20,
+			"marginTop": [
+				40
+			],
+			"marginRight": 20,
+			"marginBottom": [
+				40
+			],
+			"icon": "arrowright",
+			"paddingLeft": "16",
+			"paddingTop": "14",
+			"paddingRight": "16",
+			"paddingBottom": "14",
+			"flexDirection": "row",
+			"alignItems": "center",
+			"gap": 4,
+			"border": 2,
+			"fullWidth": true,
+			"preset": "filled"
+		},
+		"displayName": "IconButton",
+		"custom": {
+
+		},
+		"parent": "ROOT",
+		"hidden": false,
+		"nodes": [
+
+		],
+		"linkedNodes": {
+
+		}
+	}
+}

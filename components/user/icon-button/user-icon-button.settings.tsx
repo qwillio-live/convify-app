@@ -88,6 +88,7 @@ export const IconButtonSettings = () => {
       marginBottom,
       width,
       height,
+      settingsTab,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -99,7 +100,7 @@ export const IconButtonSettings = () => {
   const {filledPreset, outLinePreset} = useButtonThemePresets();
   const [selectedPreset,setSelectedPresets] = React.useState(PRESETNAMES.filled)
   const addPresetStyles = (preset) => {
-    const staticStyles = ["containerBackground","text","icon","enableIcon","size","fullWidth","width","height","paddingLeft","justifyContent","paddingTop","paddingRight","paddingBottom","flexDirection","alignItems","gap","marginLeft","marginTop","marginRight","marginBottom"]
+    const staticStyles = ["settingsTab","containerBackground","text","icon","enableIcon","size","fullWidth","width","height","paddingLeft","justifyContent","paddingTop","paddingRight","paddingBottom","flexDirection","alignItems","gap","marginLeft","marginTop","marginRight","marginBottom"]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
         if(!staticStyles.includes(key))
@@ -132,8 +133,13 @@ export const IconButtonSettings = () => {
 
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
+      <Accordion
+      value={settingsTab || "content"}
+      onValueChange={(value) => {
+        setProp((props) => (props.settingsTab = value), 200)
+      }}
+      type="single" collapsible className="w-full">
+        <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Content </span>
           </AccordionTrigger>
@@ -200,7 +206,7 @@ export const IconButtonSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-9">
+        <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Design </span>
           </AccordionTrigger>
@@ -252,7 +258,7 @@ export const IconButtonSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-2">
+        <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
@@ -350,7 +356,7 @@ export const IconButtonSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-8">
+        <AccordionItem value="styles">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Styles </span>
           </AccordionTrigger>
