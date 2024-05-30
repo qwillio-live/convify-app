@@ -72,7 +72,9 @@ export const GlobalThemeSettings = (props: Props) => {
   const debouncedDispatch = useCallback(
     debounce((value) => {
       dispatch(setPartialStyles(value));
-    }, 200), // Throttle to 200ms
+    }, 200,{
+      maxWait: 400,
+    } ), // Throttle to 200ms
     [dispatch]
   );
 
