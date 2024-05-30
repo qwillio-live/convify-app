@@ -101,7 +101,7 @@ export const IconButtonSettings = () => {
   const {filledPreset, outLinePreset} = useButtonThemePresets();
   const [selectedPreset,setSelectedPresets] = React.useState(PRESETNAMES.filled)
   const addPresetStyles = (preset) => {
-    const staticStyles = ["settingsTab","containerBackground","text","icon","enableIcon","size","fullWidth","width","height","paddingLeft","justifyContent","paddingTop","paddingRight","paddingBottom","flexDirection","alignItems","gap","marginLeft","marginTop","marginRight","marginBottom"]
+    const staticStyles = ["buttonSize","settingsTab","containerBackground","text","icon","enableIcon","size","fullWidth","width","height","paddingLeft","justifyContent","paddingTop","paddingRight","paddingBottom","flexDirection","alignItems","gap","marginLeft","marginTop","marginRight","marginBottom"]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
         if(!staticStyles.includes(key))

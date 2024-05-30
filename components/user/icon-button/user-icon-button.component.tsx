@@ -586,6 +586,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   fullWidth: true,
   preset: 'filled',
   settingsTab: 'content'
+
 }
 
 IconButton.craft = {
