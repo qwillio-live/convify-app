@@ -90,9 +90,9 @@ const IconButtonMobileSizeValues={
 
 const ButtonTextLimit = {
   small: 22,
-  medium: 32,
-  large: 42,
-  full: 92,
+  medium: 30,
+  large: 40,
+  full: 82,
 }
 export const IconButtonGen = ({
   disabled,
