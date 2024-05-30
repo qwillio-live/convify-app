@@ -103,7 +103,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   onChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
-                    handleStyleChange({general: { primaryColor: e.target.value}})
+                    handleStyleChangeDebounced({general: { primaryColor: e.target.value}})
                   }}
                   className=" basis-1/3"
                   type={"color"}
@@ -141,7 +141,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   value={backgroundColor || defaultBackgroundColor}
                   onChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
-                    handleStyleChange({general: { backgroundColor: e.target.value}})
+                    handleStyleChangeDebounced({general: { backgroundColor: e.target.value}})
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className=" basis-1/3"
@@ -246,7 +246,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 value={primaryTextColor || defaultPrimaryTextColor}
                 onChange={(e) =>
                   {
-                    handleStyleChange({text: { primaryColor: e.target.value}})
+                    handleStyleChangeDebounced({text: { primaryColor: e.target.value}})
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }
 
@@ -267,7 +267,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                 value={secondaryTextColor || defaultSecondaryTextColor}
                 onChange={(e) => {
-                  handleStyleChange({text: { secondaryColor: e.target.value}})
+                  handleStyleChangeDebounced({text: { secondaryColor: e.target.value}})
                   // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }
                 }
