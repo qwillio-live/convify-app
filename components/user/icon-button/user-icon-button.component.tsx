@@ -310,6 +310,29 @@ export const IconButton = ({
 
   },[primaryColor])
 
+  const handleTextChange = (e) => {
+    const maxLength = ButtonTextLimit[size];
+    const value = e.target.value;
+
+    if (value.length <= maxLength) {
+      setProp(
+        (props) => {
+          props.text = value;
+        },
+        200
+      );
+    } else {
+      // Allow deletion beyond the limit
+      if (text.length > maxLength && value.length < text.length) {
+        setProp(
+          (props) => {
+            props.text = e.target.value;
+          },
+          200
+        );
+      }
+    }
+  };
 
   return (
     <div
@@ -372,16 +395,7 @@ export const IconButton = ({
         }}
         className="text-ellipsis overflow-hidden whitespace-nowrap"
         onChange={(e) => {
-          if (text.length >= ButtonTextLimit[size]) {
-            e.preventDefault();
-            return;
-          }
-          setProp(
-            (props) => {
-              props.text = e.target.value;
-            },
-            200
-          );
+          handleTextChange(e);
         }}
         tagName="span"
       />
