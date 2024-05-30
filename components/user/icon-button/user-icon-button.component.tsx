@@ -43,40 +43,63 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButtonThemePresets"
 
 const IconsList = {
-  aperture: <Aperture className="shrink-0" />,
-  activity: <Activity className="shrink-0" />,
-  dollarsign: <DollarSign className="shrink-0" />,
-  anchor: <Anchor className="shrink-0" />,
-  disc: <Disc />,
-  mountain: <Mountain className="shrink-0" />,
-  arrowright: <ArrowRight className="shrink-0" />,
-}
+  aperture: (props) => <Aperture {...props} />,
+  activity: (props) => <Activity {...props} />,
+  dollarsign: (props) => <DollarSign {...props} />,
+  anchor: (props) => <Anchor {...props} />,
+  disc: (props) => <Disc {...props} />,
+  mountain: (props) => <Mountain {...props} />,
+  arrowright: (props) => <ArrowRight {...props} />,
+};
+
+const IconGenerator = ({ icon, size, className = '', ...rest }) => {
+  const IconComponent = IconsList[icon];
+
+  if (!IconComponent) {
+    return null; // or some default icon or error handling
+  }
+
+  return <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />;
+};
+
 
 const IconButtonSizeValues={
-  small: "260px",
+  small: "300px",
   medium: "376px",
   large: "576px",
   full: "100%",
 }
 
+const ButtonSizeValues = {
+  small: ".8rem",
+  medium: "1rem",
+  large: "1.4rem",
+}
+const IconSizeValues ={
+  small: 18,
+  medium: 22,
+  large: 28,
+}
+
 const IconButtonMobileSizeValues={
-  small: "200px",
-  medium: "300px",
+  small: "300px",
+  medium: "330px",
   large: "360px",
   full: "100%",
 }
 
 const ButtonTextLimit = {
-  small: 26,
-  medium: 36,
-  large: 46,
-  full: 96,
+  small: 22,
+  medium: 32,
+  large: 42,
+  full: 92,
 }
 export const IconButtonGen = ({
   disabled,
   fontFamily,
   enableIcon,
   size,
+  buttonSize,
   color,
   text,
   marginLeft,
@@ -131,6 +154,7 @@ export const IconButtonGen = ({
         marginLeft={marginLeft}
         width={width}
         size={size}
+        buttonSize={buttonSize}
         height={height}
         marginRight={marginRight}
         marginTop={marginTop}
@@ -143,10 +167,11 @@ export const IconButtonGen = ({
         gap={gap}
         mobileScreen={false}
         {...props}
+        className="text-[1rem]"
         onClick={() => console.log("Button clicked", text)}
       >
-      <span>{text}</span>
-      {enableIcon && IconsList[icon]}
+      <div>{text}</div>
+      {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
     </StyledCustomButton>
     </div>
   )
@@ -158,6 +183,7 @@ interface StyledCustomButtonProps {
   backgroundHover?: string
   colorHover?: string
   size?: string
+  buttonSize?: string
   marginLeft?: string | number
   width?: string | number
   height?: string | number
@@ -180,9 +206,11 @@ interface StyledCustomButtonProps {
 }
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
+  display: flex;
+  flex-direction: row;
   position: relative;
-  gap: 2px;
-  font-size: 1rem;
+  gap: 6px;
+  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
   border: '1px dashed transparent';
   transition: all 0.2s ease;
@@ -207,9 +235,9 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => props.paddingTop}px;
+  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => props.paddingBottom}px;
+  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
@@ -230,6 +258,7 @@ export const IconButton = ({
   borderHoverColor,
   enableIcon,
   size,
+  buttonSize,
   color,
   text,
   marginLeft,
@@ -403,6 +432,7 @@ export const IconButton = ({
         alignItems={alignItems}
         gap={gap}
         size={size}
+        buttonSize={buttonSize}
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
@@ -413,19 +443,19 @@ export const IconButton = ({
         style={{
           maxWidth: IconButtonSizeValues[size || "medium"],
           minWidth: '24px',
-          minHeight: '24px',
+          // minHeight: '24px',
           borderWidth: '1px',
           borderStyle: 'dotted',
           borderColor: 'transparent',
 
         }}
-        className="text-ellipsis overflow-hidden whitespace-nowrap min-w-10 min-h-10 border-transparent border-dotted hover:border-blue-500"
+        className="text-ellipsis whitespace-nowrap min-w-16 min-h-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
         onChange={(e) => {
           handleTextChange(e);
         }}
-        tagName="span"
+        tagName="div"
       />
-        {enableIcon && IconsList[icon]}
+        {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
       </StyledCustomButton>
       </div>
     </div>
@@ -475,6 +505,7 @@ export type IconButtonProps = {
   fullWidth: boolean
   preset: string
   settingsTab: string
+  buttonSize: string
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -526,6 +557,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   width: "366",
   height: "auto",
   size: IconButtonSizes.medium,
+  buttonSize: "medium",
   text: "Get quote",
   marginLeft: 0,
   marginTop: 0,

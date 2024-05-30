@@ -63,6 +63,7 @@ export const IconButtonSettings = () => {
       enableIcon,
       props,
       size,
+      buttonSize,
       containerBackground,
       background,
       backgroundHover,
@@ -211,28 +212,37 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Design </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Background</p>
-              <Input type="color" value={containerBackground} onChange={(e) => {
-                  debouncedSetProp("containerBackground",e.target.value)
-                }
-              } />
-            </div>
+          <div className="flex flex-row items-center col-span-2 space-x-2">
+                <label
+                  htmlFor="backgroundcolor"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                >
+                  Background Color
+                </label>
+                <Input
+                  value={containerBackground}
+                  onChange={(e) => {
+                    debouncedSetProp("containerBackground",e.target.value)
+                  }}
+                  className="basis-1/3"
+                  type={"color"}
+                  id="backgroundcolor"
+                />
+              </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Width</p>
+              <p className="text-md text-muted-foreground">Button size</p>
               <Tabs
-                value={size}
-                defaultValue={size}
+                value={buttonSize}
+                defaultValue={buttonSize}
                 onValueChange={(value) => {
-                  setProp((props) => (props.size = value), 1000)
+                  setProp((props) => (props.buttonSize = value), 1000)
                 }}
                className="flex-1">
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger   value="small">S</TabsTrigger>
-                  <TabsTrigger  value="medium">M</TabsTrigger>
-                  <TabsTrigger  value="large">L</TabsTrigger>
-                  <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="small">S</TabsTrigger>
+                  <TabsTrigger value="medium">M</TabsTrigger>
+                  <TabsTrigger value="large">L</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -263,6 +273,24 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Width</p>
+              <Tabs
+                value={size}
+                defaultValue={size}
+                onValueChange={(value) => {
+                  setProp((props) => (props.size = value), 1000)
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-4">
+                  <TabsTrigger   value="small">S</TabsTrigger>
+                  <TabsTrigger  value="medium">M</TabsTrigger>
+                  <TabsTrigger  value="large">L</TabsTrigger>
+                  <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
