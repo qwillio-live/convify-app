@@ -89,15 +89,15 @@ const IconButtonMobileSizeValues={
 }
 
 const ButtonTextLimit = {
-  small: 22,
-
+  small: 132,
+  // small: 22,
   // medium: 30,
   // large: 40,
   // full: 82,
 
-  medium: 22,
-  large: 22,
-  full: 22,
+  medium: 122,
+  large: 122,
+  full: 122,
 }
 export const IconButtonGen = ({
   disabled,
@@ -453,24 +453,25 @@ export const IconButton = ({
         onClick={() => console.log("Button clicked", text)}
       >
       <ContentEditable
-        html={text}
-        innerRef={ref}
-        disabled={disabled}
-        style={{
-          maxWidth: IconButtonSizeValues[size || "medium"],
-          minWidth: '24px',
-          // minHeight: '24px',
-          borderWidth: '1px',
-          borderStyle: 'dotted',
-          borderColor: 'transparent',
-
-        }}
-        className="text-ellipsis whitespace-nowrap min-w-16 min-h-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
-        onChange={(e) => {
-          handleTextChange(e);
-        }}
-        tagName="div"
-      />
+    html={text}
+    innerRef={ref}
+    disabled={disabled}
+    style={{
+        maxWidth: IconButtonSizeValues[size || "medium"],
+        minWidth: '24px',
+        borderWidth: '1px',
+        borderStyle: 'dotted',
+        borderColor: 'transparent',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'wrap'
+    }}
+    className="min-w-16 min-h-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+    onChange={(e) => {
+        handleTextChange(e);
+    }}
+    tagName="div"
+/>
         {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
       </StyledCustomButton>
       </div>
