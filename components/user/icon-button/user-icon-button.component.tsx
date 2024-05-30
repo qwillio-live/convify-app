@@ -1,4 +1,4 @@
-import React, { useEffect,useRef } from "react"
+import React, { useCallback, useEffect,useRef } from "react"
 import {
   Activity,
   Anchor,
@@ -10,6 +10,7 @@ import {
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
+import { throttle,debounce } from 'lodash';
 
 import { useNode } from "@/lib/craftjs"
 import {darken, rgba} from "polished";
@@ -52,9 +53,9 @@ const IconsList = {
 }
 
 const IconButtonSizeValues={
-  small: "400px",
-  medium: "800px",
-  large: "974px",
+  small: "260px",
+  medium: "376px",
+  large: "576px",
   full: "100%",
 }
 
@@ -264,6 +265,7 @@ export const IconButton = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const ref = useRef<HTMLDivElement>(null);
   const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
@@ -309,31 +311,47 @@ export const IconButton = ({
       }
 
   },[primaryColor])
-
+  const maxLength = ButtonTextLimit[size];
   const handleTextChange = (e) => {
-    const maxLength = ButtonTextLimit[size];
-    const value = e.target.value;
 
+    const value = e.target.innerText;
     if (value.length <= maxLength) {
-      setProp(
-        (props) => {
-          props.text = value;
-        },
-        200
-      );
+      // setProp((props) => props.text = value);
+      handlePropChangeDebounced('text',value);
     } else {
-      // Allow deletion beyond the limit
-      if (text.length > maxLength && value.length < text.length) {
-        setProp(
-          (props) => {
-            props.text = e.target.value;
-          },
-          200
-        );
+      if(ref.current){
+        e.target.innerText = text || ''; // Restore the previous text
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(ref.current);
+        range.collapse(false); // Move cursor to the end
+        selection?.removeAllRanges();
+        selection?.addRange(range);
       }
     }
   };
 
+  useEffect(() => {
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      currentRef.addEventListener('input', handleTextChange);
+    }
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener('input', handleTextChange);
+      }
+    };
+
+  }, [text, maxLength]);
+  const debouncedSetProp = useCallback(
+    debounce((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }),[setProp])
+
+  const handlePropChangeDebounced = (property,value) => {
+    debouncedSetProp(property,value);
+  }
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
@@ -389,11 +407,18 @@ export const IconButton = ({
       >
       <ContentEditable
         html={text}
+        innerRef={ref}
         disabled={disabled}
         style={{
           maxWidth: IconButtonSizeValues[size || "medium"],
+          minWidth: '24px',
+          minHeight: '24px',
+          borderWidth: '1px',
+          borderStyle: 'dotted',
+          borderColor: 'transparent',
+
         }}
-        className="text-ellipsis overflow-hidden whitespace-nowrap"
+        className="text-ellipsis overflow-hidden whitespace-nowrap min-w-10 min-h-10 border-transparent border-dotted hover:border-blue-500"
         onChange={(e) => {
           handleTextChange(e);
         }}
