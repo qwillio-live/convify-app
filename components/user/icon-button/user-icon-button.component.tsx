@@ -346,7 +346,8 @@ export const IconButton = ({
     const value = e.target.innerText;
     if (value.length <= maxLength) {
       // setProp((props) => props.text = value);
-      handlePropChangeDebounced('text',value);
+      // handlePropChangeDebounced('text',value);
+      handlePropChangeThrottled('text',value)
     } else {
       if(ref.current){
         e.target.innerText = text || ''; // Restore the previous text
@@ -373,6 +374,16 @@ export const IconButton = ({
     };
 
   }, [text, maxLength]);
+  const throttledSetProp = useCallback(
+    throttle((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }, 200), // Throttle to 50ms to 200ms
+    [setProp]
+  );
+
+  const handlePropChangeThrottled = (property,value) => {
+    throttledSetProp(property,value);
+  };
 
   const debouncedSetProp = useCallback(
     debounce((property,value) => {
