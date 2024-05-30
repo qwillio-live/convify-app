@@ -90,6 +90,7 @@ export const IconButtonSettings = () => {
       width,
       height,
       settingsTab,
+      preset,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -394,7 +395,7 @@ export const IconButtonSettings = () => {
               addPresetStyles(filledPreset)
               setSelectedPresets(PRESETNAMES.filled)
             }}
-            className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : selectedPreset === PRESETNAMES.filled})}
+            className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : preset === "filled"})}
             >
                 <IconButtonGen {...filledPreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} />
               </Card>
@@ -402,7 +403,7 @@ export const IconButtonSettings = () => {
                 addPresetStyles(outLinePreset)
                 setSelectedPresets(PRESETNAMES.outLine)
               }}
-              className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : selectedPreset === PRESETNAMES.outLine})}
+              className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : preset === "outline"})}
               >
                 <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} />
               </Card>
