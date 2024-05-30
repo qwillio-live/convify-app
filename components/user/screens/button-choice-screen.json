@@ -529,7 +529,9 @@
 			"gap": 4,
 			"border": 2,
 			"fullWidth": true,
-			"preset": "filled"
+			"preset": "filled",
+      "settingsTab": "content",
+      "buttonSize": "medium"
 		},
 		"displayName": "IconButton",
 		"custom": {
