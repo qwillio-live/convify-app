@@ -73,12 +73,12 @@ const IconButtonSizeValues={
 const ButtonSizeValues = {
   small: ".8rem",
   medium: "1rem",
-  large: "1.4rem",
+  large: "1.2rem",
 }
 const IconSizeValues ={
   small: 18,
   medium: 22,
-  large: 28,
+  large: 26,
 }
 
 const IconButtonMobileSizeValues={
