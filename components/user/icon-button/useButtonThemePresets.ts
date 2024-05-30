@@ -2,19 +2,21 @@ import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
 import { IconButtonProps, IconButtonSizes } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
-import { darken } from "polished";
+import { darken, rgba } from "polished";
 
 const useButtonThemePresets = () => {
   const theme = useAppSelector((state) => state.theme);
-  const darkenedPrimaryColor = darken(0.1, theme?.general?.primaryColor || "#3182ce");
+  const darkenedPrimaryColor = darken(0.05, theme?.general?.primaryColor || "#3182ce");
+  const alphaBackgroundColor = rgba(theme?.general?.primaryColor || "#3182ce", 0.1);
   const filledPreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
       isCustomized: false,
     },
+    containerBackground: "#ffffff",
     background: {
-      value: theme?.general?.primaryColor || "#4050ff",
+      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
       globalStyled: true,
       isCustomized: false,
     },
@@ -24,7 +26,7 @@ const useButtonThemePresets = () => {
       isCustomized: true,
     },
     backgroundHover: {
-      value: darkenedPrimaryColor || "#3182ce",
+      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
       globalStyled: true,
       isCustomized: false,
     },
@@ -39,12 +41,12 @@ const useButtonThemePresets = () => {
       isCustomized: false,
     },
     borderColor: {
-      value: "#00FF00",
+      value: theme?.general?.primaryColor || "#4050ff",
       globalStyled: true,
       isCustomized: false,
     },
     borderHoverColor: {
-      value: "inherit",
+      value: darkenedPrimaryColor || "#3182ce",
       globalStyled: true,
       isCustomized: false,
     },
@@ -54,21 +56,22 @@ const useButtonThemePresets = () => {
     width: IconButtonSizes.medium,
     height: "auto",
     size: IconButtonSizes.medium,
-    text: "Get quote",
-    marginLeft: 0,
+    text: "Continue",
+    marginLeft: 20,
     marginTop: 20,
-    marginRight: 0,
+    marginRight: 20,
     marginBottom: 20,
     icon: "arrowright",
     paddingLeft: "16",
-    paddingTop: "26",
+    paddingTop: "14",
     paddingRight: "16",
-    paddingBottom: "26",
+    paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    border: 0,
-    fullWidth: false,
+    border: 2,
+    fullWidth: true,
+    preset: 'filled'
   };
 
   const outLinePreset: IconButtonProps = {
@@ -77,10 +80,11 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
+    containerBackground: "#ffffff",
     background: {
-      value: "#ffffff",
-      globalStyled: false,
-      isCustomized: true,
+      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","outline"),
+      globalStyled: true,
+      isCustomized: false,
     },
     color: {
       value: theme?.general?.primaryColor || "#3182ce",
@@ -88,9 +92,9 @@ const useButtonThemePresets = () => {
       isCustomized: false,
     },
     backgroundHover: {
-      value: "#fefefe",
-      globalStyled: false,
-      isCustomized: true,
+      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","outline"),
+      globalStyled: true,
+      isCustomized: false,
     },
     colorHover: {
       value: darkenedPrimaryColor || "#3180ca",
@@ -118,24 +122,50 @@ const useButtonThemePresets = () => {
     width: IconButtonSizes.medium,
     height: "auto",
     size: IconButtonSizes.medium,
-    text: "Get quote",
-    marginLeft: 0,
+    text: "Continue",
+    marginLeft: 20,
     marginTop: 20,
-    marginRight: 0,
+    marginRight: 20,
     marginBottom: 20,
     icon: "arrowright",
     paddingLeft: "16",
-    paddingTop: "26",
+    paddingTop: "14",
     paddingRight: "16",
-    paddingBottom: "26",
+    paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
     border: 2,
-    fullWidth: false,
+    fullWidth: true,
+    preset: 'outline',
   };
 
   return { filledPreset, outLinePreset };
 };
+
+export const getBackgroundForPreset= (color,preset) => {
+  switch (preset) {
+    case "filled":
+      return color;
+    case "outline":
+      return rgba(color, 0.1);
+    default:
+      return color;
+
+  }
+}
+
+export const getHoverBackgroundForPreset= (color,preset) => {
+
+  switch (preset) {
+    case "filled":
+      return darken(0.03, color);
+    case "outline":
+      return rgba(color, 0.1);
+    default:
+      return color;
+
+  }
+}
 
 export default useButtonThemePresets;

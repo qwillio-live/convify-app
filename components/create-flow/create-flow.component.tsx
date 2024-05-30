@@ -56,6 +56,7 @@ import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -103,7 +104,7 @@ export function CreateFlowComponent() {
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
-  
+
 
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
@@ -183,7 +184,10 @@ export function CreateFlowComponent() {
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
                 className="w-full"
-                onValueChange={(value) => setView(value)}
+                onValueChange={(value) => {
+                  setView(value)
+                  dispatch(setMobileScreen(value === VIEWS.MOBILE))
+                }}
               >
                 <TabsContent
                 style={{ backgroundColor: backgroundColor }}

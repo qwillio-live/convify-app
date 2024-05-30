@@ -35,6 +35,8 @@ const useInputThemePresets = () => {
   label: "Label",
   fieldName: "Field name",
   floatingLabel: false,
+  enableIcon: false,
+  icon: "arrowright",
   };
 
   const underlinedPreset: UserInputProps = {
@@ -64,6 +66,8 @@ const useInputThemePresets = () => {
   label: "Label",
   fieldName: "Field name",
   floatingLabel: false,
+  enableIcon: false,
+  icon: "arrowright",
   };
 
 

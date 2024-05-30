@@ -12,7 +12,7 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
-import {darken} from "polished";
+import {darken, rgba} from "polished";
 import {
   Accordion,
   AccordionContent,
@@ -39,6 +39,7 @@ import { Controller } from "../settings/controller.component"
 import { IconButtonSettings } from "./user-icon-button.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButtonThemePresets"
 
 const IconsList = {
   aperture: <Aperture className="shrink-0" />,
@@ -51,12 +52,25 @@ const IconsList = {
 }
 
 const IconButtonSizeValues={
-  small: "260px",
-  medium: "376px",
-  large: "576px",
+  small: "400px",
+  medium: "800px",
+  large: "974px",
   full: "100%",
 }
 
+const IconButtonMobileSizeValues={
+  small: "200px",
+  medium: "300px",
+  large: "360px",
+  full: "100%",
+}
+
+const ButtonTextLimit = {
+  small: 36,
+  medium: 56,
+  large: 76,
+  full: 100,
+}
 export const IconButtonGen = ({
   disabled,
   fontFamily,
@@ -64,12 +78,13 @@ export const IconButtonGen = ({
   size,
   color,
   text,
-  marginLeft = 0,
+  marginLeft,
   width: width,
   height: height,
-  marginRight = 0,
-  marginTop = 0,
-  marginBottom = 0,
+  marginRight,
+  marginTop,
+  containerBackground,
+  marginBottom,
   background,
   backgroundHover,
   colorHover,
@@ -89,6 +104,17 @@ export const IconButtonGen = ({
   ...props
 }) => {
   return (
+    <div className="w-full relative" style={{
+      width: "100%",
+      background: `${containerBackground}`,
+      display: "flex",
+    justifyContent: "center",
+    minWidth: '100%',
+    paddingTop: `${props.marginTop}px`,
+    paddingBottom: `${props.marginBottom}px`,
+    paddingLeft: `${props.marginLeft}px`,
+    paddingRight: `${props.marginRight}px`,
+     }}>
 <StyledCustomButton
         fontFamily={fontFamily?.value}
         color={color.value}
@@ -114,12 +140,14 @@ export const IconButtonGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         gap={gap}
+        mobileScreen={false}
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
       <span>{text}</span>
       {enableIcon && IconsList[icon]}
     </StyledCustomButton>
+    </div>
   )
 }
 interface StyledCustomButtonProps {
@@ -147,12 +175,15 @@ interface StyledCustomButtonProps {
   border?: number
   borderColor?: string
   borderHoverColor?: string
+  mobileScreen: boolean
 }
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   position: relative;
   gap: 2px;
-  border: 1px dashed transparent;
+  font-size: 1rem;
+  font-weight: 400;
+  border: '1px dashed transparent';
   transition: all 0.2s ease;
   &:hover {
     border-style: solid;
@@ -166,13 +197,13 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-  margin-left: ${(props) => props.marginLeft}px;
-  max-width: 100%;
-  width: ${(props) => IconButtonSizeValues[props.size || "medium"]};
-  min-width: ${(props) => IconButtonSizeValues[props.size || "medium"]};
+  max-width: ${(props) => props.mobileScreen ? IconButtonMobileSizeValues[props.size || "medium"] : IconButtonSizeValues[props.size || "medium"]};
+  width: 100%;
+  box-sizing: border-box;
   height: ${(props) => props.height}px;
-  margin-right: ${(props) => props.marginRight}px;
   margin-top: ${(props) => props.marginTop}px;
+  margin-left: ${(props) => props.marginLeft}px;
+  margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
   padding-top: ${(props) => props.paddingTop}px;
@@ -184,6 +215,12 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+
+  @media (max-width: 480) {
+    width: 100%; /* Make the button take the full width on smaller screens */
+    min-width: 100%;
+  }
+
 `
 
 export const IconButton = ({
@@ -194,12 +231,13 @@ export const IconButton = ({
   size,
   color,
   text,
-  marginLeft = 0,
+  marginLeft,
   width: width,
   height: height,
-  marginRight = 0,
-  marginTop = 0,
-  marginBottom = 0,
+  marginRight,
+  marginTop,
+  marginBottom,
+  containerBackground,
   background,
   backgroundHover,
   colorHover,
@@ -232,6 +270,7 @@ export const IconButton = ({
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
   const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
   const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
 
   useEffect(() => {
     if(fontFamily.globalStyled && !fontFamily.isCustomized){
@@ -243,9 +282,11 @@ export const IconButton = ({
   useEffect(() => {
 
       if(primaryColor){
-        const darkenedPrimaryColor = darken(0.1,primaryColor);
+        const backgroundPrimaryColor = getBackgroundForPreset(primaryColor,props.preset);
+        const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(primaryColor,props.preset);
+
         if(background.globalStyled && !background.isCustomized){
-          setProp((props) => props.background.value = primaryColor, 200)
+          setProp((props) => props.background.value = backgroundPrimaryColor, 200)
         }
           if(color.globalStyled && !color.isCustomized){
         setProp((props) => props.color.value = primaryColor, 200)
@@ -257,13 +298,13 @@ export const IconButton = ({
         // hover colors
 
         if(backgroundHover.globalStyled && !backgroundHover.isCustomized){
-          setProp((props) => props.backgroundHover.value = darkenedPrimaryColor, 200)
+          setProp((props) => props.backgroundHover.value = hoverBackgroundPrimaryColor, 200)
         }
         if(borderHoverColor.globalStyled && !borderHoverColor.isCustomized){
-          setProp((props) => props.borderHoverColor.value = darkenedPrimaryColor, 200)
+          setProp((props) => props.borderHoverColor.value = primaryColor, 200)
         }
         if(colorHover.globalStyled && !colorHover.isCustomized){
-          setProp((props) => props.colorHover.value = darkenedPrimaryColor, 200)
+          setProp((props) => props.colorHover.value = primaryColor, 200)
         }
       }
 
@@ -273,9 +314,27 @@ export const IconButton = ({
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
-    className="w-full flex justify-center"
+    className="relative overflow-hidden w-full"
+    style={{
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+    }}
     >
         {isHovered && <Controller nameOfComponent="BUTTON" />}
+        <div className="relative w-full"
+  style={{
+    background: `${containerBackground}`,
+    display: "inline-flex",
+    justifyContent: "center",
+    boxSizing: 'border-box',
+    minWidth: '100%',
+    maxWidth: '100%',
+    paddingTop: `${props.marginTop}px`,
+    paddingBottom: `${props.marginBottom}px`,
+    paddingLeft: `${props.marginLeft}px`,
+    paddingRight: `${props.marginRight}px`,
+  }}>
       <StyledCustomButton
         fontFamily={fontFamily.value}
         color={color.value}
@@ -289,6 +348,7 @@ export const IconButton = ({
         borderHoverColor={borderHoverColor.value}
         border={border}
         marginLeft={marginLeft}
+        mobileScreen={mobileScreen || false}
         width={width}
         height={height}
         marginRight={marginRight}
@@ -304,24 +364,30 @@ export const IconButton = ({
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
-        <ContentEditable
-          html={text}
-          disabled={disabled}
-          style={{
-            maxWidth: IconButtonSizeValues[size || "medium"],
-           }}
-          className="text-ellipsis overflow-hidden whitespace-nowrap"
-          onChange={(e) =>
-            setProp(
-              (props) =>
-                (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
-              500
-            )
+      <ContentEditable
+        html={text}
+        disabled={disabled}
+        style={{
+          maxWidth: IconButtonSizeValues[size || "medium"],
+        }}
+        className="text-ellipsis overflow-hidden whitespace-nowrap"
+        onChange={(e) => {
+          if (text.length >= ButtonTextLimit[size]) {
+            e.preventDefault();
+            return;
           }
-          tagName="span"
-        />
+          setProp(
+            (props) => {
+              props.text = e.target.value;
+            },
+            200
+          );
+        }}
+        tagName="span"
+      />
         {enableIcon && IconsList[icon]}
       </StyledCustomButton>
+      </div>
     </div>
   )
 }
@@ -341,6 +407,7 @@ export type IconButtonProps = {
   disabled: boolean
   enableIcon: boolean
   size: IconButtonSizes
+  containerBackground: string
   background: StyleProperty
   backgroundHover: StyleProperty
   color: StyleProperty
@@ -366,6 +433,7 @@ export type IconButtonProps = {
   width: string | number
   height: string | number
   fullWidth: boolean
+  preset: string
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -374,6 +442,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
     globalStyled: true,
     isCustomized: false,
   },
+  containerBackground: "#ffffff",
   background: {
     value: "#4050ff",
     globalStyled: false,
@@ -430,7 +499,8 @@ export const IconButtonDefaultProps: IconButtonProps = {
   alignItems: "center",
   gap: 4,
   border: 0,
-  fullWidth: false,
+  fullWidth: true,
+  preset: 'filled',
 }
 
 IconButton.craft = {

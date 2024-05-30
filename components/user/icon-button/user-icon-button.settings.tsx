@@ -54,6 +54,7 @@ import {
 } from "./user-icon-button.component"
 import useButtonThemePresets from "./useButtonThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils";
 
 export const IconButtonSettings = () => {
   const {
@@ -62,6 +63,7 @@ export const IconButtonSettings = () => {
       enableIcon,
       props,
       size,
+      containerBackground,
       background,
       backgroundHover,
       colorHover,
@@ -90,11 +92,17 @@ export const IconButtonSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+  enum PRESETNAMES {
+    filled= "filled",
+    outLine= "outLine"
+  }
   const {filledPreset, outLinePreset} = useButtonThemePresets();
+  const [selectedPreset,setSelectedPresets] = React.useState(PRESETNAMES.filled)
   const addPresetStyles = (preset) => {
+    const staticStyles = ["containerBackground","text","icon","enableIcon","size","fullWidth","width","height","paddingLeft","justifyContent","paddingTop","paddingRight","paddingBottom","flexDirection","alignItems","gap","marginLeft","marginTop","marginRight","marginBottom"]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
-        if(key !== "text" && key !== "icon" && key !== "enableIcon")
+        if(!staticStyles.includes(key))
         props[key] = preset[key]
       })
     }, 1000)
@@ -197,6 +205,13 @@ export const IconButtonSettings = () => {
             <span className="text-sm font-medium">Design </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">Background</p>
+              <Input type="color" value={containerBackground} onChange={(e) => {
+                  debouncedSetProp("containerBackground",e.target.value)
+                }
+              } />
+            </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Width</p>
@@ -205,11 +220,6 @@ export const IconButtonSettings = () => {
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
-                  if(value === 'full') {
-                    setProp((props) => (props.fullWidth = true), 1000)
-                  }else{
-                    setProp((props) => (props.fullWidth = false), 1000)
-                  }
                 }}
                className="flex-1">
                 <TabsList className="w-full grid grid-cols-4">
@@ -346,11 +356,21 @@ export const IconButtonSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
-            <Card onClick={() => addPresetStyles(filledPreset)} className="px-2 py-0">
-                <IconButtonGen {...filledPreset} size="full" paddingBottom={16} paddingTop={16} width={"266px"} marginTop={12} marginBottom={12} />
+            <Card onClick={() => {
+              addPresetStyles(filledPreset)
+              setSelectedPresets(PRESETNAMES.filled)
+            }}
+            className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : selectedPreset === PRESETNAMES.filled})}
+            >
+                <IconButtonGen {...filledPreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} />
               </Card>
-              <Card onClick={() => addPresetStyles(outLinePreset)} className="px-2 py-0">
-                <IconButtonGen {...outLinePreset} size="full" paddingBottom={16} paddingTop={16} width={"266px"} marginTop={12} marginBottom={12} />
+              <Card onClick={() => {
+                addPresetStyles(outLinePreset)
+                setSelectedPresets(PRESETNAMES.outLine)
+              }}
+              className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : selectedPreset === PRESETNAMES.outLine})}
+              >
+                <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} />
               </Card>
             </div>
           </AccordionContent>

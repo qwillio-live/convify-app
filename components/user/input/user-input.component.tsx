@@ -27,6 +27,27 @@ import { Slider } from "@/components/ui/slider"
 import { Controller } from "../settings/controller.component"
 import { UserInputSettings } from "./user-input-settings.component"
 import { cn } from "@/lib/utils"
+import {
+  Activity,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  Disc,
+  DollarSign,
+  Mountain,
+} from "lucide-react"
+
+const ICONSTYLES = 'p-2 w-12 h-12 shrink-0';
+
+const IconsList = {
+  aperture: <Aperture className={ICONSTYLES} />,
+  activity: <Activity  className={ICONSTYLES} />,
+  dollarsign: <DollarSign  className={ICONSTYLES} />,
+  anchor: <Anchor  className={ICONSTYLES} />,
+  disc: <Disc className={ICONSTYLES} />,
+  mountain: <Mountain  className={ICONSTYLES} />,
+  arrowright: <ArrowRight  className={ICONSTYLES} />,
+}
 
 export enum UserInputSizes {
   small = "small",
@@ -80,7 +101,7 @@ export const UserInputGen = ({ ...props }) => {
       >
         {props.placeholder}
       </div>
-      <UserInputSyled
+      <UserInputStyled
         ref={inputRef}
         textColor={props.textColor}
         backgroundColor={props.backgroundColor}
@@ -108,7 +129,7 @@ export const UserInputGen = ({ ...props }) => {
   )
 }
 
-const UserInputSyled = styled(Input)<{
+const UserInputStyled = styled(Input)<{
   textColor: string
   width: number
   backgroundColor: string
@@ -118,13 +139,11 @@ const UserInputSyled = styled(Input)<{
   size: UserInputSizes
 }>`
   color: ${(props) => props.textColor};
-  width: ${(props) => UserInputSizeValues[props.size] || "medium"};
-  min-width: ${(props) => UserInputSizeValues[props.size || "medium"]};
   max-width: 100%;
   background-color: '#fff';
   border-color: ${(props) => props.borderColor};
   border-width: ${(props) => props.borderWidth}px;
-  border-radius: ${(props) => props.borderRadius}px;
+
   align-self: center;
 `
 
@@ -203,7 +222,12 @@ export const UserInput = ({ ...props }) => {
           props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
             ? "top-0 text-sm pl-3 pt-1"
             : "top-1 left-0 pt-3 px-3 pb-1 text-sm"
-        }`}
+        } ${
+          props.floatingLabel && props.enableIcon && "left-12"
+        }
+
+        `
+      }
         style={{
           minWidth: `${UserInputSizeValues[props.size]}`,
           width: `${UserInputSizeValues[props.size]}`,
@@ -211,14 +235,23 @@ export const UserInput = ({ ...props }) => {
       >
         {props.floatingLabel && props.label}
       </div>
+
+      <div className="field-container flex flex-row gap-0 items-center w-auto">
       {
-        // true && (
-        //   <div className="relative top-0 left-0 pt-3 px-3 pb-1 text-sm">
-        //     This is a icon
-        //   </div>
-        // )
+        props.enableIcon && (
+          <div
+          className={cn(
+            'rounded-l-md shrink-0 flex items-center justify-center bg-inherit border border-r-0 ',
+          )}
+          style={{
+            borderColor: props.isActive ? props.activeBorderColor : props.borderColor,
+           }}
+          >
+          {IconsList[props.icon]}
+          </div>
+        )
       }
-      <UserInputSyled
+      <UserInputStyled
         ref={inputRef}
         textColor={props.textColor}
         backgroundColor={props.backgroundColor}
@@ -234,13 +267,15 @@ export const UserInput = ({ ...props }) => {
         className={cn(
           {
             "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-            "font-semibold pt-4 px-3 pb-4 text-base": !props.floatingLabel,
+            "font-semibold px-3 py-6 text-base": !props.floatingLabel,
+            "rounded-l-none" : props.enableIcon,
           },
-          `ring-[${props.borderColor}]
-          focus-visible:ring-[${props.activeBorderColor}]
-          ring-opacity-50
+          `ring-0
+          focus-visible:ring-0
+          ring-opacity-0
           bg-white
-          focus-visible:ring-1 focus-visible:ring-offset-0`
+          peer
+          focus-visible:ring-0 focus-visible:ring-offset-0`
         )}
         onChange={(e) =>
           setProp((props) => (props.inputValue = e.target.value))
@@ -248,6 +283,7 @@ export const UserInput = ({ ...props }) => {
         onBlur={() => setProp((props) => (props.isActive = false))}
         autoFocus={props.isFocused}
       />
+      </div>{/** End field container */}
       </div>
       </div>
     </div>
@@ -281,6 +317,8 @@ export type UserInputProps = {
   placeholder: string
   fieldName: string
   floatingLabel: boolean
+  enableIcon: boolean
+  icon: string
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
@@ -309,6 +347,8 @@ export const UserInputDefaultProps: UserInputProps = {
   label: "Label",
   fieldName: "Field name",
   floatingLabel: false,
+  enableIcon: false,
+  icon: "arrowright",
 }
 
 UserInput.craft = {

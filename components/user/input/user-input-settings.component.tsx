@@ -26,7 +26,20 @@ import { Slider } from "@/components/custom-slider"
 
 import { Controller } from "../settings/controller.component"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { MoveHorizontal } from "lucide-react"
+import {
+  Activity,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  Disc,
+  DollarSign,
+  Mountain,
+  MoveHorizontal,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalSpaceBetween
+} from "lucide-react"
 
 export const UserInputSettings = () => {
   const {
@@ -145,6 +158,67 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">Design</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
+          <div className="flex flex-row items-center col-span-2 space-x-2">
+              <Checkbox
+                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
+                checked={props.enableIcon}
+                onCheckedChange={(e) => {
+                  // setProp((props) => (props.enableIcon = e), 1000)
+                  handlePropChange("enableIcon",e);
+                }}
+                id="enableIcon"
+              />
+              <label
+                htmlFor="enableIcon"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Enable icon
+              </label>
+            </div>
+
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+          {props.enableIcon && (
+                <>
+                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <Select
+                    defaultValue={props.icon}
+                    onValueChange={(e) => {
+                      setProp((props) => (props.icon = e), 1000)
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select icon" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="arrowright">
+                          <ArrowRight />
+                        </SelectItem>
+                        <SelectItem value="aperture">
+                          <Aperture />
+                        </SelectItem>
+                        <SelectItem value="activity">
+                          <Activity />
+                        </SelectItem>
+                        <SelectItem value="dollarsign">
+                          <DollarSign />
+                        </SelectItem>
+                        <SelectItem value="anchor">
+                          <Anchor />
+                        </SelectItem>
+                        <SelectItem value="disc">
+                          <Disc />
+                        </SelectItem>
+                        <SelectItem value="mountain">
+                          <Mountain />
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </>
+              )}
+            </div>
+
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Width</p>
               <Tabs
