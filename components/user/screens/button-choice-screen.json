@@ -4,7 +4,8 @@
 		"isCanvas": true,
 		"props": {
 			"style": {
-				"padding": "24px",
+				"paddingTop": "24px",
+        "paddingBottom": "24px",
 				"expanded": "true",
 				"maxWidth": "100%"
 			},
