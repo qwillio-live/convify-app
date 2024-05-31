@@ -8,5 +8,6 @@ export default getRequestConfig(async ({ locale }) => {
 
   return {
     messages: (await import(`./messages/${locale}.json`)).default,
+    components: (await import(`./locales/components/${locale}.json`)).default,
   }
 })

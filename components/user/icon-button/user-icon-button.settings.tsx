@@ -14,7 +14,7 @@ import {
   AlignHorizontalSpaceBetween
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
-
+import { useTranslations } from "next-intl";
 import { throttle,debounce } from 'lodash';
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
@@ -57,6 +57,8 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils";
 
 export const IconButtonSettings = () => {
+  const t = useTranslations("components")
+
   const {
     actions: { setProp },
     props: {
@@ -143,7 +145,7 @@ export const IconButtonSettings = () => {
       type="single" collapsible className="w-full">
         <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Content </span>
+            <span className="text-sm font-medium">{t("Content")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="flex flex-row items-center col-span-2 space-x-2">
