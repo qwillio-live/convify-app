@@ -3,8 +3,10 @@ import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalT
 import { IconButtonProps, IconButtonSizes } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken, rgba } from "polished";
+import { useTranslations } from "next-intl";
 
 const useButtonThemePresets = () => {
+  const t = useTranslations("Components")
   const theme = useAppSelector((state) => state.theme);
   const darkenedPrimaryColor = darken(0.05, theme?.general?.primaryColor || "#3182ce");
   const alphaBackgroundColor = rgba(theme?.general?.primaryColor || "#3182ce", 0.1);
@@ -56,7 +58,7 @@ const useButtonThemePresets = () => {
     width: IconButtonSizes.medium,
     height: "auto",
     size: IconButtonSizes.medium,
-    text: "Continue",
+    text: t("Continue"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -124,7 +126,7 @@ const useButtonThemePresets = () => {
     width: IconButtonSizes.medium,
     height: "auto",
     size: IconButtonSizes.medium,
-    text: "Continue",
+    text: t("Continue"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,

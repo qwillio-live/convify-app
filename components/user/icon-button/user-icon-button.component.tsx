@@ -41,6 +41,7 @@ import { IconButtonSettings } from "./user-icon-button.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButtonThemePresets"
+import { useTranslations } from "next-intl";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -310,6 +311,7 @@ export const IconButton = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const t = useTranslations("Components")
   const ref = useRef<HTMLDivElement>(null);
   const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
@@ -419,7 +421,7 @@ export const IconButton = ({
       justifyContent: "center",
     }}
     >
-        {isHovered && <Controller nameOfComponent="BUTTON" />}
+        {isHovered && <Controller nameOfComponent={t("Button")} />}
         <div className="relative w-full"
   style={{
     background: `${containerBackground}`,

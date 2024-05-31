@@ -108,6 +108,7 @@ import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-containe
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import useInputThemePresets from "../input/useInputThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useTranslations } from "next-intl"
 
 const MultipleChoiceOptions = [
   {
@@ -351,6 +352,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
 }
 
 export const UserToolbox = () => {
+  const t = useTranslations("Components")
   const { connectors } = useEditor()
   const {filledPreset, outLinePreset} = useButtonThemePresets();
   const {outlinedPreset} = useInputThemePresets();
@@ -578,7 +580,7 @@ export const UserToolbox = () => {
                   >
                     <IconButtonGen
                     className="w-full"
-                    {...filledPreset} size="small" marginTop={0} marginBottom={0} />
+                    {...filledPreset} size="small" marginTop={0} marginBottom={0} text={t("Continue")} />
                     {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />

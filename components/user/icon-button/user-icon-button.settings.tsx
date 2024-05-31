@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl";
+
 import { throttle,debounce } from 'lodash';
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
@@ -57,7 +58,7 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils";
 
 export const IconButtonSettings = () => {
-  const t = useTranslations("components")
+  const t = useTranslations("Components")
 
   const {
     actions: { setProp },
@@ -162,7 +163,7 @@ export const IconButtonSettings = () => {
                 htmlFor="enableIcon"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Enable icon
+                {t("Enable Icon")}
               </label>
             </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
@@ -212,7 +213,7 @@ export const IconButtonSettings = () => {
 
         <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Design </span>
+            <span className="text-sm font-medium">{t("Design")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
           <div className="flex flex-row items-center col-span-2 space-x-2">
@@ -220,7 +221,7 @@ export const IconButtonSettings = () => {
                   htmlFor="backgroundcolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Background Color
+                  {t("Background Color")}
                 </label>
                 <Input
                   defaultValue={themeBackgroundColor}
@@ -235,7 +236,7 @@ export const IconButtonSettings = () => {
               </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Button size</p>
+              <p className="text-md text-muted-foreground">{t("Button Size")}</p>
               <Tabs
                 value={buttonSize}
                 defaultValue={buttonSize}
@@ -244,15 +245,15 @@ export const IconButtonSettings = () => {
                 }}
                className="flex-1">
                 <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="small">S</TabsTrigger>
-                  <TabsTrigger value="medium">M</TabsTrigger>
-                  <TabsTrigger value="large">L</TabsTrigger>
+                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Content align</p>
+              <p className="text-md text-muted-foreground">{t("Content Align")}</p>
               <Tabs
                 value={justifyContent}
                 defaultValue={justifyContent}
@@ -274,11 +275,11 @@ export const IconButtonSettings = () => {
 
         <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Spacing </span>
+            <span className="text-sm font-medium">{t("Spacing")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Width</p>
+              <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs
                 value={size}
                 defaultValue={size}
@@ -287,9 +288,9 @@ export const IconButtonSettings = () => {
                 }}
                className="flex-1">
                 <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger   value="small">S</TabsTrigger>
-                  <TabsTrigger  value="medium">M</TabsTrigger>
-                  <TabsTrigger  value="large">L</TabsTrigger>
+                  <TabsTrigger   value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger  value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger  value="large">{t("L")}</TabsTrigger>
                   <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -298,7 +299,7 @@ export const IconButtonSettings = () => {
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Top</Label>
+              <Label htmlFor="marginTop">{t("Top")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginTop}
               </span>
@@ -324,7 +325,7 @@ export const IconButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Bottom</Label>
+              <Label htmlFor="marginTop">{t("Bottom")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginBottom}
               </span>
@@ -345,7 +346,7 @@ export const IconButtonSettings = () => {
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Right</Label>
+              <Label htmlFor="marginTop">{t("Right")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginRight}
               </span>
@@ -367,7 +368,7 @@ export const IconButtonSettings = () => {
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Left</Label>
+              <Label htmlFor="marginTop">{t("Left")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginLeft}
               </span>
@@ -390,7 +391,7 @@ export const IconButtonSettings = () => {
 
         <AccordionItem value="styles">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Styles </span>
+            <span className="text-sm font-medium">{t("Styles")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">

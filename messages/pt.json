@@ -9,5 +9,27 @@
   },
   "Dashboard": {
     "There's not a flow in sight": "Não há um fluxo à vista"
+  },
+  "Components" : {
+    "Continue Button" : "Botão Continuar odo",
+    "Continue" : "Continuar",
+    "Button" : "Botão",
+    "Content" : "Conteúdo traduzido",
+    "Enable Icon" : "Habilitar Ícone",
+    "Icon" : "Ícone",
+    "Design" : "Design",
+    "S" : "S",
+    "M" : "M",
+    "L" : "L",
+    "Background Color" : "Cor de Fundo",
+    "Button Size" : "Tamanho do Botão",
+    "Content Align" : "Alinhamento do Conteúdo",
+    "Spacing" : "Espaçamento",
+    "Width" : "Largura",
+    "Top" : "Topo",
+    "Right" : "Direita",
+    "Bottom" : "Inferior",
+    "Left" : "Esquerda",
+    "Styles" : "Estilos"
   }
 }
