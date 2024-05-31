@@ -89,15 +89,15 @@ const IconButtonMobileSizeValues={
 }
 
 const ButtonTextLimit = {
-  small: 132,
+  small: 100,
   // small: 22,
   // medium: 30,
   // large: 40,
   // full: 82,
 
-  medium: 122,
-  large: 122,
-  full: 122,
+  medium: 100,
+  large: 100,
+  full: 100,
 }
 export const IconButtonGen = ({
   disabled,
@@ -452,19 +452,16 @@ export const IconButton = ({
         {...props}
         onClick={() => console.log("Button clicked", text)}
       >
+      <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
       <ContentEditable
     html={text}
     innerRef={ref}
     disabled={disabled}
     style={{
-        maxWidth: IconButtonSizeValues[size || "medium"],
-        minWidth: '24px',
-        borderWidth: '1px',
-        borderStyle: 'dotted',
-        borderColor: 'transparent',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'wrap'
+      maxWidth: '100%',
+      transitionProperty: 'all',
+      overflowX: 'clip',
+      textOverflow: 'ellipsis',
     }}
     className="min-w-16 min-h-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
     onChange={(e) => {
@@ -472,6 +469,7 @@ export const IconButton = ({
     }}
     tagName="div"
 />
+</div>
         {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
       </StyledCustomButton>
       </div>
