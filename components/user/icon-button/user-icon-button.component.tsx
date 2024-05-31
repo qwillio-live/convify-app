@@ -175,7 +175,12 @@ export const IconButtonGen = ({
         className="text-[1rem]"
         onClick={() => console.log("Button clicked", text)}
       >
-      <div>{text}</div>
+      <div style={{
+      maxWidth: '100%',
+      transitionProperty: 'all',
+      overflowX: 'clip',
+      textOverflow: 'ellipsis',
+    }}>{text}</div>
       {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
     </StyledCustomButton>
     </div>
@@ -217,17 +222,20 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
-  border: '1px dashed transparent';
+  border: 1px dashed transparent;
   transition: all 0.2s ease;
+
   &:hover {
     border-style: solid;
     border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
     background: ${(props) => props.backgroundHover};
     color: ${(props) => props.colorHover};
   }
+
   &:focus {
     border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
   }
+
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
@@ -249,13 +257,16 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-
-  @media (max-width: 480) {
+  @media (max-width: 760px) {
     width: 100%; /* Make the button take the full width on smaller screens */
-    min-width: 100%;
+    max-width: 600px;
   }
+  @media (max-width: 660px) {
+    width: 100%; /* Make the button take the full width on smaller screens */
+    max-width: 400px;
+  }
+`;
 
-`
 
 export const IconButton = ({
   fontFamily,
