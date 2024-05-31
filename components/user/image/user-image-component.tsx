@@ -1,6 +1,9 @@
+import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
+
+import "cropperjs/dist/cropper.css"
 import React from "react"
-import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { UploadCloud } from "lucide-react"
+import Cropper, { ReactCropperElement } from "react-cropper"
 
 import { useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
@@ -10,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -17,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -57,7 +62,7 @@ export const UserLogo = ({
   )
 }
 
-export const Logo = ({
+export const Img = ({
   alt,
   marginTop,
   marginBottom,
@@ -109,9 +114,13 @@ export const Logo = ({
   )
 }
 
-export const LogoSettings = () => {
+export const ImgSettings = () => {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [setUploadedFile, uploadedFile] = React.useState<string | null>(null)
+  const [showDialog, setShowDialog] = React.useState<boolean>(false)
+  const [image, setImage] = React.useState<string>(ImgDefaultProps.src)
+  const [cropData, setCropData] = React.useState(ImgDefaultProps.src)
+
   const {
     actions: { setProp },
     props: {
@@ -133,16 +142,55 @@ export const LogoSettings = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
+      setShowDialog(true)
+
+      const reader = new FileReader()
+      reader.onload = () => {
+        setImage(reader.result as any)
+      }
+      reader.readAsDataURL(file)
     }
   }
+
+  const cropperRef = React.useRef<ReactCropperElement>(null)
+
+  const onCrop = () => {
+    const cropper = cropperRef.current?.cropper
+    // console.log(cropper.getCroppedCanvas().toDataURL())
+    cropper
+  }
+
+  const getCropData = () => {
+    if (typeof cropperRef.current?.cropper !== "undefined") {
+      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
+      setProp(
+        (props) => cropperRef.current?.cropper.getCroppedCanvas().toDataURL(),
+        1000
+      )
+      setProp(
+        (props) =>
+          (props.width = cropperRef.current?.cropper.getCroppedCanvas().width),
+        1000
+      )
+      setProp(
+        (props) =>
+          (props.height =
+            cropperRef.current?.cropper.getCroppedCanvas().height),
+        1000
+      )
+    }
+  }
+
+  // useEffect(() => {
+  //   setProp((props) => (props.src = cropData), 1000)
+  // }, [cropData])
 
   return (
     <>
       <Card className="p-2">
         <CardHeader className="p-2">
-          <CardTitle>Logo</CardTitle>
-          <CardDescription>Add url of logo</CardDescription>
+          <CardTitle>Image</CardTitle>
+          <CardDescription>Add url of image</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-2 p-2">
           <Input
@@ -150,7 +198,7 @@ export const LogoSettings = () => {
             className="w-full p-2 text-xs"
             onChange={(e) => setProp((props) => (props.src = e.target.value))}
           />
-          <span className="text-muted-foreground">Upload logo</span>
+          <span className="text-muted-foreground">Upload image</span>
           <Input
             type="file"
             className="hidden"
@@ -164,7 +212,7 @@ export const LogoSettings = () => {
             <div className="absolute flex size-full flex-row items-center justify-center bg-white bg-opacity-60">
               <UploadCloud />
             </div>
-            <img src={src} alt={alt} className="w-30" />
+            <img src={cropData} alt={alt} className="w-30" />
           </div>
         </CardContent>
       </Card>
@@ -324,12 +372,35 @@ export const LogoSettings = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="h-[calc(100vh-10%)] z-[9999999]">
+          <Cropper
+            ref={cropperRef}
+            style={{ height: 300, width: "100%" }}
+            // Cropper.js options
+            initialAspectRatio={16 / 9}
+            guides={false}
+            crop={onCrop}
+            src={image}
+          />
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                getCropData()
+                setShowDialog(false)
+              }}
+            >
+              Crop Image
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
 
-export const LogoDefaultProps = {
-  alt: "Logo",
+export const ImgDefaultProps = {
+  alt: "Image",
   marginTop: 0,
   marginBottom: 0,
   marginLeft: 0,
@@ -337,14 +408,14 @@ export const LogoDefaultProps = {
   background: "inherit",
   radius: "none",
   align: "center",
-  width: 156,
-  height: 50,
-  src: ConvifyLogo.src,
+  width: 320,
+  height: 180,
+  src: ImagePlaceholder.src,
 }
 
-Logo.craft = {
-  props: LogoDefaultProps,
+Img.craft = {
+  props: ImgDefaultProps,
   related: {
-    settings: LogoSettings,
+    settings: ImgSettings,
   },
 }

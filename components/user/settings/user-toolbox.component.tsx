@@ -3,19 +3,16 @@ import Image from "next/image"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import FirstLogo from "@/assets/images/first-logo.png"
 import FourthLogo from "@/assets/images/fourth-logo.png"
+import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
 import SecondLogo from "@/assets/images/second-logo.png"
 import ThirdLogo from "@/assets/images/third-logo.png"
 import cn from "classnames"
 import {
-  ArrowRight,
-  Bookmark,
   Box,
   Chrome,
-  Circle,
   CircleSlashed,
   Columns,
   Copy,
-  Diamond,
   Dice2,
   Facebook,
   Globe,
@@ -24,23 +21,18 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   ImagePlus,
-  Layout,
   Linkedin,
-  MousePointer2,
-  ListChecks,
+  Loader as LoaderIcon,
   Navigation,
   Pencil,
-  PlusSquare,
   Rocket,
-  Square,
   Target,
   TextCursorInput,
   Trophy,
   Type,
-  Loader as LoaderIcon,
 } from "lucide-react"
 
-import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
+import { useEditor } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
@@ -48,7 +40,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import CustomLoader from "@/components/ui/loader"
 import { Card as UiCard } from "@/components/ui/card"
 import {
   HoverCard,
@@ -56,17 +47,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { Input } from "@/components/ui/input"
+import CustomLoader from "@/components/ui/loader"
 import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 import { ScrollArea } from "@/components/ui/scroll-area"
 // import { Toggle, ToggleItem } from "@/components/ui/toggle-group"
-import { Toggle } from "@/components/ui/toggle"
 import {
-  ButtonDefaultProps,
-  Button as UserButton,
-} from "@/components/user/button/user-button.component"
-import {
-  LoaderDefaultProps,
   Loader,
+  LoaderDefaultProps,
 } from "@/components/user/loader/user-loader.component"
 import {
   TextDefaultProps,
@@ -75,20 +62,17 @@ import {
 
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
 import {
-  Container,
-  ContainerDefaultProps,
-  UserContainer,
-} from "../container/user-container.component"
-import {
   HeadlineText,
   HeadlineTextDefaultProps,
 } from "../headline-text/headline-text.component"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import {
   IconButton,
-  IconButtonDefaultProps,
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
-import { UserInput, UserInputDefaultProps } from "../input/user-input.component"
+import { Img, ImgDefaultProps } from "../image/user-image-component"
+import useInputThemePresets from "../input/useInputThemePresets"
+import { UserInput } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -103,10 +87,6 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
-import { is } from "date-fns/locale"
-import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
-import useButtonThemePresets from "../icon-button/useButtonThemePresets"
-import useInputThemePresets from "../input/useInputThemePresets"
 
 const MultipleChoiceOptions = [
   {
@@ -347,8 +327,8 @@ const HoverCardComponent = ({ title, icon, children }) => {
 
 export const UserToolbox = () => {
   const { connectors } = useEditor()
-  const {filledPreset, outLinePreset} = useButtonThemePresets();
-  const {outlinedPreset} = useInputThemePresets();
+  const { filledPreset, outLinePreset } = useButtonThemePresets()
+  const { outlinedPreset } = useInputThemePresets()
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -421,10 +401,7 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(
-                      ref,
-                      <UserInput {...outlinedPreset} />
-                    )
+                    connectors.create(ref, <UserInput {...outlinedPreset} />)
                   }
                   data-cy="toolbox-text"
                 >
@@ -572,8 +549,10 @@ export const UserToolbox = () => {
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
                     <IconButtonGen
-                    className="w-full"
-                    {...filledPreset} size="small" />
+                      className="w-full"
+                      {...filledPreset}
+                      size="small"
+                    />
                     {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />
@@ -694,6 +673,30 @@ export const UserToolbox = () => {
                         value={50}
                         className="h-1 max-w-[366px]"
                         indicatorColor={"#4050ff"}
+                      />
+                    </div>
+                  </HoverCardComponent>
+                </div>
+
+                <div
+                  className="min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref && connectors.create(ref, <Img {...ImgDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title="Image"
+                    icon={<ImageIcon className="mr-2 h-3 w-3" />}
+                  >
+                    <div className="flex w-[360px] flex-row items-center justify-between">
+                      <Image
+                        src={ImagePlaceholder.src}
+                        alt="Image component"
+                        width={360}
+                        height={203}
+                        className="w-full h-full"
                       />
                     </div>
                   </HoverCardComponent>

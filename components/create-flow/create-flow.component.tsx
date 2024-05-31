@@ -10,14 +10,10 @@ import {
   Globe,
   Image,
   Linkedin,
-  PlusCircle,
 } from "lucide-react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import {
-  addScreen,
-  setEditorLoad,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 // import { ProgressBar } from "../progress-bar.component"
@@ -39,6 +35,7 @@ import {
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
 import { List, ListItem } from "../user/list/list.component"
@@ -68,7 +65,7 @@ const SaveButton = () => {
   } = useEditor()
   const headerId = useAppSelector((state) => state?.screen?.headerId)
   //screen header id is: HeT6HrWBxJ
-  const nodeTree = node(headerId || '').toNodeTree()
+  const nodeTree = node(headerId || "").toNodeTree()
   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
   console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
   return (
@@ -96,14 +93,19 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch()
 
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
   const startScreen = useAppSelector((state) => state?.screen?.screens[0])
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
-  const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
-  
+  const editorLoadLength = useAppSelector(
+    (state) => Object.keys(state?.screen?.editorLoad).length
+  )
 
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
@@ -168,6 +170,7 @@ export function CreateFlowComponent() {
           Loader,
           List,
           ListItem,
+          Img,
         }}
         onRender={RenderNode}
       >
@@ -186,7 +189,7 @@ export function CreateFlowComponent() {
                 onValueChange={(value) => setView(value)}
               >
                 <TabsContent
-                style={{ backgroundColor: backgroundColor }}
+                  style={{ backgroundColor: backgroundColor }}
                   className={cn(
                     "mx-auto page-container min-h-[400px] box-content font-sans antialiased z-20",
                     view == VIEWS.DESKTOP
