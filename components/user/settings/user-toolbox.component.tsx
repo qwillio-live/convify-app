@@ -107,6 +107,7 @@ import { is } from "date-fns/locale"
 import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import useInputThemePresets from "../input/useInputThemePresets"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 const MultipleChoiceOptions = [
   {
@@ -310,6 +311,7 @@ function HelperInformation() {
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
+  const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
 
   return (
     <>
@@ -333,6 +335,9 @@ const HoverCardComponent = ({ title, icon, children }) => {
           <HoverCardContent
             className="flex flex-row items-center justify-center px-10 min-w-[382px]"
             forceMount={true}
+            style={{
+              background: themeBackgroundColor,
+             }}
             avoidCollisions
             side="left"
             sideOffset={32}
@@ -573,7 +578,7 @@ export const UserToolbox = () => {
                   >
                     <IconButtonGen
                     className="w-full"
-                    {...filledPreset} size="small" />
+                    {...filledPreset} size="small" marginTop={0} marginBottom={0} />
                     {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />

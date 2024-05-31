@@ -14,7 +14,7 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "#ffffff",
+    containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
       globalStyled: true,
@@ -82,7 +82,7 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "#ffffff",
+    containerBackground: 'transparent',
     background: {
       value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","outline"),
       globalStyled: true,

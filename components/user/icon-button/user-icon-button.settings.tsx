@@ -221,7 +221,7 @@ export const IconButtonSettings = () => {
                   Background Color
                 </label>
                 <Input
-                  value={containerBackground}
+                  value={themeBackgroundColor}
                   onChange={(e) => {
                     debouncedSetProp("containerBackground",e.target.value)
                   }}
