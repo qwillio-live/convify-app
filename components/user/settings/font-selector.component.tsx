@@ -49,15 +49,19 @@ export const FontSelector = ({
           aria-expanded={open}
           className="flex w-full items-center justify-between"
         >
-          {selectedFont
-            ? fontList?.find((font) => font.variable === selectedFont)?.name
-            : defaultFont
-            ? defaultFont
-            : `Select ${label.toLowerCase()}`}
-          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+          {selectedFont ? (
+            <>
+              {fontList?.find((font) => font.variable === selectedFont)?.name}
+              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+            </>
+          ) : defaultFont ? (
+            defaultFont
+          ) : (
+            `Select ${label.toLowerCase()}`
+          )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="z-10 w-[200px] p-0">
         <ScrollArea className="h-72 rounded-md border">
           <Command>
             <CommandInput placeholder="Search font..." />
