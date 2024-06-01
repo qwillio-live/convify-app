@@ -12,22 +12,6 @@ interface FontTypes {
 export const FONTS: FontTypes = {
   primaryFonts: [
     {
-      name: "Inter",
-      variable: "--font-inter",
-    },
-    {
-      name: "Roboto Mono",
-      variable: "--font-roboto-mono",
-    },
-    {
-      name: "Inter-Sans",
-      variable: "--font-sans",
-    },
-    {
-      name: "CalSans",
-      variable: "--font-heading",
-    },
-    {
       name: "Open Sans",
       variable: "--font-open-sans",
     },
@@ -218,26 +202,26 @@ export const FONTS: FontTypes = {
     {
       name: "Roboto Slab",
       variable: "--font-roboto-slab",
+    },
+    {
+      name: "Inter",
+      variable: "--font-inter",
+    },
+    {
+      name: "Roboto Mono",
+      variable: "--font-roboto-mono",
+    },
+    {
+      name: "Inter-Sans",
+      variable: "--font-sans",
+    },
+    {
+      name: "CalSans",
+      variable: "--font-heading",
     },
   ],
   secondaryFonts: [
     {
-      name: "Inter",
-      variable: "--font-inter",
-    },
-    {
-      name: "Roboto Mono",
-      variable: "--font-roboto-mono",
-    },
-    {
-      name: "Inter-Sans",
-      variable: "--font-sans",
-    },
-    {
-      name: "CalSans",
-      variable: "--font-heading",
-    },
-    {
       name: "Open Sans",
       variable: "--font-open-sans",
     },
@@ -428,6 +412,22 @@ export const FONTS: FontTypes = {
     {
       name: "Roboto Slab",
       variable: "--font-roboto-slab",
+    },
+    {
+      name: "Inter",
+      variable: "--font-inter",
+    },
+    {
+      name: "Roboto Mono",
+      variable: "--font-roboto-mono",
+    },
+    {
+      name: "Inter-Sans",
+      variable: "--font-sans",
+    },
+    {
+      name: "CalSans",
+      variable: "--font-heading",
     },
   ],
 }

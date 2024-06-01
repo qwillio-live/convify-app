@@ -59,6 +59,7 @@ import {
   zilla_slab,
   nunito_sans,
   roboto_slab,
+  roboto,
 } from "./fonts"
 
 interface RootLayoutProps {
@@ -124,6 +125,7 @@ export default function RootLayout({
       <body
         className={cn(
           "bg-background min-h-screen font-sans antialiased",
+          roboto.variable,
           fontSans.variable,
           fontHeading.variable,
           inter.variable,

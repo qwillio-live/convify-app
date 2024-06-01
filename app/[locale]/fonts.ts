@@ -1,5 +1,6 @@
 import localFont from "next/font/local"
 import {
+  Roboto,
   Inter,
   Roboto_Mono,
   Open_Sans,
@@ -51,6 +52,13 @@ import {
   Nunito_Sans,
   Roboto_Slab,
 } from "next/font/google"
+
+export const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  display: "swap",
+  weight: ["400", "700"],
+})
 
 export const inter = Inter({
   subsets: ["latin"],
