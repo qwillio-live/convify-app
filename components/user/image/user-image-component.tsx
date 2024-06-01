@@ -21,10 +21,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Icons } from "@/components/icons"
 
 import { Controller } from "../settings/controller.component"
 
@@ -92,7 +93,7 @@ export const Img = ({
         `relative flex flex-row justify-${align} w-full border border-transparent`
       )}
     >
-      {isHovered && <Controller nameOfComponent={"Logo"} />}
+      {isHovered && <Controller nameOfComponent={"Image"} />}
       {
         /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
@@ -120,6 +121,9 @@ export const ImgSettings = () => {
   const [showDialog, setShowDialog] = React.useState<boolean>(false)
   const [image, setImage] = React.useState<string>(ImgDefaultProps.src)
   const [cropData, setCropData] = React.useState(ImgDefaultProps.src)
+  const [activeAspectRatioBtn, setActiveAspectRatioBtn] =
+    React.useState<string>("source")
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   const {
     actions: { setProp },
@@ -139,16 +143,17 @@ export const ImgSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setShowDialog(true)
-
       const reader = new FileReader()
       reader.onload = () => {
         setImage(reader.result as any)
       }
       reader.readAsDataURL(file)
+      // setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
+      setShowDialog(true)
     }
   }
 
@@ -157,33 +162,65 @@ export const ImgSettings = () => {
   const onCrop = () => {
     const cropper = cropperRef.current?.cropper
     // console.log(cropper.getCroppedCanvas().toDataURL())
-    cropper
   }
 
   const getCropData = () => {
+    setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
       setProp(
-        (props) => cropperRef.current?.cropper.getCroppedCanvas().toDataURL(),
+        (props) =>
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
+      setProp((props) => (props.width = "100%"), 1000)
+      setProp((props) => (props.height = "auto"), 1000)
+      setShowDialog(false)
+      setActiveAspectRatioBtn("source")
       setProp(
         (props) =>
-          (props.width = cropperRef.current?.cropper.getCroppedCanvas().width),
-        1000
-      )
-      setProp(
-        (props) =>
-          (props.height =
-            cropperRef.current?.cropper.getCroppedCanvas().height),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
     }
+    setIsLoading(false)
   }
 
-  // useEffect(() => {
-  //   setProp((props) => (props.src = cropData), 1000)
-  // }, [cropData])
+  const aspectRatioSource = () => {
+    cropperRef.current?.cropper.setAspectRatio(
+      cropperRef.current?.cropper.getImageData().width /
+        cropperRef.current?.cropper.getImageData().height
+    )
+    setActiveAspectRatioBtn("source")
+  }
+  const aspectRatioFree = () => {
+    cropperRef.current?.cropper.setAspectRatio(NaN)
+    setActiveAspectRatioBtn("free")
+  }
+  const aspectRatioSquare = () => {
+    cropperRef.current?.cropper.setAspectRatio(1)
+    setActiveAspectRatioBtn("square")
+  }
+  const aspectRatioPortrait = () => {
+    cropperRef.current?.cropper.setAspectRatio(1.3333)
+    setActiveAspectRatioBtn("portrait")
+  }
+  const aspectRatioLandscape = () => {
+    cropperRef.current?.cropper.setAspectRatio(1.7777)
+    setActiveAspectRatioBtn("landscape")
+  }
+  const aspectRatioPortraitO = () => {
+    cropperRef.current?.cropper.setAspectRatio(0.75)
+    setActiveAspectRatioBtn("portraito")
+  }
+  const aspectRatioLandscape0 = () => {
+    cropperRef.current?.cropper.setAspectRatio(0.5625)
+    setActiveAspectRatioBtn("landscapeo")
+  }
 
   return (
     <>
@@ -212,7 +249,7 @@ export const ImgSettings = () => {
             <div className="absolute flex size-full flex-row items-center justify-center bg-white bg-opacity-60">
               <UploadCloud />
             </div>
-            <img src={cropData} alt={alt} className="w-30" />
+            <img src={src} alt={alt} className="w-30" />
           </div>
         </CardContent>
       </Card>
@@ -373,26 +410,112 @@ export const ImgSettings = () => {
         </AccordionItem>
       </Accordion>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="h-[calc(100vh-10%)] z-[9999999]">
+        <DialogContent className="max-h-[calc(100vh-10%)] z-[9999999] flex flex-col max-w-[95%] sm:max-w-[60%] sm:p-8">
           <Cropper
             ref={cropperRef}
-            style={{ height: 300, width: "100%" }}
+            style={{ width: "100%" }}
             // Cropper.js options
-            initialAspectRatio={16 / 9}
+            initialAspectRatio={NaN}
             guides={false}
             crop={onCrop}
+            autoCropArea={1}
             src={image}
+            minCropBoxHeight={10}
+            minCropBoxWidth={10}
+            background={false}
+            highlight={true}
           />
-          <DialogFooter>
+          <div className="flex items-center justify-between">
+            <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "source"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioSource}
+              >
+                Source
+              </Button>
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "free"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioFree}
+              >
+                Free
+              </Button>
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "square"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioSquare}
+              >
+                1:1
+              </Button>
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "portrait"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioPortrait}
+              >
+                4:3
+              </Button>
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "landscape"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioLandscape}
+              >
+                16:9
+              </Button>
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "portraito"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioPortraitO}
+              >
+                3:4
+              </Button>
+              <Button
+                variant="secondary"
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                  activeAspectRatioBtn === "landscapeo"
+                    ? "bg-white border-input shadow font-medium hover:bg-white"
+                    : "bg-transparent border-transparent hover:bg-transparent"
+                }`}
+                onClick={aspectRatioLandscape0}
+              >
+                9:16
+              </Button>
+            </div>
             <Button
-              onClick={() => {
-                getCropData()
-                setShowDialog(false)
-              }}
+              onClick={getCropData}
+              className="bg-black text-white"
+              disabled={isLoading}
             >
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Crop Image
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </>
