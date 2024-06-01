@@ -11,6 +11,7 @@
   },
   "scripts": {
     "dev": "concurrently \"contentlayer dev\" \"next dev\"",
+    "next-dev": "next dev",
     "build": "contentlayer build && next build",
     "turbo": "next dev --turbo",
     "start": "next start",
