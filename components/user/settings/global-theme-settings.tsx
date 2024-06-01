@@ -1,11 +1,3 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { throttle } from "lodash"
-import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
-import {
-  setBackgroundColor,
-  setPartialStyles,
-} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
   AccordionContent,
@@ -14,29 +6,11 @@ import {
 } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { throttle } from "lodash"
+import { useCallback, useEffect, useState } from "react"
+import { FontSelector } from "./font-selector.component"
 
 type Props = {}
 
@@ -216,123 +190,29 @@ export const GlobalThemeSettings = (props: Props) => {
               <span className="text-sm font-medium">Text </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-4 p-2">
-              <div className="col-span-2 flex flex-col items-center space-y-2">
-                <label
-                  htmlFor="primaryfont"
-                  className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Primary Font
-                </label>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="flex w-full items-center justify-between"
-                    >
-                      {primaryFont
-                        ? primaryFonts?.find(
-                            (font) => font.variable === primaryFont
-                          )?.name
-                        : "Select primary font"}
-                      <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <ScrollArea className="h-72 rounded-md border">
-                      <Command>
-                        <CommandInput placeholder="Search font..." />
-                        <CommandEmpty>No font found.</CommandEmpty>
-                        <CommandGroup>
-                          {primaryFonts?.map((font) => (
-                            <CommandItem
-                              key={font.variable}
-                              value={font.variable}
-                              onSelect={(currentValue) => {
-                                handleStyleChange({
-                                  text: { primaryFont: currentValue },
-                                })
-                                setOpen(false)
-                              }}
-                              style={{ fontFamily: `var(${font.variable})` }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 size-4",
-                                  primaryFont === font.variable
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {font.name}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </ScrollArea>
-                  </PopoverContent>
-                </Popover>
-              </div>
+              <FontSelector
+                fontList={primaryFonts}
+                selectedFont={primaryFont}
+                defaultFont={defaultPrimaryFont}
+                handleFontChange={(value) => {
+                  handleStyleChange({ text: { primaryFont: value } })
+                }}
+                label="Primary Font"
+                open={open}
+                setOpen={setOpen}
+              />
 
-              <div className="col-span-2 flex flex-col items-center space-y-2">
-                <label
-                  htmlFor="secondaryfont"
-                  className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Secondary Font
-                </label>
-                <Popover open={secondaryOpen} onOpenChange={setSecondaryOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="flex w-full items-center justify-between"
-                    >
-                      {secondaryFont
-                        ? secondaryFonts?.find(
-                            (font) => font.variable === secondaryFont
-                          )?.name
-                        : "Select secondary font"}
-                      <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <ScrollArea className="h-72 rounded-md border">
-                      <Command>
-                        <CommandInput placeholder="Search font..." />
-                        <CommandEmpty>No font found.</CommandEmpty>
-                        <CommandGroup>
-                          {secondaryFonts?.map((font) => (
-                            <CommandItem
-                              key={font.variable}
-                              value={font.variable}
-                              onSelect={(currentValue) => {
-                                handleStyleChange({
-                                  text: { secondaryFont: currentValue },
-                                })
-                                setSecondaryOpen(false)
-                              }}
-                              style={{ fontFamily: `var(${font.variable})` }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 size-4",
-                                  secondaryFont === font.variable
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {font.name}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </ScrollArea>
-                  </PopoverContent>
-                </Popover>
-              </div>
+              <FontSelector
+                fontList={secondaryFonts}
+                selectedFont={secondaryFont}
+                defaultFont={defaultSecondaryFont}
+                handleFontChange={(value) => {
+                  handleStyleChange({ text: { secondaryFont: value } })
+                }}
+                label="Secondary Font"
+                open={secondaryOpen}
+                setOpen={setSecondaryOpen}
+              />
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
