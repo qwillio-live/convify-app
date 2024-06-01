@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import icons from "@/constant/streamline.json"
 import {
   CardHeader,
   CardTitle,
@@ -18,6 +19,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react"
+
 import { Button, Button as CustomButton } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -25,8 +51,17 @@ import { Label } from "@radix-ui/react-label"
 import { Slider } from "@/components/ui/slider"
 import { useDragControls, Reorder, useMotionValue } from "framer-motion"
 import { Card } from "@/components/ui/card"
-import { GripVertical,Check as IconCheck, X as IconX, PlusCircle } from "lucide-react"
+import {
+  GripVertical,
+  Check as IconCheck,
+  X as IconX,
+  PlusCircle,
+  Trash2,
+} from "lucide-react"
 import ContentEditable from "react-contenteditable"
+import { ThumbsUp } from "lucide-react"
+import { SmilePlus } from "lucide-react"
+import { Image as ImageIcon } from "lucide-react"
 
 export const PictureChoiceSettings = () => {
   const controls = useDragControls()
@@ -118,7 +153,7 @@ export const PictureChoiceSettings = () => {
                   <h4 className="font-medium leading-none">
                     Add Picture Choice
                   </h4>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Select image as Picture and set text
                   </p>
                 </div>
@@ -170,7 +205,7 @@ export const PictureChoiceSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Text</p>
+              <p className="text-muted-foreground text-sm">Text</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -185,7 +220,7 @@ export const PictureChoiceSettings = () => {
                 }}
               />
 
-              <p className="text-sm text-muted-foreground">Hover</p>
+              <p className="text-muted-foreground text-sm">Hover</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -204,7 +239,7 @@ export const PictureChoiceSettings = () => {
             <Separator className="my-4" />
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background</p>
+              <p className="text-muted-foreground text-sm">Background</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -221,7 +256,7 @@ export const PictureChoiceSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background hover</p>
+              <p className="text-muted-foreground text-sm">Background hover</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -244,7 +279,7 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Padding</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Container</p>
               <Input
                 type="number"
@@ -253,7 +288,10 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.padding = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.padding = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -268,7 +306,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.pictureItemsStyles.padding = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.padding = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -280,7 +322,7 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Margin container</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
               <Input
                 type="number"
@@ -289,7 +331,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginLeft = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginLeft = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -303,7 +349,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginTop = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginTop = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -317,7 +367,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginRight = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginRight = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -331,7 +385,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginBottom = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -426,7 +484,10 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.gap = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.gap = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -441,6 +502,8 @@ enum ItemType {
   ICON = "icon",
 }
 export const PictureChoiceItem = ({ item, index }) => {
+  const [pickerType, setPickerType] = useState("image")
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const y = useMotionValue(0)
   const controls = useDragControls()
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -464,6 +527,38 @@ export const PictureChoiceItem = ({ item, index }) => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker)
+  }
+
+  const handleEmojiClick = (emojiObject: EmojiClickData) => {
+    console.log("emojiObject", emojiObject)
+    setProp(
+      (props) => (props.pictureItems[index].pic = emojiObject.imageUrl),
+      1000
+    )
+    setProp(
+      (props) => ((props.pictureItems[index].itemType = ItemType.PICTURE), 1000)
+    )
+    setShowEmojiPicker(false)
+  }
+
+  const handlePickerSelection = (type: string) => {
+    setPickerType(type)
+    if (type === "icon") {
+      setProp(
+        (props) => (props.pictureItems[index].itemType = ItemType.ICON),
+        1000
+      )
+    } else {
+      setProp(
+        (props) => (props.pictureItems[index].itemType = ItemType.PICTURE),
+        1000
+      )
+    }
+  }
+
   return (
     <Reorder.Item
       dragListener={false}
@@ -472,51 +567,91 @@ export const PictureChoiceItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex h-20 w-full  flex-row items-center justify-between gap-3 border p-4"
+      className="flex h-20 w-full flex-row items-center justify-between gap-3 border p-4"
     >
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          {/* <Button variant="outline">Open</Button> */}
+          <div className="flex flex-row items-center gap-3">
+            <div
+              onClick={() => console.log("clicked")}
+              className="pic-container hover:cursor-pointer"
+            >
+              {item.itemType === ItemType.ICON ? (
+                // <img src={item.icon} className="shrink-0 w-20 h-20" />
+                item.icon === "check" ? (
+                  <IconCheck className="size-5 shrink-0" />
+                ) : item.icon === "x" ? (
+                  <IconX className="size-5 shrink-0" />
+                ) : null
+              ) : (
+                <img src={item.pic} alt={item.alt || ""} className="size-10" />
+              )}
+            </div>
+            <ContentEditable
+              html={item.text}
+              disabled={false}
+              onChange={(e) =>
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].text = e.target.value.replace(
+                      /<\/?[^>]+(>|$)/g,
+                      ""
+                    )),
+                  500
+                )
+              }
+              className="min-w-[80px] max-w-[100px] overflow-hidden truncate"
+              tagName={"p"}
+            />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-40">
+          <DropdownMenuGroup>
+            {/* <DropdownMenuItem onClick={() => setPickerType("icon")}>
+              <ThumbsUp className="mr-2 size-4" />
+              <span>Select Icon</span>
+            </DropdownMenuItem>{" "} */}
+            <IconDialog />
+            <DropdownMenuItem onClick={toggleEmojiPicker}>
+              <SmilePlus className="mr-2 size-4" />
+              <span>Select Emoji</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+            >
+              <ImageIcon className="mr-2 size-4" />
+              <span>Select Image</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash2 className="mr-2 size-4" />
+              <span>Remove</span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Input
         type="file"
         className="hidden"
         ref={inputRef}
         onChange={handleInputChange}
       />
-      <div className="flex flex-row flex-wrap items-center gap-3">
+      {showEmojiPicker && (
         <div
-          onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-          className="pic-container hover:cursor-pointer"
+          style={{
+            position: "relative",
+            zIndex: 1000000,
+          }}
         >
-          {item.itemType === ItemType.ICON ? (
-            // <img src={item.icon} className="shrink-0 w-20 h-20" />
-            item.icon === 'check' ? (
-              <IconCheck
-                className="w-5 h-5 shrink-0"
-              />
-            ) : item.icon === 'x' ? (
-              <IconX
-              className="w-5 h-5 shrink-0"
-              />
-            ) : null
-          ) : (
-            <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
-          )}
+          <EmojiPicker
+            style={{ position: "absolute", left: "-300px", zIndex: 1000000 }}
+            width={80}
+            height={80}
+            onEmojiClick={handleEmojiClick}
+          />
         </div>
-        <ContentEditable
-          html={item.text}
-          disabled={false}
-          onChange={(e) =>
-            setProp(
-              (props) =>
-                (props.pictureItems[index].text = e.target.value.replace(
-                  /<\/?[^>]+(>|$)/g,
-                  ""
-                )),
-              500
-            )
-          }
-          className="min-w-[80px] max-w-[100px] overflow-hidden truncate"
-          tagName={"p"}
-        />
-      </div>
+      )}
+
       <div
         onPointerDown={(e) => controls.start(e)}
         className="reorder-handle hover:cursor-pointer"
@@ -524,5 +659,43 @@ export const PictureChoiceItem = ({ item, index }) => {
         <GripVertical />
       </div>
     </Reorder.Item>
+  )
+}
+
+const IconRenderer = ({ iconName }) => {
+  return (
+    <div
+      className="m-2 cursor-pointer"
+      dangerouslySetInnerHTML={{ __html: icons[iconName] || "" }}
+    />
+  )
+}
+
+export function IconDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+          <ThumbsUp className="mr-2 size-4" />
+          <span>Select Icon</span>
+        </DropdownMenuItem>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[60%]">
+        <DialogHeader>
+          <DialogTitle>Choose Icons</DialogTitle>
+          <DialogDescription>
+            Make changes to your icons here.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-4 gap-4">
+          {Object.keys(icons).map((iconName) => (
+            <IconRenderer key={iconName} iconName={iconName} />
+          ))}
+        </div>
+        <DialogFooter>
+          <Button type="submit">Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
