@@ -1,69 +1,55 @@
-import { createPortal } from "react-dom";
-import React, { useEffect, useState, useRef, forwardRef } from "react"
-import icons from "@/constant/streamline.json"
-import {useOnClickOutside} from "@/hooks/use-click-outside"
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import EmojiPicker, { EmojiClickData } from "emoji-picker-react"
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import icons from "@/constant/streamline.json";
+import { useOnClickOutside } from "@/hooks/use-click-outside";
+import { useNode } from "@/lib/craftjs";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useEventListener } from 'usehooks-ts';
 
-import { Button, Button as CustomButton } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@radix-ui/react-label"
-import { Slider } from "@/components/ui/slider"
-import { useDragControls, Reorder, useMotionValue } from "framer-motion"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@radix-ui/react-label";
+import { Reorder, useDragControls, useMotionValue } from "framer-motion";
 import {
   GripVertical,
   Check as IconCheck,
   X as IconX,
+  Image as ImageIcon,
   PlusCircle,
+  SmilePlus,
+  ThumbsUp,
   Trash2,
-} from "lucide-react"
-import ContentEditable from "react-contenteditable"
-import { ThumbsUp } from "lucide-react"
-import { SmilePlus } from "lucide-react"
-import { Image as ImageIcon } from "lucide-react"
+} from "lucide-react";
 
 export const PictureChoiceSettings = () => {
   const controls = useDragControls()
@@ -108,19 +94,6 @@ export const PictureChoiceSettings = () => {
       setUploadFile(URL.createObjectURL(file))
     }
   }
-
-  // const handleAddFile = () => {
-  //   const tempArray = [...pictureItems]
-  //   tempArray.push({
-  //     id: `${pictureItems.length + 1}`,
-  //     text: text,
-  //     pic: uploadFile,
-  //     itemType: ItemType.PICTURE,
-  //   })
-  //   setProp((props) => (props.pictureItems = tempArray), 1000)
-  //   setUploadFile(null)
-  //   setText("")
-  // }
 
   const handleAddFile = () => {
     const newItem = {
@@ -460,6 +433,9 @@ export const PictureChoiceSettings = () => {
     </>
   )
 }
+
+PictureChoiceSettings.displayName = 'PictureChoiceSettings';
+
 enum ItemType {
   PICTURE = "picture",
   ICON = "icon",
@@ -472,7 +448,7 @@ export const PictureChoiceItem = ({ item, index }) => {
   const dropdownRef = React.useRef<HTMLInputElement>(null)
   const [pickerPosition, setPickerPosition] = useState({ top: 0, left: 0 });
   const [open, setOpen] = useState(false)
-  const emojiRef = useRef(null)
+  const emojiRef = useRef<HTMLInputElement>(null)
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -519,21 +495,6 @@ export const PictureChoiceItem = ({ item, index }) => {
     }
   };
 
-  const handlePickerSelection = (type: string) => {
-    setPickerType(type)
-    if (type === "icon") {
-      setProp(
-        (props) => (props.pictureItems[index].itemType = ItemType.ICON),
-        1000
-      )
-    } else {
-      setProp(
-        (props) => (props.pictureItems[index].itemType = ItemType.PICTURE),
-        1000
-      )
-    }
-  }
-
   const handleSVGChange = (iconName) => {
     // Get the SVG data for the selected icon
     const svgData = convertToSvg(icons[iconName]?.body);
@@ -545,7 +506,6 @@ export const PictureChoiceItem = ({ item, index }) => {
       // Create a URL for the Blob
       const imageUrl = URL.createObjectURL(blob)
       // Update the pictureItems state accordingly
-      // For example:
       setProp((props) => {
         const updatedProps = { ...props }
         updatedProps.pictureItems[index].pic = imageUrl
@@ -567,17 +527,25 @@ export const PictureChoiceItem = ({ item, index }) => {
     }, 1000);
   };
 
+  useEventListener('mousedown', handleClickOutside);
 
-  const handleClickOutside = () => {
-    // Your custom logic here
-    console.log("click")
-    useOnClickOutside(emojiPickerRef, () => {
-      if (pickerType === 'emoji') setPickerType('');
-    });
+  
+  function handleClickOutside(event: MouseEvent | TouchEvent) {
+    const { target } = event;
+
+    if (
+      emojiRef.current &&
+      emojiRef.current instanceof HTMLElement && 
+      !emojiRef.current.contains(target as Node) && 
+      pickerType === 'emoji'
+    ) {
+      setPickerType('');
+    }
   }
 
-  useOnClickOutside(emojiRef, handleClickOutside)
-
+  useOnClickOutside(emojiRef, () => {
+    if (pickerType === 'emoji') setPickerType('');
+  });
 
   return (
     <Reorder.Item
@@ -680,14 +648,12 @@ export const PictureChoiceItem = ({ item, index }) => {
           )
         }
         className="min-w-[50px] max-w-[50px] overflow-x-auto truncate"
-        tagName={"p"}
       />
         
       <PortalEmojiPicker
         isVisible={pickerType === "emoji"}
         position={pickerPosition}
         onEmojiClick={handleEmojiClick}
-        ref={emojiRef}
       />
 
 
@@ -700,14 +666,16 @@ export const PictureChoiceItem = ({ item, index }) => {
     </Reorder.Item>
   )
 }
+
+PictureChoiceItem.displayName = 'PictureChoiceItem';
+
+
 const IconRenderer = ({ iconName, onClick }) => {
   return (
     <div
       className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center"
-      onClick={() => onClick(iconName)} // Call handleInputChange with the iconName when clicked
+      onClick={() => onClick(iconName)}
     >
-      {" "}
-      {/* Added flex and other properties */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24" // Adjust viewBox as needed
@@ -723,23 +691,40 @@ const convertToSvg = (svgBody) => {
   height="15">${svgBody}</svg>`;
 };
 
-
-const style = { position: "absolute", left: "300px", zIndex: 1000000 }
-
-const PortalEmojiPicker = forwardRef(({ isVisible, position, onEmojiClick }, ref) => {
-  const style = {
-    position: "absolute",
-    top: position.top,
-    left: position.left,
-    zIndex: 1000000,
+type PortalEmojiPickerProps = {
+  isVisible: boolean;
+  position: {
+    top: number;
+    left: number;
   };
+  onEmojiClick: (emojiObject: EmojiClickData) => void;
+};
+
+const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, position, onEmojiClick }) => {
+  const { top, left } = position;
 
   return isVisible
     ? createPortal(
-        <EmojiPicker ref={ref} style={style} onEmojiClick={onEmojiClick} lazyLoadEmojis={true} skinTonesDisabled={true} width={280} height={350} previewConfig={
-          {showPreview: false}
-        }/>,
+        <div
+          style={{
+            position: 'absolute',
+            top: `${top}px`,
+            left: `${left}px`,
+            zIndex: 1000000,
+          }}
+        >
+          <EmojiPicker
+            onEmojiClick={onEmojiClick}
+            lazyLoadEmojis={true}
+            skinTonesDisabled={true}
+            width={280}
+            height={350}
+            previewConfig={{ showPreview: false }}
+          />
+        </div>,
         document.body
       )
     : null;
-});
+};
+
+PortalEmojiPicker.displayName = 'PortalEmojiPicker';
