@@ -4,13 +4,8 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Input } from "@/components/ui/input"
+
+import { Input } from "@/components/input-custom"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
@@ -36,8 +31,10 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { StyleProperty } from "../types/style.types"
 
-const ICONSTYLES = 'p-2 w-12 h-12 shrink-0';
+const ICONSTYLES = 'p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent';
 
 const IconsList = {
   aperture: <Aperture className={ICONSTYLES} />,
@@ -105,20 +102,29 @@ export const UserInputGen = ({ ...props }) => {
         ref={inputRef}
         textColor={props.textColor}
         backgroundColor={props.backgroundColor}
-        borderColor={isActive ? props.activeBorderColor : props.borderColor}
+        borderColor={isActive ? props.activeBorderColor.value : props.borderColor.value}
         borderWidth={props.borderWidth}
+        primaryFont={props.primaryFont.value}
+        borderTopWidth={props.borderTopWidth}
+        borderBottomWidth={props.borderBottomWidth}
+        borderLeftWidth={props.borderLeftWidth}
+        borderRightWidth={props.borderRightWidth}
         placeholder={!props.floatingLabel && props.placeholder}
         borderRadius={props.borderRadius}
+        topLeftRadius={props.topLeftRadius}
+        topRightRadius={props.topRightRadius}
+        bottomLeftRadius={props.bottomLeftRadius}
+        bottomRightRadius={props.bottomRightRadius}
         width={props.width}
         size={props.size}
         // {...props}
         onFocus={() => setIsActive(true)}
         // 1.9em .6em .7em
         className={` font-semibold pt-5 px-3 pb-1 text-sm
-        ring-[${props.borderColor}]
-        focus-visible:ring-[${props.activeBorderColor}]
+        ring-[transparent]
+        focus-visible:ring-[transparent]
         ring-opacity-/50
-        focus-visible:ring-1 focus-visible:ring-offset-0
+        focus-visible:ring-0 focus-visible:ring-offset-0
         `}
         // placeholder={props.placeholder}
         onChange={(e) => {setInputValue(e.target.value), console.log("INPUT VALUE: ", inputValue)}}
@@ -136,13 +142,31 @@ const UserInputStyled = styled(Input)<{
   borderColor: string
   borderWidth: number
   borderRadius: number
+  topLeftRadius: number
+  topRightRadius: number
+  bottomLeftRadius: number
+  bottomRightRadius: number
+  borderTopWidth: number
+  borderBottomWidth: number
+  borderLeftWidth: number
+  borderRightWidth: number
+  primaryFont: string
   size: UserInputSizes
 }>`
   color: ${(props) => props.textColor};
   max-width: 100%;
+  min-height: 50px;
   background-color: '#fff';
+  font-family: ${(props) => `var(${props?.primaryFont})`};
+  border-top-right-radius: ${(props) => props.topRightRadius}px;
+  border-top-left-radius: ${(props) => props.topLeftRadius}px;
+  border-bottom-right-radius: ${(props) => props.bottomRightRadius}px;
+  border-bottom-left-radius: ${(props) => props.bottomLeftRadius}px;
   border-color: ${(props) => props.borderColor};
-  border-width: ${(props) => props.borderWidth}px;
+  border-top-width: ${(props) => props.borderTopWidth}px;
+  border-bottom-width: ${(props) => props.borderBottomWidth}px;
+  border-left-width: ${(props) => props.borderLeftWidth}px;
+  border-right-width: ${(props) => props.borderRightWidth}px;
 
   align-self: center;
 `
@@ -159,6 +183,27 @@ export const UserInput = ({ ...props }) => {
     isHovered: state.events.hovered,
   }))
   const inputRef = useRef<HTMLInputElement>(null)
+  const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
+  const secondaryFont = useAppSelector((state) => state?.theme?.text?.secondaryFont)
+  const primaryColor = useAppSelector((state) => state?.theme?.general?.primaryColor)
+
+  useEffect(() => {
+    if(props.primaryFont.globalStyled && !props.primaryFont.isCustomized){
+      setProp((props) => props.primaryFont.value = primaryFont, 200);
+    }
+  }, [primaryFont])
+
+  useEffect(() => {
+    if(props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized){
+      setProp((props) => props.secondaryFont.value = secondaryFont, 200);
+    }
+  }, [secondaryFont])
+
+  useEffect(() => {
+    if(props.activeBorderColor.globalStyled && !props.activeBorderColor.isCustomized){
+      setProp((props) => props.activeBorderColor.value = primaryColor, 200);
+    }
+  }, [primaryColor])
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -168,7 +213,7 @@ export const UserInput = ({ ...props }) => {
 
   return (
     <div
-      className="relative"
+      className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       ref={(ref: any) => ref && connect(drag(ref))}
       style={{
         width: "100%",
@@ -177,7 +222,7 @@ export const UserInput = ({ ...props }) => {
       }}
     >
       {isHovered && <Controller nameOfComponent={"INPUT FIELD"} />}
-      <div className="relative w-full"
+      <div className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         display: "flex",
         justifyContent: "center",
@@ -189,7 +234,7 @@ export const UserInput = ({ ...props }) => {
         paddingRight: `${props.marginRight}px`,
        }}
       >
-      <div className="relative overflow-hidden"
+      <div className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: `${UserInputSizeValues[props.size]}`,
        }}
@@ -202,8 +247,9 @@ export const UserInput = ({ ...props }) => {
                 setProp((props) => (props.isFocused = true)),
                 focusInput()
             }}
-            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out`}
+            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
+              fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
             }}
@@ -218,17 +264,18 @@ export const UserInput = ({ ...props }) => {
             setProp((props) => (props.isFocused = true)),
             focusInput() // Focus the input when placeholder is clicked
         }}
-        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out ${
+        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
           props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
-            ? "top-0 text-sm pl-3 pt-1"
-            : "top-1 left-0 pt-3 px-3 pb-1 text-sm"
+            ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+            : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
         } ${
-          props.floatingLabel && props.enableIcon && "left-12"
+          props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
         }
 
         `
       }
         style={{
+          fontFamily: `var(${props.primaryFont.value})`,
           minWidth: `${UserInputSizeValues[props.size]}`,
           width: `${UserInputSizeValues[props.size]}`,
         }}
@@ -236,15 +283,22 @@ export const UserInput = ({ ...props }) => {
         {props.floatingLabel && props.label}
       </div>
 
-      <div className="field-container flex flex-row gap-0 items-center w-auto">
+      <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
       {
         props.enableIcon && (
           <div
           className={cn(
-            'rounded-l-md shrink-0 flex items-center justify-center bg-inherit border border-r-0 ',
+            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px]',
           )}
           style={{
-            borderColor: props.isActive ? props.activeBorderColor : props.borderColor,
+            backgroundColor: '#fff',
+            borderColor: props.isActive ? props.activeBorderColor.value : props.borderColor.value,
+            borderBottomLeftRadius: props.bottomLeftRadius,
+            borderTopLeftRadius: props.topLeftRadius,
+            borderTopWidth: props.borderTopWidth,
+            borderBottomWidth: props.borderBottomWidth,
+            borderLeftWidth: props.borderLeftWidth,
+            borderRightWidth: 0,
            }}
           >
           {IconsList[props.icon]}
@@ -256,26 +310,40 @@ export const UserInput = ({ ...props }) => {
         textColor={props.textColor}
         backgroundColor={props.backgroundColor}
         borderColor={
-          props.isActive ? props.activeBorderColor : props.borderColor
+          props.isActive ? props.activeBorderColor.value : props.borderColor.value
         }
+        primaryFont={props.primaryFont.value}
         placeholder={ !props.floatingLabel && props.placeholder}
         borderWidth={props.borderWidth}
+        borderTopWidth={props.borderTopWidth}
+        borderBottomWidth={props.borderBottomWidth}
+        borderLeftWidth={props.borderLeftWidth}
+        borderRightWidth={props.borderRightWidth}
         borderRadius={props.borderRadius}
+        topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
+        topRightRadius={props.topRightRadius}
+        bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
+        bottomRightRadius={props.bottomRightRadius}
         width={props.width}
         size={props.size}
         onFocus={() => setProp((props) => (props.isActive = true))}
         className={cn(
           {
             "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-            "font-semibold px-3 py-6 text-base": !props.floatingLabel,
+            "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light": !props.floatingLabel,
             "rounded-l-none" : props.enableIcon,
           },
           `ring-0
+          outline-none
+          focus-visible:outline-none
+          peer-focus-visible:outline-none
           focus-visible:ring-0
           ring-opacity-0
           bg-white
-          peer
-          focus-visible:ring-0 focus-visible:ring-offset-0`
+          transition-all
+          duration-200
+          ease-in-out
+          focus-visible:ring-transparent focus-visible:ring-offset-0`
         )}
         onChange={(e) =>
           setProp((props) => (props.inputValue = e.target.value))
@@ -305,10 +373,20 @@ export type UserInputProps = {
   paddingTop: number
   paddingBottom: number
   backgroundColor: string
-  borderColor: string
+  borderColor: StyleProperty
+  activeBorderColor: StyleProperty
+  primaryFont: StyleProperty
+  secondaryFont: StyleProperty
   borderWidth: number
+  borderTopWidth: number
+  borderBottomWidth: number
+  borderLeftWidth: number
+  borderRightWidth: number
   borderRadius: number
-  activeBorderColor: string
+  topLeftRadius: number
+  topRightRadius: number
+  bottomLeftRadius: number
+  bottomRightRadius: number
   isActive: boolean
   fullWidth: boolean
   size: UserInputSizes
@@ -319,6 +397,7 @@ export type UserInputProps = {
   floatingLabel: boolean
   enableIcon: boolean
   icon: string
+  preset: string
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
@@ -336,10 +415,36 @@ export const UserInputDefaultProps: UserInputProps = {
   paddingBottom: 0,
   placeholder: "Placeholder",
   backgroundColor: "#fff",
-  borderColor: "#eaeaeb",
+  borderColor: {
+    value: "#eaeaeb",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  activeBorderColor: {
+    value: "#4050ff",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  primaryFont: {
+    value: "--font-heading",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  secondaryFont: {
+    value: "--font-inter",
+    globalStyled: true,
+    isCustomized: false,
+  },
   borderWidth: 1,
+  borderTopWidth: 1,
+  borderBottomWidth: 1,
+  borderLeftWidth: 1,
+  borderRightWidth: 1,
   borderRadius: 8,
-  activeBorderColor: "#4050ff",
+  topLeftRadius: 8,
+  topRightRadius: 8,
+  bottomLeftRadius: 8,
+  bottomRightRadius: 8,
   isActive: false,
   inputRequired: false,
   fullWidth: true,
@@ -349,6 +454,7 @@ export const UserInputDefaultProps: UserInputProps = {
   floatingLabel: false,
   enableIcon: false,
   icon: "arrowright",
+  preset: "outlined",
 }
 
 UserInput.craft = {

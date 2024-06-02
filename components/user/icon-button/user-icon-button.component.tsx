@@ -313,6 +313,7 @@ export const IconButton = ({
   }))
   const t = useTranslations("Components")
   const ref = useRef<HTMLDivElement>(null);
+  const [displayController, setDisplayController] = React.useState(false);
   const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
@@ -420,8 +421,10 @@ export const IconButton = ({
       display: "flex",
       justifyContent: "center",
     }}
+    onMouseOver={() => setDisplayController(true)}
+    onMouseOut={() => setDisplayController(false)}
     >
-        {isHovered && <Controller nameOfComponent={t("Button")} />}
+        {displayController && <Controller nameOfComponent={t("Button")} />}
         <div className="relative w-full"
   style={{
     background: `${containerBackground}`,

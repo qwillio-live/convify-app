@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/custom-slider"
-
+import { Card } from "@/components/ui/card"
 import { Controller } from "../settings/controller.component"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
@@ -40,6 +40,9 @@ import {
   AlignHorizontalJustifyCenter,
   AlignHorizontalSpaceBetween
 } from "lucide-react"
+import { cn } from "@/lib/utils"
+import useInputThemePresets from "./useInputThemePresets"
+import { UserInput, UserInputGen } from "./user-input.component"
 
 export const UserInputSettings = () => {
   const {
@@ -60,6 +63,20 @@ export const UserInputSettings = () => {
     textColor: node.data.props.textColor,
     width: node.data.props.width,
   }))
+  enum PRESETNAMES {
+    outlined= "outlined",
+    underlined= "underlined"
+  }
+  const {outlinedPreset, underlinedPreset} = useInputThemePresets();
+  const addPresetStyles = (preset) => {
+    const staticStyles = ["inputRequired","label","placeHolder","backgroundColor","fieldName","floatingLabel","settingsTab","inputValue","icon","enableIcon","size","fullWidth","marginLeft","marginTop","marginRight","marginBottom"]
+    setProp((props) => {
+      Object.keys(preset).forEach((key) => {
+        if(!staticStyles.includes(key))
+        props[key] = preset[key]
+      })
+    }, 1000)
+  }
   const throttledSetProp = useCallback(
     throttle((property,value) => {
       setProp((prop) => {prop[property] = value},0);
@@ -219,6 +236,34 @@ export const UserInputSettings = () => {
               )}
             </div>
 
+            <div className="flex flex-row items-center col-span-2 space-x-2">
+                <label
+                  htmlFor="backgroundcolor"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                >
+                  Background Color
+                </label>
+                <Input
+                  // defaultValue={themeBackgroundColor}
+                  // value={containerBackground}
+                  value={props.backgroundColor}
+                  onChange={(e) => {
+                    // debouncedSetProp("containerBackground",e.target.value)
+                  handlePropChange  ('backgroundColor',e.target.value);
+                  }}
+                  className="basis-1/3"
+                  type={"color"}
+                  id="backgroundcolor"
+                />
+              </div>
+
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Spacing </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Width</p>
               <Tabs
@@ -241,24 +286,6 @@ export const UserInputSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Background</p>
-              <Input
-                type="color"
-                value={props.backgroundColor}
-                onChange={(e) => {
-                  // setProp((props) => (props.backgroundColor = e.target.value), 1000)
-                  handlePropChange('backgroundColor',e.target.value);
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Spacing </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
@@ -344,6 +371,31 @@ export const UserInputSettings = () => {
                   handlePropChange("marginLeft",e)
                 }
               />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="styles">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Styles</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
+            <Card onClick={() => {
+              addPresetStyles(outlinedPreset)
+            }}
+            className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "outlined"})}
+            >
+              <UserInputGen {...outlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" />
+                {/* <IconButtonGen {...filledPreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
+              </Card>
+              <Card onClick={() => {
+                addPresetStyles(underlinedPreset)
+              }}
+              className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "underlined"})}
+              >
+                <UserInputGen {...underlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" />
+                {/* <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
+              </Card>
             </div>
           </AccordionContent>
         </AccordionItem>

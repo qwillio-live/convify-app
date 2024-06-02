@@ -355,7 +355,7 @@ export const UserToolbox = () => {
   const t = useTranslations("Components")
   const { connectors } = useEditor()
   const {filledPreset, outLinePreset} = useButtonThemePresets();
-  const {outlinedPreset} = useInputThemePresets();
+  const {outlinedPreset,underlinedPreset} = useInputThemePresets();
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -430,7 +430,7 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
-                      <UserInput {...outlinedPreset} />
+                      <UserInput {...underlinedPreset} />
                     )
                   }
                   data-cy="toolbox-text"
