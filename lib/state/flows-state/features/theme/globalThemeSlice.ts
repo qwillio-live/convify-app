@@ -46,13 +46,13 @@ const initialState: GlobalThemeState = {
     backgroundImage: undefined,
   },
   defaultText: {
-    primaryFont: "--font-heading",
+    primaryFont: "--font-cal-sans",
     secondaryFont: "--font-inter",
     primaryColor: "#0e0e0e",
     secondaryColor: "#0e0e0e",
   },
   text: {
-    primaryFont: "--font-heading",
+    primaryFont: "--font-cal-sans",
     secondaryFont: "--font-inter",
     primaryColor: "#0e0e0e",
     secondaryColor: "#0e0e0e",

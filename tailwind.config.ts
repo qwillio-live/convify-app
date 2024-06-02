@@ -19,7 +19,7 @@ const config = {
       fontFamily: {
         roboto: ["var(--font-roboto)"],
         sans: ["var(--font-sans)"],
-        heading: ["var(--font-heading)"],
+        heading: ["var(--font-cal-sans)"],
         inter: ["var(--font-inter)"],
         roboto_mono: ["var(--font-roboto-mono)"],
         open_sans: ["var(--font-open-sans)"],
