@@ -11,7 +11,7 @@ const fontSans = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-cal-sans",
   display: "swap",
 })
 

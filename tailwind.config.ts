@@ -17,10 +17,11 @@ const config = {
     },
     extend: {
       fontFamily: {
+        roboto: ["var(--font-roboto)"],
         sans: ["var(--font-sans)"],
-        heading: ["var(--font-heading)"],
+        heading: ["var(--font-cal-sans)"],
         inter: ["var(--font-inter)"],
-        roboto: ["var(--font-roboto-mono)"],
+        roboto_mono: ["var(--font-roboto-mono)"],
         open_sans: ["var(--font-open-sans)"],
         montserrat: ["var(--font-montserrat)"],
         lato: ["var(--font-lato)"],

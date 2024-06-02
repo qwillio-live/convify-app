@@ -12,6 +12,10 @@ interface FontTypes {
 export const FONTS: FontTypes = {
   primaryFonts: [
     {
+      name: "Roboto",
+      variable: "--font-roboto",
+    },
+    {
       name: "Open Sans",
       variable: "--font-open-sans",
     },
@@ -217,11 +221,15 @@ export const FONTS: FontTypes = {
     },
     {
       name: "CalSans",
-      variable: "--font-heading",
+      variable: "--font-cal-sans",
     },
   ],
   secondaryFonts: [
     {
+      name: "Roboto",
+      variable: "--font-roboto",
+    },
+    {
       name: "Open Sans",
       variable: "--font-open-sans",
     },
@@ -427,7 +435,7 @@ export const FONTS: FontTypes = {
     },
     {
       name: "CalSans",
-      variable: "--font-heading",
+      variable: "--font-cal-sans",
     },
   ],
 }

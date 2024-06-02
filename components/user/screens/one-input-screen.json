@@ -93,7 +93,7 @@
         "globalStyled": false
       },
       "fontFamily": {
-        "value": "--font-heading",
+        "value": "--font-cal-sans",
         "isCustomized": false,
         "globalStyled": false
       },
