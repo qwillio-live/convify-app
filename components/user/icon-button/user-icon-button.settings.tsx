@@ -169,7 +169,7 @@ export const IconButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <p className="text-md flex-1 text-muted-foreground">{t("Icon")}</p>
                   <Select
                     defaultValue={icon}
                     onValueChange={(e) => {

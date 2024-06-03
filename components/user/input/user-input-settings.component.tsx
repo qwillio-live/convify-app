@@ -102,11 +102,11 @@ export const UserInputSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
             <Checkbox
-            value={props.error}
-            checked={props.error}
+            value={props.inputRequired}
+            checked={props.inputRequired}
             onCheckedChange={(e) => {
               setProp((props) => (props.inputRequired = e),200)
-              setProp((props) => (props.error = !props.error),200)
+              // setProp((props) => (props.error = !props.error),200)
             }}
             id="required" />
               <label
@@ -120,11 +120,14 @@ export const UserInputSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
             <Checkbox
             checked={props.floatingLabel}
-            onCheckedChange={(e) => setProp((props) => (props.floatingLabel = e),1000)}
+            onCheckedChange={(e) => {
+              setProp((props) => (props.floatingLabel = e),0)
+              // handlePropChange("floatingLabel",e);
+            }}
             id="floating-label" />
               <label
                 htmlFor="floating-label"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Floating label
               </label>
@@ -133,13 +136,16 @@ export const UserInputSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
               <label
                 htmlFor="label-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Label
               </label>
               <Input
               value={props.label}
-              onChange={(e) => setProp((props) => (props.label = e.target.value), 1000)}
+              onChange={(e) => {
+                setProp((props) => (props.label = e.target.value), 0)
+                // handlePropChange("label",e.target.value);
+              }}
               type={"text"}
               placeholder={"Enter placeholder text"}
               />
@@ -155,7 +161,10 @@ export const UserInputSettings = () => {
               </label>
               <Input
               value={props.placeholder}
-              onChange={(e) => setProp((props) => (props.placeholder = e.target.value), 1000)}
+              onChange={(e) => {
+                // setProp((props) => (props.placeholder = e.target.value), 1000)
+                handlePropChange("placeholder",e.target.value);
+              }}
               type={"text"}
               placeholder={"Enter placeholder text"}
               />
@@ -198,7 +207,7 @@ export const UserInputSettings = () => {
                 htmlFor="enableIcon"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Enable icon
+                Enable Decorator
               </label>
             </div>
 

@@ -102,7 +102,6 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
       setToRender(<div>Error loading components.</div>)
     }
   }, [screen,globalTheme])
-
   return <Suspense fallback={<h2>Loading...</h2>}>{toRender}</Suspense>
 }
 

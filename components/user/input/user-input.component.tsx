@@ -64,7 +64,7 @@ const UserInputSizeValues={
 
 
 export const UserInputGen = ({ ...props }) => {
-  const [inputValue, setInputValue] = useState(props.inputValue)
+  const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -211,7 +211,8 @@ export const UserInputGen = ({ ...props }) => {
         )}
         onChange={(e) =>
           // setProp((props) => (props.inputValue = e.target.value))
-          setInputValue(e.target.value)
+          // setInputValue(e.target.value)
+          console.log("Input value: ", e.target.value)
           // console.log("INPUT COMPONENT VALUE", e.target.value)
         }
         onBlur={() => setIsActive(false)}
@@ -360,47 +361,62 @@ export const UserInput = ({ ...props }) => {
       >
       {
         !props.floatingLabel && (
-          <div
-            onClick={() => {
-              setProp((props) => (props.isActive = true)),
-                setProp((props) => (props.isFocused = true)),
-                focusInput()
-            }}
-            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+          <>
+          <ContentEditable
+            html={props.label}
+            disabled={false}
+            tagName="div"
+            onChange={(e) =>
+              setProp(
+                (props) =>
+                  (props.label = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
+                500
+              )
+            }
+
+            className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
             }}
-          >
-            {props.label}
-          </div>
+          />
+          </>
+
         )
       }
+      {
+      props.floatingLabel && (
       <div
-        onClick={() => {
+      onClick={() => {
+        if(props.floatingLabel){
           setProp((props) => (props.isActive = true)),
-            setProp((props) => (props.isFocused = true)),
-            focusInput() // Focus the input when placeholder is clicked
-        }}
-        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
-          props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
-            ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-            : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
-        } ${
-          props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
+          setProp((props) => (props.isFocused = true)),
+          focusInput() // Focus the input when placeholder is clicked
         }
 
-        `
+      }}
+      className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+        props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
+          ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+          : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+      } ${
+        props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
       }
-        style={{
-          fontFamily: `var(${props.primaryFont.value})`,
-          minWidth: `${UserInputSizeValues[props.size]}`,
-          width: `${UserInputSizeValues[props.size]}`,
-        }}
-      >
-        {props.floatingLabel && props.label}
-      </div>
+
+      `
+    }
+      style={{
+        fontFamily: `var(${props.primaryFont.value})`,
+        minWidth: `${UserInputSizeValues[props.size]}`,
+        width: `${UserInputSizeValues[props.size]}`,
+      }}
+    >
+      {props.floatingLabel && props.label}
+    </div>
+    )
+      }
+
 
       <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
       {
@@ -466,9 +482,9 @@ export const UserInput = ({ ...props }) => {
           focus-visible:ring-transparent focus-visible:ring-offset-0`
         )}
         onChange={(e) =>
-          // setProp((props) => (props.inputValue = e.target.value))
+          setProp((props) => (props.inputValue = e.target.value))
           // not to set input prop when editing
-          console.log("Input field value is: ",e.target.value)
+          // console.log("Input field value is: ",e.target.value)
         }
         onBlur={() => setProp((props) => (props.isActive = false))}
         autoFocus={props.isFocused}
