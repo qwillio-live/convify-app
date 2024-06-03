@@ -430,7 +430,7 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
-                      <UserInput {...underlinedPreset} />
+                      <UserInput {...outlinedPreset} />
                     )
                   }
                   data-cy="toolbox-text"

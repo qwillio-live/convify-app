@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Settings } from "lucide-react"
+import { Settings, X } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
@@ -33,6 +33,7 @@ import {
 } from "lucide-react"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { StyleProperty } from "../types/style.types"
+import { rgba } from "polished"
 
 const ICONSTYLES = 'p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent';
 
@@ -44,6 +45,7 @@ const IconsList = {
   disc: <Disc className={ICONSTYLES} />,
   mountain: <Mountain  className={ICONSTYLES} />,
   arrowright: <ArrowRight  className={ICONSTYLES} />,
+  x: <X className={cn(ICONSTYLES, "text-[#cc0000]")} />,
 }
 
 export enum UserInputSizes {
@@ -99,6 +101,7 @@ export const UserInputGen = ({ ...props }) => {
         {props.placeholder}
       </div>
       <UserInputStyled
+        error={props.error}
         ref={inputRef}
         textColor={props.textColor}
         backgroundColor={props.backgroundColor}
@@ -152,6 +155,7 @@ const UserInputStyled = styled(Input)<{
   borderRightWidth: number
   primaryFont: string
   size: UserInputSizes
+  error: boolean
 }>`
   color: ${(props) => props.textColor};
   max-width: 100%;
@@ -160,9 +164,9 @@ const UserInputStyled = styled(Input)<{
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
-  border-bottom-right-radius: ${(props) => props.bottomRightRadius}px;
-  border-bottom-left-radius: ${(props) => props.bottomLeftRadius}px;
-  border-color: ${(props) => props.borderColor};
+  border-bottom-right-radius: ${(props) => props.error ? 0 : props.bottomRightRadius}px;
+  border-bottom-left-radius: ${(props) => props.error ? 0 : props.bottomLeftRadius}px;
+  border-color: ${(props) => props.error ? "#cc0000" : props.borderColor};
   border-top-width: ${(props) => props.borderTopWidth}px;
   border-bottom-width: ${(props) => props.borderBottomWidth}px;
   border-left-width: ${(props) => props.borderLeftWidth}px;
@@ -312,6 +316,7 @@ export const UserInput = ({ ...props }) => {
         borderColor={
           props.isActive ? props.activeBorderColor.value : props.borderColor.value
         }
+        error={props.error}
         primaryFont={props.primaryFont.value}
         placeholder={ !props.floatingLabel && props.placeholder}
         borderWidth={props.borderWidth}
@@ -352,6 +357,35 @@ export const UserInput = ({ ...props }) => {
         autoFocus={props.isFocused}
       />
       </div>{/** End field container */}
+
+      {/** Error container */}
+        {
+          props.error && (
+            <div
+              className="error-container border flex flex-row items-center gap-0 mt-0"
+              style={{
+                fontFamily: `var(${props.secondaryFont.value})`,
+                borderColor: props.errorStyles.borderColor,
+                backgroundColor: props.errorStyles.backgroundColor,
+                color: props.errorStyles.textColor,
+                borderTopWidth: 0,
+                borderTopLeftRadius: props.errorStyles.topLeftRadius,
+                borderTopRightRadius: props.errorStyles.topRightRadius,
+                borderBottomLeftRadius: props.errorStyles.bottomLeftRadius,
+                borderBottomRightRadius: props.errorStyles.bottomRightRadius,
+              }}
+            >
+              <div className="p-2">
+                {IconsList[props.errorIcon]}
+              </div>
+              <div className="p-2">
+                {props.errorText}
+              </div>
+            </div>
+          )
+        }
+      {/** End error container */}
+
       </div>
       </div>
     </div>
@@ -398,6 +432,18 @@ export type UserInputProps = {
   enableIcon: boolean
   icon: string
   preset: string
+  error: boolean
+  errorText: string
+  errorIcon: string
+  errorStyles: {
+    borderColor: string
+    backgroundColor: string
+    textColor: string
+    topLeftRadius: number
+    topRightRadius: number
+    bottomLeftRadius: number
+    bottomRightRadius: number
+  }
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
@@ -455,6 +501,18 @@ export const UserInputDefaultProps: UserInputProps = {
   enableIcon: false,
   icon: "arrowright",
   preset: "outlined",
+  error: false,
+  errorText: "Please specify an answer",
+  errorIcon: "x",
+  errorStyles: {
+    borderColor: " #cc0000",
+    textColor: "#cc0000",
+    backgroundColor: rgba("#cc0000", 0.1),
+    topLeftRadius: 0,
+    topRightRadius: 0,
+    bottomLeftRadius: 8,
+    bottomRightRadius: 8,
+  }
 }
 
 UserInput.craft = {

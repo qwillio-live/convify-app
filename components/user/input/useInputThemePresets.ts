@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
 import { UserInputProps, UserInputSizes } from "./user-input.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
-import { darken } from "polished";
+import { darken, rgba } from "polished";
 
 const useInputThemePresets = () => {
   const theme = useAppSelector((state) => state.theme);
@@ -14,7 +14,7 @@ const useInputThemePresets = () => {
   textColor: "#000",
   width: 366,
   fontWeight: "normal",
-  marginLeft: 20,
+  marginLeft: 0,
   marginRight: 0,
   marginTop: 20,
   marginBottom: 20,
@@ -64,6 +64,18 @@ const useInputThemePresets = () => {
   enableIcon: false,
   icon: "arrowright",
   preset: "outlined",
+  error: false,
+  errorText: "Please specify an answer",
+  errorIcon: "x",
+  errorStyles: {
+    borderColor: "#cc0000",
+    textColor: "#cc0000",
+    backgroundColor: rgba("#cc0000", 0.1),
+    topLeftRadius: 0,
+    topRightRadius: 0,
+    bottomLeftRadius: 8,
+    bottomRightRadius: 8,
+  }
   };
 
   const underlinedPreset: UserInputProps = {
@@ -81,7 +93,7 @@ const useInputThemePresets = () => {
   paddingTop: 0,
   paddingBottom: 0,
   placeholder: "Placeholder",
-  backgroundColor: "#fff",
+  backgroundColor: theme?.general?.backgroundColor || 'white',
   borderColor: {
     value: "#eaeaeb",
     globalStyled: false,
@@ -122,6 +134,18 @@ const useInputThemePresets = () => {
   enableIcon: false,
   icon: "arrowright",
   preset: "underlined",
+  error: false,
+  errorText: "Please specify an answer",
+  errorIcon: "x",
+  errorStyles: {
+    borderColor: "transparent",
+    textColor: "#cc0000",
+    backgroundColor: "transparent",
+    topLeftRadius: 0,
+    topRightRadius: 0,
+    bottomLeftRadius: 0,
+    bottomRightRadius: 0,
+  }
   };
 
 

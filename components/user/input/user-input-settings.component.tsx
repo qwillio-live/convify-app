@@ -69,7 +69,7 @@ export const UserInputSettings = () => {
   }
   const {outlinedPreset, underlinedPreset} = useInputThemePresets();
   const addPresetStyles = (preset) => {
-    const staticStyles = ["inputRequired","label","placeHolder","backgroundColor","fieldName","floatingLabel","settingsTab","inputValue","icon","enableIcon","size","fullWidth","marginLeft","marginTop","marginRight","marginBottom"]
+    const staticStyles = ["error","inputRequired","label","placeHolder","backgroundColor","fieldName","floatingLabel","settingsTab","inputValue","icon","enableIcon","size","fullWidth","marginLeft","marginTop","marginRight","marginBottom"]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
         if(!staticStyles.includes(key))
@@ -97,8 +97,12 @@ export const UserInputSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
             <Checkbox
-            value={props.inputRequired}
-            onChange={(e) => setProp((props) => (props.inputRequired = e),1000)}
+            value={props.error}
+            checked={props.error}
+            onCheckedChange={(e) => {
+              setProp((props) => (props.inputRequired = e),200)
+              setProp((props) => (props.error = !props.error),200)
+            }}
             id="required" />
               <label
                 htmlFor="required"
