@@ -89,10 +89,15 @@ export const UserInputSettings = () => {
   };
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-1">
+      <Accordion
+      value={props.settingsTab || "content"}
+      onValueChange={(value) => {
+        setProp((props) => (props.settingsTab = value), 200)
+      }}
+      type="single" collapsible className="w-full">
+      <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Content Options </span>
+            <span className="text-sm font-medium">Content</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
@@ -174,7 +179,7 @@ export const UserInputSettings = () => {
 
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-3">
+        <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">Design</span>
           </AccordionTrigger>
@@ -263,7 +268,7 @@ export const UserInputSettings = () => {
 
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-2">
+        <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Spacing </span>
           </AccordionTrigger>
@@ -387,17 +392,19 @@ export const UserInputSettings = () => {
             <Card onClick={() => {
               addPresetStyles(outlinedPreset)
             }}
-            className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "outlined"})}
+            className={cn("relative px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "outlined"})}
             >
-              <UserInputGen {...outlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" />
+              <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+              <UserInputGen {...outlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff"  />
                 {/* <IconButtonGen {...filledPreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
               </Card>
               <Card onClick={() => {
                 addPresetStyles(underlinedPreset)
               }}
-              className={cn("px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "underlined"})}
+              className={cn("relative px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "underlined"})}
               >
-                <UserInputGen {...underlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" />
+                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <UserInputGen {...underlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff" />
                 {/* <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
               </Card>
             </div>

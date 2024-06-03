@@ -88,7 +88,7 @@ import {
   IconButtonDefaultProps,
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
-import { UserInput, UserInputDefaultProps } from "../input/user-input.component"
+import { UserInput, UserInputDefaultProps, UserInputGen } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -439,10 +439,7 @@ export const UserToolbox = () => {
                     title="Input field"
                     icon={<TextCursorInput className="mr-2 h-3 w-3" />}
                   >
-                    <Input
-                      placeholder="Placeholder"
-                      className="ring-offset-0 focus-visible:ring-blue-600 focus-visible:ring-offset-0"
-                    />
+                    <UserInputGen {...outlinedPreset} />
                   </HoverCardComponent>
                 </div>
 

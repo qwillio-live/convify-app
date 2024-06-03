@@ -75,7 +75,8 @@ const useInputThemePresets = () => {
     topRightRadius: 0,
     bottomLeftRadius: 8,
     bottomRightRadius: 8,
-  }
+  },
+  settingsTab: "content",
   };
 
   const underlinedPreset: UserInputProps = {
@@ -145,7 +146,8 @@ const useInputThemePresets = () => {
     topRightRadius: 0,
     bottomLeftRadius: 0,
     bottomRightRadius: 0,
-  }
+  },
+  settingsTab: "content",
   };
 
 

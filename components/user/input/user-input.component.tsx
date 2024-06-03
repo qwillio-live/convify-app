@@ -62,86 +62,13 @@ const UserInputSizeValues={
   full: "100%",
 }
 
-// export const UserInputGen = ({ ...props }) => {
-//   const [inputValue, setInputValue] = useState(props.inputValue)
-//   const [isActive, setIsActive] = useState(false)
-//   const [isFocused, setIsFocused] = useState(false)
-//   const inputRef = useRef<HTMLInputElement>(null)
-
-//   const focusInput = () => {
-//     if (inputRef.current) {
-//       inputRef.current.focus()
-//     }
-//   }
-
-//   return (
-//     <div
-//       className="relative"
-//       style={{
-//         marginLeft: `${props.marginLeft}px`,
-//         marginRight: `${props.marginRight}px`,
-//         marginTop: `${props.marginTop}px`,
-//         marginBottom: `${props.marginBottom}px`,
-//         minWidth: UserInputSizeValues[props.size],
-//       }}
-//     >
-//       <div
-//         onClick={() => {
-//           setIsActive(true)
-//           setIsFocused(true)
-//           focusInput() // Focus the input when placeholder is clicked
-//         }}
-//         className={`hover:cursor-text absolute transition-all duration-200 ease-in-out ${
-//           isActive || inputValue.length > 0
-//             ? "top-0 text-sm pl-3 pt-0"
-//             : "top-0 left-0 pt-3 px-3 pb-1 text-sm"
-//         }`}
-//       >
-//         {props.placeholder}
-//       </div>
-//       <UserInputStyled
-//         error={props.error}
-//         ref={inputRef}
-//         textColor={props.textColor}
-//         backgroundColor={props.backgroundColor}
-//         borderColor={isActive ? props.activeBorderColor.value : props.borderColor.value}
-//         borderWidth={props.borderWidth}
-//         primaryFont={props.primaryFont.value}
-//         borderTopWidth={props.borderTopWidth}
-//         borderBottomWidth={props.borderBottomWidth}
-//         borderLeftWidth={props.borderLeftWidth}
-//         borderRightWidth={props.borderRightWidth}
-//         placeholder={!props.floatingLabel && props.placeholder}
-//         borderRadius={props.borderRadius}
-//         topLeftRadius={props.topLeftRadius}
-//         topRightRadius={props.topRightRadius}
-//         bottomLeftRadius={props.bottomLeftRadius}
-//         bottomRightRadius={props.bottomRightRadius}
-//         width={props.width}
-//         size={props.size}
-//         // {...props}
-//         onFocus={() => setIsActive(true)}
-//         // 1.9em .6em .7em
-//         className={` font-semibold pt-5 px-3 pb-1 text-sm
-//         ring-[transparent]
-//         focus-visible:ring-[transparent]
-//         ring-opacity-/50
-//         focus-visible:ring-0 focus-visible:ring-offset-0
-//         `}
-//         // placeholder={props.placeholder}
-//         onChange={(e) => {setInputValue(e.target.value), console.log("INPUT VALUE: ", inputValue)}}
-//         // onFocus={() => setProp((props) => (props.borderColor = props.activeBorderColor))}
-//         onBlur={() => setIsActive(false)}
-//       />
-//     </div>
-//   )
-// }
 
 export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState(props.inputValue)
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const [error, setError] = useState(props.error)
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -179,10 +106,8 @@ export const UserInputGen = ({ ...props }) => {
         !props.floatingLabel && (
           <div
             onClick={() => {
-              // setProp((props) => (props.isActive = true)),
               setIsActive(true)
               setIsFocused(true)
-                // setProp((props) => (props.isFocused = true)),
                 focusInput()
             }}
             className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
@@ -198,11 +123,9 @@ export const UserInputGen = ({ ...props }) => {
       }
       <div
         onClick={() => {
-          // setProp((props) => (props.isActive = true)),
           setIsActive(true)
           setIsFocused(true)
-            // setProp((props) => (props.isFocused = true)),
-            focusInput() // Focus the input when placeholder is clicked
+          focusInput() // Focus the input when placeholder is clicked
         }}
         className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
           isActive && props.floatingLabel || inputValue.length > 0 && props.floatingLabel
@@ -228,12 +151,12 @@ export const UserInputGen = ({ ...props }) => {
         props.enableIcon && (
           <div
           className={cn(
-            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px]',
+            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200',
           )}
           style={{
             backgroundColor: '#fff',
-            borderColor: isActive ? props.activeBorderColor.value : props.borderColor.value,
-            borderBottomLeftRadius: props.bottomLeftRadius,
+            borderColor: error ? "#cc0000" : isActive ? props.activeBorderColor.value : props.borderColor.value,
+            borderBottomLeftRadius: error ? 0 : props.bottomLeftRadius,
             borderTopLeftRadius: props.topLeftRadius,
             borderTopWidth: props.borderTopWidth,
             borderBottomWidth: props.borderBottomWidth,
@@ -484,12 +407,12 @@ export const UserInput = ({ ...props }) => {
         props.enableIcon && (
           <div
           className={cn(
-            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px]',
+            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200',
           )}
           style={{
             backgroundColor: '#fff',
-            borderColor: props.isActive ? props.activeBorderColor.value : props.borderColor.value,
-            borderBottomLeftRadius: props.bottomLeftRadius,
+            borderColor: props.error ? "#cc0000" : props.isActive ? props.activeBorderColor.value : props.borderColor.value,
+            borderBottomLeftRadius: props.error ? 0 : props.bottomLeftRadius,
             borderTopLeftRadius: props.topLeftRadius,
             borderTopWidth: props.borderTopWidth,
             borderBottomWidth: props.borderBottomWidth,
@@ -635,7 +558,8 @@ export type UserInputProps = {
     topRightRadius: number
     bottomLeftRadius: number
     bottomRightRadius: number
-  }
+  },
+  settingsTab: string,
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
@@ -697,14 +621,15 @@ export const UserInputDefaultProps: UserInputProps = {
   errorText: "Please specify an answer",
   errorIcon: "x",
   errorStyles: {
-    borderColor: " #cc0000",
+    borderColor: "#cc0000",
     textColor: "#cc0000",
     backgroundColor: rgba("#cc0000", 0.1),
     topLeftRadius: 0,
     topRightRadius: 0,
     bottomLeftRadius: 8,
     bottomRightRadius: 8,
-  }
+  },
+  settingsTab: 'content',
 }
 
 UserInput.craft = {
