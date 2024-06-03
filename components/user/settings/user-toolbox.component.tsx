@@ -575,7 +575,7 @@ export const UserToolbox = () => {
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Continue Button"
+                    title={t("Continue Button")}
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
                     <IconButtonGen

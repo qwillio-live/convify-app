@@ -62,6 +62,81 @@ const UserInputSizeValues={
   full: "100%",
 }
 
+// export const UserInputGen = ({ ...props }) => {
+//   const [inputValue, setInputValue] = useState(props.inputValue)
+//   const [isActive, setIsActive] = useState(false)
+//   const [isFocused, setIsFocused] = useState(false)
+//   const inputRef = useRef<HTMLInputElement>(null)
+
+//   const focusInput = () => {
+//     if (inputRef.current) {
+//       inputRef.current.focus()
+//     }
+//   }
+
+//   return (
+//     <div
+//       className="relative"
+//       style={{
+//         marginLeft: `${props.marginLeft}px`,
+//         marginRight: `${props.marginRight}px`,
+//         marginTop: `${props.marginTop}px`,
+//         marginBottom: `${props.marginBottom}px`,
+//         minWidth: UserInputSizeValues[props.size],
+//       }}
+//     >
+//       <div
+//         onClick={() => {
+//           setIsActive(true)
+//           setIsFocused(true)
+//           focusInput() // Focus the input when placeholder is clicked
+//         }}
+//         className={`hover:cursor-text absolute transition-all duration-200 ease-in-out ${
+//           isActive || inputValue.length > 0
+//             ? "top-0 text-sm pl-3 pt-0"
+//             : "top-0 left-0 pt-3 px-3 pb-1 text-sm"
+//         }`}
+//       >
+//         {props.placeholder}
+//       </div>
+//       <UserInputStyled
+//         error={props.error}
+//         ref={inputRef}
+//         textColor={props.textColor}
+//         backgroundColor={props.backgroundColor}
+//         borderColor={isActive ? props.activeBorderColor.value : props.borderColor.value}
+//         borderWidth={props.borderWidth}
+//         primaryFont={props.primaryFont.value}
+//         borderTopWidth={props.borderTopWidth}
+//         borderBottomWidth={props.borderBottomWidth}
+//         borderLeftWidth={props.borderLeftWidth}
+//         borderRightWidth={props.borderRightWidth}
+//         placeholder={!props.floatingLabel && props.placeholder}
+//         borderRadius={props.borderRadius}
+//         topLeftRadius={props.topLeftRadius}
+//         topRightRadius={props.topRightRadius}
+//         bottomLeftRadius={props.bottomLeftRadius}
+//         bottomRightRadius={props.bottomRightRadius}
+//         width={props.width}
+//         size={props.size}
+//         // {...props}
+//         onFocus={() => setIsActive(true)}
+//         // 1.9em .6em .7em
+//         className={` font-semibold pt-5 px-3 pb-1 text-sm
+//         ring-[transparent]
+//         focus-visible:ring-[transparent]
+//         ring-opacity-/50
+//         focus-visible:ring-0 focus-visible:ring-offset-0
+//         `}
+//         // placeholder={props.placeholder}
+//         onChange={(e) => {setInputValue(e.target.value), console.log("INPUT VALUE: ", inputValue)}}
+//         // onFocus={() => setProp((props) => (props.borderColor = props.activeBorderColor))}
+//         onBlur={() => setIsActive(false)}
+//       />
+//     </div>
+//   )
+// }
+
 export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState(props.inputValue)
   const [isActive, setIsActive] = useState(false)
@@ -76,64 +151,181 @@ export const UserInputGen = ({ ...props }) => {
 
   return (
     <div
-      className="relative"
-      {...props}
+      className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
-        marginLeft: `${props.marginLeft}px`,
-        marginRight: `${props.marginRight}px`,
-        marginTop: `${props.marginTop}px`,
-        marginBottom: `${props.marginBottom}px`,
-        minWidth: UserInputSizeValues[props.size],
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
+      <div className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: `${props.backgroundColor}`,
+        minWidth: '100%',
+        paddingTop: `${props.marginTop}px`,
+        paddingBottom: `${props.marginBottom}px`,
+        paddingLeft: `${props.marginLeft}px`,
+        paddingRight: `${props.marginRight}px`,
+       }}
+      >
+      <div className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
+      style={{
+        width: `${UserInputSizeValues[props.size]}`,
+       }}
+      >
+      {
+        !props.floatingLabel && (
+          <div
+            onClick={() => {
+              // setProp((props) => (props.isActive = true)),
+              setIsActive(true)
+              setIsFocused(true)
+                // setProp((props) => (props.isFocused = true)),
+                focusInput()
+            }}
+            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            style={{
+              fontFamily: `var(${props.primaryFont.value})`,
+              minWidth: `${UserInputSizeValues[props.size]}`,
+              width: `${UserInputSizeValues[props.size]}`,
+            }}
+          >
+            {props.label}
+          </div>
+        )
+      }
       <div
         onClick={() => {
+          // setProp((props) => (props.isActive = true)),
           setIsActive(true)
           setIsFocused(true)
-          focusInput() // Focus the input when placeholder is clicked
+            // setProp((props) => (props.isFocused = true)),
+            focusInput() // Focus the input when placeholder is clicked
         }}
-        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out ${
-          isActive || inputValue.length > 0
-            ? "top-0 text-sm pl-3 pt-0"
-            : "top-0 left-0 pt-3 px-3 pb-1 text-sm"
-        }`}
+        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+          isActive && props.floatingLabel || inputValue.length > 0 && props.floatingLabel
+            ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+            : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+        } ${
+          props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
+        }
+
+        `
+      }
+        style={{
+          fontFamily: `var(${props.primaryFont.value})`,
+          minWidth: `${UserInputSizeValues[props.size]}`,
+          width: `${UserInputSizeValues[props.size]}`,
+        }}
       >
-        {props.placeholder}
+        {props.floatingLabel && props.label}
       </div>
+
+      <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+      {
+        props.enableIcon && (
+          <div
+          className={cn(
+            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px]',
+          )}
+          style={{
+            backgroundColor: '#fff',
+            borderColor: isActive ? props.activeBorderColor.value : props.borderColor.value,
+            borderBottomLeftRadius: props.bottomLeftRadius,
+            borderTopLeftRadius: props.topLeftRadius,
+            borderTopWidth: props.borderTopWidth,
+            borderBottomWidth: props.borderBottomWidth,
+            borderLeftWidth: props.borderLeftWidth,
+            borderRightWidth: 0,
+           }}
+          >
+          {IconsList[props.icon]}
+          </div>
+        )
+      }
       <UserInputStyled
-        error={props.error}
         ref={inputRef}
         textColor={props.textColor}
         backgroundColor={props.backgroundColor}
-        borderColor={isActive ? props.activeBorderColor.value : props.borderColor.value}
-        borderWidth={props.borderWidth}
+        borderColor={
+          isActive ? props.activeBorderColor.value : props.borderColor.value
+        }
+        error={props.error}
         primaryFont={props.primaryFont.value}
+        placeholder={ !props.floatingLabel && props.placeholder}
+        borderWidth={props.borderWidth}
         borderTopWidth={props.borderTopWidth}
         borderBottomWidth={props.borderBottomWidth}
         borderLeftWidth={props.borderLeftWidth}
         borderRightWidth={props.borderRightWidth}
-        placeholder={!props.floatingLabel && props.placeholder}
         borderRadius={props.borderRadius}
-        topLeftRadius={props.topLeftRadius}
+        topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
         topRightRadius={props.topRightRadius}
-        bottomLeftRadius={props.bottomLeftRadius}
+        bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
         bottomRightRadius={props.bottomRightRadius}
         width={props.width}
         size={props.size}
-        // {...props}
         onFocus={() => setIsActive(true)}
-        // 1.9em .6em .7em
-        className={` font-semibold pt-5 px-3 pb-1 text-sm
-        ring-[transparent]
-        focus-visible:ring-[transparent]
-        ring-opacity-/50
-        focus-visible:ring-0 focus-visible:ring-offset-0
-        `}
-        // placeholder={props.placeholder}
-        onChange={(e) => {setInputValue(e.target.value), console.log("INPUT VALUE: ", inputValue)}}
-        // onFocus={() => setProp((props) => (props.borderColor = props.activeBorderColor))}
+        className={cn(
+          {
+            "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
+            "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light": !props.floatingLabel,
+            "rounded-l-none" : props.enableIcon,
+          },
+          `ring-0
+          outline-none
+          focus-visible:outline-none
+          peer-focus-visible:outline-none
+          focus-visible:ring-0
+          ring-opacity-0
+          bg-white
+          transition-all
+          duration-200
+          ease-in-out
+          focus-visible:ring-transparent focus-visible:ring-offset-0`
+        )}
+        onChange={(e) =>
+          // setProp((props) => (props.inputValue = e.target.value))
+          setInputValue(e.target.value)
+          // console.log("INPUT COMPONENT VALUE", e.target.value)
+        }
         onBlur={() => setIsActive(false)}
+        autoFocus={isFocused}
       />
+      </div>{/** End field container */}
+
+      {/** Error container */}
+        {
+          props.error && (
+            <div
+              className="error-container border flex flex-row items-center gap-0 mt-0"
+              style={{
+                fontFamily: `var(${props.secondaryFont.value})`,
+                borderColor: props.errorStyles.borderColor,
+                backgroundColor: props.errorStyles.backgroundColor,
+                color: props.errorStyles.textColor,
+                borderTopWidth: 0,
+                borderTopLeftRadius: props.errorStyles.topLeftRadius,
+                borderTopRightRadius: props.errorStyles.topRightRadius,
+                borderBottomLeftRadius: props.errorStyles.bottomLeftRadius,
+                borderBottomRightRadius: props.errorStyles.bottomRightRadius,
+              }}
+            >
+              <div className="p-2">
+                {IconsList[props.errorIcon]}
+              </div>
+              <div className="p-2">
+                {props.errorText}
+              </div>
+            </div>
+          )
+        }
+      {/** End error container */}
+
+      </div>
+      </div>
     </div>
   )
 }
