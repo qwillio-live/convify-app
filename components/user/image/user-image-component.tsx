@@ -2,7 +2,6 @@ import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
 
 import "cropperjs/dist/cropper.css"
 import React from "react"
-import { UploadCloud } from "lucide-react"
 import Cropper, { ReactCropperElement } from "react-cropper"
 
 import { useNode } from "@/lib/craftjs"
@@ -117,6 +116,7 @@ export const Img = ({
 
 export const ImgSettings = () => {
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const dialogRef = React.useRef<HTMLDivElement>(null)
   const [setUploadedFile, uploadedFile] = React.useState<string | null>(null)
   const [showDialog, setShowDialog] = React.useState<boolean>(false)
   const [image, setImage] = React.useState<string>(ImgDefaultProps.src)
@@ -152,7 +152,6 @@ export const ImgSettings = () => {
         setImage(reader.result as any)
       }
       reader.readAsDataURL(file)
-      // setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
       setShowDialog(true)
     }
   }
@@ -161,7 +160,6 @@ export const ImgSettings = () => {
 
   const onCrop = () => {
     const cropper = cropperRef.current?.cropper
-    // console.log(cropper.getCroppedCanvas().toDataURL())
   }
 
   const getCropData = () => {
@@ -196,10 +194,6 @@ export const ImgSettings = () => {
         cropperRef.current?.cropper.getImageData().height
     )
     setActiveAspectRatioBtn("source")
-  }
-  const aspectRatioFree = () => {
-    cropperRef.current?.cropper.setAspectRatio(NaN)
-    setActiveAspectRatioBtn("free")
   }
   const aspectRatioSquare = () => {
     cropperRef.current?.cropper.setAspectRatio(1)
@@ -244,10 +238,29 @@ export const ImgSettings = () => {
           />
           <div
             onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-            className="relative flex w-full flex-row justify-center hover:cursor-pointer"
+            className="relative flex w-full flex-row justify-center group hover:cursor-pointer"
           >
-            <div className="absolute flex size-full flex-row items-center justify-center bg-white bg-opacity-60">
-              <UploadCloud />
+            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent group-hover:bg-white/[0.85] group-hover:opacity-100 opacity-0 transition-opacity duration-200 ease-in">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-image-up"
+              >
+                <path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
+                <path d="m14 19.5 3-3 3 3" />
+                <path d="M17 22v-5.5" />
+                <circle cx="9" cy="9" r="2" />
+              </svg>
+              <span className="text-sm font-semibold text-black mt-1">
+                Upload
+              </span>
             </div>
             <img src={src} alt={alt} className="w-30" />
           </div>
@@ -410,20 +423,26 @@ export const ImgSettings = () => {
         </AccordionItem>
       </Accordion>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="max-h-[calc(100vh-10%)] z-[9999999] flex flex-col max-w-[95%] sm:max-w-[60%] sm:p-8">
+        <DialogContent
+          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[60%] relative flex flex-col gap-4 p-4 sm:p-8"
+          ref={dialogRef}
+        >
           <Cropper
             ref={cropperRef}
-            style={{ width: "100%" }}
-            // Cropper.js options
+            style={{
+              width: "100%",
+              height: "calc(100% - 56px)",
+            }}
             initialAspectRatio={NaN}
             guides={false}
             crop={onCrop}
             autoCropArea={1}
             src={image}
-            minCropBoxHeight={10}
-            minCropBoxWidth={10}
+            minCropBoxHeight={100}
+            minCropBoxWidth={100}
             background={false}
             highlight={true}
+            responsive={true}
           />
           <div className="flex items-center justify-between">
             <div className="p-1 flex gap-0 bg-secondary rounded-lg">
@@ -437,17 +456,6 @@ export const ImgSettings = () => {
                 onClick={aspectRatioSource}
               >
                 Source
-              </Button>
-              <Button
-                variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "free"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
-                onClick={aspectRatioFree}
-              >
-                Free
               </Button>
               <Button
                 variant="secondary"
