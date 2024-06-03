@@ -466,7 +466,9 @@ export const UserInput = ({ ...props }) => {
           focus-visible:ring-transparent focus-visible:ring-offset-0`
         )}
         onChange={(e) =>
-          setProp((props) => (props.inputValue = e.target.value))
+          // setProp((props) => (props.inputValue = e.target.value))
+          // not to set input prop when editing
+          console.log("Input field value is: ",e.target.value)
         }
         onBlur={() => setProp((props) => (props.isActive = false))}
         autoFocus={props.isFocused}
