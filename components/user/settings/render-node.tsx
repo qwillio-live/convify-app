@@ -49,7 +49,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   return (
     <div
       className={cn('relative border z-10 border-transparent border-dotted',
-        (isHover || isActive) && (id !== 'ROOT') && 'border-blue-400',
+        (isActive) && (id !== 'ROOT') && 'border-blue-400',
+        (id !== 'ROOT') && 'hover:border-blue-400',
         fullWidth && 'w-full',
       )}
     >
