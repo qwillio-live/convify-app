@@ -38,6 +38,9 @@
     "Placeholder" : "Marcador de posição",
     "Field Name" : "Nome do Campo",
     "Enter field name here" : "Digite o nome do campo aqui",
+    "Enter label text" : "Digite o texto do rótulo",
+    "Enter placeholder text" : "Digite o texto do marcador de posição",
+    "Please specify an answer" : "Por favor, especifique uma resposta",
     "Decorator" : "Decorador",
     "Input" : "Entrada"
   }

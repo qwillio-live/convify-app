@@ -144,12 +144,13 @@ export const UserInputSettings = () => {
               </label>
               <Input
               value={props.label}
+              defaultValue={props.label}
               onChange={(e) => {
                 setProp((props) => (props.label = e.target.value), 0)
                 // handlePropChange("label",e.target.value);
               }}
               type={"text"}
-              placeholder={"Enter placeholder text"}
+              placeholder={t("Enter label text")}
               />
             </div>
 
@@ -168,7 +169,7 @@ export const UserInputSettings = () => {
                 // handlePropChange("placeholder",e.target.value);
               }}
               type={"text"}
-              placeholder={"Enter placeholder text"}
+              placeholder={t("Enter placeholder text")}
               />
             </div>
 

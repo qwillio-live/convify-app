@@ -38,6 +38,9 @@
     "Placeholder" : "Placeholder",
     "Field Name" : "Field Name",
     "Enter field name here" : "Enter field name here",
+    "Enter label text" : "Enter label text",
+    "Enter placeholder text" : "Enter placeholder text",
+    "Please specify an answer" : "Please specify an answer",
     "Decorator" : "Decorator",
     "Input" : "Input"
   }
