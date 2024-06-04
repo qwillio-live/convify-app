@@ -13,6 +13,9 @@
   "Components" : {
     "Continue Button" : "Botão Continuar odo",
     "Continue" : "Continuar",
+    "Element"  : "Elemento",
+    "Theme" : "Tema",
+    "Delete" : "Excluir",
     "Button" : "Botão",
     "Content" : "Conteúdo traduzido",
     "Enable Icon" : "Habilitar Ícone",
@@ -42,6 +45,15 @@
     "Enter placeholder text" : "Digite o texto do marcador de posição",
     "Please specify an answer" : "Por favor, especifique uma resposta",
     "Decorator" : "Decorador",
-    "Input" : "Entrada"
+    "Input" : "Entrada",
+    "General" : "Geral",
+    "Primary Color" : "Cor Primária",
+    "Secondary Color" : "Cor Secundária",
+    "Background Image" : "Imagem de Fundo",
+    "Text" : "Texto",
+    "Primary Font" : "Fonte Primária",
+    "Secondary Font" : "Fonte Secundária",
+    "Primary Text Color" : "Cor do Texto Primário",
+    "Secondary Text Color" : "Cor do Texto Secundário"
   }
 }

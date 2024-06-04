@@ -12,6 +12,9 @@
   },
   "Components" : {
     "Continue Button" : "Continue Button",
+    "Element"  : "Element",
+    "Theme" : "Theme",
+    "Delete" : "Delete",
     "Continue" : "Continue",
     "Button" : "Button",
     "Content" : "Content",
@@ -42,6 +45,15 @@
     "Enter placeholder text" : "Enter placeholder text",
     "Please specify an answer" : "Please specify an answer",
     "Decorator" : "Decorator",
-    "Input" : "Input"
+    "Input" : "Input",
+    "General" : "General",
+    "Primary Color" : "Primary Color",
+    "Secondary Color" : "Secondary Color",
+    "Background Image" : "Background Image",
+    "Text" : "Text",
+    "Primary Font" : "Primary Font",
+    "Secondary Font" : "Secondary Font",
+    "Primary Text Color" : "Primary Text Color",
+    "Secondary Text Color" : "Secondary Text Color"
   }
 }

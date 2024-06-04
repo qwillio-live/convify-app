@@ -439,7 +439,7 @@ export const UserToolbox = () => {
                     title={t("Input Field")}
                     icon={<TextCursorInput className="mr-2 h-3 w-3" />}
                   >
-                    <UserInputGen {...outlinedPreset} />
+                    <UserInputGen {...outlinedPreset} label={t("Label")} placeholder={t("Placeholder")} />
                   </HoverCardComponent>
                 </div>
 

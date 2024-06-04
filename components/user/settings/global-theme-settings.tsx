@@ -19,11 +19,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
+import { useTranslations } from "next-intl";
 
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
   const dispatch = useAppDispatch()
+  const t = useTranslations("Components");
 
   /** GENERAL STYLES */
   const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor)
@@ -90,7 +92,7 @@ export const GlobalThemeSettings = (props: Props) => {
         className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">General </span>
+              <span className="text-sm font-medium">{t("General")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
               <div className="flex flex-row items-center col-span-2 space-x-2">
@@ -98,7 +100,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarycolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Primary Color
+                  {t("Primary Color")}
                 </label>
                 <Input
                   value={primaryColor || defaultPrimaryColor}
@@ -118,7 +120,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="secondarycolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Secondary Color
+                  {t("Secondary Color")}
                 </label>
                 <Input
                 value={secondaryColor || defaultSecondaryColor}
@@ -137,7 +139,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundcolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Background Color
+                  {t("Background Color")}
                 </label>
                 <Input
                   value={backgroundColor || defaultBackgroundColor}
@@ -157,7 +159,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundimage"
                   className="text-sm self-start font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
                 >
-                  Background Image
+                  {t("Background Image")}
                 </label>
                 <Input
                   onChange={handleFileChange}
@@ -174,7 +176,7 @@ export const GlobalThemeSettings = (props: Props) => {
 
           <AccordionItem value="item-2">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">Text </span>
+              <span className="text-sm font-medium">{t("Text")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-4 p-2">
               <div className="flex flex-col items-center col-span-2 space-y-2">
@@ -182,7 +184,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primaryfont"
                   className="text-sm font-medium self-start leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
                 >
-                  Primary Font
+                  {t("Primary Font")}
                 </label>
                 <Select
                   value={primaryFont || defaultPrimaryFont}
@@ -212,7 +214,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="secondaryfont"
                   className="text-sm font-medium self-start leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
                 >
-                  Secondary Font
+                  {t("Secondary Font")}
                 </label>
                 <Select
                   value={secondaryFont || defaultSecondaryFont}
@@ -242,7 +244,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarytextcolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Primary Text Color
+                  {t("Primary Text Color")}
                 </label>
                 <Input
                 value={primaryTextColor || defaultPrimaryTextColor}
@@ -264,7 +266,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarytextcolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Secondary Text Color
+                  {t("Secondary Text Color")}
                 </label>
                 <Input
                 value={secondaryTextColor || defaultSecondaryTextColor}
