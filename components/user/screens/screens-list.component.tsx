@@ -230,8 +230,9 @@ const ScreensList = () => {
                 <ContextMenu>
                   <ContextMenuTrigger>
                     {" "}
-                    <div className="mt-4">
-                      {screen?.ROOT?.displayName ?? "New Screen"}
+                    <div className="mt-4 flex flex-row items-center justify-between px-2">
+                      <span>{index+1}</span>
+                      <span>{screen?.ROOT?.displayName ?? "New Screen"}</span>
                     </div>
                     <Card
                       style={{ backgroundColor: backgroundColor }}
