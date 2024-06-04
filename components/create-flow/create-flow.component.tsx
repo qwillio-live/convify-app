@@ -103,7 +103,7 @@ export function CreateFlowComponent() {
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
-  const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
+  // const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
 
 
   // React.useEffect(() => {
@@ -199,7 +199,7 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  <Frame data={JSON.parse(editorLoad)}></Frame>
+                  <Frame data={editorLoad?.screenData ? JSON.parse(editorLoad.screenData) : {}}></Frame>
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>

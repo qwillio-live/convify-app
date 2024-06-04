@@ -105,11 +105,11 @@ const ScreensList = () => {
   // }, [selectedScreenIndex, screens]);
 
   const handleScreenClick = async (index: number) => {
-    if (screens && screens[index]) {
+    if (screens && screens[index] && screens[index].screenData) {
       dispatch(setSelectedScreen(index));
-      await actions.deserialize(screens[index]);
+      await actions.deserialize(screens[index].screenData || {});
     } else {
-      console.error('screens is undefined or index is out of bounds');
+      console.error('screens is undefined, index is out of bounds, or screenData is undefined');
     }
   };
 
@@ -133,9 +133,9 @@ const ScreensList = () => {
     if(screens && selectedScreenIndex !== undefined){
       dispatch(deleteScreen(index))
       if(index === 0){
-        await actions.deserialize(screens[1]);
+        await actions.deserialize(screens[1].screenData);
       }else{
-        await actions.deserialize(screens[index-1]);
+        await actions.deserialize(screens[index-1].screenData);
       }
     }
   }
@@ -222,8 +222,8 @@ const ScreensList = () => {
           <Reorder.Group values={screens || []} onReorder={handleReorder}>
             {screens?.map((screen: any, index) => (
               <Reorder.Item
-                key={screen?.ROOT?.nodes[0]}
-                id={screen?.ROOT?.nodes[0]}
+                key={screen?.screenName}
+                id={screen?.screenName}
                 value={screen}
                 className="relative"
               >
@@ -232,7 +232,7 @@ const ScreensList = () => {
                     {" "}
                     <div className="mt-4 flex flex-row items-center justify-between px-2">
                       <span>{index+1}</span>
-                      <span>{screen?.ROOT?.displayName ?? "New Screen"}</span>
+                      <span>{screen?.screenName ?? "New Screen"}</span>
                     </div>
                     <Card
                       style={{ backgroundColor: backgroundColor }}
@@ -246,7 +246,7 @@ const ScreensList = () => {
                     >
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
-                        <ResolvedComponentsFromCraftState screen={screen} />
+                        <ResolvedComponentsFromCraftState screen={screen.screenData ? screen.screenData : {}} />
                       </div>
                     </Card>
                   </ContextMenuTrigger>

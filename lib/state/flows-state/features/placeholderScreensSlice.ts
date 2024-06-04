@@ -6,6 +6,12 @@ import footerScreenData from "@/components/user/screens/screen-footer.json";
 import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
 
+type ScreenType = {
+  screenId: string;
+  screenName: string;
+  screenData: any;
+};
+
 export interface ScreensState {
   selectedScreen: number;
   headerId: string;
@@ -13,7 +19,7 @@ export interface ScreensState {
   footerMode: boolean;
   screensHeader: any;
   screensFooter: any;
-  screens: any[];
+  screens: ScreenType[];
   editorLoad: any;
 }
 
@@ -23,9 +29,30 @@ const initialState: ScreensState = {
   screensHeader: JSON.stringify(headerScreenData),
   headerMode: false,
   footerMode: false,
-  screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
+  // screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
+  screens: [
+    {
+      screenId: "1",
+      screenName: "button-choice",
+      screenData: JSON.stringify(buttonChoiceData),
+    },
+    {
+      screenId: "2",
+      screenName: "one-choice",
+      screenData: JSON.stringify(oneChoiceData),
+    },
+    {
+      screenId: "3",
+      screenName: "one-input",
+      screenData: JSON.stringify(oneInputData),
+    },
+  ],
   screensFooter: JSON.stringify(footerScreenData),
-  editorLoad: JSON.stringify(buttonChoiceData),
+  editorLoad: {
+    screenId: "1",
+    screenName: "button-choice",
+    screenData: JSON.stringify(buttonChoiceData),
+  }
 };
 
 export const screensSlice = createSlice({
@@ -39,8 +66,8 @@ export const screensSlice = createSlice({
       state.footerMode = false;
       state.screensHeader = headerScreenData;
       state.screensFooter = footerScreenData;
-      state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
-      state.editorLoad = state.screens[state.selectedScreen];
+      // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
+      state.editorLoad = state.screens[state.selectedScreen].screenData;
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
       state.editorLoad = action.payload;
@@ -50,7 +77,7 @@ export const screensSlice = createSlice({
       } else if (state.footerMode === true) {
         state.screensFooter = action.payload;
       } else {
-        state.screens[state.selectedScreen] = action.payload ;
+        state.screens[state.selectedScreen].screenData = action.payload ;
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
@@ -77,13 +104,13 @@ export const screensSlice = createSlice({
       state.footerMode = action.payload;
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
-      // state.screens = [...action.payload];
+      state.screens = action.payload;
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.headerMode = false;
       state.footerMode = false;
       state.selectedScreen = action.payload;
-      state.editorLoad = state.screens[action.payload] ; // Ensure new reference
+      state.editorLoad = state.screens[action.payload].screenData; // Ensure new reference
     },
     reorderScreens: (
       state,
@@ -96,8 +123,9 @@ export const screensSlice = createSlice({
       state.screens = result;
     },
     addScreen: (state, action: PayloadAction<number>) => {
+      const newId = state.screens.length + 1;
       const newScreens = [...state.screens]; // Create new array
-      newScreens.splice(action.payload + 1, 0, JSON.stringify(emptyScreenData));
+      newScreens.splice(action.payload + 1, 0, {screenId: newId.toString(),screenName:"Random Name",screenData:JSON.stringify(emptyScreenData)});
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
