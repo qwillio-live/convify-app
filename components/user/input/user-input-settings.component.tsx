@@ -21,7 +21,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
 import { Card } from "@/components/ui/card"
 import { Controller } from "../settings/controller.component"
@@ -43,8 +43,10 @@ import {
 import { cn } from "@/lib/utils"
 import useInputThemePresets from "./useInputThemePresets"
 import { UserInput, UserInputGen } from "./user-input.component"
+import { useTranslations } from "next-intl"
 
 export const UserInputSettings = () => {
+  const t = useTranslations("Components")
   const {
     actions: { setProp },
     marginLeft,
@@ -97,7 +99,7 @@ export const UserInputSettings = () => {
       type="single" collapsible className="w-full">
       <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Content</span>
+            <span className="text-sm font-medium">{t("Content")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
@@ -111,9 +113,9 @@ export const UserInputSettings = () => {
             id="required" />
               <label
                 htmlFor="required"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 underline decoration-dotted"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Required
+                {t("Required")}
               </label>
             </div>
 
@@ -129,7 +131,7 @@ export const UserInputSettings = () => {
                 htmlFor="floating-label"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Floating label
+                {t("Floating Label")}
               </label>
             </div>
 
@@ -138,7 +140,7 @@ export const UserInputSettings = () => {
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Label
+                {t("Label")}
               </label>
               <Input
               value={props.label}
@@ -157,13 +159,13 @@ export const UserInputSettings = () => {
                 htmlFor="placeholder-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
               >
-                Placeholder
+                {t("Placeholder")}
               </label>
               <Input
               value={props.placeholder}
               onChange={(e) => {
-                // setProp((props) => (props.placeholder = e.target.value), 1000)
-                handlePropChange("placeholder",e.target.value);
+                setProp((props) => (props.placeholder = e.target.value), 0)
+                // handlePropChange("placeholder",e.target.value);
               }}
               type={"text"}
               placeholder={"Enter placeholder text"}
@@ -175,13 +177,13 @@ export const UserInputSettings = () => {
                 htmlFor="placeholder-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
               >
-                Field name
+                {t("Field Name")}
               </label>
               <Input
               value={props.fieldName}
               onChange={(e) => setProp((props) => (props.fieldName = e.target.value), 1000)}
               type={"text"}
-              placeholder={"Enter field name here"}
+              placeholder={t("Enter field name here")}
               />
 
             </div>
@@ -190,7 +192,7 @@ export const UserInputSettings = () => {
         </AccordionItem>
         <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Design</span>
+            <span className="text-sm font-medium">{t("Design")}</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
           <div className="flex flex-row items-center col-span-2 space-x-2">
@@ -207,14 +209,14 @@ export const UserInputSettings = () => {
                 htmlFor="enableIcon"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Enable Decorator
+                {t("Decorator")}
               </label>
             </div>
 
-          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
           {props.enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <p className="text-md flex-1 text-muted-foreground">{t("Icon")}</p>
                   <Select
                     defaultValue={props.icon}
                     onValueChange={(e) => {
@@ -259,7 +261,7 @@ export const UserInputSettings = () => {
                   htmlFor="backgroundcolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Background Color
+                  {t("Background Color")}
                 </label>
                 <Input
                   // defaultValue={themeBackgroundColor}
@@ -279,11 +281,11 @@ export const UserInputSettings = () => {
         </AccordionItem>
         <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Spacing </span>
+            <span className="text-sm font-medium">{t("Spacing")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">Width</p>
+              <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs
                 defaultValue={props.size}
                 value={props.size}
@@ -297,9 +299,9 @@ export const UserInputSettings = () => {
                 }}
                className="flex-1">
                 <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger  value="small">S</TabsTrigger>
-                  <TabsTrigger  value="medium">M</TabsTrigger>
-                  <TabsTrigger  value="large">L</TabsTrigger>
+                  <TabsTrigger  value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger  value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger  value="large">{("L")}</TabsTrigger>
                   <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -307,7 +309,7 @@ export const UserInputSettings = () => {
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Top</Label>
+              <Label htmlFor="marginTop">{t("Top")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginTop}
               </span>
@@ -332,7 +334,7 @@ export const UserInputSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Bottom</Label>
+              <Label htmlFor="marginTop">{t("Bottom")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginBottom}
               </span>
@@ -352,7 +354,7 @@ export const UserInputSettings = () => {
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Right</Label>
+              <Label htmlFor="marginTop">{t("Right")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginRight}
               </span>
@@ -373,7 +375,7 @@ export const UserInputSettings = () => {
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">Left</Label>
+              <Label htmlFor="marginTop">{t("Left")}</Label>
               <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                 {marginLeft}
               </span>
@@ -394,7 +396,7 @@ export const UserInputSettings = () => {
         </AccordionItem>
         <AccordionItem value="styles">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Styles</span>
+            <span className="text-sm font-medium">{t("Styles")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
@@ -404,8 +406,7 @@ export const UserInputSettings = () => {
             className={cn("relative px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "outlined"})}
             >
               <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
-              <UserInputGen {...outlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff"  />
-                {/* <IconButtonGen {...filledPreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
+              <UserInputGen {...outlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff" label={t("Label")}  />
               </Card>
               <Card onClick={() => {
                 addPresetStyles(underlinedPreset)
@@ -413,8 +414,7 @@ export const UserInputSettings = () => {
               className={cn("relative px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "underlined"})}
               >
                 <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
-                <UserInputGen {...underlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff" />
-                {/* <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
+                <UserInputGen {...underlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff" label={t("Label")} />
               </Card>
             </div>
           </AccordionContent>

@@ -34,6 +34,7 @@ import {
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { StyleProperty } from "../types/style.types"
 import { rgba } from "polished"
+import { useTranslations } from "next-intl"
 
 const ICONSTYLES = 'p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent';
 
@@ -104,47 +105,49 @@ export const UserInputGen = ({ ...props }) => {
       >
       {
         !props.floatingLabel && (
+          <>
           <div
-            onClick={() => {
-              setIsActive(true)
-              setIsFocused(true)
-                focusInput()
-            }}
-            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
             }}
-          >
-            {props.label}
-          </div>
+          >{props.label}</div>
+          </>
+
         )
       }
+      {
+      props.floatingLabel && (
       <div
-        onClick={() => {
+      onClick={() => {
+        if(props.floatingLabel){
           setIsActive(true)
           setIsFocused(true)
           focusInput() // Focus the input when placeholder is clicked
-        }}
-        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
-          isActive && props.floatingLabel || inputValue.length > 0 && props.floatingLabel
-            ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-            : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
-        } ${
-          props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
         }
-
-        `
+      }}
+      className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+        isActive && props.floatingLabel || inputValue.length > 0 && props.floatingLabel
+          ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+          : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+      } ${
+        props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
       }
-        style={{
-          fontFamily: `var(${props.primaryFont.value})`,
-          minWidth: `${UserInputSizeValues[props.size]}`,
-          width: `${UserInputSizeValues[props.size]}`,
-        }}
-      >
-        {props.floatingLabel && props.label}
-      </div>
+
+      `
+    }
+      style={{
+        fontFamily: `var(${props.primaryFont.value})`,
+        // minWidth: `${UserInputSizeValues[props.size]}`,
+        // width: `${UserInputSizeValues[props.size]}`,
+      }}
+    >
+      {props.floatingLabel && props.label}
+    </div>
+    )
+      }
 
       <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
       {
@@ -210,10 +213,7 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:ring-transparent focus-visible:ring-offset-0`
         )}
         onChange={(e) =>
-          // setProp((props) => (props.inputValue = e.target.value))
-          // setInputValue(e.target.value)
-          console.log("Input value: ", e.target.value)
-          // console.log("INPUT COMPONENT VALUE", e.target.value)
+          setInputValue(e.target.value)
         }
         onBlur={() => setIsActive(false)}
         autoFocus={isFocused}
@@ -302,6 +302,7 @@ export const UserInput = ({ ...props }) => {
     dragged: state.events.dragged,
     isHovered: state.events.hovered,
   }))
+  const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const secondaryFont = useAppSelector((state) => state?.theme?.text?.secondaryFont)
@@ -341,7 +342,7 @@ export const UserInput = ({ ...props }) => {
         justifyContent: "center",
       }}
     >
-      {isHovered && <Controller nameOfComponent={"INPUT FIELD"} />}
+      {isHovered && <Controller nameOfComponent={t("Input Field")} />}
       <div className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         display: "flex",
@@ -396,7 +397,7 @@ export const UserInput = ({ ...props }) => {
         }
 
       }}
-      className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+      className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
         props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
           ? "top-0 text-sm pl-3 pt-1 text-gray-400"
           : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
@@ -408,8 +409,8 @@ export const UserInput = ({ ...props }) => {
     }
       style={{
         fontFamily: `var(${props.primaryFont.value})`,
-        minWidth: `${UserInputSizeValues[props.size]}`,
-        width: `${UserInputSizeValues[props.size]}`,
+        // minWidth: `${UserInputSizeValues[props.size]}`,
+        // width: `${UserInputSizeValues[props.size]}`,
       }}
     >
       {props.floatingLabel && props.label}

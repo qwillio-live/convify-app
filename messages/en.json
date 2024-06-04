@@ -29,7 +29,16 @@
     "Top" : "Top",
     "Right" : "Right",
     "Bottom" : "Bottom",
+    "Label" : "Label",
     "Left" : "Left",
-    "Styles" : "Styles"
+    "Styles" : "Styles",
+    "Input Field" : "Input Field",
+    "Required" : "Required",
+    "Floating Label" : "Floating Label",
+    "Placeholder" : "Placeholder",
+    "Field Name" : "Field Name",
+    "Enter field name here" : "Enter field name here",
+    "Decorator" : "Decorator",
+    "Input" : "Input"
   }
 }

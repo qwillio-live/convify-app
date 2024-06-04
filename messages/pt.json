@@ -30,6 +30,15 @@
     "Right" : "Direita",
     "Bottom" : "Inferior",
     "Left" : "Esquerda",
-    "Styles" : "Estilos"
+    "Label" : "Rótulo",
+    "Styles" : "Estilos",
+    "Input Field" : "Campo de Entrada",
+    "Required" : "Obrigatório",
+    "Floating Label" : "Rótulo Flutuante",
+    "Placeholder" : "Marcador de posição",
+    "Field Name" : "Nome do Campo",
+    "Enter field name here" : "Digite o nome do campo aqui",
+    "Decorator" : "Decorador",
+    "Input" : "Entrada"
   }
 }
