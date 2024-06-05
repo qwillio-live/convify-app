@@ -52,7 +52,7 @@ export const ScreenListItem = ({
                           "border-blue-500": (selectedScreenIndex === index),
                         }
                       )}
-                      onClick={handleScreenClick(index)}
+                      onClick={() => handleScreenClick(index)}
                     >
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>

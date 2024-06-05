@@ -49,11 +49,7 @@ const initialState: ScreensState = {
     },
   ],
   screensFooter: JSON.stringify(footerScreenData),
-  editorLoad: {
-    screenId: "1",
-    screenName: "button-choice",
-    screenData: JSON.stringify(buttonChoiceData),
-  }
+  editorLoad: buttonChoiceData,
 };
 
 export const screensSlice = createSlice({
