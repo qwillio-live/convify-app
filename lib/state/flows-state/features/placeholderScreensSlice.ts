@@ -18,6 +18,7 @@ export interface ScreensState {
   headerId: string;
   headerMode: boolean;
   footerMode: boolean;
+  renamingScreen: boolean;
   screensHeader: any;
   screensFooter: any;
   screens: ScreenType[];
@@ -30,6 +31,7 @@ const initialState: ScreensState = {
   screensHeader: JSON.stringify(headerScreenData),
   headerMode: false,
   footerMode: false,
+  renamingScreen: false,
   // screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
   screens: [
     {
@@ -130,11 +132,17 @@ export const screensSlice = createSlice({
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array
-      const newScreen = state.screens[action.payload]; // Create new object
+      const newScreen = {
+        screenId: hexoid(8)(),
+        screenName: "",
+        screenData: "",
+      }
+      newScreen.screenData = state.screens[action.payload].screenData; // Create new object
+      newScreen.screenName = "screen-"+newScreen.screenId;
       newScreens.splice(action.payload + 1, 0, newScreen);
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
-      state.editorLoad = newScreen; // Ensure new reference
+      state.editorLoad = newScreen.screenData; // Ensure new reference
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
       if(state.screens.length === 1) return;
@@ -151,6 +159,17 @@ export const screensSlice = createSlice({
 
       state.editorLoad = state.screens[state.selectedScreen]; // Ensure new reference
     },
+    setScreenName: (state, action: PayloadAction<{ screenId: string, screenName: string }>) => {
+      const { screenId, screenName } = action.payload;
+      const screen = state.screens.find(screen => screen.screenId === screenId);
+      if (screen) {
+        screen.screenName = screenName;
+      }
+    },
+    setRenamingScreen: (state, action: PayloadAction<boolean>) => {
+      state.renamingScreen = action.payload;
+    },
+
   },
 });
 
@@ -169,6 +188,8 @@ export const {
   setScreens,
   deleteScreen,
   setHeaderId,
+  setScreenName,
+  setRenamingScreen,
 } = screensSlice.actions;
 
 export default screensSlice.reducer;

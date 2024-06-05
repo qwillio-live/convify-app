@@ -8,10 +8,11 @@ import {
   Delete,
   Edit,
   MousePointer,
+  Pencil,
   PlusCircle,
+  Save,
   Scissors,
   Trash2,
-  Pencil,
 } from "lucide-react"
 import lz from "lzutf8"
 
@@ -21,16 +22,18 @@ import {
   deleteScreen,
   duplicateScreen,
   reorderScreens,
-  setHeaderMode,
+  setEditorLoad,
   setFooterMode,
+  setHeaderFooterMode,
+  setHeaderMode,
+  setScreenFooter,
+  setScreenHeader,
+  setScreenName,
   setScreens,
   setSelectedScreen,
-  setHeaderFooterMode,
-  setEditorLoad,
-  setScreenHeader,
-  setScreenFooter,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
 import {
   Accordion,
@@ -38,6 +41,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
   ContextMenu,
@@ -45,6 +49,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
@@ -53,15 +58,14 @@ import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { DragDrop } from "./drag-drop-screens.component"
 import { ButtonChoiceScreen } from "./screen-button-choice.component"
+import { ScreenListItem } from "./screen-list-item.component"
 import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
-import { RootState } from "@/lib/state/flows-state/store"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { ScreenListItem } from "./screen-list-item.component"
+import { Input } from "@/components/input-custom"
+import ContentEditable from "react-contenteditable"
 
 const ScreensList = () => {
-  const screens = useAppSelector((state:RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]
@@ -71,34 +75,37 @@ const ScreensList = () => {
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor);
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
 
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
- const headerFooterMode = useAppSelector((state) => state?.screen?.headerMode || state?.screen?.footerMode);
+  const headerFooterMode = useAppSelector(
+    (state) => state?.screen?.headerMode || state?.screen?.footerMode
+  )
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
 
-  const themeSettings = useAppSelector((state: RootState) => state.theme);
+  const themeSettings = useAppSelector((state: RootState) => state.theme)
   // const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
 
-
   // React.useEffect(() => {
-    // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
-    //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
-    // console.log("DESERIALIZE CALLED: ")
+  // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+  //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+  // console.log("DESERIALIZE CALLED: ")
 
-      // actions.deserialize(editorLoad.screenData);
-      // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
-    // }
+  // actions.deserialize(editorLoad.screenData);
+  // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+  // }
   // }, []);
 
   const handleReorder = (data) => {
-    dispatch(setScreens(data));
-  };
+    dispatch(setScreens(data))
+  }
 
   // useEffect(() => {
   //   if (selectedScreenIndex !== undefined && screens && selectedScreenIndex >= 0 && selectedScreenIndex < screens.length) {
@@ -108,56 +115,67 @@ const ScreensList = () => {
   //   }
   // }, [selectedScreenIndex, screens]);
 
-  const handleScreenClick =useCallback( async (index: number) => {
-    if (screens && screens[index] && screens[index].screenData) {
-      dispatch(setSelectedScreen(index));
-      await actions.deserialize(screens[index].screenData || {});
-    } else {
-      console.error('screens is undefined, index is out of bounds, or screenData is undefined');
-    }
-  },
-  [dispatch, screens]
-);
-
-  const handleAddScreen = useCallback( async (index: number) => {
-    if(screens && screens[index]){
-    dispatch(addScreen(index));
-    await actions.deserialize(JSON.stringify(emptyScreenData));
-    } else {
-      console.error('screens is undefined or index is out of bounds');
-    }
-  },[dispatch,screens]);
-
-  const handleDuplicateScreen =useCallback( async (index: number) => {
-    if(screens){
-      dispatch(duplicateScreen(index));
-      await actions.deserialize(editorLoad);
-    }
-  },[dispatch,screens])
-
-  const handleDeleteScreen =useCallback( async (index: number) => {
-    if(screens && selectedScreenIndex !== undefined){
-      dispatch(deleteScreen(index))
-      if(index === 0){
-        await actions.deserialize(screens[1].screenData);
-      }else{
-        await actions.deserialize(screens[index-1].screenData);
+  const handleScreenClick = useCallback(
+    async (index: number) => {
+      if (screens && screens[index] && screens[index].screenData) {
+        dispatch(setSelectedScreen(index))
+        await actions.deserialize(screens[index].screenData || {})
+      } else {
+        console.error(
+          "screens is undefined, index is out of bounds, or screenData is undefined"
+        )
       }
-    }
-  },[dispatch,screens])
+    },
+    [dispatch, screens]
+  )
+
+  const handleAddScreen = useCallback(
+    async (index: number) => {
+      if (screens && screens[index]) {
+        dispatch(addScreen(index))
+        await actions.deserialize(JSON.stringify(emptyScreenData))
+      } else {
+        console.error("screens is undefined or index is out of bounds")
+      }
+    },
+    [dispatch, screens]
+  )
+
+  const handleDuplicateScreen = useCallback(
+    async (index: number) => {
+      if (screens) {
+        dispatch(duplicateScreen(index))
+        await actions.deserialize(editorLoad)
+      }
+    },
+    [dispatch, screens]
+  )
+
+  const handleDeleteScreen = useCallback(
+    async (index: number) => {
+      if (screens && selectedScreenIndex !== undefined) {
+        dispatch(deleteScreen(index))
+        if (index === 0) {
+          await actions.deserialize(screens[1].screenData)
+        } else {
+          await actions.deserialize(screens[index - 1].screenData)
+        }
+      }
+    },
+    [dispatch, screens]
+  )
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
-    dispatch(setFooterMode(true));
-    actions.deserialize(screensFooter);
-  };
+    dispatch(setFooterMode(true))
+    actions.deserialize(screensFooter)
+  }
 
   const handleHeaderScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
-    dispatch(setHeaderMode(true));
-    actions.deserialize(screensHeader);
-  };
-
+    dispatch(setHeaderMode(true))
+    actions.deserialize(screensHeader)
+  }
 
   return (
     <Accordion
@@ -216,23 +234,23 @@ const ScreensList = () => {
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
           <div className="section-header flex items-center justify-end">
-              <Button
-                variant={"secondary"}
-                className=""
-                onClick={() => handleAddScreen(selectedScreenIndex || 0)}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Screen
-              </Button>
-            </div>
-            {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
+            <Button
+              variant={"secondary"}
+              className=""
+              onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+            >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Screen
+            </Button>
+          </div>
+          {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
           <Reorder.Group
-          axis="y"
-          onReorder={handleReorder}
-          values={screens || []}
-          // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
-          // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
-          // layoutScroll
+            axis="y"
+            onReorder={handleReorder}
+            values={screens || []}
+            // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
+            // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
+            // layoutScroll
           >
             {screens?.map((screen: any, index) => (
               // <ScreenListItem
@@ -254,22 +272,24 @@ const ScreensList = () => {
                   <ContextMenuTrigger>
                     {" "}
                     <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
-                      <span>{index+1}</span>
-                      <span className="flex flex-row gap-2 items-center text-current bg-slate-500 p-2 grow justify-end hover:cursor-text"><Pencil size={16} />{screen?.screenName ?? "New Screen"}</span>
+                      <span>{index + 1}</span>
+                      <EditScreenName screenId={screen.screenId} screenName={screen.screenName} />
                     </div>
                     <Card
                       style={{ backgroundColor: backgroundColor }}
                       className={cn(
                         "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": (selectedScreenIndex === index),
+                          "border-blue-500": selectedScreenIndex === index,
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
-                        <ResolvedComponentsFromCraftState screen={screen.screenData ? screen.screenData : {}} />
+                        <ResolvedComponentsFromCraftState
+                          screen={screen.screenData ? screen.screenData : {}}
+                        />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
@@ -307,6 +327,44 @@ const ScreensList = () => {
   )
 }
 
+const EditScreenName = ({ screenId,screenName }) => {
+  const dispatch = useAppDispatch();
+  const [editing, setEditing] = React.useState(false);
+  const [name, setName] = React.useState(screenName);
+  const handleChange = (e) => {
+    dispatch(setScreenName({ screenId: screenId, screenName: e }));
+    // setName(e.target.value);
+  };
+
+  return (
+    <>
+    {
+      !editing && (
+        <div
+        onClick={() => setEditing(true)}
+        className="flex flex-row gap-2 items-center  border border-transparent text-current bg-slate-gray-200 p-2 grow justify-end hover:cursor-text">
+        <Pencil size={16} className="shrink-0" />
+        <div className="h-10 p-2">{screenName}</div>
+      </div>
+      )
+    }
+    {
+      editing && (
+        <div className="flex flex-row gap-2 items-center text-current bg-slate-gray-200 p-2 grow justify-end">
+          <Input
+            className="text-right"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() => {handleChange(name); setEditing(false);}}
+            autoFocus
+          />
+        </div>
+      )
+
+    }
+    </>
+  );
+}
 function HelperInformation() {
   return (
     <Card
