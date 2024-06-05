@@ -156,6 +156,13 @@ export const ImgSettings = () => {
     }
   }
 
+  const handleUploadOriginal = () => {
+    if (image) {
+      setProp((props) => (props.src = image), 1000)
+      setShowDialog(false)
+    }
+  }
+
   const cropperRef = React.useRef<ReactCropperElement>(null)
 
   const onCrop = () => {
@@ -424,7 +431,7 @@ export const ImgSettings = () => {
       </Accordion>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent
-          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[60%] relative flex flex-col gap-4 p-4 sm:p-8"
+          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[70%] relative flex flex-col gap-4 p-4 sm:p-8"
           ref={dialogRef}
         >
           <Cropper
@@ -444,7 +451,7 @@ export const ImgSettings = () => {
             highlight={true}
             responsive={true}
           />
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div className="p-1 flex gap-0 bg-secondary rounded-lg">
               <Button
                 variant="secondary"
@@ -513,16 +520,28 @@ export const ImgSettings = () => {
                 9:16
               </Button>
             </div>
-            <Button
-              onClick={getCropData}
-              className="bg-black text-white"
-              disabled={isLoading}
-            >
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Crop Image
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleUploadOriginal}
+                variant="secondary"
+                disabled={isLoading}
+              >
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Upload original
+              </Button>
+              <Button
+                onClick={getCropData}
+                className="bg-black text-white"
+                disabled={isLoading}
+              >
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Upload crop
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
