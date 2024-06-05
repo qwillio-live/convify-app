@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import hexoid  from 'hexoid';
 import buttonChoiceData from "@/components/user/screens/button-choice-screen.json";
 import oneChoiceData from "@/components/user/screens/one-choice-screen.json";
 import oneInputData from "@/components/user/screens/one-input-screen.json";
@@ -123,9 +124,10 @@ export const screensSlice = createSlice({
       state.screens = result;
     },
     addScreen: (state, action: PayloadAction<number>) => {
-      const newId = state.screens.length + 1;
+      const newId = hexoid(8)();
       const newScreens = [...state.screens]; // Create new array
-      newScreens.splice(action.payload + 1, 0, {screenId: newId.toString(),screenName:"Random Name",screenData:JSON.stringify(emptyScreenData)});
+      const screenName = "screen-"+newId;
+      newScreens.splice(action.payload + 1, 0, {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData)});
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference

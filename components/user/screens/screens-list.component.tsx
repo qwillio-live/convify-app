@@ -1,6 +1,6 @@
 "use client"
 
-import React, { use, useEffect } from "react"
+import React, { use, useCallback, useEffect } from "react"
 import { AnimatePresence, Reorder } from "framer-motion"
 import {
   Clipboard,
@@ -11,6 +11,7 @@ import {
   PlusCircle,
   Scissors,
   Trash2,
+  Pencil,
 } from "lucide-react"
 import lz from "lzutf8"
 
@@ -56,6 +57,8 @@ import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
 import { RootState } from "@/lib/state/flows-state/store"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScreenListItem } from "./screen-list-item.component"
 
 const ScreensList = () => {
   const screens = useAppSelector((state:RootState) => state?.screen?.screens)
@@ -104,32 +107,34 @@ const ScreensList = () => {
   //   }
   // }, [selectedScreenIndex, screens]);
 
-  const handleScreenClick = async (index: number) => {
+  const handleScreenClick =useCallback( async (index: number) => {
     if (screens && screens[index] && screens[index].screenData) {
       dispatch(setSelectedScreen(index));
       await actions.deserialize(screens[index].screenData || {});
     } else {
       console.error('screens is undefined, index is out of bounds, or screenData is undefined');
     }
-  };
+  },
+  [dispatch, screens]
+);
 
-  const handleAddScreen =async (index: number) => {
+  const handleAddScreen = useCallback( async (index: number) => {
     if(screens && screens[index]){
     dispatch(addScreen(index));
     await actions.deserialize(JSON.stringify(emptyScreenData));
     } else {
       console.error('screens is undefined or index is out of bounds');
     }
-  };
+  },[dispatch,screens]);
 
-  const handleDuplicateScreen =async (index: number) => {
+  const handleDuplicateScreen =useCallback( async (index: number) => {
     if(screens){
       dispatch(duplicateScreen(index));
       await actions.deserialize(editorLoad);
     }
-  }
+  },[dispatch,screens])
 
-  const handleDeleteScreen =async (index: number) => {
+  const handleDeleteScreen =useCallback( async (index: number) => {
     if(screens && selectedScreenIndex !== undefined){
       dispatch(deleteScreen(index))
       if(index === 0){
@@ -138,7 +143,7 @@ const ScreensList = () => {
         await actions.deserialize(screens[index-1].screenData);
       }
     }
-  }
+  },[dispatch,screens])
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
@@ -219,8 +224,25 @@ const ScreensList = () => {
                 Add Screen
               </Button>
             </div>
-          <Reorder.Group values={screens || []} onReorder={handleReorder}>
+            {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
+          <Reorder.Group
+          axis="y"
+          onReorder={handleReorder}
+          values={screens || []}
+          // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
+          // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
+          // layoutScroll
+          >
             {screens?.map((screen: any, index) => (
+              // <ScreenListItem
+              // key={screen?.screenName}
+              // handleAddScreen={handleAddScreen}
+              // handleDeleteScreen={handleDeleteScreen}
+              // handleDuplicateScreen={handleDuplicateScreen}
+              // handleScreenClick={handleScreenClick}
+              // index={index}
+              // screen={screen}
+              // />
               <Reorder.Item
                 key={screen?.screenName}
                 id={screen?.screenName}
@@ -230,9 +252,9 @@ const ScreensList = () => {
                 <ContextMenu>
                   <ContextMenuTrigger>
                     {" "}
-                    <div className="mt-4 flex flex-row items-center justify-between px-2">
+                    <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
                       <span>{index+1}</span>
-                      <span>{screen?.screenName ?? "New Screen"}</span>
+                      <span className="flex flex-row gap-2 items-center text-current bg-slate-500 p-2 grow justify-end hover:cursor-text"><Pencil size={16} />{screen?.screenName ?? "New Screen"}</span>
                     </div>
                     <Card
                       style={{ backgroundColor: backgroundColor }}
@@ -277,6 +299,7 @@ const ScreensList = () => {
               </Reorder.Item>
             ))}
           </Reorder.Group>
+          {/* </ScrollArea> */}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

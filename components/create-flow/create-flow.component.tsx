@@ -57,6 +57,7 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -100,6 +101,7 @@ export function CreateFlowComponent() {
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
   const startScreen = useAppSelector((state) => state?.screen?.screens[0])
+  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
@@ -199,7 +201,7 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  <Frame data={editorLoad?.screenData ? JSON.parse(editorLoad.screenData) : {}}></Frame>
+                  <Frame data={editorLoad?.screenData && JSON.parse(editorLoad.screenData) }></Frame>
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
