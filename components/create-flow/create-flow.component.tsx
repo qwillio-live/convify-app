@@ -14,6 +14,7 @@ import {
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 // import { ProgressBar } from "../progress-bar.component"
@@ -186,7 +187,10 @@ export function CreateFlowComponent() {
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
                 className="w-full"
-                onValueChange={(value) => setView(value)}
+                onValueChange={(value) => {
+                  setView(value)
+                  dispatch(setMobileScreen(value === VIEWS.MOBILE))
+                }}
               >
                 <TabsContent
                   style={{ backgroundColor: backgroundColor }}

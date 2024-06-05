@@ -31,8 +31,10 @@ import {
   Trophy,
   Type,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { useEditor } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
   AccordionContent,
@@ -46,7 +48,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import { Input } from "@/components/ui/input"
 import CustomLoader from "@/components/ui/loader"
 import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -72,7 +73,7 @@ import {
 } from "../icon-button/user-icon-button.component"
 import { Img, ImgDefaultProps } from "../image/user-image-component"
 import useInputThemePresets from "../input/useInputThemePresets"
-import { UserInput } from "../input/user-input.component"
+import { UserInput, UserInputGen } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -290,6 +291,9 @@ function HelperInformation() {
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
+  const themeBackgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
 
   return (
     <>
@@ -313,6 +317,9 @@ const HoverCardComponent = ({ title, icon, children }) => {
           <HoverCardContent
             className="flex flex-row items-center justify-center px-10 min-w-[382px]"
             forceMount={true}
+            style={{
+              background: themeBackgroundColor,
+            }}
             avoidCollisions
             side="left"
             sideOffset={32}
@@ -326,9 +333,10 @@ const HoverCardComponent = ({ title, icon, children }) => {
 }
 
 export const UserToolbox = () => {
+  const t = useTranslations("Components")
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
-  const { outlinedPreset } = useInputThemePresets()
+  const { outlinedPreset, underlinedPreset } = useInputThemePresets()
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -409,10 +417,7 @@ export const UserToolbox = () => {
                     title="Input field"
                     icon={<TextCursorInput className="mr-2 h-3 w-3" />}
                   >
-                    <Input
-                      placeholder="Placeholder"
-                      className="ring-offset-0 focus-visible:ring-blue-600 focus-visible:ring-offset-0"
-                    />
+                    <UserInputGen {...outlinedPreset} />
                   </HoverCardComponent>
                 </div>
 
@@ -545,13 +550,16 @@ export const UserToolbox = () => {
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Continue Button"
+                    title={t("Continue Button")}
                     icon={<Navigation className="mr-2 h-3 w-3" />}
                   >
                     <IconButtonGen
                       className="w-full"
                       {...filledPreset}
                       size="small"
+                      marginTop={0}
+                      marginBottom={0}
+                      text={t("Continue")}
                     />
                     {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
@@ -687,7 +695,7 @@ export const UserToolbox = () => {
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Image"
+                    title={t("Image")}
                     icon={<ImageIcon className="mr-2 h-3 w-3" />}
                   >
                     <div className="flex w-[360px] flex-row items-center justify-between">

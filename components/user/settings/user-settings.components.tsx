@@ -88,7 +88,7 @@ export const SettingsPanel = () => {
               </div>
             </div>
           )}
-          <Layers expandRootOnLoad={true} />
+          {/* <Layers expandRootOnLoad={true} /> */}
         </ScrollArea>
       </TabsContent>
       <TabsContent value="theme">

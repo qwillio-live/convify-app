@@ -23,10 +23,26 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/custom-slider"
-
+import { Card } from "@/components/ui/card"
 import { Controller } from "../settings/controller.component"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { MoveHorizontal } from "lucide-react"
+import {
+  Activity,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  Disc,
+  DollarSign,
+  Mountain,
+  MoveHorizontal,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalSpaceBetween
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import useInputThemePresets from "./useInputThemePresets"
+import { UserInput, UserInputGen } from "./user-input.component"
 
 export const UserInputSettings = () => {
   const {
@@ -47,6 +63,20 @@ export const UserInputSettings = () => {
     textColor: node.data.props.textColor,
     width: node.data.props.width,
   }))
+  enum PRESETNAMES {
+    outlined= "outlined",
+    underlined= "underlined"
+  }
+  const {outlinedPreset, underlinedPreset} = useInputThemePresets();
+  const addPresetStyles = (preset) => {
+    const staticStyles = ["error","inputRequired","label","placeHolder","backgroundColor","fieldName","floatingLabel","settingsTab","inputValue","icon","enableIcon","size","fullWidth","marginLeft","marginTop","marginRight","marginBottom"]
+    setProp((props) => {
+      Object.keys(preset).forEach((key) => {
+        if(!staticStyles.includes(key))
+        props[key] = preset[key]
+      })
+    }, 1000)
+  }
   const throttledSetProp = useCallback(
     throttle((property,value) => {
       setProp((prop) => {prop[property] = value},0);
@@ -59,16 +89,25 @@ export const UserInputSettings = () => {
   };
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-1">
+      <Accordion
+      value={props.settingsTab || "content"}
+      onValueChange={(value) => {
+        setProp((props) => (props.settingsTab = value), 200)
+      }}
+      type="single" collapsible className="w-full">
+      <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Content Options </span>
+            <span className="text-sm font-medium">Content</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
             <Checkbox
-            value={props.inputRequired}
-            onChange={(e) => setProp((props) => (props.inputRequired = e),1000)}
+            value={props.error}
+            checked={props.error}
+            onCheckedChange={(e) => {
+              setProp((props) => (props.inputRequired = e),200)
+              setProp((props) => (props.error = !props.error),200)
+            }}
             id="required" />
               <label
                 htmlFor="required"
@@ -140,11 +179,100 @@ export const UserInputSettings = () => {
 
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-3">
+        <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">Design</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
+          <div className="flex flex-row items-center col-span-2 space-x-2">
+              <Checkbox
+                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
+                checked={props.enableIcon}
+                onCheckedChange={(e) => {
+                  // setProp((props) => (props.enableIcon = e), 1000)
+                  handlePropChange("enableIcon",e);
+                }}
+                id="enableIcon"
+              />
+              <label
+                htmlFor="enableIcon"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Enable icon
+              </label>
+            </div>
+
+          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+          {props.enableIcon && (
+                <>
+                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <Select
+                    defaultValue={props.icon}
+                    onValueChange={(e) => {
+                      setProp((props) => (props.icon = e), 1000)
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select icon" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="arrowright">
+                          <ArrowRight />
+                        </SelectItem>
+                        <SelectItem value="aperture">
+                          <Aperture />
+                        </SelectItem>
+                        <SelectItem value="activity">
+                          <Activity />
+                        </SelectItem>
+                        <SelectItem value="dollarsign">
+                          <DollarSign />
+                        </SelectItem>
+                        <SelectItem value="anchor">
+                          <Anchor />
+                        </SelectItem>
+                        <SelectItem value="disc">
+                          <Disc />
+                        </SelectItem>
+                        <SelectItem value="mountain">
+                          <Mountain />
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-row items-center col-span-2 space-x-2">
+                <label
+                  htmlFor="backgroundcolor"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                >
+                  Background Color
+                </label>
+                <Input
+                  // defaultValue={themeBackgroundColor}
+                  // value={containerBackground}
+                  value={props.backgroundColor}
+                  onChange={(e) => {
+                    // debouncedSetProp("containerBackground",e.target.value)
+                  handlePropChange  ('backgroundColor',e.target.value);
+                  }}
+                  className="basis-1/3"
+                  type={"color"}
+                  id="backgroundcolor"
+                />
+              </div>
+
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="spacing">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Spacing </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Width</p>
               <Tabs
@@ -167,24 +295,6 @@ export const UserInputSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Background</p>
-              <Input
-                type="color"
-                value={props.backgroundColor}
-                onChange={(e) => {
-                  // setProp((props) => (props.backgroundColor = e.target.value), 1000)
-                  handlePropChange('backgroundColor',e.target.value);
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Spacing </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
@@ -270,6 +380,33 @@ export const UserInputSettings = () => {
                   handlePropChange("marginLeft",e)
                 }
               />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="styles">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Styles</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
+            <Card onClick={() => {
+              addPresetStyles(outlinedPreset)
+            }}
+            className={cn("relative px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "outlined"})}
+            >
+              <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+              <UserInputGen {...outlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff"  />
+                {/* <IconButtonGen {...filledPreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
+              </Card>
+              <Card onClick={() => {
+                addPresetStyles(underlinedPreset)
+              }}
+              className={cn("relative px-2 py-0 hover:cursor-pointer transition-all duration-300", {"border-blue-500" : props.preset === "underlined"})}
+              >
+                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <UserInputGen {...underlinedPreset} floatingLabel={true} size="full" enableIcon={false} marginLeft="0" marginRight="0" backgroundColor="#fff" />
+                {/* <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} /> */}
+              </Card>
             </div>
           </AccordionContent>
         </AccordionItem>

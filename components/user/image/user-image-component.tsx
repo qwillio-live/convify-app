@@ -2,6 +2,7 @@ import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
 
 import "cropperjs/dist/cropper.css"
 import React from "react"
+import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
 
 import { useNode } from "@/lib/craftjs"
@@ -85,6 +86,7 @@ export const Img = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const t = useTranslations("Components")
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -92,7 +94,7 @@ export const Img = ({
         `relative flex flex-row justify-${align} w-full border border-transparent`
       )}
     >
-      {isHovered && <Controller nameOfComponent={"Image"} />}
+      {isHovered && <Controller nameOfComponent={t("Image")} />}
       {
         /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
@@ -124,6 +126,8 @@ export const ImgSettings = () => {
   const [activeAspectRatioBtn, setActiveAspectRatioBtn] =
     React.useState<string>("source")
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+  const t = useTranslations("Components")
 
   const {
     actions: { setProp },
@@ -227,8 +231,8 @@ export const ImgSettings = () => {
     <>
       <Card className="p-2">
         <CardHeader className="p-2">
-          <CardTitle>Image</CardTitle>
-          <CardDescription>Add url of image</CardDescription>
+          <CardTitle>{t("Image")}</CardTitle>
+          <CardDescription>{t("Add url of image")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-2 p-2">
           <Input
@@ -236,7 +240,7 @@ export const ImgSettings = () => {
             className="w-full p-2 text-xs"
             onChange={(e) => setProp((props) => (props.src = e.target.value))}
           />
-          <span className="text-muted-foreground">Upload image</span>
+          <span className="text-muted-foreground">{t("Upload image")}</span>
           <Input
             type="file"
             className="hidden"
@@ -266,7 +270,7 @@ export const ImgSettings = () => {
                 <circle cx="9" cy="9" r="2" />
               </svg>
               <span className="text-sm font-semibold text-black mt-1">
-                Upload
+                {t("Upload")}
               </span>
             </div>
             <img src={src} alt={alt} className="w-30" />
@@ -276,11 +280,11 @@ export const ImgSettings = () => {
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">General </span>
+            <span className="text-sm font-medium">{t("General")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Alt label</p>
+              <p className="text-sm text-muted-foreground">{t("Alt label")}</p>
               <Input
                 className="p-2 text-sm"
                 value={alt}
@@ -292,7 +296,7 @@ export const ImgSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Width</p>
+              <p className="text-sm text-muted-foreground">{t("Width")}</p>
               <Input
                 defaultValue={width}
                 className="w-full"
@@ -303,7 +307,7 @@ export const ImgSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Height</p>
+              <p className="text-sm text-muted-foreground">{t("Height")}</p>
               <Input
                 defaultValue={height}
                 className="w-full"
@@ -316,7 +320,7 @@ export const ImgSettings = () => {
         </AccordionItem>
         <AccordionItem value="item-3">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Spacing</span>
+            <span className="text-sm font-medium">{t("Spacing")}</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
             <div className="style-control flex flex-col gap-2">
@@ -333,7 +337,9 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Bottom</Label>
+              <Label className="text-sm text-muted-foreground">
+                {t("Bottom")}
+              </Label>
               <Input
                 type="number"
                 placeholder={marginBottom}
@@ -349,7 +355,9 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Left</Label>
+              <Label className="text-sm text-muted-foreground">
+                {t("Left")}
+              </Label>
               <Input
                 type="number"
                 placeholder={marginLeft}
@@ -362,7 +370,9 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Right</Label>
+              <Label className="text-sm text-muted-foreground">
+                {t("Right")}
+              </Label>
               <Input
                 type="number"
                 placeholder={marginRight}
@@ -378,11 +388,11 @@ export const ImgSettings = () => {
         </AccordionItem>
         <AccordionItem value="item-4">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Appearance </span>
+            <span className="text-sm font-medium">{t("Appearance")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background</p>
+              <p className="text-sm text-muted-foreground">{t("Background")}</p>
               <Input
                 type="color"
                 value={background}
@@ -392,7 +402,7 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Align</p>
+              <p className="text-sm text-muted-foreground">{t("Align")}</p>
               <RadioGroup
                 value={align}
                 onValueChange={(value) =>
@@ -401,20 +411,20 @@ export const ImgSettings = () => {
               >
                 <div className="flex flex-row gap-2">
                   <RadioGroupItem value="start" id="al-1" />
-                  <Label htmlFor="al-1">Left</Label>
+                  <Label htmlFor="al-1">{t("Left")}</Label>
                 </div>
                 <div className="flex flex-row gap-2">
                   <RadioGroupItem value="center" id="al-2" />
-                  <Label htmlFor="al-1">Center</Label>
+                  <Label htmlFor="al-1">{t("Center")}</Label>
                 </div>
                 <div className="flex flex-row gap-2">
                   <RadioGroupItem value="end" id="al-3" />
-                  <Label htmlFor="al-1">Right</Label>
+                  <Label htmlFor="al-1">{t("Right")}</Label>
                 </div>
               </RadioGroup>
             </div>
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Radius</p>
+              <p className="text-sm text-muted-foreground">{t("Radius")}</p>
               <Input
                 type="number"
                 placeholder={radius}
@@ -462,7 +472,7 @@ export const ImgSettings = () => {
                 }`}
                 onClick={aspectRatioSource}
               >
-                Source
+                {t("Source")}
               </Button>
               <Button
                 variant="secondary"
@@ -529,7 +539,7 @@ export const ImgSettings = () => {
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Upload original
+                {t("Upload original")}
               </Button>
               <Button
                 onClick={getCropData}
@@ -539,7 +549,7 @@ export const ImgSettings = () => {
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Upload crop
+                {t("Upload crop")}
               </Button>
             </div>
           </div>
