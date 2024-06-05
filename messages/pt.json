@@ -22,6 +22,7 @@
     "M": "M",
     "L": "L",
     "Background Color": "Cor de Fundo",
+    "Background Image": "Imagem de fundo",
     "Button Size": "Tamanho do Botão",
     "Content Align": "Alinhamento do Conteúdo",
     "Spacing": "Espaçamento",
@@ -44,6 +45,8 @@
     "Radius": "Raio",
     "Source": "Fonte",
     "Upload original": "Carregar original",
-    "Upload crop": "Carregar corte"
+    "Upload crop": "Carregar corte",
+    "Primary Color": "Cor primária",
+    "Secondary Color": "Cor Secundária"
   }
 }

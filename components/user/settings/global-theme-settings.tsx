@@ -1,7 +1,8 @@
-import React,{useCallback} from "react"
-import { throttle,debounce } from 'lodash';
-import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
-import { setBackgroundColor, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { useCallback, useState } from "react"
+import { debounce, throttle } from "lodash"
+import { useTranslations } from "next-intl"
+
+import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
@@ -9,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import ImageUpload from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -18,76 +20,136 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
   const dispatch = useAppDispatch()
 
+  const t = useTranslations("Components")
+
+  const [image, setImage] = useState<string>("")
+
   /** GENERAL STYLES */
-  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor)
-  const defaultPrimaryColor = useAppSelector((state) => state.theme?.defaultGeneral?.primaryColor)
-  const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor)
-  const defaultSecondaryColor = useAppSelector((state) => state.theme?.defaultGeneral?.secondaryColor)
-  const backgroundColor = useAppSelector((state) => state.theme?.general?.backgroundColor)
-  const defaultBackgroundColor = useAppSelector((state) => state.theme?.defaultGeneral?.backgroundColor)
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
+  const defaultPrimaryColor = useAppSelector(
+    (state) => state.theme?.defaultGeneral?.primaryColor
+  )
+  const secondaryColor = useAppSelector(
+    (state) => state.theme?.general?.secondaryColor
+  )
+  const defaultSecondaryColor = useAppSelector(
+    (state) => state.theme?.defaultGeneral?.secondaryColor
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state.theme?.general?.backgroundColor
+  )
+  const backgroundImage = useAppSelector(
+    (state) => state.theme?.general?.backgroundImage
+  )
+  const defaultBackgroundColor = useAppSelector(
+    (state) => state.theme?.defaultGeneral?.backgroundColor
+  )
 
   /** TEXT STYLES */
   const primaryFonts = useAppSelector((state) => state.theme?.primaryFonts)
   const secondaryFonts = useAppSelector((state) => state.theme?.secondaryFonts)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
-  const defaultPrimaryFont = useAppSelector((state) => state.theme?.defaultText?.primaryFont)
+  const defaultPrimaryFont = useAppSelector(
+    (state) => state.theme?.defaultText?.primaryFont
+  )
   const secondaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
-  const defaultSecondaryFont = useAppSelector((state) => state.theme?.defaultText?.secondaryFont)
-  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
-  const defaultPrimaryTextColor = useAppSelector((state) => state.theme?.defaultText?.primaryColor);
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
-  const defaultSecondaryTextColor = useAppSelector((state) => state.theme?.defaultText?.secondaryColor);
+  const defaultSecondaryFont = useAppSelector(
+    (state) => state.theme?.defaultText?.secondaryFont
+  )
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
+  const defaultPrimaryTextColor = useAppSelector(
+    (state) => state.theme?.defaultText?.primaryColor
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
+  const defaultSecondaryTextColor = useAppSelector(
+    (state) => state.theme?.defaultText?.secondaryColor
+  )
 
   const handleApplyTheme = (themeStyles) => {
-    dispatch({ type: 'APPLY_THEME_AND_CYCLE_SCREENS', payload: themeStyles });
-  };
+    dispatch({ type: "APPLY_THEME_AND_CYCLE_SCREENS", payload: themeStyles })
+  }
 
   const handleFileChange = (e) => {
-    if (!e?.target?.files?.length) return;
-    const file = e?.target?.files[0];
-    const objectUrl = URL.createObjectURL(file);
+    // if (!e?.target?.files?.length) return
+    // const file = e?.target?.files[0]
+    // const objectUrl = URL.createObjectURL(file)
+    // console.log(objectUrl)
 
-    dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }));
-  };
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const result = reader.result
+        handleStyleChangeDebounced({
+          general: { backgroundImage: `url(${result})` },
+        })
+      }
+      reader.readAsDataURL(file)
+    }
+
+    // dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }))
+  }
   const throttledDispatch = useCallback(
     throttle((value) => {
-      dispatch(setPartialStyles(value));
+      dispatch(setPartialStyles(value))
     }, 200), // Throttle to 200ms
     [dispatch]
-  );
+  )
 
   const handleStyleChange = (style) => {
-    throttledDispatch(style);
-  };
+    throttledDispatch(style)
+  }
 
   const debouncedDispatch = useCallback(
-    debounce((value) => {
-      dispatch(setPartialStyles(value));
-    }, 200,{
-      maxWait: 400,
-    } ), // Throttle to 200ms
+    debounce(
+      (value) => {
+        dispatch(setPartialStyles(value))
+      },
+      200,
+      {
+        maxWait: 400,
+      }
+    ), // Throttle to 200ms
     [dispatch]
-  );
+  )
 
   const handleStyleChangeDebounced = (style) => {
-    debouncedDispatch(style);
+    debouncedDispatch(style)
+  }
+
+  const handleUploadComplete = (url: string) => {
+    handleStyleChangeDebounced({
+      general: { backgroundImage: `url(${url})` },
+    })
+  }
+
+  const removeSelectedImage = () => {
+    // setLoading(false)
+    // setUploadedImagePath(null)
+    // setSelectedImage(null)
+    handleStyleChangeDebounced({
+      general: { backgroundImage: `` },
+    })
   }
 
   return (
     <>
       <ScrollArea>
-        <Accordion type="single"
-        defaultValue="item-1"
-        className="w-full">
+        <Accordion type="single" defaultValue="item-1" className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
               <span className="text-sm font-medium">General </span>
@@ -98,14 +160,16 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarycolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Primary Color
+                  {t("Primary Color")}
                 </label>
                 <Input
                   value={primaryColor || defaultPrimaryColor}
                   onChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
-                    handleStyleChangeDebounced({general: { primaryColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      general: { primaryColor: e.target.value },
+                    })
                   }}
                   className=" basis-1/3"
                   type={"color"}
@@ -118,14 +182,16 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="secondarycolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Secondary Color
+                  {t("Secondary Color")}
                 </label>
                 <Input
-                value={secondaryColor || defaultSecondaryColor}
-                onChange={(e) => {
-                  // handleStyleChange({general: { secondaryColor: e.target.value}})
-                  handleStyleChangeDebounced({general: { secondaryColor: e.target.value}})
-                }}
+                  value={secondaryColor || defaultSecondaryColor}
+                  onChange={(e) => {
+                    // handleStyleChange({general: { secondaryColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      general: { secondaryColor: e.target.value },
+                    })
+                  }}
                   className=" basis-1/3"
                   type={"color"}
                   id="secondarycolor"
@@ -137,13 +203,15 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundcolor"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
                 >
-                  Background Color
+                  {t("Background Color")}
                 </label>
                 <Input
                   value={backgroundColor || defaultBackgroundColor}
                   onChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
-                    handleStyleChangeDebounced({general: { backgroundColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      general: { backgroundColor: e.target.value },
+                    })
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className=" basis-1/3"
@@ -157,9 +225,9 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundimage"
                   className="text-sm self-start font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
                 >
-                  Background Image
+                  {t("Background Image")}
                 </label>
-                <Input
+                {/* <Input
                   onChange={handleFileChange}
                   multiple={false}
                   className="basis-full"
@@ -167,6 +235,11 @@ export const GlobalThemeSettings = (props: Props) => {
                   placeholder="Upload Image"
                   accept="image/*"
                   id="backgroundimage"
+                /> */}
+                <ImageUpload
+                  onUploadComplete={handleUploadComplete}
+                  backgroundImage={backgroundImage}
+                  removeSelectedImage={removeSelectedImage}
                 />
               </div>
             </AccordionContent>
@@ -189,8 +262,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   onValueChange={(value) => {
                     handleStyleChange({ text: { primaryFont: value } })
                     // handleApplyTheme({text: { primaryFont: value}})
-                  }
-                  }
+                  }}
                 >
                   <SelectTrigger className="basis-full self-start">
                     <SelectValue placeholder="Primary font" />
@@ -219,8 +291,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   onValueChange={(value) => {
                     handleStyleChange({ text: { secondaryFont: value } })
                     // handleApplyTheme({text: { secondaryFont: value}})
-                  }
-                  }
+                  }}
                 >
                   <SelectTrigger className="basis-full self-start">
                     <SelectValue placeholder="Secondary font" />
@@ -245,14 +316,13 @@ export const GlobalThemeSettings = (props: Props) => {
                   Primary Text Color
                 </label>
                 <Input
-                value={primaryTextColor || defaultPrimaryTextColor}
-                onChange={(e) =>
-                  {
-                    handleStyleChangeDebounced({text: { primaryColor: e.target.value}})
+                  value={primaryTextColor || defaultPrimaryTextColor}
+                  onChange={(e) => {
+                    handleStyleChangeDebounced({
+                      text: { primaryColor: e.target.value },
+                    })
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
-                  }
-
-                }
+                  }}
                   className=" basis-1/3"
                   type={"color"}
                   id="primarytextcolor"
@@ -267,12 +337,13 @@ export const GlobalThemeSettings = (props: Props) => {
                   Secondary Text Color
                 </label>
                 <Input
-                value={secondaryTextColor || defaultSecondaryTextColor}
-                onChange={(e) => {
-                  handleStyleChangeDebounced({text: { secondaryColor: e.target.value}})
-                  // handleApplyTheme({text: { secondaryColor: e.target.value}})
-                  }
-                }
+                  value={secondaryTextColor || defaultSecondaryTextColor}
+                  onChange={(e) => {
+                    handleStyleChangeDebounced({
+                      text: { secondaryColor: e.target.value },
+                    })
+                    // handleApplyTheme({text: { secondaryColor: e.target.value}})
+                  }}
                   className=" basis-1/3"
                   type={"color"}
                   id="secondarytextcolor"

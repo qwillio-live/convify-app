@@ -22,6 +22,7 @@
     "M": "M",
     "L": "L",
     "Background Color": "Background Color",
+    "Background Image": "Background Image",
     "Button Size": "Button Size",
     "Content Align": "Content Align",
     "Spacing": "Spacing",
@@ -44,6 +45,8 @@
     "Radius": "Radius",
     "Source": "Source",
     "Upload original": "Upload original",
-    "Upload crop": "Upload crop"
+    "Upload crop": "Upload crop",
+    "Primary Color": "Primary Color",
+    "Secondary Color": "Secondary Color"
   }
 }

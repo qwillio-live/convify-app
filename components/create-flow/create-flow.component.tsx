@@ -97,6 +97,9 @@ export function CreateFlowComponent() {
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+  const backgroundImage = useAppSelector(
+    (state) => state?.theme?.general?.backgroundImage
+  )
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
@@ -111,6 +114,8 @@ export function CreateFlowComponent() {
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
   // },[dispatch])
+
+  console.log(backgroundImage)
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -193,7 +198,13 @@ export function CreateFlowComponent() {
                 }}
               >
                 <TabsContent
-                  style={{ backgroundColor: backgroundColor }}
+                  style={{
+                    backgroundColor: backgroundColor,
+                    backgroundImage: backgroundImage,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
                   className={cn(
                     "mx-auto page-container min-h-[400px] box-content font-sans antialiased z-20",
                     view == VIEWS.DESKTOP

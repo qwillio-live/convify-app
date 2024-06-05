@@ -1,35 +1,21 @@
 "use client"
 
-import React, { use, useEffect } from "react"
-import { AnimatePresence, Reorder } from "framer-motion"
-import {
-  Clipboard,
-  ClipboardCopy,
-  Delete,
-  Edit,
-  MousePointer,
-  PlusCircle,
-  Scissors,
-  Trash2,
-} from "lucide-react"
-import lz from "lzutf8"
+import { Reorder } from "framer-motion"
+import { ClipboardCopy, MousePointer, PlusCircle, Trash2 } from "lucide-react"
 
-import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
+import { Frame, useEditor } from "@/lib/craftjs"
 import {
   addScreen,
   deleteScreen,
   duplicateScreen,
-  reorderScreens,
-  setHeaderMode,
   setFooterMode,
+  setHeaderFooterMode,
+  setHeaderMode,
   setScreens,
   setSelectedScreen,
-  setHeaderFooterMode,
-  setEditorLoad,
-  setScreenHeader,
-  setScreenFooter,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
 import {
   Accordion,
@@ -37,6 +23,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
   ContextMenu,
@@ -46,19 +33,11 @@ import {
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
-import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
-import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
-import { DragDrop } from "./drag-drop-screens.component"
-import { ButtonChoiceScreen } from "./screen-button-choice.component"
-import { ScreenOneChoice } from "./screen-one-choice.component"
-import { ScreenOneInput } from "./screen-one-input.component"
-import { RootState } from "@/lib/state/flows-state/store"
-import { Button } from "@/components/ui/button"
 
 const ScreensList = () => {
-  const screens = useAppSelector((state:RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]
@@ -68,33 +47,39 @@ const ScreensList = () => {
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor);
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const backgroundImage = useAppSelector(
+    (state) => state?.theme?.general?.backgroundImage
+  )
 
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
- const headerFooterMode = useAppSelector((state) => state?.screen?.headerMode || state?.screen?.footerMode);
+  const headerFooterMode = useAppSelector(
+    (state) => state?.screen?.headerMode || state?.screen?.footerMode
+  )
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
 
-  const themeSettings = useAppSelector((state: RootState) => state.theme);
+  const themeSettings = useAppSelector((state: RootState) => state.theme)
   // const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
 
-
   // React.useEffect(() => {
-    // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
-    // //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
-    // console.log("DESERIALIZE CALLED: ")
-    //   actions.deserialize(editorLoad);
-    //   setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
-    // }
+  // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+  // //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+  // console.log("DESERIALIZE CALLED: ")
+  //   actions.deserialize(editorLoad);
+  //   setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+  // }
   // }, [editorLoad]);
 
   const handleReorder = (data) => {
-    dispatch(setScreens(data));
-  };
+    dispatch(setScreens(data))
+  }
 
   // useEffect(() => {
   //   if (selectedScreenIndex !== undefined && screens && selectedScreenIndex >= 0 && selectedScreenIndex < screens.length) {
@@ -106,52 +91,51 @@ const ScreensList = () => {
 
   const handleScreenClick = async (index: number) => {
     if (screens && screens[index]) {
-      dispatch(setSelectedScreen(index));
-      await actions.deserialize(screens[index]);
+      dispatch(setSelectedScreen(index))
+      await actions.deserialize(screens[index])
     } else {
-      console.error('screens is undefined or index is out of bounds');
-    }
-  };
-
-  const handleAddScreen =async (index: number) => {
-    if(screens && screens[index]){
-    dispatch(addScreen(index));
-    await actions.deserialize(JSON.stringify(emptyScreenData));
-    } else {
-      console.error('screens is undefined or index is out of bounds');
-    }
-  };
-
-  const handleDuplicateScreen =async (index: number) => {
-    if(screens){
-      dispatch(duplicateScreen(index));
-      await actions.deserialize(editorLoad);
+      console.error("screens is undefined or index is out of bounds")
     }
   }
 
-  const handleDeleteScreen =async (index: number) => {
-    if(screens && selectedScreenIndex !== undefined){
+  const handleAddScreen = async (index: number) => {
+    if (screens && screens[index]) {
+      dispatch(addScreen(index))
+      await actions.deserialize(JSON.stringify(emptyScreenData))
+    } else {
+      console.error("screens is undefined or index is out of bounds")
+    }
+  }
+
+  const handleDuplicateScreen = async (index: number) => {
+    if (screens) {
+      dispatch(duplicateScreen(index))
+      await actions.deserialize(editorLoad)
+    }
+  }
+
+  const handleDeleteScreen = async (index: number) => {
+    if (screens && selectedScreenIndex !== undefined) {
       dispatch(deleteScreen(index))
-      if(index === 0){
-        await actions.deserialize(screens[1]);
-      }else{
-        await actions.deserialize(screens[index-1]);
+      if (index === 0) {
+        await actions.deserialize(screens[1])
+      } else {
+        await actions.deserialize(screens[index - 1])
       }
     }
   }
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
-    dispatch(setFooterMode(true));
-    actions.deserialize(screensFooter);
-  };
+    dispatch(setFooterMode(true))
+    actions.deserialize(screensFooter)
+  }
 
   const handleHeaderScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
-    dispatch(setHeaderMode(true));
-    actions.deserialize(screensHeader);
-  };
-
+    dispatch(setHeaderMode(true))
+    actions.deserialize(screensHeader)
+  }
 
   return (
     <Accordion
@@ -210,15 +194,15 @@ const ScreensList = () => {
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
           <div className="section-header flex items-center justify-end">
-              <Button
-                variant={"secondary"}
-                className=""
-                onClick={() => handleAddScreen(selectedScreenIndex || 0)}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Screen
-              </Button>
-            </div>
+            <Button
+              variant={"secondary"}
+              className=""
+              onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+            >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Screen
+            </Button>
+          </div>
           <Reorder.Group values={screens || []} onReorder={handleReorder}>
             {screens?.map((screen: any, index) => (
               <Reorder.Item
@@ -234,11 +218,14 @@ const ScreensList = () => {
                       {screen?.ROOT?.displayName ?? "New Screen"}
                     </div>
                     <Card
-                      style={{ backgroundColor: backgroundColor }}
+                      style={{
+                        backgroundColor: backgroundColor,
+                        backgroundImage: backgroundImage,
+                      }}
                       className={cn(
                         "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": (selectedScreenIndex === index),
+                          "border-blue-500": selectedScreenIndex === index,
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
