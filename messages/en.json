@@ -9,5 +9,14 @@
   },
   "Dashboard": {
     "There's not a flow in sight": "There's not a flow in sight"
+  },
+  "CreateFlow": {
+    "PictureChoice": {
+      "icon" : "Select Icons",
+      "iconDesc": "Make changes to your icons here.",
+      "emoji": "Select Emoji",
+      "image": "Select Image",
+      "remove": "Remove"
+    }
   }
 }

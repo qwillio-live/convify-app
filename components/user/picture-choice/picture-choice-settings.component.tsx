@@ -54,6 +54,7 @@ import {
   ThumbsUp,
   Trash2,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const PictureChoiceSettings = () => {
   const controls = useDragControls()
@@ -456,6 +457,8 @@ export const PictureChoiceItem = ({ item, index }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const t = useTranslations("CreateFlow")
+
 
   const handleDropdownClick = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -586,23 +589,23 @@ export const PictureChoiceItem = ({ item, index }) => {
               <DialogTrigger asChild>
                 <DropdownMenuItem>
                   <ThumbsUp className="mr-2 size-4" />
-                  <span>Select Icon</span>
+                  <span>{t("PictureChoice.icon")}</span>
                 </DropdownMenuItem>
               </DialogTrigger>
               <DropdownMenuItem onClick={handleOpenEmojiPicker} ref={dropdownRef}>
                 <SmilePlus className="mr-2 size-4" />
-                <span>Select Emoji</span>
+                <span>{t("PictureChoice.emoji")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => (inputRef.current as HTMLInputElement)?.click()}
               >
                 <ImageIcon className="mr-2 size-4" />
-                <span>Select Image</span>
+                <span>{t("PictureChoice.image")}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleRemoveItem} className="focus:bg-red-500 focus:text-white">
                 <Trash2 className="mr-2 size-4" />
-                <span>Remove</span>
+                <span>{t("PictureChoice.remove")}</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -612,9 +615,9 @@ export const PictureChoiceItem = ({ item, index }) => {
           <DialogHeader className="sticky top-0 bg-white z-10 p-4 shadow-sm">
             <div className="flex items-center justify-start gap-4">
               <div>
-                <DialogTitle>Choose Icons</DialogTitle>
+                <DialogTitle>{t("PictureChoice.icon")}</DialogTitle>
                 <DialogDescription>
-                  Make changes to your icons here.
+                  {t("PictureChoice.iconDesc")}
                 </DialogDescription>
               </div>
               <div className="relative ml-auto flex-1 md:grow-0 flex items-center">
