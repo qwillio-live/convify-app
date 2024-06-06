@@ -4,6 +4,7 @@ import { IconButtonProps, IconButtonSizes } from "./user-icon-button.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken, rgba } from "polished";
 import { useTranslations } from "next-intl";
+import hexoid from "hexoid";
 
 const useButtonThemePresets = () => {
   const t = useTranslations("Components")
@@ -75,7 +76,9 @@ const useButtonThemePresets = () => {
     fullWidth: true,
     preset: 'filled',
     settingsTab: 'content',
-    buttonSize: 'medium'
+    buttonSize: 'medium',
+    tracking: false,
+    trackingEvent: "button-"+hexoid(6)().toLowerCase(),
   };
 
   const outLinePreset: IconButtonProps = {
@@ -143,7 +146,9 @@ const useButtonThemePresets = () => {
     fullWidth: true,
     preset: 'outline',
     settingsTab: 'content',
-    buttonSize: 'medium'
+    buttonSize: 'medium',
+    tracking: false,
+    trackingEvent: "button-"+hexoid(6)().toLowerCase(),
   };
 
   return { filledPreset, outLinePreset };

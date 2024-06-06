@@ -6,6 +6,7 @@ import oneInputData from "@/components/user/screens/one-input-screen.json";
 import footerScreenData from "@/components/user/screens/screen-footer.json";
 import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
+import { toast } from "sonner";
 
 type ScreenType = {
   screenId: string;
@@ -162,7 +163,13 @@ export const screensSlice = createSlice({
     setScreenName: (state, action: PayloadAction<{ screenId: string, screenName: string }>) => {
       const { screenId, screenName } = action.payload;
       const screen = state.screens.find(screen => screen.screenId === screenId);
-      if (screen) {
+      const duplicateName = state.screens.find(screen => screen.screenName === screenName);
+      if(duplicateName) {
+        console.log("DUPLICATE SCREEN NAMES")
+        toast("Event has been created.")
+        return;
+      }else if(screen) {
+        console.log("DUPLICATE NEVER REACHED")
         screen.screenName = screenName;
       }
     },

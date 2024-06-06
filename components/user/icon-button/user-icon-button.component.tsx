@@ -42,6 +42,7 @@ import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButtonThemePresets"
 import { useTranslations } from "next-intl";
+import { track } from "@vercel/analytics/react";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -537,6 +538,8 @@ export type IconButtonProps = {
   preset: string
   settingsTab: string
   buttonSize: string
+  tracking: boolean
+  trackingEvent: string
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -605,7 +608,9 @@ export const IconButtonDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: 'filled',
-  settingsTab: 'content'
+  settingsTab: 'content',
+  tracking: false,
+  trackingEvent: 'button_clicked',
 
 }
 

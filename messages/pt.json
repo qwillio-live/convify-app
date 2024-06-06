@@ -54,6 +54,10 @@
     "Primary Font" : "Fonte Primária",
     "Secondary Font" : "Fonte Secundária",
     "Primary Text Color" : "Cor do Texto Primário",
-    "Secondary Text Color" : "Cor do Texto Secundário"
+    "Secondary Text Color" : "Cor do Texto Secundário",
+    "Tracking" : "Rastreamento",
+    "Tracking activated" : "Rastreamento ativado",
+    "Event Name" : "Nome do Evento",
+    "Tracking Event" : "Evento de Rastreamento"
   }
 }

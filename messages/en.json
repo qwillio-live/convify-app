@@ -54,6 +54,10 @@
     "Primary Font" : "Primary Font",
     "Secondary Font" : "Secondary Font",
     "Primary Text Color" : "Primary Text Color",
-    "Secondary Text Color" : "Secondary Text Color"
+    "Secondary Text Color" : "Secondary Text Color",
+    "Tracking" : "Tracking",
+    "Tracking activated" : "Tracking activated",
+    "Event Name" : "Event Name",
+    "Tracking Event" : "Tracking Event"
   }
 }
