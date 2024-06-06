@@ -63,6 +63,7 @@ import { ScreenOneChoice } from "./screen-one-choice.component"
 import { ScreenOneInput } from "./screen-one-input.component"
 import { Input } from "@/components/input-custom"
 import ContentEditable from "react-contenteditable"
+import { Toaster, toast } from 'sonner'
 
 const ScreensList = () => {
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
@@ -326,44 +327,67 @@ const ScreensList = () => {
   )
 }
 
-const EditScreenName = ({ screenId,screenName }) => {
+const EditScreenName = ({ screenId, screenName }) => {
+  const ref = React.useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
   const [editing, setEditing] = React.useState(false);
   const [name, setName] = React.useState(screenName);
-  const handleChange = (e) => {
-    dispatch(setScreenName({ screenId: screenId, screenName: e }));
-    // setName(e.target.value);
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens);
+
+  const handleChange = (inputName) => {
+    if (!checkDuplicateName(inputName)) {
+      dispatch(setScreenName({ screenId: screenId, screenName: inputName }));
+      setName(inputName);
+      toast.success("Screen name changed successfully");
+      setEditing(false);
+    } else {
+      toast.error("Screen name already exists");
+      ref?.current?.focus();
+    }
+  };
+
+  const checkDuplicateName = (inputName) => {
+    const screenNames = screens?.filter((screen) => screen.screenId !== screenId) // Exclude the current screen
+      .map((screen) => screen.screenName.toLowerCase());
+
+    return screenNames?.includes(inputName.toLowerCase());
+  };
+
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/\s+/g, '-');
+    value = value.replace(/[^a-z0-9-]/gi, '');
+    setName(value.toLowerCase());
   };
 
   return (
     <>
-    {
-      !editing && (
+      {!editing && (
         <div
-        onClick={() => setEditing(true)}
-        className="flex flex-row gap-2 items-center  border border-transparent text-current bg-slate-gray-200 p-2 grow justify-end hover:cursor-text">
-        <Pencil size={16} className="shrink-0" />
-        <div className="h-10 p-2">{screenName}</div>
-      </div>
-      )
-    }
-    {
-      editing && (
+          onClick={() => setEditing(true)}
+          className="flex flex-row gap-2 items-center border border-transparent text-current bg-slate-gray-200 p-2 grow justify-end hover:cursor-text"
+        >
+          <Pencil size={16} className="shrink-0" />
+          <div className="h-10 p-2 truncate">{screenName}</div>
+        </div>
+      )}
+      {editing && (
         <div className="flex flex-row gap-2 items-center text-current bg-slate-gray-200 p-2 grow justify-end">
           <Input
+            ref={ref}
             className="text-right"
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            onBlur={() => {handleChange(name); setEditing(false);}}
+            onChange={handleInputChange}
+            onBlur={() => handleChange(name)}
             autoFocus
           />
         </div>
-      )
-
-    }
+      )}
+      {/* <Toaster position="bottom-right" /> */}
     </>
   );
-}
+};
+
 function HelperInformation() {
   return (
     <Card

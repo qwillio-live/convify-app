@@ -3,7 +3,7 @@ import { Inter, Roboto_Mono } from 'next/font/google'
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@/components/analytics"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -112,9 +112,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <NextIntlClientProvider locale={locale} messages={messages} >
             {children}
+            <Toaster richColors />
           </NextIntlClientProvider>
           <Analytics />
-          <Toaster />
         </ThemeProvider>
       </body>
     </html>
