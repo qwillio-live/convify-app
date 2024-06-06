@@ -145,7 +145,9 @@ export const IconButtonSettings = () => {
       onValueChange={(value) => {
         setProp((props) => (props.settingsTab = value), 200)
       }}
-      type="single" collapsible className="w-full">
+      type="multiple"
+      defaultValue={['content']}
+      className="w-full mb-10">
         <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Content")}</span>

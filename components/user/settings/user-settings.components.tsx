@@ -40,7 +40,7 @@ export const SettingsPanel = () => {
     }
   })
   return (
-    <Tabs defaultValue="element" className="">
+    <Tabs defaultValue="element" className="mb-10">
       <TabsList>
         <TabsTrigger
           className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"

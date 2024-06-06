@@ -179,10 +179,9 @@ const ScreensList = () => {
 
   return (
     <Accordion
-      type="single"
-      collapsible
+      type="multiple"
       className="w-full overflow-x-hidden"
-      defaultValue="item-2"
+      defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1">
         <AccordionTrigger className="uppercase hover:no-underline">
