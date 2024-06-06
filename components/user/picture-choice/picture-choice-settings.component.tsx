@@ -562,26 +562,13 @@ export const PictureChoiceItem = ({ item, index }) => {
     >
       <Dialog open={open} onOpenChange={setOpen}>
         <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild onMouseDown={handleDropdownClick}>
             <div className="flex flex-row flex-wrap items-center gap-3">
-              <button
-                className="pic-container hover:cursor-pointer"
-              >
-                {item.itemType === ItemType.ICON ? (
-                  // <img src={item.icon} className="shrink-0 w-20 h-20" />
-                  item.icon === "check" ? (
-                    <IconCheck className="size-5 shrink-0" />
-                  ) : item.icon === "x" ? (
-                    <IconX className="size-5 shrink-0" />
-                  ) : null
-                ) : (
                   <img
                     src={item.pic}
                     alt={item.alt || ""}
                     className="w-6 h-6 object-cover"
                   />
-                )}
-              </button>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-40">
@@ -611,8 +598,8 @@ export const PictureChoiceItem = ({ item, index }) => {
           </DropdownMenuContent>
         </DropdownMenu>
         {/* icons */}
-        <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%]">
-          <DialogHeader className="sticky top-0 bg-white z-10 p-4 shadow-sm">
+        <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[700px]">
+          <DialogHeader className="sticky top-0 bg-white py-4 px-2 z-10">
             <div className="flex items-center justify-start gap-4">
               <div>
                 <DialogTitle>{t("PictureChoice.icon")}</DialogTitle>
@@ -631,18 +618,26 @@ export const PictureChoiceItem = ({ item, index }) => {
                 />
               </div>
               <DialogClose asChild>
-                <Button variant="ghost">Close</Button>
+                <Button variant="ghost">
+                  <IconX className="size-5 shrink-0" />
+                </Button>
               </DialogClose>
             </div>
           </DialogHeader>
           <div className="ml-4 mt-4 grid grid-cols-6 gap-4">
-            {filteredIcons.map((iconName) => (
-              <IconRenderer
-                key={iconName}
-                iconName={iconName}
-                onClick={handleSVGChange}
-              />
-            ))}
+            {filteredIcons.length > 0 ? (
+              filteredIcons.map((iconName) => (
+                <IconRenderer
+                  key={iconName}
+                  iconName={iconName}
+                  onClick={handleSVGChange}
+                />
+              ))
+            ) : (
+              <div className="col-span-6 text-center mt-4">
+                No icons found
+              </div>
+            )}
           </div>
         </DialogContent>
 
@@ -725,58 +720,59 @@ type PortalEmojiPickerProps = {
   dropdownRef: React.RefObject<HTMLInputElement>;
 };
 
-const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, position, onEmojiClick, pickerType, setPickerType, dropdownRef }) => {
-  const emojiRef = useRef<HTMLInputElement>(null)
+const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, position, onEmojiClick, setPickerType }) => {
+  const emojiRef = useRef<HTMLInputElement>(null);
   const { top, left } = position;
-
-  useOnClickOutside(emojiRef, () => {
-    setPickerType('');
-  });
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
       const { target } = event;
-      const dropdownTrigger = dropdownRef.current;
 
-      if (
-        emojiRef.current &&
-        emojiRef.current instanceof HTMLElement && 
-        !emojiRef.current.contains(target as Node) && 
-        pickerType === 'emoji' &&
-        !(dropdownTrigger && dropdownTrigger.contains(target as Node))
-      ) {
+      // Check if the click occurred outside the emoji picker
+      if (isVisible && emojiRef.current && !emojiRef.current.contains(target as Node)) {
+        // Close the emoji picker
         setPickerType('');
       }
     }
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [emojiRef]);
+  }, [isVisible, emojiRef, setPickerType]);
 
-  return isVisible
-    ? createPortal(
-        <div
-          style={{
-            position: 'absolute',
-            top: `${top}px`,
-            left: `${left}px`,
-            zIndex: 1000000,
-          }}
-          ref={emojiRef}
-        >
-          <EmojiPicker
-            onEmojiClick={onEmojiClick}
-            lazyLoadEmojis={true}
-            skinTonesDisabled={true}
-            width={280}
-            height={350}
-            previewConfig={{ showPreview: false }}
-          />
-        </div>,
-        document.body
-      )
-    : null;
+  return isVisible ? (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 1000000,
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: `${top}px`,
+          left: `${left}px`,
+          zIndex: 1000001,
+        }}
+        ref={emojiRef}
+      >
+        <EmojiPicker
+          onEmojiClick={onEmojiClick}
+          lazyLoadEmojis={true}
+          skinTonesDisabled={true}
+          width={280}
+          height={350}
+          previewConfig={{ showPreview: false }}
+        />
+      </div>
+    </div>
+  ) : null;
 };
+
 
 PortalEmojiPicker.displayName = 'PortalEmojiPicker';
