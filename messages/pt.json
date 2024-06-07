@@ -12,11 +12,11 @@
   },
   "CreateFlow": {
     "PictureChoice": {
-      "icon" : "Select Icon",
-      "iconDesc": "Make changes to your icons here.",
-      "emoji": "Select Emoji",
-      "image": "Select Image",
-      "remove": "Remove"
+      "icon" : "Selecione o ícone",
+      "iconDesc": "Faça alterações em seus ícones aqui.",
+      "emoji": "Selecione o emoji",
+      "image": "Selecione a imagem",
+      "remove": "Remover"
     }
   }
 }
