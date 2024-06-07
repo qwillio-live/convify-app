@@ -44,7 +44,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       reader.onload = () => {
         const result = reader.result
         if (typeof result === "string") {
-          // Ensure the result is a string
           onUploadComplete(result)
         } else {
           console.error(

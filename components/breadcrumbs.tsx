@@ -1,3 +1,5 @@
+import { ChevronLeft } from "lucide-react"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,15 +9,25 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
+import { Button } from "./ui/button"
 
 export function BreadCrumbs() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">My Workspace</BreadcrumbLink>
+          <BreadcrumbLink href="/dashboard">
+            <span className="hidden lg:inline-block">My workspace</span>
+            <Button
+              className="lg:hidden p-2 my-4 h-8"
+              size="sm"
+              variant="outline"
+            >
+              <ChevronLeft />
+            </Button>
+          </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator>
+        <BreadcrumbSeparator className="hidden lg:inline-block">
           /
         </BreadcrumbSeparator>
         <BreadcrumbItem>

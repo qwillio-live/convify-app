@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, Plus } from "lucide-react"
 import { signOut } from "next-auth/react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -30,6 +31,8 @@ export default function CreateFlowsPage() {
   )
   const [tab, setTab] = useState("create")
 
+  const t = useTranslations("Components")
+
   // store the current tab value
   const onTabChange = (value: string) => {
     setTab(value)
@@ -50,15 +53,15 @@ export default function CreateFlowsPage() {
     <div className="min-h-screen w-full">
       <Tabs defaultValue="create" onValueChange={onTabChange}>
         <div className="sticky top-0 z-[60]">
-          <header className="flex h-14 items-center justify-between gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
-            <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
+          <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
+            <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
                 <BreadCrumbs />
               </div>
-              <div className="flex h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6">
+              <div className="h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6 hidden">
                 <div className="flex flex-row items-center justify-between py-4">
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
-                    Content
+                    {t("Content")}
                   </h4>
                   <Button size="icon" className="size-8">
                     <Plus className="size-3.5" />
@@ -66,35 +69,35 @@ export default function CreateFlowsPage() {
                 </div>
               </div>
             </div>
-            <div className="tabs-list-container flex h-full">
-              <TabsList className="flex h-full bg-inherit py-0 ">
+            <div className="tabs-list-container w-full order-last lg:order-[unset] basis-full lg:basis-auto lg:w-auto flex h-1/2 lg:h-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset]">
+              <TabsList className="flex h-full bg-inherit lg:justify-center py-0 w-full lg:w-auto">
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="create"
                 >
-                  Create
+                  {t("Create")}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="connect"
                 >
-                  Connect
+                  {t("Connect")}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="share"
                 >
-                  Share
+                  {t("Share")}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="results"
                 >
-                  Results
+                  {t("Results")}
                 </TabsTrigger>
               </TabsList>
             </div>
-            <div className="account-settings flex flex-row items-center justify-between gap-4">
+            <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
               <Link href="/dashboard/flows/preview-flow" target="_blank">
                 <Button
                   variant="outline"
@@ -106,7 +109,7 @@ export default function CreateFlowsPage() {
               </Link>
               <div className="">
                 <Button size="sm" className="my-4 h-8 gap-1 py-2">
-                  Publish
+                  {t("Publish")}
                 </Button>
               </div>
 
@@ -137,13 +140,13 @@ export default function CreateFlowsPage() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
+                  <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
-                    Logout
+                    {t("Logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -171,19 +174,19 @@ export default function CreateFlowsPage() {
                       href="#"
                       className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] bg-[rgb(227,227,227)] px-4 py-2 font-medium leading-8 text-[rgb(38,38,39)] no-underline transition-[background]  delay-0 duration-200 ease-in hover:bg-[rgb(240,240,240)]"
                     >
-                      Share the link
+                      {t("Share the link")}
                     </Link>
                     <div
                       onClick={() => setIsCustomLinkOpen(true)}
                       className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background]  delay-0 duration-200  ease-in hover:bg-[rgb(240,240,240)]"
                     >
-                      Embed in an email
+                      {t("Embed in an email")}
                     </div>
                     <div
                       onClick={() => setIsCustomLinkOpen(true)}
                       className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background] delay-0 duration-200   ease-in hover:bg-[rgb(240,240,240)]"
                     >
-                      Embed in a webpage
+                      {t("Embed in a webpage")}
                     </div>
                   </nav>
 
@@ -196,11 +199,11 @@ export default function CreateFlowsPage() {
                   <div className="max-h-[4.75rem] min-w-0 pb-6">
                     <div className="flex max-h-[3.25rem] items-center rounded-[8px] bg-[rgb(255,250,235)] p-4 text-[rgb(100,82,22)]">
                       <span className="block w-full text-sm text-[rgb(100,82,22)]">
-                        ⚠️ This typeform is not published yet.{" "}
+                        ⚠️ {t("This typeform is not published yet.")}{" "}
                         <Link className="underline" href="#">
-                          Click here to publish the latest version
+                          {t("Click here to publish the latest version")}
                         </Link>{" "}
-                        before you share your typeform.
+                        {t("before you share your typeform.")}
                       </span>
                     </div>
                   </div>
@@ -230,7 +233,7 @@ export default function CreateFlowsPage() {
                             onClick={() => navigator.clipboard.writeText(link)}
                             className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)] "
                           >
-                            Copy link
+                            {t("Copy link")}
                           </button>
                         </div>
                         <button
@@ -239,7 +242,7 @@ export default function CreateFlowsPage() {
                           color="description"
                           className="relative m-0 inline-block cursor-pointer border-none p-0 text-[rgb(115,115,115)] underline outline-none"
                         >
-                          Customize link
+                          {t("Customize link")}
                         </button>
                       </div>
                       {/* socials */}
@@ -383,7 +386,7 @@ export default function CreateFlowsPage() {
                                   fill="currentColor"
                                 ></path>
                               </svg>
-                              Email link
+                              {t("Email link")}
                             </a>
                             <button
                               aria-label="qr code"
@@ -427,7 +430,7 @@ export default function CreateFlowsPage() {
                                   fill="currentColor"
                                 ></path>
                               </svg>
-                              QR Code
+                              {t("QR Code")}
                             </button>
                           </div>
                         </div>
@@ -473,7 +476,7 @@ export default function CreateFlowsPage() {
                               </defs>
                             </svg>
                             <span className="flex-[0_0_auto]">
-                              Publish your typeform to preview it here
+                              {t("Publish your typeform to preview it here")}
                             </span>
                           </div>
                         </div>
@@ -481,8 +484,12 @@ export default function CreateFlowsPage() {
                       <div className="relative mt-5  flex w-full items-end justify-center">
                         <Tabs defaultValue="desktop" className="w-[200px]">
                           <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="desktop">Desktop</TabsTrigger>{" "}
-                            <TabsTrigger value="mobile">Mobile</TabsTrigger>{" "}
+                            <TabsTrigger value="desktop">
+                              {t("Desktop")}
+                            </TabsTrigger>{" "}
+                            <TabsTrigger value="mobile">
+                              {t("Mobile")}
+                            </TabsTrigger>{" "}
                           </TabsList>
                         </Tabs>
                       </div>
@@ -526,30 +533,32 @@ export default function CreateFlowsPage() {
             <div className="z-[1] flex w-[512px] flex-col items-center p-8">
               <div className="min-h-0 min-w-0 shrink-0 pb-6">
                 <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
-                  CUSTOM LINK
+                  {t("CUSTOM LINK")}
                 </span>
               </div>
               <div className="min-h-0 min-w-0 shrink-0 pb-2">
                 <span className="block text-center text-4xl font-light">
-                  Create a custom link
+                  {t("Create a custom link")}
                 </span>
               </div>
               <div className="min-h-0 min-w-0 shrink-0">
                 <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                  Edit the link and let people know what your typeform is about.
+                  {t(
+                    "Edit the link and let people know what your typeform is about."
+                  )}
                 </span>
               </div>
               <div className="mb-10"></div>
               <div className="min-h-0 min-w-0 shrink-0 pb-6">
                 <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
-                  Available on these plans: Plus, Business, Enterprise
+                  {t("Available on these plans: Plus, Business, Enterprise")}
                 </span>
               </div>
               <div className="flex size-full items-center justify-center">
                 <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
                   <div className="flex">
                     <span className="block flex-[0_0_auto]">
-                      Upgrade my plan
+                      {t("Upgrade my plan")}
                     </span>
                   </div>
                 </button>

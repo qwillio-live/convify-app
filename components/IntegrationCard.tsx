@@ -34,7 +34,7 @@ const IntegrationCard = ({
       className="mb-2.5 rounded-md border bg-white shadow dark:bg-[#070e1f]"
     >
       <AccordionTrigger
-        className="flex items-center px-4 py-6 hover:no-underline h-32"
+        className="flex items-center px-4 py-6 hover:no-underline min-h-32"
         noIcon={true}
       >
         <div>
