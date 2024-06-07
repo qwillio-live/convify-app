@@ -29,18 +29,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [progress, setProgress] = useState<number>(0)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [uploadedImagePath, setUploadedImagePath] = useState<string | null>(
-    null
-  )
-
-  const onUploadProgress = (progressEvent) => {
-    if (progressEvent.total) {
-      const percentage = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total
-      )
-      setProgress(percentage)
-    }
-  }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -50,38 +38,20 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   }
 
-  // const removeSelectedImage = () => {
-  //   setLoading(false)
-  //   setUploadedImagePath(null)
-  //   setSelectedImage(null)
-  // }
-
   const handleImageUpload = async (image: File) => {
-    // if (!image) return
-    // setLoading(true)
-    // const formData = new FormData()
-    // formData.append("file", image)
-    // formData.append("upload_preset", uploadPreset as string)
-    // formData.append("api_key", apiKey as string)
-    // try {
-    //   const res = await uploadImageToCloudinary(formData, onUploadProgress)
-    //   if (res.status === 200) {
-    //     setLoading(false)
-    //     setUploadedImagePath(res.data.url)
-    //     if (onUploadComplete) {
-    //       onUploadComplete(res.data.url)
-    //     }
-    //   }
-    // } catch (error) {
-    //   setLoading(false)
-    //   console.error("Error uploading image:", error)
-    // }
     if (image) {
       const reader = new FileReader()
       reader.onload = () => {
         const result = reader.result
-        onUploadComplete(result)
-        // setUploadedImagePath(result)
+        if (typeof result === "string") {
+          // Ensure the result is a string
+          onUploadComplete(result)
+        } else {
+          console.error(
+            "Expected result to be a string, but got:",
+            typeof result
+          )
+        }
       }
       reader.readAsDataURL(image)
     }
@@ -133,16 +103,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
           {backgroundImage && !loading && (
             <div className="text-center space-y-2">
-              {/* {uploadedImagePath && backgroundImage && (
-                  <Image
-                    width={1000}
-                    height={1000}
-                    src={uploadedImagePath}
-                    className="w-full object-contain max-h-16 opacity-70"
-                    alt="uploaded image"
-                  />
-                )} */}
-              {backgroundImage && !uploadedImagePath && (
+              {backgroundImage && (
                 <div
                   style={{
                     backgroundImage: backgroundImage,
