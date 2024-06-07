@@ -563,7 +563,7 @@ export const PictureChoiceItem = ({ item, index }) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild onMouseDown={handleDropdownClick}>
-            <div className="flex flex-row flex-wrap items-center gap-3">
+            <div className="flex flex-row flex-wrap items-center gap-3 cursor-pointer">
                   <img
                     src={item.pic}
                     alt={item.alt || ""}
