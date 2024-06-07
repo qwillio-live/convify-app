@@ -14,6 +14,8 @@
     "PictureChoice": {
       "icon" : "Select Icons",
       "iconDesc": "Make changes to your icons here.",
+      "iconSearch": "Search...",
+      "iconNotFound": "No icons found.",
       "emoji": "Select Emoji",
       "image": "Select Image",
       "remove": "Remove"

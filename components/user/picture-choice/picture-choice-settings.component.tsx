@@ -563,12 +563,25 @@ export const PictureChoiceItem = ({ item, index }) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild onMouseDown={handleDropdownClick}>
-            <div className="flex flex-row flex-wrap items-center gap-3 cursor-pointer">
+          <div className="flex flex-row flex-wrap items-center gap-3">
+              <button
+                className="pic-container hover:cursor-pointer"
+              >
+                {item.itemType === ItemType.ICON ? (
+                  // <img src={item.icon} className="shrink-0 w-20 h-20" />
+                  item.icon === "check" ? (
+                    <IconCheck className="size-5 shrink-0" />
+                  ) : item.icon === "x" ? (
+                    <IconX className="size-5 shrink-0" />
+                  ) : null
+                ) : (
                   <img
                     src={item.pic}
                     alt={item.alt || ""}
                     className="w-6 h-6 object-cover"
                   />
+                )}
+              </button>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-40">
@@ -611,7 +624,7 @@ export const PictureChoiceItem = ({ item, index }) => {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="Search..."
+                  placeholder={t("PictureChoice.iconSearch")}
                   className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -635,7 +648,7 @@ export const PictureChoiceItem = ({ item, index }) => {
               ))
             ) : (
               <div className="col-span-6 text-center mt-4">
-                No icons found
+                {t("PictureChoice.iconNotFound")}
               </div>
             )}
           </div>
