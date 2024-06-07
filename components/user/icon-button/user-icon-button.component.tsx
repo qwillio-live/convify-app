@@ -156,7 +156,7 @@ export const IconButtonGen = ({
     paddingLeft: `${props.marginLeft}px`,
     paddingRight: `${props.marginRight}px`,
      }}>
-<Link href={`${pathName}#${nextScreen}`} className="w-full flex flex-row justify-center">
+<Link href={`${pathName}#${nextScreen}`} className="contents">
 <StyledCustomButton
         fontFamily={fontFamily?.value}
         color={color.value}
