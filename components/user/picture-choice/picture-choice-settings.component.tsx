@@ -1,32 +1,66 @@
 import React, { useEffect, useState } from "react"
+import { Label } from "@radix-ui/react-label"
+import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+  Activity,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalSpaceBetween,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  CornerRightDown,
+  Disc,
+  DollarSign,
+  GripVertical,
+  Check as IconCheck,
+  X as IconX,
+  Mountain,
+  MoveHorizontal,
+  PlusCircle,
+} from "lucide-react"
+import ContentEditable from "react-contenteditable"
+
 import { useNode } from "@/lib/craftjs"
 import {
+  useScreenNames,
+  useScreensLength,
+} from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion"
+import { Button, Button as CustomButton } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Button, Button as CustomButton } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@radix-ui/react-label"
+import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
-import { useDragControls, Reorder, useMotionValue } from "framer-motion"
-import { Card } from "@/components/ui/card"
-import { GripVertical,Check as IconCheck, X as IconX, PlusCircle } from "lucide-react"
-import ContentEditable from "react-contenteditable"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/custom-select"
 
 export const PictureChoiceSettings = () => {
   const controls = useDragControls()
@@ -46,6 +80,18 @@ export const PictureChoiceSettings = () => {
   const closePopover = () => {
     setPopoverOpen(false)
   }
+  const screenNames = useScreenNames()
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || ""
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -78,6 +124,8 @@ export const PictureChoiceSettings = () => {
       id: `${pictureItems.length + 1}`,
       text: text,
       pic: uploadFile,
+      buttonAction: "next-screen",
+      nextScreen: nextScreenName,
       itemType: ItemType.PICTURE,
     })
     setProp((props) => (props.pictureItems = tempArray), 1000)
@@ -100,7 +148,13 @@ export const PictureChoiceSettings = () => {
             onReorder={(e) => setProp((props) => (props.pictureItems = e))}
           >
             {pictureItems.map((item, index) => (
-              <PictureChoiceItem key={item.id} item={item} index={index} />
+              <PictureChoiceItem
+                key={item.id}
+                item={item}
+                index={index}
+                screenNames={screenNames}
+                nextScreenName={nextScreenName}
+              />
             ))}
           </Reorder.Group>
         </CardContent>
@@ -244,7 +298,7 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Padding</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Container</p>
               <Input
                 type="number"
@@ -253,7 +307,10 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.padding = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.padding = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -268,7 +325,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.pictureItemsStyles.padding = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.padding = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -280,7 +341,7 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Margin container</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
               <Input
                 type="number"
@@ -289,7 +350,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginLeft = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginLeft = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -303,7 +368,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginTop = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginTop = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -317,7 +386,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginRight = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginRight = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -331,7 +404,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginBottom = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -426,7 +503,10 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.gap = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.gap = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -440,7 +520,12 @@ enum ItemType {
   PICTURE = "picture",
   ICON = "icon",
 }
-export const PictureChoiceItem = ({ item, index }) => {
+export const PictureChoiceItem = ({
+  item,
+  index,
+  screenNames,
+  nextScreenName,
+}) => {
   const y = useMotionValue(0)
   const controls = useDragControls()
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -472,7 +557,7 @@ export const PictureChoiceItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex h-20 w-full  flex-row items-center justify-between gap-3 border p-4"
+      className="flex w-full  flex-row items-center justify-between gap-3 border p-4"
     >
       <Input
         type="file"
@@ -480,42 +565,101 @@ export const PictureChoiceItem = ({ item, index }) => {
         ref={inputRef}
         onChange={handleInputChange}
       />
-      <div className="flex flex-row flex-wrap items-center gap-3">
-        <div
-          onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-          className="pic-container hover:cursor-pointer"
-        >
-          {item.itemType === ItemType.ICON ? (
-            // <img src={item.icon} className="shrink-0 w-20 h-20" />
-            item.icon === 'check' ? (
-              <IconCheck
-                className="w-5 h-5 shrink-0"
-              />
-            ) : item.icon === 'x' ? (
-              <IconX
-              className="w-5 h-5 shrink-0"
-              />
-            ) : null
-          ) : (
-            <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
-          )}
+      <div className="flex flex-col items-start">
+        <div className="flex flex-row gap-2 py-2 items-center justify-center">
+          <div
+            onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+            className="pic-container hover:cursor-pointer"
+          >
+            {item.itemType === ItemType.ICON ? (
+              // <img src={item.icon} className="shrink-0 w-20 h-20" />
+              item.icon === "check" ? (
+                <IconCheck className="w-5 h-5 shrink-0" />
+              ) : item.icon === "x" ? (
+                <IconX className="w-5 h-5 shrink-0" />
+              ) : null
+            ) : (
+              <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
+            )}
+          </div>
+          <ContentEditable
+            html={item.text}
+            disabled={false}
+            onChange={(e) =>
+              setProp(
+                (props) =>
+                  (props.pictureItems[index].text = e.target.value.replace(
+                    /<\/?[^>]+(>|$)/g,
+                    ""
+                  )),
+                500
+              )
+            }
+            className="min-w-[40px] max-w-[100px] overflow-hidden truncate"
+            tagName={"p"}
+          />
         </div>
-        <ContentEditable
-          html={item.text}
-          disabled={false}
-          onChange={(e) =>
-            setProp(
-              (props) =>
-                (props.pictureItems[index].text = e.target.value.replace(
-                  /<\/?[^>]+(>|$)/g,
-                  ""
-                )),
-              500
-            )
-          }
-          className="min-w-[80px] max-w-[100px] overflow-hidden truncate"
-          tagName={"p"}
-        />
+
+        <div className="screen-action-container flex flex-col gap-2">
+          <Select
+            defaultValue={
+              item.buttonAction === "next-screen"
+                ? "next-screen"
+                : item.nextScreen
+            }
+            value={
+              item.buttonAction === "next-screen"
+                ? "next-screen"
+                : item.nextScreen
+            }
+            onValueChange={(e) => {
+              if (e === "next-screen") {
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].buttonAction = "next-screen")
+                )
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].nextScreen = nextScreenName)
+                )
+              } else {
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].buttonAction = "custom-action")
+                )
+                setProp((props) => (props.pictureItems[index].nextScreen = e))
+              }
+            }}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Select screen" />
+            </SelectTrigger>
+            <SelectContent className="text-left">
+              <SelectGroup>
+                <SelectItem
+                  value="next-screen"
+                  className="flex flex-row items-center text-[10px]"
+                >
+                  <div className="flex flex-row items-center text-xs gap-2">
+                    <ArrowRight size={14} /> <span>Next Screen</span>
+                  </div>
+                </SelectItem>
+                {screenNames.map((screenName, index) => (
+                  <SelectItem
+                    value={screenName}
+                    className="flex flex-row items-center text-[10px]"
+                  >
+                    <div className="flex flex-row items-center text-xs gap-2">
+                      <span>
+                        {index + 1} : {screenName}
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div
         onPointerDown={(e) => controls.start(e)}

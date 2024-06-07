@@ -62,6 +62,8 @@ import { TextDefaultProps, UserText } from "../text/user-text.component"
 import { UserTextSettings } from "../text/user-text-settings"
 import { PictureChoiceSettings } from "./picture-choice-settings.component"
 import styled from "styled-components"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 
 const ICONS = {
   check: CheckIcon.src,
@@ -211,6 +213,19 @@ export const PictureChoice = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
+  const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+
+  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
+
+  useEffect(() => {
+    pictureItems.map((item, index) => {
+      if(item.buttonAction === "next-screen"){
+        setProp((props) => (props.pictureItems[index].nextScreen = nextScreenName))
+      }
+    })
+},[nextScreenName,pictureItems])
 
   const [editable, setEditable] = useState(false)
   useEffect(() => {
@@ -346,6 +361,8 @@ type PictureChoiceTypes = {
     text: string
     pic: any
     icon: any
+    buttonAction: "next-screen" | "custom-action" | "none"
+    nextScreen: string
     itemType: ItemType
   }[]
 }
@@ -395,6 +412,8 @@ export const PictureChoiceDefaultProps: PictureChoiceTypes = {
       text: "Yes",
       pic: null,
       icon: "check",
+      buttonAction: "next-screen",
+      nextScreen: "",
       itemType: ItemType.ICON,
     },
     {
@@ -402,6 +421,8 @@ export const PictureChoiceDefaultProps: PictureChoiceTypes = {
       text: "No",
       pic: null,
       icon: "x",
+      buttonAction: "next-screen",
+      nextScreen: "",
       itemType: ItemType.ICON,
     },
   ],
