@@ -54,7 +54,6 @@ model User {
 
   accounts Account[]
   sessions Session[]
-  Post     Post[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -68,62 +67,53 @@ model User {
 
 model VerificationToken {
   identifier String
-  token      String
+  token      String   @unique
   expires    DateTime
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
-  @@unique([identifier, token])
+  @@id([identifier, token])
   @@map(name: "verification_tokens")
-}
-
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   Json?
-  published Boolean  @default(false)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
-  authorId  String
-
-  author User @relation(fields: [authorId], references: [id])
-
-  @@map(name: "posts")
 }
 
 model Flow {
   id                String   @id @default(cuid())
+  userId            String
   name              String
-  templateId        String?
-  flowSettings      Json
+  description       String? // Ensuring it is nullable
   isDeleted         Boolean  @default(false)
   createdAt         DateTime @default(now()) @map(name: "created_at")
   updatedAt         DateTime @default(now()) @map(name: "updated_at")
-  previewImage      String?
-  link              String?
-  status            String
-  numberOfSteps     Int
-  numberOfResponses Int
-  userId            String
+  customDomain      String   @default("") @db.VarChar(50)
+  flowSettings      Json? // Ensuring it is nullable
+  link              String? // Ensuring it is nullable
+  numberOfResponses Int? // Ensuring it is nullable
+  numberOfSteps     Int? // Ensuring it is nullable
+  previewImage      String? // Ensuring it is nullable
+  status            String? // Ensuring it is nullable
+  templateId        String? // Ensuring it is nullable
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  responses   Response[]
-  visits      Visit[]
-  flowSteps   FlowStep[]
-  Integration Integration?
+  flowSteps    FlowStep[]
+  visits       Visit[]
+  responses    Response[]
+  integrations Integration[]
 
   @@map(name: "flows")
 }
 
 model Integration {
   id                   String   @id @default(cuid())
-  flowId               String   @unique
-  googleAnalyticsId    String?
-  googleTagManagerId   String?
-  metaPixelId          String?
-  metaPixelAccessToken String?
-  isDeleted            Boolean  @default(false)
+  flowId               String
+  name                 String?
+  settings             Json?
   createdAt            DateTime @default(now()) @map(name: "created_at")
   updatedAt            DateTime @default(now()) @map(name: "updated_at")
+  googleAnalyticsId    String?
+  isDeleted            Boolean?
+  metaPixelAccessToken String?
+  metaPixelId          String?
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -147,12 +137,13 @@ model Response {
 }
 
 model Visit {
-  id        String   @id @default(cuid())
-  flowId    String
-  stepId    String
-  ip        String
-  userAgent String
-  createdAt DateTime @default(now()) @map(name: "created_at")
+  id          String   @id @default(cuid())
+  flowId      String
+  stepId      String
+  ip          String
+  userAgent   String
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  device_type Int      @default(0) @db.TinyInt
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -165,9 +156,10 @@ model Template {
   templateSettings Json
   tags             Json
   isActive         Boolean  @default(true)
-  preview          String?
+  previewImage     String? // Renamed preview to previewImage
   createdAt        DateTime @default(now()) @map(name: "created_at")
   updatedAt        DateTime @default(now()) @map(name: "updated_at")
+  language         String   @default("pt") @db.Char(2)
 
   templateSteps TemplateStep[]
 
