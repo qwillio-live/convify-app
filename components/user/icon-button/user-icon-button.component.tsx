@@ -45,6 +45,8 @@ import { useTranslations } from "next-intl";
 import { track } from "@vercel/analytics/react";
 import { RootState } from "@/lib/state/flows-state/store";
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -134,8 +136,14 @@ export const IconButtonGen = ({
   border,
   borderColor,
   borderHoverColor,
+  nextScreen,
   ...props
 }) => {
+  const router = useRouter();
+  const pathName = usePathname();
+  const handleNavigateToContent = () => {
+    // router.push(currentUrlWithHash);
+  };
   return (
     <div className="w-full relative" style={{
       width: "100%",
@@ -148,6 +156,7 @@ export const IconButtonGen = ({
     paddingLeft: `${props.marginLeft}px`,
     paddingRight: `${props.marginRight}px`,
      }}>
+<Link href={`${pathName}#${nextScreen}`} className="w-full flex flex-row justify-center">
 <StyledCustomButton
         fontFamily={fontFamily?.value}
         color={color.value}
@@ -187,6 +196,7 @@ export const IconButtonGen = ({
     }}>{text}</div>
       {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
     </StyledCustomButton>
+    </Link>
     </div>
   )
 }
