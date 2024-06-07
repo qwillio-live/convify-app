@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
   Activity,
   Anchor,
@@ -11,7 +11,8 @@ import {
   AlignHorizontalJustifyStart,
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyCenter,
-  AlignHorizontalSpaceBetween
+  AlignHorizontalSpaceBetween,
+  CornerRightDown
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl";
@@ -56,9 +57,13 @@ import {
 import useButtonThemePresets from "./useButtonThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils";
+import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
+import { RootState } from "@/lib/state/flows-state/store";
 
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
+  const screenNames = useScreenNames();
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
 
   const {
     actions: { setProp },
@@ -96,10 +101,14 @@ export const IconButtonSettings = () => {
       preset,
       tracking,
       trackingEvent,
+      nextScreen,
+      buttonAction
     },
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+
   enum PRESETNAMES {
     filled= "filled",
     outLine= "outLine"
@@ -212,6 +221,60 @@ export const IconButtonSettings = () => {
                 </>
               )}
             </div>
+            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+                  <p className="text-md flex-1 text-muted-foreground shrink-0"><ArrowRight /></p>
+                  <Select
+                    defaultValue={buttonAction}
+                    value={buttonAction}
+                    onValueChange={(e) => {
+                        setProp((props) => (props.buttonAction = e), 200)
+                  }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select action" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="next-screen" className="flex flex-row items-center text-xs">
+                          <div className="flex flex-row items-center text-xs gap-2"><ArrowRight size={16} /> <span>Next Screen</span></div>
+                        </SelectItem>
+                        <SelectItem value="custom-action" className="flex flex-row items-center text-xs">
+                          <div className="flex flex-row items-center text-xs gap-2"><CornerRightDown size={16} /> <span>Go to</span></div>
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+            </div>
+            {
+              buttonAction === "custom-action" && (
+                <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+                <Select
+                  defaultValue={nextScreen}
+                  value={nextScreen}
+                  onValueChange={(e) => {
+                      setProp((props) => (props.nextScreen = e), 200)
+                }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select screen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                    {
+                      screenNames?.map((screen) => {
+                        return (
+                          <SelectItem value={screen}>
+                            {screen}
+                          </SelectItem>
+                        )
+                      })
+                      }
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+          </div>
+              )
+            }
           </AccordionContent>
         </AccordionItem>
 

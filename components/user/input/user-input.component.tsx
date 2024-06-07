@@ -343,7 +343,10 @@ export const UserInput = ({ ...props }) => {
       }}
     >
       {isHovered && <Controller nameOfComponent={t("Input Field")} />}
-      <div className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+      <div className={cn(
+        "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent",
+        { "animate-shake": props.inputRequired }
+      )}
       style={{
         display: "flex",
         justifyContent: "center",

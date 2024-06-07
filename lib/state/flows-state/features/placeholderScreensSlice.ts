@@ -8,7 +8,7 @@ import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
 
 
-type ScreenType = {
+export type ScreenType = {
   screenId: string;
   screenName: string;
   screenData: any;
@@ -173,11 +173,19 @@ export const screensSlice = createSlice({
     setRenamingScreen: (state, action: PayloadAction<boolean>) => {
       state.renamingScreen = action.payload;
     },
-
+    navigateToScreen: (state, action: PayloadAction<string>) => {
+      const screen = state.screens.find(screen => screen.screenName === action.payload);
+      if(screen) {
+        state.selectedScreen = state.screens.indexOf(screen);
+        state.editorLoad = screen.screenData;
+      }
+    },
   },
 });
 
+
 export const {
+  navigateToScreen,
   setHeaderMode,
   resetScreensState,
   setScreenHeader,

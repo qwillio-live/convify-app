@@ -79,6 +79,8 @@ const useButtonThemePresets = () => {
     buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-"+hexoid(6)().toLowerCase(),
+    nextScreen: '',
+    buttonAction: "next-screen",
   };
 
   const outLinePreset: IconButtonProps = {
@@ -149,6 +151,8 @@ const useButtonThemePresets = () => {
     buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-"+hexoid(6)().toLowerCase(),
+    nextScreen: '',
+    buttonAction: "next-screen",
   };
 
   return { filledPreset, outLinePreset };
