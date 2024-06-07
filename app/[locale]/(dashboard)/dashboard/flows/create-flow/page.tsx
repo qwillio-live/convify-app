@@ -31,7 +31,7 @@ export default function CreateFlowsPage() {
   )
   const [tab, setTab] = useState("create")
 
-  const t = useTranslations("Components")
+  const t = useTranslations("CreateFlow")
 
   // store the current tab value
   const onTabChange = (value: string) => {

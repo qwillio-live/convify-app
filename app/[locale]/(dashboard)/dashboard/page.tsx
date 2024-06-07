@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation"
 import {
   Bell,
   ChevronDown,
+  FolderOpen,
   Home,
   LineChart,
-  Menu,
   Package,
   Package2,
   Plus,
@@ -144,7 +144,7 @@ export default function DashboardPage() {
                   <Search className="absolute left-2.5 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="search"
-                    placeholder="Find workspace or flow"
+                    placeholder={t("Find workspace or flow")}
                     className="w-full appearance-none bg-background pl-8 shadow-none "
                   />
                 </div>
@@ -153,7 +153,7 @@ export default function DashboardPage() {
               <div className="flex items-center gap-3 rounded-lg px-3 py-2 uppercase text-muted-foreground">
                 <ChevronDown className="size-4" />
                 {/* <User className="h-4 w-4" /> */}
-                Private
+                {t("Private")}
               </div>
 
               {/* <Link
@@ -171,8 +171,9 @@ export default function DashboardPage() {
                 // href="/dashboard/flows"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:cursor-pointer hover:text-primary"
               >
-                <Package className="size-4" />
-                My workspace{" "}
+                {/* <Package className="size-4" /> */}
+                <FolderOpen className="size-4" />
+                {t("My workspace")}{" "}
                 <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full bg-transparent text-black hover:bg-transparent hover:text-black">
                   1
                 </Badge>
@@ -203,9 +204,66 @@ export default function DashboardPage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="shrink-0 md:hidden"
+                  className="shrink-0 md:hidden w-auto px-3"
                 >
-                  <Menu className="size-5" />
+                  <svg
+                    className="w-7 h-7"
+                    viewBox="0 0 720 524"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <mask
+                      id="mask0_2503_36160"
+                      style={{ maskType: "alpha" }}
+                      maskUnits="userSpaceOnUse"
+                      x="65"
+                      y="65"
+                      width="590"
+                      height="394"
+                    >
+                      <rect
+                        x="65.4551"
+                        y="65.4551"
+                        width="589.091"
+                        height="392.727"
+                        fill="#D9D9D9"
+                      />
+                    </mask>
+                    <g mask="url(#mask0_2503_36160)">
+                      <path
+                        d="M114.547 507.273L286.365 261.819L114.547 16.3643"
+                        stroke="white"
+                        strokeWidth="98.1818"
+                      />
+                      <path
+                        d="M114.547 507.273L286.365 261.819L114.547 16.3643"
+                        stroke="black"
+                        strokeWidth="98.1818"
+                      />
+                      <path
+                        d="M261.818 507.273L433.637 261.819L261.818 16.3643"
+                        stroke="white"
+                        strokeWidth="98.1818"
+                      />
+                      <path
+                        d="M261.818 507.273L433.637 261.819L261.818 16.3643"
+                        stroke="black"
+                        strokeOpacity="0.6"
+                        strokeWidth="98.1818"
+                      />
+                      <path
+                        d="M409.092 507.273L580.91 261.819L409.092 16.3643"
+                        stroke="white"
+                        strokeWidth="98.1818"
+                      />
+                      <path
+                        d="M409.092 507.273L580.91 261.819L409.092 16.3643"
+                        stroke="black"
+                        strokeOpacity="0.2"
+                        strokeWidth="98.1818"
+                      />
+                    </g>
+                  </svg>
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
@@ -223,14 +281,14 @@ export default function DashboardPage() {
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <Home className="size-5" />
-                    Dashboard
+                    {t("Dashboard")}
                   </Link>
                   <Link
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
                   >
                     <ShoppingCart className="size-5" />
-                    Orders
+                    {t("Orders")}
                     <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
                       6
                     </Badge>
@@ -240,21 +298,21 @@ export default function DashboardPage() {
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <Package className="size-5" />
-                    Products
+                    {t("Products")}
                   </Link>
                   <Link
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <Users className="size-5" />
-                    Customers
+                    {t("Customers")}
                   </Link>
                   <Link
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <LineChart className="size-5" />
-                    Analytics
+                    {t("Analytics")}
                   </Link>
                 </nav>
               </SheetContent>
@@ -276,39 +334,22 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex w-10 h-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec]"
+                  className="flex w-10 h-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
                 >
-                  {userData && userData?.name ? (
-                    userData?.name?.charAt(0).toUpperCase()
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-circle-user"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="10" r="3" />
-                      <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                    </svg>
-                  )}
+                  {userData && userData?.name
+                    ? userData?.name?.charAt(0).toUpperCase()
+                    : userData?.email?.charAt(0)}
                   <span className="sr-only">Toggle user menu</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
-                  Logout
+                  {t("Logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -317,7 +358,9 @@ export default function DashboardPage() {
 
         <main className="flex flex-1 flex-col p-4 lg:p-6">
           <div className="mb-4 flex items-center">
-            <h1 className="text-lg font-semibold md:text-lg">My workspace</h1>
+            <h1 className="text-lg font-semibold md:text-lg">
+              {t("My workspace")}
+            </h1>
           </div>
           <div
             className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
@@ -338,14 +381,18 @@ export default function DashboardPage() {
                   {t("There's not a flow in sight")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Click on &quot;Create new flow&quot; or use one of flow <br />{" "}
-                  suggestions above to get started
+                  {t.rich(
+                    "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
+                    {
+                      br: () => <br />,
+                    }
+                  )}
                 </p>
                 <Button
                   className="itmes-center mt-4 flex gap-2"
                   onClick={handleOpenCreateFlow}
                 >
-                  <Plus size={16} /> Create new flow
+                  <Plus size={16} /> {t("Create new flow")}
                 </Button>
               </div>
             )}

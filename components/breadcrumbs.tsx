@@ -1,4 +1,5 @@
 import { ChevronLeft } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import {
   Breadcrumb,
@@ -12,12 +13,14 @@ import {
 import { Button } from "./ui/button"
 
 export function BreadCrumbs() {
+  const t = useTranslations("CreateFlow")
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/dashboard">
-            <span className="hidden lg:inline-block">My workspace</span>
+            <span className="hidden lg:inline-block">{t("My workspace")}</span>
             <Button
               className="lg:hidden p-2 my-4 h-8"
               size="sm"

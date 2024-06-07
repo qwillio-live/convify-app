@@ -1,14 +1,16 @@
 "use client"
 
-import { MoreHorizontal, Plus } from "lucide-react"
 import Image from "next/image"
-import placeholder  from "@/assets/placeholder.svg";
+import Link from "next/link"
+import placeholder from "@/assets/placeholder.svg"
+import { MoreHorizontal, Plus } from "lucide-react"
+import { useTranslations } from "next-intl"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -27,50 +29,50 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import Link from "next/link"
+
 import { Badge } from "./ui/badge"
 
 export function FlowsList() {
+  const t = useTranslations("Dashboard")
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="sm:py-0 md:gap-8">
-        <div>
+        <div className="flex flex-col">
           <Link
-            className="flex items-center"
+            className="flex items-center justify-start self-start"
             href="/dashboard/flows/create-flow"
           >
             <Button size="sm" className="my-4 h-8 gap-1 py-2">
               <Plus className="size-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Create new flow
-              </span>
+              <span className="whitespace-nowrap">{t("Create new flow")}</span>
             </Button>
           </Link>
           <Card>
             <CardHeader>
-              <CardTitle>My flows</CardTitle>
+              <CardTitle>{t("My flows")}</CardTitle>
               <CardDescription>
-                Manage your flows and view their performance.
+                {t("Manage your flows and view their performance")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="hidden w-[100px] sm:table-cell">
+                    <TableHead className="hidden w-[144px] sm:table-cell">
                       <span className="sr-only">Image</span>
                     </TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Steps</TableHead>
+                    <TableHead>{t("Name")}</TableHead>
+                    <TableHead>{t("Status")}</TableHead>
+                    <TableHead>{t("Steps")}</TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Responses
+                      {t("Responses")}
                     </TableHead>
                     <TableHead className="hidden md:table-cell">
-                      Created at
+                      {t("Created at")}
                     </TableHead>
                     <TableHead>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">{t("Actions")}</span>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -79,13 +81,13 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-square rounded-md object-cover"
+                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
                         height="64"
+                        width="113"
                         src={placeholder.src}
-                        width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-bold">
                       Laser Lemonade Machine
                     </TableCell>
                     <TableCell>
@@ -94,7 +96,7 @@ export function FlowsList() {
                     <TableCell>499</TableCell>
                     <TableCell className="hidden md:table-cell">25</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2023-07-12 10:42 AM
+                      2023-07-12 10:42
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -109,9 +111,10 @@ export function FlowsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -120,13 +123,13 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-square rounded-md object-cover"
+                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
                         height="64"
+                        width="113"
                         src={placeholder.src}
-                        width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-bold">
                       Hypernova Headphones
                     </TableCell>
                     <TableCell>
@@ -135,7 +138,7 @@ export function FlowsList() {
                     <TableCell>129</TableCell>
                     <TableCell className="hidden md:table-cell">100</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2023-10-18 03:21 PM
+                      2023-10-18 15:21
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -150,9 +153,10 @@ export function FlowsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -161,13 +165,13 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-square rounded-md object-cover"
+                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
                         height="64"
+                        width="113"
                         src={placeholder.src}
-                        width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-bold">
                       AeroGlow Desk Lamp
                     </TableCell>
                     <TableCell>
@@ -176,7 +180,7 @@ export function FlowsList() {
                     <TableCell>39</TableCell>
                     <TableCell className="hidden md:table-cell">50</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2023-11-29 08:15 AM
+                      2023-11-29 08:15
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -191,9 +195,10 @@ export function FlowsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -202,13 +207,13 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-square rounded-md object-cover"
+                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
                         height="64"
+                        width="113"
                         src={placeholder.src}
-                        width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-bold">
                       TechTonic Energy Drink
                     </TableCell>
                     <TableCell>
@@ -217,7 +222,7 @@ export function FlowsList() {
                     <TableCell>2</TableCell>
                     <TableCell className="hidden md:table-cell">0</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2023-12-25 11:59 PM
+                      2023-12-25 23:59
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -232,9 +237,10 @@ export function FlowsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -243,13 +249,13 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-square rounded-md object-cover"
+                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
                         height="64"
+                        width="113"
                         src={placeholder.src}
-                        width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-bold">
                       Gamer Gear Pro Controller
                     </TableCell>
                     <TableCell>
@@ -258,7 +264,7 @@ export function FlowsList() {
                     <TableCell>59</TableCell>
                     <TableCell className="hidden md:table-cell">75</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2024-01-01 12:00 AM
+                      2024-01-01 00:00
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -273,9 +279,10 @@ export function FlowsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -284,13 +291,13 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-square rounded-md object-cover"
+                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
                         height="64"
+                        width="113"
                         src={placeholder.src}
-                        width="64"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-bold">
                       Luminous VR Headset
                     </TableCell>
                     <TableCell>
@@ -299,7 +306,7 @@ export function FlowsList() {
                     <TableCell>199</TableCell>
                     <TableCell className="hidden md:table-cell">30</TableCell>
                     <TableCell className="hidden md:table-cell">
-                      2024-02-14 02:14 PM
+                      2024-02-14 14:14
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -314,9 +321,10 @@ export function FlowsList() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -324,11 +332,11 @@ export function FlowsList() {
                 </TableBody>
               </Table>
             </CardContent>
-            <CardFooter>
+            {/* <CardFooter>
               <div className="text-xs text-muted-foreground">
                 Showing <strong>1-10</strong> of <strong>32</strong> products
               </div>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </div>
       </main>
