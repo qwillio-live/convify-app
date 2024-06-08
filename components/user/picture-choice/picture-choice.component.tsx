@@ -180,7 +180,7 @@ export const PictureChoiceGen = ({
               ) : null}
             </>
           ) : (
-            item.pic ?
+            item.pic &&
             (
               <img
                 src={item.pic}
@@ -190,11 +190,6 @@ export const PictureChoiceGen = ({
                   height: `${pictureItemsStyles.picHeight}px`,
                 }}
               />
-            ) : (
-              <div style={{
-                width: `${pictureItemsStyles.picWidth}px`,
-                height: `${pictureItemsStyles.picHeight}px`,
-              }}></div>
             )
           )}
           <p>{item.text}</p>
