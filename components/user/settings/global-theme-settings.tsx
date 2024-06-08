@@ -1,7 +1,5 @@
-import React,{useCallback} from "react"
 import { throttle,debounce } from 'lodash';
 import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
-import { setBackgroundColor, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
@@ -12,8 +10,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { throttle } from "lodash"
 import { useCallback, useEffect, useState } from "react"
 import { FontSelector } from "./font-selector.component"
 
