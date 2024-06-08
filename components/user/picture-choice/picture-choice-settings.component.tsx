@@ -32,17 +32,17 @@ import { Input } from "@/components/ui/input";
 import icons from "@/constant/streamline.json";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import { useNode } from "@/lib/craftjs";
-import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useEventListener } from 'usehooks-ts';
-
+// import {useInView}
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@radix-ui/react-label";
-import { Reorder, useDragControls, useMotionValue } from "framer-motion";
+import { Reorder, useDragControls, useInView, useMotionValue } from "framer-motion";
 import {
   GripVertical,
   Check as IconCheck,
@@ -473,6 +473,13 @@ export const PictureChoiceItem = ({ item, index }) => {
     iconName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const {
+    actions: { setProp },
+    props: { pictureItems, tagLine, containerStyles, pictureItemsStyles },
+  } = useNode((node) => ({
+    props: node.data.props,
+  }))
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -488,12 +495,6 @@ export const PictureChoiceItem = ({ item, index }) => {
       )
     }
   }
-  const {
-    actions: { setProp },
-    props: { pictureItems, tagLine, containerStyles, pictureItemsStyles },
-  } = useNode((node) => ({
-    props: node.data.props,
-  }))
 
   const handleEmojiClick = (emojiObject: EmojiClickData) => {
     setProp(
@@ -549,7 +550,6 @@ export const PictureChoiceItem = ({ item, index }) => {
     }, 1000);
   };
 
-
   return (
     <Reorder.Item
       dragListener={false}
@@ -602,16 +602,22 @@ export const PictureChoiceItem = ({ item, index }) => {
                 <ImageIcon className="mr-2 size-4" />
                 <span>{t("PictureChoice.image")}</span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleRemoveItem} className="focus:bg-red-500 focus:text-white">
-                <Trash2 className="mr-2 size-4" />
-                <span>{t("PictureChoice.remove")}</span>
-              </DropdownMenuItem>
+              {
+                item.pic && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleRemoveItem} className="focus:bg-red-500 focus:text-white">
+                      <Trash2 className="mr-2 size-4" />
+                      <span>{t("PictureChoice.remove")}</span>
+                    </DropdownMenuItem>
+                  </>
+                )
+              }
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
         {/* icons */}
-        <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[700px]">
+        <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[70%]">
           <DialogHeader className="sticky top-0 bg-white py-4 px-2 z-10">
             <div className="flex items-center justify-start gap-4">
               <div>
@@ -701,17 +707,24 @@ PictureChoiceItem.displayName = 'PictureChoiceItem';
 
 
 const IconRenderer = ({ iconName, onClick }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref);
   return (
-    <div
-      className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center"
-      onClick={() => onClick(iconName)}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24" 
-        dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
-        className="h-24 w-24 cursor-pointer ml-10 mt-8" 
-      />
+    <div className="max-h-[160px]">
+      <div
+        ref={ref}
+        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center max-h-full max-w-full h-auto w-auto"
+        onClick={() => onClick(iconName)}
+      >
+        {isInView && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
+            className="h-24 w-24 cursor-pointer ml-10 mt-8" 
+          />
+        )}
+      </div>
     </div>
   )
 }
@@ -775,6 +788,7 @@ const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, positi
         ref={emojiRef}
       >
         <EmojiPicker
+          emojiStyle={EmojiStyle.APPLE}
           onEmojiClick={onEmojiClick}
           lazyLoadEmojis={true}
           skinTonesDisabled={true}

@@ -180,14 +180,22 @@ export const PictureChoiceGen = ({
               ) : null}
             </>
           ) : (
-            <img
-              src={item.pic}
-              alt={item.alt || ""}
-              style={{
+            item.pic ?
+            (
+              <img
+                src={item.pic}
+                alt={item.alt || ""}
+                style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}
+              />
+            ) : (
+              <div style={{
                 width: `${pictureItemsStyles.picWidth}px`,
                 height: `${pictureItemsStyles.picHeight}px`,
-              }}
-            />
+              }}></div>
+            )
           )}
           <p>{item.text}</p>
         </PictureChoiceItem>
@@ -262,14 +270,21 @@ export const PictureChoice = ({
                 ) : null}
               </>
             ) : (
-              <img
-                src={item.pic}
-                alt={item.alt || ""}
-                style={{
+              item.pic ? (
+                <img
+                  src={item.pic}
+                  alt={item.alt || ""}
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) : (
+                <div style={{
                   width: `${pictureItemsStyles.picWidth}px`,
                   height: `${pictureItemsStyles.picHeight}px`,
-                }}
-              />
+                }}></div>
+              )
             )}
             <ContentEditable
               html={item?.text || ""}
