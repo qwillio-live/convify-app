@@ -32,7 +32,7 @@ import { Input } from "@/components/ui/input";
 import icons from "@/constant/streamline.json";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import { useNode } from "@/lib/craftjs";
-import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react";
+import EmojiPicker, { EmojiClickData, EmojiStyle, SuggestionMode } from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useEventListener } from 'usehooks-ts';
@@ -803,6 +803,8 @@ const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, positi
           skinTonesDisabled={true}
           width={280}
           height={350}
+          suggestedEmojisMode={SuggestionMode.RECENT}
+          emojiVersion={'4.0'}
           previewConfig={{ showPreview: false }}
         />
       </div>
