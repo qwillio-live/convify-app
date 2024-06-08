@@ -242,7 +242,23 @@ export const PictureChoice = ({
 
         {pictureItems.map((item, index) => (
           <PictureChoiceItem key={index} {...pictureItemsStyles}>
+
             {item.itemType === ItemType.ICON ? (
+              item.icon === "check" ? (
+                <IconCheck
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) : item.icon === "x" ? (
+                <IconX
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) :
               item.icon ? (
                 <span className="text-[75px]"
                 style={{

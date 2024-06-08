@@ -577,12 +577,11 @@ export const PictureChoiceItem = ({ item, index }) => {
                 className="pic-container hover:cursor-pointer"
               >
                 {item.itemType === ItemType.ICON ? (
-                  // <img src={item.icon} className="shrink-0 w-20 h-20" />
-                  // item.icon === "check" ? (
-                  //   <IconCheck className="size-5 shrink-0" />
-                  // ) : item.icon === "x" ? (
-                  //   <IconX className="size-5 shrink-0" />
-                  // ) : null
+                  item.icon === "check" ? (
+                    <IconCheck className="size-5 shrink-0" />
+                  ) : item.icon === "x" ? (
+                    <IconX className="size-5 shrink-0" />
+                  ) : 
                   <div className="size-5 shrink-0">{item.icon}</div>
                 ) : (
                   <img
