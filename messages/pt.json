@@ -10,6 +10,17 @@
   "Dashboard": {
     "There's not a flow in sight": "Não há um fluxo à vista"
   },
+  "CreateFlow": {
+    "PictureChoice": {
+      "icon" : "Selecione o ícone",
+      "iconDesc": "Faça alterações em seus ícones aqui.",
+      "iconSearch": "Search...",
+      "iconNotFound": "No icons found.",
+      "emoji": "Selecione o emoji",
+      "image": "Selecione a imagem",
+      "remove": "Remover"
+    }
+  },
   "Components" : {
     "Continue Button" : "Botão Continuar odo",
     "Continue" : "Continuar",

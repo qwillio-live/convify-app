@@ -10,6 +10,17 @@
   "Dashboard": {
     "There's not a flow in sight": "There's not a flow in sight"
   },
+  "CreateFlow": {
+    "PictureChoice": {
+      "icon" : "Select Icons",
+      "iconDesc": "Make changes to your icons here.",
+      "iconSearch": "Search...",
+      "iconNotFound": "No icons found.",
+      "emoji": "Select Emoji",
+      "image": "Select Image",
+      "remove": "Remove"
+    }
+  },
   "Components" : {
     "Continue Button" : "Continue Button",
     "Continue" : "Continue",

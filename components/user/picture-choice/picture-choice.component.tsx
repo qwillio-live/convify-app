@@ -161,8 +161,7 @@ export const PictureChoiceGen = ({
     <PictureChoiceContainer {...containerStyles}>
       {pictureItems.map((item, index) => (
         <PictureChoiceItem key={index} {...pictureItemsStyles}>
-          {item.itemType === ItemType.ICON ? (
-            <>
+           {/* <>
               {item.icon === "check" ? (
                 <IconCheck
                   style={{
@@ -178,16 +177,25 @@ export const PictureChoiceGen = ({
                   }}
                 />
               ) : null}
-            </>
+            </> */}
+          {item.itemType === ItemType.ICON ? (
+            item.icon ? (
+              <div className="text-[75px]">{item.icon}</div>
+            ) : (
+              <div className="text-[75px]"></div>
+            )
           ) : (
-            <img
-              src={item.pic}
-              alt={item.alt || ""}
-              style={{
-                width: `${pictureItemsStyles.picWidth}px`,
-                height: `${pictureItemsStyles.picHeight}px`,
-              }}
-            />
+            item.pic &&
+            (
+              <img
+                src={item.pic}
+                alt={item.alt || ""}
+                style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}
+              />
+            )
           )}
           <p>{item.text}</p>
         </PictureChoiceItem>
@@ -234,42 +242,55 @@ export const PictureChoice = ({
 
         {pictureItems.map((item, index) => (
           <PictureChoiceItem key={index} {...pictureItemsStyles}>
-            {item.itemType === ItemType.ICON ? (
-              <>
-                {/* <img
-                src={item.icon}
-                style={{
-                  color: `${pictureItemsStyles.textColor}`,
-                  width: `${pictureItemsStyles.picWidth}px`,
-                  height: `${pictureItemsStyles.picHeight}px`,
-                }}
-              /> */}
 
-                {item.icon === "check" ? (
-                  <IconCheck
-                    style={{
-                      width: `${pictureItemsStyles.picWidth}px`,
-                      height: `${pictureItemsStyles.picHeight}px`,
-                    }}
-                  />
-                ) : item.icon === "x" ? (
-                  <IconX
-                    style={{
-                      width: `${pictureItemsStyles.picWidth}px`,
-                      height: `${pictureItemsStyles.picHeight}px`,
-                    }}
-                  />
-                ) : null}
-              </>
-            ) : (
-              <img
-                src={item.pic}
-                alt={item.alt || ""}
+            {item.itemType === ItemType.ICON ? (
+              item.icon === "check" ? (
+                <IconCheck
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) : item.icon === "x" ? (
+                <IconX
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) :
+              item.icon ? (
+                <span className="text-[75px]"
                 style={{
                   width: `${pictureItemsStyles.picWidth}px`,
                   height: `${pictureItemsStyles.picHeight}px`,
-                }}
-              />
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>{item.icon}</span>
+              ) : (
+                <div style={{
+                  width: `75px`,
+                  height: `75px`,
+                }}></div>
+              )
+            ) : (
+              item.pic ? (
+                <img
+                  src={item.pic}
+                  alt={item.alt || ""}
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                    marginLeft: `6px`
+                  }}
+                />
+              ) : (
+                <div style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}></div>
+              )
             )}
             <ContentEditable
               html={item?.text || ""}
