@@ -797,7 +797,7 @@ const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, positi
         ref={emojiRef}
       >
         <EmojiPicker
-          emojiStyle={EmojiStyle.APPLE}
+          emojiStyle={EmojiStyle.NATIVE}
           onEmojiClick={onEmojiClick}
           lazyLoadEmojis={true}
           skinTonesDisabled={true}
