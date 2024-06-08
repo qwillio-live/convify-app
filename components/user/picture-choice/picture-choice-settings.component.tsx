@@ -91,7 +91,7 @@ export const PictureChoiceSettings = () => {
         state?.screen?.screens[
           selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
         ]?.screenName
-    ) || ""
+    ) || "";
 
   useEffect(() => {
     const handleClickOutside = (event) => {

@@ -57,13 +57,23 @@ import {
 import useButtonThemePresets from "./useButtonThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils";
-import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
+import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks";
 import { RootState } from "@/lib/state/flows-state/store";
 
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
   const screenNames = useScreenNames();
-  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || "";
 
   const {
     actions: { setProp },
@@ -221,38 +231,25 @@ export const IconButtonSettings = () => {
                 </>
               )}
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-                  <p className="text-md flex-1 text-muted-foreground shrink-0"><ArrowRight /></p>
-                  <Select
-                    defaultValue={buttonAction}
-                    value={buttonAction}
-                    onValueChange={(e) => {
-                        setProp((props) => (props.buttonAction = e), 200)
-                  }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select action" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="next-screen" className="flex flex-row items-center text-xs">
-                          <div className="flex flex-row items-center text-xs gap-2"><ArrowRight size={16} /> <span>Next Screen</span></div>
-                        </SelectItem>
-                        <SelectItem value="custom-action" className="flex flex-row items-center text-xs">
-                          <div className="flex flex-row items-center text-xs gap-2"><CornerRightDown size={16} /> <span>Go to</span></div>
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-            </div>
-            {
-              buttonAction === "custom-action" && (
+
                 <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+                <label
+                  htmlFor="text"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Navigation
+                </label>
                 <Select
-                  defaultValue={nextScreen}
-                  value={nextScreen}
+                  defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen}
+                  value={buttonAction === "next-screen" ? "next-screen" : nextScreen}
                   onValueChange={(e) => {
-                      setProp((props) => (props.nextScreen = e), 200)
+                      if(e === "next-screen") {
+                        setProp((props) => (props.buttonAction = "next-screen" ))
+                        setProp((props) => (props.nextScreen = nextScreenName ))
+                      } else {
+                        setProp((props) => (props.buttonAction = "custom-action" ))
+                        setProp((props) => (props.nextScreen = e))
+                      }
                 }}
                 >
                   <SelectTrigger className="w-full">
@@ -260,11 +257,14 @@ export const IconButtonSettings = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
+                    <SelectItem value={"next-screen"}>
+                      Next Screen
+                    </SelectItem>
                     {
-                      screenNames?.map((screen) => {
+                      screenNames?.map((screen,index) => {
                         return (
                           <SelectItem value={screen}>
-                            {screen}
+                            {index+1} : {screen}
                           </SelectItem>
                         )
                       })
@@ -273,8 +273,6 @@ export const IconButtonSettings = () => {
                   </SelectContent>
                 </Select>
           </div>
-              )
-            }
           </AccordionContent>
         </AccordionItem>
 
