@@ -2,8 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FONTS, PrimaryFontType, SecondaryFontType } from "./fonts"
 
 export interface GlobalThemeState {
-  primaryFonts?: PrimaryFontType
-  secondaryFonts?: SecondaryFontType
+  mobileScreen: boolean;
+  primaryFonts?: PrimaryFontType;
+  secondaryFonts?: SecondaryFontType;
   defaultGeneral?: {
     primaryColor?: string
     secondaryColor?: string
@@ -31,6 +32,7 @@ export interface GlobalThemeState {
 }
 
 const initialState: GlobalThemeState = {
+  mobileScreen: false,
   primaryFonts: FONTS.primaryFonts,
   secondaryFonts: FONTS.secondaryFonts,
   defaultGeneral: {
@@ -79,10 +81,19 @@ export const themeSlice = createSlice({
         state.general.backgroundColor = action.payload
       }
     },
+    setMobileScreen: (state, action: PayloadAction<boolean>) => {
+      state.mobileScreen = action.payload;
+
+    },
   },
 })
 
-export const { setThemeStyles, setPartialStyles, setBackgroundColor } =
-  themeSlice.actions
+
+export const {
+  setThemeStyles,
+  setPartialStyles,
+  setBackgroundColor,
+  setMobileScreen,
+} = themeSlice.actions;
 
 export default themeSlice.reducer

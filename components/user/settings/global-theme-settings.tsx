@@ -1,3 +1,8 @@
+import React,{useCallback} from "react"
+import { throttle,debounce } from 'lodash';
+import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
+import { setBackgroundColor, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
   AccordionContent,
@@ -92,6 +97,19 @@ export const GlobalThemeSettings = (props: Props) => {
     console.log("primaryFonts", primaryFonts)
   }, [primaryFonts])
 
+  const debouncedDispatch = useCallback(
+    debounce((value) => {
+      dispatch(setPartialStyles(value));
+    }, 200,{
+      maxWait: 400,
+    } ), // Throttle to 200ms
+    [dispatch]
+  );
+
+  const handleStyleChangeDebounced = (style) => {
+    debouncedDispatch(style);
+  }
+
   return (
     <>
       <ScrollArea>
@@ -113,9 +131,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   onChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
-                    handleStyleChange({
-                      general: { primaryColor: e.target.value },
-                    })
+                    handleStyleChangeDebounced({general: { primaryColor: e.target.value}})
                   }}
                   className=" basis-1/3"
                   type={"color"}
@@ -133,14 +149,13 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                   value={secondaryColor || defaultSecondaryColor}
                   onChange={(e) => {
-                    handleStyleChange({
-                      general: { secondaryColor: e.target.value },
-                    })
+                    // handleStyleChange({general: { secondaryColor: e.target.value}})
+                    handleStyleChangeDebounced({general: { secondaryColor: e.target.value}})
                   }}
-                  className=" basis-1/3"
-                  type={"color"}
-                  id="secondarycolor"
-                />
+                    className=" basis-1/3"
+                    type={"color"}
+                    id="secondarycolor"
+                  />
               </div>
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
@@ -154,9 +169,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   value={backgroundColor || defaultBackgroundColor}
                   onChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
-                    handleStyleChange({
-                      general: { backgroundColor: e.target.value },
-                    })
+                    handleStyleChangeDebounced({general: { backgroundColor: e.target.value}})
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className=" basis-1/3"
@@ -223,16 +236,15 @@ export const GlobalThemeSettings = (props: Props) => {
                 </label>
                 <Input
                   value={primaryTextColor || defaultPrimaryTextColor}
-                  onChange={(e) => {
-                    handleStyleChange({
-                      text: { primaryColor: e.target.value },
-                    })
-                    // handleApplyTheme({text: { primaryColor: e.target.value}})
-                  }}
-                  className=" basis-1/3"
-                  type={"color"}
-                  id="primarytextcolor"
-                />
+                  onChange={(e) =>
+                    {
+                      handleStyleChangeDebounced({text: { primaryColor: e.target.value}})
+                      // handleApplyTheme({text: { primaryColor: e.target.value}})
+                    }}
+                    className=" basis-1/3"
+                    type={"color"}
+                    id="primarytextcolor"
+                  />
               </div>
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
@@ -245,11 +257,10 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                   value={secondaryTextColor || defaultSecondaryTextColor}
                   onChange={(e) => {
-                    handleStyleChange({
-                      text: { secondaryColor: e.target.value },
-                    })
+                    handleStyleChangeDebounced({text: { secondaryColor: e.target.value}})
                     // handleApplyTheme({text: { secondaryColor: e.target.value}})
-                  }}
+                    }
+                  }
                   className=" basis-1/3"
                   type={"color"}
                   id="secondarytextcolor"

@@ -18,7 +18,7 @@
 			"mdsAe2aBSM",
 			"HsVEwi1W0N",
 			"WyPGuBF4RD",
-			"Yj9p3YXY1L",
+			"lWqDrGF2Nc",
 			"footer-node"
 		],
 		"linkedNodes": {
@@ -65,7 +65,7 @@
 			"color": "#4050ff",
 			"maxWidth": "366",
 			"fullWidth": false,
-      "progressvalue" : "20"
+			"progressvalue": "20"
 		},
 		"displayName": "ProgressBar",
 		"custom": {
@@ -227,75 +227,15 @@
 
 		}
 	},
-	"Yj9p3YXY1L": {
+	"footer-node": {
 		"type": {
-			"resolvedName": "IconButton"
+			"resolvedName": "ScreenFooter"
 		},
 		"isCanvas": false,
 		"props": {
-      "fontFamily": {
-        "value": "inherit",
-        "globalStyled": true,
-        "isCustomized": false
-      },
-      "background": {
-        "value": "#4050ff",
-        "globalStyled": true,
-        "isCustomized": false
-      },
-      "color": {
-        "value": "#ffffff",
-        "globalStyled": false,
-        "isCustomized": true
-      },
-      "backgroundHover": {
-        "value": "#3041ff",
-        "globalStyled": true,
-        "isCustomized": false
-      },
-      "colorHover": {
-        "value": "#ffffff",
-        "globalStyled": false,
-        "isCustomized": true
-      },
-      "radius": {
-        "value": "8",
-        "globalStyled": false,
-        "isCustomized": false
-      },
-      "borderColor": {
-        "value": "inherit",
-        "globalStyled": true,
-        "isCustomized": false
-      },
-      "borderHoverColor": {
-        "value": "inherit",
-        "globalStyled": true,
-        "isCustomized": false
-      },
-      "justifyContent": "space-between",
-      "disabled": false,
-      "enableIcon": true,
-      "width": "366",
-      "height": "auto",
-      "size": "medium",
-      "text": "Get quote",
-      "marginLeft": "20",
-      "marginTop": "20",
-      "marginRight": "20",
-      "marginBottom": "20",
-      "icon": "arrowright",
-      "paddingLeft": "16",
-      "paddingTop": "26",
-      "paddingRight": "16",
-      "paddingBottom": "26",
-      "flexDirection": "row",
-      "alignItems": "center",
-      "gap": 4,
-      "border": 0,
-      "fullWidth": false
-    },
-		"displayName": "IconButton",
+
+		},
+		"displayName": "Footers",
 		"custom": {
 
 		},
@@ -308,15 +248,83 @@
 
 		}
 	},
-	"footer-node": {
+	"lWqDrGF2Nc": {
 		"type": {
-			"resolvedName": "ScreenFooter"
+			"resolvedName": "IconButton"
 		},
 		"isCanvas": false,
 		"props": {
-
+			"fontFamily": {
+				"value": "--font-heading",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"containerBackground": "#ffffff",
+			"background": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"color": {
+				"value": "#ffffff",
+				"globalStyled": false,
+				"isCustomized": true
+			},
+			"backgroundHover": {
+				"value": "#3142ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"colorHover": {
+				"value": "#ffffff",
+				"globalStyled": false,
+				"isCustomized": true
+			},
+			"radius": {
+				"value": "8",
+				"globalStyled": false,
+				"isCustomized": false
+			},
+			"justifyContent": "space-between",
+			"borderColor": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"borderHoverColor": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"disabled": false,
+			"enableIcon": true,
+			"width": "medium",
+			"height": "auto",
+			"size": "medium",
+			"text": "Get quote",
+			"marginLeft": 20,
+			"marginTop": [
+				40
+			],
+			"marginRight": 20,
+			"marginBottom": [
+				40
+			],
+			"icon": "arrowright",
+			"paddingLeft": "16",
+			"paddingTop": "14",
+			"paddingRight": "16",
+			"paddingBottom": "14",
+			"flexDirection": "row",
+			"alignItems": "center",
+			"gap": 4,
+			"border": 2,
+			"fullWidth": true,
+			"preset": "filled",
+      "settingsTab": "content",
+      "buttonSize": "medium"
 		},
-		"displayName": "Footers",
+		"displayName": "IconButton",
 		"custom": {
 
 		},

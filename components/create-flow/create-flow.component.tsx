@@ -56,6 +56,7 @@ import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -106,9 +107,10 @@ export function CreateFlowComponent() {
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
-  )
+
 
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
@@ -188,7 +190,10 @@ export function CreateFlowComponent() {
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
                 className="w-full"
-                onValueChange={(value) => setView(value)}
+                onValueChange={(value) => {
+                  setView(value)
+                  dispatch(setMobileScreen(value === VIEWS.MOBILE))
+                }}
               >
                 <TabsContent
                   style={{ backgroundColor: backgroundColor }}
@@ -204,7 +209,7 @@ export function CreateFlowComponent() {
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
+                  <TabsTrigger  value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>
               </Tabs>
 
