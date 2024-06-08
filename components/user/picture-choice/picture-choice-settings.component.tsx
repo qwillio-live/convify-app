@@ -497,14 +497,23 @@ export const PictureChoiceItem = ({ item, index }) => {
   }
 
   const handleEmojiClick = (emojiObject: EmojiClickData) => {
+    console.log(emojiObject)
+    // setProp(
+    //   (props) => (props.pictureItems[index].pic = emojiObject.imageUrl),
+    //   1000
+    // )
     setProp(
-      (props) => (props.pictureItems[index].pic = emojiObject.imageUrl),
+      (props) => (props.pictureItems[index].icon = emojiObject.emoji),
       1000
     )
+    // setProp(
+    //   (props) => ((props.pictureItems[index].itemType = ItemType.ICON), 1000)
+    // )
     setProp(
-      (props) => ((props.pictureItems[index].itemType = ItemType.PICTURE), 1000)
+      (props) => ((props.pictureItems[index].itemType = ItemType.ICON), 1000)
     )
     setPickerType("")
+    console.log(pictureItems);
   }
 
   const handleOpenEmojiPicker = () => {
@@ -569,11 +578,12 @@ export const PictureChoiceItem = ({ item, index }) => {
               >
                 {item.itemType === ItemType.ICON ? (
                   // <img src={item.icon} className="shrink-0 w-20 h-20" />
-                  item.icon === "check" ? (
-                    <IconCheck className="size-5 shrink-0" />
-                  ) : item.icon === "x" ? (
-                    <IconX className="size-5 shrink-0" />
-                  ) : null
+                  // item.icon === "check" ? (
+                  //   <IconCheck className="size-5 shrink-0" />
+                  // ) : item.icon === "x" ? (
+                  //   <IconX className="size-5 shrink-0" />
+                  // ) : null
+                  <div className="size-5 shrink-0">{item.icon}</div>
                 ) : (
                   <img
                     src={item.pic}
@@ -603,7 +613,7 @@ export const PictureChoiceItem = ({ item, index }) => {
                 <span>{t("PictureChoice.image")}</span>
               </DropdownMenuItem>
               {
-                item.pic && (
+                (item.pic || item.icon) && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleRemoveItem} className="focus:bg-red-500 focus:text-white">

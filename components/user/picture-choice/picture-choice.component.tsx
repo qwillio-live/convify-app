@@ -161,8 +161,7 @@ export const PictureChoiceGen = ({
     <PictureChoiceContainer {...containerStyles}>
       {pictureItems.map((item, index) => (
         <PictureChoiceItem key={index} {...pictureItemsStyles}>
-          {item.itemType === ItemType.ICON ? (
-            <>
+           {/* <>
               {item.icon === "check" ? (
                 <IconCheck
                   style={{
@@ -178,7 +177,13 @@ export const PictureChoiceGen = ({
                   }}
                 />
               ) : null}
-            </>
+            </> */}
+          {item.itemType === ItemType.ICON ? (
+            item.icon ? (
+              <div className="text-[75px]">{item.icon}</div>
+            ) : (
+              <div className="text-[75px]"></div>
+            )
           ) : (
             item.pic &&
             (
@@ -238,32 +243,21 @@ export const PictureChoice = ({
         {pictureItems.map((item, index) => (
           <PictureChoiceItem key={index} {...pictureItemsStyles}>
             {item.itemType === ItemType.ICON ? (
-              <>
-                {/* <img
-                src={item.icon}
+              item.icon ? (
+                <span className="text-[75px]"
                 style={{
-                  color: `${pictureItemsStyles.textColor}`,
                   width: `${pictureItemsStyles.picWidth}px`,
                   height: `${pictureItemsStyles.picHeight}px`,
-                }}
-              /> */}
-
-                {item.icon === "check" ? (
-                  <IconCheck
-                    style={{
-                      width: `${pictureItemsStyles.picWidth}px`,
-                      height: `${pictureItemsStyles.picHeight}px`,
-                    }}
-                  />
-                ) : item.icon === "x" ? (
-                  <IconX
-                    style={{
-                      width: `${pictureItemsStyles.picWidth}px`,
-                      height: `${pictureItemsStyles.picHeight}px`,
-                    }}
-                  />
-                ) : null}
-              </>
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>{item.icon}</span>
+              ) : (
+                <div style={{
+                  width: `75px`,
+                  height: `75px`,
+                }}></div>
+              )
             ) : (
               item.pic ? (
                 <img
@@ -272,6 +266,7 @@ export const PictureChoice = ({
                   style={{
                     width: `${pictureItemsStyles.picWidth}px`,
                     height: `${pictureItemsStyles.picHeight}px`,
+                    marginLeft: `6px`
                   }}
                 />
               ) : (
