@@ -207,60 +207,54 @@ export default function DashboardPage() {
                   className="shrink-0 md:hidden w-auto px-3"
                 >
                   <svg
-                    className="w-7 h-7"
-                    viewBox="0 0 720 524"
+                    width="25"
+                    viewBox="0 0 22 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <mask
-                      id="mask0_2503_36160"
+                      id="mask0_2486_36154"
                       style={{ maskType: "alpha" }}
                       maskUnits="userSpaceOnUse"
-                      x="65"
-                      y="65"
-                      width="590"
-                      height="394"
+                      x="0"
+                      y="0"
+                      width="22"
+                      height="12"
                     >
-                      <rect
-                        x="65.4551"
-                        y="65.4551"
-                        width="589.091"
-                        height="392.727"
-                        fill="#D9D9D9"
-                      />
+                      <rect width="22" height="12" fill="#D9D9D9" />
                     </mask>
-                    <g mask="url(#mask0_2503_36160)">
+                    <g mask="url(#mask0_2486_36154)">
                       <path
-                        d="M114.547 507.273L286.365 261.819L114.547 16.3643"
+                        d="M2 14L7 6L2 -2"
                         stroke="white"
-                        strokeWidth="98.1818"
+                        stroke-width="4"
                       />
                       <path
-                        d="M114.547 507.273L286.365 261.819L114.547 16.3643"
+                        d="M2 14L7 6L2 -2"
                         stroke="black"
-                        strokeWidth="98.1818"
+                        stroke-width="4"
                       />
                       <path
-                        d="M261.818 507.273L433.637 261.819L261.818 16.3643"
+                        d="M8 14L13 6L8 -2"
                         stroke="white"
-                        strokeWidth="98.1818"
+                        stroke-width="4"
                       />
                       <path
-                        d="M261.818 507.273L433.637 261.819L261.818 16.3643"
+                        d="M8 14L13 6L8 -2"
                         stroke="black"
-                        strokeOpacity="0.6"
-                        strokeWidth="98.1818"
+                        stroke-opacity="0.6"
+                        stroke-width="4"
                       />
                       <path
-                        d="M409.092 507.273L580.91 261.819L409.092 16.3643"
+                        d="M14 14L19 6L14 -2"
                         stroke="white"
-                        strokeWidth="98.1818"
+                        stroke-width="4"
                       />
                       <path
-                        d="M409.092 507.273L580.91 261.819L409.092 16.3643"
+                        d="M14 14L19 6L14 -2"
                         stroke="black"
-                        strokeOpacity="0.2"
-                        strokeWidth="98.1818"
+                        stroke-opacity="0.2"
+                        stroke-width="4"
                       />
                     </g>
                   </svg>

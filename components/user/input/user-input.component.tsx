@@ -1,27 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
-import { Settings, X } from "lucide-react"
-import ContentEditable from "react-contenteditable"
-import styled from "styled-components"
-
-import { useNode } from "@/lib/craftjs"
-
-import { Input } from "@/components/input-custom"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-
-import { Controller } from "../settings/controller.component"
-import { UserInputSettings } from "./user-input-settings.component"
-import { cn } from "@/lib/utils"
+import { useEffect, useRef, useState } from "react"
 import {
   Activity,
   Anchor,
@@ -30,21 +7,31 @@ import {
   Disc,
   DollarSign,
   Mountain,
+  X,
 } from "lucide-react"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { StyleProperty } from "../types/style.types"
 import { rgba } from "polished"
+import styled from "styled-components"
 
-const ICONSTYLES = 'p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent';
+import { useNode } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+import { Input } from "@/components/input-custom"
+
+import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
+import { UserInputSettings } from "./user-input-settings.component"
+
+const ICONSTYLES =
+  "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
 
 const IconsList = {
   aperture: <Aperture className={ICONSTYLES} />,
-  activity: <Activity  className={ICONSTYLES} />,
-  dollarsign: <DollarSign  className={ICONSTYLES} />,
-  anchor: <Anchor  className={ICONSTYLES} />,
+  activity: <Activity className={ICONSTYLES} />,
+  dollarsign: <DollarSign className={ICONSTYLES} />,
+  anchor: <Anchor className={ICONSTYLES} />,
   disc: <Disc className={ICONSTYLES} />,
-  mountain: <Mountain  className={ICONSTYLES} />,
-  arrowright: <ArrowRight  className={ICONSTYLES} />,
+  mountain: <Mountain className={ICONSTYLES} />,
+  arrowright: <ArrowRight className={ICONSTYLES} />,
   x: <X className={cn(ICONSTYLES, "text-[#cc0000]")} />,
 }
 
@@ -55,13 +42,12 @@ export enum UserInputSizes {
   full = "full",
 }
 
-const UserInputSizeValues={
+const UserInputSizeValues = {
   small: "260px",
   medium: "376px",
   large: "576px",
   full: "100%",
 }
-
 
 export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState(props.inputValue)
@@ -85,119 +71,126 @@ export const UserInputGen = ({ ...props }) => {
         justifyContent: "center",
       }}
     >
-      <div className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        backgroundColor: `${props.backgroundColor}`,
-        minWidth: '100%',
-        paddingTop: `${props.marginTop}px`,
-        paddingBottom: `${props.marginBottom}px`,
-        paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `${props.marginRight}px`,
-       }}
+      <div
+        className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          backgroundColor: `${props.backgroundColor}`,
+          minWidth: "100%",
+          paddingTop: `${props.marginTop}px`,
+          paddingBottom: `${props.marginBottom}px`,
+          paddingLeft: `${props.marginLeft}px`,
+          paddingRight: `${props.marginRight}px`,
+        }}
       >
-      <div className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-      style={{
-        width: `${UserInputSizeValues[props.size]}`,
-       }}
-      >
-      {
-        !props.floatingLabel && (
+        <div
+          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
+          style={{
+            width: `${UserInputSizeValues[props.size]}`,
+          }}
+        >
+          {!props.floatingLabel && (
+            <div
+              onClick={() => {
+                setIsActive(true)
+                setIsFocused(true)
+                focusInput()
+              }}
+              className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+              style={{
+                fontFamily: `var(${props.primaryFont.value})`,
+                minWidth: `${UserInputSizeValues[props.size]}`,
+                width: `${UserInputSizeValues[props.size]}`,
+              }}
+            >
+              {props.label}
+            </div>
+          )}
           <div
             onClick={() => {
               setIsActive(true)
               setIsFocused(true)
-                focusInput()
+              focusInput() // Focus the input when placeholder is clicked
             }}
-            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+              (isActive && props.floatingLabel) ||
+              (inputValue.length > 0 && props.floatingLabel)
+                ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+                : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+            } ${
+              props.floatingLabel &&
+              props.enableIcon &&
+              "left-[49px]" /**was left-12 but care for a single pixel */
+            }
+
+        `}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
             }}
           >
-            {props.label}
+            {props.floatingLabel && props.label}
           </div>
-        )
-      }
-      <div
-        onClick={() => {
-          setIsActive(true)
-          setIsFocused(true)
-          focusInput() // Focus the input when placeholder is clicked
-        }}
-        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
-          isActive && props.floatingLabel || inputValue.length > 0 && props.floatingLabel
-            ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-            : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
-        } ${
-          props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
-        }
 
-        `
-      }
-        style={{
-          fontFamily: `var(${props.primaryFont.value})`,
-          minWidth: `${UserInputSizeValues[props.size]}`,
-          width: `${UserInputSizeValues[props.size]}`,
-        }}
-      >
-        {props.floatingLabel && props.label}
-      </div>
-
-      <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
-      {
-        props.enableIcon && (
-          <div
-          className={cn(
-            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200',
-          )}
-          style={{
-            backgroundColor: '#fff',
-            borderColor: error ? "#cc0000" : isActive ? props.activeBorderColor.value : props.borderColor.value,
-            borderBottomLeftRadius: error ? 0 : props.bottomLeftRadius,
-            borderTopLeftRadius: props.topLeftRadius,
-            borderTopWidth: props.borderTopWidth,
-            borderBottomWidth: props.borderBottomWidth,
-            borderLeftWidth: props.borderLeftWidth,
-            borderRightWidth: 0,
-           }}
-          >
-          {IconsList[props.icon]}
-          </div>
-        )
-      }
-      <UserInputStyled
-        ref={inputRef}
-        textColor={props.textColor}
-        backgroundColor={props.backgroundColor}
-        borderColor={
-          isActive ? props.activeBorderColor.value : props.borderColor.value
-        }
-        error={props.error}
-        primaryFont={props.primaryFont.value}
-        placeholder={ !props.floatingLabel && props.placeholder}
-        borderWidth={props.borderWidth}
-        borderTopWidth={props.borderTopWidth}
-        borderBottomWidth={props.borderBottomWidth}
-        borderLeftWidth={props.borderLeftWidth}
-        borderRightWidth={props.borderRightWidth}
-        borderRadius={props.borderRadius}
-        topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
-        topRightRadius={props.topRightRadius}
-        bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
-        bottomRightRadius={props.bottomRightRadius}
-        width={props.width}
-        size={props.size}
-        onFocus={() => setIsActive(true)}
-        className={cn(
-          {
-            "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-            "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light": !props.floatingLabel,
-            "rounded-l-none" : props.enableIcon,
-          },
-          `ring-0
+          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+            {props.enableIcon && (
+              <div
+                className={cn(
+                  "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
+                )}
+                style={{
+                  backgroundColor: "#fff",
+                  borderColor: error
+                    ? "#cc0000"
+                    : isActive
+                    ? props.activeBorderColor.value
+                    : props.borderColor.value,
+                  borderBottomLeftRadius: error ? 0 : props.bottomLeftRadius,
+                  borderTopLeftRadius: props.topLeftRadius,
+                  borderTopWidth: props.borderTopWidth,
+                  borderBottomWidth: props.borderBottomWidth,
+                  borderLeftWidth: props.borderLeftWidth,
+                  borderRightWidth: 0,
+                }}
+              >
+                {IconsList[props.icon]}
+              </div>
+            )}
+            <UserInputStyled
+              ref={inputRef}
+              textColor={props.textColor}
+              backgroundColor={props.backgroundColor}
+              borderColor={
+                isActive
+                  ? props.activeBorderColor.value
+                  : props.borderColor.value
+              }
+              error={props.error}
+              primaryFont={props.primaryFont.value}
+              placeholder={!props.floatingLabel && props.placeholder}
+              borderWidth={props.borderWidth}
+              borderTopWidth={props.borderTopWidth}
+              borderBottomWidth={props.borderBottomWidth}
+              borderLeftWidth={props.borderLeftWidth}
+              borderRightWidth={props.borderRightWidth}
+              borderRadius={props.borderRadius}
+              topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
+              topRightRadius={props.topRightRadius}
+              bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
+              bottomRightRadius={props.bottomRightRadius}
+              width={props.width}
+              size={props.size}
+              onFocus={() => setIsActive(true)}
+              className={cn(
+                {
+                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
+                  "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
+                    !props.floatingLabel,
+                  "rounded-l-none": props.enableIcon,
+                },
+                `ring-0
           outline-none
           focus-visible:outline-none
           peer-focus-visible:outline-none
@@ -208,20 +201,21 @@ export const UserInputGen = ({ ...props }) => {
           duration-200
           ease-in-out
           focus-visible:ring-transparent focus-visible:ring-offset-0`
-        )}
-        onChange={(e) =>
-          // setProp((props) => (props.inputValue = e.target.value))
-          setInputValue(e.target.value)
-          // console.log("INPUT COMPONENT VALUE", e.target.value)
-        }
-        onBlur={() => setIsActive(false)}
-        autoFocus={isFocused}
-      />
-      </div>{/** End field container */}
+              )}
+              onChange={
+                (e) =>
+                  // setProp((props) => (props.inputValue = e.target.value))
+                  setInputValue(e.target.value)
+                // console.log("INPUT COMPONENT VALUE", e.target.value)
+              }
+              onBlur={() => setIsActive(false)}
+              autoFocus={isFocused}
+            />
+          </div>
+          {/** End field container */}
 
-      {/** Error container */}
-        {
-          props.error && (
+          {/** Error container */}
+          {props.error && (
             <div
               className="error-container border flex flex-row items-center gap-0 mt-0"
               style={{
@@ -236,18 +230,12 @@ export const UserInputGen = ({ ...props }) => {
                 borderBottomRightRadius: props.errorStyles.bottomRightRadius,
               }}
             >
-              <div className="p-2">
-                {IconsList[props.errorIcon]}
-              </div>
-              <div className="p-2">
-                {props.errorText}
-              </div>
+              <div className="p-2">{IconsList[props.errorIcon]}</div>
+              <div className="p-2">{props.errorText}</div>
             </div>
-          )
-        }
-      {/** End error container */}
-
-      </div>
+          )}
+          {/** End error container */}
+        </div>
       </div>
     </div>
   )
@@ -275,13 +263,15 @@ const UserInputStyled = styled(Input)<{
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 50px;
-  background-color: '#fff';
+  background-color: "#fff";
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
-  border-bottom-right-radius: ${(props) => props.error ? 0 : props.bottomRightRadius}px;
-  border-bottom-left-radius: ${(props) => props.error ? 0 : props.bottomLeftRadius}px;
-  border-color: ${(props) => props.error ? "#cc0000" : props.borderColor};
+  border-bottom-right-radius: ${(props) =>
+    props.error ? 0 : props.bottomRightRadius}px;
+  border-bottom-left-radius: ${(props) =>
+    props.error ? 0 : props.bottomLeftRadius}px;
+  border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
   border-top-width: ${(props) => props.borderTopWidth}px;
   border-bottom-width: ${(props) => props.borderBottomWidth}px;
   border-left-width: ${(props) => props.borderLeftWidth}px;
@@ -303,24 +293,31 @@ export const UserInput = ({ ...props }) => {
   }))
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
-  const secondaryFont = useAppSelector((state) => state?.theme?.text?.secondaryFont)
-  const primaryColor = useAppSelector((state) => state?.theme?.general?.primaryColor)
+  const secondaryFont = useAppSelector(
+    (state) => state?.theme?.text?.secondaryFont
+  )
+  const primaryColor = useAppSelector(
+    (state) => state?.theme?.general?.primaryColor
+  )
 
   useEffect(() => {
-    if(props.primaryFont.globalStyled && !props.primaryFont.isCustomized){
-      setProp((props) => props.primaryFont.value = primaryFont, 200);
+    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+      setProp((props) => (props.primaryFont.value = primaryFont), 200)
     }
   }, [primaryFont])
 
   useEffect(() => {
-    if(props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized){
-      setProp((props) => props.secondaryFont.value = secondaryFont, 200);
+    if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
+      setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
     }
   }, [secondaryFont])
 
   useEffect(() => {
-    if(props.activeBorderColor.globalStyled && !props.activeBorderColor.isCustomized){
-      setProp((props) => props.activeBorderColor.value = primaryColor, 200);
+    if (
+      props.activeBorderColor.globalStyled &&
+      !props.activeBorderColor.isCustomized
+    ) {
+      setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
     }
   }, [primaryColor])
 
@@ -341,119 +338,128 @@ export const UserInput = ({ ...props }) => {
       }}
     >
       {isHovered && <Controller nameOfComponent={"INPUT FIELD"} />}
-      <div className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        backgroundColor: `${props.backgroundColor}`,
-        minWidth: '100%',
-        paddingTop: `${props.marginTop}px`,
-        paddingBottom: `${props.marginBottom}px`,
-        paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `${props.marginRight}px`,
-       }}
+      <div
+        className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          backgroundColor: `${props.backgroundColor}`,
+          minWidth: "100%",
+          paddingTop: `${props.marginTop}px`,
+          paddingBottom: `${props.marginBottom}px`,
+          paddingLeft: `${props.marginLeft}px`,
+          paddingRight: `${props.marginRight}px`,
+        }}
       >
-      <div className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-      style={{
-        width: `${UserInputSizeValues[props.size]}`,
-       }}
-      >
-      {
-        !props.floatingLabel && (
+        <div
+          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
+          style={{
+            width: `${UserInputSizeValues[props.size]}`,
+          }}
+        >
+          {!props.floatingLabel && (
+            <div
+              onClick={() => {
+                setProp((props) => (props.isActive = true)),
+                  setProp((props) => (props.isFocused = true)),
+                  focusInput()
+              }}
+              className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+              style={{
+                fontFamily: `var(${props.primaryFont.value})`,
+                minWidth: `${UserInputSizeValues[props.size]}`,
+                width: `${UserInputSizeValues[props.size]}`,
+              }}
+            >
+              {props.label}
+            </div>
+          )}
           <div
             onClick={() => {
               setProp((props) => (props.isActive = true)),
                 setProp((props) => (props.isFocused = true)),
-                focusInput()
+                focusInput() // Focus the input when placeholder is clicked
             }}
-            className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+              (props.isActive && props.floatingLabel) ||
+              (props.inputValue.length > 0 && props.floatingLabel)
+                ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+                : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+            } ${
+              props.floatingLabel &&
+              props.enableIcon &&
+              "left-[49px]" /**was left-12 but care for a single pixel */
+            }
+
+        `}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
             }}
           >
-            {props.label}
+            {props.floatingLabel && props.label}
           </div>
-        )
-      }
-      <div
-        onClick={() => {
-          setProp((props) => (props.isActive = true)),
-            setProp((props) => (props.isFocused = true)),
-            focusInput() // Focus the input when placeholder is clicked
-        }}
-        className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
-          props.isActive && props.floatingLabel || props.inputValue.length > 0 && props.floatingLabel
-            ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-            : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
-        } ${
-          props.floatingLabel && props.enableIcon && "left-[49px]" /**was left-12 but care for a single pixel */
-        }
 
-        `
-      }
-        style={{
-          fontFamily: `var(${props.primaryFont.value})`,
-          minWidth: `${UserInputSizeValues[props.size]}`,
-          width: `${UserInputSizeValues[props.size]}`,
-        }}
-      >
-        {props.floatingLabel && props.label}
-      </div>
-
-      <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
-      {
-        props.enableIcon && (
-          <div
-          className={cn(
-            'rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200',
-          )}
-          style={{
-            backgroundColor: '#fff',
-            borderColor: props.error ? "#cc0000" : props.isActive ? props.activeBorderColor.value : props.borderColor.value,
-            borderBottomLeftRadius: props.error ? 0 : props.bottomLeftRadius,
-            borderTopLeftRadius: props.topLeftRadius,
-            borderTopWidth: props.borderTopWidth,
-            borderBottomWidth: props.borderBottomWidth,
-            borderLeftWidth: props.borderLeftWidth,
-            borderRightWidth: 0,
-           }}
-          >
-          {IconsList[props.icon]}
-          </div>
-        )
-      }
-      <UserInputStyled
-        ref={inputRef}
-        textColor={props.textColor}
-        backgroundColor={props.backgroundColor}
-        borderColor={
-          props.isActive ? props.activeBorderColor.value : props.borderColor.value
-        }
-        error={props.error}
-        primaryFont={props.primaryFont.value}
-        placeholder={ !props.floatingLabel && props.placeholder}
-        borderWidth={props.borderWidth}
-        borderTopWidth={props.borderTopWidth}
-        borderBottomWidth={props.borderBottomWidth}
-        borderLeftWidth={props.borderLeftWidth}
-        borderRightWidth={props.borderRightWidth}
-        borderRadius={props.borderRadius}
-        topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
-        topRightRadius={props.topRightRadius}
-        bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
-        bottomRightRadius={props.bottomRightRadius}
-        width={props.width}
-        size={props.size}
-        onFocus={() => setProp((props) => (props.isActive = true))}
-        className={cn(
-          {
-            "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-            "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light": !props.floatingLabel,
-            "rounded-l-none" : props.enableIcon,
-          },
-          `ring-0
+          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+            {props.enableIcon && (
+              <div
+                className={cn(
+                  "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
+                )}
+                style={{
+                  backgroundColor: "#fff",
+                  borderColor: props.error
+                    ? "#cc0000"
+                    : props.isActive
+                    ? props.activeBorderColor.value
+                    : props.borderColor.value,
+                  borderBottomLeftRadius: props.error
+                    ? 0
+                    : props.bottomLeftRadius,
+                  borderTopLeftRadius: props.topLeftRadius,
+                  borderTopWidth: props.borderTopWidth,
+                  borderBottomWidth: props.borderBottomWidth,
+                  borderLeftWidth: props.borderLeftWidth,
+                  borderRightWidth: 0,
+                }}
+              >
+                {IconsList[props.icon]}
+              </div>
+            )}
+            <UserInputStyled
+              ref={inputRef}
+              textColor={props.textColor}
+              backgroundColor={props.backgroundColor}
+              borderColor={
+                props.isActive
+                  ? props.activeBorderColor.value
+                  : props.borderColor.value
+              }
+              error={props.error}
+              primaryFont={props.primaryFont.value}
+              placeholder={!props.floatingLabel && props.placeholder}
+              borderWidth={props.borderWidth}
+              borderTopWidth={props.borderTopWidth}
+              borderBottomWidth={props.borderBottomWidth}
+              borderLeftWidth={props.borderLeftWidth}
+              borderRightWidth={props.borderRightWidth}
+              borderRadius={props.borderRadius}
+              topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
+              topRightRadius={props.topRightRadius}
+              bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
+              bottomRightRadius={props.bottomRightRadius}
+              width={props.width}
+              size={props.size}
+              onFocus={() => setProp((props) => (props.isActive = true))}
+              className={cn(
+                {
+                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
+                  "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
+                    !props.floatingLabel,
+                  "rounded-l-none": props.enableIcon,
+                },
+                `ring-0
           outline-none
           focus-visible:outline-none
           peer-focus-visible:outline-none
@@ -464,20 +470,20 @@ export const UserInput = ({ ...props }) => {
           duration-200
           ease-in-out
           focus-visible:ring-transparent focus-visible:ring-offset-0`
-        )}
-        onChange={(e) =>
-          // setProp((props) => (props.inputValue = e.target.value))
-          // not to set input prop when editing
-          console.log("Input field value is: ",e.target.value)
-        }
-        onBlur={() => setProp((props) => (props.isActive = false))}
-        autoFocus={props.isFocused}
-      />
-      </div>{/** End field container */}
+              )}
+              onChange={(e) =>
+                // setProp((props) => (props.inputValue = e.target.value))
+                // not to set input prop when editing
+                console.log("Input field value is: ", e.target.value)
+              }
+              onBlur={() => setProp((props) => (props.isActive = false))}
+              autoFocus={props.isFocused}
+            />
+          </div>
+          {/** End field container */}
 
-      {/** Error container */}
-        {
-          props.error && (
+          {/** Error container */}
+          {props.error && (
             <div
               className="error-container border flex flex-row items-center gap-0 mt-0"
               style={{
@@ -492,18 +498,12 @@ export const UserInput = ({ ...props }) => {
                 borderBottomRightRadius: props.errorStyles.bottomRightRadius,
               }}
             >
-              <div className="p-2">
-                {IconsList[props.errorIcon]}
-              </div>
-              <div className="p-2">
-                {props.errorText}
-              </div>
+              <div className="p-2">{IconsList[props.errorIcon]}</div>
+              <div className="p-2">{props.errorText}</div>
             </div>
-          )
-        }
-      {/** End error container */}
-
-      </div>
+          )}
+          {/** End error container */}
+        </div>
       </div>
     </div>
   )
@@ -560,8 +560,8 @@ export type UserInputProps = {
     topRightRadius: number
     bottomLeftRadius: number
     bottomRightRadius: number
-  },
-  settingsTab: string,
+  }
+  settingsTab: string
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
@@ -631,7 +631,7 @@ export const UserInputDefaultProps: UserInputProps = {
     bottomLeftRadius: 8,
     bottomRightRadius: 8,
   },
-  settingsTab: 'content',
+  settingsTab: "content",
 }
 
 UserInput.craft = {

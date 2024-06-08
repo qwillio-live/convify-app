@@ -138,9 +138,6 @@ export const GlobalThemeSettings = (props: Props) => {
   }
 
   const removeSelectedImage = () => {
-    // setLoading(false)
-    // setUploadedImagePath(null)
-    // setSelectedImage(null)
     handleStyleChangeDebounced({
       general: { backgroundImage: `` },
     })

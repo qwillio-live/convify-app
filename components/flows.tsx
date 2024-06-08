@@ -114,7 +114,11 @@ export function FlowsList() {
                           <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button variant="destructive" size="sm">
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -156,7 +160,11 @@ export function FlowsList() {
                           <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button variant="destructive" size="sm">
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -198,7 +206,11 @@ export function FlowsList() {
                           <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button variant="destructive" size="sm">
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -240,7 +252,11 @@ export function FlowsList() {
                           <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button variant="destructive" size="sm">
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -282,7 +298,11 @@ export function FlowsList() {
                           <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button variant="destructive" size="sm">
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -324,7 +344,11 @@ export function FlowsList() {
                           <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Delete")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button variant="destructive" size="sm">
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

@@ -102,6 +102,11 @@
     "Upload original": "Upload original",
     "Upload crop": "Upload crop",
     "Primary Color": "Primary Color",
-    "Secondary Color": "Secondary Color"
+    "Secondary Color": "Secondary Color",
+    "Drag an image": "Drag an image",
+    "Select a image or drag here to upload directly": "Select a image or drag here to upload directly",
+    "Image Uploaded": "Image Uploaded",
+    "Click here to upload another image": "Click here to upload another image",
+    "Remove": "Remove"
   }
 }
