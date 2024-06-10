@@ -20,6 +20,9 @@ import {
 } from "@/components/ui/select"
 import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 import { useTranslations } from "next-intl";
+import { rollScreens } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { RootState } from "@/lib/state/flows-state/store";
+import { delay } from "redux-saga/effects";
 
 type Props = {}
 
@@ -48,7 +51,7 @@ export const GlobalThemeSettings = (props: Props) => {
   const defaultPrimaryTextColor = useAppSelector((state) => state.theme?.defaultText?.primaryColor);
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
   const defaultSecondaryTextColor = useAppSelector((state) => state.theme?.defaultText?.secondaryColor);
-
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
   const handleApplyTheme = (themeStyles) => {
     dispatch({ type: 'APPLY_THEME_AND_CYCLE_SCREENS', payload: themeStyles });
   };
@@ -83,6 +86,13 @@ export const GlobalThemeSettings = (props: Props) => {
   const handleStyleChangeDebounced = (style) => {
     debouncedDispatch(style);
   }
+  // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // const hanldeScreenRolling =async () => {
+  //   screens?.map(async (screen, index) => {
+  //     await dispatch(rollScreens(screen.screenData))
+  //     delay(200)
+  //   })
+  // }
 
   return (
     <>

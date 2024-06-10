@@ -44,7 +44,7 @@ export const Controller = ({ nameOfComponent }) => {
       <span className="hover:cursor-move">
         <Move />
       </span>
-      {isHovered.isDeletable && (
+      {isHovered?.isDeletable && (
         <button
           onClick={() => {
             actions.delete(selected.id)

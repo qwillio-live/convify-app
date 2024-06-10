@@ -6,6 +6,7 @@ import oneInputData from "@/components/user/screens/one-input-screen.json";
 import footerScreenData from "@/components/user/screens/screen-footer.json";
 import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
+import { stat } from "fs";
 
 
 export type ScreenType = {
@@ -23,6 +24,7 @@ export interface ScreensState {
   screensHeader: any;
   screensFooter: any;
   screens: ScreenType[];
+  screenRoller: any;
   editorLoad: any;
 }
 
@@ -53,6 +55,7 @@ const initialState: ScreensState = {
   ],
   screensFooter: JSON.stringify(footerScreenData),
   editorLoad: buttonChoiceData,
+  screenRoller: '',
 };
 
 export const screensSlice = createSlice({
@@ -180,11 +183,18 @@ export const screensSlice = createSlice({
         state.editorLoad = screen.screenData;
       }
     },
+    rollScreens: (state, action:PayloadAction<string>) => {
+
+          state.screenRoller = action.payload;
+
+
+    },
   },
 });
 
 
 export const {
+  rollScreens,
   navigateToScreen,
   setHeaderMode,
   resetScreensState,

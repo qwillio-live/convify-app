@@ -12,7 +12,7 @@ import { Controller } from '../settings/controller.component';
 import { UserText } from '../text/user-text.component';
 import { CardContainerSettings } from './user-card-settings';
 
-interface CardStyles {
+interface CardOuterStyles {
   fullWidth: boolean;
   width: string;
   height: string;
@@ -40,12 +40,12 @@ interface CardStyles {
 }
 
 
-const CardContentInner=styled.div<CardStyles>`
+const CardContentOuter=styled.div<CardOuterStyles>`
   width: '100%';
   flex-shrink: 0;
   flex-basis: 100%;
   min-width: 100%;
-  height: ${(props) => props.height}px;
+  height: auto;
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   margin-left: ${(props) => props.marginLeft}px;
@@ -70,11 +70,30 @@ const CardContentInner=styled.div<CardStyles>`
   border-color: ${(props) => props.borderColor};
 `;
 
+interface CardInnerStyles {
+  width: string;
+  direction: string;
+  size: string;
+}
+
+const CardContentInner=styled.div<CardInnerStyles>`
+  max-width: ${(props) => CardSizeValues[props.size || "medium"] };
+  width: 100%;
+  display: flex;
+  flex-direction: ${(props) => props.direction};
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 20px;
+  height: auto;
+`;
+
 
 
 export const CardContentGen = ({ children, ...props }) => {
   return(
-    <CardContentInner
+    <CardContentOuter
     fullWidth={props.fullWidth}
     width={props.width}
     height={props.height}
@@ -99,7 +118,7 @@ export const CardContentGen = ({ children, ...props }) => {
     gap={props.gap}
     border={props.border}
     borderColor={props.borderColor}
-    >{children}</CardContentInner>
+    >{children}</CardContentOuter>
   )
 }
 export const CardContent = ({ children, ...props }) => {
@@ -142,13 +161,58 @@ export const CardContent = ({ children, ...props }) => {
           border={props.border}
           borderColor={props.borderColor}
     >
+      <CardContentInner
+      size={props.size}
+      width='auto'
+      direction={props.flexDirection || "column"}
+      >
       {children}
+      </CardContentInner>
     </CardContentGen>
     </div>
   );
 };
+export enum CardSizes {
+  small = "small",
+  medium = "medium",
+  large = "large",
+  full = "full",
+}
+const CardSizeValues={
+  small: "300px",
+  medium: "376px",
+  large: "576px",
+  full: "100%",
+}
 
-export const CardContentDefaultProps:CardStyles = {
+export type CardContentDefaultPropsTypes= {
+  fullWidth: boolean
+  width: string
+  height: string
+  background: string
+  color: string
+  marginLeft: string
+  marginTop: string
+  marginRight: string
+  marginBottom: string
+  paddingLeft: string
+  paddingTop: string
+  paddingRight: string
+  paddingBottom: string
+  radius: string
+  flexDirection: string
+  fillSpace: string
+  alignItems: string
+  justifyContent: string
+  flexWrap: string
+  overflowY: string
+  overflowX: string
+  gap: number
+  border: number
+  borderColor: string
+  size: CardSizes
+}
+export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
     width: "400",
     height: "200",
@@ -159,9 +223,9 @@ export const CardContentDefaultProps:CardStyles = {
     marginRight: "2",
     marginBottom: "2",
     paddingLeft: "12",
-    paddingTop: "12",
+    paddingTop: "40",
     paddingRight: "12",
-    paddingBottom: "12",
+    paddingBottom: "40",
     radius: "none",
     flexDirection: "column",
     fillSpace: "1",
@@ -173,6 +237,7 @@ export const CardContentDefaultProps:CardStyles = {
     gap: 20,
     border: 0,
     borderColor: "inherit",
+    size: CardSizes.medium,
 }
 
 CardContent.craft = {
@@ -214,7 +279,7 @@ export const Card = ({ children, ...props }) => {
 
     <CardContainer
       background={props.background}
-      className='card-container relative shrink-0 basis-full min-w-full'
+      className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col'
       ref={(ref: any) => connect(drag(ref))}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -222,6 +287,7 @@ export const Card = ({ children, ...props }) => {
       {hovered && <Controller nameOfComponent={"Card"} />}
       <Element
         canvas id="usercard" is={CardContent} data-cy="card-top"
+        className="max-w-[500px]"
         {...props}
       >
         {children}
