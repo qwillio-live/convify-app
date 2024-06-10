@@ -1,32 +1,100 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { Label } from "@radix-ui/react-label"
+import { Reorder, useDragControls, useInView, useMotionValue } from "framer-motion"
 import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+  Activity,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalSpaceBetween,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  CornerRightDown,
+  Disc,
+  DollarSign,
+  GripVertical,
+  Image as ImageIcon,
+  Check as IconCheck,
+  X as IconX,
+  Mountain,
+  MoveHorizontal,
+  PlusCircle,
+  Search,
+  Trash2,
+  ThumbsUp,
+  SmilePlus,
+} from "lucide-react"
+import ContentEditable from "react-contenteditable"
+
 import { useNode } from "@/lib/craftjs"
 import {
+  useScreenNames,
+  useScreensLength,
+} from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion"
+import { Button, Button as CustomButton } from "@/components/ui/button"
+
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Button, Button as CustomButton } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@radix-ui/react-label"
+import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
-import { useDragControls, Reorder, useMotionValue } from "framer-motion"
-import { Card } from "@/components/ui/card"
-import { GripVertical,Check as IconCheck, X as IconX, PlusCircle } from "lucide-react"
-import ContentEditable from "react-contenteditable"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/custom-select"
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import icons from "@/constant/streamline.json";
+import { useOnClickOutside } from "@/hooks/use-click-outside";
+import EmojiPicker, { EmojiClickData, EmojiStyle, SuggestionMode } from "emoji-picker-react";
+
+import { createPortal } from "react-dom";
+import { useEventListener } from 'usehooks-ts';
+// import {useInView}
+import { Card } from "@/components/ui/card";
+
+import { useTranslations } from "next-intl";
+
 
 export const PictureChoiceSettings = () => {
   const controls = useDragControls()
@@ -39,13 +107,25 @@ export const PictureChoiceSettings = () => {
   }))
 
   const [uploadFile, setUploadFile] = React.useState<string | null>(null)
-  const [text, setText] = React.useState<string | null>(null)
+  const [text, setText] = React.useState<string | null>("")
   const [isPopoverOpen, setPopoverOpen] = useState(false)
   const popoverRef = React.useRef<HTMLInputElement>(null)
 
   const closePopover = () => {
     setPopoverOpen(false)
   }
+  const screenNames = useScreenNames()
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || "";
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -73,16 +153,18 @@ export const PictureChoiceSettings = () => {
   }
 
   const handleAddFile = () => {
-    const tempArray = [...pictureItems]
-    tempArray.push({
+    const newItem = {
       id: `${pictureItems.length + 1}`,
-      text: text,
-      pic: uploadFile,
+      buttonAction: "next-screen",
+      nextScreen: nextScreenName,
+      text: text || "Lorem",
+      pic: uploadFile || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f972.png", // Use a placeholder image URL
       itemType: ItemType.PICTURE,
-    })
-    setProp((props) => (props.pictureItems = tempArray), 1000)
+    }
+
+    setProp((props) => (props.pictureItems = [...props.pictureItems, newItem]), 1000)
     setUploadFile(null)
-    setText(null)
+    setText("")
   }
 
   return (
@@ -100,67 +182,21 @@ export const PictureChoiceSettings = () => {
             onReorder={(e) => setProp((props) => (props.pictureItems = e))}
           >
             {pictureItems.map((item, index) => (
-              <PictureChoiceItem key={item.id} item={item} index={index} />
+              <PictureChoiceItem
+                key={item.id}
+                item={item}
+                index={index}
+                screenNames={screenNames}
+                nextScreenName={nextScreenName}
+              />
             ))}
           </Reorder.Group>
         </CardContent>
         <div className="add-logo mb-6 flex w-full flex-row items-center justify-end">
-          <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="w-full">
-                <PlusCircle className="mr-4" />
-                Add Items
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" ref={popoverRef}>
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">
-                    Add Picture Choice
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Select image as Picture and set text
-                  </p>
-                </div>
-                <div className="grid gap-2">
-                  <div className="grid grid-cols-3 items-center gap-2">
-                    <Label htmlFor="media">Picture</Label>
-                    <Input
-                      id="media"
-                      onChange={handleInputFileChange}
-                      type={"file"}
-                      className="col-span-2 h-8"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-3 items-center gap-2">
-                    <Label htmlFor="altText">Text</Label>
-                    <Input
-                      id="altText"
-                      onChange={(e) => {
-                        setText(e.target.value)
-                      }}
-                      placeholder="Text for Picture Icon"
-                      className="col-span-2 h-8"
-                    />
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-4 items-center gap-2">
-                    <Button
-                      id="altText"
-                      onClick={() => {
-                        handleAddFile()
-                        closePopover()
-                      }}
-                      className="col-span-2 h-8"
-                    >
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <Button variant="outline" className="w-full" onClick={handleAddFile}>
+            <PlusCircle className="mr-4" />
+            Add Items
+          </Button>
         </div>
       </Card>
       <Accordion type="single" collapsible className="w-full">
@@ -170,7 +206,7 @@ export const PictureChoiceSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Text</p>
+              <p className="text-muted-foreground text-sm">Text</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -185,7 +221,7 @@ export const PictureChoiceSettings = () => {
                 }}
               />
 
-              <p className="text-sm text-muted-foreground">Hover</p>
+              <p className="text-muted-foreground text-sm">Hover</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -204,7 +240,7 @@ export const PictureChoiceSettings = () => {
             <Separator className="my-4" />
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background</p>
+              <p className="text-muted-foreground text-sm">Background</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -221,7 +257,7 @@ export const PictureChoiceSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background hover</p>
+              <p className="text-muted-foreground text-sm">Background hover</p>
               <Input
                 type={"color"}
                 className="p-2 text-sm"
@@ -244,7 +280,7 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Padding</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Container</p>
               <Input
                 type="number"
@@ -253,7 +289,10 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.padding = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.padding = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -268,7 +307,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.pictureItemsStyles.padding = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.pictureItemsStyles.padding = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -280,7 +323,7 @@ export const PictureChoiceSettings = () => {
             <span className="text-sm font-medium">Margin container</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
               <p className="text-md text-muted-foreground">Left</p>
               <Input
                 type="number"
@@ -289,7 +332,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginLeft = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginLeft = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -303,7 +350,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginTop = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginTop = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -317,7 +368,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginRight = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginRight = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -331,7 +386,11 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.marginBottom = e.target.value), 1000)
+                  setProp(
+                    (props) =>
+                      (props.containerStyles.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -426,7 +485,10 @@ export const PictureChoiceSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.containerStyles.gap = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.containerStyles.gap = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -436,14 +498,54 @@ export const PictureChoiceSettings = () => {
     </>
   )
 }
+
+PictureChoiceSettings.displayName = 'PictureChoiceSettings';
+
 enum ItemType {
   PICTURE = "picture",
   ICON = "icon",
 }
-export const PictureChoiceItem = ({ item, index }) => {
+export const PictureChoiceItem = ({
+  item,
+  index,
+  screenNames,
+  nextScreenName,
+}) => {
+  const [pickerType, setPickerType] = useState("image")
   const y = useMotionValue(0)
   const controls = useDragControls()
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const dropdownRef = React.useRef<HTMLInputElement>(null)
+  const [pickerPosition, setPickerPosition] = useState({ top: 0, left: 0 });
+  const [open, setOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const t = useTranslations("CreateFlow")
+
+
+  const handleDropdownClick = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+    if (isDropdownOpen) {
+      setPickerType('');
+    } else {
+      handleOpenEmojiPicker();
+    }
+  };
+
+  const filteredIcons = Object.keys(icons).filter((iconName) =>
+    iconName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const {
+    actions: { setProp },
+    props: { pictureItems, tagLine, containerStyles, pictureItemsStyles },
+  } = useNode((node) => ({
+    props: node.data.props,
+  }))
+
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -458,12 +560,70 @@ export const PictureChoiceItem = ({ item, index }) => {
       )
     }
   }
-  const {
-    actions: { setProp },
-    props: { pictureItems, tagLine, containerStyles, pictureItemsStyles },
-  } = useNode((node) => ({
-    props: node.data.props,
-  }))
+
+  const handleEmojiClick = (emojiObject: EmojiClickData) => {
+    console.log(emojiObject)
+    // setProp(
+    //   (props) => (props.pictureItems[index].pic = emojiObject.imageUrl),
+    //   1000
+    // )
+    setProp(
+      (props) => (props.pictureItems[index].icon = emojiObject.emoji),
+      1000
+    )
+    // setProp(
+    //   (props) => ((props.pictureItems[index].itemType = ItemType.ICON), 1000)
+    // )
+    setProp(
+      (props) => ((props.pictureItems[index].itemType = ItemType.ICON), 1000)
+    )
+    setPickerType("")
+    console.log(pictureItems);
+  }
+
+  const handleOpenEmojiPicker = () => {
+    if (dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      setPickerPosition({
+        top: rect.top + window.scrollY - 300, // Adjust the position as needed
+        left: rect.left + window.scrollX - 250,
+      });
+    }
+    setPickerType("emoji");
+  };
+
+  const handleSVGChange = (iconName) => {
+    // Get the SVG data for the selected icon
+    const svgData = convertToSvg(icons[iconName]?.body);
+
+
+    if (svgData) {
+      // Convert the SVG data into a Blob
+      const blob = new Blob([svgData], { type: "image/svg+xml" })
+      // Create a URL for the Blob
+      const imageUrl = URL.createObjectURL(blob)
+      // Update the pictureItems state accordingly
+      setProp((props) => {
+        const updatedProps = { ...props }
+        updatedProps.pictureItems[index].pic = imageUrl
+        updatedProps.pictureItems[index].itemType = ItemType.PICTURE
+        return updatedProps
+      }, 1000)
+    }
+    setOpen(false)
+
+  }
+
+  const handleRemoveItem = () => {
+    setProp((props) => {
+      const updatedProps = { ...props };
+      updatedProps.pictureItems[index].pic = null;
+      updatedProps.pictureItems[index].icon = null;
+      updatedProps.pictureItems[index].itemType = null;
+      return updatedProps;
+    }, 1000);
+  };
+
   return (
     <Reorder.Item
       dragListener={false}
@@ -472,51 +632,220 @@ export const PictureChoiceItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex h-20 w-full  flex-row items-center justify-between gap-3 border p-4"
+      className="flex w-full  flex-row items-center justify-between gap-3 border p-4"
     >
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <DropdownMenuTrigger asChild onMouseDown={handleDropdownClick}>
+          <div className="flex flex-row flex-wrap items-center gap-3">
+              <button
+                className="pic-container hover:cursor-pointer"
+              >
+                {item.itemType === ItemType.ICON ? (
+                  item.icon === "check" ? (
+                    <IconCheck className="size-5 shrink-0" />
+                  ) : item.icon === "x" ? (
+                    <IconX className="size-5 shrink-0" />
+                  ) :
+                  <div className="size-5 shrink-0">{item.icon}</div>
+                ) : (
+                  <img
+                    src={item.pic}
+                    alt={item.alt || ""}
+                    className="w-6 h-6 object-cover"
+                  />
+                )}
+              </button>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40">
+            <DropdownMenuGroup>
+              <DialogTrigger asChild>
+                <DropdownMenuItem>
+                  <ThumbsUp className="mr-2 size-4" />
+                  <span>{t("PictureChoice.icon")}</span>
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuItem onClick={handleOpenEmojiPicker} ref={dropdownRef}>
+                <SmilePlus className="mr-2 size-4" />
+                <span>{t("PictureChoice.emoji")}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+              >
+                <ImageIcon className="mr-2 size-4" />
+                <span>{t("PictureChoice.image")}</span>
+              </DropdownMenuItem>
+              {
+                (item.pic || item.icon) && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleRemoveItem} className="focus:bg-red-500 focus:text-white">
+                      <Trash2 className="mr-2 size-4" />
+                      <span>{t("PictureChoice.remove")}</span>
+                    </DropdownMenuItem>
+                  </>
+                )
+              }
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        {/* icons */}
+        <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[70%]">
+          <DialogHeader className="sticky top-0 bg-white py-4 px-2 z-10">
+            <div className="flex items-center justify-start gap-4">
+              <div>
+                <DialogTitle>{t("PictureChoice.icon")}</DialogTitle>
+                <DialogDescription>
+                  {t("PictureChoice.iconDesc")}
+                </DialogDescription>
+              </div>
+              <div className="relative ml-auto flex-1 md:grow-0 flex items-center">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder={t("PictureChoice.iconSearch")}
+                  className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <DialogClose asChild>
+                <Button variant="ghost">
+                  <IconX className="size-5 shrink-0" />
+                </Button>
+              </DialogClose>
+            </div>
+          </DialogHeader>
+          <div className="ml-4 mt-4 grid grid-cols-6 gap-4">
+            {filteredIcons.length > 0 ? (
+              filteredIcons.map((iconName) => (
+                <IconRenderer
+                  key={iconName}
+                  iconName={iconName}
+                  onClick={handleSVGChange}
+                />
+              ))
+            ) : (
+              <div className="col-span-6 text-center mt-4">
+                {t("PictureChoice.iconNotFound")}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+
+      </Dialog>
       <Input
         type="file"
         className="hidden"
         ref={inputRef}
         onChange={handleInputChange}
       />
-      <div className="flex flex-row flex-wrap items-center gap-3">
-        <div
-          onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-          className="pic-container hover:cursor-pointer"
-        >
-          {item.itemType === ItemType.ICON ? (
-            // <img src={item.icon} className="shrink-0 w-20 h-20" />
-            item.icon === 'check' ? (
-              <IconCheck
-                className="w-5 h-5 shrink-0"
-              />
-            ) : item.icon === 'x' ? (
-              <IconX
-              className="w-5 h-5 shrink-0"
-              />
-            ) : null
-          ) : (
-            <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
-          )}
+      <div className="flex flex-col items-start">
+        <div className="flex flex-row gap-2 py-2 items-center justify-center">
+          {/* <div
+            onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+            className="pic-container hover:cursor-pointer"
+          >
+            {item.itemType === ItemType.ICON ? (
+              // <img src={item.icon} className="shrink-0 w-20 h-20" />
+              item.icon === "check" ? (
+                <IconCheck className="w-5 h-5 shrink-0" />
+              ) : item.icon === "x" ? (
+                <IconX className="w-5 h-5 shrink-0" />
+              ) : null
+            ) : (
+              <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
+            )}
+          </div> */}
+          <ContentEditable
+            html={item.text}
+            disabled={false}
+            onChange={(e) =>
+              setProp(
+                (props) =>
+                  (props.pictureItems[index].text = e.target.value.replace(
+                    /<\/?[^>]+(>|$)/g,
+                    ""
+                  )),
+                500
+              )
+            }
+            className="min-w-[40px] max-w-[100px] overflow-hidden truncate"
+            tagName={"p"}
+          />
         </div>
-        <ContentEditable
-          html={item.text}
-          disabled={false}
-          onChange={(e) =>
-            setProp(
-              (props) =>
-                (props.pictureItems[index].text = e.target.value.replace(
-                  /<\/?[^>]+(>|$)/g,
-                  ""
-                )),
-              500
-            )
-          }
-          className="min-w-[80px] max-w-[100px] overflow-hidden truncate"
-          tagName={"p"}
-        />
+
+        <div className="screen-action-container flex flex-col gap-2">
+          <Select
+            defaultValue={
+              item.buttonAction === "next-screen"
+                ? "next-screen"
+                : item.nextScreen
+            }
+            value={
+              item.buttonAction === "next-screen"
+                ? "next-screen"
+                : item.nextScreen
+            }
+            onValueChange={(e) => {
+              if (e === "next-screen") {
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].buttonAction = "next-screen")
+                )
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].nextScreen = nextScreenName)
+                )
+              } else {
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].buttonAction = "custom-action")
+                )
+                setProp((props) => (props.pictureItems[index].nextScreen = e))
+              }
+            }}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Select screen" />
+            </SelectTrigger>
+            <SelectContent className="text-left">
+              <SelectGroup>
+                <SelectItem
+                  value="next-screen"
+                  className="flex flex-row items-center text-[10px]"
+                >
+                  <div className="flex flex-row items-center text-xs gap-2">
+                    <ArrowRight size={14} /> <span>Next Screen</span>
+                  </div>
+                </SelectItem>
+                {screenNames.map((screenName, index) => (
+                  <SelectItem
+                    value={screenName}
+                    className="flex flex-row items-center text-[10px]"
+                  >
+                    <div className="flex flex-row items-center text-xs gap-2">
+                      <span>
+                        {index + 1} : {screenName}
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+
+        <PortalEmojiPicker
+          isVisible={pickerType === "emoji"}
+          position={pickerPosition}
+          onEmojiClick={handleEmojiClick}
+          pickerType={pickerType}
+          setPickerType={setPickerType}
+          dropdownRef={dropdownRef}
+        />
       <div
         onPointerDown={(e) => controls.start(e)}
         className="reorder-handle hover:cursor-pointer"
@@ -526,3 +855,106 @@ export const PictureChoiceItem = ({ item, index }) => {
     </Reorder.Item>
   )
 }
+
+PictureChoiceItem.displayName = 'PictureChoiceItem';
+
+
+const IconRenderer = ({ iconName, onClick }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref);
+  return (
+    <div className="max-h-[160px]">
+      <div
+        ref={ref}
+        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center max-h-full max-w-full h-auto w-auto"
+        onClick={() => onClick(iconName)}
+      >
+        {isInView && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
+            className="h-24 w-24 cursor-pointer ml-10 mt-8"
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+const convertToSvg = (svgBody) => {
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 cursor-pointer" width="15"
+  height="15">${svgBody}</svg>`;
+};
+
+type PortalEmojiPickerProps = {
+  isVisible: boolean;
+  position: {
+    top: number;
+    left: number;
+  };
+  onEmojiClick: (emojiObject: EmojiClickData) => void;
+  pickerType: string;
+  setPickerType: (value: string) => void;
+  dropdownRef: React.RefObject<HTMLInputElement>;
+};
+
+const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, position, onEmojiClick, setPickerType }) => {
+  const emojiRef = useRef<HTMLInputElement>(null);
+  const { top, left } = position;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
+      const { target } = event;
+
+      // Check if the click occurred outside the emoji picker
+      if (isVisible && emojiRef.current && !emojiRef.current.contains(target as Node)) {
+        // Close the emoji picker
+        setPickerType('');
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isVisible, emojiRef, setPickerType]);
+
+  return isVisible ? (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 1000000,
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: `${top}px`,
+          left: `${left}px`,
+          zIndex: 1000001,
+        }}
+        ref={emojiRef}
+      >
+        <EmojiPicker
+          emojiStyle={EmojiStyle.NATIVE}
+          onEmojiClick={onEmojiClick}
+          lazyLoadEmojis={true}
+          skinTonesDisabled={true}
+          width={280}
+          height={350}
+          suggestedEmojisMode={SuggestionMode.RECENT}
+          emojiVersion={'4.0'}
+          previewConfig={{ showPreview: false }}
+        />
+      </div>
+    </div>
+  ) : null;
+};
+
+
+PortalEmojiPicker.displayName = 'PortalEmojiPicker';

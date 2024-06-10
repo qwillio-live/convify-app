@@ -85,6 +85,7 @@ export const HeadlineTextSettings = () => {
               <p className="text-md text-muted-foreground">Font Size</p>
               <Input
                 type="number"
+                value={fontSize.value}
                 placeholder={fontSize.value}
                 max={100}
                 min={0}

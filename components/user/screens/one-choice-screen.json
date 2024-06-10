@@ -6,7 +6,7 @@
 			"padding": 5,
 			"background": "#ad2121",
 			"expanded": "true",
-			"className": "min-h-screen min-w-full flex flex-col items-center"
+			"className": "min-h-screen min-w-full flex flex-col items-center py-5"
 		},
 		"displayName": "One Choice Screen",
 		"custom": {
@@ -18,7 +18,7 @@
 			"mdsAe2aBSM",
 			"HsVEwi1W0N",
 			"WyPGuBF4RD",
-			"Yj9p3YXY1L",
+			"mVILya3SGO",
 			"footer-node"
 		],
 		"linkedNodes": {
@@ -65,7 +65,7 @@
 			"color": "#4050ff",
 			"maxWidth": "366",
 			"fullWidth": false,
-      "progressvalue" : "20"
+			"progressvalue": "20"
 		},
 		"displayName": "ProgressBar",
 		"custom": {
@@ -93,7 +93,7 @@
         "globalStyled": false
       },
       "fontFamily": {
-        "value": "--font-heading",
+        "value": "--font-cal-sans",
         "isCustomized": false,
         "globalStyled": false
       },
@@ -134,6 +134,55 @@
       },
       "tagType": "h1"
     },
+		"props": {
+			"text": "Which marketing channels do you use?",
+			"fontSize": {
+				"value": 42,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"fontFamily": {
+				"value": "--font-heading",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"textColor": {
+				"value": "#0e0e0e",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"fontWeight": {
+				"value": "700",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"textAlign": {
+				"value": "center",
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginLeft": {
+				"value": 58,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginRight": {
+				"value": 58,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginTop": {
+				"value": 40,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"marginBottom": {
+				"value": 40,
+				"isCustomized": false,
+				"globalStyled": false
+			},
+			"tagType": "h1"
+		},
 		"displayName": "HeadlineText",
 		"custom": {
 
@@ -227,40 +276,15 @@
 
 		}
 	},
-	"Yj9p3YXY1L": {
+	"footer-node": {
 		"type": {
-			"resolvedName": "IconButton"
+			"resolvedName": "ScreenFooter"
 		},
 		"isCanvas": false,
 		"props": {
-			"disabled": false,
-			"enableIcon": true,
-			"width": "366",
-			"height": "auto",
-			"size": "small",
-			"background": "#4050ff",
-			"color": "#ffffff",
-			"backgroundHover": "#3041ff",
-			"colorHover": "#ffffff",
-			"text": "Continue",
-			"marginLeft": 0,
-			"marginTop": "40",
-			"marginRight": 0,
-			"marginBottom": "40",
-			"icon": "arrowright",
-			"paddingLeft": "16",
-			"paddingTop": "26",
-			"paddingRight": "16",
-			"paddingBottom": "26",
-			"radius": "none",
-			"flexDirection": "row",
-			"alignItems": "center",
-			"justifyContent": "center",
-			"gap": 4,
-			"border": 0,
-			"borderColor": "inherit"
+
 		},
-		"displayName": "IconButton",
+		"displayName": "Footer",
 		"custom": {
 
 		},
@@ -273,15 +297,83 @@
 
 		}
 	},
-	"footer-node": {
+	"mVILya3SGO": {
 		"type": {
-			"resolvedName": "ScreenFooter"
+			"resolvedName": "IconButton"
 		},
 		"isCanvas": false,
 		"props": {
-
+			"fontFamily": {
+				"value": "--font-heading",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"containerBackground": "#ffffff",
+			"background": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"color": {
+				"value": "#ffffff",
+				"globalStyled": false,
+				"isCustomized": true
+			},
+			"backgroundHover": {
+				"value": "#3142ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"colorHover": {
+				"value": "#ffffff",
+				"globalStyled": false,
+				"isCustomized": true
+			},
+			"radius": {
+				"value": "8",
+				"globalStyled": false,
+				"isCustomized": false
+			},
+			"justifyContent": "space-between",
+			"borderColor": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"borderHoverColor": {
+				"value": "#4050ff",
+				"globalStyled": true,
+				"isCustomized": false
+			},
+			"disabled": false,
+			"enableIcon": true,
+			"width": "medium",
+			"height": "auto",
+			"size": "medium",
+			"text": "Continue",
+			"marginLeft": 20,
+			"marginTop": [
+				40
+			],
+			"marginRight": 20,
+			"marginBottom": [
+				40
+			],
+			"icon": "arrowright",
+			"paddingLeft": "16",
+			"paddingTop": "14",
+			"paddingRight": "16",
+			"paddingBottom": "14",
+			"flexDirection": "row",
+			"alignItems": "center",
+			"gap": 4,
+			"border": 2,
+			"fullWidth": true,
+			"preset": "filled",
+      "settingsTab": "content",
+      "buttonSize": "medium"
 		},
-		"displayName": "Footer",
+		"displayName": "IconButton",
 		"custom": {
 
 		},
