@@ -17,10 +17,11 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)'],
-        heading: ['var(--font-heading)'],
-        inter: ['var(--font-inter)'],
-        roboto: ['var(--font-roboto-mono)'],
+        sans: ["var(--font-sans)"],
+        heading: ["var(--font-heading)"],
+        inter: ["var(--font-inter)"],
+        roboto: ["var(--font-roboto-mono)"],
+        geist: ["var(--font-geist)"],
       },
       colors: {
         border: "hsl(var(--border))",

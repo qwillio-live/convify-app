@@ -163,7 +163,7 @@ export const UserContainer = ({
         style={{
           width: `${width}px`,
           height: `${height}px`,
-          // backgroundColor: `${backgroundColor}`,
+          backgroundColor: `${backgroundColor}`,
           backgroundImage: `${backgroundImage}`,
           color: `${color}`,
           marginLeft: `${marginLeft}px`,

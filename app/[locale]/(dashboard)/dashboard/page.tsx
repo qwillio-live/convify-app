@@ -47,8 +47,6 @@ export default function DashboardPage() {
   const router = useRouter()
   const t = useTranslations("Dashboard")
 
-  console.log(userData)
-
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())

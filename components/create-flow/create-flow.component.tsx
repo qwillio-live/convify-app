@@ -115,8 +115,6 @@ export function CreateFlowComponent() {
   //   dispatch(resetScreensState())
   // },[dispatch])
 
-  console.log(backgroundImage)
-
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor

@@ -56,6 +56,8 @@ export const UserInputGen = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
 
+  console.log(props.backgroundImage)
+
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
@@ -77,6 +79,9 @@ export const UserInputGen = ({ ...props }) => {
           display: "flex",
           justifyContent: "center",
           backgroundColor: `${props.backgroundColor}`,
+          backgroundImage: `${props.backgroundImage}`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
           minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
@@ -344,6 +349,7 @@ export const UserInput = ({ ...props }) => {
           display: "flex",
           justifyContent: "center",
           backgroundColor: `${props.backgroundColor}`,
+          backgroundImage: `${props.backgroundImage}`,
           minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
@@ -523,7 +529,11 @@ export type UserInputProps = {
   paddingRight: number
   paddingTop: number
   paddingBottom: number
-  backgroundColor: string
+  backgroundColor?: string
+  backgroundImage?: string
+  backgroundRepeat?: string
+  backgroundPosition?: string
+  backgroundSize?: string
   borderColor: StyleProperty
   activeBorderColor: StyleProperty
   primaryFont: StyleProperty

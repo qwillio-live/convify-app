@@ -51,7 +51,11 @@ export default function CreateFlowsPage() {
 
   return (
     <div className="min-h-screen w-full">
-      <Tabs defaultValue="create" onValueChange={onTabChange}>
+      <Tabs
+        defaultValue="create"
+        onValueChange={onTabChange}
+        className="min-h-screen flex flex-col"
+      >
         <div className="sticky top-0 z-[60]">
           <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
@@ -156,7 +160,7 @@ export default function CreateFlowsPage() {
           </header>
         </div>
         <main
-          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] ${
+          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full${
             tab === "results" ? "" : tab === "share" ? "" : "px-4 lg:px-6"
           }`}
         >

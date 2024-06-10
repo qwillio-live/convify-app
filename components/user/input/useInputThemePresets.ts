@@ -6,6 +6,9 @@ import { UserInputProps, UserInputSizes } from "./user-input.component"
 
 const useInputThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
+  const backgroundImage = useAppSelector(
+    (state) => state?.theme?.general?.backgroundImage
+  )
   const darkenedPrimaryColor = darken(
     0.1,
     theme?.general?.primaryColor || "#3182ce"
@@ -27,6 +30,10 @@ const useInputThemePresets = () => {
     paddingBottom: 0,
     placeholder: "Placeholder",
     backgroundColor: theme?.general?.backgroundColor || "white",
+    backgroundImage: theme?.general?.backgroundImage,
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
     borderColor: {
       value: "#eaeaeb",
       globalStyled: false,
@@ -98,6 +105,7 @@ const useInputThemePresets = () => {
     paddingBottom: 0,
     placeholder: "Placeholder",
     backgroundColor: theme?.general?.backgroundColor || "white",
+    backgroundImage: theme?.general?.backgroundImage,
     borderColor: {
       value: "#eaeaeb",
       globalStyled: false,

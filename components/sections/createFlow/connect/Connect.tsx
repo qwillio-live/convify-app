@@ -1,11 +1,12 @@
-import { TIntegrationCardData } from "@/types"
 import { useEffect, useState } from "react"
-import { DummyIntregationCardData } from "./collapsibleContents"
+import { TIntegrationCardData } from "@/types"
 
+import { Accordion } from "@/components/ui/accordion"
 // ui componnets
 import IntegrationCard from "@/components/IntegrationCard"
 import SearchBar from "@/components/SearchBar"
-import { Accordion } from "@/components/ui/accordion"
+
+import { DummyIntregationCardData } from "./collapsibleContents"
 
 const ConnectFlowComponents = () => {
   const [search, setSearch] = useState("")
@@ -39,7 +40,7 @@ const ConnectFlowComponents = () => {
   return (
     <div className="min-h-screen w-full">
       <div
-        className="mx-auto mt-8 flex w-7/12
+        className="mx-auto mt-8 flex lg:w-7/12
         flex-col items-center justify-center"
       >
         <SearchBar search={search} setSearch={setSearch} />

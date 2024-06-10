@@ -294,6 +294,9 @@ const HoverCardComponent = ({ title, icon, children }) => {
   const themeBackgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+  const themeBackgroundImage = useAppSelector(
+    (state) => state?.theme?.general?.backgroundImage
+  )
 
   return (
     <>
@@ -319,6 +322,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
             forceMount={true}
             style={{
               background: themeBackgroundColor,
+              backgroundImage: themeBackgroundImage,
             }}
             avoidCollisions
             side="left"

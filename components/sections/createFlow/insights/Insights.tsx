@@ -2,6 +2,7 @@ import { useState } from "react"
 import { InsightsDevices } from "@/constant"
 import { TabsList, TabsTrigger } from "@radix-ui/react-tabs"
 import { Percent, User } from "lucide-react"
+import { useTranslations } from "next-intl"
 import {
   Bar,
   BarChart,
@@ -25,7 +26,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange"
 
-const data = [
+const visitsData = [
   {
     time: 5.05,
     visits: 4,
@@ -56,14 +57,51 @@ const data = [
   },
 ]
 
+const submitsData = [
+  {
+    time: 5.05,
+    submits: 6,
+  },
+  {
+    time: 6.05,
+    submits: 3,
+  },
+  {
+    time: 7.05,
+    submits: 7,
+  },
+  {
+    time: 8.05,
+    submits: 1,
+  },
+  {
+    time: 9.05,
+    submits: 4,
+  },
+  {
+    time: 10.05,
+    submits: 1,
+  },
+  {
+    time: 11.05,
+    submits: 3,
+  },
+]
+
 const InsightsFlowComponents = () => {
   const [date, setDate] = useState(new Date())
   const [selected, setSelected] = useState(InsightsDevices[0] || {})
+  const [dataKey, setDataKey] = useState("visits")
+  const [data, setData] = useState(visitsData)
+  const [focusBar, setFocusBar] = useState(null)
+
+  const t = useTranslations("CreateFlow.ResultsPage")
+
   return (
     <Tabs defaultValue="custom">
       <header className="mt-4 flex items-center gap-4 px-4 lg:px-6">
-        <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-1">
-          <TabsList className="flex h-full bg-inherit py-0">
+        <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-1 overflow-x-hidden">
+          <TabsList className="flex h-full bg-inherit py-0 overflow-x-auto">
             <TabsTrigger
               className="[&>div>button]:data-[state=active]:border-input [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=inactive]:bg-transparent [&>div>button]:data-[state=active]:bg-muted [&>div>button]:font-medium"
               value="custom"
@@ -71,50 +109,53 @@ const InsightsFlowComponents = () => {
               <DatePickerWithRange className="" />
             </TabsTrigger>
             <TabsTrigger
-              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent"
+              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"
               value="28days"
             >
-              Last 28 days
+              {t("Last 28 days")}
             </TabsTrigger>
             <TabsTrigger
-              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md  border data-[state=active]:border-input data-[state=inactive]:border-transparent"
+              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"
               value="14days"
             >
-              Last 14 days
+              {t("Last 14 days")}
             </TabsTrigger>
             <TabsTrigger
-              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent"
+              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"
               value="7days"
             >
-              Last 7 days
+              {t("Last 7 days")}
             </TabsTrigger>
           </TabsList>
         </div>
       </header>
-      <main className="content relative z-50 flex items-start overflow-hidden bg-transparent px-4 lg:px-6">
+      <main className="content relative z-50 flex items-start bg-transparent px-0 lg:px-6">
         <div className="tabs-content flex w-full items-center justify-start">
           <TabsContent
-            className="mt-0 w-full overflow-y-auto"
+            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
             value="custom"
-            style={{ height: "87.3vh" }}
           >
-            <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 w-full gap-4">
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">Visits</h3>
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Visits")}
+                  </h3>
                   <User />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">45,231</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
+                  <div className="text-4xl font-semibold font-geist">
+                    45,231
+                  </div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("visits from last month", { visits: "+20.1%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Submits
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Submits")}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -134,23 +175,25 @@ const InsightsFlowComponents = () => {
                   </svg>
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">898</div>
-                  <p className="text-xs text-muted-foreground">
-                    +8% from last month
+                  <div className=" text-4xl font-semibold font-geist">898</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("submits from last month", { submits: "+8%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Conversion Rate
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Conversion Rate")}
                   </h3>
                   <Percent />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">109%</div>
-                  <p className="text-xs text-muted-foreground">
-                    +32% from last month
+                  <div className=" text-4xl font-semibold font-geist">109%</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("conversionRate from last month", {
+                      conversionRate: "+32%",
+                    })}
                   </p>
                 </div>
               </Card>
@@ -172,11 +215,13 @@ const InsightsFlowComponents = () => {
                         <line x1="8" x2="16" y1="21" y2="21" />
                         <line x1="12" x2="12" y1="17" y2="21" />
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Desktop
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Desktop")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                   <div className="">
                     <div>
@@ -204,30 +249,50 @@ const InsightsFlowComponents = () => {
                           ></path>
                         </g>
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Mobile
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Mobile")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                 </div>
               </Card>
             </div>
-            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
-              <Card className="">
+            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start pb-4">
+              <Card className="w-full">
                 <div className="p-3 flex justify-start">
-                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                  <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
                     <Button
                       variant="secondary"
-                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                      className={`text-sm rounded-md border ${
+                        dataKey === "visits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(visitsData)
+                        setDataKey("visits")
+                      }}
+                      size="sm"
                     >
-                      Visits
+                      {t("Visits")}
                     </Button>
                     <Button
                       variant="secondary"
-                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                      className={`text-sm rounded-md border hover:bg-white ${
+                        dataKey === "submits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(submitsData)
+                        setDataKey("submits")
+                      }}
+                      size="sm"
                     >
-                      Submits
+                      {t("Submits")}
                     </Button>
                   </div>
                 </div>
@@ -242,14 +307,21 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
+                      onMouseMove={(state) => {
+                        if (state.isTooltipActive) {
+                          setFocusBar(state.activeTooltipIndex)
+                        } else {
+                          setFocusBar(null)
+                        }
+                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
-                      <YAxis dataKey="visits" fontSize={14} />
-                      <Tooltip />
+                      <YAxis dataKey={dataKey} fontSize={14} />
+                      <Tooltip cursor={false} />
                       {/* <Legend /> */}
                       <Bar
-                        dataKey="visits"
+                        dataKey={dataKey}
                         fill="#000"
                         activeBar={<Rectangle fill="#000" />}
                         radius={[4, 4, 0, 0]}
@@ -258,15 +330,23 @@ const InsightsFlowComponents = () => {
                   </ResponsiveContainer>
                 </div>
               </Card>
-              <Card>
-                <Table className="">
+              <Card className="w-full overflow-x-hidden">
+                <Table className="w-full">
                   <TableHeader>
                     <TableRow>
                       <TableHead>#</TableHead>
-                      <TableHead>Step</TableHead>
-                      <TableHead>Views</TableHead>
-                      <TableHead>Exits</TableHead>
-                      <TableHead>Drop-off rate</TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        {t("Step")}
+                      </TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        {t("Views")}
+                      </TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        {t("Exits")}
+                      </TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        {t("Drop-off rate")}
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -296,24 +376,31 @@ const InsightsFlowComponents = () => {
               </Card>
             </div>
           </TabsContent>
-          <TabsContent className="mt-0 w-full" value="28days">
-            <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 w-full gap-4">
+          <TabsContent
+            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            value="28days"
+          >
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">Visits</h3>
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Visits")}
+                  </h3>
                   <User />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">45,231</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
+                  <div className=" text-4xl font-semibold font-geist">
+                    45,231
+                  </div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("visits from last month", { visits: "+20.1%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Submits
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Submits")}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -333,23 +420,25 @@ const InsightsFlowComponents = () => {
                   </svg>
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">898</div>
-                  <p className="text-xs text-muted-foreground">
-                    +8% from last month
+                  <div className=" text-4xl font-semibold font-geist">898</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("submits from last month", { submits: "+8%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Conversion Rate
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Conversion Rate")}
                   </h3>
                   <Percent />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">109%</div>
-                  <p className="text-xs text-muted-foreground">
-                    +32% from last month
+                  <div className=" text-4xl font-semibold font-geist">109%</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("conversionRate from last month", {
+                      conversionRate: "+32%",
+                    })}
                   </p>
                 </div>
               </Card>
@@ -371,11 +460,13 @@ const InsightsFlowComponents = () => {
                         <line x1="8" x2="16" y1="21" y2="21" />
                         <line x1="12" x2="12" y1="17" y2="21" />
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Desktop
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Desktop")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                   <div className="">
                     <div>
@@ -403,30 +494,50 @@ const InsightsFlowComponents = () => {
                           ></path>
                         </g>
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Mobile
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Mobile")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                 </div>
               </Card>
             </div>
-            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
+            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start pb-4">
               <Card className="">
                 <div className="p-3 flex justify-start">
-                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                  <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
                     <Button
                       variant="secondary"
-                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                      className={`text-sm rounded-md border ${
+                        dataKey === "visits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(visitsData)
+                        setDataKey("visits")
+                      }}
+                      size="sm"
                     >
-                      Visits
+                      {t("Visits")}
                     </Button>
                     <Button
                       variant="secondary"
-                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                      className={`text-sm rounded-md border hover:bg-white ${
+                        dataKey === "submits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(submitsData)
+                        setDataKey("submits")
+                      }}
+                      size="sm"
                     >
-                      Submits
+                      {t("Submits")}
                     </Button>
                   </div>
                 </div>
@@ -441,14 +552,21 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
+                      onMouseMove={(state) => {
+                        if (state.isTooltipActive) {
+                          setFocusBar(state.activeTooltipIndex)
+                        } else {
+                          setFocusBar(null)
+                        }
+                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
-                      <YAxis dataKey="visits" fontSize={14} />
-                      <Tooltip />
+                      <YAxis dataKey={dataKey} fontSize={14} />
+                      <Tooltip cursor={false} />
                       {/* <Legend /> */}
                       <Bar
-                        dataKey="visits"
+                        dataKey={dataKey}
                         fill="#000"
                         activeBar={<Rectangle fill="#000" />}
                         radius={[4, 4, 0, 0]}
@@ -462,10 +580,10 @@ const InsightsFlowComponents = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>#</TableHead>
-                      <TableHead>Step</TableHead>
-                      <TableHead>Views</TableHead>
-                      <TableHead>Exits</TableHead>
-                      <TableHead>Drop-off rate</TableHead>
+                      <TableHead>{t("Step")}</TableHead>
+                      <TableHead>{t("Views")}</TableHead>
+                      <TableHead>{t("Exits")}</TableHead>
+                      <TableHead>{t("Drop-off rate")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -495,24 +613,31 @@ const InsightsFlowComponents = () => {
               </Card>
             </div>
           </TabsContent>
-          <TabsContent className="mt-0 w-full" value="14days">
-            <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 w-full gap-4">
+          <TabsContent
+            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            value="14days"
+          >
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">Visits</h3>
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Visits")}
+                  </h3>
                   <User />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">45,231</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
+                  <div className=" text-4xl font-semibold font-geist">
+                    45,231
+                  </div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("visits from last month", { visits: "+20.1%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Submits
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Submits")}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -532,23 +657,25 @@ const InsightsFlowComponents = () => {
                   </svg>
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">898</div>
-                  <p className="text-xs text-muted-foreground">
-                    +8% from last month
+                  <div className=" text-4xl font-semibold font-geist">898</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("submits from last month", { submits: "+8%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Conversion Rate
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Conversion Rate")}
                   </h3>
                   <Percent />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">109%</div>
-                  <p className="text-xs text-muted-foreground">
-                    +32% from last month
+                  <div className=" text-4xl font-semibold font-geist">109%</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("conversionRate from last month", {
+                      conversionRate: "+32%",
+                    })}
                   </p>
                 </div>
               </Card>
@@ -570,11 +697,13 @@ const InsightsFlowComponents = () => {
                         <line x1="8" x2="16" y1="21" y2="21" />
                         <line x1="12" x2="12" y1="17" y2="21" />
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Desktop
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Desktop")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                   <div className="">
                     <div>
@@ -602,30 +731,50 @@ const InsightsFlowComponents = () => {
                           ></path>
                         </g>
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Mobile
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Mobile")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                 </div>
               </Card>
             </div>
-            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
+            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start pb-4">
               <Card className="">
                 <div className="p-3 flex justify-start">
-                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                  <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
                     <Button
                       variant="secondary"
-                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                      className={`text-sm rounded-md border ${
+                        dataKey === "visits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(visitsData)
+                        setDataKey("visits")
+                      }}
+                      size="sm"
                     >
-                      Visits
+                      {t("Visits")}
                     </Button>
                     <Button
                       variant="secondary"
-                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                      className={`text-sm rounded-md border hover:bg-white ${
+                        dataKey === "submits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(submitsData)
+                        setDataKey("submits")
+                      }}
+                      size="sm"
                     >
-                      Submits
+                      {t("Submits")}
                     </Button>
                   </div>
                 </div>
@@ -640,14 +789,21 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
+                      onMouseMove={(state) => {
+                        if (state.isTooltipActive) {
+                          setFocusBar(state.activeTooltipIndex)
+                        } else {
+                          setFocusBar(null)
+                        }
+                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
-                      <YAxis dataKey="visits" fontSize={14} />
-                      <Tooltip />
+                      <YAxis dataKey={dataKey} fontSize={14} />
+                      <Tooltip cursor={false} />
                       {/* <Legend /> */}
                       <Bar
-                        dataKey="visits"
+                        dataKey={dataKey}
                         fill="#000"
                         activeBar={<Rectangle fill="#000" />}
                         radius={[4, 4, 0, 0]}
@@ -661,10 +817,10 @@ const InsightsFlowComponents = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>#</TableHead>
-                      <TableHead>Step</TableHead>
-                      <TableHead>Views</TableHead>
-                      <TableHead>Exits</TableHead>
-                      <TableHead>Drop-off rate</TableHead>
+                      <TableHead>{t("Step")}</TableHead>
+                      <TableHead>{t("Views")}</TableHead>
+                      <TableHead>{t("Exits")}</TableHead>
+                      <TableHead>{t("Drop-off rate")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -694,24 +850,31 @@ const InsightsFlowComponents = () => {
               </Card>
             </div>
           </TabsContent>
-          <TabsContent className="mt-0 w-full" value="7days">
-            <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 w-full gap-4">
+          <TabsContent
+            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            value="7days"
+          >
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">Visits</h3>
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Visits")}
+                  </h3>
                   <User />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">45,231</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
+                  <div className=" text-4xl font-semibold font-geist">
+                    45,231
+                  </div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("visits from last month", { visits: "+20.1%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Submits
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Submits")}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -731,23 +894,25 @@ const InsightsFlowComponents = () => {
                   </svg>
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">898</div>
-                  <p className="text-xs text-muted-foreground">
-                    +8% from last month
+                  <div className=" text-4xl font-semibold font-geist">898</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("submits from last month", { submits: "+8%" })}
                   </p>
                 </div>
               </Card>
               <Card className="flex flex-col">
                 <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-                  <h3 className="text-sm font-medium tracking-tight">
-                    Conversion Rate
+                  <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground">
+                    {t("Conversion Rate")}
                   </h3>
                   <Percent />
                 </div>
                 <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-                  <div className="text-2xl font-bold">109%</div>
-                  <p className="text-xs text-muted-foreground">
-                    +32% from last month
+                  <div className=" text-4xl font-semibold font-geist">109%</div>
+                  <p className="text-xs text-muted-foreground font-geist">
+                    {t("conversionRate from last month", {
+                      conversionRate: "+32%",
+                    })}
                   </p>
                 </div>
               </Card>
@@ -769,11 +934,13 @@ const InsightsFlowComponents = () => {
                         <line x1="8" x2="16" y1="21" y2="21" />
                         <line x1="12" x2="12" y1="17" y2="21" />
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Desktop
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Desktop")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                   <div className="">
                     <div>
@@ -801,30 +968,50 @@ const InsightsFlowComponents = () => {
                           ></path>
                         </g>
                       </svg>
-                      <p className="pb-1 text-sm font-medium tracking-tight">
-                        Mobile
+                      <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
+                        {t("Mobile")}
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">0 %</span>
+                    <span className=" text-4xl font-semibold font-geist">
+                      0 %
+                    </span>
                   </div>
                 </div>
               </Card>
             </div>
-            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start">
+            <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start pb-4">
               <Card className="">
                 <div className="p-3 flex justify-start">
-                  <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+                  <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
                     <Button
                       variant="secondary"
-                      className="text-sm bg-white rounded-md border border-input hover:bg-white"
+                      className={`text-sm rounded-md border ${
+                        dataKey === "visits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(visitsData)
+                        setDataKey("visits")
+                      }}
+                      size="sm"
                     >
-                      Visits
+                      {t("Visits")}
                     </Button>
                     <Button
                       variant="secondary"
-                      className="text-sm bg-transparent rounded-md hover:bg-transparent"
+                      className={`text-sm rounded-md border hover:bg-white ${
+                        dataKey === "submits"
+                          ? "bg-white border-input hover:bg-white"
+                          : "bg-transparent border-transparent hover:bg-transparent"
+                      }`}
+                      onClick={() => {
+                        setData(submitsData)
+                        setDataKey("submits")
+                      }}
+                      size="sm"
                     >
-                      Submits
+                      {t("Submits")}
                     </Button>
                   </div>
                 </div>
@@ -839,14 +1026,21 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
+                      onMouseMove={(state) => {
+                        if (state.isTooltipActive) {
+                          setFocusBar(state.activeTooltipIndex)
+                        } else {
+                          setFocusBar(null)
+                        }
+                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
-                      <YAxis dataKey="visits" fontSize={14} />
-                      <Tooltip />
+                      <YAxis dataKey={dataKey} fontSize={14} />
+                      <Tooltip cursor={false} />
                       {/* <Legend /> */}
                       <Bar
-                        dataKey="visits"
+                        dataKey={dataKey}
                         fill="#000"
                         activeBar={<Rectangle fill="#000" />}
                         radius={[4, 4, 0, 0]}
@@ -860,10 +1054,10 @@ const InsightsFlowComponents = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>#</TableHead>
-                      <TableHead>Step</TableHead>
-                      <TableHead>Views</TableHead>
-                      <TableHead>Exits</TableHead>
-                      <TableHead>Drop-off rate</TableHead>
+                      <TableHead>{t("Step")}</TableHead>
+                      <TableHead>{t("Views")}</TableHead>
+                      <TableHead>{t("Exits")}</TableHead>
+                      <TableHead>{t("Drop-off rate")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

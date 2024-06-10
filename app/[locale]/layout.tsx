@@ -1,5 +1,5 @@
+import { Inter, Roboto_Mono } from "next/font/google"
 import localFont from "next/font/local"
-import { Inter, Roboto_Mono } from 'next/font/google'
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
+
 // import {  inter,
 //   roboto_mono,} from "./fonts-list"
 // const fontSans = FontSans({
@@ -16,17 +17,67 @@ import { NextIntlClientProvider, useMessages } from "next-intl"
 //   variable: "--font-sans",
 // })
 
-
 const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const geist = localFont({
+  variable: "--font-geist",
+  src: [
+    {
+      path: "../../assets/fonts/Geist-Black.woff2",
+      weight: "900",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-UltraBlack.woff2",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-UltraLight.woff2",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Thin.woff2",
+      weight: "100",
+      style: "normal",
+    },
+  ],
 })
 
 const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
-  variable: '--font-roboto-mono',
-  display: 'swap',
+  subsets: ["latin"],
+  variable: "--font-roboto-mono",
+  display: "swap",
 })
 
 const fontSans = localFont({
@@ -106,11 +157,12 @@ export default function RootLayout({
           fontSans.variable,
           fontHeading.variable,
           inter.variable,
-          roboto_mono.variable
+          roboto_mono.variable,
+          geist.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <NextIntlClientProvider locale={locale} messages={messages} >
+          <NextIntlClientProvider locale={locale} messages={messages}>
             {children}
           </NextIntlClientProvider>
           <Analytics />
