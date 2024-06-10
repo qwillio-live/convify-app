@@ -15,7 +15,7 @@ import jsonData from "./parse.json"
 import { PictureChoiceGen } from "../picture-choice/picture-choice.component"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
-import { CardContentGen } from "../card/user-card.component"
+import { CardContentGen, CardGen } from "../card/user-card.component"
 import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
@@ -24,7 +24,7 @@ const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
   [CRAFT_ELEMENTS.LOGO]: UserLogo,
-  [CRAFT_ELEMENTS.CARD]: "div",
+  [CRAFT_ELEMENTS.CARD]: CardGen,
   [CRAFT_ELEMENTS.CARDCONTENT]: CardContentGen,
   [CRAFT_ELEMENTS.DIV]: "div",
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,

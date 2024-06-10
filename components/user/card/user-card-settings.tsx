@@ -27,7 +27,7 @@ import { Slider } from "@/components/ui/slider"
 import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
-import { MoveHorizontal } from "lucide-react"
+import { MoveHorizontal,AlignVerticalJustifyStart,AlignHorizontalJustifyStart } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 export const CardContainerSettings = () => {
@@ -60,6 +60,7 @@ export const CardContainerSettings = () => {
       borderColor,
       border,
       size,
+      mobileFlexDirection,
     },
     actions: { setProp },
   } = useNode((node) => ({
@@ -75,8 +76,69 @@ export const CardContainerSettings = () => {
     }
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion type="multiple" className="w-full">
+      <AccordionItem value="layout">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">Layout </span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
+          <div className="flex flex-row items-center col-span-2 space-x-2">
+          <p className="text-md text-muted-foreground">Layout</p>
+              <Tabs
+                value={flexDirection}
+                defaultValue={flexDirection}
+                onValueChange={(value) => {
+                  setProp((props) => (props.flexDirection = value), 200)
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-2">
+                  <TabsTrigger   value="row"><AlignVerticalJustifyStart /></TabsTrigger>
+                  <TabsTrigger  value="column"><AlignHorizontalJustifyStart /></TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="flex flex-row items-center col-span-2 space-x-2">
+          <p className="text-md text-muted-foreground">Layout Mobile</p>
+              <Tabs
+                value={mobileFlexDirection}
+                defaultValue={mobileFlexDirection}
+                onValueChange={(value) => {
+                  setProp((props) => (props.mobileFlexDirection = value), 200)
+                }}
+               className="flex-1">
+                <TabsList className="w-full grid grid-cols-2">
+                  <TabsTrigger  value="row"><AlignVerticalJustifyStart /></TabsTrigger>
+                  <TabsTrigger value="column"><AlignHorizontalJustifyStart /></TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
 
+<div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+<Label htmlFor="marginTop">Gap</Label>
+<span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+  {gap}
+</span>
+</div>
+<Slider
+  className=""
+  defaultValue={[gap]}
+  value={[gap]}
+  max={100}
+  min={0}
+  step={1}
+  onValueChange={(e) =>
+
+    // setProp((props) => (props.marginTop = e),200)
+    // handlePropChange("marginTop",e)
+    handlePropChangeDebounced("gap",e)
+  }
+/>
+
+
+</div>
+          </AccordionContent>
+        </AccordionItem>
         <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Design </span>

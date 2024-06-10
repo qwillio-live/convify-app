@@ -1,4 +1,5 @@
 import { Element, useNode } from '@/lib/craftjs';
+import { useAppSelector } from '@/lib/state/flows-state/hooks';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -48,9 +49,7 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   height: auto;
   background: ${(props) => props.background};
   color: ${(props) => props.color};
-  margin-left: ${(props) => props.marginLeft}px;
   margin-top: ${(props) => props.marginTop}px;
-  margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
   padding-top: ${(props) => props.paddingTop}px;
@@ -74,19 +73,28 @@ interface CardInnerStyles {
   width: string;
   direction: string;
   size: string;
+  marginLeft: string;
+  marginRight: string;
+  gap: string;
+  mobileFlexDirection: string;
 }
 
 const CardContentInner=styled.div<CardInnerStyles>`
   max-width: ${(props) => CardSizeValues[props.size || "medium"] };
   width: 100%;
   display: flex;
+  margin-left: ${(props) => props.marginLeft}px;
+  margin-right: ${(props) => props.marginRight}px;
   flex-direction: ${(props) => props.direction};
   flex: 1;
   align-items: center;
   justify-content: center;
   flex-wrap: nowrap;
-  gap: 20px;
+  gap: ${(props) => props.gap}px;
   height: auto;
+  @media (max-width: 768px) {
+    flex-direction: ${(props) => props.mobileFlexDirection};
+  }
 `;
 
 
@@ -118,7 +126,19 @@ export const CardContentGen = ({ children, ...props }) => {
     gap={props.gap}
     border={props.border}
     borderColor={props.borderColor}
-    >{children}</CardContentOuter>
+    >
+    <CardContentInner
+    size={props.size}
+    width={props.width}
+    gap={props.gap}
+    direction={props.flexDirection || "column"}
+    marginLeft={props.marginLeft}
+    marginRight={props.marginRight}
+    mobileFlexDirection={props.mobileFlexDirection}
+    >
+      {children}
+      </CardContentInner>
+      </CardContentOuter>
   )
 }
 export const CardContent = ({ children, ...props }) => {
@@ -131,9 +151,11 @@ export const CardContent = ({ children, ...props }) => {
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
+    style={{ width: "100%", height: "100%" }}
     className={`${isHovered ? 'border border-blue-500 border-dotted' : ''} border border-transparent relative`}>
       <CardContentGen
           fullWidth={props.fullWidth}
@@ -145,12 +167,14 @@ export const CardContent = ({ children, ...props }) => {
           marginTop={props.marginTop}
           marginRight={props.marginRight}
           marginBottom={props.marginBottom}
+          mobileFlexDirection={props.mobileFlexDirection}
+          size={props.size}
           paddingLeft={props.paddingLeft}
           paddingTop={props.paddingTop}
           paddingRight={props.paddingRight}
           paddingBottom={props.paddingBottom}
           radius={props.radius}
-          flexDirection={props.flexDirection}
+          flexDirection={mobileScreen ? props.mobileFlexDirection : props.flexDirection}
           fillSpace={props.fillSpace}
           alignItems={props.alignItems}
           justifyContent={props.justifyContent}
@@ -161,13 +185,8 @@ export const CardContent = ({ children, ...props }) => {
           border={props.border}
           borderColor={props.borderColor}
     >
-      <CardContentInner
-      size={props.size}
-      width='auto'
-      direction={props.flexDirection || "column"}
-      >
+
       {children}
-      </CardContentInner>
     </CardContentGen>
     </div>
   );
@@ -211,6 +230,7 @@ export type CardContentDefaultPropsTypes= {
   border: number
   borderColor: string
   size: CardSizes
+  mobileFlexDirection: string
 }
 export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
@@ -228,6 +248,7 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     paddingBottom: "40",
     radius: "none",
     flexDirection: "column",
+    mobileFlexDirection: "column",
     fillSpace: "1",
     alignItems: "center",
     justifyContent: "center",
@@ -262,6 +283,15 @@ background: string;
   max-width: fit-content;
   width: 100%;
 `;
+export const CardGen = ({ children, ...props }) => {
+  return(
+   <div
+   style={{ width: "100%", height: "100%" }}
+   >
+        {children}
+    </div>
+  )
+}
 
 export const Card = ({ children, ...props }) => {
   const [hovered, setHovered] = React.useState(false)
@@ -283,12 +313,12 @@ export const Card = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      style={{ minWidth: "100%", height: "100%" }}
     >
       {hovered && <Controller nameOfComponent={"Card"} />}
       <Element
-        canvas id="usercard" is={CardContent} data-cy="card-top"
-        className="max-w-[500px]"
-        {...props}
+        canvas id="usercard" is={CardContent} data-cy="card-content"
+        className=""
       >
         {children}
       </Element>
