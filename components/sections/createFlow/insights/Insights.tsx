@@ -26,7 +26,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange"
 
-const visitsData = [
+const visitsData: SubmitData[] = [
   {
     time: 5.05,
     visits: 4,
@@ -57,7 +57,7 @@ const visitsData = [
   },
 ]
 
-const submitsData = [
+const submitsData: SubmitData[] = [
   {
     time: 5.05,
     submits: 6,
@@ -88,12 +88,17 @@ const submitsData = [
   },
 ]
 
+interface SubmitData {
+  time: number
+  submits?: number
+  visits?: number
+}
+
 const InsightsFlowComponents = () => {
   const [date, setDate] = useState(new Date())
   const [selected, setSelected] = useState(InsightsDevices[0] || {})
   const [dataKey, setDataKey] = useState("visits")
-  const [data, setData] = useState(visitsData)
-  const [focusBar, setFocusBar] = useState(null)
+  const [data, setData] = useState<SubmitData[]>(visitsData)
 
   const t = useTranslations("CreateFlow.ResultsPage")
 
@@ -307,13 +312,6 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
-                      onMouseMove={(state) => {
-                        if (state.isTooltipActive) {
-                          setFocusBar(state.activeTooltipIndex)
-                        } else {
-                          setFocusBar(null)
-                        }
-                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
@@ -552,13 +550,6 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
-                      onMouseMove={(state) => {
-                        if (state.isTooltipActive) {
-                          setFocusBar(state.activeTooltipIndex)
-                        } else {
-                          setFocusBar(null)
-                        }
-                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
@@ -789,13 +780,6 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
-                      onMouseMove={(state) => {
-                        if (state.isTooltipActive) {
-                          setFocusBar(state.activeTooltipIndex)
-                        } else {
-                          setFocusBar(null)
-                        }
-                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
@@ -1026,13 +1010,6 @@ const InsightsFlowComponents = () => {
                         bottom: 20,
                       }}
                       className="w-full"
-                      onMouseMove={(state) => {
-                        if (state.isTooltipActive) {
-                          setFocusBar(state.activeTooltipIndex)
-                        } else {
-                          setFocusBar(null)
-                        }
-                      }}
                     >
                       {/* <CartesianGrid strokeDasharray="3 3" /> */}
                       <XAxis dataKey="time" fontSize={14} />
