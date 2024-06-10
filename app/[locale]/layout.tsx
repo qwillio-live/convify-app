@@ -1,6 +1,3 @@
-import localFont from "next/font/local"
-import { Inter, Roboto_Mono } from 'next/font/google'
-
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
@@ -9,36 +6,61 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
-// import {  inter,
-//   roboto_mono,} from "./fonts-list"
-// const fontSans = FontSans({
-//   subsets: ["latin"],
-//   variable: "--font-sans",
-// })
-
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
-  variable: '--font-roboto-mono',
-  display: 'swap',
-})
-
-const fontSans = localFont({
-  src: "../../assets/fonts/Inter-Regular.ttf",
-  variable: "--font-sans",
-})
-
-// Font files can be colocated inside of `pages`
-const fontHeading = localFont({
-  src: "../../assets/fonts/CalSans-SemiBold.woff2",
-  variable: "--font-heading",
-})
+import {
+  fontSans,
+  fontHeading,
+  inter,
+  roboto_mono,
+  open_sans,
+  montserrat,
+  lato,
+  oswald,
+  source_sans_pro,
+  raleway,
+  pt_sans,
+  merriweather,
+  nunito,
+  playfair_display,
+  poppins,
+  ubuntu,
+  mukta,
+  rubik,
+  work_sans,
+  roboto_condensed,
+  noto_sans,
+  fira_sans,
+  quicksand,
+  karla,
+  cabin,
+  barlow,
+  arimo,
+  teko,
+  catamaran,
+  libre_franklin,
+  oxygen,
+  heebo,
+  asap,
+  bitter,
+  ibm_plex_sans,
+  exo_2,
+  dosis,
+  pt_serif,
+  overpass,
+  varela_round,
+  questrial,
+  inconsolata,
+  rokkitt,
+  red_hat_display,
+  cairo,
+  lora,
+  titillium_web,
+  bebas_neue,
+  anton,
+  zilla_slab,
+  nunito_sans,
+  roboto_slab,
+  roboto,
+} from "./fonts"
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -102,11 +124,60 @@ export default function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "bg-background min-h-screen font-sans antialiased",
+          roboto.variable,
           fontSans.variable,
           fontHeading.variable,
           inter.variable,
-          roboto_mono.variable
+          roboto_mono.variable,
+          open_sans.variable,
+          montserrat.variable,
+          lato.variable,
+          oswald.variable,
+          source_sans_pro.variable,
+          raleway.variable,
+          pt_sans.variable,
+          merriweather.variable,
+          nunito.variable,
+          playfair_display.variable,
+          poppins.variable,
+          ubuntu.variable,
+          mukta.variable,
+          rubik.variable,
+          work_sans.variable,
+          roboto_condensed.variable,
+          noto_sans.variable,
+          fira_sans.variable,
+          quicksand.variable,
+          karla.variable,
+          cabin.variable,
+          barlow.variable,
+          arimo.variable,
+          teko.variable,
+          catamaran.variable,
+          libre_franklin.variable,
+          oxygen.variable,
+          heebo.variable,
+          asap.variable,
+          bitter.variable,
+          ibm_plex_sans.variable,
+          exo_2.variable,
+          dosis.variable,
+          pt_serif.variable,
+          overpass.variable,
+          varela_round.variable,
+          questrial.variable,
+          inconsolata.variable,
+          rokkitt.variable,
+          red_hat_display.variable,
+          cairo.variable,
+          lora.variable,
+          titillium_web.variable,
+          bebas_neue.variable,
+          anton.variable,
+          zilla_slab.variable,
+          nunito_sans.variable,
+          roboto_slab.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>

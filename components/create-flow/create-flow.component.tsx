@@ -70,7 +70,7 @@ const SaveButton = () => {
   } = useEditor()
   const headerId = useAppSelector((state) => state?.screen?.headerId)
   //screen header id is: HeT6HrWBxJ
-  const nodeTree = node(headerId || '').toNodeTree()
+  const nodeTree = node(headerId || "").toNodeTree()
   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
   console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
   return (
@@ -103,11 +103,14 @@ export function CreateFlowComponent() {
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
-  // const editorLoadLength = useAppSelector((state) => Object.keys(state?.screen?.editorLoad).length);
 
+  const editorLoadLength = useAppSelector(
+    (state) => Object.keys(state?.screen?.editorLoad).length
+  )
 
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
@@ -182,7 +185,7 @@ export function CreateFlowComponent() {
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-4 ">
-            <div className="mt-8 section-header flex items-center justify-between"></div>
+            <div className="section-header mt-8 flex items-center justify-between"></div>
             <div className="section-body">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
@@ -193,11 +196,11 @@ export function CreateFlowComponent() {
                 }}
               >
                 <TabsContent
-                style={{ backgroundColor: backgroundColor }}
+                  style={{ backgroundColor: backgroundColor }}
                   className={cn(
-                    "mx-auto page-container min-h-[400px] box-content font-sans antialiased z-20",
+                    "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
                     view == VIEWS.DESKTOP
-                      ? "w-full border-0 shahid"
+                      ? "shahid w-full border-0"
                       : "w-96 border px-4"
                   )}
                   value={view}
