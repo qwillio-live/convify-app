@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
   Activity,
   Anchor,
@@ -11,7 +11,8 @@ import {
   AlignHorizontalJustifyStart,
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyCenter,
-  AlignHorizontalSpaceBetween
+  AlignHorizontalSpaceBetween,
+  CornerRightDown
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl";
@@ -56,9 +57,23 @@ import {
 import useButtonThemePresets from "./useButtonThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils";
+import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks";
+import { RootState } from "@/lib/state/flows-state/store";
 
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
+  const screenNames = useScreenNames();
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || "";
 
   const {
     actions: { setProp },
@@ -94,10 +109,16 @@ export const IconButtonSettings = () => {
       height,
       settingsTab,
       preset,
+      tracking,
+      trackingEvent,
+      nextScreen,
+      buttonAction
     },
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+
   enum PRESETNAMES {
     filled= "filled",
     outLine= "outLine"
@@ -143,7 +164,9 @@ export const IconButtonSettings = () => {
       onValueChange={(value) => {
         setProp((props) => (props.settingsTab = value), 200)
       }}
-      type="single" collapsible className="w-full">
+      type="multiple"
+      defaultValue={['content']}
+      className="w-full mb-10">
         <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Content")}</span>
@@ -169,7 +192,7 @@ export const IconButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">Icon</p>
+                  <p className="text-md flex-1 text-muted-foreground">{t("Icon")}</p>
                   <Select
                     defaultValue={icon}
                     onValueChange={(e) => {
@@ -208,6 +231,48 @@ export const IconButtonSettings = () => {
                 </>
               )}
             </div>
+
+                <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+                <label
+                  htmlFor="text"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Navigation
+                </label>
+                <Select
+                  defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen}
+                  value={buttonAction === "next-screen" ? "next-screen" : nextScreen}
+                  onValueChange={(e) => {
+                      if(e === "next-screen") {
+                        setProp((props) => (props.buttonAction = "next-screen" ))
+                        setProp((props) => (props.nextScreen = nextScreenName ))
+                      } else {
+                        setProp((props) => (props.buttonAction = "custom-action" ))
+                        setProp((props) => (props.nextScreen = e))
+                      }
+                }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select screen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                    <SelectItem value={"next-screen"}>
+                      Next Screen
+                    </SelectItem>
+                    {
+                      screenNames?.map((screen,index) => {
+                        return (
+                          <SelectItem value={screen}>
+                            {index+1} : {screen}
+                          </SelectItem>
+                        )
+                      })
+                      }
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+          </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -412,6 +477,52 @@ export const IconButtonSettings = () => {
                 <IconButtonGen {...outLinePreset} size="full" paddingBottom={14} paddingTop={14} width={"266px"} marginTop={12} marginBottom={12} marginLeft={0} marginRight={0} />
               </Card>
             </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="tracking">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+            <span className="text-sm font-medium">{t("Tracking")}</span>
+          </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <div className="flex flex-row items-center col-span-2 space-x-2">
+              <Checkbox
+                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
+                checked={tracking}
+                onCheckedChange={(e) => {
+                  // setProp((props) => (props.enableIcon = e), 1000)
+                  handlePropChange("tracking",e);
+                }}
+                id="enableTracking"
+              />
+              <label
+                htmlFor="enableIcon"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {t("Tracking activated")}
+              </label>
+            </div>
+            {
+              tracking && (
+                <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-2 items-center mt-2">
+              <label
+                htmlFor="label-event"
+                className="text-sm font-medium shrink-0 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {t("Event Name")}
+              </label>
+              <Input
+              value={trackingEvent}
+              defaultValue={trackingEvent}
+              onChange={(e) => {
+                setProp((props) => (props.trackingEvent = e.target.value), 0)
+              }}
+              type={"text"}
+              placeholder={t("Tracking Event")}
+              />
+            </div>
+              )
+            }
           </AccordionContent>
         </AccordionItem>
 

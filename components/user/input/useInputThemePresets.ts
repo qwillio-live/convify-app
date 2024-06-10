@@ -23,7 +23,7 @@ const useInputThemePresets = () => {
   paddingTop: 0,
   paddingBottom: 0,
   placeholder: "Placeholder",
-  backgroundColor: theme?.general?.backgroundColor || 'white',
+  backgroundColor: "transparent",
   borderColor: {
     value: "#eaeaeb",
     globalStyled: false,
@@ -94,7 +94,7 @@ const useInputThemePresets = () => {
   paddingTop: 0,
   paddingBottom: 0,
   placeholder: "Placeholder",
-  backgroundColor: theme?.general?.backgroundColor || 'white',
+  backgroundColor: "transparent",
   borderColor: {
     value: "#eaeaeb",
     globalStyled: false,

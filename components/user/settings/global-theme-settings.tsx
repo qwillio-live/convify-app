@@ -9,9 +9,22 @@ import {
 } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
+import { useTranslations } from "next-intl";
+import { rollScreens } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { RootState } from "@/lib/state/flows-state/store";
+import { delay } from "redux-saga/effects";
 import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useCallback, useEffect, useState } from "react"
 import { FontSelector } from "./font-selector.component"
+
 
 type Props = {}
 
@@ -20,6 +33,7 @@ export const GlobalThemeSettings = (props: Props) => {
   const [secondaryOpen, setSecondaryOpen] = useState(false)
 
   const dispatch = useAppDispatch()
+  const t = useTranslations("Components");
 
   /** GENERAL STYLES */
   const primaryColor = useAppSelector(
@@ -51,21 +65,12 @@ export const GlobalThemeSettings = (props: Props) => {
   const secondaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
-  const defaultSecondaryFont = useAppSelector(
-    (state) => state.theme?.defaultText?.secondaryFont
-  )
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
-  const defaultPrimaryTextColor = useAppSelector(
-    (state) => state.theme?.defaultText?.primaryColor
-  )
-  const secondaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.secondaryColor
-  )
-  const defaultSecondaryTextColor = useAppSelector(
-    (state) => state.theme?.defaultText?.secondaryColor
-  )
+  const defaultSecondaryFont = useAppSelector((state) => state.theme?.defaultText?.secondaryFont)
+  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
+  const defaultPrimaryTextColor = useAppSelector((state) => state.theme?.defaultText?.primaryColor);
+  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
+  const defaultSecondaryTextColor = useAppSelector((state) => state.theme?.defaultText?.secondaryColor);
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
 
   const handleApplyTheme = (themeStyles) => {
     dispatch({ type: "APPLY_THEME_AND_CYCLE_SCREENS", payload: themeStyles })
@@ -105,14 +110,24 @@ export const GlobalThemeSettings = (props: Props) => {
   const handleStyleChangeDebounced = (style) => {
     debouncedDispatch(style);
   }
+  // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // const hanldeScreenRolling =async () => {
+  //   screens?.map(async (screen, index) => {
+  //     await dispatch(rollScreens(screen.screenData))
+  //     delay(200)
+  //   })
+  // }
 
   return (
     <>
       <ScrollArea>
-        <Accordion type="single" defaultValue="item-1" className="w-full">
+        <Accordion type="multiple"
+        defaultValue={["item-1"]}
+        className="w-full">
+
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">General </span>
+              <span className="text-sm font-medium">{t("General")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
               <div className="col-span-2 flex flex-row items-center space-x-2">
@@ -120,7 +135,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarycolor"
                   className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Primary Color
+                  {t("Primary Color")}
                 </label>
                 <Input
                   value={primaryColor || defaultPrimaryColor}
@@ -140,7 +155,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="secondarycolor"
                   className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Secondary Color
+                  {t("Secondary Color")}
                 </label>
                 <Input
                   value={secondaryColor || defaultSecondaryColor}
@@ -159,7 +174,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundcolor"
                   className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Background Color
+                  {t("Background Color")}
                 </label>
                 <Input
                   value={backgroundColor || defaultBackgroundColor}
@@ -179,7 +194,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundimage"
                   className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Background Image
+                  {t("Background Image")}
                 </label>
                 <Input
                   onChange={handleFileChange}
@@ -196,9 +211,68 @@ export const GlobalThemeSettings = (props: Props) => {
 
           <AccordionItem value="item-2">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">Text </span>
+              <span className="text-sm font-medium">{t("Text")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-4 p-2">
+              <div className="flex flex-col items-center col-span-2 space-y-2">
+                <label
+                  htmlFor="primaryfont"
+                  className="text-sm font-medium self-start leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
+                >
+                  {t("Primary Font")}
+                </label>
+                <Select
+                  value={primaryFont || defaultPrimaryFont}
+                  onValueChange={(value) => {
+                    handleStyleChange({ text: { primaryFont: value } })
+                    // handleApplyTheme({text: { primaryFont: value}})
+                  }
+                  }
+                >
+                  <SelectTrigger className="basis-full self-start">
+                    <SelectValue placeholder="Primary font" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {primaryFonts?.map((font, index) => {
+                      return (
+                        <SelectItem key={index} value={font.variable}>
+                          {font.name}
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col items-center col-span-2 space-y-2">
+                <label
+                  htmlFor="secondaryfont"
+                  className="text-sm font-medium self-start leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
+                >
+                  {t("Secondary Font")}
+                </label>
+                <Select
+                  value={secondaryFont || defaultSecondaryFont}
+                  onValueChange={(value) => {
+                    handleStyleChange({ text: { secondaryFont: value } })
+                    // handleApplyTheme({text: { secondaryFont: value}})
+                  }
+                  }
+                >
+                  <SelectTrigger className="basis-full self-start">
+                    <SelectValue placeholder="Secondary font" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {secondaryFonts?.map((font, index) => {
+                      return (
+                        <SelectItem key={index} value={font.variable}>
+                          {font.name}
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
               <FontSelector
                 fontList={primaryFonts}
                 selectedFont={primaryFont}
@@ -228,7 +302,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarytextcolor"
                   className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Primary Text Color
+                  {t("Primary Text Color")}
                 </label>
                 <Input
                   value={primaryTextColor || defaultPrimaryTextColor}
@@ -248,7 +322,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="primarytextcolor"
                   className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Secondary Text Color
+                  {t("Secondary Text Color")}
                 </label>
                 <Input
                   value={secondaryTextColor || defaultSecondaryTextColor}

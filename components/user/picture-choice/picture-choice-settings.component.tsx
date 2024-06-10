@@ -1,9 +1,65 @@
+import React, { useEffect, useRef, useState } from "react"
+import { Label } from "@radix-ui/react-label"
+import { Reorder, useDragControls, useInView, useMotionValue } from "framer-motion"
+import {
+  Activity,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalSpaceBetween,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  CornerRightDown,
+  Disc,
+  DollarSign,
+  GripVertical,
+  Image as ImageIcon,
+  Check as IconCheck,
+  X as IconX,
+  Mountain,
+  MoveHorizontal,
+  PlusCircle,
+  Search,
+  Trash2,
+  ThumbsUp,
+  SmilePlus,
+} from "lucide-react"
+import ContentEditable from "react-contenteditable"
+
+import { useNode } from "@/lib/craftjs"
+import {
+  useScreenNames,
+  useScreensLength,
+} from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/ui/accordion"
+import { Button, Button as CustomButton } from "@/components/ui/button"
+
+import { Input } from "@/components/ui/input"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Separator } from "@/components/ui/separator"
+import { Slider } from "@/components/ui/slider"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/custom-select"
 import {
   CardContent,
   CardDescription,
@@ -28,33 +84,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import icons from "@/constant/streamline.json";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
-import { useNode } from "@/lib/craftjs";
 import EmojiPicker, { EmojiClickData, EmojiStyle, SuggestionMode } from "emoji-picker-react";
-import React, { useEffect, useRef, useState } from "react";
+
 import { createPortal } from "react-dom";
 import { useEventListener } from 'usehooks-ts';
 // import {useInView}
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
-import { Label } from "@radix-ui/react-label";
-import { Reorder, useDragControls, useInView, useMotionValue } from "framer-motion";
-import {
-  GripVertical,
-  Check as IconCheck,
-  X as IconX,
-  Image as ImageIcon,
-  PlusCircle,
-  Search,
-  SmilePlus,
-  ThumbsUp,
-  Trash2,
-} from "lucide-react";
+
 import { useTranslations } from "next-intl";
+
 
 export const PictureChoiceSettings = () => {
   const controls = useDragControls()
@@ -74,6 +114,18 @@ export const PictureChoiceSettings = () => {
   const closePopover = () => {
     setPopoverOpen(false)
   }
+  const screenNames = useScreenNames()
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || "";
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -103,6 +155,8 @@ export const PictureChoiceSettings = () => {
   const handleAddFile = () => {
     const newItem = {
       id: `${pictureItems.length + 1}`,
+      buttonAction: "next-screen",
+      nextScreen: nextScreenName,
       text: text || "Lorem",
       pic: uploadFile || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f972.png", // Use a placeholder image URL
       itemType: ItemType.PICTURE,
@@ -128,7 +182,13 @@ export const PictureChoiceSettings = () => {
             onReorder={(e) => setProp((props) => (props.pictureItems = e))}
           >
             {pictureItems.map((item, index) => (
-              <PictureChoiceItem key={item.id} item={item} index={index} />
+              <PictureChoiceItem
+                key={item.id}
+                item={item}
+                index={index}
+                screenNames={screenNames}
+                nextScreenName={nextScreenName}
+              />
             ))}
           </Reorder.Group>
         </CardContent>
@@ -445,7 +505,12 @@ enum ItemType {
   PICTURE = "picture",
   ICON = "icon",
 }
-export const PictureChoiceItem = ({ item, index }) => {
+export const PictureChoiceItem = ({
+  item,
+  index,
+  screenNames,
+  nextScreenName,
+}) => {
   const [pickerType, setPickerType] = useState("image")
   const y = useMotionValue(0)
   const controls = useDragControls()
@@ -567,7 +632,7 @@ export const PictureChoiceItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex h-20 w-full flex-row flex-wrap items-center justify-between gap-3 border p-4 relative"
+      className="flex w-full  flex-row items-center justify-between gap-3 border p-4"
     >
       <Dialog open={open} onOpenChange={setOpen}>
         <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -581,7 +646,7 @@ export const PictureChoiceItem = ({ item, index }) => {
                     <IconCheck className="size-5 shrink-0" />
                   ) : item.icon === "x" ? (
                     <IconX className="size-5 shrink-0" />
-                  ) : 
+                  ) :
                   <div className="size-5 shrink-0">{item.icon}</div>
                 ) : (
                   <img
@@ -676,22 +741,102 @@ export const PictureChoiceItem = ({ item, index }) => {
         ref={inputRef}
         onChange={handleInputChange}
       />
-      <input
-        type="text"
-        value={item.text}
-        disabled={false}
-        onChange={(e) =>
-          setProp(
-            (props) =>
-              (props.pictureItems[index].text = e.target.value.replace(
-                /<\/?[^>]+(>|$)/g,
-                ""
-              )),
-            500
-          )
-        }
-        className="min-w-[50px] max-w-[50px] overflow-x-auto truncate"
-      />
+      <div className="flex flex-col items-start">
+        <div className="flex flex-row gap-2 py-2 items-center justify-center">
+          {/* <div
+            onClick={() => (inputRef.current as HTMLInputElement)?.click()}
+            className="pic-container hover:cursor-pointer"
+          >
+            {item.itemType === ItemType.ICON ? (
+              // <img src={item.icon} className="shrink-0 w-20 h-20" />
+              item.icon === "check" ? (
+                <IconCheck className="w-5 h-5 shrink-0" />
+              ) : item.icon === "x" ? (
+                <IconX className="w-5 h-5 shrink-0" />
+              ) : null
+            ) : (
+              <img src={item.pic} alt={item.alt || ""} className="h-10 w-10" />
+            )}
+          </div> */}
+          <ContentEditable
+            html={item.text}
+            disabled={false}
+            onChange={(e) =>
+              setProp(
+                (props) =>
+                  (props.pictureItems[index].text = e.target.value.replace(
+                    /<\/?[^>]+(>|$)/g,
+                    ""
+                  )),
+                500
+              )
+            }
+            className="min-w-[40px] max-w-[100px] overflow-hidden truncate"
+            tagName={"p"}
+          />
+        </div>
+
+        <div className="screen-action-container flex flex-col gap-2">
+          <Select
+            defaultValue={
+              item.buttonAction === "next-screen"
+                ? "next-screen"
+                : item.nextScreen
+            }
+            value={
+              item.buttonAction === "next-screen"
+                ? "next-screen"
+                : item.nextScreen
+            }
+            onValueChange={(e) => {
+              if (e === "next-screen") {
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].buttonAction = "next-screen")
+                )
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].nextScreen = nextScreenName)
+                )
+              } else {
+                setProp(
+                  (props) =>
+                    (props.pictureItems[index].buttonAction = "custom-action")
+                )
+                setProp((props) => (props.pictureItems[index].nextScreen = e))
+              }
+            }}
+          >
+            <SelectTrigger className="">
+              <SelectValue placeholder="Select screen" />
+            </SelectTrigger>
+            <SelectContent className="text-left">
+              <SelectGroup>
+                <SelectItem
+                  value="next-screen"
+                  className="flex flex-row items-center text-[10px]"
+                >
+                  <div className="flex flex-row items-center text-xs gap-2">
+                    <ArrowRight size={14} /> <span>Next Screen</span>
+                  </div>
+                </SelectItem>
+                {screenNames.map((screenName, index) => (
+                  <SelectItem
+                    value={screenName}
+                    className="flex flex-row items-center text-[10px]"
+                  >
+                    <div className="flex flex-row items-center text-xs gap-2">
+                      <span>
+                        {index + 1} : {screenName}
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
         <PortalEmojiPicker
           isVisible={pickerType === "emoji"}
@@ -701,7 +846,6 @@ export const PictureChoiceItem = ({ item, index }) => {
           setPickerType={setPickerType}
           dropdownRef={dropdownRef}
         />
-
       <div
         onPointerDown={(e) => controls.start(e)}
         className="reorder-handle hover:cursor-pointer"
@@ -730,7 +874,7 @@ const IconRenderer = ({ iconName, onClick }) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
-            className="h-24 w-24 cursor-pointer ml-10 mt-8" 
+            className="h-24 w-24 cursor-pointer ml-10 mt-8"
           />
         )}
       </div>

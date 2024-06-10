@@ -57,6 +57,7 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -97,15 +98,14 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch()
 
-  const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
-  const selectedScreen = useAppSelector(
-    (state) => state?.screen?.selectedScreen
-  )
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0])
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
+  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
+  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
-  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
+  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
 
   const editorLoadLength = useAppSelector(
@@ -205,7 +205,8 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  <Frame data={JSON.parse(editorLoad)}></Frame>
+                  <Frame data={editorLoad}></Frame>
+
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -232,6 +233,56 @@ export function CreateFlowComponent() {
               <SettingsPanel />
             </div>
           </ScrollArea>
+        </div>
+      </Editor>
+      <Editor
+              resolver={{
+                Controller,
+                Logo,
+                HeadlineText,
+                UserText,
+                UserButton,
+                ProgressBar,
+                Element,
+                Progress,
+                ButtonChoiceScreen,
+                ScreenHeader,
+                UserInput,
+                ScreenFooter,
+                ScreensList,
+                ScreenOneChoice,
+                // UserProgressBar,
+                ScreenOneInput,
+                Input,
+                Button,
+                ArrowRight,
+                Check,
+                Cross,
+                Facebook,
+                Github,
+                Globe,
+                Linkedin,
+                Container,
+                Card,
+                CardContent,
+                UserContainer,
+                IconButton,
+                DragDrop,
+                UserToolbox,
+                Image,
+                PictureChoice,
+                MultipleChoice,
+                LogoBar,
+                LogoBarItem,
+                LayoutContainer,
+                Loader,
+                List,
+                ListItem,
+              }}
+              onRender={RenderNode}
+      >
+        <div className="special-editor">
+        <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>
