@@ -1,4 +1,11 @@
 import React, { useCallback } from "react"
+import { debounce, throttle } from "lodash"
+import {
+  AlignHorizontalJustifyStart,
+  AlignVerticalJustifyStart,
+  MoveHorizontal,
+} from "lucide-react"
+import { useTranslations } from "next-intl"
 import styled from "styled-components"
 
 import { Element, Node, NodeHelpers, useNode } from "@/lib/craftjs"
@@ -12,7 +19,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { throttle,debounce } from 'lodash';
 import {
   Select,
   SelectContent,
@@ -23,12 +29,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
-import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
-import { MoveHorizontal,AlignVerticalJustifyStart,AlignHorizontalJustifyStart } from "lucide-react"
-import { useTranslations } from "next-intl"
 
 export const CardContainerSettings = () => {
   const {
@@ -61,6 +65,7 @@ export const CardContainerSettings = () => {
       border,
       size,
       mobileFlexDirection,
+      settingsTab,
     },
     actions: { setProp },
   } = useNode((node) => ({
@@ -68,75 +73,146 @@ export const CardContainerSettings = () => {
   }))
   const t = useTranslations("Components")
   const debouncedSetProp = useCallback(
-    debounce((property,value) => {
-      setProp((prop) => {prop[property] = value},0);
-    }),[setProp])
-    const handlePropChangeDebounced = (property,value) => {
-      debouncedSetProp(property,value);
-    }
+    debounce((property, value) => {
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
+    [setProp]
+  )
+  const handlePropChangeDebounced = (property, value) => {
+    debouncedSetProp(property, value)
+  }
   return (
     <>
-      <Accordion type="multiple" className="w-full">
-      <AccordionItem value="layout">
+      <Accordion
+            value={settingsTab || "layout"}
+            onValueChange={(value) => {
+              setProp((props) => (props.settingsTab = value), 200)
+            }}
+            type="multiple"
+            defaultValue={['layout']}
+        className="w-full">
+        <AccordionItem value="layout">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">Layout </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-          <div className="flex flex-row items-center col-span-2 space-x-2">
-          <p className="text-md text-muted-foreground">Layout</p>
+            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
+              <Label className="text-md text-muted-foreground col-span-1">
+                Layout Desktop
+              </Label>
               <Tabs
                 value={flexDirection}
                 defaultValue={flexDirection}
                 onValueChange={(value) => {
                   setProp((props) => (props.flexDirection = value), 200)
                 }}
-               className="flex-1">
+                className="flex-1 col-span-1"
+              >
                 <TabsList className="w-full grid grid-cols-2">
-                  <TabsTrigger   value="row"><AlignVerticalJustifyStart /></TabsTrigger>
-                  <TabsTrigger  value="column"><AlignHorizontalJustifyStart /></TabsTrigger>
+                  <TabsTrigger value="row">
+                    <AlignVerticalJustifyStart />
+                  </TabsTrigger>
+                  <TabsTrigger value="column">
+                    <AlignHorizontalJustifyStart />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-          <p className="text-md text-muted-foreground">Layout Mobile</p>
+            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
+              <Label className="col-span-1 text-md text-muted-foreground">
+                Layout Mobile
+              </Label>
               <Tabs
                 value={mobileFlexDirection}
                 defaultValue={mobileFlexDirection}
                 onValueChange={(value) => {
                   setProp((props) => (props.mobileFlexDirection = value), 200)
                 }}
-               className="flex-1">
+                className="flex-1 col-span-1"
+              >
                 <TabsList className="w-full grid grid-cols-2">
-                  <TabsTrigger  value="row"><AlignVerticalJustifyStart /></TabsTrigger>
-                  <TabsTrigger value="column"><AlignHorizontalJustifyStart /></TabsTrigger>
+                  <TabsTrigger value="row">
+                    <AlignVerticalJustifyStart />
+                  </TabsTrigger>
+                  <TabsTrigger value="column">
+                    <AlignHorizontalJustifyStart />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
+              <Label className="col-span-1 text-md text-muted-foreground">
+                Align Horizontal
+              </Label>
+              <Tabs
+                value={justifyContent}
+                defaultValue={justifyContent}
+                onValueChange={(value) => {
+                  setProp((props) => (props.justifyContent = value), 200)
+                }}
+                className="flex-1 col-span-1"
+              >
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="flex-start" disabled={flexDirection == "column"}>
+                    <AlignVerticalJustifyStart />
+                  </TabsTrigger>
+                  <TabsTrigger value="center" disabled={flexDirection == "column"}>
+                    <AlignHorizontalJustifyStart />
+                  </TabsTrigger>
+                  <TabsTrigger value="flex-end" disabled={flexDirection == "column"}>
+                    <AlignHorizontalJustifyStart />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
+              <Label className="col-span-1 text-md text-muted-foreground">
+                Align Vertical
+              </Label>
+              <Tabs
+                value={alignItems}
+                defaultValue={alignItems}
+                onValueChange={(value) => {
+                  setProp((props) => (props.alignItems = value), 200)
+                }}
+                className="flex-1 col-span-1"
+              >
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="flex-start"  disabled={flexDirection == "row"}>
+                    <AlignVerticalJustifyStart />
+                  </TabsTrigger>
+                  <TabsTrigger value="center" disabled={flexDirection == "row"}>
+                    <AlignHorizontalJustifyStart />
+                  </TabsTrigger>
+                  <TabsTrigger value="flex-end" disabled={flexDirection == "row"}>
+                    <AlignHorizontalJustifyStart />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-
-<div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-<Label htmlFor="marginTop">Gap</Label>
-<span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-  {gap}
-</span>
-</div>
-<Slider
-  className=""
-  defaultValue={[gap]}
-  value={[gap]}
-  max={100}
-  min={0}
-  step={1}
-  onValueChange={(e) =>
-
-    // setProp((props) => (props.marginTop = e),200)
-    // handlePropChange("marginTop",e)
-    handlePropChangeDebounced("gap",e)
-  }
-/>
-
-
-</div>
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+                <Label htmlFor="marginTop">Gap</Label>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {gap}
+                </span>
+              </div>
+              <Slider
+                className=""
+                defaultValue={[gap]}
+                value={[gap]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  // setProp((props) => (props.marginTop = e),200)
+                  // handlePropChange("marginTop",e)
+                  handlePropChangeDebounced("gap", e)
+                }
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
@@ -144,24 +220,24 @@ export const CardContainerSettings = () => {
             <span className="text-sm font-medium">Design </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-          <div className="flex flex-row items-center col-span-2 space-x-2">
-                <label
-                  htmlFor="backgroundcolor"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-                >
-                  {"Background Color"}
-                </label>
-                <Input
-                  defaultValue={"rgba(0,0,0,0)"}
-                  value={background}
-                  onChange={(e) => {
-                    debouncedSetProp("background",e.target.value)
-                  }}
-                  className="basis-1/3"
-                  type={"color"}
-                  id="backgroundcolor"
-                />
-              </div>
+            <div className="flex flex-row items-center col-span-2 space-x-2">
+              <label
+                htmlFor="backgroundcolor"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+              >
+                {"Background Color"}
+              </label>
+              <Input
+                defaultValue={"rgba(0,0,0,0)"}
+                value={background}
+                onChange={(e) => {
+                  debouncedSetProp("background", e.target.value)
+                }}
+                className="basis-1/3"
+                type={"color"}
+                id="backgroundcolor"
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
@@ -169,31 +245,35 @@ export const CardContainerSettings = () => {
             <span className="text-sm font-medium">{t("Spacing")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <Label className="text-md text-muted-foreground">
+                {t("Width")}
+              </Label>
               <Tabs
                 value={size}
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-               className="flex-1">
+                className="flex-1"
+              >
                 <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger   value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger  value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger  value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
+                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
+                  <TabsTrigger value="full">
+                    <MoveHorizontal />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
-          <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">{t("Top")}</Label>
-              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                {marginTop}
-              </span>
+                <Label htmlFor="marginTop">{t("Top")}</Label>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {marginTop}
+                </span>
               </div>
               <Slider
                 className=""
@@ -203,23 +283,19 @@ export const CardContainerSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) =>
-
                   // setProp((props) => (props.marginTop = e),200)
                   // handlePropChange("marginTop",e)
-                  handlePropChangeDebounced("marginTop",e)
+                  handlePropChangeDebounced("marginTop", e)
                 }
               />
-
-
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">{t("Bottom")}</Label>
-              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                {marginBottom}
-              </span>
+                <Label htmlFor="marginTop">{t("Bottom")}</Label>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {marginBottom}
+                </span>
               </div>
               <Slider
                 defaultValue={[marginBottom]}
@@ -230,17 +306,17 @@ export const CardContainerSettings = () => {
                 onValueChange={(e) =>
                   // setProp((props) => (props.marginBottom = e),200)
                   // handlePropChange("marginBottom",e)
-                  handlePropChangeDebounced("marginBottom",e)
+                  handlePropChangeDebounced("marginBottom", e)
                 }
               />
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">{t("Right")}</Label>
-              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                {marginRight}
-              </span>
+                <Label htmlFor="marginTop">{t("Right")}</Label>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {marginRight}
+                </span>
               </div>
               <Slider
                 defaultValue={[marginRight]}
@@ -251,18 +327,17 @@ export const CardContainerSettings = () => {
                 onValueChange={(e) =>
                   // setProp((props) => (props.marginRight = e),200)
                   // handlePropChange("marginRight",e)
-                  handlePropChangeDebounced("marginRight",e)
+                  handlePropChangeDebounced("marginRight", e)
                 }
               />
-
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-              <Label htmlFor="marginTop">{t("Left")}</Label>
-              <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                {marginLeft}
-              </span>
+                <Label htmlFor="marginTop">{t("Left")}</Label>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {marginLeft}
+                </span>
               </div>
               <Slider
                 defaultValue={[marginLeft]}
@@ -273,7 +348,7 @@ export const CardContainerSettings = () => {
                 onValueChange={(e) =>
                   // setProp((props) => (props.marginLeft = e),200)
                   // handlePropChange("marginLeft",e)
-                  handlePropChangeDebounced("marginLeft",e)
+                  handlePropChangeDebounced("marginLeft", e)
                 }
               />
             </div>

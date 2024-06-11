@@ -231,6 +231,7 @@ export type CardContentDefaultPropsTypes= {
   borderColor: string
   size: CardSizes
   mobileFlexDirection: string
+  settingsTab: string
 }
 export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
@@ -259,6 +260,7 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     border: 0,
     borderColor: "inherit",
     size: CardSizes.medium,
+    settingsTab: "layout",
 }
 
 CardContent.craft = {
