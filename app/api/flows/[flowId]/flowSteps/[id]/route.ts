@@ -209,6 +209,7 @@ export async function DELETE(
     })
 
     // Decrease number of steps in flow
+    existingFlow.numberOfSteps = existingFlow.numberOfSteps? existingFlow.numberOfSteps : 0;
     await prisma.flow.update({
       where: { id: String(flowId), userId, isDeleted: false },
       data: { numberOfSteps: existingFlow.numberOfSteps - 1 },

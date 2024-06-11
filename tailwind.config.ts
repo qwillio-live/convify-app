@@ -26,7 +26,6 @@ const config = {
         montserrat: ["var(--font-montserrat)"],
         lato: ["var(--font-lato)"],
         oswald: ["var(--font-oswald)"],
-        source_sans_pro: ["var(--font-source-sans-pro)"],
         raleway: ["var(--font-raleway)"],
         pt_sans: ["var(--font-pt-sans)"],
         merriweather: ["var(--font-merriweather)"],

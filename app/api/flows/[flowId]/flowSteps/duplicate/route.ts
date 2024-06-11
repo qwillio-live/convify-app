@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
         flowId: step.flowId,
         name: newStepName,
         link: step.link,
-        content: step.content,
+        content: step.content || {},
         order: newStepOrder,
         isDeleted: false,
       },

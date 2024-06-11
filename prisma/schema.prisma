@@ -65,6 +65,19 @@ model User {
   @@map(name: "users")
 }
 
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   Json?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  authorId  String
+
+  @@index([authorId], map: "posts_authorId_fkey")
+  @@map("posts")
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -92,9 +105,9 @@ model Flow {
   previewImage      String? // Ensuring it is nullable
   status            String? // Ensuring it is nullable
   templateId        String? // Ensuring it is nullable
-  content           Json
-  templateSettings  Json
-  steps             Json
+  content           Json?
+  templateSettings  Json?
+  steps             Json?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

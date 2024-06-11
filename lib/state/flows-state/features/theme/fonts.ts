@@ -32,10 +32,6 @@ export const FONTS: FontTypes = {
       variable: "--font-oswald",
     },
     {
-      name: "Source Sans Pro",
-      variable: "--font-source-sans-pro",
-    },
-    {
       name: "Raleway",
       variable: "--font-raleway",
     },
@@ -244,10 +240,6 @@ export const FONTS: FontTypes = {
     {
       name: "Oswald",
       variable: "--font-oswald",
-    },
-    {
-      name: "Source Sans Pro",
-      variable: "--font-source-sans-pro",
     },
     {
       name: "Raleway",

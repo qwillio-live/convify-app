@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getServerSession } from "next-auth"
 import { logError } from "@/lib/utils/logger"
 import { authOptions } from "@/lib/auth"

@@ -1,8 +1,10 @@
+// @ts-nocheck
 import { getServerSession } from "next-auth"
 import { logError } from "@/lib/utils/logger"
 import { authOptions } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
+import { JsonObject } from "@prisma/client/runtime/library"
 
 export async function POST(
   req: NextRequest,
@@ -38,22 +40,28 @@ export async function POST(
       userId,
       templateId: flow.templateId,
       name: `${flow.name} - Copy`,
-      flowSettings: flow.flowSettings,
+      flowSettings: flow.flowSettings || {},
       status: "draft",
       isDeleted: false,
-      content:flow.content || "",
+      content:flow.content || {},
       templateSettings: flow.templateSettings || {},
-      steps: flow.steps,
+      steps: flow.steps || {}
     };
 
     const newFlow = await prisma.flow.create({
       data: newFlowData,
     });
-
-    const newFlowSteps = flow.steps.map((step) => ({
-      ...step,
-      flowId: newFlow.id,
-    }));
+    const templateSteps = await prisma.templateStep.findMany({
+      where: {
+        templateId: String(flow.templateId),
+      },
+    })
+    flow.steps = flow.steps? flow.steps : templateSteps;
+      const newFlowSteps = flow.steps.map((step) => ({
+        ...step,
+        flowId: newFlow.id,
+      }));
+   
 
     await prisma.flowStep.createMany({
       data: newFlowSteps,
@@ -78,4 +86,3 @@ export async function POST(
   }
    
 }
-

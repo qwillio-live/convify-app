@@ -66,7 +66,7 @@ export async function POST(
         isFinished: data.isFinished,
       },
     })
-
+    flow.numberOfResponses = flow.numberOfResponses? flow.numberOfResponses : 0;
     await prisma.flow.update({
       where: { id: String(flowId) },
       data: { numberOfResponses: flow.numberOfResponses + 1 },
