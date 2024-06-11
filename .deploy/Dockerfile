@@ -8,7 +8,7 @@ WORKDIR /usr/src/convify-app
 # Copy package.json and pnpm-lock.yaml to the working directory
 COPY package.json pnpm-lock.yaml yarn.lock ./
 # Install pnpm globally
-RUN npm install -g yarn
+# RUN npm install -g yarn
 
 # Install application dependencies
 RUN yarn install
