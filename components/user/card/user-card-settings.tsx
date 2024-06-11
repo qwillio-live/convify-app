@@ -1,8 +1,12 @@
 import React, { useCallback } from "react"
 import { debounce, throttle } from "lodash"
 import {
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyStart,
+  AlignVerticalJustifyCenter,
   AlignVerticalJustifyStart,
+  AlignVerticalJustifyEnd,
   MoveHorizontal,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -33,6 +37,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 
 export const CardContainerSettings = () => {
   const {
@@ -65,6 +71,8 @@ export const CardContainerSettings = () => {
       border,
       size,
       mobileFlexDirection,
+      mobileJustifyContent,
+      mobileAlignItems,
       settingsTab,
     },
     actions: { setProp },
@@ -83,6 +91,7 @@ export const CardContainerSettings = () => {
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
+  const mobileScreen = useAppSelector((state:RootState) => state.theme?.mobileScreen);
   return (
     <>
       <Accordion
@@ -111,11 +120,11 @@ export const CardContainerSettings = () => {
                 className="flex-1 col-span-1"
               >
                 <TabsList className="w-full grid grid-cols-2">
-                  <TabsTrigger value="row">
-                    <AlignVerticalJustifyStart />
+                <TabsTrigger value="column">
+                    <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="column">
-                    <AlignHorizontalJustifyStart />
+                <TabsTrigger value="row">
+                    <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -133,65 +142,77 @@ export const CardContainerSettings = () => {
                 className="flex-1 col-span-1"
               >
                 <TabsList className="w-full grid grid-cols-2">
-                  <TabsTrigger value="row">
-                    <AlignVerticalJustifyStart />
+                <TabsTrigger value="column">
+                    <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="column">
-                    <AlignHorizontalJustifyStart />
+                  <TabsTrigger value="row">
+                    <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
-              <Label className="col-span-1 text-md text-muted-foreground">
+            <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
+              <Label className="text-md text-muted-foreground">
                 Align Horizontal
               </Label>
               <Tabs
-                value={justifyContent}
-                defaultValue={justifyContent}
+                value={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent : flexDirection === "column" ? alignItems: justifyContent}
+                defaultValue={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent: flexDirection === "column" ? alignItems: justifyContent}
                 onValueChange={(value) => {
-                  setProp((props) => (props.justifyContent = value), 200)
+                  if(mobileScreen){
+                    mobileFlexDirection === "column" ? setProp((props) => (props.mobileAlignItems = value), 200) : setProp((props) => (props.mobileJustifyContent = value), 200)
+                  }else{
+                    flexDirection === "column" ? setProp((props) => (props.alignItems = value), 200) : setProp((props) => (props.justifyContent = value), 200)
+                  }
                 }}
-                className="flex-1 col-span-1"
+                className="flex-initial flex flex-col shrink-0"
               >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="flex-start" disabled={flexDirection == "column"}>
-                    <AlignVerticalJustifyStart />
+                <TabsList className="w-full flex flex-row">
+                  <TabsTrigger value="flex-start">
+                    <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="center" disabled={flexDirection == "column"}>
-                    <AlignHorizontalJustifyStart />
+                  <TabsTrigger value="center" >
+                    <AlignHorizontalJustifyCenter size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="flex-end" disabled={flexDirection == "column"}>
-                    <AlignHorizontalJustifyStart />
+                  <TabsTrigger value="flex-end">
+                    <AlignHorizontalJustifyEnd size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
-              <Label className="col-span-1 text-md text-muted-foreground">
-                Align Vertical
-              </Label>
-              <Tabs
-                value={alignItems}
-                defaultValue={alignItems}
-                onValueChange={(value) => {
-                  setProp((props) => (props.alignItems = value), 200)
-                }}
-                className="flex-1 col-span-1"
-              >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="flex-start"  disabled={flexDirection == "row"}>
-                    <AlignVerticalJustifyStart />
-                  </TabsTrigger>
-                  <TabsTrigger value="center" disabled={flexDirection == "row"}>
-                    <AlignHorizontalJustifyStart />
-                  </TabsTrigger>
-                  <TabsTrigger value="flex-end" disabled={flexDirection == "row"}>
-                    <AlignHorizontalJustifyStart />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+{
+  ((mobileScreen && mobileFlexDirection === "row") || (!mobileScreen && flexDirection === "row")) && (
+    <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
+    <Label className="text-md text-muted-foreground">
+      Align Vertical
+    </Label>
+    <Tabs
+      value={mobileScreen ? mobileAlignItems: alignItems}
+      defaultValue={mobileScreen ? mobileAlignItems: alignItems}
+      onValueChange={(value) => {
+        if(mobileScreen){
+          setProp((props) => (props.mobileAlignItems = value), 200)
+        }else{
+          setProp((props) => (props.alignItems = value), 200)
+        }
+      }}
+      className="flex-initial flex flex-col shrink-0"
+    >
+      <TabsList className="w-full flex flex-row">
+        <TabsTrigger value="flex-start">
+          <AlignVerticalJustifyStart  size={16} />
+        </TabsTrigger>
+        <TabsTrigger value="center" >
+          <AlignVerticalJustifyCenter size={16} />
+        </TabsTrigger>
+        <TabsTrigger value="flex-end">
+          <AlignVerticalJustifyEnd size={16} />
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
+  </div>
+  )
+}
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
                 <Label htmlFor="marginTop">Gap</Label>

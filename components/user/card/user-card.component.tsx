@@ -77,6 +77,10 @@ interface CardInnerStyles {
   marginRight: string;
   gap: string;
   mobileFlexDirection: string;
+  alignItems: string;
+  justifyContent: string;
+  mobileAlignItems: string;
+  mobileJustifyContent: string;
 }
 
 const CardContentInner=styled.div<CardInnerStyles>`
@@ -87,13 +91,16 @@ const CardContentInner=styled.div<CardInnerStyles>`
   margin-right: ${(props) => props.marginRight}px;
   flex-direction: ${(props) => props.direction};
   flex: 1;
-  align-items: center;
-  justify-content: center;
+  align-items: ${(props) => props.alignItems};
+
+  justify-content: ${(props) => props.justifyContent};
   flex-wrap: nowrap;
   gap: ${(props) => props.gap}px;
   height: auto;
   @media (max-width: 768px) {
     flex-direction: ${(props) => props.mobileFlexDirection};
+    align-items: ${(props) => props.mobileAlignItems};
+    justify-content: ${(props) => props.mobileJustifyContent};
   }
 `;
 
@@ -131,6 +138,10 @@ export const CardContentGen = ({ children, ...props }) => {
     size={props.size}
     width={props.width}
     gap={props.gap}
+    alignItems={props.alignItems}
+    justifyContent={props.justifyContent}
+    mobileAlignItems={props.mobileAlignItems}
+    mobileJustifyContent={props.mobileJustifyContent}
     direction={props.flexDirection || "column"}
     marginLeft={props.marginLeft}
     marginRight={props.marginRight}
@@ -176,14 +187,16 @@ export const CardContent = ({ children, ...props }) => {
           radius={props.radius}
           flexDirection={mobileScreen ? props.mobileFlexDirection : props.flexDirection}
           fillSpace={props.fillSpace}
-          alignItems={props.alignItems}
-          justifyContent={props.justifyContent}
+          alignItems={mobileScreen ? props.mobileAlignItems : props.alignItems}
+          justifyContent={mobileScreen ? props.mobileJustifyContent : props.justifyContent}
           flexWrap={props.flexWrap}
           overflowY={props.overflowY}
           overflowX={props.overflowX}
           gap={props.gap}
           border={props.border}
           borderColor={props.borderColor}
+          mobileAlignItems={props.mobileAlignItems}
+          mobileJustifyContent={props.mobileJustifyContent}
     >
 
       {children}
@@ -223,6 +236,8 @@ export type CardContentDefaultPropsTypes= {
   fillSpace: string
   alignItems: string
   justifyContent: string
+  mobileAlignItems: string
+  mobileJustifyContent: string
   flexWrap: string
   overflowY: string
   overflowX: string
@@ -252,6 +267,8 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     mobileFlexDirection: "column",
     fillSpace: "1",
     alignItems: "center",
+    mobileAlignItems: "center",
+    mobileJustifyContent: "center",
     justifyContent: "center",
     flexWrap: "nowrap",
     overflowY: "hidden",
@@ -317,7 +334,7 @@ export const Card = ({ children, ...props }) => {
       onMouseLeave={() => setHovered(false)}
       style={{ minWidth: "100%", height: "100%" }}
     >
-      {hovered && <Controller nameOfComponent={"Card"} />}
+      {hovered && <Controller nameOfComponent={"Container"} />}
       <Element
         canvas id="usercard" is={CardContent} data-cy="card-content"
         className=""
