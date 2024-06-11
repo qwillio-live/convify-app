@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { templateId, status, previewImage, link } = reqBody
+  const { templateId, status, previewImage, link ,name, flowSettings, steps, content} = reqBody
 
   if (!templateId) {
     const statusCode = 400
@@ -98,23 +98,26 @@ export async function POST(req: NextRequest) {
         templateId: template.id,
       },
     })
-
+    
     const flow = await prisma.flow.create({
       data: {
-        name: template.name,
         templateId: template.id,
-        flowSettings: template.templateSettings as any,
+        name: name || template.name,
+        flowSettings: flowSettings || template.templateSettings,
         status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",
         numberOfSteps: templateSteps.length,
         numberOfResponses: 0,
+        content:content || "",
+        templateSettings: template.templateSettings || {},
+        steps: steps || templateSteps,
         userId,
       },
     })
 
     const flowId = flow.id
-    const flowSteps = templateSteps.map((step) => ({
+    const flowSteps = steps || templateSteps.map((step) => ({
       flowId,
       name: step.name,
       link: step.link,
