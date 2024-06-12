@@ -3,7 +3,7 @@ import { Settings, X } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
-import { useNode } from "@/lib/craftjs"
+import { useEditor, useNode } from "@/lib/craftjs"
 
 import { Input } from "@/components/input-custom"
 import { Label } from "@/components/ui/label"
@@ -294,19 +294,36 @@ const UserInputStyled = styled(Input)<{
 export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
+    parent,
     selected,
     isHovered,
     actions: { setProp },
   } = useNode((state) => ({
+    parent: state.data.parent,
     selected: state.events.selected,
     dragged: state.events.dragged,
     isHovered: state.events.hovered,
   }))
+  const {
+    // query,
+    query: { node },
+  } = useEditor()
+
+  // const isRoot = node(id).Root(),
+  //       isDraggable = node(id).Draggable();
+  const parentContainer = node(parent || "").get();
+
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const secondaryFont = useAppSelector((state) => state?.theme?.text?.secondaryFont)
   const primaryColor = useAppSelector((state) => state?.theme?.general?.primaryColor)
+
+  useEffect(() => {
+    if(parentContainer.id !== "ROOT" && parentContainer.data.name === "CardContent"){
+      setProp((props) => props.size = "full");
+    }
+  },[parentContainer])
 
   useEffect(() => {
     if(props.primaryFont.globalStyled && !props.primaryFont.isCustomized){
