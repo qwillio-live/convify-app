@@ -14,7 +14,7 @@ export async function PUT(
   if (!data) {
     const statusCode = 401
     const errorMessage = "User is not authenticated"
-    const userId = "unknown"
+    const userId = 0
     const requestUrl = req.url
     await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
@@ -81,7 +81,7 @@ export async function DELETE(
   if (!data) {
     const statusCode = 401
     const errorMessage = "User is not authenticated"
-    const userId = "unknown"
+    const userId = 0
     const requestUrl = req.url
     await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: errorMessage }, { status: statusCode })

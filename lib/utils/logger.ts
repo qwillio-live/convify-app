@@ -13,11 +13,11 @@ export async function logError({
   }
 
   const logPayload = {
-    statusCode,
-    errorMessage,
-    userId,
-    requestUrl,
-    appKey,
+    error_code  : statusCode,
+    error_message : errorMessage,
+    user_id : userId,
+    request_url: requestUrl,
+    appKey: appKey,
   }
 
   try {
