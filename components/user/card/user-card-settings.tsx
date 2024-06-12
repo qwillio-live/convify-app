@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
+import { Slider } from "@/components/custom-slider"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { ScreenFooter } from "../screens/screen-footer.component"
