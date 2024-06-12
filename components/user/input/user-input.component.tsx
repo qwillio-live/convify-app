@@ -9,7 +9,9 @@ import {
   Mountain,
   X,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { rgba } from "polished"
+import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
@@ -50,7 +52,7 @@ const UserInputSizeValues = {
 }
 
 export const UserInputGen = ({ ...props }) => {
-  const [inputValue, setInputValue] = useState(props.inputValue)
+  const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -96,48 +98,49 @@ export const UserInputGen = ({ ...props }) => {
           }}
         >
           {!props.floatingLabel && (
+            <>
+              <div
+                className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                style={{
+                  fontFamily: `var(${props.primaryFont.value})`,
+                  minWidth: `${UserInputSizeValues[props.size]}`,
+                  width: `${UserInputSizeValues[props.size]}`,
+                }}
+              >
+                {props.label}
+              </div>
+            </>
+          )}
+          {props.floatingLabel && (
             <div
               onClick={() => {
-                setIsActive(true)
-                setIsFocused(true)
-                focusInput()
+                if (props.floatingLabel) {
+                  setIsActive(true)
+                  setIsFocused(true)
+                  focusInput() // Focus the input when placeholder is clicked
+                }
               }}
-              className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+              className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+                (isActive && props.floatingLabel) ||
+                (inputValue.length > 0 && props.floatingLabel)
+                  ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+                  : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+              } ${
+                props.floatingLabel &&
+                props.enableIcon &&
+                "left-[49px]" /**was left-12 but care for a single pixel */
+              }
+
+      `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                minWidth: `${UserInputSizeValues[props.size]}`,
-                width: `${UserInputSizeValues[props.size]}`,
+                // minWidth: `${UserInputSizeValues[props.size]}`,
+                // width: `${UserInputSizeValues[props.size]}`,
               }}
             >
-              {props.label}
+              {props.floatingLabel && props.label}
             </div>
           )}
-          <div
-            onClick={() => {
-              setIsActive(true)
-              setIsFocused(true)
-              focusInput() // Focus the input when placeholder is clicked
-            }}
-            className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
-              (isActive && props.floatingLabel) ||
-              (inputValue.length > 0 && props.floatingLabel)
-                ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-                : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
-            } ${
-              props.floatingLabel &&
-              props.enableIcon &&
-              "left-[49px]" /**was left-12 but care for a single pixel */
-            }
-
-        `}
-            style={{
-              fontFamily: `var(${props.primaryFont.value})`,
-              minWidth: `${UserInputSizeValues[props.size]}`,
-              width: `${UserInputSizeValues[props.size]}`,
-            }}
-          >
-            {props.floatingLabel && props.label}
-          </div>
 
           <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
@@ -207,12 +210,7 @@ export const UserInputGen = ({ ...props }) => {
           ease-in-out
           focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
-              onChange={
-                (e) =>
-                  // setProp((props) => (props.inputValue = e.target.value))
-                  setInputValue(e.target.value)
-                // console.log("INPUT COMPONENT VALUE", e.target.value)
-              }
+              onChange={(e) => setInputValue(e.target.value)}
               onBlur={() => setIsActive(false)}
               autoFocus={isFocused}
             />
@@ -296,6 +294,7 @@ export const UserInput = ({ ...props }) => {
     dragged: state.events.dragged,
     isHovered: state.events.hovered,
   }))
+  const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const secondaryFont = useAppSelector(
@@ -342,9 +341,12 @@ export const UserInput = ({ ...props }) => {
         justifyContent: "center",
       }}
     >
-      {isHovered && <Controller nameOfComponent={"INPUT FIELD"} />}
+      {isHovered && <Controller nameOfComponent={t("Input Field")} />}
       <div
-        className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+        className={cn(
+          "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent",
+          { "animate-shake": props.inputRequired }
+        )}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -364,48 +366,60 @@ export const UserInput = ({ ...props }) => {
           }}
         >
           {!props.floatingLabel && (
+            <>
+              <ContentEditable
+                html={props.label}
+                disabled={false}
+                tagName="div"
+                onChange={(e) =>
+                  setProp(
+                    (props) =>
+                      (props.label = e.target.value.replace(
+                        /<\/?[^>]+(>|$)/g,
+                        ""
+                      )),
+                    500
+                  )
+                }
+                className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                style={{
+                  fontFamily: `var(${props.primaryFont.value})`,
+                  minWidth: `${UserInputSizeValues[props.size]}`,
+                  width: `${UserInputSizeValues[props.size]}`,
+                }}
+              />
+            </>
+          )}
+          {props.floatingLabel && (
             <div
               onClick={() => {
-                setProp((props) => (props.isActive = true)),
-                  setProp((props) => (props.isFocused = true)),
-                  focusInput()
+                if (props.floatingLabel) {
+                  setProp((props) => (props.isActive = true)),
+                    setProp((props) => (props.isFocused = true)),
+                    focusInput() // Focus the input when placeholder is clicked
+                }
               }}
-              className={`mb-1 hover:cursor-text relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+              className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+                (props.isActive && props.floatingLabel) ||
+                (props.inputValue.length > 0 && props.floatingLabel)
+                  ? "top-0 text-sm pl-3 pt-1 text-gray-400"
+                  : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+              } ${
+                props.floatingLabel &&
+                props.enableIcon &&
+                "left-[49px]" /**was left-12 but care for a single pixel */
+              }
+
+      `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                minWidth: `${UserInputSizeValues[props.size]}`,
-                width: `${UserInputSizeValues[props.size]}`,
+                // minWidth: `${UserInputSizeValues[props.size]}`,
+                // width: `${UserInputSizeValues[props.size]}`,
               }}
             >
-              {props.label}
+              {props.floatingLabel && props.label}
             </div>
           )}
-          <div
-            onClick={() => {
-              setProp((props) => (props.isActive = true)),
-                setProp((props) => (props.isFocused = true)),
-                focusInput() // Focus the input when placeholder is clicked
-            }}
-            className={`hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
-              (props.isActive && props.floatingLabel) ||
-              (props.inputValue.length > 0 && props.floatingLabel)
-                ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-                : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
-            } ${
-              props.floatingLabel &&
-              props.enableIcon &&
-              "left-[49px]" /**was left-12 but care for a single pixel */
-            }
-
-        `}
-            style={{
-              fontFamily: `var(${props.primaryFont.value})`,
-              minWidth: `${UserInputSizeValues[props.size]}`,
-              width: `${UserInputSizeValues[props.size]}`,
-            }}
-          >
-            {props.floatingLabel && props.label}
-          </div>
 
           <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
@@ -477,10 +491,10 @@ export const UserInput = ({ ...props }) => {
           ease-in-out
           focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
-              onChange={(e) =>
-                // setProp((props) => (props.inputValue = e.target.value))
+              onChange={
+                (e) => setProp((props) => (props.inputValue = e.target.value))
                 // not to set input prop when editing
-                console.log("Input field value is: ", e.target.value)
+                // console.log("Input field value is: ", e.target.value)
               }
               onBlur={() => setProp((props) => (props.isActive = false))}
               autoFocus={props.isFocused}

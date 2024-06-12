@@ -1,22 +1,15 @@
 "use client"
 
 import { Reorder } from "framer-motion"
-import { ClipboardCopy, MousePointer, PlusCircle, Trash2 } from "lucide-react"
-
-import { Frame, useEditor } from "@/lib/craftjs"
 import {
-  addScreen,
-  deleteScreen,
-  duplicateScreen,
-  setFooterMode,
-  setHeaderFooterMode,
-  setHeaderMode,
-  setScreens,
-  setSelectedScreen,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
-import { cn } from "@/lib/utils"
+  ClipboardCopy,
+  MousePointer,
+  Pencil,
+  PlusCircle,
+  Trash2
+} from "lucide-react"
+import React, { useCallback } from "react"
+
 import {
   Accordion,
   AccordionContent,
@@ -33,11 +26,28 @@ import {
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
+import { Frame, useEditor } from "@/lib/craftjs"
+import {
+  addScreen,
+  deleteScreen,
+  duplicateScreen,
+  setFooterMode,
+  setHeaderFooterMode,
+  setHeaderMode,
+  setScreenName,
+  setScreens,
+  setSelectedScreen
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 
+import { Input } from "@/components/input-custom"
+import { toast } from 'sonner'
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 
 const ScreensList = () => {
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state:  RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]
@@ -47,11 +57,11 @@ const ScreensList = () => {
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
-  const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
   )
 
   const selectedScreenIndex = useAppSelector(
@@ -76,6 +86,14 @@ const ScreensList = () => {
   //   setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
   // }
   // }, [editorLoad]);
+  // if (lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))) !== compareLoad) {
+  //   console.log("EDITOR LOAD CALLED AGAIN", compareLoad)
+  // console.log("DESERIALIZE CALLED: ")
+
+  // actions.deserialize(editorLoad.screenData);
+  // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
+  // }
+  // }, []);
 
   const handleReorder = (data) => {
     dispatch(setScreens(data))
@@ -89,41 +107,55 @@ const ScreensList = () => {
   //   }
   // }, [selectedScreenIndex, screens]);
 
-  const handleScreenClick = async (index: number) => {
-    if (screens && screens[index]) {
-      dispatch(setSelectedScreen(index))
-      await actions.deserialize(screens[index])
-    } else {
-      console.error("screens is undefined or index is out of bounds")
-    }
-  }
-
-  const handleAddScreen = async (index: number) => {
-    if (screens && screens[index]) {
-      dispatch(addScreen(index))
-      await actions.deserialize(JSON.stringify(emptyScreenData))
-    } else {
-      console.error("screens is undefined or index is out of bounds")
-    }
-  }
-
-  const handleDuplicateScreen = async (index: number) => {
-    if (screens) {
-      dispatch(duplicateScreen(index))
-      await actions.deserialize(editorLoad)
-    }
-  }
-
-  const handleDeleteScreen = async (index: number) => {
-    if (screens && selectedScreenIndex !== undefined) {
-      dispatch(deleteScreen(index))
-      if (index === 0) {
-        await actions.deserialize(screens[1])
+  const handleScreenClick = useCallback(
+    async (index: number) => {
+      if (screens && screens[index] && screens[index].screenData) {
+        dispatch(setSelectedScreen(index))
+        await actions.deserialize(screens[index].screenData || {})
       } else {
-        await actions.deserialize(screens[index - 1])
+        console.error(
+          "screens is undefined, index is out of bounds, or screenData is undefined"
+        )
       }
-    }
-  }
+    },
+    [dispatch, screens]
+  )
+
+  const handleAddScreen = useCallback(
+    async (index: number) => {
+      if (screens && screens[index]) {
+        dispatch(addScreen(index))
+        await actions.deserialize(JSON.stringify(emptyScreenData))
+      } else {
+        console.error("screens is undefined or index is out of bounds")
+      }
+    },
+    [dispatch, screens]
+  )
+
+  const handleDuplicateScreen = useCallback(
+    async (index: number) => {
+      if (screens) {
+        dispatch(duplicateScreen(index))
+        await actions.deserialize(editorLoad)
+      }
+    },
+    [dispatch, screens]
+  )
+
+  const handleDeleteScreen = useCallback(
+    async (index: number) => {
+      if (screens && selectedScreenIndex !== undefined) {
+        dispatch(deleteScreen(index))
+        if (index === 0) {
+          await actions.deserialize(screens[1].screenData)
+        } else {
+          await actions.deserialize(screens[index - 1].screenData)
+        }
+      }
+    },
+    [dispatch, screens]
+  )
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
@@ -139,10 +171,9 @@ const ScreensList = () => {
 
   return (
     <Accordion
-      type="single"
-      collapsible
+      type="multiple"
       className="w-full overflow-x-hidden"
-      defaultValue="item-2"
+      defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1">
         <AccordionTrigger className="uppercase hover:no-underline">
@@ -203,19 +234,37 @@ const ScreensList = () => {
               Add Screen
             </Button>
           </div>
-          <Reorder.Group values={screens || []} onReorder={handleReorder}>
+          {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
+          <Reorder.Group
+            axis="y"
+            onReorder={handleReorder}
+            values={screens || []}
+            // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
+            // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
+            // layoutScroll
+          >
             {screens?.map((screen: any, index) => (
+              // <ScreenListItem
+              // key={screen?.screenName}
+              // handleAddScreen={handleAddScreen}
+              // handleDeleteScreen={handleDeleteScreen}
+              // handleDuplicateScreen={handleDuplicateScreen}
+              // handleScreenClick={handleScreenClick}
+              // index={index}
+              // screen={screen}
+              // />
               <Reorder.Item
-                key={screen?.ROOT?.nodes[0]}
-                id={screen?.ROOT?.nodes[0]}
+                key={screen?.screenName}
+                id={screen?.screenName}
                 value={screen}
                 className="relative"
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
                     {" "}
-                    <div className="mt-4">
-                      {screen?.ROOT?.displayName ?? "New Screen"}
+                    <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
+                      <span>{index + 1}</span>
+                      <EditScreenName screenId={screen.screenId} screenName={screen.screenName} />
                     </div>
                     <Card
                       style={{
@@ -232,7 +281,9 @@ const ScreensList = () => {
                     >
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
-                        <ResolvedComponentsFromCraftState screen={screen} />
+                        <ResolvedComponentsFromCraftState
+                          screen={screen.screenData ? screen.screenData : {}}
+                        />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
@@ -263,11 +314,73 @@ const ScreensList = () => {
               </Reorder.Item>
             ))}
           </Reorder.Group>
+          {/* </ScrollArea> */}
         </AccordionContent>
       </AccordionItem>
     </Accordion>
   )
 }
+
+const EditScreenName = ({ screenId, screenName }) => {
+  const ref = React.useRef<HTMLInputElement | null>(null);
+  const dispatch = useAppDispatch();
+  const [editing, setEditing] = React.useState(false);
+  const [name, setName] = React.useState(screenName);
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens);
+
+  const handleChange = (inputName) => {
+    if (!checkDuplicateName(inputName)) {
+      dispatch(setScreenName({ screenId: screenId, screenName: inputName }));
+      setName(inputName);
+      toast.success("Screen name changed successfully");
+      setEditing(false);
+    } else {
+      toast.error("Screen name already exists");
+      ref?.current?.focus();
+    }
+  };
+
+  const checkDuplicateName = (inputName) => {
+    const screenNames = screens?.filter((screen) => screen.screenId !== screenId) // Exclude the current screen
+      .map((screen) => screen.screenName.toLowerCase());
+
+    return screenNames?.includes(inputName.toLowerCase());
+  };
+
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/\s+/g, '-');
+    value = value.replace(/[^a-z0-9-]/gi, '');
+    setName(value.toLowerCase());
+  };
+
+  return (
+    <>
+      {!editing && (
+        <div
+          onClick={() => setEditing(true)}
+          className="flex flex-row gap-2 items-center border border-transparent text-current bg-slate-gray-200 p-2 grow justify-end hover:cursor-text"
+        >
+          <Pencil size={16} className="shrink-0" />
+          <div className="h-10 p-2 truncate">{screenName}</div>
+        </div>
+      )}
+      {editing && (
+        <div className="flex flex-row gap-2 items-center text-current bg-slate-gray-200 p-2 grow justify-end">
+          <Input
+            ref={ref}
+            className="text-right"
+            value={name}
+            onChange={handleInputChange}
+            onBlur={() => handleChange(name)}
+            autoFocus
+          />
+        </div>
+      )}
+      {/* <Toaster position="bottom-right" /> */}
+    </>
+  );
+};
 
 function HelperInformation() {
   return (

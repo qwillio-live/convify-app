@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils"
 
 import { Controller } from "../settings/controller.component"
 import { MultipleChoiceSettings } from "./user-multiple-choice-settings"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 
 const MultipleChoiceItem = styled.div<{
   fontSize: string | number
@@ -219,6 +221,7 @@ export const MultipleChoice = ({
   width,
   multipleChoices,
   multipleChoiceStyles,
+  singleChoice,
   ...props
 }) => {
   const {
@@ -230,6 +233,22 @@ export const MultipleChoice = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
+  const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+
+  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
+
+  useEffect(() => {
+    if(singleChoice){
+      multipleChoices.map((item, index) => {
+        if(item.buttonAction === "next-screen"){
+          setProp((props) => (props.multipleChoices[index].nextScreen = nextScreenName))
+        }
+      })
+    }
+},[nextScreenName,multipleChoices])
 
   return (
     <div
@@ -300,6 +319,8 @@ export type MultipleChoiceProps = {
     optionLabel: string
     optionValue: string
     optionSelected: boolean
+    buttonAction: "next-screen" | "custom-action" | "none",
+    nextScreen: string
   }[]
 }
 
@@ -339,6 +360,8 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionLabel: "Option 1",
       optionValue: "option1",
       optionSelected: false,
+      buttonAction: "next-screen",
+      nextScreen: ""
     },
     {
       id: "2",
@@ -346,6 +369,8 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionLabel: "Option 2",
       optionValue: "option2",
       optionSelected: false,
+      buttonAction: "next-screen",
+      nextScreen: ""
     },
     {
       id: "3",
@@ -353,6 +378,8 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionLabel: "Option 3",
       optionValue: "option3",
       optionSelected: false,
+      buttonAction: "next-screen",
+      nextScreen: ""
     },
     {
       id: "4",
@@ -360,6 +387,8 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionLabel: "Option 4",
       optionValue: "option4",
       optionSelected: false,
+      buttonAction: "next-screen",
+      nextScreen: ""
     },
   ],
 }

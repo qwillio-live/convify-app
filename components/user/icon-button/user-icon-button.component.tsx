@@ -12,7 +12,7 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 import { throttle,debounce } from 'lodash';
 
-import { useNode } from "@/lib/craftjs"
+import { useEditor, useNode } from "@/lib/craftjs"
 import {darken, rgba} from "polished";
 import {
   Accordion,
@@ -39,9 +39,14 @@ import { Slider } from "@/components/ui/slider"
 import { Controller } from "../settings/controller.component"
 import { IconButtonSettings } from "./user-icon-button.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppSelector,useAppDispatch } from "@/lib/state/flows-state/hooks"
 import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButtonThemePresets"
 import { useTranslations } from "next-intl";
+import { track } from "@vercel/analytics/react";
+import { RootState } from "@/lib/state/flows-state/store";
+import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -131,8 +136,14 @@ export const IconButtonGen = ({
   border,
   borderColor,
   borderHoverColor,
+  nextScreen,
   ...props
 }) => {
+  const router = useRouter();
+  const pathName = usePathname();
+  const handleNavigateToContent = () => {
+    // router.push(currentUrlWithHash);
+  };
   return (
     <div className="w-full relative" style={{
       width: "100%",
@@ -145,6 +156,7 @@ export const IconButtonGen = ({
     paddingLeft: `${props.marginLeft}px`,
     paddingRight: `${props.marginRight}px`,
      }}>
+<Link href={`${pathName}#${nextScreen}`} className="contents">
 <StyledCustomButton
         fontFamily={fontFamily?.value}
         color={color.value}
@@ -184,6 +196,7 @@ export const IconButtonGen = ({
     }}>{text}</div>
       {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
     </StyledCustomButton>
+    </Link>
     </div>
   )
 }
@@ -300,6 +313,8 @@ export const IconButton = ({
   gap,
   border,
   borderColor,
+  buttonAction,
+  nextScreen,
   ...props
 }) => {
   const {
@@ -311,7 +326,11 @@ export const IconButton = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const { actions } = useEditor((state, query) => ({
+    enabled: state.options.enabled,
+  }))
   const t = useTranslations("Components")
+  const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [displayController, setDisplayController] = React.useState(false);
   const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
@@ -321,6 +340,17 @@ export const IconButton = ({
   const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
   const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
+  const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+
+  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
+
+  useEffect(() => {
+    if(buttonAction === "next-screen"){
+    setProp((props) => (props.nextScreen = nextScreenName), 1000)
+    }
+},[nextScreenName,buttonAction])
 
   useEffect(() => {
     if(fontFamily.globalStyled && !fontFamily.isCustomized){
@@ -403,6 +433,16 @@ export const IconButton = ({
   const handlePropChangeThrottled = (property,value) => {
     throttledSetProp(property,value);
   };
+  const handleNavigateToScreen =async () => {
+      dispatch(navigateToScreen(nextScreen));
+      if(screens){
+        const screen = screens.find(screen => screen.screenName === nextScreen);
+        if(screen){
+          const screenData = screen.screenData;
+          actions.deserialize(screenData);
+        }
+      }
+  }
 
   const debouncedSetProp = useCallback(
     debounce((property,value) => {
@@ -466,7 +506,7 @@ export const IconButton = ({
         size={size}
         buttonSize={buttonSize}
         {...props}
-        onClick={() => console.log("Button clicked", text)}
+        onClick={() => handleNavigateToScreen()}
       >
       <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
       <ContentEditable
@@ -537,6 +577,10 @@ export type IconButtonProps = {
   preset: string
   settingsTab: string
   buttonSize: string
+  tracking: boolean
+  trackingEvent: string
+  buttonAction: "next-screen" | "custom-action" | "none"
+  nextScreen: string
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -605,8 +649,11 @@ export const IconButtonDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: 'filled',
-  settingsTab: 'content'
-
+  settingsTab: 'content',
+  tracking: false,
+  trackingEvent: 'button_clicked',
+  nextScreen: '',
+  buttonAction: "next-screen",
 }
 
 IconButton.craft = {

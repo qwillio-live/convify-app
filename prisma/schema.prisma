@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:djafnwjgnrwjg@185.253.219.240:5015/convify?schema=public"
 }
 
 model Account {
@@ -54,7 +54,6 @@ model User {
 
   accounts Account[]
   sessions Session[]
-  Post     Post[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -66,63 +65,72 @@ model User {
   @@map(name: "users")
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map(name: "verification_tokens")
-}
-
 model Post {
   id        String   @id @default(cuid())
   title     String
   content   Json?
   published Boolean  @default(false)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
   authorId  String
 
-  author User @relation(fields: [authorId], references: [id])
+  @@index([authorId], map: "posts_authorId_fkey")
+  @@map("posts")
+}
 
-  @@map(name: "posts")
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @default(now()) @map(name: "updated_at")
+
+  @@id([identifier, token])
+  @@map(name: "verification_tokens")
 }
 
 model Flow {
-  id               String   @id @default(cuid())
-  name             String
-  content          Json
-  templateSettings Json
-  steps            Json
-  isDeleted        Boolean  @default(false)
-  createdAt        DateTime @default(now()) @map(name: "created_at")
-  updatedAt        DateTime @default(now()) @map(name: "updated_at")
-  previewImage     String?
-  link             String?
-  status           String
-  numberOfSteps    Int
-  numberOfResponses Int
-  userId           String
+  id                String   @id @default(cuid())
+  userId            String
+  name              String
+  description       String? // Ensuring it is nullable
+  isDeleted         Boolean  @default(false)
+  createdAt         DateTime @default(now()) @map(name: "created_at")
+  updatedAt         DateTime @default(now()) @map(name: "updated_at")
+  customDomain      String   @default("") @db.VarChar(50)
+  flowSettings      Json? // Ensuring it is nullable
+  link              String? // Ensuring it is nullable
+  numberOfResponses Int? // Ensuring it is nullable
+  numberOfSteps     Int? // Ensuring it is nullable
+  previewImage      String? // Ensuring it is nullable
+  status            String? // Ensuring it is nullable
+  templateId        String? // Ensuring it is nullable
+  content           Json?
+  templateSettings  Json?
+  steps             Json?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  responses Response[]
-  visits Visit[]
+  flow    FlowStep[]
+  visits       Visit[]
+  responses    Response[]
   integrations Integration[]
 
   @@map(name: "flows")
 }
 
 model Integration {
-  id             String @id @default(cuid())
-  flowId         String
-  googleAnalyticsId String?
-  googleTagManagerId String?
-  metaPixelId    String?
+  id                   String   @id @default(cuid())
+  flowId               String
+  name                 String?
+  settings             Json?
+  createdAt            DateTime @default(now()) @map(name: "created_at")
+  updatedAt            DateTime @default(now()) @map(name: "updated_at")
+  googleAnalyticsId    String?
+  googleTagManagerId   String?
+  isDeleted            Boolean?
   metaPixelAccessToken String?
-  createdAt      DateTime @default(now()) @map(name: "created_at")
-  updatedAt      DateTime @default(now()) @map(name: "updated_at")
+  metaPixelId          String?
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -130,14 +138,15 @@ model Integration {
 }
 
 model Response {
-  id          String   @id @default(cuid())
-  flowId      String
-  ip          String
-  userAgent   String
-  isFinished  Boolean  @default(false)
-  isDeleted   Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map(name: "created_at")
-  updatedAt   DateTime @default(now()) @map(name: "updated_at")
+  id         String   @id @default(cuid())
+  flowId     String
+  content    Json
+  ip         String
+  userAgent  String
+  isFinished Boolean  @default(false)
+  isDeleted  Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -151,6 +160,7 @@ model Visit {
   ip          String
   userAgent   String
   createdAt   DateTime @default(now()) @map(name: "created_at")
+  device_type Int @default(0) @db.TinyInt
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -167,6 +177,37 @@ model Template {
   preview        String?
   createdAt      DateTime @default(now()) @map(name: "created_at")
   updatedAt      DateTime @default(now()) @map(name: "updated_at")
+  language       String   @default("pt") @db.Char(2)
+  template TemplateStep[]
 
   @@map(name: "templates")
+}
+
+model TemplateStep {
+  id         String @id @default(cuid())
+  templateId String
+  name       String
+  link       String
+  content    Json
+  order      Int
+
+  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@map(name: "templateSteps")
+}
+
+model FlowStep {
+  id        String   @id @default(cuid())
+  flowId    String
+  name      String
+  link      String
+  content   Json
+  order     Int
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@map(name: "flowSteps")
 }

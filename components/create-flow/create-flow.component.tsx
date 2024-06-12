@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react"
 import {
   ArrowRight,
   Check,
@@ -11,6 +10,7 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
+import React from "react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -94,19 +94,20 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch()
 
-  const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
-  const selectedScreen = useAppSelector(
-    (state) => state?.screen?.selectedScreen
-  )
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0])
+
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
+  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
+  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
-  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
+  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -185,7 +186,7 @@ export function CreateFlowComponent() {
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-4 ">
-            <div className="mt-8 section-header flex items-center justify-between"></div>
+            <div className="section-header mt-8 flex items-center justify-between"></div>
             <div className="section-body">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
@@ -204,14 +205,15 @@ export function CreateFlowComponent() {
                     backgroundPosition: "center",
                   }}
                   className={cn(
-                    "mx-auto page-container min-h-[400px] box-content font-sans antialiased z-20",
+                    "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
                     view == VIEWS.DESKTOP
-                      ? "w-full border-0 shahid"
+                      ? "shahid w-full border-0"
                       : "w-96 border px-4"
                   )}
                   value={view}
                 >
-                  <Frame data={JSON.parse(editorLoad)}></Frame>
+                  <Frame data={editorLoad}></Frame>
+
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -238,6 +240,56 @@ export function CreateFlowComponent() {
               <SettingsPanel />
             </div>
           </ScrollArea>
+        </div>
+      </Editor>
+      <Editor
+              resolver={{
+                Controller,
+                Logo,
+                HeadlineText,
+                UserText,
+                UserButton,
+                ProgressBar,
+                Element,
+                Progress,
+                ButtonChoiceScreen,
+                ScreenHeader,
+                UserInput,
+                ScreenFooter,
+                ScreensList,
+                ScreenOneChoice,
+                // UserProgressBar,
+                ScreenOneInput,
+                Input,
+                Button,
+                ArrowRight,
+                Check,
+                Cross,
+                Facebook,
+                Github,
+                Globe,
+                Linkedin,
+                Container,
+                Card,
+                CardContent,
+                UserContainer,
+                IconButton,
+                DragDrop,
+                UserToolbox,
+                Image,
+                PictureChoice,
+                MultipleChoice,
+                LogoBar,
+                LogoBarItem,
+                LayoutContainer,
+                Loader,
+                List,
+                ListItem,
+              }}
+              onRender={RenderNode}
+      >
+        <div className="special-editor">
+        <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>

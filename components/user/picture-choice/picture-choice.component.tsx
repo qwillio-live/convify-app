@@ -62,6 +62,8 @@ import { TextDefaultProps, UserText } from "../text/user-text.component"
 import { UserTextSettings } from "../text/user-text-settings"
 import { PictureChoiceSettings } from "./picture-choice-settings.component"
 import styled from "styled-components"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 
 const ICONS = {
   check: CheckIcon.src,
@@ -161,8 +163,7 @@ export const PictureChoiceGen = ({
     <PictureChoiceContainer {...containerStyles}>
       {pictureItems.map((item, index) => (
         <PictureChoiceItem key={index} {...pictureItemsStyles}>
-          {item.itemType === ItemType.ICON ? (
-            <>
+           {/* <>
               {item.icon === "check" ? (
                 <IconCheck
                   style={{
@@ -178,16 +179,25 @@ export const PictureChoiceGen = ({
                   }}
                 />
               ) : null}
-            </>
+            </> */}
+          {item.itemType === ItemType.ICON ? (
+            item.icon ? (
+              <div className="text-[75px]">{item.icon}</div>
+            ) : (
+              <div className="text-[75px]"></div>
+            )
           ) : (
-            <img
-              src={item.pic}
-              alt={item.alt || ""}
-              style={{
-                width: `${pictureItemsStyles.picWidth}px`,
-                height: `${pictureItemsStyles.picHeight}px`,
-              }}
-            />
+            item.pic &&
+            (
+              <img
+                src={item.pic}
+                alt={item.alt || ""}
+                style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}
+              />
+            )
           )}
           <p>{item.text}</p>
         </PictureChoiceItem>
@@ -211,6 +221,19 @@ export const PictureChoice = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
+  const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+
+  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
+
+  useEffect(() => {
+    pictureItems.map((item, index) => {
+      if(item.buttonAction === "next-screen"){
+        setProp((props) => (props.pictureItems[index].nextScreen = nextScreenName))
+      }
+    })
+},[nextScreenName,pictureItems])
 
   const [editable, setEditable] = useState(false)
   useEffect(() => {
@@ -234,42 +257,55 @@ export const PictureChoice = ({
 
         {pictureItems.map((item, index) => (
           <PictureChoiceItem key={index} {...pictureItemsStyles}>
-            {item.itemType === ItemType.ICON ? (
-              <>
-                {/* <img
-                src={item.icon}
-                style={{
-                  color: `${pictureItemsStyles.textColor}`,
-                  width: `${pictureItemsStyles.picWidth}px`,
-                  height: `${pictureItemsStyles.picHeight}px`,
-                }}
-              /> */}
 
-                {item.icon === "check" ? (
-                  <IconCheck
-                    style={{
-                      width: `${pictureItemsStyles.picWidth}px`,
-                      height: `${pictureItemsStyles.picHeight}px`,
-                    }}
-                  />
-                ) : item.icon === "x" ? (
-                  <IconX
-                    style={{
-                      width: `${pictureItemsStyles.picWidth}px`,
-                      height: `${pictureItemsStyles.picHeight}px`,
-                    }}
-                  />
-                ) : null}
-              </>
-            ) : (
-              <img
-                src={item.pic}
-                alt={item.alt || ""}
+            {item.itemType === ItemType.ICON ? (
+              item.icon === "check" ? (
+                <IconCheck
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) : item.icon === "x" ? (
+                <IconX
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                  }}
+                />
+              ) :
+              item.icon ? (
+                <span className="text-[75px]"
                 style={{
                   width: `${pictureItemsStyles.picWidth}px`,
                   height: `${pictureItemsStyles.picHeight}px`,
-                }}
-              />
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>{item.icon}</span>
+              ) : (
+                <div style={{
+                  width: `75px`,
+                  height: `75px`,
+                }}></div>
+              )
+            ) : (
+              item.pic ? (
+                <img
+                  src={item.pic}
+                  alt={item.alt || ""}
+                  style={{
+                    width: `${pictureItemsStyles.picWidth}px`,
+                    height: `${pictureItemsStyles.picHeight}px`,
+                    marginLeft: `6px`
+                  }}
+                />
+              ) : (
+                <div style={{
+                  width: `${pictureItemsStyles.picWidth}px`,
+                  height: `${pictureItemsStyles.picHeight}px`,
+                }}></div>
+              )
             )}
             <ContentEditable
               html={item?.text || ""}
@@ -346,6 +382,8 @@ type PictureChoiceTypes = {
     text: string
     pic: any
     icon: any
+    buttonAction: "next-screen" | "custom-action" | "none"
+    nextScreen: string
     itemType: ItemType
   }[]
 }
@@ -395,6 +433,8 @@ export const PictureChoiceDefaultProps: PictureChoiceTypes = {
       text: "Yes",
       pic: null,
       icon: "check",
+      buttonAction: "next-screen",
+      nextScreen: "",
       itemType: ItemType.ICON,
     },
     {
@@ -402,6 +442,8 @@ export const PictureChoiceDefaultProps: PictureChoiceTypes = {
       text: "No",
       pic: null,
       icon: "x",
+      buttonAction: "next-screen",
+      nextScreen: "",
       itemType: ItemType.ICON,
     },
   ],

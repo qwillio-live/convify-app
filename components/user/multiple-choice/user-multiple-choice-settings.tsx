@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
-import { GripVertical, Image, UploadCloud } from "lucide-react"
+import { ArrowRight, GripVertical, Image, UploadCloud } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 
 import { useNode } from "@/lib/craftjs"
@@ -35,6 +35,9 @@ import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 import { TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 
 enum SWITCH {
   SINGLE = "single",
@@ -54,6 +57,7 @@ export const MultipleChoiceSettings = () => {
       radius,
       width,
       multipleChoices,
+      singleChoice,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -64,6 +68,19 @@ export const MultipleChoiceSettings = () => {
       setProp((props) => (props.src = URL.createObjectURL(file)), 1000)
     }
   }
+
+  const screenNames = useScreenNames()
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || "";
 
   return (
     <>
@@ -94,11 +111,16 @@ export const MultipleChoiceSettings = () => {
             onReorder={(e) => setProp((props) => (props.multipleChoices = e))}
           >
             {multipleChoices?.map((item, index) => (
+              <div>
               <MultipleChoiceSettingsItem
                 key={item.id}
                 item={item}
                 index={index}
+                singleChoice={singleChoice}
+                screenNames={screenNames}
+                nextScreenName={nextScreenName}
               />
+              </div>
             ))}
           </Reorder.Group>
         </CardContent>
@@ -272,8 +294,7 @@ export const MultipleChoiceSettings = () => {
     </>
   )
 }
-
-export const MultipleChoiceSettingsItem = ({ item, index }) => {
+export const MultipleChoiceSettingsItem = ({ item, index,singleChoice,screenNames,nextScreenName }) => {
   const y = useMotionValue(0)
   const controls = useDragControls()
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -305,7 +326,7 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
       id={item.id}
       style={{ y }}
       key={item}
-      className="flex h-20 w-full  flex-row items-center justify-between gap-3 border p-4"
+      className="flex w-full  flex-row items-center justify-between gap-3 border p-4"
     >
       <Input
         type="file"
@@ -338,6 +359,70 @@ export const MultipleChoiceSettingsItem = ({ item, index }) => {
           className="min-w-[100px] max-w-[100px] overflow-hidden truncate"
           tagName={"p"}
         />
+        {
+          singleChoice && (
+            <div className="screen-action-container flex flex-col gap-2">
+            <Select
+              defaultValue={
+                item.buttonAction === "next-screen"
+                  ? "next-screen"
+                  : item.nextScreen
+              }
+              value={
+                item.buttonAction === "next-screen"
+                  ? "next-screen"
+                  : item.nextScreen
+              }
+              onValueChange={(e) => {
+                if (e === "next-screen") {
+                  setProp(
+                    (props) =>
+                      (props.multipleChoices[index].buttonAction = "next-screen")
+                  )
+                  setProp(
+                    (props) =>
+                      (props.multipleChoices[index].nextScreen = nextScreenName)
+                  )
+                } else {
+                  setProp(
+                    (props) =>
+                      (props.multipleChoices[index].buttonAction = "custom-action")
+                  )
+                  setProp((props) => (props.multipleChoices[index].nextScreen = e))
+                }
+              }}
+            >
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select screen" defaultValue={"next-screen"} />
+              </SelectTrigger>
+              <SelectContent className="text-left min-w-[80px]">
+                <SelectGroup>
+                  <SelectItem
+                    value="next-screen"
+                    className="flex flex-row items-center text-[10px]"
+                  >
+                    <div className="flex flex-row items-center text-xs gap-2">
+                      <ArrowRight size={14} /> <span>Next Screen</span>
+                    </div>
+                  </SelectItem>
+                  {screenNames.map((screenName, index) => (
+                    <SelectItem
+                      value={screenName}
+                      className="flex flex-row items-center text-[10px]"
+                    >
+                      <div className="flex flex-row items-center text-xs gap-2">
+                        <span>
+                          {index + 1} : {screenName}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          )
+        }
       </div>
       <div
         onPointerDown={(e) => controls.start(e)}

@@ -1,19 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import hexoid  from 'hexoid';
 import buttonChoiceData from "@/components/user/screens/button-choice-screen.json";
 import oneChoiceData from "@/components/user/screens/one-choice-screen.json";
 import oneInputData from "@/components/user/screens/one-input-screen.json";
 import footerScreenData from "@/components/user/screens/screen-footer.json";
 import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
+import { stat } from "fs";
+
+
+export type ScreenType = {
+  screenId: string;
+  screenName: string;
+  screenData: any;
+};
 
 export interface ScreensState {
   selectedScreen: number;
   headerId: string;
   headerMode: boolean;
   footerMode: boolean;
+  renamingScreen: boolean;
   screensHeader: any;
   screensFooter: any;
-  screens: any[];
+  screens: ScreenType[];
+  screenRoller: any;
   editorLoad: any;
 }
 
@@ -23,9 +34,28 @@ const initialState: ScreensState = {
   screensHeader: JSON.stringify(headerScreenData),
   headerMode: false,
   footerMode: false,
-  screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
+  renamingScreen: false,
+  // screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
+  screens: [
+    {
+      screenId: "1",
+      screenName: "button-choice",
+      screenData: JSON.stringify(buttonChoiceData),
+    },
+    {
+      screenId: "2",
+      screenName: "one-choice",
+      screenData: JSON.stringify(oneChoiceData),
+    },
+    {
+      screenId: "3",
+      screenName: "one-input",
+      screenData: JSON.stringify(oneInputData),
+    },
+  ],
   screensFooter: JSON.stringify(footerScreenData),
-  editorLoad: JSON.stringify(buttonChoiceData),
+  editorLoad: buttonChoiceData,
+  screenRoller: '',
 };
 
 export const screensSlice = createSlice({
@@ -39,8 +69,8 @@ export const screensSlice = createSlice({
       state.footerMode = false;
       state.screensHeader = headerScreenData;
       state.screensFooter = footerScreenData;
-      state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
-      state.editorLoad = state.screens[state.selectedScreen];
+      // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
+      state.editorLoad = state.screens[state.selectedScreen].screenData;
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
       state.editorLoad = action.payload;
@@ -50,7 +80,7 @@ export const screensSlice = createSlice({
       } else if (state.footerMode === true) {
         state.screensFooter = action.payload;
       } else {
-        state.screens[state.selectedScreen] = action.payload ;
+        state.screens[state.selectedScreen].screenData = action.payload ;
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
@@ -77,13 +107,13 @@ export const screensSlice = createSlice({
       state.footerMode = action.payload;
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
-      // state.screens = [...action.payload];
+      state.screens = action.payload;
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.headerMode = false;
       state.footerMode = false;
       state.selectedScreen = action.payload;
-      state.editorLoad = state.screens[action.payload] ; // Ensure new reference
+      state.editorLoad = state.screens[action.payload].screenData; // Ensure new reference
     },
     reorderScreens: (
       state,
@@ -96,19 +126,27 @@ export const screensSlice = createSlice({
       state.screens = result;
     },
     addScreen: (state, action: PayloadAction<number>) => {
+      const newId = hexoid(8)();
       const newScreens = [...state.screens]; // Create new array
-      newScreens.splice(action.payload + 1, 0, JSON.stringify(emptyScreenData));
+      const screenName = "screen-"+newId;
+      newScreens.splice(action.payload + 1, 0, {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData)});
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array
-      const newScreen = state.screens[action.payload]; // Create new object
+      const newScreen = {
+        screenId: hexoid(8)(),
+        screenName: "",
+        screenData: "",
+      }
+      newScreen.screenData = state.screens[action.payload].screenData; // Create new object
+      newScreen.screenName = "screen-"+newScreen.screenId;
       newScreens.splice(action.payload + 1, 0, newScreen);
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
-      state.editorLoad = newScreen; // Ensure new reference
+      state.editorLoad = newScreen.screenData; // Ensure new reference
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
       if(state.screens.length === 1) return;
@@ -125,10 +163,39 @@ export const screensSlice = createSlice({
 
       state.editorLoad = state.screens[state.selectedScreen]; // Ensure new reference
     },
+    setScreenName: (state, action: PayloadAction<{ screenId: string, screenName: string }>) => {
+      const { screenId, screenName } = action.payload;
+      const screen = state.screens.find(screen => screen.screenId === screenId);
+      const duplicateName = state.screens.find(screen => screen.screenName === screenName);
+      if(duplicateName) {
+        return;
+      }else if(screen) {
+        screen.screenName = screenName;
+      }
+    },
+    setRenamingScreen: (state, action: PayloadAction<boolean>) => {
+      state.renamingScreen = action.payload;
+    },
+    navigateToScreen: (state, action: PayloadAction<string>) => {
+      const screen = state.screens.find(screen => screen.screenName === action.payload);
+      if(screen) {
+        state.selectedScreen = state.screens.indexOf(screen);
+        state.editorLoad = screen.screenData;
+      }
+    },
+    rollScreens: (state, action:PayloadAction<string>) => {
+
+          state.screenRoller = action.payload;
+
+
+    },
   },
 });
 
+
 export const {
+  rollScreens,
+  navigateToScreen,
   setHeaderMode,
   resetScreensState,
   setScreenHeader,
@@ -143,6 +210,8 @@ export const {
   setScreens,
   deleteScreen,
   setHeaderId,
+  setScreenName,
+  setRenamingScreen,
 } = screensSlice.actions;
 
 export default screensSlice.reducer;

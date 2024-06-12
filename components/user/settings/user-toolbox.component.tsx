@@ -405,7 +405,7 @@ export const UserToolbox = () => {
 
             <AccordionItem value="item-2">
               <AccordionTrigger className="uppercase hover:no-underline">
-                Input
+                {t("Input")}
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
@@ -418,10 +418,14 @@ export const UserToolbox = () => {
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Input field"
+                    title={t("Input Field")}
                     icon={<TextCursorInput className="mr-2 h-3 w-3" />}
                   >
-                    <UserInputGen {...outlinedPreset} />
+                    <UserInputGen
+                      {...outlinedPreset}
+                      label={t("Label")}
+                      placeholder={t("Placeholder")}
+                    />
                   </HoverCardComponent>
                 </div>
 
@@ -532,7 +536,7 @@ export const UserToolbox = () => {
 
             <AccordionItem value="item-3">
               <AccordionTrigger className="uppercase hover:no-underline">
-                Button
+                {t("Button")}
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div

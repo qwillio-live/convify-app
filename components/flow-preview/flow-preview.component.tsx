@@ -25,15 +25,17 @@ export default function FlowPreview() {
         return (
           <div
             key={index}
-            style={{
-              backgroundColor: backgroundColor,
-            }}
+            id={screen?.screenName}
+            style={{ backgroundColor: backgroundColor }}
             className="my-14 min-h-screen
           shrink-0
           basis-full
           min-w-full"
           >
-            <ResolvedComponentsFromCraftState key={index} screen={screen} />
+            <ResolvedComponentsFromCraftState
+              key={index}
+              screen={screen.screenData}
+            />
           </div>
         )
       })}
