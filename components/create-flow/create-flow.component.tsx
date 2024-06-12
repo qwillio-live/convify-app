@@ -104,6 +104,8 @@ export function CreateFlowComponent() {
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
 
+  const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
@@ -198,6 +200,7 @@ export function CreateFlowComponent() {
                   style={{ backgroundColor: backgroundColor }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
+                    footerMode ? "flex justify-center items-end" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
                       : "w-96 border px-4"
