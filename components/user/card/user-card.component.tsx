@@ -49,8 +49,6 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   height: auto;
   background: ${(props) => props.background};
   color: ${(props) => props.color};
-  margin-top: ${(props) => props.marginTop}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
   padding-top: ${(props) => props.paddingTop}px;
   padding-right: ${(props) => props.paddingRight}px;
@@ -73,6 +71,8 @@ interface CardInnerStyles {
   width: string;
   direction: string;
   size: string;
+  marginTop: string;
+  marginBottom: string;
   marginLeft: string;
   marginRight: string;
   gap: string;
@@ -87,6 +87,8 @@ const CardContentInner=styled.div<CardInnerStyles>`
   max-width: ${(props) => CardSizeValues[props.size || "medium"] };
   width: 100%;
   display: flex;
+  padding-top: ${(props) => props.marginTop}px;
+  padding-bottom: ${(props) => props.marginBottom}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   flex-direction: ${(props) => props.direction};
@@ -143,6 +145,8 @@ export const CardContentGen = ({ children, ...props }) => {
     mobileAlignItems={props.mobileAlignItems}
     mobileJustifyContent={props.mobileJustifyContent}
     direction={props.flexDirection || "column"}
+    marginTop={props.marginTop}
+    marginBottom={props.marginBottom}
     marginLeft={props.marginLeft}
     marginRight={props.marginRight}
     mobileFlexDirection={props.mobileFlexDirection}
