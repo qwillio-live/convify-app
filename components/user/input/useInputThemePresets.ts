@@ -105,7 +105,6 @@ const useInputThemePresets = () => {
     paddingBottom: 0,
     placeholder: "Placeholder",
     backgroundColor: theme?.general?.backgroundColor || "white",
-    backgroundImage: theme?.general?.backgroundImage,
     borderColor: {
       value: "#eaeaeb",
       globalStyled: false,

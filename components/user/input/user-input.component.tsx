@@ -80,10 +80,9 @@ export const UserInputGen = ({ ...props }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          backgroundColor: `${props.backgroundColor}`,
-          backgroundImage: `${props.backgroundImage}`,
-          backgroundPosition: "center",
-          backgroundSize: "cover",
+          backgroundColor: `${
+            props.backgroundImage ? "transparent" : props.backgroundColor
+          }`,
           minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,

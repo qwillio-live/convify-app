@@ -81,7 +81,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -115,7 +115,11 @@ export function FlowsList() {
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
                               {t("Delete")}
                             </Button>
                           </DropdownMenuItem>
@@ -127,7 +131,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -161,7 +165,11 @@ export function FlowsList() {
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
                               {t("Delete")}
                             </Button>
                           </DropdownMenuItem>
@@ -173,7 +181,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -207,7 +215,11 @@ export function FlowsList() {
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
                               {t("Delete")}
                             </Button>
                           </DropdownMenuItem>
@@ -219,7 +231,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -253,7 +265,11 @@ export function FlowsList() {
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
                               {t("Delete")}
                             </Button>
                           </DropdownMenuItem>
@@ -265,7 +281,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -299,7 +315,11 @@ export function FlowsList() {
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
                               {t("Delete")}
                             </Button>
                           </DropdownMenuItem>
@@ -311,7 +331,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto !min-h-16"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -345,7 +365,11 @@ export function FlowsList() {
                           <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
                           <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Button variant="destructive" size="sm">
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
                               {t("Delete")}
                             </Button>
                           </DropdownMenuItem>

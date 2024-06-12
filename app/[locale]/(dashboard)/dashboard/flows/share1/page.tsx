@@ -50,7 +50,7 @@ export default function CreateFlowsPage() {
               </div>
             </div>
             <div className="w-full order-last lg:order-[unset] basis-full lg:basis-auto lg:w-auto flex h-1/2 lg:h-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset]">
-              <div className="flex h-full bg-inherit lg:justify-center py-0 w-full lg:w-auto">
+              <div className="flex bg-inherit lg:justify-center py-0 size-full lg:w-auto">
                 <Link
                   className="h-full rounded-none border-b-4 border-transparent flex-1 lg:flex-auto flex justify-center items-center text-sm text-muted-foreground px-3"
                   href="/dashboard/flows/create"
@@ -99,7 +99,7 @@ export default function CreateFlowsPage() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="rounded-full w-10 h-10"
+                      className="rounded-full size-10"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -135,9 +135,7 @@ export default function CreateFlowsPage() {
             </div>
           </header>
         </div>
-        <main
-          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full`}
-        >
+        <main className="content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full">
           <ShareFlowComponents isPublished={false} />
         </main>
       </div>
@@ -152,10 +150,10 @@ export default function CreateFlowsPage() {
                 viewBox="0 0 8 12"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <g fill-rule="evenodd">
+                <g fillRule="evenodd">
                   <path
                     d="M0 5h2v.088H0V5zm0-1.25C0 1.494 1.626 0 4 0c2.377 0 4 1.488 4 3.75 0 1.462-.636 2.323-1.885 3.164l-.44.29c-.33.221-.482.355-.54.455C5.068 7.774 4.999 8.25 5 9l-2 .003c-.002-1.083.108-1.835.405-2.347.255-.439.59-.732 1.158-1.113l.435-.287C5.75 4.748 6 4.41 6 3.75 6 2.633 5.309 2 4 2c-1.305 0-2 .638-2 1.75v1.338H0V3.75z"
-                    fill-rule="nonzero"
+                    fillRule="nonzero"
                   ></path>
                   <path d="M3 10h2v2H3z"></path>
                 </g>

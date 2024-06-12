@@ -22,7 +22,7 @@ export function BreadCrumbs() {
           <BreadcrumbLink href="/dashboard">
             <span className="hidden lg:inline-block">{t("My workspace")}</span>
             <Button
-              className="lg:hidden p-2 my-4 h-8"
+              className="lg:hidden p-0 size-8 max-h-8"
               size="sm"
               variant="outline"
             >

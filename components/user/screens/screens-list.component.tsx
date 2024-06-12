@@ -1,15 +1,31 @@
 "use client"
 
+import React, { useCallback } from "react"
 import { Reorder } from "framer-motion"
 import {
   ClipboardCopy,
   MousePointer,
   Pencil,
   PlusCircle,
-  Trash2
+  Trash2,
 } from "lucide-react"
-import React, { useCallback } from "react"
+import { toast } from "sonner"
 
+import { Frame, useEditor } from "@/lib/craftjs"
+import {
+  addScreen,
+  deleteScreen,
+  duplicateScreen,
+  setFooterMode,
+  setHeaderFooterMode,
+  setHeaderMode,
+  setScreenName,
+  setScreens,
+  setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -25,29 +41,13 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
-import emptyScreenData from "@/components/user/screens/empty-screen.json"
-import { Frame, useEditor } from "@/lib/craftjs"
-import {
-  addScreen,
-  deleteScreen,
-  duplicateScreen,
-  setFooterMode,
-  setHeaderFooterMode,
-  setHeaderMode,
-  setScreenName,
-  setScreens,
-  setSelectedScreen
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
-import { cn } from "@/lib/utils"
-
 import { Input } from "@/components/input-custom"
-import { toast } from 'sonner'
+import emptyScreenData from "@/components/user/screens/empty-screen.json"
+
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 
 const ScreensList = () => {
-  const screens = useAppSelector((state:  RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]
@@ -192,7 +192,7 @@ const ScreensList = () => {
             onClick={() => handleHeaderScreenClick()}
           >
             <div className="text-xs text-muted-foreground scale-[.25] relative">
-              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+              <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
               <ResolvedComponentsFromCraftState screen={screensHeader} />
             </div>
           </Card>
@@ -209,7 +209,7 @@ const ScreensList = () => {
             onClick={() => handleFooterScreenClick()}
           >
             <div className="text-xs text-muted-foreground scale-[.25] relative">
-              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+              <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
               <ResolvedComponentsFromCraftState screen={screensFooter} />
             </div>
           </Card>
@@ -230,7 +230,7 @@ const ScreensList = () => {
               className=""
               onClick={() => handleAddScreen(selectedScreenIndex || 0)}
             >
-              <PlusCircle className="mr-2 h-4 w-4" />
+              <PlusCircle className="mr-2 size-4" />
               Add Screen
             </Button>
           </div>
@@ -264,7 +264,10 @@ const ScreensList = () => {
                     {" "}
                     <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
                       <span>{index + 1}</span>
-                      <EditScreenName screenId={screen.screenId} screenName={screen.screenName} />
+                      <EditScreenName
+                        screenId={screen.screenId}
+                        screenName={screen.screenName}
+                      />
                     </div>
                     <Card
                       style={{
@@ -280,7 +283,7 @@ const ScreensList = () => {
                       onClick={() => handleScreenClick(index)}
                     >
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+                        <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
                         <ResolvedComponentsFromCraftState
                           screen={screen.screenData ? screen.screenData : {}}
                         />
@@ -322,37 +325,38 @@ const ScreensList = () => {
 }
 
 const EditScreenName = ({ screenId, screenName }) => {
-  const ref = React.useRef<HTMLInputElement | null>(null);
-  const dispatch = useAppDispatch();
-  const [editing, setEditing] = React.useState(false);
-  const [name, setName] = React.useState(screenName);
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens);
+  const ref = React.useRef<HTMLInputElement | null>(null)
+  const dispatch = useAppDispatch()
+  const [editing, setEditing] = React.useState(false)
+  const [name, setName] = React.useState(screenName)
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
 
   const handleChange = (inputName) => {
     if (!checkDuplicateName(inputName)) {
-      dispatch(setScreenName({ screenId: screenId, screenName: inputName }));
-      setName(inputName);
-      toast.success("Screen name changed successfully");
-      setEditing(false);
+      dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
+      setName(inputName)
+      toast.success("Screen name changed successfully")
+      setEditing(false)
     } else {
-      toast.error("Screen name already exists");
-      ref?.current?.focus();
+      toast.error("Screen name already exists")
+      ref?.current?.focus()
     }
-  };
+  }
 
   const checkDuplicateName = (inputName) => {
-    const screenNames = screens?.filter((screen) => screen.screenId !== screenId) // Exclude the current screen
-      .map((screen) => screen.screenName.toLowerCase());
+    const screenNames = screens
+      ?.filter((screen) => screen.screenId !== screenId) // Exclude the current screen
+      .map((screen) => screen.screenName.toLowerCase())
 
-    return screenNames?.includes(inputName.toLowerCase());
-  };
+    return screenNames?.includes(inputName.toLowerCase())
+  }
 
   const handleInputChange = (e) => {
-    let value = e.target.value;
-    value = value.replace(/\s+/g, '-');
-    value = value.replace(/[^a-z0-9-]/gi, '');
-    setName(value.toLowerCase());
-  };
+    let value = e.target.value
+    value = value.replace(/\s+/g, "-")
+    value = value.replace(/[^a-z0-9-]/gi, "")
+    setName(value.toLowerCase())
+  }
 
   return (
     <>
@@ -379,8 +383,8 @@ const EditScreenName = ({ screenId, screenName }) => {
       )}
       {/* <Toaster position="bottom-right" /> */}
     </>
-  );
-};
+  )
+}
 
 function HelperInformation() {
   return (

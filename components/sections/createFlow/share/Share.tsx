@@ -130,8 +130,8 @@ const ShareFlowComponents = ({ isPublished }) => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M1.7778 0.888916C1.28689 0.888916 0.888916 1.28689 0.888916 1.7778V14.2222C0.888916 14.7132 1.28689 15.1111 1.7778 15.1111H14.2222C14.7132 15.1111 15.1111 14.7132 15.1111 14.2222V1.7778C15.1111 1.28689 14.7132 0.888916 14.2222 0.888916H1.7778ZM8.22149 6.30691H6.30691V13.0794H8.33865V9.82657C8.33865 8.6915 8.82559 8.00003 9.84688 8.00003C10.688 8.00003 11.0476 8.79038 11.0476 9.69112V13.0794H13.0794V9.32066C13.0794 7.30856 12.5085 6.22225 10.4625 6.22225C9.39652 6.22225 8.53438 6.7566 8.24248 7.28282H8.22149V6.30691ZM4.95241 13.0794H2.92066V6.30691H4.95241V13.0794ZM3.93653 5.20638C4.63816 5.20638 5.20638 4.63816 5.20638 3.93653C5.20638 3.23491 4.63816 2.66669 3.93653 2.66669C3.23491 2.66669 2.66669 3.23491 2.66669 3.93653C2.66669 4.63816 3.23491 5.20638 3.93653 5.20638Z"
                           fill="currentColor"
                         ></path>
@@ -149,8 +149,8 @@ const ShareFlowComponents = ({ isPublished }) => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16ZM6.536 12.22C10.084 12.22 12.024 9.28 12.024 6.732C12.024 6.64801 12.024 6.56398 12.02 6.484C12.396 6.212 12.724 5.872 12.984 5.484C12.64 5.636 12.268 5.74 11.876 5.788C12.276 5.548 12.58 5.172 12.724 4.72C12.352 4.94 11.94 5.1 11.5 5.188C11.148 4.812 10.648 4.58 10.092 4.58C9.028 4.58 8.164 5.444 8.164 6.508C8.164 6.66 8.18 6.808 8.216 6.948C6.612 6.868 5.192 6.1 4.24 4.932C4.076 5.216 3.98 5.548 3.98 5.9C3.98 6.568 4.32 7.16 4.84 7.504C4.524 7.496 4.228 7.408 3.968 7.264V7.288C3.968 8.224 4.632 9 5.516 9.18C5.356 9.224 5.184 9.248 5.008 9.248C4.884 9.248 4.764 9.236 4.644 9.212C4.888 9.98 5.6 10.536 6.444 10.552C5.784 11.068 4.952 11.376 4.048 11.376C3.892 11.376 3.74 11.368 3.588 11.348C4.432 11.9 5.448 12.22 6.536 12.22Z"
                           fill="currentColor"
                         ></path>
@@ -235,14 +235,14 @@ const ShareFlowComponents = ({ isPublished }) => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M0.777832 6.11117V0.777832H6.11117V6.11117H0.777832ZM2.55561 2.55561H4.33339V4.33339H2.55561V2.55561Z"
                           fill="currentColor"
                         ></path>
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M7.88894 6.11117V0.777832H13.2223V6.11117H7.88894ZM9.66672 2.55561H11.4445V4.33339H9.66672V2.55561Z"
                           fill="currentColor"
                         ></path>
@@ -259,8 +259,8 @@ const ShareFlowComponents = ({ isPublished }) => {
                           fill="currentColor"
                         ></path>
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M0.777832 13.2223V7.88894H6.11117V13.2223H0.777832ZM2.55561 9.66672H4.33339V11.4445H2.55561V9.66672Z"
                           fill="currentColor"
                         ></path>
@@ -278,7 +278,7 @@ const ShareFlowComponents = ({ isPublished }) => {
                   <iframe
                     src="https://convify.io/survey"
                     frameBorder="0"
-                    className="w-full h-full"
+                    className="size-full"
                   ></iframe>
                 ) : (
                   <div className="flex size-full items-center justify-center text-sm text-[rgb(38,38,39)] mt-5">
@@ -391,8 +391,8 @@ const ShareFlowComponents = ({ isPublished }) => {
                   fill="#000000"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
                   />
                 </svg>

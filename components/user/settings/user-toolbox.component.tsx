@@ -93,22 +93,22 @@ const MultipleChoiceOptions = [
   {
     id: "1",
     text: "Option 1",
-    icon: <Chrome className="h-6 w-6 text-lg" />,
+    icon: <Chrome className="size-6 text-lg" />,
   },
   {
     id: "2",
     text: "Option 2",
-    icon: <Facebook className="h-6 w-6" />,
+    icon: <Facebook className="size-6" />,
   },
   {
     id: "3",
     text: "Option 3",
-    icon: <Linkedin className="h-6 w-6" />,
+    icon: <Linkedin className="size-6" />,
   },
   {
     id: "4",
     text: "Option 4",
-    icon: <Globe className="h-6 w-6" />,
+    icon: <Globe className="size-6" />,
   },
 ]
 
@@ -119,7 +119,7 @@ const ListOptions = [
     subText: "Saves time and frustation",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -154,7 +154,7 @@ const ListOptions = [
     subText: "It's fun to work with",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -187,7 +187,7 @@ const ListOptions = [
     subText: "Your data is protected",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -230,7 +230,7 @@ const ListOptions = [
     subText: "Understand your user's behavior",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         width="192"
         height="192"
@@ -323,6 +323,9 @@ const HoverCardComponent = ({ title, icon, children }) => {
             style={{
               background: themeBackgroundColor,
               backgroundImage: themeBackgroundImage,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
             }}
             avoidCollisions
             side="left"
@@ -370,7 +373,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Headline"
-                    icon={<Type className="mr-2 h-3 w-3" />}
+                    icon={<Type className="mr-2 size-3" />}
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
@@ -391,7 +394,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Text"
-                    icon={<Pencil className="mr-2 h-3 w-3" />}
+                    icon={<Pencil className="mr-2 size-3" />}
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
@@ -419,7 +422,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Input Field")}
-                    icon={<TextCursorInput className="mr-2 h-3 w-3" />}
+                    icon={<TextCursorInput className="mr-2 size-3" />}
                   >
                     <UserInputGen
                       {...outlinedPreset}
@@ -443,7 +446,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Picture Choice"
-                    icon={<ImagePlus className="mr-2 h-3 w-3" />}
+                    icon={<ImagePlus className="mr-2 size-3" />}
                   >
                     <div className="grid grid-cols-2 gap-2">
                       <div
@@ -455,7 +458,7 @@ export const UserToolbox = () => {
                                     hover:text-white
                         "
                       >
-                        <Target className="h-10 w-10" />
+                        <Target className="size-10" />
                         Target
                       </div>
                       <div
@@ -466,7 +469,7 @@ export const UserToolbox = () => {
                                       hover:bg-[#4050ff]
                                     hover:text-white"
                       >
-                        <Rocket className="h-10 w-10" />
+                        <Rocket className="size-10" />
                         Launch
                       </div>
                       <div
@@ -477,7 +480,7 @@ export const UserToolbox = () => {
                                       hover:bg-[#4050ff]
                                     hover:text-white"
                       >
-                        <HeartHandshake className="h-10 w-10" />
+                        <HeartHandshake className="size-10" />
                         Agree
                       </div>
                       <div
@@ -488,7 +491,7 @@ export const UserToolbox = () => {
                                       hover:bg-[#4050ff]
                                     hover:text-white"
                       >
-                        <Trophy className="h-10 w-10" />
+                        <Trophy className="size-10" />
                         Achieve
                       </div>
                     </div>
@@ -509,7 +512,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Multiple Choice"
-                    icon={<Copy className="mr-2 h-3 w-3" />}
+                    icon={<Copy className="mr-2 size-3" />}
                   >
                     <div className="flex w-full flex-col gap-2">
                       {MultipleChoiceOptions.map((option, index) => (
@@ -559,7 +562,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Continue Button")}
-                    icon={<Navigation className="mr-2 h-3 w-3" />}
+                    icon={<Navigation className="mr-2 size-3" />}
                   >
                     <IconButtonGen
                       className="w-full"
@@ -598,7 +601,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Container"
-                    icon={<Box className="mr-2 h-3 w-3" />}
+                    icon={<Box className="mr-2 size-3" />}
                   >
                     <Box width={120} height={42} />
                   </HoverCardComponent>
@@ -615,7 +618,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Logo"
-                    icon={<Dice2 className="mr-2 h-3 w-3" />}
+                    icon={<Dice2 className="mr-2 size-3" />}
                   >
                     <Image
                       src={ConvifyLogo.src}
@@ -637,7 +640,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Logo Bar"
-                    icon={<Columns className="mr-2 h-3 w-3" />}
+                    icon={<Columns className="mr-2 size-3" />}
                   >
                     <div className="flex w-[366px] flex-row items-center justify-between border p-2">
                       <Image
@@ -682,7 +685,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Progress"
-                    icon={<CircleSlashed className="mr-2 h-3 w-3" />}
+                    icon={<CircleSlashed className="mr-2 size-3" />}
                   >
                     <div className="flex w-[360px] flex-row items-center justify-between border p-4">
                       <CustomProgressBar
@@ -704,7 +707,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Image")}
-                    icon={<ImageIcon className="mr-2 h-3 w-3" />}
+                    icon={<ImageIcon className="mr-2 size-3" />}
                   >
                     <div className="flex w-[360px] flex-row items-center justify-between">
                       <Image
@@ -712,7 +715,7 @@ export const UserToolbox = () => {
                         alt="Image component"
                         width={360}
                         height={203}
-                        className="w-full h-full"
+                        className="size-full"
                       />
                     </div>
                   </HoverCardComponent>

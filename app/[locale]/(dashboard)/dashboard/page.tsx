@@ -71,7 +71,7 @@ export default function DashboardPage() {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <svg
-                className="w-7 h-7"
+                className="size-7"
                 viewBox="0 0 720 524"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -130,8 +130,8 @@ export default function DashboardPage() {
               </svg>
               <span className="">Convify</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto w-8 h-8">
-              <Bell className="w-4 h-4" />
+            <Button variant="outline" size="icon" className="ml-auto size-8">
+              <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder={t("Find workspace or flow")}
@@ -200,15 +200,16 @@ export default function DashboardPage() {
             <Sheet>
               <SheetTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="link"
                   size="icon"
-                  className="shrink-0 md:hidden w-auto px-3"
+                  className="shrink-0 md:hidden w-auto px-2"
                 >
                   <svg
                     width="25"
                     viewBox="0 0 22 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="w-7"
                   >
                     <mask
                       id="mask0_2486_36154"
@@ -326,7 +327,7 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex w-10 h-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
+                  className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
                 >
                   {userData ? (
                     userData?.name ? (
