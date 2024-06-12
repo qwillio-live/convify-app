@@ -103,6 +103,7 @@ export function CreateFlowComponent() {
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
 
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
@@ -207,7 +208,16 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
+                  {
+                  !headerMode && !footerMode &&
+                   <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  }
                   <Frame data={editorLoad}></Frame>
+                  {
+                    !headerMode && !footerMode &&
+                  <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  }
+
 
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
