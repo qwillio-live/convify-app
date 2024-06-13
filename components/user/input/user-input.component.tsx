@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Settings, X } from "lucide-react"
-import ContentEditable from "react-contenteditable"
-import styled from "styled-components"
-
 import { useEditor, useNode } from "@/lib/craftjs"
-
-import { Input } from "@/components/input-custom"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
@@ -18,10 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
-
-import { Controller } from "../settings/controller.component"
-import { UserInputSettings } from "./user-input-settings.component"
-import { cn } from "@/lib/utils"
 import {
   Activity,
   Anchor,
@@ -37,7 +27,6 @@ import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
-import { useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/input-custom"

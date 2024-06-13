@@ -253,63 +253,6 @@ export const GlobalThemeSettings = (props: Props) => {
               <span className="text-sm font-medium">{t("Text")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-4 p-2">
-              <div className="flex flex-col items-center col-span-2 space-y-2">
-                <label
-                  htmlFor="primaryfont"
-                  className="text-sm font-medium self-start leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
-                >
-                  {t("Primary Font")}
-                </label>
-                <Select
-                  value={primaryFont || defaultPrimaryFont}
-                  onValueChange={(value) => {
-                    handleStyleChange({ text: { primaryFont: value } })
-                    // handleApplyTheme({text: { primaryFont: value}})
-                  }}
-                >
-                  <SelectTrigger className="basis-full self-start">
-                    <SelectValue placeholder="Primary font" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {primaryFonts?.map((font, index) => {
-                      return (
-                        <SelectItem key={index} value={font.variable}>
-                          {font.name}
-                        </SelectItem>
-                      )
-                    })}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex flex-col items-center col-span-2 space-y-2">
-                <label
-                  htmlFor="secondaryfont"
-                  className="text-sm font-medium self-start leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-full"
-                >
-                  {t("Secondary Font")}
-                </label>
-                <Select
-                  value={secondaryFont || defaultSecondaryFont}
-                  onValueChange={(value) => {
-                    handleStyleChange({ text: { secondaryFont: value } })
-                    // handleApplyTheme({text: { secondaryFont: value}})
-                  }}
-                >
-                  <SelectTrigger className="basis-full self-start">
-                    <SelectValue placeholder="Secondary font" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {secondaryFonts?.map((font, index) => {
-                      return (
-                        <SelectItem key={index} value={font.variable}>
-                          {font.name}
-                        </SelectItem>
-                      )
-                    })}
-                  </SelectContent>
-                </Select>
-              </div>
               <FontSelector
                 fontList={primaryFonts}
                 selectedFont={primaryFont}
