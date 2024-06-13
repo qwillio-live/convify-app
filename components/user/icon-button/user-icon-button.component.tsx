@@ -520,7 +520,7 @@ export const IconButton = ({
       overflowX: 'clip',
       textOverflow: 'ellipsis',
     }}
-    className="min-w-16 min-h-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+    className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
     onChange={(e) => {
         handleTextChange(e);
     }}

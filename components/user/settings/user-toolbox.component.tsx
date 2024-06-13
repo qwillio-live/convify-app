@@ -497,7 +497,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
 
-                <div
+                {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -526,13 +526,12 @@ export const UserToolbox = () => {
                       bg-white p-4 text-lg font-bold hover:border-[#4050ff] hover:bg-[#4050ff] hover:text-white"
                         >
                           <input type="radio" className="hidden" />
-                          {/* {option.icon} */}
                           <label>{option.text}</label>
                         </div>
                       ))}
                     </div>
                   </HoverCardComponent>
-                </div>
+                </div> */}
               </AccordionContent>
             </AccordionItem>
 
@@ -606,7 +605,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
 
-                <div
+                {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -626,9 +625,9 @@ export const UserToolbox = () => {
                       height={42}
                     />
                   </HoverCardComponent>
-                </div>
+                </div> */}
 
-                <div
+                {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -668,9 +667,9 @@ export const UserToolbox = () => {
                       />
                     </div>
                   </HoverCardComponent>
-                </div>
+                </div> */}
 
-                <div
+                {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -694,7 +693,7 @@ export const UserToolbox = () => {
                       />
                     </div>
                   </HoverCardComponent>
-                </div>
+                </div> */}
 
                 <div
                   className="min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
@@ -721,7 +720,7 @@ export const UserToolbox = () => {
                 </div>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-5">
+            {/* <AccordionItem value="item-5">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Navigation
               </AccordionTrigger>
@@ -758,7 +757,7 @@ export const UserToolbox = () => {
                   </HoverCard>
                 </div>
               </AccordionContent>
-            </AccordionItem>
+            </AccordionItem> */}
           </Accordion>
         </ScrollArea>
       </div>
