@@ -103,6 +103,9 @@ export function CreateFlowComponent() {
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
+
+  const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
@@ -125,7 +128,6 @@ export function CreateFlowComponent() {
           let jsonString = JSON.stringify(json)
           // let editorLoadLength = Object.keys(editorLoad).length;
           // if(jsonString !== editorLoad){
-          console.log("RE-REnder called")
           dispatch(setEditorLoad(JSON.stringify(json)))
           // }else{
           // console.log("RE-REnder NOT called")
@@ -206,13 +208,23 @@ export function CreateFlowComponent() {
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
+                    footerMode ? "flex justify-center items-end" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
                       : "w-96 border px-4"
                   )}
                   value={view}
                 >
+                  {
+                  !headerMode && !footerMode &&
+                   <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  }
                   <Frame data={editorLoad}></Frame>
+                  {
+                    !headerMode && !footerMode &&
+                  <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  }
+
 
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">

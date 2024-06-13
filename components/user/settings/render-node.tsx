@@ -20,6 +20,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     connectors: { drag },
     fullWidth,
     parent,
+    amIBeingDragged,
     deletable,
     props,
     name,
@@ -27,6 +28,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     isHover: node.events.hovered,
     isSelected: node.events.selected,
     dom: node.dom,
+    amIBeingDragged: node.events.dragged,
     name: node.data.custom.displayName || node.data.displayName,
     fullWidth: node.data.props.fullWidth,
     moveable: query.node(node.id).isDraggable(),
@@ -51,7 +53,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       className={cn('relative border z-10 border-transparent border-dotted',
         (isActive) && (id !== 'ROOT') && 'border-blue-400',
         (id !== 'ROOT') && 'hover:border-blue-400',
-        fullWidth && 'w-full',
+        fullWidth && 'w-full'
       )}
     >
       {/* <div className='flex flex-col justify-center items-center w-full'> */}

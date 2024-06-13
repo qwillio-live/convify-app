@@ -184,16 +184,18 @@ const ScreensList = () => {
 
           <Card
             className={cn(
-              "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+              "flex h-12 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden",
               {
                 "border-blue-500": headerMode,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
           >
-            <div className="text-xs text-muted-foreground scale-[.25] relative">
-              <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
+            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
+              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0">
+
               <ResolvedComponentsFromCraftState screen={screensHeader} />
+              </div>
             </div>
           </Card>
           <Separator className="my-4" />
@@ -201,16 +203,17 @@ const ScreensList = () => {
 
           <Card
             className={cn(
-              "flex h-60 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer",
+              "flex h-12 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden",
               {
                 "border-blue-500": footerMode,
               }
             )}
             onClick={() => handleFooterScreenClick()}
           >
-            <div className="text-xs text-muted-foreground scale-[.25] relative">
-              <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
+            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
+              <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
+              </div>
             </div>
           </Card>
         </AccordionContent>

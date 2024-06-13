@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback,useState } from "react"
 import ContentEditable from "react-contenteditable"
 import {throttle} from "lodash"
-import { useNode } from "@/lib/craftjs"
+import { useEditor, useNode } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
@@ -56,7 +56,9 @@ export const UserInputSettings = () => {
     textColor,
     width,
     props,
+    parent,
   } = useNode((node) => ({
+    parent: node.data.parent,
     props: node.data.props,
     marginLeft: node.data.props.marginLeft,
     marginRight: node.data.props.marginRight,
@@ -65,6 +67,23 @@ export const UserInputSettings = () => {
     textColor: node.data.props.textColor,
     width: node.data.props.width,
   }))
+
+  const {
+    // query,
+    query: { node },
+  } = useEditor()
+
+  const parentContainer = node(parent || "").get();
+  const [disableSize,setDisableSize] = useState(false);
+  useEffect(() => {
+    if(parentContainer.id !== "ROOT" && parentContainer.data.name === "CardContent"){
+      setProp((props) => props.size = "full");
+      setDisableSize(true);
+    }else{
+      setDisableSize(false);
+    }
+  },[parentContainer])
+
   enum PRESETNAMES {
     outlined= "outlined",
     underlined= "underlined"
@@ -294,18 +313,25 @@ export const UserInputSettings = () => {
                 value={props.size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
-                  if(value === 'full') {
-                    // setProp((props) => (props.fullWidth = true), 1000)
-                  }else{
-                    // setProp((props) => (props.fullWidth = false), 1000)
-                  }
                 }}
                className="flex-1">
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger  value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger  value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger  value="large">{("L")}</TabsTrigger>
-                  <TabsTrigger  value="full"><MoveHorizontal /></TabsTrigger>
+                <TabsList className={cn("w-full grid grid-cols-4",
+                  {
+                    "cursor-not-allowed": disableSize
+                  }
+                )}>
+                  <TabsTrigger
+                  disabled={disableSize}
+                  value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger
+                  disabled={disableSize}
+                  value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger
+                  disabled={disableSize}
+                  value="large">{("L")}</TabsTrigger>
+                  <TabsTrigger
+                  disabled={disableSize}
+                  value="full"><MoveHorizontal /></TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>

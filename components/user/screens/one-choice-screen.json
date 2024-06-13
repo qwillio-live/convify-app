@@ -6,7 +6,7 @@
 			"padding": 5,
 			"background": "#ad2121",
 			"expanded": "true",
-			"className": "min-h-screen min-w-full flex flex-col items-center py-5"
+			"className": "min-w-full flex flex-col items-center py-5"
 		},
 		"displayName": "One Choice Screen",
 		"custom": {
@@ -14,43 +14,10 @@
 		},
 		"hidden": false,
 		"nodes": [
-			"ws9t9vvLKO",
 			"mdsAe2aBSM",
 			"HsVEwi1W0N",
 			"WyPGuBF4RD",
-			"mVILya3SGO",
-			"footer-node"
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"ws9t9vvLKO": {
-		"type": {
-			"resolvedName": "Logo"
-		},
-		"isCanvas": false,
-		"props": {
-			"alt": "Logo",
-			"marginTop": 0,
-			"marginBottom": "40",
-			"marginLeft": 0,
-			"marginRight": 0,
-			"background": "inherit",
-			"radius": "none",
-			"align": "center",
-			"width": 156,
-			"height": 50,
-			"src": "/_next/static/media/convify_logo_black.0085e885.png"
-		},
-		"displayName": "Logo",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
+			"mVILya3SGO"
 		],
 		"linkedNodes": {
 
@@ -85,55 +52,6 @@
 			"resolvedName": "HeadlineText"
 		},
 		"isCanvas": false,
-    "props": {
-      "text": "Which marketing channels do you use?",
-      "fontSize": {
-        "value": 42,
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "fontFamily": {
-        "value": "--font-cal-sans",
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "textColor": {
-        "value": "inherit",
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "fontWeight": {
-        "value": "700",
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "textAlign": {
-        "value": "center",
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "marginLeft": {
-        "value": 58,
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "marginRight": {
-        "value": 58,
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "marginTop": {
-        "value": 40,
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "marginBottom": {
-        "value": 40,
-        "isCustomized": false,
-        "globalStyled": false
-      },
-      "tagType": "h1"
-    },
 		"props": {
 			"text": "Which marketing channels do you use?",
 			"fontSize": {
@@ -264,27 +182,6 @@
 			]
 		},
 		"displayName": "MultipleChoice",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"footer-node": {
-		"type": {
-			"resolvedName": "ScreenFooter"
-		},
-		"isCanvas": false,
-		"props": {
-
-		},
-		"displayName": "Footer",
 		"custom": {
 
 		},

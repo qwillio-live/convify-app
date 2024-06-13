@@ -9,7 +9,7 @@
 				"expanded": "true",
 				"maxWidth": "100%"
 			},
-			"className": "min-h-screen max-w-full flex flex-col items-center py-5"
+			"className": "max-w-full flex flex-col items-center py-5"
 		},
 		"displayName": "Button Choice Screen",
 		"custom": {
@@ -17,45 +17,12 @@
 		},
 		"hidden": false,
 		"nodes": [
-			"MZSOrDgJzf",
 			"-P_KRbsLr-",
 			"zKf_v9AqPq",
 			"-sb_tsQpxz",
 			"IfbbpQ2CNy",
 			"qDDDnjiRMy",
-			"_TbLO0RG2M",
-			"footer-node"
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"MZSOrDgJzf": {
-		"type": {
-			"resolvedName": "Logo"
-		},
-		"isCanvas": false,
-		"props": {
-			"alt": "Logo",
-			"marginTop": 0,
-			"marginBottom": "40",
-			"marginLeft": 0,
-			"marginRight": 0,
-			"background": "inherit",
-			"radius": "none",
-			"align": "center",
-			"width": 156,
-			"height": 50,
-			"src": "/_next/static/media/convify_logo_black.0085e885.png"
-		},
-		"displayName": "Logo",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
+			"_TbLO0RG2M"
 		],
 		"linkedNodes": {
 
@@ -425,27 +392,6 @@
 			]
 		},
 		"displayName": "PictureChoice",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"footer-node": {
-		"type": {
-			"resolvedName": "ScreenFooter"
-		},
-		"isCanvas": false,
-		"props": {
-
-		},
-		"displayName": "Footer",
 		"custom": {
 
 		},

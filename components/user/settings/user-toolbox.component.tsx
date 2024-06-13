@@ -384,7 +384,7 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -412,7 +412,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -431,9 +431,8 @@ export const UserToolbox = () => {
                     />
                   </HoverCardComponent>
                 </div>
-
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -499,7 +498,7 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -543,7 +542,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -587,7 +586,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     //@ts-ignore
@@ -608,7 +607,7 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -630,7 +629,7 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -672,7 +671,7 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className=" min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -728,7 +727,7 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className="group min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&

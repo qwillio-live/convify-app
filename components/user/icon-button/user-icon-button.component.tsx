@@ -434,14 +434,15 @@ export const IconButton = ({
     throttledSetProp(property,value);
   };
   const handleNavigateToScreen =async () => {
-      dispatch(navigateToScreen(nextScreen));
-      if(screens){
-        const screen = screens.find(screen => screen.screenName === nextScreen);
-        if(screen){
-          const screenData = screen.screenData;
-          actions.deserialize(screenData);
-        }
-      }
+    return;
+    // dispatch(navigateToScreen(nextScreen));
+      // if(screens){
+      //   const screen = screens.find(screen => screen.screenName === nextScreen);
+      //   if(screen){
+      //     const screenData = screen.screenData;
+      //     actions.deserialize(screenData);
+      //   }
+      // }
   }
 
   const debouncedSetProp = useCallback(
