@@ -3,19 +3,16 @@ import Image from "next/image"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import FirstLogo from "@/assets/images/first-logo.png"
 import FourthLogo from "@/assets/images/fourth-logo.png"
+import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
 import SecondLogo from "@/assets/images/second-logo.png"
 import ThirdLogo from "@/assets/images/third-logo.png"
 import cn from "classnames"
 import {
-  ArrowRight,
-  Bookmark,
   Box,
   Chrome,
-  Circle,
   CircleSlashed,
   Columns,
   Copy,
-  Diamond,
   Dice2,
   Facebook,
   Globe,
@@ -24,23 +21,20 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   ImagePlus,
-  Layout,
   Linkedin,
-  MousePointer2,
-  ListChecks,
+  Loader as LoaderIcon,
   Navigation,
   Pencil,
-  PlusSquare,
   Rocket,
-  Square,
   Target,
   TextCursorInput,
   Trophy,
   Type,
-  Loader as LoaderIcon,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
-import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
+import { useEditor } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
   AccordionContent,
@@ -48,25 +42,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import CustomLoader from "@/components/ui/loader"
 import { Card as UiCard } from "@/components/ui/card"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import { Input } from "@/components/ui/input"
+import CustomLoader from "@/components/ui/loader"
 import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 import { ScrollArea } from "@/components/ui/scroll-area"
 // import { Toggle, ToggleItem } from "@/components/ui/toggle-group"
-import { Toggle } from "@/components/ui/toggle"
 import {
-  ButtonDefaultProps,
-  Button as UserButton,
-} from "@/components/user/button/user-button.component"
-import {
-  LoaderDefaultProps,
   Loader,
+  LoaderDefaultProps,
 } from "@/components/user/loader/user-loader.component"
 import {
   TextDefaultProps,
@@ -75,20 +63,17 @@ import {
 
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
 import {
-  Container,
-  ContainerDefaultProps,
-  UserContainer,
-} from "../container/user-container.component"
-import {
   HeadlineText,
   HeadlineTextDefaultProps,
 } from "../headline-text/headline-text.component"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import {
   IconButton,
-  IconButtonDefaultProps,
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
-import { UserInput, UserInputDefaultProps, UserInputGen } from "../input/user-input.component"
+import { Img, ImgDefaultProps } from "../image/user-image-component"
+import useInputThemePresets from "../input/useInputThemePresets"
+import { UserInput, UserInputGen } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -103,33 +88,27 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
-import { is } from "date-fns/locale"
-import { LayoutContainer, LayoutContainerDefaultProps } from "../layout-container/layout-container.component"
-import useButtonThemePresets from "../icon-button/useButtonThemePresets"
-import useInputThemePresets from "../input/useInputThemePresets"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { useTranslations } from "next-intl"
 
 const MultipleChoiceOptions = [
   {
     id: "1",
     text: "Option 1",
-    icon: <Chrome className="h-6 w-6 text-lg" />,
+    icon: <Chrome className="size-6 text-lg" />,
   },
   {
     id: "2",
     text: "Option 2",
-    icon: <Facebook className="h-6 w-6" />,
+    icon: <Facebook className="size-6" />,
   },
   {
     id: "3",
     text: "Option 3",
-    icon: <Linkedin className="h-6 w-6" />,
+    icon: <Linkedin className="size-6" />,
   },
   {
     id: "4",
     text: "Option 4",
-    icon: <Globe className="h-6 w-6" />,
+    icon: <Globe className="size-6" />,
   },
 ]
 
@@ -140,7 +119,7 @@ const ListOptions = [
     subText: "Saves time and frustation",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -175,7 +154,7 @@ const ListOptions = [
     subText: "It's fun to work with",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -208,7 +187,7 @@ const ListOptions = [
     subText: "Your data is protected",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -251,7 +230,7 @@ const ListOptions = [
     subText: "Understand your user's behavior",
     icon: (
       <svg
-        className="h-6 w-6"
+        className="size-6"
         xmlns="http://www.w3.org/2000/svg"
         width="192"
         height="192"
@@ -312,7 +291,12 @@ function HelperInformation() {
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
-  const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
+  const themeBackgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const themeBackgroundImage = useAppSelector(
+    (state) => state?.theme?.general?.backgroundImage
+  )
 
   return (
     <>
@@ -338,7 +322,11 @@ const HoverCardComponent = ({ title, icon, children }) => {
             forceMount={true}
             style={{
               background: themeBackgroundColor,
-             }}
+              backgroundImage: themeBackgroundImage,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+            }}
             avoidCollisions
             side="left"
             sideOffset={32}
@@ -354,8 +342,8 @@ const HoverCardComponent = ({ title, icon, children }) => {
 export const UserToolbox = () => {
   const t = useTranslations("Components")
   const { connectors } = useEditor()
-  const {filledPreset, outLinePreset} = useButtonThemePresets();
-  const {outlinedPreset,underlinedPreset} = useInputThemePresets();
+  const { filledPreset, outLinePreset } = useButtonThemePresets()
+  const { outlinedPreset, underlinedPreset } = useInputThemePresets()
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -385,7 +373,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Headline"
-                    icon={<Type className="mr-2 h-3 w-3" />}
+                    icon={<Type className="mr-2 size-3" />}
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
@@ -406,7 +394,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Text"
-                    icon={<Pencil className="mr-2 h-3 w-3" />}
+                    icon={<Pencil className="mr-2 size-3" />}
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
@@ -428,18 +416,19 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(
-                      ref,
-                      <UserInput {...outlinedPreset} />
-                    )
+                    connectors.create(ref, <UserInput {...outlinedPreset} />)
                   }
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
                     title={t("Input Field")}
-                    icon={<TextCursorInput className="mr-2 h-3 w-3" />}
+                    icon={<TextCursorInput className="mr-2 size-3" />}
                   >
-                    <UserInputGen {...outlinedPreset} label={t("Label")} placeholder={t("Placeholder")} />
+                    <UserInputGen
+                      {...outlinedPreset}
+                      label={t("Label")}
+                      placeholder={t("Placeholder")}
+                    />
                   </HoverCardComponent>
                 </div>
                 <div
@@ -456,7 +445,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Picture Choice"
-                    icon={<ImagePlus className="mr-2 h-3 w-3" />}
+                    icon={<ImagePlus className="mr-2 size-3" />}
                   >
                     <div className="grid grid-cols-2 gap-2">
                       <div
@@ -468,7 +457,7 @@ export const UserToolbox = () => {
                                     hover:text-white
                         "
                       >
-                        <Target className="h-10 w-10" />
+                        <Target className="size-10" />
                         Target
                       </div>
                       <div
@@ -479,7 +468,7 @@ export const UserToolbox = () => {
                                       hover:bg-[#4050ff]
                                     hover:text-white"
                       >
-                        <Rocket className="h-10 w-10" />
+                        <Rocket className="size-10" />
                         Launch
                       </div>
                       <div
@@ -490,7 +479,7 @@ export const UserToolbox = () => {
                                       hover:bg-[#4050ff]
                                     hover:text-white"
                       >
-                        <HeartHandshake className="h-10 w-10" />
+                        <HeartHandshake className="size-10" />
                         Agree
                       </div>
                       <div
@@ -501,7 +490,7 @@ export const UserToolbox = () => {
                                       hover:bg-[#4050ff]
                                     hover:text-white"
                       >
-                        <Trophy className="h-10 w-10" />
+                        <Trophy className="size-10" />
                         Achieve
                       </div>
                     </div>
@@ -522,7 +511,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Multiple Choice"
-                    icon={<Copy className="mr-2 h-3 w-3" />}
+                    icon={<Copy className="mr-2 size-3" />}
                   >
                     <div className="flex w-full flex-col gap-2">
                       {MultipleChoiceOptions.map((option, index) => (
@@ -572,11 +561,16 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Continue Button")}
-                    icon={<Navigation className="mr-2 h-3 w-3" />}
+                    icon={<Navigation className="mr-2 size-3" />}
                   >
                     <IconButtonGen
-                    className="w-full"
-                    {...filledPreset} size="small" marginTop={0} marginBottom={0} text={t("Continue")} />
+                      className="w-full"
+                      {...filledPreset}
+                      size="small"
+                      marginTop={0}
+                      marginBottom={0}
+                      text={t("Continue")}
+                    />
                     {/* <Button className="w-full bg-[#4050ff] px-4 py-6 text-white hover:bg-[#3041ff]">
                       Get quote
                       <ArrowRight className="ml-2" />
@@ -606,7 +600,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Container"
-                    icon={<Box className="mr-2 h-3 w-3" />}
+                    icon={<Box className="mr-2 size-3" />}
                   >
                     <Box width={120} height={42} />
                   </HoverCardComponent>
@@ -623,7 +617,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Logo"
-                    icon={<Dice2 className="mr-2 h-3 w-3" />}
+                    icon={<Dice2 className="mr-2 size-3" />}
                   >
                     <Image
                       src={ConvifyLogo.src}
@@ -645,7 +639,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Logo Bar"
-                    icon={<Columns className="mr-2 h-3 w-3" />}
+                    icon={<Columns className="mr-2 size-3" />}
                   >
                     <div className="flex w-[366px] flex-row items-center justify-between border p-2">
                       <Image
@@ -690,13 +684,37 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title="Progress"
-                    icon={<CircleSlashed className="mr-2 h-3 w-3" />}
+                    icon={<CircleSlashed className="mr-2 size-3" />}
                   >
                     <div className="flex w-[360px] flex-row items-center justify-between border p-4">
                       <CustomProgressBar
                         value={50}
                         className="h-1 max-w-[366px]"
                         indicatorColor={"#4050ff"}
+                      />
+                    </div>
+                  </HoverCardComponent>
+                </div>
+
+                <div
+                  className="min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref && connectors.create(ref, <Img {...ImgDefaultProps} />)
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title={t("Image")}
+                    icon={<ImageIcon className="mr-2 size-3" />}
+                  >
+                    <div className="flex w-[360px] flex-row items-center justify-between">
+                      <Image
+                        src={ImagePlaceholder.src}
+                        alt="Image component"
+                        width={360}
+                        height={203}
+                        className="size-full"
                       />
                     </div>
                   </HoverCardComponent>

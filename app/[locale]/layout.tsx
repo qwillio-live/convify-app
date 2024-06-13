@@ -1,65 +1,117 @@
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@/components/analytics"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
+import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import localFont from "next/font/local"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
+
+const geist = localFont({
+  variable: "--font-geist",
+  src: [
+    {
+      path: "../../assets/fonts/Geist-Black.woff2",
+      weight: "900",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-UltraBlack.woff2",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-UltraLight.woff2",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/Geist-Thin.woff2",
+      weight: "100",
+      style: "normal",
+    },
+  ],
+})
+
 import {
-  fontSans,
+  anton,
+  arimo,
+  asap,
+  barlow,
+  bebas_neue,
+  bitter,
+  cabin,
+  cairo,
+  catamaran,
+  dosis,
+  exo_2,
+  fira_sans,
   fontHeading,
+  fontSans,
+  heebo,
+  ibm_plex_sans,
+  inconsolata,
   inter,
-  roboto_mono,
-  open_sans,
-  montserrat,
+  karla,
   lato,
-  oswald,
-  source_sans_pro,
-  raleway,
-  pt_sans,
+  libre_franklin,
+  lora,
   merriweather,
+  montserrat,
+  mukta,
+  noto_sans,
   nunito,
+  nunito_sans,
+  open_sans,
+  oswald,
+  overpass,
+  oxygen,
   playfair_display,
   poppins,
-  ubuntu,
-  mukta,
-  rubik,
-  work_sans,
-  roboto_condensed,
-  noto_sans,
-  fira_sans,
-  quicksand,
-  karla,
-  cabin,
-  barlow,
-  arimo,
-  teko,
-  catamaran,
-  libre_franklin,
-  oxygen,
-  heebo,
-  asap,
-  bitter,
-  ibm_plex_sans,
-  exo_2,
-  dosis,
+  pt_sans,
   pt_serif,
-  overpass,
-  varela_round,
   questrial,
-  inconsolata,
-  rokkitt,
+  quicksand,
+  raleway,
   red_hat_display,
-  cairo,
-  lora,
-  titillium_web,
-  bebas_neue,
-  anton,
-  zilla_slab,
-  nunito_sans,
-  roboto_slab,
   roboto,
+  roboto_condensed,
+  roboto_mono,
+  roboto_slab,
+  rokkitt,
+  rubik,
+  teko,
+  titillium_web,
+  ubuntu,
+  varela_round,
+  work_sans,
+  zilla_slab,
 } from "./fonts"
 
 interface RootLayoutProps {
@@ -130,11 +182,11 @@ export default function RootLayout({
           fontHeading.variable,
           inter.variable,
           roboto_mono.variable,
+          geist.variable,
           open_sans.variable,
           montserrat.variable,
           lato.variable,
           oswald.variable,
-          source_sans_pro.variable,
           raleway.variable,
           pt_sans.variable,
           merriweather.variable,
@@ -181,7 +233,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <NextIntlClientProvider locale={locale} messages={messages} >
+          <NextIntlClientProvider locale={locale} messages={messages}>
             {children}
             <Toaster richColors />
           </NextIntlClientProvider>

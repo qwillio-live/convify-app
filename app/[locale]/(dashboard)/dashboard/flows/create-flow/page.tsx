@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, Plus } from "lucide-react"
 import { signOut } from "next-auth/react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -30,6 +31,8 @@ export default function CreateFlowsPage() {
   )
   const [tab, setTab] = useState("create")
 
+  const t = useTranslations("CreateFlow")
+
   // store the current tab value
   const onTabChange = (value: string) => {
     setTab(value)
@@ -48,17 +51,21 @@ export default function CreateFlowsPage() {
 
   return (
     <div className="min-h-screen w-full">
-      <Tabs defaultValue="create" onValueChange={onTabChange}>
+      <Tabs
+        defaultValue="create"
+        onValueChange={onTabChange}
+        className="min-h-screen flex flex-col"
+      >
         <div className="sticky top-0 z-[60]">
-          <header className="flex h-14 items-center justify-between gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
-            <div className="bread-crumbs flex h-full max-h-screen flex-col items-center">
+          <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
+            <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
                 <BreadCrumbs />
               </div>
-              <div className="flex h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6">
+              <div className="h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6 hidden">
                 <div className="flex flex-row items-center justify-between py-4">
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
-                    Content
+                    {t("Content")}
                   </h4>
                   <Button size="icon" className="size-8">
                     <Plus className="size-3.5" />
@@ -66,35 +73,35 @@ export default function CreateFlowsPage() {
                 </div>
               </div>
             </div>
-            <div className="tabs-list-container flex h-full">
-              <TabsList className="flex h-full bg-inherit py-0 ">
+            <div className="tabs-list-container w-full order-last lg:order-[unset] basis-full lg:basis-auto lg:w-auto flex h-1/2 lg:h-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset]">
+              <TabsList className="flex !h-full bg-inherit lg:justify-center py-0 lg:w-auto">
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="create"
                 >
-                  Create
+                  {t("Create")}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="connect"
                 >
-                  Connect
+                  {t("Connect")}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="share"
                 >
-                  Share
+                  {t("Share")}
                 </TabsTrigger>
                 <TabsTrigger
-                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+                  className="h-full rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit flex-1 lg:flex-auto"
                   value="results"
                 >
-                  Results
+                  {t("Results")}
                 </TabsTrigger>
               </TabsList>
             </div>
-            <div className="account-settings flex flex-row items-center justify-between gap-4">
+            <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
               <Link href="/dashboard/flows/preview-flow" target="_blank">
                 <Button
                   variant="outline"
@@ -106,52 +113,54 @@ export default function CreateFlowsPage() {
               </Link>
               <div className="">
                 <Button size="sm" className="my-4 h-8 gap-1 py-2">
-                  Publish
+                  {t("Publish")}
                 </Button>
               </div>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="rounded-full w-10 h-10"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-circle-user"
+              <div className="lg:block hidden">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="rounded-full size-10"
                     >
-                      <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="10" r="3" />
-                      <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                    </svg>
-                    <span className="sr-only">Toggle user menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Support</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-circle-user"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="10" r="3" />
+                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                      </svg>
+                      <span className="sr-only">Toggle user menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
+                    <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      {t("Logout")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </header>
         </div>
         <main
-          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] ${
+          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full${
             tab === "results" ? "" : tab === "share" ? "" : "px-4 lg:px-6"
           }`}
         >
@@ -171,19 +180,19 @@ export default function CreateFlowsPage() {
                       href="#"
                       className="flex-0 border-b border-solid border-b-[rgba(0,0,0,0.07)] bg-[rgb(227,227,227)] px-4 py-2 font-medium leading-8 text-[rgb(38,38,39)] no-underline transition-[background]  delay-0 duration-200 ease-in hover:bg-[rgb(240,240,240)]"
                     >
-                      Share the link
+                      {t("Share the link")}
                     </Link>
                     <div
                       onClick={() => setIsCustomLinkOpen(true)}
                       className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background]  delay-0 duration-200  ease-in hover:bg-[rgb(240,240,240)]"
                     >
-                      Embed in an email
+                      {t("Embed in an email")}
                     </div>
                     <div
                       onClick={() => setIsCustomLinkOpen(true)}
                       className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background] delay-0 duration-200   ease-in hover:bg-[rgb(240,240,240)]"
                     >
-                      Embed in a webpage
+                      {t("Embed in a webpage")}
                     </div>
                   </nav>
 
@@ -196,11 +205,11 @@ export default function CreateFlowsPage() {
                   <div className="max-h-[4.75rem] min-w-0 pb-6">
                     <div className="flex max-h-[3.25rem] items-center rounded-[8px] bg-[rgb(255,250,235)] p-4 text-[rgb(100,82,22)]">
                       <span className="block w-full text-sm text-[rgb(100,82,22)]">
-                        ⚠️ This typeform is not published yet.{" "}
+                        ⚠️ {t("This typeform is not published yet.")}{" "}
                         <Link className="underline" href="#">
-                          Click here to publish the latest version
+                          {t("Click here to publish the latest version")}
                         </Link>{" "}
-                        before you share your typeform.
+                        {t("before you share your typeform.")}
                       </span>
                     </div>
                   </div>
@@ -230,7 +239,7 @@ export default function CreateFlowsPage() {
                             onClick={() => navigator.clipboard.writeText(link)}
                             className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)] "
                           >
-                            Copy link
+                            {t("Copy link")}
                           </button>
                         </div>
                         <button
@@ -239,7 +248,7 @@ export default function CreateFlowsPage() {
                           color="description"
                           className="relative m-0 inline-block cursor-pointer border-none p-0 text-[rgb(115,115,115)] underline outline-none"
                         >
-                          Customize link
+                          {t("Customize link")}
                         </button>
                       </div>
                       {/* socials */}
@@ -281,8 +290,8 @@ export default function CreateFlowsPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M1.7778 0.888916C1.28689 0.888916 0.888916 1.28689 0.888916 1.7778V14.2222C0.888916 14.7132 1.28689 15.1111 1.7778 15.1111H14.2222C14.7132 15.1111 15.1111 14.7132 15.1111 14.2222V1.7778C15.1111 1.28689 14.7132 0.888916 14.2222 0.888916H1.7778ZM8.22149 6.30691H6.30691V13.0794H8.33865V9.82657C8.33865 8.6915 8.82559 8.00003 9.84688 8.00003C10.688 8.00003 11.0476 8.79038 11.0476 9.69112V13.0794H13.0794V9.32066C13.0794 7.30856 12.5085 6.22225 10.4625 6.22225C9.39652 6.22225 8.53438 6.7566 8.24248 7.28282H8.22149V6.30691ZM4.95241 13.0794H2.92066V6.30691H4.95241V13.0794ZM3.93653 5.20638C4.63816 5.20638 5.20638 4.63816 5.20638 3.93653C5.20638 3.23491 4.63816 2.66669 3.93653 2.66669C3.23491 2.66669 2.66669 3.23491 2.66669 3.93653C2.66669 4.63816 3.23491 5.20638 3.93653 5.20638Z"
                                   fill="currentColor"
                                 ></path>
@@ -303,8 +312,8 @@ export default function CreateFlowsPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16ZM6.536 12.22C10.084 12.22 12.024 9.28 12.024 6.732C12.024 6.64801 12.024 6.56398 12.02 6.484C12.396 6.212 12.724 5.872 12.984 5.484C12.64 5.636 12.268 5.74 11.876 5.788C12.276 5.548 12.58 5.172 12.724 4.72C12.352 4.94 11.94 5.1 11.5 5.188C11.148 4.812 10.648 4.58 10.092 4.58C9.028 4.58 8.164 5.444 8.164 6.508C8.164 6.66 8.18 6.808 8.216 6.948C6.612 6.868 5.192 6.1 4.24 4.932C4.076 5.216 3.98 5.548 3.98 5.9C3.98 6.568 4.32 7.16 4.84 7.504C4.524 7.496 4.228 7.408 3.968 7.264V7.288C3.968 8.224 4.632 9 5.516 9.18C5.356 9.224 5.184 9.248 5.008 9.248C4.884 9.248 4.764 9.236 4.644 9.212C4.888 9.98 5.6 10.536 6.444 10.552C5.784 11.068 4.952 11.376 4.048 11.376C3.892 11.376 3.74 11.368 3.588 11.348C4.432 11.9 5.448 12.22 6.536 12.22Z"
                                   fill="currentColor"
                                 ></path>
@@ -383,7 +392,7 @@ export default function CreateFlowsPage() {
                                   fill="currentColor"
                                 ></path>
                               </svg>
-                              Email link
+                              {t("Email link")}
                             </a>
                             <button
                               aria-label="qr code"
@@ -397,14 +406,14 @@ export default function CreateFlowsPage() {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M0.777832 6.11117V0.777832H6.11117V6.11117H0.777832ZM2.55561 2.55561H4.33339V4.33339H2.55561V2.55561Z"
                                   fill="currentColor"
                                 ></path>
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M7.88894 6.11117V0.777832H13.2223V6.11117H7.88894ZM9.66672 2.55561H11.4445V4.33339H9.66672V2.55561Z"
                                   fill="currentColor"
                                 ></path>
@@ -421,13 +430,13 @@ export default function CreateFlowsPage() {
                                   fill="currentColor"
                                 ></path>
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M0.777832 13.2223V7.88894H6.11117V13.2223H0.777832ZM2.55561 9.66672H4.33339V11.4445H2.55561V9.66672Z"
                                   fill="currentColor"
                                 ></path>
                               </svg>
-                              QR Code
+                              {t("QR Code")}
                             </button>
                           </div>
                         </div>
@@ -473,7 +482,7 @@ export default function CreateFlowsPage() {
                               </defs>
                             </svg>
                             <span className="flex-[0_0_auto]">
-                              Publish your typeform to preview it here
+                              {t("Publish your typeform to preview it here")}
                             </span>
                           </div>
                         </div>
@@ -481,8 +490,12 @@ export default function CreateFlowsPage() {
                       <div className="relative mt-5  flex w-full items-end justify-center">
                         <Tabs defaultValue="desktop" className="w-[200px]">
                           <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="desktop">Desktop</TabsTrigger>{" "}
-                            <TabsTrigger value="mobile">Mobile</TabsTrigger>{" "}
+                            <TabsTrigger value="desktop">
+                              {t("Desktop")}
+                            </TabsTrigger>{" "}
+                            <TabsTrigger value="mobile">
+                              {t("Mobile")}
+                            </TabsTrigger>{" "}
                           </TabsList>
                         </Tabs>
                       </div>
@@ -508,10 +521,10 @@ export default function CreateFlowsPage() {
                 viewBox="0 0 8 12"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <g fill-rule="evenodd">
+                <g fillRule="evenodd">
                   <path
                     d="M0 5h2v.088H0V5zm0-1.25C0 1.494 1.626 0 4 0c2.377 0 4 1.488 4 3.75 0 1.462-.636 2.323-1.885 3.164l-.44.29c-.33.221-.482.355-.54.455C5.068 7.774 4.999 8.25 5 9l-2 .003c-.002-1.083.108-1.835.405-2.347.255-.439.59-.732 1.158-1.113l.435-.287C5.75 4.748 6 4.41 6 3.75 6 2.633 5.309 2 4 2c-1.305 0-2 .638-2 1.75v1.338H0V3.75z"
-                    fill-rule="nonzero"
+                    fillRule="nonzero"
                   ></path>
                   <path d="M3 10h2v2H3z"></path>
                 </g>
@@ -526,30 +539,32 @@ export default function CreateFlowsPage() {
             <div className="z-[1] flex w-[512px] flex-col items-center p-8">
               <div className="min-h-0 min-w-0 shrink-0 pb-6">
                 <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
-                  CUSTOM LINK
+                  {t("CUSTOM LINK")}
                 </span>
               </div>
               <div className="min-h-0 min-w-0 shrink-0 pb-2">
                 <span className="block text-center text-4xl font-light">
-                  Create a custom link
+                  {t("Create a custom link")}
                 </span>
               </div>
               <div className="min-h-0 min-w-0 shrink-0">
                 <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                  Edit the link and let people know what your typeform is about.
+                  {t(
+                    "Edit the link and let people know what your typeform is about."
+                  )}
                 </span>
               </div>
               <div className="mb-10"></div>
               <div className="min-h-0 min-w-0 shrink-0 pb-6">
                 <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
-                  Available on these plans: Plus, Business, Enterprise
+                  {t("Available on these plans: Plus, Business, Enterprise")}
                 </span>
               </div>
               <div className="flex size-full items-center justify-center">
                 <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
                   <div className="flex">
                     <span className="block flex-[0_0_auto]">
-                      Upgrade my plan
+                      {t("Upgrade my plan")}
                     </span>
                   </div>
                 </button>
@@ -576,8 +591,8 @@ export default function CreateFlowsPage() {
                   fill="#000000"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
                   />
                 </svg>

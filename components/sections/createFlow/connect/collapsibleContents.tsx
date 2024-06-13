@@ -1,12 +1,14 @@
 "use client"
 
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react"
 import { LocalIcons } from "@/public/icons"
 import { TIntegrationCardData } from "@/types"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { useState } from "react"
+import { useTranslations } from "next-intl"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Icons } from "@/components/icons"
 
 type HandleStatusUpdateFunction = (newStatus: string) => void
 
@@ -17,10 +19,65 @@ interface ContentProps {
 
 export const EmailContent: React.FC<ContentProps> = ({
   handleStatusUpdate,
+  status,
 }) => {
+  const [email, setEmail] = useState<string>("user@email.com")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const t = useTranslations("CreateFlow.ConnectPage")
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
+  }
+
+  const handleClick = () => {
+    if (status === "active") {
+      handleStatusUpdate("inactive")
+      setEmail("")
+    } else {
+      handleStatusUpdate("active")
+    }
+  }
+
   return (
     <div className="border-t border-solid border-gray-200 p-5">
-      EmailContent
+      <div className="">
+        <Input
+          placeholder="user@email.com"
+          id="email"
+          onChange={handleInputChange}
+          value={email}
+        />
+      </div>
+      <p className="mt-0.5 mb-4 text-xs text-gray-600">
+        {t("Email address to which the response is sent")}
+      </p>
+      <div className="flex w-full justify-between">
+        <AccordionPrimitive.Trigger>
+          <Button variant="secondary">{t("Close")}</Button>
+        </AccordionPrimitive.Trigger>
+        <div>
+          {status !== "active" ? (
+            <Button disabled={!email.trim() || isLoading} onClick={handleClick}>
+              {isLoading && (
+                <Icons.spinner className="mr-2 size-4 animate-spin" />
+              )}
+              {t("Connect")}
+            </Button>
+          ) : (
+            <div className="flex gap-1.5">
+              <Button
+                variant="ghost"
+                className="text-red-500 hover:bg-red-100 hover:text-red-500"
+                onClick={handleClick}
+              >
+                {t("Disconnect")}
+              </Button>
+              <Button>{t("Save changes")}</Button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -31,6 +88,8 @@ export const GAnalytics: React.FC<ContentProps> = ({
 }) => {
   const [measurementId, setMeasurementId] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const t = useTranslations("CreateFlow.ConnectPage")
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMeasurementId(event.target.value)
@@ -49,14 +108,15 @@ export const GAnalytics: React.FC<ContentProps> = ({
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
         <p className="mb-4 text-sm text-gray-800">
-          Changes to the Google Analytics 4 integration will only become active
-          after re-publishing.
+          {t(
+            "Changes to the Google Analytics 4 integration will only become active after re-publishing"
+          )}
         </p>
         <div className="mb-4">
           <div className="input-container css-1ee99c9 e1veqj306">
             <div className="">
               <label className="text-black" htmlFor="measurement-id">
-                Measurement ID
+                {t("Measurement ID")}
               </label>
               <Input
                 placeholder="G-XXXXXXXXXX"
@@ -66,13 +126,13 @@ export const GAnalytics: React.FC<ContentProps> = ({
               />
             </div>
             <p className="mt-0.5 text-xs text-gray-600">
-              Copy and paste your Google Analytics 4 Measurement ID here.
+              {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary">Close</Button>
+            <Button variant="secondary">{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
@@ -83,7 +143,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 {isLoading && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
-                Connect
+                {t("Connect")}
               </Button>
             ) : (
               <div className="flex gap-1.5">
@@ -92,9 +152,9 @@ export const GAnalytics: React.FC<ContentProps> = ({
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={handleClick}
                 >
-                  Disconnect
+                  {t("Disconnect")}
                 </Button>
-                <Button>Save changes</Button>
+                <Button>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -110,6 +170,8 @@ export const GTagManager: React.FC<ContentProps> = ({
 }) => {
   const [containerId, setContainerId] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const t = useTranslations("CreateFlow.ConnectPage")
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContainerId(event.target.value)
@@ -128,14 +190,15 @@ export const GTagManager: React.FC<ContentProps> = ({
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
         <p className="mb-4 text-sm text-gray-800">
-          Changes to the Google Tag Manager integration will only become active
-          after re-publishing.
+          {t(
+            "Changes to the Google Tag Manager integration will only become active after re-publishing"
+          )}
         </p>
         <div className="mb-4">
           <div className="input-container css-1ee99c9 e1veqj306">
             <div className="">
               <label className="text-black" htmlFor="container-id">
-                Container ID
+                {t("Container ID")}
               </label>
               <Input
                 placeholder="GTM-XXXXXX"
@@ -145,13 +208,13 @@ export const GTagManager: React.FC<ContentProps> = ({
               />
             </div>
             <p className="mt-0.5 text-xs text-gray-600">
-              Copy and paste your Google Analytics 4 Measurement ID here.
+              {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary">Close</Button>
+            <Button variant="secondary">{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
@@ -162,7 +225,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 {isLoading && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
-                Connect
+                {t("Connect")}
               </Button>
             ) : (
               <div className="flex gap-1.5">
@@ -171,9 +234,9 @@ export const GTagManager: React.FC<ContentProps> = ({
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={handleClick}
                 >
-                  Disconnect
+                  {t("Disconnect")}
                 </Button>
-                <Button>Save changes</Button>
+                <Button>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -190,6 +253,8 @@ export const MetaPixel: React.FC<ContentProps> = ({
   const [pixelId, setpixelId] = useState<string>("")
   const [eventName, setEventName] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const t = useTranslations("CreateFlow.ConnectPage")
 
   const handlePixelId = (event: React.ChangeEvent<HTMLInputElement>) => {
     setpixelId(event.target.value)
@@ -213,14 +278,15 @@ export const MetaPixel: React.FC<ContentProps> = ({
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
         <p className="mb-4 text-sm text-gray-800">
-          Changes to the Meta Pixel integration will only become active after
-          re-publishing.
+          {t(
+            "Changes to the Meta Pixel integration will only become active after re-publishing"
+          )}
         </p>
         <div className="mb-4">
           <div className="input-container css-1ee99c9 e1veqj306">
             <div className="mb-4">
               <label className="text-black" htmlFor="pixel-id">
-                Pixel ID
+                {t("Pixel ID")}
               </label>
               <Input
                 placeholder="124970192730929"
@@ -231,7 +297,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
             </div>
             <div className="">
               <label className="text-black" htmlFor="event">
-                Submit Event
+                {t("Submit Event")}
               </label>
               <Input
                 placeholder="CompleteRegistration"
@@ -241,13 +307,13 @@ export const MetaPixel: React.FC<ContentProps> = ({
               />
             </div>
             <p className="mt-0.5 text-xs text-gray-600">
-              Copy and paste your Google Analytics 4 Measurement ID here.
+              {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary">Close</Button>
+            <Button variant="secondary">{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
@@ -258,7 +324,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 {isLoading && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
-                Connect
+                {t("Connect")}
               </Button>
             ) : (
               <div className="flex gap-1.5">
@@ -267,9 +333,9 @@ export const MetaPixel: React.FC<ContentProps> = ({
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={handleClick}
                 >
-                  Disconnect
+                  {t("Disconnect")}
                 </Button>
-                <Button>Save changes</Button>
+                <Button>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -283,7 +349,7 @@ export const DummyIntregationCardData: TIntegrationCardData[] = [
   {
     id: 1,
     title: "Email",
-    description: "Recive an email every time a user submit their answer",
+    description: "email des",
     image: LocalIcons.email,
     status: "active",
     alt: "intregation option",
@@ -292,8 +358,7 @@ export const DummyIntregationCardData: TIntegrationCardData[] = [
   {
     id: 2,
     title: "Google Analytics 4",
-    description:
-      "Discover how respondents find and interact with your heyflow. Get the data you need to measure ad campaigns, improve your conversion rate, and more.",
+    description: "google analytics des",
     image: LocalIcons.googleAnalytics,
     status: "inactive",
     alt: "google analytics 4",
@@ -302,8 +367,7 @@ export const DummyIntregationCardData: TIntegrationCardData[] = [
   {
     id: 3,
     title: "Google Tag Manager",
-    description:
-      "Get even more analytics features for most ambitious data mining demands.",
+    description: "google tag manager des",
     image: LocalIcons.googleTagManager,
     status: "inactive",
     alt: "google tag manager",
@@ -312,8 +376,7 @@ export const DummyIntregationCardData: TIntegrationCardData[] = [
   {
     id: 4,
     title: "Meta Pixel",
-    description:
-      "The Meta pixel helps you measure customer actions, build audiences and unlock optimization tools.",
+    description: "meta pixel des",
     image: LocalIcons.metaPixel,
     status: "inactive",
     alt: "meta pixel",

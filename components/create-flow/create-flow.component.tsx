@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react"
 import {
   ArrowRight,
   Check,
@@ -10,14 +9,12 @@ import {
   Globe,
   Image,
   Linkedin,
-  PlusCircle,
 } from "lucide-react"
+import React from "react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import {
-  addScreen,
-  setEditorLoad,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 // import { ProgressBar } from "../progress-bar.component"
@@ -39,6 +36,7 @@ import {
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
 import { List, ListItem } from "../user/list/list.component"
@@ -56,8 +54,6 @@ import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
-import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -97,6 +93,10 @@ const NodesToSerializedNodes = (nodes) => {
 export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch()
+
+  const backgroundImage = useAppSelector(
+    (state) => state?.theme?.general?.backgroundImage
+  )
 
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
@@ -177,6 +177,7 @@ export function CreateFlowComponent() {
           Loader,
           List,
           ListItem,
+          Img,
         }}
         onRender={RenderNode}
       >
@@ -198,7 +199,13 @@ export function CreateFlowComponent() {
                 }}
               >
                 <TabsContent
-                  style={{ backgroundColor: backgroundColor }}
+                  style={{
+                    backgroundColor: backgroundColor,
+                    backgroundImage: backgroundImage,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
                     footerMode ? "flex justify-center items-end" : "",
@@ -222,7 +229,7 @@ export function CreateFlowComponent() {
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
-                  <TabsTrigger  value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
+                  <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>
               </Tabs>
 

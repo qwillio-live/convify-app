@@ -6,12 +6,12 @@ WORKDIR /usr/src/convify-app
 
 # install app dependencies
 # Copy package.json and pnpm-lock.yaml to the working directory
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml yarn.lock ./
 # Install pnpm globally
-RUN npm install -g pnpm
+# RUN npm install -g yarn
 
 # Install application dependencies
-RUN pnpm install
+RUN yarn install
 
 #RUN npm install --force
 
@@ -19,13 +19,13 @@ RUN pnpm install
 COPY . .
 
 #RUN NODE_OPTIONS=--max_old_space_size=1024 npm run build
-RUN NODE_OPTIONS=--max_old_space_size=1024 pnpm run postinstall
+RUN NODE_OPTIONS=--max_old_space_size=1024 yarn run postinstall
 
 
 # Build the Next.js application
-RUN pnpm run build
+RUN yarn run build
 
 EXPOSE 3000
 
 # start app
-CMD [ "pnpm", "start" ]
+CMD [ "yarn", "start" ]

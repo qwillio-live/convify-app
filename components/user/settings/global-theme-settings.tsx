@@ -1,12 +1,17 @@
-import { throttle,debounce } from 'lodash';
-import { FONTS } from "@/lib/state/flows-state/features/theme/fonts"
+import { useCallback, useEffect, useState } from "react"
+import { debounce, throttle } from "lodash"
+import { useTranslations } from "next-intl"
+
+import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import ImageUpload from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -16,15 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { applyThemeBackgroundAndCycleScreens } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
-import { useTranslations } from "next-intl";
-import { rollScreens } from "@/lib/state/flows-state/features/placeholderScreensSlice";
-import { RootState } from "@/lib/state/flows-state/store";
-import { delay } from "redux-saga/effects";
-import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { useCallback, useEffect, useState } from "react"
-import { FontSelector } from "./font-selector.component"
 
+import { FontSelector } from "./font-selector.component"
 
 type Props = {}
 
@@ -33,7 +31,10 @@ export const GlobalThemeSettings = (props: Props) => {
   const [secondaryOpen, setSecondaryOpen] = useState(false)
 
   const dispatch = useAppDispatch()
-  const t = useTranslations("Components");
+
+  const t = useTranslations("Components")
+
+  const [image, setImage] = useState<string>("")
 
   /** GENERAL STYLES */
   const primaryColor = useAppSelector(
@@ -51,6 +52,9 @@ export const GlobalThemeSettings = (props: Props) => {
   const backgroundColor = useAppSelector(
     (state) => state.theme?.general?.backgroundColor
   )
+  const backgroundImage = useAppSelector(
+    (state) => state.theme?.general?.backgroundImage
+  )
   const defaultBackgroundColor = useAppSelector(
     (state) => state.theme?.defaultGeneral?.backgroundColor
   )
@@ -65,12 +69,22 @@ export const GlobalThemeSettings = (props: Props) => {
   const secondaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
-  const defaultSecondaryFont = useAppSelector((state) => state.theme?.defaultText?.secondaryFont)
-  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
-  const defaultPrimaryTextColor = useAppSelector((state) => state.theme?.defaultText?.primaryColor);
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
-  const defaultSecondaryTextColor = useAppSelector((state) => state.theme?.defaultText?.secondaryColor);
-  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
+  const defaultSecondaryFont = useAppSelector(
+    (state) => state.theme?.defaultText?.secondaryFont
+  )
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
+  const defaultPrimaryTextColor = useAppSelector(
+    (state) => state.theme?.defaultText?.primaryColor
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
+  const defaultSecondaryTextColor = useAppSelector(
+    (state) => state.theme?.defaultText?.secondaryColor
+  )
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
 
   const handleApplyTheme = (themeStyles) => {
     dispatch({ type: "APPLY_THEME_AND_CYCLE_SCREENS", payload: themeStyles })
@@ -83,6 +97,7 @@ export const GlobalThemeSettings = (props: Props) => {
 
     dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }))
   }
+
   const throttledDispatch = useCallback(
     throttle((value) => {
       dispatch(setPartialStyles(value))
@@ -99,16 +114,32 @@ export const GlobalThemeSettings = (props: Props) => {
   }, [primaryFonts])
 
   const debouncedDispatch = useCallback(
-    debounce((value) => {
-      dispatch(setPartialStyles(value));
-    }, 200,{
-      maxWait: 400,
-    } ), // Throttle to 200ms
+    debounce(
+      (value) => {
+        dispatch(setPartialStyles(value))
+      },
+      200,
+      {
+        maxWait: 400,
+      }
+    ), // Throttle to 200ms
     [dispatch]
-  );
+  )
 
   const handleStyleChangeDebounced = (style) => {
-    debouncedDispatch(style);
+    debouncedDispatch(style)
+  }
+
+  const handleUploadComplete = (url: string) => {
+    handleStyleChangeDebounced({
+      general: { backgroundImage: `url(${url})` },
+    })
+  }
+
+  const removeSelectedImage = () => {
+    handleStyleChangeDebounced({
+      general: { backgroundImage: `` },
+    })
   }
   // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   // const hanldeScreenRolling =async () => {
@@ -121,10 +152,7 @@ export const GlobalThemeSettings = (props: Props) => {
   return (
     <>
       <ScrollArea>
-        <Accordion type="multiple"
-        defaultValue={["item-1"]}
-        className="w-full">
-
+        <Accordion type="multiple" defaultValue={["item-1"]} className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
               <span className="text-sm font-medium">{t("General")} </span>
@@ -142,7 +170,9 @@ export const GlobalThemeSettings = (props: Props) => {
                   onChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
-                    handleStyleChangeDebounced({general: { primaryColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      general: { primaryColor: e.target.value },
+                    })
                   }}
                   className=" basis-1/3"
                   type={"color"}
@@ -161,12 +191,14 @@ export const GlobalThemeSettings = (props: Props) => {
                   value={secondaryColor || defaultSecondaryColor}
                   onChange={(e) => {
                     // handleStyleChange({general: { secondaryColor: e.target.value}})
-                    handleStyleChangeDebounced({general: { secondaryColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      general: { secondaryColor: e.target.value },
+                    })
                   }}
-                    className=" basis-1/3"
-                    type={"color"}
-                    id="secondarycolor"
-                  />
+                  className=" basis-1/3"
+                  type={"color"}
+                  id="secondarycolor"
+                />
               </div>
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
@@ -180,7 +212,9 @@ export const GlobalThemeSettings = (props: Props) => {
                   value={backgroundColor || defaultBackgroundColor}
                   onChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
-                    handleStyleChangeDebounced({general: { backgroundColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      general: { backgroundColor: e.target.value },
+                    })
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className=" basis-1/3"
@@ -196,7 +230,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 >
                   {t("Background Image")}
                 </label>
-                <Input
+                {/* <Input
                   onChange={handleFileChange}
                   multiple={false}
                   className="basis-full"
@@ -204,6 +238,11 @@ export const GlobalThemeSettings = (props: Props) => {
                   placeholder="Upload Image"
                   accept="image/*"
                   id="backgroundimage"
+                /> */}
+                <ImageUpload
+                  onUploadComplete={handleUploadComplete}
+                  backgroundImage={backgroundImage}
+                  removeSelectedImage={removeSelectedImage}
                 />
               </div>
             </AccordionContent>
@@ -226,8 +265,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   onValueChange={(value) => {
                     handleStyleChange({ text: { primaryFont: value } })
                     // handleApplyTheme({text: { primaryFont: value}})
-                  }
-                  }
+                  }}
                 >
                   <SelectTrigger className="basis-full self-start">
                     <SelectValue placeholder="Primary font" />
@@ -256,8 +294,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   onValueChange={(value) => {
                     handleStyleChange({ text: { secondaryFont: value } })
                     // handleApplyTheme({text: { secondaryFont: value}})
-                  }
-                  }
+                  }}
                 >
                   <SelectTrigger className="basis-full self-start">
                     <SelectValue placeholder="Secondary font" />
@@ -306,15 +343,16 @@ export const GlobalThemeSettings = (props: Props) => {
                 </label>
                 <Input
                   value={primaryTextColor || defaultPrimaryTextColor}
-                  onChange={(e) =>
-                    {
-                      handleStyleChangeDebounced({text: { primaryColor: e.target.value}})
-                      // handleApplyTheme({text: { primaryColor: e.target.value}})
-                    }}
-                    className=" basis-1/3"
-                    type={"color"}
-                    id="primarytextcolor"
-                  />
+                  onChange={(e) => {
+                    handleStyleChangeDebounced({
+                      text: { primaryColor: e.target.value },
+                    })
+                    // handleApplyTheme({text: { primaryColor: e.target.value}})
+                  }}
+                  className=" basis-1/3"
+                  type={"color"}
+                  id="primarytextcolor"
+                />
               </div>
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
@@ -327,10 +365,11 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Input
                   value={secondaryTextColor || defaultSecondaryTextColor}
                   onChange={(e) => {
-                    handleStyleChangeDebounced({text: { secondaryColor: e.target.value}})
+                    handleStyleChangeDebounced({
+                      text: { secondaryColor: e.target.value },
+                    })
                     // handleApplyTheme({text: { secondaryColor: e.target.value}})
-                    }
-                  }
+                  }}
                   className=" basis-1/3"
                   type={"color"}
                   id="secondarytextcolor"

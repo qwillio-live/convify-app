@@ -1,6 +1,7 @@
 // import EmptyResponse from "@/components/sections/createFlow/empty/Empty"
 
 import { ArrowDown, Check } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Card } from "@/components/ui/card"
 import {
@@ -13,26 +14,42 @@ import {
 } from "@/components/ui/table"
 
 const ResponseFlowComponents = () => {
+  const t = useTranslations("CreateFlow.ResultsPage")
+
   return (
-    <div className="min-w-screen-md flex-1 items-center justify-center overflow-y-hidden mx-auto p-4 lg:px-8 lg:py-4">
+    <div className="min-w-screen-md flex-1 items-center justify-center overflow-y-hidden mx-auto py-4 px-0 lg:px-8 lg:py-4">
       <Card>
         <Table className="text-xs">
           <TableHeader>
             <TableRow>
               <TableHead className="flex gap-0.5 items-center whitespace-nowrap">
-                Submission time <ArrowDown className="w-4 h-4" />
+                {t("Submission time")} <ArrowDown className="w-4 h-4" />
               </TableHead>
-              <TableHead className="whitespace-nowrap">Label</TableHead>
-              <TableHead className="whitespace-nowrap">Yes/No</TableHead>
-              <TableHead className="whitespace-nowrap">Social Media</TableHead>
-              <TableHead className="whitespace-nowrap">Workers</TableHead>
-              <TableHead className="whitespace-nowrap">First name</TableHead>
-              <TableHead className="whitespace-nowrap">Last name</TableHead>
-              <TableHead className="whitespace-nowrap">Compnay name</TableHead>
-              <TableHead className="whitespace-nowrap">Email address</TableHead>
-              <TableHead className="whitespace-nowrap">Phone number</TableHead>
+              <TableHead className="whitespace-nowrap">{t("Label")}</TableHead>
+              <TableHead className="whitespace-nowrap">{t("Yes/No")}</TableHead>
               <TableHead className="whitespace-nowrap">
-                User aggrement
+                {t("Social Media")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("Workers")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("First name")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("Last name")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("Compnay name")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("Email address")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("Phone number")}
+              </TableHead>
+              <TableHead className="whitespace-nowrap">
+                {t("User aggrement")}
               </TableHead>
             </TableRow>
           </TableHeader>

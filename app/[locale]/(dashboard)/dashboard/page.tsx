@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation"
 import {
   Bell,
   ChevronDown,
+  FolderOpen,
   Home,
   LineChart,
-  Menu,
   Package,
   Package2,
   Plus,
@@ -47,8 +47,6 @@ export default function DashboardPage() {
   const router = useRouter()
   const t = useTranslations("Dashboard")
 
-  console.log(userData)
-
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
@@ -73,7 +71,7 @@ export default function DashboardPage() {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <svg
-                className="w-7 h-7"
+                className="size-7"
                 viewBox="0 0 720 524"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -132,8 +130,8 @@ export default function DashboardPage() {
               </svg>
               <span className="">Convify</span>
             </Link>
-            <Button variant="outline" size="icon" className="ml-auto w-8 h-8">
-              <Bell className="w-4 h-4" />
+            <Button variant="outline" size="icon" className="ml-auto size-8">
+              <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
@@ -141,10 +139,10 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 w-4 h-4 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="search"
-                    placeholder="Find workspace or flow"
+                    placeholder={t("Find workspace or flow")}
                     className="w-full appearance-none bg-background pl-8 shadow-none "
                   />
                 </div>
@@ -153,7 +151,7 @@ export default function DashboardPage() {
               <div className="flex items-center gap-3 rounded-lg px-3 py-2 uppercase text-muted-foreground">
                 <ChevronDown className="size-4" />
                 {/* <User className="h-4 w-4" /> */}
-                Private
+                {t("Private")}
               </div>
 
               {/* <Link
@@ -171,8 +169,9 @@ export default function DashboardPage() {
                 // href="/dashboard/flows"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:cursor-pointer hover:text-primary"
               >
-                <Package className="size-4" />
-                My workspace{" "}
+                {/* <Package className="size-4" /> */}
+                <FolderOpen className="size-4" />
+                {t("My workspace")}{" "}
                 <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full bg-transparent text-black hover:bg-transparent hover:text-black">
                   1
                 </Badge>
@@ -201,11 +200,63 @@ export default function DashboardPage() {
             <Sheet>
               <SheetTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="link"
                   size="icon"
-                  className="shrink-0 md:hidden"
+                  className="shrink-0 md:hidden w-auto px-2"
                 >
-                  <Menu className="size-5" />
+                  <svg
+                    width="25"
+                    viewBox="0 0 22 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-7"
+                  >
+                    <mask
+                      id="mask0_2486_36154"
+                      style={{ maskType: "alpha" }}
+                      maskUnits="userSpaceOnUse"
+                      x="0"
+                      y="0"
+                      width="22"
+                      height="12"
+                    >
+                      <rect width="22" height="12" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_2486_36154)">
+                      <path
+                        d="M2 14L7 6L2 -2"
+                        stroke="white"
+                        stroke-width="4"
+                      />
+                      <path
+                        d="M2 14L7 6L2 -2"
+                        stroke="black"
+                        stroke-width="4"
+                      />
+                      <path
+                        d="M8 14L13 6L8 -2"
+                        stroke="white"
+                        stroke-width="4"
+                      />
+                      <path
+                        d="M8 14L13 6L8 -2"
+                        stroke="black"
+                        stroke-opacity="0.6"
+                        stroke-width="4"
+                      />
+                      <path
+                        d="M14 14L19 6L14 -2"
+                        stroke="white"
+                        stroke-width="4"
+                      />
+                      <path
+                        d="M14 14L19 6L14 -2"
+                        stroke="black"
+                        stroke-opacity="0.2"
+                        stroke-width="4"
+                      />
+                    </g>
+                  </svg>
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
@@ -223,14 +274,14 @@ export default function DashboardPage() {
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <Home className="size-5" />
-                    Dashboard
+                    {t("Dashboard")}
                   </Link>
                   <Link
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
                   >
                     <ShoppingCart className="size-5" />
-                    Orders
+                    {t("Orders")}
                     <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
                       6
                     </Badge>
@@ -240,21 +291,21 @@ export default function DashboardPage() {
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <Package className="size-5" />
-                    Products
+                    {t("Products")}
                   </Link>
                   <Link
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <Users className="size-5" />
-                    Customers
+                    {t("Customers")}
                   </Link>
                   <Link
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <LineChart className="size-5" />
-                    Analytics
+                    {t("Analytics")}
                   </Link>
                 </nav>
               </SheetContent>
@@ -276,10 +327,14 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex w-10 h-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec]"
+                  className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
                 >
-                  {userData && userData?.name ? (
-                    userData?.name?.charAt(0).toUpperCase()
+                  {userData ? (
+                    userData?.name ? (
+                      userData?.name?.charAt(0).toUpperCase()
+                    ) : (
+                      userData?.email?.charAt(0)
+                    )
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -302,13 +357,13 @@ export default function DashboardPage() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
-                  Logout
+                  {t("Logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -317,7 +372,9 @@ export default function DashboardPage() {
 
         <main className="flex flex-1 flex-col p-4 lg:p-6">
           <div className="mb-4 flex items-center">
-            <h1 className="text-lg font-semibold md:text-lg">My workspace</h1>
+            <h1 className="text-lg font-semibold md:text-lg">
+              {t("My workspace")}
+            </h1>
           </div>
           <div
             className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
@@ -338,14 +395,18 @@ export default function DashboardPage() {
                   {t("There's not a flow in sight")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Click on &quot;Create new flow&quot; or use one of flow <br />{" "}
-                  suggestions above to get started
+                  {t.rich(
+                    "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
+                    {
+                      br: () => <br />,
+                    }
+                  )}
                 </p>
                 <Button
                   className="itmes-center mt-4 flex gap-2"
                   onClick={handleOpenCreateFlow}
                 >
-                  <Plus size={16} /> Create new flow
+                  <Plus size={16} /> {t("Create new flow")}
                 </Button>
               </div>
             )}

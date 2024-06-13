@@ -7,7 +7,6 @@ import {
   Montserrat,
   Lato,
   Oswald,
-  Source_Sans_Pro,
   Raleway,
   PT_Sans,
   Merriweather,
@@ -96,13 +95,6 @@ export const oswald = Oswald({
   subsets: ["latin"],
   variable: "--font-oswald",
   display: "swap",
-})
-
-export const source_sans_pro = Source_Sans_Pro({
-  subsets: ["latin"],
-  variable: "--font-source-sans-pro",
-  display: "swap",
-  weight: "400",
 })
 
 export const raleway = Raleway({
