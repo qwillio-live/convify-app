@@ -1,5 +1,6 @@
 import { Element, useNode } from '@/lib/craftjs';
 import { useAppSelector } from '@/lib/state/flows-state/hooks';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -327,7 +328,7 @@ export const Card = ({ children, ...props }) => {
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-
+  const t = useTranslations("Components")
   return (
 
     <CardContainer
@@ -338,7 +339,7 @@ export const Card = ({ children, ...props }) => {
       onMouseLeave={() => setHovered(false)}
       style={{ minWidth: "100%", height: "100%" }}
     >
-      {hovered && <Controller nameOfComponent={"Container"} />}
+      {hovered && <Controller nameOfComponent={t("Container")} />}
       <Element
         canvas id="usercard" is={CardContent} data-cy="card-content"
         className=""

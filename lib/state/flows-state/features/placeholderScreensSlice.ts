@@ -107,7 +107,7 @@ export const screensSlice = createSlice({
       state.footerMode = action.payload;
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
-      state.screens = action.payload;
+      state.screens = [...action.payload];
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.headerMode = false;

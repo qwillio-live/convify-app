@@ -88,6 +88,8 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
+import { RootState } from "@/lib/state/flows-state/store"
+import { is } from "date-fns/locale"
 
 const MultipleChoiceOptions = [
   {
@@ -344,6 +346,17 @@ export const UserToolbox = () => {
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
+
+  {
+    /**
+     * isHeaderFooterMode: flag is used to determine if the header or footer mode is active
+     * this is used to filter out certain components which should be allowed in header footer mode
+     *
+     */
+  }
+  const isHeaderFooterMode = useAppSelector((state:RootState) => state?.screen?.footerMode || state?.screen?.headerMode);
+
+
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -406,7 +419,8 @@ export const UserToolbox = () => {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-2">
+            {!isHeaderFooterMode && (
+              <AccordionItem value="item-2">
               <AccordionTrigger className="uppercase hover:no-underline">
                 {t("Input")}
               </AccordionTrigger>
@@ -533,7 +547,9 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div> */}
               </AccordionContent>
-            </AccordionItem>
+              </AccordionItem>
+            )
+            }
 
             <AccordionItem value="item-3">
               <AccordionTrigger className="uppercase hover:no-underline">
@@ -579,6 +595,8 @@ export const UserToolbox = () => {
               </AccordionContent>
             </AccordionItem>
 
+            {
+             !isHeaderFooterMode && (
             <AccordionItem value="item-4">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Display
@@ -720,6 +738,8 @@ export const UserToolbox = () => {
                 </div>
               </AccordionContent>
             </AccordionItem>
+            )
+            }
             {/* <AccordionItem value="item-5">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Navigation
