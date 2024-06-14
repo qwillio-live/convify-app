@@ -119,7 +119,7 @@ export const CardContainerSettings = () => {
                 }}
                 className="flex-1 col-span-1"
               >
-                <TabsList className="w-full grid grid-cols-2">
+                <TabsList className="flex-initial flex flex-row shrink-0">
                 <TabsTrigger value="column">
                     <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
@@ -141,7 +141,7 @@ export const CardContainerSettings = () => {
                 }}
                 className="flex-1 col-span-1"
               >
-                <TabsList className="w-full grid grid-cols-2">
+                <TabsList className="flex-initial flex flex-row shrink-0">
                 <TabsTrigger value="column">
                     <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
