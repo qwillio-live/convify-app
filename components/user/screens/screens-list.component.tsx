@@ -280,9 +280,11 @@ const ScreensList = () => {
                     >
                         <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
+                        <ResolvedComponentsFromCraftState screen={screensHeader} />
                         <ResolvedComponentsFromCraftState
                           screen={screen.screenData ? screen.screenData : {}}
                         />
+                        <ResolvedComponentsFromCraftState screen={screensFooter} />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
