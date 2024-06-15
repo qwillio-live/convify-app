@@ -24,6 +24,7 @@ import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
 import { UserText } from "@/components/user/text/user-text.component"
+import { IconButton } from "../user/icon-button/user-icon-button.component"
 
 import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
@@ -35,7 +36,6 @@ import {
   UserContainer,
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
-import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"

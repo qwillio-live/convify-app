@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
-import { IconButtonSizes, TextInputProps } from "./user-text.component"
+import { TextContainerSize, TextInputProps } from "./user-text.component"
 
 const useTextThemePresets = () => {
   const t = useTranslations("Components")
@@ -19,16 +19,24 @@ const useTextThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce",
     0.1
   )
-  const filledPreset: TextInputProps = {
-    fontFamily: {
-      value: theme?.text?.primaryFont || "inherit",
-      globalStyled: true,
-      isCustomized: false,
+  const parapgraphPreset: TextInputProps = {
+    fontSize: 18,
+
+    fontWeight: {
+      value: "400",
+      globalStyled: false,
+      isCustomized: true,
     },
+    textAlign: {
+      value: "left",
+      globalStyled: false,
+      isCustomized: true,
+    },
+    fontFamily: theme?.text?.secondaryFont || "inherit",
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
+        theme?.general?.backgroundColor || "#3182ce",
         "filled"
       ),
       globalStyled: true,
@@ -68,9 +76,9 @@ const useTextThemePresets = () => {
       isCustomized: false,
     },
     justifyContent: "space-between",
-    width: IconButtonSizes.medium,
+    width: TextContainerSize.medium,
     height: "auto",
-    size: IconButtonSizes.medium,
+    size: TextContainerSize.medium,
     text: t("Text"),
     marginLeft: 0,
     marginTop: 20,
@@ -90,29 +98,36 @@ const useTextThemePresets = () => {
     buttonSize: "medium",
   }
 
-  const outLinePreset: TextInputProps = {
-    fontFamily: {
-      value: theme?.text?.primaryFont || "inherit",
-      globalStyled: true,
-      isCustomized: false,
+  const spanPreset: TextInputProps = {
+    fontSize: 14,
+    fontWeight: {
+      value: "400",
+      globalStyled: false,
+      isCustomized: true,
     },
+    textAlign: {
+      value: "left",
+      globalStyled: false,
+      isCustomized: true,
+    },
+    fontFamily: theme?.text?.primaryFont || "inherit",
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
-        "outline"
+        theme?.general?.backgroundColor || "#3182ce",
+        "ghost"
       ),
       globalStyled: true,
       isCustomized: false,
     },
     color: {
-      value: theme?.general?.primaryColor || "#3182ce",
+      value: theme?.general?.secondaryColor || "#3182ce",
       globalStyled: true,
       isCustomized: false,
     },
     backgroundHover: {
       value: getHoverBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
+        theme?.general?.primaryColor || "#ffffff",
         "outline"
       ),
       globalStyled: true,
@@ -139,9 +154,9 @@ const useTextThemePresets = () => {
       isCustomized: false,
     },
     justifyContent: "space-between",
-    width: IconButtonSizes.medium,
+    width: TextContainerSize.medium,
     height: "auto",
-    size: IconButtonSizes.medium,
+    size: TextContainerSize.medium,
     text: t("Text"),
     marginLeft: 0,
     marginTop: 20,
@@ -161,7 +176,7 @@ const useTextThemePresets = () => {
     buttonSize: "medium",
   }
 
-  return { filledPreset, outLinePreset }
+  return { parapgraphPreset, spanPreset }
 }
 
 export const getBackgroundForPreset = (color, preset) => {

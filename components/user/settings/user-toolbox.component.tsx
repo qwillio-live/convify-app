@@ -57,8 +57,8 @@ import {
   LoaderDefaultProps,
 } from "@/components/user/loader/user-loader.component"
 import {
-  TextDefaultProps,
   UserText,
+  TextInputDefaultProps,
 } from "@/components/user/text/user-text.component"
 
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
@@ -388,7 +388,10 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <UserText {...TextDefaultProps} />)
+                    connectors.create(ref, 
+                    <UserText {...TextInputDefaultProps} 
+
+                    />)
                   }
                   data-cy="toolbox-text"
                 >

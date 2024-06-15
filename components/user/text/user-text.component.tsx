@@ -1,383 +1,4 @@
-// import React, { useCallback, useEffect, useState, useRef } from "react";
-// import ContentEditable from "react-contenteditable";
-// import styled from "styled-components";
-// import { throttle, debounce } from "lodash";
-// import { useNode } from "@/lib/craftjs";
-// import { useAppSelector } from "@/lib/state/flows-state/hooks";
-// import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-// import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { Slider } from "@/components/ui/slider";
-// import { Controller } from "../settings/controller.component";
-// import { useTranslations } from "next-intl";
-// import { cn } from "@/lib/utils";
-// import { RootState } from "@/lib/state/flows-state/store";
-
-// export const UserTextInputSettings = () => {
-//   const t = useTranslations("Components");
-//   const {
-//     actions: { setProp },
-//     props: {
-//       text,
-//       fontSize,
-//       textAlign,
-//       fontWeight,
-//       marginLeft,
-//       marginRight,
-//       marginTop,
-//       marginBottom,
-//       textColor,
-//       backgroundColor,
-//       borderColor,
-//       borderRadius,
-//       padding,
-//     },
-//   } = useNode((node) => ({
-//     props: node.data.props,
-//   }));
-
-//   const throttledSetProp = useCallback(
-//     throttle((property, value) => {
-//       setProp((prop) => { prop[property] = value }, 0);
-//     }, 200), // Throttle to 50ms to 200ms
-//     [setProp]
-//   );
-
-//   const handlePropChange = (property, value) => {
-//     throttledSetProp(property, value);
-//   };
-
-//   const debouncedSetProp = useCallback(
-//     debounce((property, value) => {
-//       setProp((prop) => { prop[property] = value }, 0);
-//     }), [setProp]
-//   );
-
-//   const handlePropChangeDebounced = (property, value) => {
-//     debouncedSetProp(property, value);
-//   };
-
-//   return (
-//     <>
-//       <Accordion type="single" collapsible className="w-full">
-//         <AccordionItem value="content">
-//           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//             <span className="text-sm font-medium">{t("Content")}</span>
-//           </AccordionTrigger>
-//           <AccordionContent className="p-2">
-//             <Input
-//               type="text"
-//               value={text}
-//               onChange={(e) => setProp((props) => (props.text = e.target.value))}
-//               placeholder={t("Enter text")}
-//               className="w-full"
-//             />
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="design">
-//           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//             <span className="text-sm font-medium">{t("Design")}</span>
-//           </AccordionTrigger>
-//           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-//             <div className="flex flex-row items-center col-span-2 space-x-2">
-//               <label htmlFor="backgroundColor" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3">
-//                 {t("Background Color")}
-//               </label>
-//               <Input
-//                 type="color"
-//                 value={backgroundColor}
-//                 onChange={(e) => handlePropChangeDebounced("backgroundColor", e.target.value)}
-//                 className="basis-1/3"
-//                 id="backgroundColor"
-//               />
-//             </div>
-//             <div className="flex flex-row items-center col-span-2 space-x-2">
-//               <label htmlFor="textColor" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3">
-//                 {t("Text Color")}
-//               </label>
-//               <Input
-//                 type="color"
-//                 value={textColor}
-//                 onChange={(e) => handlePropChangeDebounced("textColor", e.target.value)}
-//                 className="basis-1/3"
-//                 id="textColor"
-//               />
-//             </div>
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="spacing">
-//           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//             <span className="text-sm font-medium">{t("Spacing")}</span>
-//           </AccordionTrigger>
-//           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-//             {["marginTop", "marginBottom", "marginLeft", "marginRight"].map((prop) => (
-//               <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start" key={prop}>
-//                 <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-//                   <Label htmlFor={prop}>{t(prop.charAt(0).toUpperCase() + prop.slice(1))}</Label>
-//                   <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-//                     {eval(prop)}
-//                   </span>
-//                 </div>
-//                 <Slider
-//                   defaultValue={[eval(prop)]}
-//                   value={[eval(prop)]}
-//                   max={100}
-//                   min={0}
-//                   step={1}
-//                   onValueChange={(e) => handlePropChangeDebounced(prop, e)}
-//                 />
-//               </div>
-//             ))}
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="border">
-//           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//             <span className="text-sm font-medium">{t("Border")}</span>
-//           </AccordionTrigger>
-//           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-//             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-//               <label htmlFor="borderColor" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-//                 {t("Border Color")}
-//               </label>
-//               <Input
-//                 type="color"
-//                 value={borderColor}
-//                 onChange={(e) => handlePropChangeDebounced("borderColor", e.target.value)}
-//                 className="w-full"
-//                 id="borderColor"
-//               />
-//             </div>
-//             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-//               <label htmlFor="borderRadius" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-//                 {t("Border Radius")}
-//               </label>
-//               <Input
-//                 type="number"
-//                 value={borderRadius}
-//                 onChange={(e) => handlePropChangeDebounced("borderRadius", e.target.value)}
-//                 className="w-full"
-//                 id="borderRadius"
-//               />
-//             </div>
-//           </AccordionContent>
-//         </AccordionItem>
-
-//         <AccordionItem value="typography">
-//           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//             <span className="text-sm font-medium">{t("Typography")}</span>
-//           </AccordionTrigger>
-//           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-//             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-//               <label htmlFor="fontSize" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-//                 {t("Font Size")}
-//               </label>
-//               <Input
-//                 type="number"
-//                 value={fontSize}
-//                 onChange={(e) => handlePropChangeDebounced("fontSize", e.target.value)}
-//                 className="w-full"
-//                 id="fontSize"
-//               />
-//             </div>
-//             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-//               <label htmlFor="fontWeight" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-//                 {t("Font Weight")}
-//               </label>
-//               <Select
-//                 value={fontWeight}
-//                 onValueChange={(e) => handlePropChange("fontWeight", e)}
-//               >
-//                 <SelectTrigger className="w-full">
-//                   <SelectValue placeholder="Select font weight" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectGroup>
-//                     <SelectLabel>{t("Font Weight")}</SelectLabel>
-//                     <SelectItem value="100">Thin</SelectItem>
-//                     <SelectItem value="400">Normal</SelectItem>
-//                     <SelectItem value="500">Medium</SelectItem>
-//                     <SelectItem value="600">Semi-bold</SelectItem>
-//                     <SelectItem value="700">Bold</SelectItem>
-//                     <SelectItem value="800">Extra bold</SelectItem>
-//                   </SelectGroup>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </AccordionContent>
-//         </AccordionItem>
-//       </Accordion>
-//     </>
-//   );
-// };
-
-// const StyledTextInput = styled.div`
-//   font-family: ${(props) => props.fontFamily};
-//   font-size: ${(props) => props.fontSize}px;
-//   font-weight: ${(props) => props.fontWeight};
-//   color: ${(props) => props.textColor};
-//   background-color: ${(props) => props.backgroundColor};
-//   border: 1px solid ${(props) => props.borderColor};
-//   border-radius: ${(props) => props.borderRadius}px;
-//   padding: ${(props) => props.padding}px;
-//   margin-top: ${(props) => props.marginTop}px;
-//   margin-bottom: ${(props) => props.marginBottom}px;
-//   margin-left: ${(props) => props.marginLeft}px;
-//   margin-right: ${(props) => props.marginRight}px;
-//   text-align: ${(props) => props.textAlign};
-//   width: 100%;
-//   box-sizing: border-box;
-//   outline: none;
-// `;
-
-// export const UserTextInputGen = ({
-//   text,
-//   fontSize,
-//   fontWeight,
-//   textAlign,
-//   marginLeft,
-//   marginRight,
-//   marginTop,
-//   marginBottom,
-//   textColor,
-//   backgroundColor,
-//   borderColor,
-//   borderRadius,
-//   padding,
-//   ...props
-// }) => {
-//   return (
-//     <StyledTextInput
-//       fontSize={fontSize}
-//       fontWeight={fontWeight}
-//       textAlign={textAlign}
-//       marginLeft={marginLeft}
-//       marginRight={marginRight}
-//       marginTop={marginTop}
-//       marginBottom={marginBottom}
-//       textColor={textColor}
-//       backgroundColor={backgroundColor}
-//       borderColor={borderColor}
-//       borderRadius={borderRadius}
-//       padding={padding}
-//       {...props}
-//     >
-//       <ContentEditable
-//         html={text}
-//         disabled={false}
-//         onChange={() => { }}
-//         tagName="div"
-//       />
-//     </StyledTextInput>
-//   );
-// };
-
-// export const UserTextInput = ({
-//   text,
-//   fontSize,
-//   fontWeight,
-//   textAlign,
-//   marginLeft,
-//   marginRight,
-//   marginTop,
-//   marginBottom,
-//   textColor,
-//   backgroundColor,
-//   borderColor,
-//   borderRadius,
-//   padding,
-//   ...props
-// }) => {
-//   const {
-//     connectors: { connect, drag },
-//     selected,
-//     isHovered,
-//     actions: { setProp },
-//   } = useNode((state) => ({
-//     selected: state.events.selected,
-//     isHovered: state.events.hovered,
-//   }));
-
-//   const [editable, setEditable] = useState(false);
-
-//   useEffect(() => {
-//     if (selected) {
-//       setEditable(true);
-//     } else {
-//       setEditable(false);
-//     }
-//   }, [selected]);
-
-//   return (
-//     <div
-//       className="relative"
-//       {...props}
-//       ref={(ref) => ref && connect(drag(ref))}
-//       onClick={() => setEditable(true)}
-//     >
-//       {isHovered && <Controller nameOfComponent={"TEXT_INPUT"} />}
-//       <StyledTextInput
-//         fontSize={fontSize}
-//         fontWeight={fontWeight}
-//         textAlign={textAlign}
-//         marginLeft={marginLeft}
-//         marginRight={marginRight}
-//         marginTop={marginTop}
-//         marginBottom={marginBottom}
-//         textColor={textColor}
-//         backgroundColor={backgroundColor}
-//         borderColor={borderColor}
-//         borderRadius={borderRadius}
-//         padding={padding}
-//         onClick={() => setEditable(true)}
-//       >
-//         <ContentEditable
-//           html={text}
-//           disabled={!editable}
-//           onChange={(e) =>
-//             setProp(
-//               (props) => (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
-//               500
-//             )
-//           }
-//           tagName="div"
-//         />
-//       </StyledTextInput>
-//     </div>
-//   );
-// };
-
-// export const TextInputDefaultProps = {
-//   text: "Your text here",
-//   fontSize: 16,
-//   fontWeight: "400",
-//   textAlign: "left",
-//   marginLeft: 0,
-//   marginRight: 0,
-//   marginTop: 0,
-//   marginBottom: 0,
-//   textColor: "#000000",
-//   backgroundColor: "#ffffff",
-//   borderColor: "#000000",
-//   borderRadius: 4,
-//   padding: 8,
-// };
-
-// UserTextInput.craft = {
-//   rules: {
-//     canMoveIn: () => true,
-//   },
-//   props: TextInputDefaultProps,
-//   related: {
-//     settings: UserTextInputSettings,
-//   },
-// };
 import React, { useCallback, useEffect, useRef } from "react"
-import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { track } from "@vercel/analytics/react"
 import { set } from "date-fns"
@@ -391,12 +12,6 @@ import { useEditor, useNode } from "@/lib/craftjs"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -424,7 +39,7 @@ const IconButtonSizeValues = {
   small: "300px",
   medium: "376px",
   large: "576px",
-  full: "100%",
+  full: "785px",
 }
 
 const ButtonSizeValues = {
@@ -440,23 +55,12 @@ const IconButtonMobileSizeValues = {
   full: "100%",
 }
 
-const ButtonTextLimit = {
-  small: 100,
-  // small: 22,
-  // medium: 30,
-  // large: 40,
-  // full: 82,
-
-  medium: 100,
-  large: 100,
-  full: 100,
-}
 export const UserTextInputGen = ({
   fontFamily,
   size,
   buttonSize,
   color,
-  text,  
+  text,
   marginLeft,
   width: width,
   height: height,
@@ -477,10 +81,9 @@ export const UserTextInputGen = ({
   alignItems,
   justifyContent,
   gap,
-  fontSize : fontSize,
-  fontWeight : fontWeight,
+  fontSize: fontSize,
+  fontWeight: fontWeight,
   textAlign,
-  backgroundColor,
   border,
   borderColor,
   borderHoverColor,
@@ -488,9 +91,6 @@ export const UserTextInputGen = ({
 }) => {
   const router = useRouter()
   const pathName = usePathname()
-  const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
-  }
   return (
     <div
       className="w-full relative"
@@ -503,7 +103,7 @@ export const UserTextInputGen = ({
         paddingTop: `${props.marginTop}px`,
         paddingBottom: `${props.marginBottom}px`,
         paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `${props.marginRight}px`,
+        paddingRight: `20px`,
       }}
     >
       <StyledCustomTextInput
@@ -514,8 +114,8 @@ export const UserTextInputGen = ({
         borderHoverColor={borderHoverColor?.value}
         colorHover={colorHover?.value}
         flexDirection={flexDirection}
-        fontSize={fontSize.value}
-        fontWeight={fontWeight.value}
+        fontSize={fontSize?.value}
+        fontWeight={fontWeight?.value}
         textAlign={textAlign?.value}
         justifyContent={justifyContent}
         borderColor={borderColor?.value}
@@ -583,7 +183,6 @@ interface StyleCustomTextContainerProps {
   fontSize?: string
   fontWeight?: string
   textAlign?: string
-  backgroundColor?: string
   borderRadius?: string
   padding?: string
   preset?: string
@@ -591,6 +190,7 @@ interface StyleCustomTextContainerProps {
 }
 const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
+  background: ${(props) => `var(${props?.background})`};
   display: flex;
   flex-direction: row;
   position: relative;
@@ -613,8 +213,7 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
       props.borderHoverColor}; /* Change to your desired focus border color */
   }
 
-  background: ${(props) => props.background};
-  color: ${(props) => props.color};
+  color: ${(props) => `var(${props?.color})`};
   overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
@@ -638,11 +237,11 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
   @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
+    width: 100%; /* Make the container take the full width on smaller screens */
     max-width: 600px;
   }
   @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
+    width: 100%; /* Make the container take the full width on smaller screens */
     max-width: 400px;
   }
 `
@@ -663,7 +262,6 @@ export const UserText = ({
   fontSize,
   fontWeight,
   textAlign,
-  backgroundColor,
   containerBackground,
   background,
   backgroundHover,
@@ -704,7 +302,9 @@ export const UserText = ({
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
-  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryFont = useAppSelector(
+    (state) => state.theme?.text?.secondaryFont
+  )
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
@@ -724,7 +324,12 @@ export const UserText = ({
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
       setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
-  }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
+  }, [
+    primaryFont,
+    fontFamily.globalStyled,
+    fontFamily.isCustomized,
+    setProp,
+  ])
 
   useEffect(() => {
     if (primaryColor) {
@@ -744,7 +349,7 @@ export const UserText = ({
         )
       }
       if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => (props.color.value = primaryColor), 200)
+        setProp((props) => (props.color.value = secondaryTextColor), 200)
       }
       if (borderColor.globalStyled && !borderColor.isCustomized) {
         setProp((props) => (props.borderColor.value = primaryColor), 200)
@@ -769,33 +374,41 @@ export const UserText = ({
   }, [
     primaryColor,
     secondaryTextColor,
-    primaryFont,
-    background,
-    color,
-    borderColor,
-    backgroundHover,
-    borderHoverColor,
-    colorHover,
     setProp,
+    background.globalStyled,
+    background.isCustomized,
+    backgroundHover.globalStyled,
+    backgroundHover.isCustomized,
+    borderColor.globalStyled,
+    borderColor.isCustomized,
+    borderHoverColor.globalStyled,
+    borderHoverColor.isCustomized,
+    color.globalStyled,
+    color.isCustomized,
+    colorHover.globalStyled,
+    colorHover.isCustomized,
     props.preset,
   ])
-  const maxLength = ButtonTextLimit[size]
-  const handleTextChange = (e) => {
-    const value = e.target.innerText
-    if (value.length <= maxLength) {
-      setProp((props) => (props.text = value))
-    } else {
-      if (ref.current) {
-        e.target.innerText = text || "" // Restore the previous text
-        const selection = window.getSelection()
-        const range = document.createRange()
-        range.selectNodeContents(ref.current)
-        range.collapse(false) // Move cursor to the end
-        selection?.removeAllRanges()
-        selection?.addRange(range)
+
+  const handleTextChange = useCallback(
+    (e) => {
+      const value = e.target.innerText
+      if (value.length) {
+        setProp((props) => (props.text = value))
+      } else {
+        if (ref.current) {
+          e.target.innerText = text || "" // Restore the previous text
+          const selection = window.getSelection()
+          const range = document.createRange()
+          range.selectNodeContents(ref.current)
+          range.collapse(false) // Move cursor to the end
+          selection?.removeAllRanges()
+          selection?.addRange(range)
+        }
       }
-    }
-  }
+    },
+    [text, setProp]
+  )
 
   useEffect(() => {
     const currentRef = ref.current
@@ -807,7 +420,8 @@ export const UserText = ({
         currentRef.removeEventListener("input", handleTextChange)
       }
     }
-  }, [text, maxLength])
+  }, [handleTextChange])
+
   const throttledSetProp = useCallback(
     throttle((property, value) => {
       setProp((prop) => {
@@ -835,7 +449,7 @@ export const UserText = ({
   }
   return (
     <div
-      ref={(ref: any) => connect(drag(ref))}
+      ref={(el: any) => connect(drag(el))}
       style={{
         width: "100%",
         display: "flex",
@@ -861,14 +475,12 @@ export const UserText = ({
         }}
       >
         <StyledCustomTextInput
-          fontFamily={fontFamily.value}
-          color={color.value}
-          background={background.value}
-          backgroundHover={backgroundHover.value}
+          fontFamily={primaryFont}
+          fontSize={`${fontSize}px`}
+          color={secondaryTextColor}
           colorHover={colorHover.value}
           radius={radius.value}
           flexDirection={flexDirection}
-          fontSize={fontSize.value}
           fontWeight={fontWeight.value}
           textAlign={textAlign}
           justifyContent={justifyContent}
@@ -901,6 +513,8 @@ export const UserText = ({
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
+                color: `${color?.value}`, 
+
               }}
               className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
               onChange={(e) => {
@@ -915,7 +529,7 @@ export const UserText = ({
   )
 }
 
-export enum IconButtonSizes {
+export enum TextContainerSize {
   small = "small",
   medium = "medium",
   large = "large",
@@ -923,9 +537,9 @@ export enum IconButtonSizes {
 }
 
 export type TextInputProps = {
-  fontFamily: StyleProperty
-  size: IconButtonSizes
-  fontSize: StyleProperty
+  fontFamily: string
+  size: TextContainerSize
+  fontSize: number
   fontWeight: StyleProperty
   textAlign: StyleProperty
   containerBackground: string
@@ -959,24 +573,20 @@ export type TextInputProps = {
 }
 
 export const TextInputDefaultProps: TextInputProps = {
-  fontFamily: {
-    value: "inherit",
-    globalStyled: true,
-    isCustomized: false,
-  },
-  containerBackground: "#ffffff",
+  fontFamily: "inherit",
+  containerBackground: "transparent",
   background: {
     value: "#4050ff",
     globalStyled: false,
     isCustomized: false,
   },
   color: {
-    value: "#ffffff",
-    globalStyled: false,
+    value: "#000",
+    globalStyled: true,
     isCustomized: false,
   },
   backgroundHover: {
-    value: "#3182ce",
+    value: "transparent",
     globalStyled: false,
     isCustomized: false,
   },
@@ -997,24 +607,20 @@ export const TextInputDefaultProps: TextInputProps = {
     isCustomized: false,
   },
   borderHoverColor: {
-    value: "inherit",
+    value: "transparent",
     globalStyled: false,
     isCustomized: false,
   },
   width: "366",
   height: "auto",
-  size: IconButtonSizes.medium,
+  size: TextContainerSize.medium,
   buttonSize: "medium",
   text: "Text Content",
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  fontSize: {
-    value: "16",
-    globalStyled: false,
-    isCustomized: false,
-  },
+  fontSize: 18,
   fontWeight: {
     value: "400",
     globalStyled: false,
@@ -1025,16 +631,16 @@ export const TextInputDefaultProps: TextInputProps = {
     globalStyled: false,
     isCustomized: false,
   },
-  paddingLeft: "16",
-  paddingTop: "26",
-  paddingRight: "16",
-  paddingBottom: "26",
+  paddingLeft: "0",
+  paddingTop: "0",
+  paddingRight: "0",
+  paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
   gap: 4,
   border: 0,
   fullWidth: true,
-  preset: "filled",
+  preset: "paragraph",
   settingsTab: "content",
 }
 

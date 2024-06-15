@@ -1,216 +1,3 @@
-// import React, { useEffect, useState } from "react"
-// import { useNode } from "@/lib/craftjs"
-// import ContentEditable from "react-contenteditable"
-
-// import {
-//   Accordion,
-//   AccordionContent,
-//   AccordionItem,
-//   AccordionTrigger,
-// } from "@/components/ui/accordion"
-// import { Label } from "@/components/ui/label"
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectLabel,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select"
-// import { Slider } from "@/components/ui/slider"
-
-// import { Input } from "@/components/ui/input"
-// import { Controller } from "../settings/controller.component"
-
-// export const UserTextSettings = () => {
-//   const {
-//     actions: { setProp },
-//     props: {
-//       fontSize,
-//       fontWeight,
-//       text,
-//       textAlign,
-//       marginLeft,
-//       marginRight,
-//       marginTop,
-//       marginBottom,
-//       textColor,
-//       tagType,
-//     },
-//   } = useNode((node) => ({
-//     props: node.data.props,
-//   }))
-
-//   return (
-//     <Accordion type="single" collapsible className="w-full">
-//       <AccordionItem value="item-1">
-//         <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//           <span className="text-sm font-medium">Teleloy</span>
-//         </AccordionTrigger>
-//         <AccordionContent className="flex flex-col gap-2 p-2">
-//           <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-//             <p className="text-md text-muted-foreground">Type</p>
-//             <Select
-//               defaultValue={tagType}
-//               onValueChange={(e) => {
-//                 setProp((props) => (props.tagType = e), 1000)
-//               }}
-//             >
-//               <SelectTrigger className="w-full">
-//                 <SelectValue placeholder="Select text type" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectGroup>
-//                   <SelectItem value="p">Paragraph</SelectItem>
-//                   <SelectItem value="span">Span</SelectItem>
-//                 </SelectGroup>
-//               </SelectContent>
-//             </Select>
-//           </div>
-//           <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-//             <p className="text-md text-muted-foreground">Font Size</p>
-//             <Input
-//               type="number"
-//               value={fontSize}
-//               placeholder={fontSize}
-//               max={100}
-//               min={0}
-//               className="w-full"
-//               onChange={(e) =>
-//                 setProp((props) => (props.fontSize = e.target.value), 1000)
-//               }
-//             />
-//           </div>
-//           <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-//             <p className="text-md text-muted-foreground">Font Weight</p>
-//             <Select
-//               value={fontWeight}
-//               onValueChange={(e) => {
-//                 setProp((props) => (props.fontWeight = e), 1000)
-//               }}
-//             >
-//               <SelectTrigger className="w-full">
-//                 <SelectValue placeholder="Select font weight" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectGroup>
-//                   <SelectLabel>Font Weight</SelectLabel>
-//                   <SelectItem value="100">Test1</SelectItem>
-//                   <SelectItem value="400">Normal</SelectItem>
-//                   <SelectItem value="500">Medium</SelectItem>
-//                   <SelectItem value="600">Semi-bold</SelectItem>
-//                   <SelectItem value="700">Bold</SelectItem>
-//                   <SelectItem value="800">Extra bold</SelectItem>
-//                 </SelectGroup>
-//               </SelectContent>
-//             </Select>
-//           </div>
-//           <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-//             <p className="text-md text-muted-foreground">Align</p>
-//             <RadioGroup
-//               defaultValue="left"
-//               onValueChange={(event) => {
-//                 setProp((props) => (props.textAlign = event), 1000)
-//               }}
-//             >
-//               <div className="flex items-center space-x-2">
-//                 <RadioGroupItem value="left" id="r1" />
-//                 <Label htmlFor="r1">Left</Label>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <RadioGroupItem value="center" id="r2" />
-//                 <Label htmlFor="r2">Center</Label>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <RadioGroupItem value="right" id="r3" />
-//                 <Label htmlFor="r3">Right</Label>
-//               </div>
-//             </RadioGroup>
-//           </div>
-//         </AccordionContent>
-//       </AccordionItem>
-//       <AccordionItem value="item-2">
-//         <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//           <span className="text-sm font-medium">Margin</span>
-//         </AccordionTrigger>
-//         <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-//           <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-//             <p className="text-md text-muted-foreground">Left</p>
-//             <Input
-//               type="number"
-//               placeholder={marginLeft}
-//               max={100}
-//               min={0}
-//               className="w-full"
-//               onChange={(e) =>
-//                 setProp((props) => (props.marginLeft = e.target.value), 1000)
-//               }
-//             />
-//           </div>
-//           <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-//             <p className="text-md text-muted-foreground">Top</p>
-//             <Input
-//               type="number"
-//               placeholder={marginTop}
-//               max={100}
-//               min={0}
-//               className="w-full"
-//               onChange={(e) =>
-//                 setProp((props) => (props.marginTop = e.target.value), 1000)
-//               }
-//             />
-//           </div>
-//           <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-//             <p className="text-md text-muted-foreground">Right</p>
-//             <Input
-//               type="number"
-//               placeholder={marginRight}
-//               max={100}
-//               min={0}
-//               className="w-full"
-//               onChange={(e) =>
-//                 setProp((props) => (props.marginRight = e.target.value), 1000)
-//               }
-//             />
-//           </div>
-//           <div className="style-control flex w-1/2 basis-2/4 flex-col gap-2">
-//             <p className="text-md text-muted-foreground">Bottom</p>
-//             <Input
-//               type="number"
-//               placeholder={marginBottom}
-//               max={100}
-//               min={0}
-//               className="w-full"
-//               onChange={(e) =>
-//                 setProp((props) => (props.marginBottom = e.target.value), 1000)
-//               }
-//             />
-//           </div>
-//         </AccordionContent>
-//       </AccordionItem>
-//       <AccordionItem value="item-3">
-//         <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-//           <span className="text-sm font-medium">Appearance</span>
-//         </AccordionTrigger>
-//         <AccordionContent className="flex flex-col gap-y-2 p-2">
-//           <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-//             <p className="text-md text-muted-foreground">Text</p>
-//             <Input
-//               type="color"
-//               value={textColor}
-//               onChange={(e) => {
-//                 setProp((props) => (props.textColor = e.target.value), 1000)
-//               }}
-//             />
-//           </div>
-//         </AccordionContent>
-//       </AccordionItem>
-//     </Accordion>
-//   )
-// }
-
 import React, { useCallback, useEffect } from "react"
 import { debounce, throttle } from "lodash"
 import {
@@ -263,12 +50,11 @@ import {
 } from "@/components/custom-tabs"
 
 import { Controller } from "../settings/controller.component"
-import useButtonThemePresets from "./useTextThemePresets"
+import useTextThemePresets from "./useTextThemePresets"
 import { TextInputDefaultProps, UserTextInputGen } from "./user-text.component"
 
 export const UserTextInputSettings = () => {
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
   const screensLength = useScreensLength()
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
@@ -284,7 +70,6 @@ export const UserTextInputSettings = () => {
   const {
     actions: { setProp },
     props: {
-      enableIcon,
       props,
       size,
       buttonSize,
@@ -304,7 +89,6 @@ export const UserTextInputSettings = () => {
       flexDirection,
       alignItems,
       justifyContent,
-      gap,
       border,
       borderColor,
       marginLeft,
@@ -315,10 +99,6 @@ export const UserTextInputSettings = () => {
       height,
       settingsTab,
       preset,
-      tracking,
-      trackingEvent,
-      nextScreen,
-      buttonAction,
       fontWeight,
       fontSize,
       tagType,
@@ -329,8 +109,8 @@ export const UserTextInputSettings = () => {
     props: node.data.props,
   }))
 
-  const { filledPreset, outLinePreset } = useButtonThemePresets()
-  const addPresetStyles = (preset) => {
+  const { spanPreset, parapgraphPreset } = useTextThemePresets()
+  const addPresetStyles = (preset = parapgraphPreset) => {
     const staticStyles = [
       "buttonSize",
       "settingsTab",
@@ -434,7 +214,7 @@ export const UserTextInputSettings = () => {
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">
-                {t("Button Size")}
+                {/* {t("Button Size")} */} Container Size
               </p>
               <Tabs
                 value={buttonSize}
@@ -464,7 +244,7 @@ export const UserTextInputSettings = () => {
                 }}
                 className="flex-1"
               >
-                <TabsList className="w-full grid grid-cols-4">
+                <TabsList className="w-full grid grid-cols-3">
                   <TabsTrigger value="start">
                     <AlignHorizontalJustifyStart />
                   </TabsTrigger>
@@ -474,11 +254,29 @@ export const UserTextInputSettings = () => {
                   <TabsTrigger value="end">
                     <AlignHorizontalJustifyEnd />
                   </TabsTrigger>
-                  <TabsTrigger value="space-between">
+                  {/* <TabsTrigger value="space-between">
                     <AlignHorizontalSpaceBetween />
-                  </TabsTrigger>
+                  </TabsTrigger> */}
                 </TabsList>
               </Tabs>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
+            <span className="text-sm font-medium">Appearance</span>
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-y-2 p-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Text</p>
+              <Input
+                type="color"
+                value={textColor}
+                onChange={(value) => {
+                  setProp((props) => (props.textColor = value), 1000)
+                }}
+              />
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -487,6 +285,7 @@ export const UserTextInputSettings = () => {
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">Typography</span>
           </AccordionTrigger>
+
           <AccordionContent className="flex flex-col gap-2 p-2">
             {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Type</p>
@@ -507,9 +306,25 @@ export const UserTextInputSettings = () => {
                 </SelectContent>
               </Select>
             </div> */}
+            {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
+            <p className="text-md text-muted-foreground">Font Size</p>
+            <Slider
+              className=""
+              defaultValue={[1,100]}
+              value={fontSize}
+              max={100}
+              min={0}
+              step={1}
+              // onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
+              onValueChange={(value) => {
+                setProp((props) => (props.fontSize = value), 1000)
+              }}
+
+            />
+          </div> */}
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Size</p>
-              {/* <Input
+              <Input
                 type="number"
                 value={fontSize}
                 placeholder={fontSize}
@@ -519,18 +334,9 @@ export const UserTextInputSettings = () => {
                 onChange={(e) =>
                   setProp((props) => (props.fontSize = e.target.value), 1000)
                 }
-              /> */}
-              <Slider
-                className=""
-                defaultValue={[fontSize]}
-                value={[fontSize]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
               />
-
             </div>
+
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Weight</p>
               <Select

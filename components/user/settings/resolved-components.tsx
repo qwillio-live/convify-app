@@ -6,7 +6,7 @@ import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.co
 import { UserLogo } from "@/components/user/logo/user-logo.component"
 // import lz from "lzutf8";
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
-import { UserTextGen } from "@/components/user/text/user-text.component"
+import { UserTextInputGen } from "@/components/user/text/user-text.component"
 
 import { UserInputGen } from "../input/user-input.component"
 import { LogoBarGen } from "../logo-bar/logo-bar.component"
@@ -31,7 +31,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
-  [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
+  [CRAFT_ELEMENTS.USERTEXT]: UserTextInputGen,
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
