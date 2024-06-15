@@ -1,66 +1,30 @@
-import React, { useEffect, useState } from "react"
-import { useNode } from "@/lib/craftjs"
-import ContentEditable from "react-contenteditable"
+import React, { useEffect, useState } from "react";
+import { useNode } from "@/lib/craftjs";
+import ContentEditable from "react-contenteditable";
+import { Controller } from "../settings/controller.component";
+import { UserTextSettings } from "./user-text-settings";
+import { useAppSelector } from "@/lib/state/flows-state/hooks";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-
-import { Input } from "@/components/ui/input"
-import { Controller } from "../settings/controller.component"
-import { UserTextSettings } from "./user-text-settings"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-
-export const UserTextGen = ({
-  text,
-  fontSize,
-  textAlign,
-  fontWeight,
-  marginLeft,
-  marginRight,
-  marginTop,
-  marginBottom,
-  textColor,
-  tagType,
-  fontFamily,
-  ...props }) => {
-  return(
-    <>
-    <ContentEditable
-        html={text}
-        disabled={true}
-        tagName={tagType}
-        onChange={(e) => {console.log(e.target.value)}}
-        style={{
-          fontFamily: `var(${fontFamily})`,
-          fontSize: `${fontSize}px`,
-          textAlign,
-          fontWeight: `${fontWeight}`,
-          marginLeft: `${marginLeft}px`,
-          marginRight: `${marginRight}px`,
-          marginTop: `${marginTop}px`,
-          marginBottom: `${marginBottom}px`,
-          color: `${textColor}`,
-        }}
-      />
-    </>
-  )
+export enum ContainerTextSize {
+  small = "small",
+  medium = "medium",
+  large = "large",
+  full = "full",
 }
+
+const ContainerTextSizeValues = {
+  small: "300px",
+  medium: "376px",
+  large: "576px",
+  full: "100%",
+};
+
+const ContainerTextMobileSizeValues = {
+  small: "300px",
+  medium: "330px",
+  large: "360px",
+  full: "100%",
+};
 
 export const UserText = ({
   text,
@@ -73,6 +37,10 @@ export const UserText = ({
   marginBottom,
   textColor,
   tagType,
+  containerBackground,
+  justifyContent,
+  containerSize,
+  fullWidth,
   ...props
 }) => {
   const {
@@ -84,30 +52,47 @@ export const UserText = ({
     selected: state.events.selected,
     dragged: state.events.dragged,
     isHovered: state.events.hovered,
-  }))
-  const [editable, setEditable] = useState(false)
-  const secondaryFont = useAppSelector((state) => state.theme?.text?.secondaryFont)
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
-  useEffect(() => {
-    setProp((props) => (props.fontFamily = secondaryFont), 200)
-  },[secondaryFont])
+  }));
+
+  const [editable, setEditable] = useState(false);
+  const secondaryFont = useAppSelector((state) => state.theme?.text?.secondaryFont);
+  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
 
   useEffect(() => {
-    setProp((props) => (props.textColor = secondaryTextColor), 200)
-  },[secondaryTextColor])
+    setProp((props) => (props.fontFamily = secondaryFont), 200);
+  }, [secondaryFont]);
+
+  useEffect(() => {
+    setProp((props) => (props.textColor = secondaryTextColor), 200);
+  }, [secondaryTextColor]);
 
   useEffect(() => {
     if (selected) {
-      return
+      return;
     }
+    setEditable(false);
+  }, [selected]);
 
-    setEditable(false)
-  }, [selected])
+  const getWidthValue = () => {
+    if (mobileScreen) {
+      return containerSize === 'full' ? '100%' : ContainerTextMobileSizeValues[containerSize];
+    } else {
+      return containerSize === 'full' ? '100%' : ContainerTextSizeValues[containerSize];
+    }
+  };
+
   return (
     <div
       className="relative"
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: justifyContent || "center",
+        background: `${containerBackground}`,
+      }}
       {...props}
-      ref={(ref: any) => ref && connect(drag(ref))}
+      ref={(ref) => ref && connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >
       {isHovered && <Controller nameOfComponent={"TEXT"} />}
@@ -125,36 +110,43 @@ export const UserText = ({
         style={{
           fontFamily: `var(${secondaryFont})`,
           fontSize: `${fontSize}px`,
-          textAlign,
+          textAlign: textAlign,
           fontWeight: `${fontWeight}`,
           marginLeft: `${marginLeft}px`,
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
           color: `${textColor}`,
+          outline: "none",
+          background: `${containerBackground}`,
+          width: getWidthValue(),
         }}
       />
     </div>
-  )
-}
+  );
+};
 
 export const TextDefaultProps = {
   fontFamily: "inherit",
   text: "Your text here",
-  fontSize: 24,
+  fontSize: 18,
   textColor: "inherit",
   fontWeight: "400",
-  textAlign: "left",
+  textAlign: "center",
   marginLeft: 0,
   marginRight: 0,
-  marginTop: 0,
-  marginBottom: 0,
+  marginTop: 20,
+  marginBottom: 20,
   tagType: "p",
-}
+  fullWidth: true, // Default to true for full width
+  justifyContent: "center",
+  containerSize: ContainerTextSize.medium,
+  // containerBackground: string,
+};
 
 UserText.craft = {
   props: TextDefaultProps,
   related: {
     settings: UserTextSettings,
   },
-}
+};
