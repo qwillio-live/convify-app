@@ -86,6 +86,7 @@ export const Img = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const [hover,setHover] = React.useState(false)
   const t = useTranslations("Components")
   return (
     <div
@@ -93,8 +94,10 @@ export const Img = ({
       className={cn(
         `relative flex flex-row justify-${align} w-full border border-transparent`
       )}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
-      {isHovered && <Controller nameOfComponent={t("Image")} />}
+      {hover && <Controller nameOfComponent={t("Image")} />}
       {
         /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
