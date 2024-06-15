@@ -263,7 +263,7 @@ export const UserTextInputSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="item-3">
+        {/* <AccordionItem value="item-3">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">Appearance</span>
           </AccordionTrigger>
@@ -279,7 +279,7 @@ export const UserTextInputSettings = () => {
               />
             </div>
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
 
         <AccordionItem value="item-1">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
@@ -322,6 +322,7 @@ export const UserTextInputSettings = () => {
               <p className="text-md text-muted-foreground">Font Weight</p>
               <Select
                 value={fontWeight}
+                defaultValue="400"
                 onValueChange={(e) => {
                   setProp((props) => (props.fontWeight = e), 1000)
                 }}

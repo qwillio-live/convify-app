@@ -12,6 +12,7 @@ import { useEditor, useNode } from "@/lib/craftjs"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import {
@@ -24,7 +25,7 @@ const IconButtonSizeValues = {
   small: "300px",
   medium: "376px",
   large: "576px",
-  full: "785px",
+  full: "100%",
 }
 
 const ButtonSizeValues = {
@@ -83,10 +84,11 @@ export const UserTextInputGen = ({
         display: "flex",
         justifyContent: "center",
         minWidth: "100%",
+        maxWidth: "1400px",
         paddingTop: `${props.marginTop}px`,
         paddingBottom: `${props.marginBottom}px`,
         paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `20px`,
+        paddingRight: `${props.marginRight}px`,
       }}
     >
       <StyledCustomTextInput
@@ -116,7 +118,6 @@ export const UserTextInputGen = ({
         paddingRight={paddingRight}
         paddingBottom={paddingBottom}
         alignItems={alignItems}
-        gap={gap}
         mobileScreen={false}
         {...props}
         className="text-[1rem]"
@@ -128,7 +129,11 @@ export const UserTextInputGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-          }}
+            color: `${color?.value}`,
+            fontSize: `${fontSize}px`,
+            fontWeight: `${fontWeight}`,
+            height: "fit-content",
+            wordWrap: "break-word",}}
         >
           {text}
         </p>
@@ -306,12 +311,7 @@ export const UserText = ({
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
       setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
-  }, [
-    primaryFont,
-    fontFamily.globalStyled,
-    fontFamily.isCustomized,
-    setProp,
-  ])
+  }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
 
   useEffect(() => {
     if (primaryColor) {
@@ -491,14 +491,13 @@ export const UserText = ({
               html={text}
               innerRef={ref}
               style={{
-                maxWidth: "100%",
+                maxWidth: "783px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${color?.value}`, 
+                color: `${color?.value}`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
-
               }}
               className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
               onChange={(e) => {
@@ -540,7 +539,6 @@ export type TextInputProps = {
   flexDirection: string
   alignItems: string
   justifyContent: string
-  gap: number
   border: number
   borderColor: StyleProperty
   borderHoverColor: StyleProperty
@@ -621,11 +619,10 @@ export const TextInputDefaultProps: TextInputProps = {
   paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
-  gap: 4,
   border: 0,
   fullWidth: true,
   preset: "paragraph",
-  settingsTab: "content",
+  settingsTab: "design",
 }
 
 UserText.craft = {

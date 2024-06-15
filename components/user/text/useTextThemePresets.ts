@@ -21,14 +21,13 @@ const useTextThemePresets = () => {
   )
   const parapgraphPreset: TextInputProps = {
     fontSize: 18,
-
     fontWeight: {
       value: "400",
       globalStyled: false,
       isCustomized: true,
     },
     textAlign: {
-      value: "left",
+      value: "center",
       globalStyled: false,
       isCustomized: true,
     },
@@ -75,7 +74,7 @@ const useTextThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: TextContainerSize.medium,
     height: "auto",
     size: TextContainerSize.medium,
@@ -90,7 +89,6 @@ const useTextThemePresets = () => {
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
     border: 2,
     fullWidth: true,
     preset: "filled",
@@ -99,14 +97,14 @@ const useTextThemePresets = () => {
   }
 
   const spanPreset: TextInputProps = {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: {
       value: "400",
       globalStyled: false,
       isCustomized: true,
     },
     textAlign: {
-      value: "left",
+      value: "center",
       globalStyled: false,
       isCustomized: true,
     },
@@ -153,7 +151,7 @@ const useTextThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: TextContainerSize.medium,
     height: "auto",
     size: TextContainerSize.medium,
@@ -168,7 +166,6 @@ const useTextThemePresets = () => {
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
     border: 2,
     fullWidth: true,
     preset: "outline",
