@@ -12,21 +12,6 @@ import { useEditor, useNode } from "@/lib/craftjs"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import {
@@ -89,8 +74,6 @@ export const UserTextInputGen = ({
   borderHoverColor,
   ...props
 }) => {
-  const router = useRouter()
-  const pathName = usePathname()
   return (
     <div
       className="w-full relative"
@@ -295,7 +278,6 @@ export const UserText = ({
   const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
   const [displayController, setDisplayController] = React.useState(false)
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full")
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -514,6 +496,8 @@ export const UserText = ({
                 overflowX: "clip",
                 textOverflow: "ellipsis",
                 color: `${color?.value}`, 
+                fontSize: `${fontSize}px`,
+                fontWeight: `${fontWeight}`,
 
               }}
               className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"

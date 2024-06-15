@@ -306,37 +306,18 @@ export const UserTextInputSettings = () => {
                 </SelectContent>
               </Select>
             </div> */}
-            {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-            <p className="text-md text-muted-foreground">Font Size</p>
-            <Slider
-              className=""
-              defaultValue={[1,100]}
-              value={fontSize}
-              max={100}
-              min={0}
-              step={1}
-              // onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
-              onValueChange={(value) => {
-                setProp((props) => (props.fontSize = value), 1000)
-              }}
-
-            />
-          </div> */}
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Size</p>
-              <Input
-                type="number"
-                value={fontSize}
-                placeholder={fontSize}
+              <Slider
+                className=""
+                defaultValue={[fontSize]}
+                value={[fontSize]}
                 max={100}
-                min={0}
-                className="w-full"
-                onChange={(e) =>
-                  setProp((props) => (props.fontSize = e.target.value), 1000)
-                }
+                min={12}
+                step={1}
+                onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
               />
             </div>
-
             <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Font Weight</p>
               <Select
