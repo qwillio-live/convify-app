@@ -66,6 +66,7 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid;
   border-color: ${(props) => props.borderColor};
+  border-width: 0;
 `;
 
 interface CardInnerStyles {
@@ -95,7 +96,7 @@ const CardContentInner=styled.div<CardInnerStyles>`
   flex-direction: ${(props) => props.direction};
   flex: 1;
   align-items: ${(props) => props.alignItems};
-
+  border-width: 0;
   justify-content: ${(props) => props.justifyContent};
   flex-wrap: nowrap;
   gap: ${(props) => props.gap}px;
@@ -115,7 +116,7 @@ export const CardContentGen = ({ children, ...props }) => {
     fullWidth={props.fullWidth}
     width={props.width}
     height={props.height}
-    background={props.background}
+    background={props.backgroundColor}
     color={props.color}
     marginLeft={props.marginLeft}
     marginTop={props.marginTop}
@@ -135,7 +136,7 @@ export const CardContentGen = ({ children, ...props }) => {
     overflowX={props.overflowX}
     gap={props.gap}
     border={props.border}
-    borderColor={props.borderColor}
+    borderColor={props.backgroundColor}
     >
     <CardContentInner
     size={props.size}
@@ -171,13 +172,15 @@ export const CardContent = ({ children, ...props }) => {
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
-    style={{ width: "100%", height: "100%" }}
-    className={`${isHovered ? 'border border-blue-500 border-dotted' : ''} border border-transparent relative`}>
+    {...props}
+    style={{ width: "100%", height: "100%", borderWidth: "0"}}
+    // className={`${isHovered ? 'border border-blue-500 border-dotted' : ''} border border-transparent relative`}
+    >
       <CardContentGen
           fullWidth={props.fullWidth}
           width={props.width}
           height={props.height}
-          background={props.background}
+          backgroundColor={props.backgroundColor}
           color={props.color}
           marginLeft={props.marginLeft}
           marginTop={props.marginTop}
@@ -226,7 +229,7 @@ export type CardContentDefaultPropsTypes= {
   fullWidth: boolean
   width: string
   height: string
-  background: string
+  backgroundColor: string
   color: string
   marginLeft: string
   marginTop: string
@@ -257,7 +260,7 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
     width: "400",
     height: "200",
-    background: "transparent",
+    backgroundColor: "transparent",
     color: "#000000",
     marginLeft: "2",
     marginTop: "2",
@@ -301,16 +304,16 @@ CardContent.craft = {
 };
 
 const CardContainer = styled.div<{
-background: string;
+backgroundColor: string;
 }>`
-  background: ${({ background }) => background};
+  background: ${({ backgroundColor }) => backgroundColor};
   max-width: fit-content;
   width: 100%;
 `;
 export const CardGen = ({ children, ...props }) => {
   return(
    <div
-   style={{ width: "100%", height: "100%" }}
+   style={{ width: "100%", height: "100%", borderWidth: "0" }}
    >
         {children}
     </div>
@@ -332,9 +335,10 @@ export const Card = ({ children, ...props }) => {
   return (
 
     <CardContainer
-      background={props.background}
-      className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col'
+      backgroundColor={props.backgroundColor}
+      className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col border-0'
       ref={(ref: any) => connect(drag(ref))}
+      {...props}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{ minWidth: "100%", height: "100%" }}

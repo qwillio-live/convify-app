@@ -47,7 +47,7 @@ export const CardContainerSettings = () => {
       fullWidth,
       width,
       height,
-      background,
+      backgroundColor,
       color,
       marginLeft,
       marginTop,
@@ -250,9 +250,9 @@ export const CardContainerSettings = () => {
               </label>
               <Input
                 defaultValue={"rgba(0,0,0,0)"}
-                value={background}
+                value={backgroundColor}
                 onChange={(e) => {
-                  debouncedSetProp("background", e.target.value)
+                  debouncedSetProp("backgroundColor", e.target.value)
                 }}
                 className="basis-1/3"
                 type={"color"}
