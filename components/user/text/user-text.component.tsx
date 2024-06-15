@@ -86,6 +86,7 @@ export const UserText = ({
     isHovered: state.events.hovered,
   }))
   const [editable, setEditable] = useState(false)
+  const [hover, setHover] = useState(false)
   const secondaryFont = useAppSelector((state) => state.theme?.text?.secondaryFont)
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
   useEffect(() => {
@@ -108,9 +109,11 @@ export const UserText = ({
       className="relative"
       {...props}
       ref={(ref: any) => ref && connect(drag(ref))}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       onClick={() => selected && setEditable(true)}
     >
-      {isHovered && <Controller nameOfComponent={"TEXT"} />}
+      {hover && <Controller nameOfComponent={"TEXT"} />}
       <ContentEditable
         html={text}
         disabled={!editable}

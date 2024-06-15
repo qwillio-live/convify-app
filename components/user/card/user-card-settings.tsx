@@ -104,12 +104,12 @@ export const CardContainerSettings = () => {
         className="w-full">
         <AccordionItem value="layout">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Layout </span>
+            <span className="text-sm font-medium">{t("Layout")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
               <Label className="text-md text-muted-foreground col-span-1">
-                Layout Desktop
+                {t("Layout Desktop")}
               </Label>
               <Tabs
                 value={flexDirection}
@@ -119,7 +119,7 @@ export const CardContainerSettings = () => {
                 }}
                 className="flex-1 col-span-1"
               >
-                <TabsList className="w-full grid grid-cols-2">
+                <TabsList className="flex-initial flex flex-row shrink-0">
                 <TabsTrigger value="column">
                     <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
@@ -131,7 +131,7 @@ export const CardContainerSettings = () => {
             </div>
             <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
               <Label className="col-span-1 text-md text-muted-foreground">
-                Layout Mobile
+                {t("Layout Mobile")}
               </Label>
               <Tabs
                 value={mobileFlexDirection}
@@ -141,7 +141,7 @@ export const CardContainerSettings = () => {
                 }}
                 className="flex-1 col-span-1"
               >
-                <TabsList className="w-full grid grid-cols-2">
+                <TabsList className="flex-initial flex flex-row shrink-0">
                 <TabsTrigger value="column">
                     <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
@@ -153,7 +153,7 @@ export const CardContainerSettings = () => {
             </div>
             <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
               <Label className="text-md text-muted-foreground">
-                Align Horizontal
+                {t("Align Horizontal")}
               </Label>
               <Tabs
                 value={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent : flexDirection === "column" ? alignItems: justifyContent}
@@ -184,7 +184,7 @@ export const CardContainerSettings = () => {
   ((mobileScreen && mobileFlexDirection === "row") || (!mobileScreen && flexDirection === "row")) && (
     <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
     <Label className="text-md text-muted-foreground">
-      Align Vertical
+      {t("Align Vertical")}
     </Label>
     <Tabs
       value={mobileScreen ? mobileAlignItems: alignItems}
@@ -215,7 +215,7 @@ export const CardContainerSettings = () => {
 }
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">Gap</Label>
+                <Label htmlFor="marginTop">{t("Gap")}</Label>
                 <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                   {gap}
                 </span>
@@ -238,7 +238,7 @@ export const CardContainerSettings = () => {
         </AccordionItem>
         <AccordionItem value="design">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">Design </span>
+            <span className="text-sm font-medium">{t("Design")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="flex flex-row items-center col-span-2 space-x-2">
@@ -246,7 +246,7 @@ export const CardContainerSettings = () => {
                 htmlFor="backgroundcolor"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
               >
-                {"Background Color"}
+                {t("Background Color")}
               </label>
               <Input
                 defaultValue={"rgba(0,0,0,0)"}

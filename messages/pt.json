@@ -101,7 +101,22 @@
     "Select a image or drag here to upload directly": "Selecione uma imagem ou arraste aqui para carregar diretamente",
     "Image Uploaded": "Imagem Carregada",
     "Click here to upload another image": "Clique aqui para carregar outra imagem",
-    "Remove": "Remover"
+    "Remove": "Remover",
+    "Layout": "Disposição",
+    "Layout Desktop" : "Disposição Desktop",
+    "Layout Mobile" :  "Disposição Celular",
+    "Align Horizontal": "Alinhar Horizontalmente",
+    "Align Vertical": "Alinhar Verticalmente",
+    "Gap": "Espaçamento",
+    "Container": "Contêiner",
+    "Header & Footer" : "Cabeçalho e Rodapé",
+    "Header": "Cabeçalho",
+    "Footer": "Rodapé",
+    "Screens": "Telas",
+    "Add Screen" : "Adicionar Tela",
+    "Duplicate" : "Duplicar",
+    "Right-Click" : "Clique Direito",
+    "Click on a screen to edit it" : "Clique em uma tela para editá-la"
   },
   "CreateFlow": {
     "Create": "Criar",

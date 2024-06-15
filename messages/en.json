@@ -101,7 +101,22 @@
     "Select a image or drag here to upload directly": "Select a image or drag here to upload directly",
     "Image Uploaded": "Image Uploaded",
     "Click here to upload another image": "Click here to upload another image",
-    "Remove": "Remove"
+    "Remove": "Remove",
+    "Layout": "Layout",
+    "Layout Desktop" : "Layout Desktop",
+    "Layout Mobile" : "Layout Mobile",
+    "Align Horizontal": "Align Horizontal",
+    "Align Vertical": "Align Vertical",
+    "Gap": "Gap",
+    "Container": "Container",
+    "Header & Footer" : "Header & Footer",
+    "Header": "Header",
+    "Footer": "Footer",
+    "Screens": "Screens",
+    "Add Screen" : "Add Screen",
+    "Duplicate" : "Duplicate",
+    "Right-Click" : "Right Click",
+    "Click on a screen to edit it" : "Click on a screen to edit it"
   },
   "CreateFlow": {
     "Create": "Create",

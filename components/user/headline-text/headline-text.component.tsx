@@ -88,6 +88,7 @@ export const HeadlineText = ({
     dragged: state.events.dragged,
     isHovered: state.events.hovered,
   }))
+  const [hover, setHover] = useState(false)
   const [editable, setEditable] = useState(false)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
@@ -112,10 +113,12 @@ export const HeadlineText = ({
     <div
       className="relative"
       {...props}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       ref={(ref: any) => ref && connect(drag(ref))}
       onClick={() => selected && setEditable(true)}
     >
-      {isHovered && <Controller nameOfComponent={"HEADLINE"} />}
+      {hover && <Controller nameOfComponent={"HEADLINE"} />}
       <ContentEditable
         html={text}
         disabled={!editable}

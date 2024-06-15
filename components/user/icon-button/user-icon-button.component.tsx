@@ -329,10 +329,10 @@ export const IconButton = ({
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
+  const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
-  const [displayController, setDisplayController] = React.useState(false);
   const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
   const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
   const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
@@ -462,10 +462,10 @@ export const IconButton = ({
       display: "flex",
       justifyContent: "center",
     }}
-    onMouseOver={() => setDisplayController(true)}
-    onMouseOut={() => setDisplayController(false)}
+    onMouseOver={() => setHover(true)}
+    onMouseOut={() => setHover(false)}
     >
-        {displayController && <Controller nameOfComponent={t("Button")} />}
+        {hover && <Controller nameOfComponent={t("Button")} />}
         <div className="relative w-full"
   style={{
     background: `${containerBackground}`,

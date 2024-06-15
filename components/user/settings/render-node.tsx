@@ -15,6 +15,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   const {
     isHover,
     isSelected,
+    containerBackground,
+    elementBackground,
     dom,
     moveable,
     connectors: { drag },
@@ -25,6 +27,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     props,
     name,
   } = useNode((node) => ({
+    containerBackground: node.data.props.containerBackground,
+    elementBackground: node.data.props.backgroundColor,
     isHover: node.events.hovered,
     isSelected: node.events.selected,
     dom: node.dom,
@@ -51,7 +55,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   return (
     <div
       className={cn('relative border z-10 border-transparent border-dotted',
-        (isActive) && (id !== 'ROOT') && 'border-blue-400',
+        (isActive) && (id !== 'ROOT') && (containerBackground) && `border-[${containerBackground}]`,
+        (isActive) && (id !== 'ROOT') && (!containerBackground && elementBackground) && `border-[${elementBackground}]`,
         (id !== 'ROOT') && 'hover:border-blue-400',
         fullWidth && 'w-full'
       )}

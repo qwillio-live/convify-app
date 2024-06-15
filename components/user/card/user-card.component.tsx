@@ -1,5 +1,6 @@
 import { Element, useNode } from '@/lib/craftjs';
 import { useAppSelector } from '@/lib/state/flows-state/hooks';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -256,7 +257,7 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
     width: "400",
     height: "200",
-    background: "#ffffff",
+    background: "transparent",
     color: "#000000",
     marginLeft: "2",
     marginTop: "2",
@@ -317,7 +318,7 @@ export const CardGen = ({ children, ...props }) => {
 }
 
 export const Card = ({ children, ...props }) => {
-  const [hovered, setHovered] = React.useState(false)
+  const [hover, setHover] = React.useState(false)
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -327,18 +328,18 @@ export const Card = ({ children, ...props }) => {
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-
+  const t = useTranslations("Components")
   return (
 
     <CardContainer
       background={props.background}
       className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col'
       ref={(ref: any) => connect(drag(ref))}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       style={{ minWidth: "100%", height: "100%" }}
     >
-      {hovered && <Controller nameOfComponent={"Container"} />}
+      {hover && <Controller nameOfComponent={t("Container")} />}
       <Element
         canvas id="usercard" is={CardContent} data-cy="card-content"
         className=""
