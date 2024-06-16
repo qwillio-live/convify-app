@@ -109,7 +109,7 @@ export const CardContainerSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
             <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
               <Label className="text-md text-muted-foreground col-span-1">
-                {t("Layout Desktop")}
+                {t("Desktop")}
               </Label>
               <Tabs
                 value={flexDirection}
@@ -131,7 +131,7 @@ export const CardContainerSettings = () => {
             </div>
             <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
               <Label className="col-span-1 text-md text-muted-foreground">
-                {t("Layout Mobile")}
+                {t("Mobile")}
               </Label>
               <Tabs
                 value={mobileFlexDirection}
@@ -151,7 +151,7 @@ export const CardContainerSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <Label className="text-md text-muted-foreground">
                 {t("Align Horizontal")}
               </Label>
@@ -165,9 +165,9 @@ export const CardContainerSettings = () => {
                     flexDirection === "column" ? setProp((props) => (props.alignItems = value), 200) : setProp((props) => (props.justifyContent = value), 200)
                   }
                 }}
-                className="flex-initial flex flex-col shrink-0"
+                className="flex-1"
               >
-                <TabsList className="w-full flex flex-row">
+                <TabsList className="w-full grid grid-cols-3">
                   <TabsTrigger value="flex-start">
                     <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
@@ -182,7 +182,7 @@ export const CardContainerSettings = () => {
             </div>
 {
   ((mobileScreen && mobileFlexDirection === "row") || (!mobileScreen && flexDirection === "row")) && (
-    <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
+    <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
     <Label className="text-md text-muted-foreground">
       {t("Align Vertical")}
     </Label>
@@ -196,9 +196,9 @@ export const CardContainerSettings = () => {
           setProp((props) => (props.alignItems = value), 200)
         }
       }}
-      className="flex-initial flex flex-col shrink-0"
+      className="flex-1"
     >
-      <TabsList className="w-full flex flex-row">
+      <TabsList className="w-full grid grid-cols-3">
         <TabsTrigger value="flex-start">
           <AlignVerticalJustifyStart  size={16} />
         </TabsTrigger>

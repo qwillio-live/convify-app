@@ -1,5 +1,6 @@
 import { Element, useNode } from '@/lib/craftjs';
 import { useAppSelector } from '@/lib/state/flows-state/hooks';
+import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import styled from 'styled-components';
@@ -207,7 +208,8 @@ export const CardContent = ({ children, ...props }) => {
           mobileJustifyContent={props.mobileJustifyContent}
     >
 
-      {children}
+        {/* {children ? children : <div className='flex flex-col gap-2 justify-center items-center text-current opacity-50'><Plus size={32} /> Add blocks here</div>} */}
+        {children}
     </CardContentGen>
     </div>
   );

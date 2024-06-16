@@ -183,7 +183,7 @@ export function CreateFlowComponent() {
         onRender={RenderNode}
       >
         <div className="flex h-full min-h-screen flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pl-0">
+          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pr-0">
             <div className="section-body">
               <ScreensList />
             </div>
@@ -245,7 +245,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pr-4">
+          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
