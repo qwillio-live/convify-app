@@ -38,7 +38,7 @@ export const UserText = ({
   textColor,
   tagType,
   containerBackground,
-  justifyContent,
+  // justifyContent,
   containerSize,
   fullWidth,
   ...props
@@ -88,7 +88,7 @@ export const UserText = ({
       style={{
         width: "100%",
         display: "flex",
-        justifyContent: justifyContent || "center",
+        justifyContent: "center", // justifyContent || "center",
         background: `${containerBackground}`,
       }}
       {...props}
@@ -117,7 +117,7 @@ export const UserText = ({
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
           color: `${textColor}`,
-          outline: "none",
+          // outline: "none",
           background: `${containerBackground}`,
           width: getWidthValue(),
         }}
@@ -139,7 +139,7 @@ export const TextDefaultProps = {
   marginBottom: 20,
   tagType: "p",
   fullWidth: true, // Default to true for full width
-  justifyContent: "center",
+  // justifyContent: "center",
   containerSize: ContainerTextSize.medium,
   // containerBackground: string,
 };

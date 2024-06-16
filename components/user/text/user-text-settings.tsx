@@ -44,7 +44,7 @@ export const UserTextSettings = () => {
     textColor,
     tagType,
     containerBackground,
-    justifyContent,
+    // justifyContent,
     containerSize,
   } = useNode((node) => ({
     text: node.data.props.text,
@@ -58,7 +58,7 @@ export const UserTextSettings = () => {
     textColor: node.data.props.textColor,
     tagType: node.data.props.tagType,
     containerBackground: node.data.props.containerBackground,
-    justifyContent: node.data.props.justifyContent,
+    // justifyContent: node.data.props.justifyContent,
     containerSize: node.data.props.containerSize,
   }));
 
@@ -83,7 +83,7 @@ export const UserTextSettings = () => {
 
   const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor);
   return (
-    <div>
+    <>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
@@ -150,7 +150,7 @@ export const UserTextSettings = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="style-control flex flex-col gap-2 pb-4 pt-2">
+            {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Align</p>
               <RadioGroup
                 defaultValue={textAlign}
@@ -171,10 +171,10 @@ export const UserTextSettings = () => {
                   <Label htmlFor="r3">Right</Label>
                 </div>
               </RadioGroup>
-            </div>
+            </div> */}
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-2">
+        {/* <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">Margin</span>
           </AccordionTrigger>
@@ -200,7 +200,7 @@ export const UserTextSettings = () => {
               onChange={(value) => handlePropChangeDebounced("marginBottom", value)}
             />
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
         <AccordionItem value="item-3">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">Color</span>
@@ -221,17 +221,19 @@ export const UserTextSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">Align</p>
               <Tabs
-                value={justifyContent}
-                defaultValue={justifyContent}
-                onValueChange={(value) => {
-                  setProp((props) => (props.justifyContent = value), 1000);
+                value={textAlign}
+                defaultValue={textAlign}
+                onValueChange={(e) => {
+                  setProp((props) => {
+                    props.textAlign = e;
+                  }, 1000);
                 }}
                 className="flex-1"
               >
                 <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="flex-start"><AlignLeft /></TabsTrigger>
+                  <TabsTrigger value="left"><AlignLeft /></TabsTrigger>
                   <TabsTrigger value="center"><AlignCenter /></TabsTrigger>
-                  <TabsTrigger value="flex-end"><AlignRight /></TabsTrigger>
+                  <TabsTrigger value="right"><AlignRight /></TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -244,6 +246,7 @@ export const UserTextSettings = () => {
               </label>
               <Input
                 value={containerBackground}
+                defaultValue={containerBackground}
                 onChange={(e) => handlePropChangeDebounced("containerBackground", e.target.value)}
                 className="basis-1/3"
                 type={"color"}
@@ -366,7 +369,7 @@ export const UserTextSettings = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </div>
+    </>
   );
 };
 
