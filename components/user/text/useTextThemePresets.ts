@@ -21,7 +21,7 @@ const useTextThemePresets = () => {
   )
   const parapgraphPreset: TextInputProps = {
     fontSize: 18,
-    fontWeight: 400,
+    fontWeight: "400",
     textAlign: {
       value: "center",
       globalStyled: false,
@@ -94,7 +94,7 @@ const useTextThemePresets = () => {
 
   const spanPreset: TextInputProps = {
     fontSize: 18,
-    fontWeight: 400,
+    fontWeight: "400",
     textAlign: {
       value: "center",
       globalStyled: false,
