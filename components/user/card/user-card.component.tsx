@@ -51,9 +51,9 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   height: auto;
   background: ${(props) => props.backgroundColor};
   color: ${(props) => props.color};
-  padding-left: ${(props) => props.paddingLeft}px;
+  padding-left: 0;
   padding-top: ${(props) => props.paddingTop}px;
-  padding-right: ${(props) => props.paddingRight}px;
+  padding-right: 0;
   padding-bottom: ${(props) => props.paddingBottom}px;
   border-radius: ${(props) => props.radius};
   display: flex;
@@ -208,8 +208,8 @@ export const CardContent = ({ children, ...props }) => {
           mobileJustifyContent={props.mobileJustifyContent}
     >
 
-        {/* {children ? children : <div className='flex flex-col gap-2 justify-center items-center text-current opacity-50'><Plus size={32} /> Add blocks here</div>} */}
-        {children}
+        {children ? children : <div className='flex flex-col gap-2 justify-center items-center text-current opacity-50'><Plus size={32} /> Add blocks here</div>}
+        {/* {children} */}
     </CardContentGen>
     </div>
   );

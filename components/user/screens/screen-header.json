@@ -7,7 +7,7 @@
 			"background": "#ad2121",
 			"expanded": "true",
       "style" : {
-        "minHeight": "200px",
+        "minHeight": "100px",
         "minWidth": "200px",
         "flexDirection": "column",
         "justifyContent": "start"

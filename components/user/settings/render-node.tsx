@@ -14,11 +14,19 @@ interface StyledNodeDivProps {
   selected: boolean;
   isActive: boolean;
   id: string;
+  name: string;
 }
 
 const StyledNodeDiv = styled.div<StyledNodeDivProps>`
   position: relative;
-  border-width: ${(props) => (props.id === 'ROOT' ? '0' : '1px')};
+  /* border-width: ${(props) => (props.id === 'ROOT' ? '0' : '1px')}; */
+  border-width: ${(props) => {
+    if(props.id === 'ROOT' || ((props.name === 'Card Content') && !props.isActive)) {
+      return '0';
+    }else{
+      return '1px';
+    }
+  }};
   border-style: ${(props) => (props.selected ? 'dotted' : 'solid')};
   width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   border-color: ${(props) => {
@@ -64,7 +72,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     isHover: node.events.hovered,
     isSelected: node.events.selected,
     dom: node.dom,
-    borderColor: node.data.props.containerBackground || node.data.props.backgroundColor,
+    borderColor: node.data.props.containerBackground || node.data.props.backgroundColor || node.data.props.background || undefined,
     amIBeingDragged: node.events.dragged,
     name: node.data.custom.displayName || node.data.displayName,
     fullWidth: node.data.props.fullWidth,
@@ -100,6 +108,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       borderColor={borderColor}
       fullWidth={fullWidth}
       id={id}
+      name={name}
       isActive={isActive}
       // className={cn('relative z-10', fullWidth && 'w-full')}
     >
