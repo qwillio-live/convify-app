@@ -132,8 +132,10 @@ export const UserTextInputGen = ({
             color: `${color?.value}`,
             fontSize: `${fontSize}px`,
             fontWeight: `${fontWeight}`,
+            fontFamily: `${fontFamily?.value}`,
             height: "fit-content",
-            wordWrap: "break-word",}}
+            wordWrap: "break-word",
+          }}
         >
           {text}
         </p>

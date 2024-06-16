@@ -58,8 +58,8 @@ import {
   UserContainerSettings,
 } from "../container/user-container.component"
 import { Controller } from "../settings/controller.component"
-import { TextDefaultProps, UserText } from "../text/user-text.component"
-import { UserTextSettings } from "../text/user-text-settings"
+import { TextInputDefaultProps, UserText } from "../text/user-text.component"
+import { UserTextInputSettings } from "../text/user-text-settings"
 import { PictureChoiceSettings } from "./picture-choice-settings.component"
 import styled from "styled-components"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"

@@ -7,10 +7,10 @@ import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
 import {
-  TextDefaultProps,
+  TextInputDefaultProps,
   UserText
 } from "../text/user-text.component"
-import { UserTextSettings } from "../text/user-text-settings"
+import { UserTextInputSettings } from "../text/user-text-settings"
 import { ContainerDefaultProps, UserContainer } from "../container/user-container.component"
 import { DefaultSerializer } from "v8"
 import { CardContent as CardTop } from "../card/user-card.component"
@@ -64,7 +64,7 @@ export const ButtonChoiceScreen = ({ ...props }) => {
           id="one-choice-content"
         >
           <UserText
-            {...TextDefaultProps}
+            {...TextInputDefaultProps}
             text="See how much you can save with Convify."
             fontSize={45}
             marginBottom={12}
@@ -72,6 +72,7 @@ export const ButtonChoiceScreen = ({ ...props }) => {
             fontWeight="800"
             textColor={"inherit"}
             tagType={"p"}
+            gap={"inherit"}
           />
         <Element
           is={ProgressBar}
