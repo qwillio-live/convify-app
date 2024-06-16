@@ -185,6 +185,13 @@ const ScreensList = () => {
           <div className="mt-4">{t("Header")}</div>
 
           <Card
+          style={{
+            backgroundColor: backgroundColor,
+            backgroundImage: backgroundImage,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
             className={cn(
               "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
@@ -204,6 +211,13 @@ const ScreensList = () => {
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
 
           <Card
+          style={{
+            backgroundColor: backgroundColor,
+            backgroundImage: backgroundImage,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
             className={cn(
               "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
@@ -213,7 +227,7 @@ const ScreensList = () => {
             onClick={() => handleFooterScreenClick()}
           >
             <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
+            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative flex flex-col justify-start">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
 
             </div>

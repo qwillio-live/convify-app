@@ -56,7 +56,6 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
     try {
       // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');
       const craftState = JSON.parse(screen);
-      console.log("RECIEVED SCREEN IS: ", screen)
       const resolveComponents = () => {
 
         const parsedNodes = {}
