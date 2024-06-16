@@ -6,6 +6,9 @@ import {
   AlignHorizontalJustifyStart,
   AlignHorizontalSpaceBetween,
   MoveHorizontal,
+  AlignCenter as TextAlignCenter,
+  AlignLeft as TextAlignLeft,
+  AlignRight as TextAlignRight,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
@@ -210,11 +213,31 @@ export const UserTextInputSettings = () => {
                 id="backgroundcolor"
               />
             </div>
-
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">
-                {/* {t("Button Size")} */} Container Size
-              </p>
+              <p className="text-md text-muted-foreground">{t("Width")}</p>
+              <Tabs
+                value={size}
+                defaultValue={size}
+                onValueChange={(value) => {
+                  setProp((props) => (props.size = value), 1000)
+                }}
+                className="flex-1"
+              >
+                <TabsList className="w-full grid grid-cols-4">
+                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
+                  <TabsTrigger value="full">
+                    <MoveHorizontal />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
+            {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground"> */}
+            {/* {t("Button Size")} */}
+            {/* </p>
               <Tabs
                 value={buttonSize}
                 defaultValue={buttonSize}
@@ -229,7 +252,7 @@ export const UserTextInputSettings = () => {
                   <TabsTrigger value="large">{t("L")}</TabsTrigger>
                 </TabsList>
               </Tabs>
-            </div>
+            </div> */}
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">
@@ -255,9 +278,76 @@ export const UserTextInputSettings = () => {
                   </TabsTrigger>
                   {/* <TabsTrigger value="space-between">
                     <AlignHorizontalSpaceBetween />
-                  </TabsTrigger> */}
+                  </TabsTrigger>  */}
                 </TabsList>
               </Tabs>
+            </div>
+            {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">{t("Text Align")}</p>
+              <Tabs
+                value={textAlign}
+                defaultValue={textAlign}
+                onValueChange={(value) => {
+                  setProp((props) => (props.textAlign = value), 1000)
+                }}
+                className="flex-1"
+              >
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="left">
+                    <TextAlignLeft />
+                  </TabsTrigger>
+                  <TabsTrigger value="center">
+                    <TextAlignCenter />
+                  </TabsTrigger>
+                  <TabsTrigger value="right">
+                    <TextAlignRight />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div> */}
+
+            <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
+              <div className="flex justify-between items-center">
+                <p className="text-md text-muted-foreground">Font Size</p>
+                <span className="border bg-white text-muted-foreground p-2 rounded-md">
+                  {fontSize}
+                </span>
+              </div>
+              <Slider
+                className=""
+                defaultValue={[fontSize]}
+                value={[fontSize]}
+                max={100}
+                min={12}
+                step={1}
+                onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex flex-col gap-2 pb-4 pt-2">
+              <p className="text-md text-muted-foreground">Font Weight</p>
+              <Select
+                value={fontWeight}
+                defaultValue={fontWeight}
+                onValueChange={(value) => {
+                  setProp((props) => (props.fontWeight = value), 1000)
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={"Type your weight"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Font Weight</SelectLabel>
+                    <SelectItem value="100">Thin</SelectItem>
+                    <SelectItem value="400">Normal</SelectItem>
+                    <SelectItem value="500">Medium</SelectItem>
+                    <SelectItem value="600">Semi-bold</SelectItem>
+                    <SelectItem value="700">Bold</SelectItem>
+                    <SelectItem value="800">Extra bold</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -280,13 +370,7 @@ export const UserTextInputSettings = () => {
           </AccordionContent>
         </AccordionItem> */}
 
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Typography</span>
-          </AccordionTrigger>
-
-          <AccordionContent className="flex flex-col gap-2 p-2">
-            {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
+        {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">Type</p>
               <Select
                 defaultValue={tagType}
@@ -305,72 +389,12 @@ export const UserTextInputSettings = () => {
                 </SelectContent>
               </Select>
             </div> */}
-            <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-              <p className="text-md text-muted-foreground">Font Size</p>
-              <Slider
-                className=""
-                defaultValue={[fontSize]}
-                value={[fontSize]}
-                max={100}
-                min={12}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
-              />
-            </div>
-            <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-              <p className="text-md text-muted-foreground">Font Weight</p>
-              <Select
-                value={fontWeight}
-                defaultValue="400"
-                onValueChange={(e) => {
-                  setProp((props) => (props.fontWeight = e), 1000)
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select font weight" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Font Weight</SelectLabel>
-                    <SelectItem value="100">Thin</SelectItem>
-                    <SelectItem value="400">Normal</SelectItem>
-                    <SelectItem value="500">Medium</SelectItem>
-                    <SelectItem value="600">Semi-bold</SelectItem>
-                    <SelectItem value="700">Bold</SelectItem>
-                    <SelectItem value="800">Extra bold</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
 
         <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Spacing")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
-              <Tabs
-                value={size}
-                defaultValue={size}
-                onValueChange={(value) => {
-                  setProp((props) => (props.size = value), 1000)
-                }}
-                className="flex-1"
-              >
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
                 <Label htmlFor="marginTop">{t("Top")}</Label>

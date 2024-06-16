@@ -36,8 +36,8 @@ const ButtonSizeValues = {
 
 const IconButtonMobileSizeValues = {
   small: "300px",
-  medium: "330px",
-  large: "360px",
+  medium: "430px",
+  large: "500px",
   full: "100%",
 }
 
@@ -101,7 +101,7 @@ export const UserTextInputGen = ({
         fontSize={fontSize?.value}
         fontWeight={fontWeight?.value}
         textAlign={textAlign?.value}
-        justifyContent={justifyContent}
+        // justifyContent={justifyContent}
         borderColor={borderColor?.value}
         border={border}
         marginLeft={marginLeft}
@@ -169,14 +169,14 @@ interface StyleCustomTextContainerProps {
   borderHoverColor?: string
   mobileScreen: boolean
   fontSize?: string
-  fontWeight?: string
+  fontWeight?: number
   textAlign?: string
   borderRadius?: string
   padding?: string
   preset?: string
   settingsTab?: string
 }
-const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
+const StyledCustomTextInput = styled.p<StyleCustomTextContainerProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   background: ${(props) => `var(${props?.background})`};
   display: flex;
@@ -372,8 +372,12 @@ export const UserText = ({
   const handleTextChange = useCallback(
     (e) => {
       const value = e.target.innerText
-      if (value.length) {
-        setProp((props) => (props.text = value))
+
+      if (typeof value === "string" && value.length) {
+        setProp((props) => {
+          props.text = value
+          return { ...props }
+        })
       } else {
         if (ref.current) {
           e.target.innerText = text || "" // Restore the previous text
@@ -443,7 +447,7 @@ export const UserText = ({
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
-          justifyContent: "center",
+          justifyContent: `${justifyContent}`,
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
@@ -519,7 +523,7 @@ export type TextInputProps = {
   fontFamily: string
   size: TextContainerSize
   fontSize: number
-  fontWeight: StyleProperty
+  fontWeight: string | number
   textAlign: StyleProperty
   containerBackground: string
   background: StyleProperty
@@ -599,13 +603,9 @@ export const TextInputDefaultProps: TextInputProps = {
   marginRight: 0,
   marginBottom: 0,
   fontSize: 18,
-  fontWeight: {
-    value: "400",
-    globalStyled: false,
-    isCustomized: false,
-  },
+  fontWeight: "400",
   textAlign: {
-    value: "left",
+    value: "center",
     globalStyled: false,
     isCustomized: false,
   },
