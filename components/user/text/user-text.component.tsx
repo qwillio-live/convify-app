@@ -66,7 +66,6 @@ export const UserTextInputGen = ({
   flexDirection,
   alignItems,
   justifyContent,
-  gap,
   fontSize: fontSize,
   fontWeight: fontWeight,
   textAlign,
@@ -165,7 +164,6 @@ interface StyleCustomTextContainerProps {
   flexDirection?: string
   alignItems?: string
   justifyContent?: string
-  gap?: number
   border?: number
   borderColor?: string
   borderHoverColor?: string
@@ -184,7 +182,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   display: flex;
   flex-direction: row;
   position: relative;
-  gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "18px"]};
   font-weight: 400;
   border: 1px dashed transparent;
@@ -224,7 +221,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
   @media (max-width: 760px) {
     width: 100%; /* Make the container take the full width on smaller screens */
@@ -264,7 +260,6 @@ export const UserText = ({
   flexDirection,
   alignItems,
   justifyContent,
-  gap,
   border,
   borderColor,
   ...props
@@ -483,7 +478,6 @@ export const UserText = ({
           paddingRight={paddingRight}
           paddingBottom={paddingBottom}
           alignItems={alignItems}
-          gap={gap}
           size={size}
           buttonSize={buttonSize}
           {...props}

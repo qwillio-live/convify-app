@@ -129,7 +129,6 @@ export const UserTextInputSettings = () => {
       "paddingBottom",
       "flexDirection",
       "alignItems",
-      "gap",
       "marginLeft",
       "marginTop",
       "marginRight",
