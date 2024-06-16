@@ -309,7 +309,7 @@ export const UserTextInputSettings = () => {
             <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
               <div className="flex justify-between items-center">
                 <p className="text-md text-muted-foreground">Font Size</p>
-                <span className="border bg-white text-muted-foreground p-2 rounded-md">
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                   {fontSize}
                 </span>
               </div>
