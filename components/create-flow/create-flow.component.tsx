@@ -36,6 +36,7 @@ import {
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
@@ -167,6 +168,7 @@ export function CreateFlowComponent() {
           CardContent,
           UserContainer,
           IconButton,
+          Select,
           DragDrop,
           UserToolbox,
           Image,
@@ -287,6 +289,7 @@ export function CreateFlowComponent() {
                 CardContent,
                 UserContainer,
                 IconButton,
+                Select,
                 DragDrop,
                 UserToolbox,
                 Image,
