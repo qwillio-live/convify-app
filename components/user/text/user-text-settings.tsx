@@ -75,31 +75,12 @@ export const UserTextInputSettings = () => {
     props: {
       props,
       size,
-      buttonSize,
       containerBackground,
-      background,
-      backgroundHover,
-      colorHover,
-      color,
-      text,
-      custom,
-      icon,
-      paddingLeft,
-      paddingTop,
-      paddingRight,
-      paddingBottom,
-      radius,
-      flexDirection,
-      alignItems,
       justifyContent,
-      border,
-      borderColor,
       marginLeft,
       marginTop,
       marginRight,
       marginBottom,
-      width,
-      height,
       settingsTab,
       preset,
       fontWeight,
@@ -234,26 +215,6 @@ export const UserTextInputSettings = () => {
               </Tabs>
             </div>
 
-            {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground"> */}
-            {/* {t("Button Size")} */}
-            {/* </p>
-              <Tabs
-                value={buttonSize}
-                defaultValue={buttonSize}
-                onValueChange={(value) => {
-                  setProp((props) => (props.buttonSize = value), 1000)
-                }}
-                className="flex-1"
-              >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div> */}
-
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">
                 {t("Content Align")}
@@ -282,29 +243,6 @@ export const UserTextInputSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Text Align")}</p>
-              <Tabs
-                value={textAlign}
-                defaultValue={textAlign}
-                onValueChange={(value) => {
-                  setProp((props) => (props.textAlign = value), 1000)
-                }}
-                className="flex-1"
-              >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="left">
-                    <TextAlignLeft />
-                  </TabsTrigger>
-                  <TabsTrigger value="center">
-                    <TextAlignCenter />
-                  </TabsTrigger>
-                  <TabsTrigger value="right">
-                    <TextAlignRight />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div> */}
 
             <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
               <div className="flex justify-between items-center">
@@ -352,43 +290,6 @@ export const UserTextInputSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
-        {/* <AccordionItem value="item-3">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">Appearance</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
-              <p className="text-md text-muted-foreground">Text</p>
-              <Input
-                type="color"
-                value={textColor}
-                onChange={(value) => {
-                  setProp((props) => (props.textColor = value), 1000)
-                }}
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem> */}
-
-        {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
-              <p className="text-md text-muted-foreground">Type</p>
-              <Select
-                defaultValue={tagType}
-                onValueChange={(e) => {
-                  setProp((props) => (props.tagType = e), 1000)
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select text type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="p">Paragraph</SelectItem>
-                    <SelectItem value="span">Span</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div> */}
 
         <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
@@ -481,3 +382,87 @@ export const UserTextInputSettings = () => {
     </>
   )
 }
+
+
+
+        {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground"> */}
+        {/* {t("Button Size")} */}
+        {/* </p>
+              <Tabs
+                value={buttonSize}
+                defaultValue={buttonSize}
+                onValueChange={(value) => {
+                  setProp((props) => (props.buttonSize = value), 1000)
+                }}
+                className="flex-1"
+              >
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div> */}
+
+        {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">{t("Text Align")}</p>
+              <Tabs
+                value={textAlign}
+                defaultValue={textAlign}
+                onValueChange={(value) => {
+                  setProp((props) => (props.textAlign = value), 1000)
+                }}
+                className="flex-1"
+              >
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="left">
+                    <TextAlignLeft />
+                  </TabsTrigger>
+                  <TabsTrigger value="center">
+                    <TextAlignCenter />
+                  </TabsTrigger>
+                  <TabsTrigger value="right">
+                    <TextAlignRight />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div> */}
+
+        {/* <AccordionItem value="item-3">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
+            <span className="text-sm font-medium">Appearance</span>
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-y-2 p-2">
+            <div className="style-control col-span-1 flex w-1/2 grow-0 basis-2/4 flex-col gap-2">
+              <p className="text-md text-muted-foreground">Text</p>
+              <Input
+                type="color"
+                value={textColor}
+                onChange={(value) => {
+                  setProp((props) => (props.textColor = value), 1000)
+                }}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem> */}
+
+        {/* <div className="style-control flex flex-col gap-2 pb-4 pt-2">
+              <p className="text-md text-muted-foreground">Type</p>
+              <Select
+                defaultValue={tagType}
+                onValueChange={(e) => {
+                  setProp((props) => (props.tagType = e), 1000)
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select text type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="p">Paragraph</SelectItem>
+                    <SelectItem value="span">Span</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div> */}

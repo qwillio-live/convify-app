@@ -21,23 +21,18 @@ import {
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
 
-const IconButtonSizeValues = {
+const ContainerWidthValues = {
   small: "300px",
   medium: "376px",
   large: "576px",
   full: "100%",
 }
 
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1rem",
-  large: "1.2rem",
-}
 
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "430px",
-  large: "500px",
+const MobileContainerWidthValues = {
+  small: "120px",
+  medium: "220px",
+  large: "320px",
   full: "100%",
 }
 
@@ -182,7 +177,7 @@ const StyledCustomTextInput = styled.p<StyleCustomTextContainerProps>`
   display: flex;
   flex-direction: row;
   position: relative;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "18px"]};
+  font-size: 18;
   font-weight: 400;
   border: 1px dashed transparent;
   transition: all 0.2s ease;
@@ -204,8 +199,8 @@ const StyledCustomTextInput = styled.p<StyleCustomTextContainerProps>`
   overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
-      ? IconButtonMobileSizeValues[props.size || "medium"]
-      : IconButtonSizeValues[props.size || "medium"]};
+      ? MobileContainerWidthValues[props.size || "medium"]
+      : ContainerWidthValues[props.size || "medium"]};
   width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
@@ -213,10 +208,6 @@ const StyledCustomTextInput = styled.p<StyleCustomTextContainerProps>`
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
@@ -491,7 +482,7 @@ export const UserText = ({
               html={text}
               innerRef={ref}
               style={{
-                maxWidth: "783px",
+                maxWidth: "1008px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
@@ -503,7 +494,7 @@ export const UserText = ({
               onChange={(e) => {
                 handleTextChange(e)
               }}
-              tagName="div"
+              tagName="p"
             />
           </div>
         </StyledCustomTextInput>
