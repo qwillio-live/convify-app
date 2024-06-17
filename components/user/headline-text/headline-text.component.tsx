@@ -30,6 +30,8 @@ const MobileContainerWidthValues = {
   full: "100%",
 }
 
+const maxLength = 850
+
 interface StyledCustomHeadlineInput {
   fontFamily?: string
   color?: string
@@ -48,7 +50,6 @@ interface StyledCustomHeadlineInput {
   paddingTop?: string | number
   paddingRight?: string | number
   paddingBottom?: string | number
-  radius?: number
   flexDirection?: string
   alignItems?: string
   justifyContent?: string
@@ -58,13 +59,12 @@ interface StyledCustomHeadlineInput {
   mobileScreen: boolean
   fontSize?: string
   fontWeight?: number
-  textAlign?: string
   borderRadius?: string
   padding?: string
   preset?: string
   settingsTab?: string
 }
-const StyledCustomHeadlineInput = styled.h1<StyledCustomHeadlineInput>`
+const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   background: ${(props) => `var(${props?.background})`};
   display: flex;
@@ -101,7 +101,6 @@ const StyledCustomHeadlineInput = styled.h1<StyledCustomHeadlineInput>`
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
@@ -137,13 +136,11 @@ export const HeadlineTextGen = ({
   paddingTop,
   paddingRight,
   paddingBottom,
-  radius,
   flexDirection,
   alignItems,
   justifyContent,
   fontSize: fontSize,
   fontWeight: fontWeight,
-  textAlign,
   border,
   borderColor,
   borderHoverColor,
@@ -175,7 +172,7 @@ export const HeadlineTextGen = ({
         flexDirection={flexDirection}
         fontSize={fontSize?.value}
         fontWeight={fontWeight?.value}
-        textAlign={textAlign?.value}
+        // textAlign={textAlign?.value}
         // justifyContent={justifyContent}
         borderColor={borderColor?.value}
         border={border}
@@ -197,7 +194,7 @@ export const HeadlineTextGen = ({
         className="text-[1rem]"
         onClick={() => console.log(text)}
       >
-        <p
+        <h1
           style={{
             maxWidth: "100%",
             transitionProperty: "all",
@@ -205,14 +202,14 @@ export const HeadlineTextGen = ({
             textOverflow: "ellipsis",
             color: `${color?.value}`,
             fontSize: `${fontSize}px`,
-            fontWeight: `${fontWeight}`,
-            fontFamily: `${fontFamily?.value}`,
+            fontWeight: `${fontWeight.value}`,
+            fontFamily: `${fontFamily}`,
             height: "fit-content",
             wordWrap: "break-word",
           }}
         >
           {text}
-        </p>
+        </h1>
       </StyledCustomHeadlineInput>
     </div>
   )
@@ -233,7 +230,6 @@ export const HeadlineText = ({
   marginBottom,
   fontSize,
   fontWeight,
-  textAlign,
   containerBackground,
   background,
   backgroundHover,
@@ -242,7 +238,6 @@ export const HeadlineText = ({
   paddingTop,
   paddingRight,
   paddingBottom,
-  radius,
   flexDirection,
   alignItems,
   justifyContent,
@@ -355,26 +350,15 @@ export const HeadlineText = ({
 
   const handleTextChange = useCallback(
     (e) => {
-      const value = e.target.innerText
-
+      const value = e.target.textContent
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.text = value
           return { ...props }
         })
-      } else {
-        if (ref.current) {
-          e.target.innerText = text || "" // Restore the previous text
-          const selection = window.getSelection()
-          const range = document.createRange()
-          range.selectNodeContents(ref.current)
-          range.collapse(false) // Move cursor to the end
-          selection?.removeAllRanges()
-          selection?.addRange(range)
-        }
       }
     },
-    [text, setProp]
+    [setProp]
   )
 
   useEffect(() => {
@@ -425,7 +409,7 @@ export const HeadlineText = ({
       onMouseOver={() => setDisplayController(true)}
       onMouseOut={() => setDisplayController(false)}
     >
-      {displayController && <Controller nameOfComponent={t("HEADLINE")} />}
+      {displayController && <Controller nameOfComponent={t("Headline")} />}
       <div
         className="relative w-full"
         style={{
@@ -446,10 +430,8 @@ export const HeadlineText = ({
           fontSize={`${fontSize}px`}
           color={primaryTextColor}
           colorHover={colorHover.value}
-          radius={radius.value}
           flexDirection={flexDirection}
           fontWeight={fontWeight.value}
-          textAlign={textAlign}
           justifyContent={justifyContent}
           borderColor={borderColor.value}
           borderHoverColor={borderHoverColor.value}
@@ -501,7 +483,6 @@ export type HeadlineTextProps = {
   size: TextContainerSize
   fontSize: number
   fontWeight: string | number
-  textAlign: StyleProperty
   containerBackground: string
   background: StyleProperty
   backgroundHover: StyleProperty
@@ -512,7 +493,6 @@ export type HeadlineTextProps = {
   paddingTop: string | number
   paddingRight: string | number
   paddingBottom: string | number
-  radius: StyleProperty
   flexDirection: string
   alignItems: string
   justifyContent: string
@@ -561,11 +541,6 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
     globalStyled: false,
     isCustomized: false,
   },
-  radius: {
-    value: "0",
-    globalStyled: false,
-    isCustomized: false,
-  },
   justifyContent: "center",
   borderColor: {
     value: "inherit",
@@ -582,16 +557,11 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   size: TextContainerSize.medium,
   buttonSize: "medium",
   marginLeft: 0,
-  marginTop: 0,
+  marginTop: 20,
   marginRight: 0,
-  marginBottom: 0,
+  marginBottom: 20,
   fontSize: 42,
   fontWeight: "700",
-  textAlign: {
-    value: "center",
-    globalStyled: false,
-    isCustomized: false,
-  },
   paddingLeft: "0",
   paddingTop: "0",
   paddingRight: "0",

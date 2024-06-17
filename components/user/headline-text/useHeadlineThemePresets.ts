@@ -22,11 +22,6 @@ const useHeadlineThemePresets = () => {
   const h1Preset: HeadlineTextProps = {
     fontSize: 42,
     fontWeight: "700",
-    textAlign: {
-      value: "center",
-      globalStyled: false,
-      isCustomized: true,
-    },
     fontFamily: theme?.text?.secondaryFont || "inherit",
     containerBackground: "transparent",
     background: {
@@ -54,11 +49,6 @@ const useHeadlineThemePresets = () => {
       value: "#ffffff",
       globalStyled: false,
       isCustomized: true,
-    },
-    radius: {
-      value: "8",
-      globalStyled: false,
-      isCustomized: false,
     },
     borderColor: {
       value: theme?.general?.primaryColor || "#4050ff",
@@ -95,11 +85,6 @@ const useHeadlineThemePresets = () => {
   const h2Preset: HeadlineTextProps = {
     fontSize: 42,
     fontWeight: "700",
-    textAlign: {
-      value: "center",
-      globalStyled: false,
-      isCustomized: true,
-    },
     fontFamily: theme?.text?.primaryFont || "inherit",
     containerBackground: "transparent",
     background: {
@@ -126,11 +111,6 @@ const useHeadlineThemePresets = () => {
     colorHover: {
       value: darkenedPrimaryColor || "#3180ca",
       globalStyled: true,
-      isCustomized: false,
-    },
-    radius: {
-      value: "8",
-      globalStyled: false,
       isCustomized: false,
     },
     borderColor: {

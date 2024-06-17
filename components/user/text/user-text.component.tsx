@@ -28,12 +28,206 @@ const ContainerWidthValues = {
   full: "100%",
 }
 
-
 const MobileContainerWidthValues = {
   small: "120px",
   medium: "220px",
   large: "320px",
   full: "100%",
+}
+
+export enum TextContainerSize {
+  small = "small",
+  medium = "medium",
+  large = "large",
+  full = "full",
+}
+
+interface StyleCustomTextContainerProps {
+  fontFamily?: string
+  color?: string
+  background?: string
+  backgroundHover?: string
+  colorHover?: string
+  size?: string
+  buttonSize?: string
+  marginLeft?: string | number
+  width?: string | number
+  height?: string | number
+  marginRight?: string | number
+  marginTop?: string | number
+  marginBottom?: string | number
+  paddingLeft?: string | number
+  paddingTop?: string | number
+  paddingRight?: string | number
+  paddingBottom?: string | number
+  radius?: number
+  flexDirection?: string
+  alignItems?: string
+  justifyContent?: string
+  border?: number
+  borderColor?: string
+  borderHoverColor?: string
+  mobileScreen: boolean
+  fontSize?: string
+  fontWeight?: number
+  textAlign?: string
+  borderRadius?: string
+  padding?: string
+  preset?: string
+  settingsTab?: string
+}
+const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
+  font-family: ${(props) => `var(${props?.fontFamily})`};
+  background: ${(props) => `var(${props?.background})`};
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  font-size: 18;
+  font-weight: 400;
+  border: 1px dashed transparent;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-style: solid;
+    border-color: ${(props) =>
+      props.borderHoverColor}; /* Change to your desired hover border color */
+    background: ${(props) => props.backgroundHover};
+    color: ${(props) => props.colorHover};
+  }
+
+  &:focus {
+    border-color: ${(props) =>
+      props.borderHoverColor}; /* Change to your desired focus border color */
+  }
+
+  color: ${(props) => `var(${props?.color})`};
+  overflow: hidden;
+  max-width: ${(props) =>
+    props.mobileScreen
+      ? MobileContainerWidthValues[props.size || "medium"]
+      : ContainerWidthValues[props.size || "medium"]};
+  width: 100%;
+  box-sizing: border-box;
+  height: ${(props) => props.height}px;
+  margin-top: ${(props) => props.marginTop}px;
+  margin-left: ${(props) => props.marginLeft}px;
+  margin-right: ${(props) => props.marginRight}px;
+  margin-bottom: ${(props) => props.marginBottom}px;
+  border-radius: ${(props) => props.radius}px;
+  flex-direction: ${(props) => props.flexDirection};
+  align-items: ${(props) => props.alignItems};
+  justify-content: ${(props) => props.justifyContent};
+  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+  @media (max-width: 760px) {
+    width: 100%; /* Make the container take the full width on smaller screens */
+    max-width: 600px;
+  }
+  @media (max-width: 660px) {
+    width: 100%; /* Make the container take the full width on smaller screens */
+    max-width: 400px;
+  }
+`
+
+export type TextInputProps = {
+  fontFamily: string
+  size: TextContainerSize
+  fontSize: number
+  fontWeight: string | number
+  textAlign: StyleProperty
+  containerBackground: string
+  background: StyleProperty
+  backgroundHover: StyleProperty
+  color: StyleProperty
+  colorHover: StyleProperty
+  text: string
+  paddingLeft: string | number
+  paddingTop: string | number
+  paddingRight: string | number
+  paddingBottom: string | number
+  radius: StyleProperty
+  flexDirection: string
+  alignItems: string
+  justifyContent: string
+  border: number
+  borderColor: StyleProperty
+  borderHoverColor: StyleProperty
+  marginLeft: number | number
+  marginTop: number | number
+  marginRight: number | number
+  marginBottom: number | number
+  width: string | number
+  height: string | number
+  fullWidth: boolean
+  preset: string
+  settingsTab: string
+  buttonSize: string
+}
+
+export const TextInputDefaultProps: TextInputProps = {
+  fontFamily: "inherit",
+  containerBackground: "transparent",
+  background: {
+    value: "#4050ff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  color: {
+    value: "#000",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  backgroundHover: {
+    value: "transparent",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  colorHover: {
+    value: "#ffffff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  radius: {
+    value: "0",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  justifyContent: "center",
+  borderColor: {
+    value: "inherit",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  borderHoverColor: {
+    value: "transparent",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  width: "366",
+  height: "auto",
+  size: TextContainerSize.medium,
+  buttonSize: "medium",
+  text: "Text Content",
+  marginLeft: 0,
+  marginTop: 20,
+  marginRight: 0,
+  marginBottom: 20,
+  fontSize: 18,
+  fontWeight: "400",
+  textAlign: {
+    value: "center",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  paddingLeft: "0",
+  paddingTop: "0",
+  paddingRight: "0",
+  paddingBottom: "0",
+  flexDirection: "row",
+  alignItems: "center",
+  border: 0,
+  fullWidth: true,
+  preset: "paragraph",
+  settingsTab: "design",
 }
 
 export const UserTextInputGen = ({
@@ -86,7 +280,7 @@ export const UserTextInputGen = ({
       }}
     >
       <StyledCustomTextInput
-        fontFamily={fontFamily?.value}
+        fontFamily={fontFamily}
         color={color?.value}
         background={background?.value}
         backgroundHover={backgroundHover?.value}
@@ -125,8 +319,8 @@ export const UserTextInputGen = ({
             textOverflow: "ellipsis",
             color: `${color?.value}`,
             fontSize: `${fontSize}px`,
-            fontWeight: `${fontWeight}`,
-            fontFamily: `${fontFamily?.value}`,
+            fontWeight: `${fontWeight.value}`,
+            fontFamily: `${fontFamily}`,
             height: "fit-content",
             wordWrap: "break-word",
           }}
@@ -137,92 +331,6 @@ export const UserTextInputGen = ({
     </div>
   )
 }
-interface StyleCustomTextContainerProps {
-  fontFamily?: string
-  color?: string
-  background?: string
-  backgroundHover?: string
-  colorHover?: string
-  size?: string
-  buttonSize?: string
-  marginLeft?: string | number
-  width?: string | number
-  height?: string | number
-  marginRight?: string | number
-  marginTop?: string | number
-  marginBottom?: string | number
-  paddingLeft?: string | number
-  paddingTop?: string | number
-  paddingRight?: string | number
-  paddingBottom?: string | number
-  radius?: number
-  flexDirection?: string
-  alignItems?: string
-  justifyContent?: string
-  border?: number
-  borderColor?: string
-  borderHoverColor?: string
-  mobileScreen: boolean
-  fontSize?: string
-  fontWeight?: number
-  textAlign?: string
-  borderRadius?: string
-  padding?: string
-  preset?: string
-  settingsTab?: string
-}
-const StyledCustomTextInput = styled.p<StyleCustomTextContainerProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  background: ${(props) => `var(${props?.background})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  font-size: 18;
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-
-  color: ${(props) => `var(${props?.color})`};
-  overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
-  }
-`
-
 export const UserText = ({
   fontFamily,
   borderHoverColor,
@@ -362,26 +470,15 @@ export const UserText = ({
 
   const handleTextChange = useCallback(
     (e) => {
-      const value = e.target.innerText
-
+      const value = e.target.textContent
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.text = value
           return { ...props }
         })
-      } else {
-        if (ref.current) {
-          e.target.innerText = text || "" // Restore the previous text
-          const selection = window.getSelection()
-          const range = document.createRange()
-          range.selectNodeContents(ref.current)
-          range.collapse(false) // Move cursor to the end
-          selection?.removeAllRanges()
-          selection?.addRange(range)
-        }
       }
     },
-    [text, setProp]
+    [setProp]
   )
 
   useEffect(() => {
@@ -501,115 +598,6 @@ export const UserText = ({
       </div>
     </div>
   )
-}
-
-export enum TextContainerSize {
-  small = "small",
-  medium = "medium",
-  large = "large",
-  full = "full",
-}
-
-export type TextInputProps = {
-  fontFamily: string
-  size: TextContainerSize
-  fontSize: number
-  fontWeight: string | number
-  textAlign: StyleProperty
-  containerBackground: string
-  background: StyleProperty
-  backgroundHover: StyleProperty
-  color: StyleProperty
-  colorHover: StyleProperty
-  text: string
-  paddingLeft: string | number
-  paddingTop: string | number
-  paddingRight: string | number
-  paddingBottom: string | number
-  radius: StyleProperty
-  flexDirection: string
-  alignItems: string
-  justifyContent: string
-  border: number
-  borderColor: StyleProperty
-  borderHoverColor: StyleProperty
-  marginLeft: number | number
-  marginTop: number | number
-  marginRight: number | number
-  marginBottom: number | number
-  width: string | number
-  height: string | number
-  fullWidth: boolean
-  preset: string
-  settingsTab: string
-  buttonSize: string
-}
-
-export const TextInputDefaultProps: TextInputProps = {
-  fontFamily: "inherit",
-  containerBackground: "transparent",
-  background: {
-    value: "#4050ff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  color: {
-    value: "#000",
-    globalStyled: true,
-    isCustomized: false,
-  },
-  backgroundHover: {
-    value: "transparent",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  colorHover: {
-    value: "#ffffff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  radius: {
-    value: "0",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  justifyContent: "center",
-  borderColor: {
-    value: "inherit",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  borderHoverColor: {
-    value: "transparent",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  width: "366",
-  height: "auto",
-  size: TextContainerSize.medium,
-  buttonSize: "medium",
-  text: "Text Content",
-  marginLeft: 0,
-  marginTop: 0,
-  marginRight: 0,
-  marginBottom: 0,
-  fontSize: 18,
-  fontWeight: "400",
-  textAlign: {
-    value: "center",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  paddingLeft: "0",
-  paddingTop: "0",
-  paddingRight: "0",
-  paddingBottom: "0",
-  flexDirection: "row",
-  alignItems: "center",
-  border: 0,
-  fullWidth: true,
-  preset: "paragraph",
-  settingsTab: "design",
 }
 
 UserText.craft = {
