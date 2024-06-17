@@ -1,15 +1,17 @@
 import { SelectProps, SelectSizes } from "./user-select.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
+import { useTranslations } from "next-intl"
 
 const useSelectThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
+  const t = useTranslations("Components")
 
   const selectPreset: SelectProps = {
     selectOptions: [
-      { id: `select-option-item-${hexoid(4)()}`, value: "Option 1" },
-      { id: `select-option-item-${hexoid(4)()}`, value: "Option 2" },
-      { id: `select-option-item-${hexoid(4)()}`, value: "Option 3" },
+      { id: `select-option-item-${hexoid(4)()}`, value: `${t("Option")} 1` },
+      { id: `select-option-item-${hexoid(4)()}`, value: `${t("Option")} 2` },
+      { id: `select-option-item-${hexoid(4)()}`, value: `${t("Option")} 3` },
     ],
     selectedOptionId: undefined,
     fontFamily: {
@@ -44,8 +46,9 @@ const useSelectThemePresets = () => {
     width: SelectSizes.medium,
     height: 50,
     size: SelectSizes.medium,
-    fieldName: "Select",
-    placeholder: "Please select an option",
+    label: t("Select"),
+    fieldName: t("Select Field"),
+    placeholder: t("Please select an option"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -62,6 +65,15 @@ const useSelectThemePresets = () => {
   }
 
   return { selectPreset }
+}
+
+export const getSortedSelectOptions = (
+  selectOptions: [{ id: string; value: string }],
+  sortAlphabetically: boolean
+) => {
+  if (!sortAlphabetically) return selectOptions
+
+  return [...selectOptions].sort((a, b) => a.value.localeCompare(b.value))
 }
 
 export default useSelectThemePresets

@@ -38,8 +38,12 @@
   "Components": {
     "Continue Button": "Botão Continuar",
     "Select": "Selecione",
+    "Select Field": "Selecione o campo",
+    "Option":"Opção",
     "Sort Alphabetically": "Classificar em ordem alfabética",
+    "Please select an option": "Por favor selecione uma opção",
     "Add new option": "Adicionar nova opção",
+    "Drag to re-arrange click to edit":"Arraste para reorganizar clique para editar",
     "Element": "Elemento",
     "Theme": "Tema",
     "Delete": "Excluir",

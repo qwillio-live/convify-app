@@ -49,6 +49,7 @@ export const SelectSettings = () => {
       selectOptions,
       required,
       sortAlphabetically,
+      label,
       fieldName,
       placeholder,
       size,
@@ -120,9 +121,9 @@ export const SelectSettings = () => {
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Content")}</span>
           </AccordionTrigger>
-          <AccordionContent className="w-full p-2 space-y-2">
+          <AccordionContent className="w-full space-y-2 p-2">
             <div className="text-muted-foreground">
-              Drag to re-arrange click to edit
+              {t("Drag to re-arrange click to edit")}
             </div>
 
             <Reorder.Group
@@ -148,7 +149,7 @@ export const SelectSettings = () => {
                   ...selectOptions,
                   {
                     id: `select-option-item-${hexoid(4)()}`,
-                    value: `Option ${selectOptions.length + 1}`,
+                    value: `${t("Option")} ${selectOptions.length + 1}`,
                   },
                 ])
               }
@@ -202,21 +203,6 @@ export const SelectSettings = () => {
                 htmlFor="placeholder-text"
                 className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {t("Field Name")}
-              </label>
-              <Input
-                value={fieldName}
-                onChange={(e) => handlePropChange("fieldName", e.target.value)}
-                type={"text"}
-                placeholder={t("Enter field name here")}
-              />
-            </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
-              <label
-                htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
                 {t("Placeholder")}
               </label>
               <Input
@@ -226,6 +212,21 @@ export const SelectSettings = () => {
                 }
                 type={"text"}
                 placeholder={t("Enter placeholder text")}
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
+              <label
+                htmlFor="placeholder-text"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {t("Field Name")}
+              </label>
+              <Input
+                value={fieldName}
+                onChange={(e) => handlePropChange("fieldName", e.target.value)}
+                type={"text"}
+                placeholder={t("Enter field name here")}
               />
             </div>
           </AccordionContent>
@@ -365,6 +366,7 @@ export const SelectSettings = () => {
 }
 
 export const SelectOptionSettingsItem = ({ item, index }) => {
+  const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -406,25 +408,26 @@ export const SelectOptionSettingsItem = ({ item, index }) => {
       dragListener={false}
       dragControls={controls}
       value={item}
+      transition={{ duration: 0 }}
       id={`select-option-item-${item.id}`}
       style={{ y }}
-      className="flex w-full items-center gap-2"
+      className="flex w-full select-none items-center gap-2 [&>svg]:hover:visible [&>div]:hover:visible"
     >
       <Input
-        className="flex-1 h-8"
+        className="h-8 flex-1"
         value={item.value}
-        placeholder={`Option ${index + 1}`}
+        placeholder={`${t("Option")} ${index + 1}`}
         onChange={handleOptionEdit}
       />
       <Trash2
-        className="size-3 hover:cursor-pointer text-muted-foreground"
+        className="text-muted-foreground size-3 hover:cursor-pointer invisible"
         onClick={handleOptionDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle hover:cursor-pointer"
+        className="reorder-handle hover:cursor-pointer invisible"
       >
-        <GripVertical className="size-4 text-muted-foreground" />
+        <GripVertical className="text-muted-foreground size-4" />
       </div>
     </Reorder.Item>
   )

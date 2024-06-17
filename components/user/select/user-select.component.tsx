@@ -14,6 +14,8 @@ import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import hexoid from "hexoid"
+import { getSortedSelectOptions } from "./useSelectThemePresets"
+import ContentEditable from "react-contenteditable"
 
 const SelectSizeValues = {
   small: "300px",
@@ -35,6 +37,7 @@ export const SelectGen = ({
   fontFamily,
   required,
   sortAlphabetically,
+  label,
   fieldName,
   placeholder,
   size,
@@ -88,10 +91,12 @@ export const SelectGen = ({
             maxWidth: SelectSizeValues[size || "medium"],
           }}
         >
-          <label>{fieldName}</label>
+          <label>{label}</label>
         </div>
         <StyledCustomSelectTrigger
-          className="!outline-none !ring-transparent"
+          className={`!outline-none !ring-transparent ${
+            !selectedOptionId ? "text-muted-foreground" : ""
+          }`}
           fontFamily={fontFamily?.value}
           borderHoverColor={borderHoverColor?.value}
           borderColor={borderColor.value}
@@ -109,23 +114,25 @@ export const SelectGen = ({
           <SelectValue placeholder={placeholder} />
         </StyledCustomSelectTrigger>
         <SelectContent>
-          {selectOptions.map((item, index) => (
-            <SelectItem
-              key={item.id}
-              value={item.id}
-              style={{
-                fontFamily: `var(${fontFamily?.value})`,
-                ...(selectedOptionId === item.id
-                  ? {
-                      backgroundColor: selectedOptionBackgroundColor.value,
-                      color: selectedOptionTextColor.value,
-                    }
-                  : {}),
-              }}
-            >
-              {item.value}
-            </SelectItem>
-          ))}
+          {getSortedSelectOptions(selectOptions, sortAlphabetically).map(
+            (item, index) => (
+              <SelectItem
+                key={item.id}
+                value={item.id}
+                style={{
+                  fontFamily: `var(${fontFamily?.value})`,
+                  ...(selectedOptionId === item.id
+                    ? {
+                        backgroundColor: selectedOptionBackgroundColor.value,
+                        color: selectedOptionTextColor.value,
+                      }
+                    : {}),
+                }}
+              >
+                {item.value}
+              </SelectItem>
+            )
+          )}
         </SelectContent>
       </CustomSelect>
     </div>
@@ -194,6 +201,7 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
 export const Select = ({
   required,
   sortAlphabetically,
+  label,
   fieldName,
   placeholder,
   selectOptions,
@@ -302,7 +310,7 @@ export const Select = ({
           }
         >
           <div
-            className="w-full p-1"
+            className="w-full py-1"
             style={{
               fontFamily: `var(${fontFamily?.value})`,
               maxWidth: mobileScreen
@@ -310,10 +318,22 @@ export const Select = ({
                 : SelectSizeValues[size || "medium"],
             }}
           >
-            <label>{fieldName}</label>
+            <ContentEditable
+              className="px-1"
+              html={label}
+              onChange={(e) =>
+                setProp((props) => (props.label = e.target.value))
+              }
+              style={{
+                outlineColor: borderHoverColor.value,
+                borderRadius: "4px",
+              }}
+            />
           </div>
           <StyledCustomSelectTrigger
-            className="!outline-none !ring-transparent"
+            className={`!outline-none !ring-transparent ${
+              !selectedOptionId ? "text-muted-foreground" : ""
+            }`}
             fontFamily={fontFamily.value}
             borderColor={borderColor.value}
             borderHoverColor={borderHoverColor.value}
@@ -331,23 +351,25 @@ export const Select = ({
             <SelectValue placeholder={placeholder} />
           </StyledCustomSelectTrigger>
           <SelectContent>
-            {selectOptions.map((item, index) => (
-              <SelectItem
-                key={item.id}
-                value={item.id}
-                style={{
-                  fontFamily: `var(${fontFamily?.value})`,
-                  ...(selectedOptionId === item.id
-                    ? {
-                        backgroundColor: selectedOptionBackgroundColor.value,
-                        color: selectedOptionTextColor.value,
-                      }
-                    : {}),
-                }}
-              >
-                {item.value}
-              </SelectItem>
-            ))}
+            {getSortedSelectOptions(selectOptions, sortAlphabetically).map(
+              (item, index) => (
+                <SelectItem
+                  key={item.id}
+                  value={item.id}
+                  style={{
+                    fontFamily: `var(${fontFamily?.value})`,
+                    ...(selectedOptionId === item.id
+                      ? {
+                          backgroundColor: selectedOptionBackgroundColor.value,
+                          color: selectedOptionTextColor.value,
+                        }
+                      : {}),
+                  }}
+                >
+                  {item.value}
+                </SelectItem>
+              )
+            )}
           </SelectContent>
         </CustomSelect>
       </div>
@@ -371,6 +393,7 @@ export type SelectProps = {
   required: boolean
   sortAlphabetically: boolean
   size: SelectSizes
+  label: string
   fieldName: string
   placeholder: string
   paddingLeft: string | number
@@ -433,8 +456,9 @@ export const SelectDefaultProps: SelectProps = {
   width: "366",
   height: "auto",
   size: SelectSizes.medium,
-  fieldName: "Select",
-  placeholder: "Please select an option",
+  label: "",
+  fieldName: "",
+  placeholder: "",
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,

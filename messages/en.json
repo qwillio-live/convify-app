@@ -38,8 +38,12 @@
   "Components": {
     "Continue Button": "Continue Button",
     "Select": "Select",
+    "Select Field": "Select Field",
+    "Option": "Option",
     "Sort Alphabetically": "Sort Alphabetically",
+    "Please select an option": "Please select an option",
     "Add new option": "Add new option",
+    "Drag to re-arrange click to edit":"Drag to re-arrange click to edit",
     "Element": "Element",
     "Theme": "Theme",
     "Delete": "Delete",
