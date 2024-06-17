@@ -63,6 +63,7 @@ import { RootState } from "@/lib/state/flows-state/store";
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
   const screenNames = useScreenNames();
+  console.log("SCREEN NAMES: ", screenNames)
   const screensLength = useScreensLength()
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
@@ -73,6 +74,14 @@ export const IconButtonSettings = () => {
         state?.screen?.screens[
           selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
         ]?.screenName
+    ) || "";
+
+    const nextScreenId =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenId
     ) || "";
 
   const {
@@ -240,15 +249,21 @@ export const IconButtonSettings = () => {
                   Navigation
                 </label>
                 <Select
-                  defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen}
-                  value={buttonAction === "next-screen" ? "next-screen" : nextScreen}
+                  defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen.screenId}
+                  value={buttonAction === "next-screen" ? "next-screen" : nextScreen.screenId}
                   onValueChange={(e) => {
                       if(e === "next-screen") {
                         setProp((props) => (props.buttonAction = "next-screen" ))
-                        setProp((props) => (props.nextScreen = nextScreenName ))
+                        setProp((props) => (props.nextScreen = {
+                          screenId: nextScreenId,
+                          screenName: nextScreenName
+                        } ))
                       } else {
                         setProp((props) => (props.buttonAction = "custom-action" ))
-                        setProp((props) => (props.nextScreen = e))
+                        setProp((props) => (props.nextScreen = {
+                          screenId: e,
+                          screenName: screenNames?.find(screen => screen.screenId === e)?.screenName
+                        }))
                       }
                 }}
                 >
@@ -263,8 +278,8 @@ export const IconButtonSettings = () => {
                     {
                       screenNames?.map((screen,index) => {
                         return (
-                          <SelectItem value={screen}>
-                            {index+1} : {screen}
+                          <SelectItem value={screen.screenId}>
+                            {index+1} : {screen.screenName}
                           </SelectItem>
                         )
                       })
