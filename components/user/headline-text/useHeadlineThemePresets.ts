@@ -77,7 +77,6 @@ const useHeadlineThemePresets = () => {
     alignItems: "center",
     border: 2,
     fullWidth: true,
-    settingsTab: "content",
     buttonSize: "medium",
     tagType: "h1"
   }
@@ -140,7 +139,6 @@ const useHeadlineThemePresets = () => {
     alignItems: "center",
     border: 2,
     fullWidth: true,
-    settingsTab: "content",
     buttonSize: "medium",
     tagType: "h1"
   }
