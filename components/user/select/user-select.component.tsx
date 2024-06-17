@@ -117,8 +117,8 @@ export const SelectGen = ({
                 fontFamily: `var(${fontFamily?.value})`,
                 ...(selectedOptionId === item.id
                   ? {
-                      backgroundColor: selectedOptionBackgroundColor,
-                      color: selectedOptionTextColor,
+                      backgroundColor: selectedOptionBackgroundColor.value,
+                      color: selectedOptionTextColor.value,
                     }
                   : {}),
               }}
