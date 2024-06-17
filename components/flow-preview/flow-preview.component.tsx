@@ -16,11 +16,14 @@ export default function FlowPreview() {
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+  const screenHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screenFooter = useAppSelector((state) => state?.screen?.screensFooter)
   React.useEffect(() => {
     console.log(selectedScreen)
   }, [selectedScreen])
   return (
     <>
+      <ResolvedComponentsFromCraftState screen={screenHeader} />
       {screens?.map((screen, index) => {
         return (
           <div
@@ -39,6 +42,7 @@ export default function FlowPreview() {
           </div>
         )
       })}
+      <ResolvedComponentsFromCraftState screen={screenFooter} />
     </>
   )
 }

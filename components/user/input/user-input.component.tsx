@@ -315,6 +315,7 @@ export const UserInput = ({ ...props }) => {
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get();
+  const [hover, setHover] = useState(false)
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
@@ -368,8 +369,10 @@ export const UserInput = ({ ...props }) => {
         display: "flex",
         justifyContent: "center",
       }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
-      {isHovered && <Controller nameOfComponent={t("Input Field")} />}
+      {hover && <Controller nameOfComponent={t("Input Field")} />}
       <div
         className={cn(
           "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent",

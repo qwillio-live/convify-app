@@ -221,6 +221,7 @@ export const PictureChoice = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const [hover, setHover] = useState(false)
   const screens = useAppSelector((state:RootState) => state?.screen?.screens);
   const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
   const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
@@ -250,10 +251,12 @@ export const PictureChoice = ({
         ref={(ref: any) => connect(drag(ref))}
         {...containerStyles}
         {...props}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         onClick={() => selected && setEditable(true)}
         className="relative"
       >
-        {isHovered && <Controller nameOfComponent={"Picture Choice"} />}
+        {hover && <Controller nameOfComponent={"Picture Choice"} />}
 
         {pictureItems.map((item, index) => (
           <PictureChoiceItem key={index} {...pictureItemsStyles}>

@@ -212,7 +212,7 @@ export function CreateFlowComponent() {
                     footerMode ? "flex justify-center items-end" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
-                      : "w-96 border px-4"
+                      : "w-96 border px-0"
                   )}
                   value={view}
                 >

@@ -45,8 +45,10 @@ import { Input } from "@/components/input-custom"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
+import { useTranslations } from "next-intl"
 
 const ScreensList = () => {
+  const t = useTranslations("Components");
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
@@ -172,48 +174,48 @@ const ScreensList = () => {
   return (
     <Accordion
       type="multiple"
-      className="w-full overflow-x-hidden"
+      className="w-full overflow-x-hidden max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1">
         <AccordionTrigger className="uppercase hover:no-underline">
-          Header & Footer
+          {t("Header & Footer")}
         </AccordionTrigger>
         <AccordionContent className="w-full">
-          <div className="mt-4">Header</div>
+          <div className="mt-4">{t("Header")}</div>
 
           <Card
             className={cn(
-              "flex h-12 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden",
+              "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
                 "border-blue-500": headerMode,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
           >
+            <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
             <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
-              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0">
 
               <ResolvedComponentsFromCraftState screen={screensHeader} />
-              </div>
+
             </div>
           </Card>
           <Separator className="my-4" />
-          <p className="text-sm text-muted-foreground">Footer</p>
+          <p className="text-sm text-muted-foreground">{t("Footer")}</p>
 
           <Card
             className={cn(
-              "flex h-12 w-[14vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden",
+              "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
                 "border-blue-500": footerMode,
               }
             )}
             onClick={() => handleFooterScreenClick()}
           >
+            <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
             <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
-              <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
-              </div>
+
             </div>
           </Card>
         </AccordionContent>
@@ -223,7 +225,7 @@ const ScreensList = () => {
           className="uppercase hover:no-underline"
           onClick={() => dispatch(setHeaderFooterMode(false))}
         >
-          Screens
+          {t("Screens")}
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
@@ -234,7 +236,7 @@ const ScreensList = () => {
               onClick={() => handleAddScreen(selectedScreenIndex || 0)}
             >
               <PlusCircle className="mr-2 size-4" />
-              Add Screen
+              {t("Add Screen")}
             </Button>
           </div>
           {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
@@ -247,20 +249,11 @@ const ScreensList = () => {
             // layoutScroll
           >
             {screens?.map((screen: any, index) => (
-              // <ScreenListItem
-              // key={screen?.screenName}
-              // handleAddScreen={handleAddScreen}
-              // handleDeleteScreen={handleDeleteScreen}
-              // handleDuplicateScreen={handleDuplicateScreen}
-              // handleScreenClick={handleScreenClick}
-              // index={index}
-              // screen={screen}
-              // />
               <Reorder.Item
-                key={screen?.screenName}
-                id={screen?.screenName}
+                key={screen.screenName + screen.screenId}
+                id={screen.screenName + screen.screenId}
                 value={screen}
-                className="relative"
+                // className="relative"
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
@@ -278,18 +271,20 @@ const ScreensList = () => {
                         backgroundImage: backgroundImage,
                       }}
                       className={cn(
-                        "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "h-60 w-[13.5vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500": selectedScreenIndex === index,
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
+                        <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
+                        <ResolvedComponentsFromCraftState screen={screensHeader} />
                         <ResolvedComponentsFromCraftState
                           screen={screen.screenData ? screen.screenData : {}}
                         />
+                        <ResolvedComponentsFromCraftState screen={screensFooter} />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
@@ -299,21 +294,21 @@ const ScreensList = () => {
                       onClick={() => handleAddScreen(index)}
                     >
                       <PlusCircle size={18} />
-                      <span>Add screen</span>
+                      <span>{t("Add Screen")}</span>
                     </ContextMenuItem>
                     <ContextMenuItem
                       className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
                       onClick={() => handleDuplicateScreen(index)}
                     >
                       <ClipboardCopy size={18} />
-                      <span>Duplicate</span>
+                      <span>{t("Duplicate")}</span>
                     </ContextMenuItem>
                     <ContextMenuItem
                       className="flex flex-row items-center gap-2 text-inherit hover:cursor-pointer"
                       onClick={() => handleDeleteScreen(index)}
                     >
                       <Trash2 size={18} />
-                      <span>Delete</span>
+                      <span>{("Delete")}</span>
                     </ContextMenuItem>
                   </ContextMenuContent>
                 </ContextMenu>
@@ -390,6 +385,7 @@ const EditScreenName = ({ screenId, screenName }) => {
 }
 
 function HelperInformation() {
+  const t = useTranslations("Components");
   return (
     <Card
       className={cn(
@@ -400,9 +396,9 @@ function HelperInformation() {
         <MousePointer />
         <div>
           <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
-            Right-click
+            {t("Right-Click")}
           </h2>
-          <p className="text-sm font-light">Click on a screen to edit it</p>
+          <p className="text-sm font-light">{t("Click on a screen to edit it")}</p>
         </div>
       </div>
     </Card>
