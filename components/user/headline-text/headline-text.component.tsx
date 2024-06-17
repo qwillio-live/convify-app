@@ -506,7 +506,6 @@ export type HeadlineTextProps = {
   width: string | number
   height: string | number
   fullWidth: boolean
-  settingsTab: string
   buttonSize: string
   tagType: string
 }
@@ -570,7 +569,6 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   alignItems: "center",
   border: 0,
   fullWidth: true,
-  settingsTab: "design",
   tagType: "h1",
 }
 

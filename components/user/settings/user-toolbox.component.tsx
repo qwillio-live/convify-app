@@ -7,6 +7,7 @@ import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
 import SecondLogo from "@/assets/images/second-logo.png"
 import ThirdLogo from "@/assets/images/third-logo.png"
 import cn from "classnames"
+import { is } from "date-fns/locale"
 import {
   Box,
   Chrome,
@@ -35,6 +36,7 @@ import { useTranslations } from "next-intl"
 
 import { useEditor } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import {
   Accordion,
   AccordionContent,
@@ -57,8 +59,8 @@ import {
   LoaderDefaultProps,
 } from "@/components/user/loader/user-loader.component"
 import {
-  UserText,
   TextInputDefaultProps,
+  UserText,
 } from "@/components/user/text/user-text.component"
 
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
@@ -88,8 +90,6 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
-import { RootState } from "@/lib/state/flows-state/store"
-import { is } from "date-fns/locale"
 
 const MultipleChoiceOptions = [
   {
@@ -354,8 +354,9 @@ export const UserToolbox = () => {
      *
      */
   }
-  const isHeaderFooterMode = useAppSelector((state:RootState) => state?.screen?.footerMode || state?.screen?.headerMode);
-
+  const isHeaderFooterMode = useAppSelector(
+    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+  )
 
   return (
     <div className="p-y" draggable={false}>
@@ -369,7 +370,7 @@ export const UserToolbox = () => {
           >
             <AccordionItem value="item-1">
               <AccordionTrigger className="uppercase hover:no-underline">
-                Text
+                {t("Text")}
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
@@ -385,7 +386,7 @@ export const UserToolbox = () => {
                   data-cy="toolbox-headline"
                 >
                   <HoverCardComponent
-                    title="Headline"
+                    title={t("Headline")}
                     icon={<Type className="mr-2 size-3" />}
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
@@ -401,15 +402,15 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, 
-                    <UserText {...TextInputDefaultProps} 
-
-                    />)
+                    connectors.create(
+                      ref,
+                      <UserText {...TextInputDefaultProps} />
+                    )
                   }
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
-                    title="Text"
+                    title={t("Text")}
                     icon={<Pencil className="mr-2 size-3" />}
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
@@ -424,97 +425,97 @@ export const UserToolbox = () => {
 
             {!isHeaderFooterMode && (
               <AccordionItem value="item-2">
-              <AccordionTrigger className="uppercase hover:no-underline">
-                {t("Input")}
-              </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
-                <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(ref, <UserInput {...outlinedPreset} />)
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCardComponent
-                    title={t("Input Field")}
-                    icon={<TextCursorInput className="mr-2 size-3" />}
+                <AccordionTrigger className="uppercase hover:no-underline">
+                  {t("Input")}
+                </AccordionTrigger>
+                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(ref, <UserInput {...outlinedPreset} />)
+                    }
+                    data-cy="toolbox-text"
                   >
-                    <UserInputGen
-                      {...outlinedPreset}
-                      label={t("Label")}
-                      placeholder={t("Placeholder")}
-                    />
-                  </HoverCardComponent>
-                </div>
-                <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(
-                      ref,
-                      <PictureChoice {...PictureChoiceDefaultProps} />
-                    )
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCardComponent
-                    title="Picture Choice"
-                    icon={<ImagePlus className="mr-2 size-3" />}
+                    <HoverCardComponent
+                      title={t("Input Field")}
+                      icon={<TextCursorInput className="mr-2 size-3" />}
+                    >
+                      <UserInputGen
+                        {...outlinedPreset}
+                        label={t("Label")}
+                        placeholder={t("Placeholder")}
+                      />
+                    </HoverCardComponent>
+                  </div>
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <PictureChoice {...PictureChoiceDefaultProps} />
+                      )
+                    }
+                    data-cy="toolbox-text"
                   >
-                    <div className="grid grid-cols-2 gap-2">
-                      <div
-                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                    <HoverCardComponent
+                      title="Picture Choice"
+                      icon={<ImagePlus className="mr-2 size-3" />}
+                    >
+                      <div className="grid grid-cols-2 gap-2">
+                        <div
+                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
                                       border-2 border-[#eaeaeb]
                                     bg-white p-4 text-lg
                                     font-bold hover:border-[#4050ff]
                                       hover:bg-[#4050ff]
                                     hover:text-white
                         "
-                      >
-                        <Target className="size-10" />
-                        Target
-                      </div>
-                      <div
-                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                        >
+                          <Target className="size-10" />
+                          Target
+                        </div>
+                        <div
+                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
                                       border-2 border-[#eaeaeb]
                                     bg-white p-4 text-lg
                                     font-bold hover:border-[#4050ff]
                                       hover:bg-[#4050ff]
                                     hover:text-white"
-                      >
-                        <Rocket className="size-10" />
-                        Launch
-                      </div>
-                      <div
-                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                        >
+                          <Rocket className="size-10" />
+                          Launch
+                        </div>
+                        <div
+                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
                                       border-2 border-[#eaeaeb]
                                     bg-white p-4 text-lg
                                     font-bold hover:border-[#4050ff]
                                       hover:bg-[#4050ff]
                                     hover:text-white"
-                      >
-                        <HeartHandshake className="size-10" />
-                        Agree
-                      </div>
-                      <div
-                        className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
+                        >
+                          <HeartHandshake className="size-10" />
+                          Agree
+                        </div>
+                        <div
+                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
                                       border-2 border-[#eaeaeb]
                                     bg-white p-4 text-lg
                                     font-bold hover:border-[#4050ff]
                                       hover:bg-[#4050ff]
                                     hover:text-white"
-                      >
-                        <Trophy className="size-10" />
-                        Achieve
+                        >
+                          <Trophy className="size-10" />
+                          Achieve
+                        </div>
                       </div>
-                    </div>
-                  </HoverCardComponent>
-                </div>
+                    </HoverCardComponent>
+                  </div>
 
-                {/* <div
+                  {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -549,10 +550,9 @@ export const UserToolbox = () => {
                     </div>
                   </HoverCardComponent>
                 </div> */}
-              </AccordionContent>
+                </AccordionContent>
               </AccordionItem>
-            )
-            }
+            )}
 
             <AccordionItem value="item-3">
               <AccordionTrigger className="uppercase hover:no-underline">
@@ -598,35 +598,34 @@ export const UserToolbox = () => {
               </AccordionContent>
             </AccordionItem>
 
-            {
-             !isHeaderFooterMode && (
-            <AccordionItem value="item-4">
-              <AccordionTrigger className="uppercase hover:no-underline">
-                Display
-              </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
-                <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    //@ts-ignore
-                    connectors.create(
-                      ref,
+            {!isHeaderFooterMode && (
+              <AccordionItem value="item-4">
+                <AccordionTrigger className="uppercase hover:no-underline">
+                  Display
+                </AccordionTrigger>
+                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
                       //@ts-ignore
-                      <Card {...CardContentDefaultProps} />
-                    )
-                  }
-                  data-cy="toolbox-layout-container"
-                >
-                  <HoverCardComponent
-                    title="Container"
-                    icon={<Box className="mr-2 size-3" />}
+                      connectors.create(
+                        ref,
+                        //@ts-ignore
+                        <Card {...CardContentDefaultProps} />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
                   >
-                    <Box width={120} height={42} />
-                  </HoverCardComponent>
-                </div>
+                    <HoverCardComponent
+                      title="Container"
+                      icon={<Box className="mr-2 size-3" />}
+                    >
+                      <Box width={120} height={42} />
+                    </HoverCardComponent>
+                  </div>
 
-                {/* <div
+                  {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -648,7 +647,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div> */}
 
-                {/* <div
+                  {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -690,7 +689,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div> */}
 
-                {/* <div
+                  {/* <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -716,33 +715,33 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div> */}
 
-                <div
-                  className="min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref && connectors.create(ref, <Img {...ImgDefaultProps} />)
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCardComponent
-                    title={t("Image")}
-                    icon={<ImageIcon className="mr-2 size-3" />}
+                  <div
+                    className="min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(ref, <Img {...ImgDefaultProps} />)
+                    }
+                    data-cy="toolbox-text"
                   >
-                    <div className="flex w-[360px] flex-row items-center justify-between">
-                      <Image
-                        src={ImagePlaceholder.src}
-                        alt="Image component"
-                        width={360}
-                        height={203}
-                        className="size-full"
-                      />
-                    </div>
-                  </HoverCardComponent>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-            )
-            }
+                    <HoverCardComponent
+                      title={t("Image")}
+                      icon={<ImageIcon className="mr-2 size-3" />}
+                    >
+                      <div className="flex w-[360px] flex-row items-center justify-between">
+                        <Image
+                          src={ImagePlaceholder.src}
+                          alt="Image component"
+                          width={360}
+                          height={203}
+                          className="size-full"
+                        />
+                      </div>
+                    </HoverCardComponent>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )}
             {/* <AccordionItem value="item-5">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Navigation

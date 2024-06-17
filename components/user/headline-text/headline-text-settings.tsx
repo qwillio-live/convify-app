@@ -53,8 +53,11 @@ import {
 } from "@/components/custom-tabs"
 
 import { Controller } from "../settings/controller.component"
+import {
+  HeadlineTextDefaultProps,
+  HeadlineTextGen,
+} from "./headline-text.component"
 import useHeadlineThemePresets from "./useHeadlineThemePresets"
-import { HeadlineTextDefaultProps, HeadlineTextGen } from "./headline-text.component"
 
 export const HeadlineTextSettings = () => {
   const t = useTranslations("Components")
@@ -176,49 +179,8 @@ export const HeadlineTextSettings = () => {
             <span className="text-sm font-medium">{t("Design")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={themeBackgroundColor}
-                value={containerBackground}
-                onChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
-                }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
-              />
-            </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
-              <Tabs
-                value={size}
-                defaultValue={size}
-                onValueChange={(value) => {
-                  setProp((props) => (props.size = value), 1000)
-                }}
-                className="flex-1"
-              >
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">
-                {t("Content Align")}
-              </p>
+              <p className="text-md text-muted-foreground">{t("Align")}</p>
               <Tabs
                 value={justifyContent}
                 defaultValue={justifyContent}
@@ -242,6 +204,25 @@ export const HeadlineTextSettings = () => {
                   </TabsTrigger>  */}
                 </TabsList>
               </Tabs>
+            </div>
+
+            <div className="flex flex-row items-center col-span-2 space-x-2">
+              <label
+                htmlFor="backgroundcolor"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+              >
+                {t("Background Color")}
+              </label>
+              <Input
+                defaultValue={themeBackgroundColor}
+                value={containerBackground}
+                onChange={(e) => {
+                  debouncedSetProp("containerBackground", e.target.value)
+                }}
+                className="basis-1/3"
+                type={"color"}
+                id="backgroundcolor"
+              />
             </div>
 
             <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
@@ -290,12 +271,32 @@ export const HeadlineTextSettings = () => {
           </AccordionContent>
         </AccordionItem>
 
-
         <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Spacing")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
+              <p className="text-md text-muted-foreground">{t("Width")}</p>
+              <Tabs
+                value={size}
+                defaultValue={size}
+                onValueChange={(value) => {
+                  setProp((props) => (props.size = value), 1000)
+                }}
+                className="flex-1"
+              >
+                <TabsList className="w-full grid grid-cols-4">
+                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
+                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
+                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
+                  <TabsTrigger value="full">
+                    <MoveHorizontal />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
                 <Label htmlFor="marginTop">{t("Top")}</Label>

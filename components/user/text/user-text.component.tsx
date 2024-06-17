@@ -74,7 +74,6 @@ interface StyleCustomTextContainerProps {
   borderRadius?: string
   padding?: string
   preset?: string
-  settingsTab?: string
 }
 const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -159,7 +158,6 @@ export type TextInputProps = {
   height: string | number
   fullWidth: boolean
   preset: string
-  settingsTab: string
   buttonSize: string
 }
 
@@ -226,8 +224,7 @@ export const TextInputDefaultProps: TextInputProps = {
   alignItems: "center",
   border: 0,
   fullWidth: true,
-  preset: "paragraph",
-  settingsTab: "design",
+  preset: "paragraph"
 }
 
 export const UserTextInputGen = ({
