@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:asdaf345fvf5@94.16.114.99:5015/convify?schema=public"
+  url      = "mysql://root:djafnwjgnrwjg@185.253.219.240:5015/convify?schema=public"
 }
 
 model Account {
