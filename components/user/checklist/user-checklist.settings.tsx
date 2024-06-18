@@ -84,7 +84,7 @@ export const ChecklistSettings = () => {
       marginBottom,
       width,
       height,
-      settingsTab,
+      settingTabs,
       preset,
     },
   } = useNode((node) => ({
@@ -139,12 +139,12 @@ export const ChecklistSettings = () => {
   return (
     <>
       <Accordion
-        value={settingsTab || "content"}
+        value={settingTabs || ["content"]}
         onValueChange={(value) => {
-          setProp((props) => (props.settingsTab = value), 200)
+          setProp((props) => (props.settingTabs = value), 200)
         }}
         type="multiple"
-        defaultValue={["content"]}
+        defaultValue={settingTabs || ["content"]}
         className="mb-10 w-full"
       >
         <AccordionItem value="content">
@@ -545,8 +545,8 @@ const ChecklistSettingsIconPicker = ({ className = "", icon, onChange }) => {
             <ChecklistIconRenderer iconName={icon} className="size-6" />
           </Button>
         </DialogTrigger>
-        <DialogContent className="h-[70%] overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] p-0">
-          <DialogHeader className="sticky top-0 z-10 bg-white px-8 pt-10 pb-4">
+        <DialogContent className="h-[70%] overflow-y-auto p-0 sm:max-h-[70%] sm:max-w-[80%]">
+          <DialogHeader className="sticky top-0 z-10 bg-white px-8 pb-4 pt-10">
             <div className="flex items-center justify-start gap-4">
               <div>
                 <DialogTitle>{t("PictureChoice.icon")}</DialogTitle>

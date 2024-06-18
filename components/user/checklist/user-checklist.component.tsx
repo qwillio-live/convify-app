@@ -245,7 +245,7 @@ export type ChecklistProps = {
   width: string | number
   height: string | number
   fullWidth: boolean
-  settingsTab: string
+  settingTabs: string[]
   preset: ChecklistPresets
 }
 
@@ -274,7 +274,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   paddingRight: "16",
   paddingBottom: "26",
   fullWidth: true,
-  settingsTab: "content",
+  settingTabs: ["content"],
   preset: ChecklistPresets.normal,
 }
 

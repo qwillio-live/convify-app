@@ -41,7 +41,7 @@ const useChecklistThemePresets = () => {
     paddingRight: "16",
     paddingBottom: "20",
     fullWidth: true,
-    settingsTab: "content",
+    settingTabs: ["content"],
     preset: ChecklistPresets.normal,
   }
 
@@ -74,7 +74,7 @@ const useChecklistThemePresets = () => {
     paddingRight: "16",
     paddingBottom: "20",
     fullWidth: true,
-    settingsTab: "content",
+    settingTabs: ["content"],
     preset: ChecklistPresets.bold,
   }
 
