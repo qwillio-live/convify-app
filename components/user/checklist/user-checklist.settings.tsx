@@ -545,8 +545,8 @@ const ChecklistSettingsIconPicker = ({ className = "", icon, onChange }) => {
             <ChecklistIconRenderer iconName={icon} className="size-6" />
           </Button>
         </DialogTrigger>
-        <DialogContent className="h-[70%] overflow-y-auto sm:max-h-[70%] sm:max-w-[80%]">
-          <DialogHeader className="sticky top-0 z-10 bg-white px-2 py-4">
+        <DialogContent className="h-[70%] overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] p-0">
+          <DialogHeader className="sticky top-0 z-10 bg-white px-8 pt-10 pb-4">
             <div className="flex items-center justify-start gap-4">
               <div>
                 <DialogTitle>{t("PictureChoice.icon")}</DialogTitle>
@@ -571,7 +571,7 @@ const ChecklistSettingsIconPicker = ({ className = "", icon, onChange }) => {
               </DialogClose>
             </div>
           </DialogHeader>
-          <div className="ml-4 mt-4 grid grid-cols-6 gap-4">
+          <div className="m-6 mt-0 grid grid-cols-6 gap-4">
             {filteredIcons.length > 0 ? (
               filteredIcons.map((iconName) => (
                 <ChecklistIconPickerItem
