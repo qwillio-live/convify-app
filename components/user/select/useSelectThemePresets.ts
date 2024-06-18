@@ -47,7 +47,7 @@ const useSelectThemePresets = () => {
     height: 50,
     size: SelectSizes.medium,
     label: t("Select"),
-    fieldName: t("Select Field"),
+    fieldName: t("Select").toLowerCase()+ "-" + hexoid(6)().toLowerCase(),
     placeholder: t("Please select an option"),
     marginLeft: 0,
     marginTop: 20,
