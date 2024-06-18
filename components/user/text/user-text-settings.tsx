@@ -224,7 +224,7 @@ export const UserTextInputSettings = () => {
 
             <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
               <div className="flex justify-between items-center">
-                <p className="text-md text-muted-foreground">Font Size</p>
+                <p className="text-md text-muted-foreground">{t("FontSize")}</p>
                 <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                   {fontSize}
                 </span>
@@ -241,7 +241,7 @@ export const UserTextInputSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col gap-2 pb-4 pt-2">
-              <p className="text-md text-muted-foreground">Font Weight</p>
+              <p className="text-md text-muted-foreground">{t("FontWeight")}</p>
               <Select
                 value={fontWeight}
                 defaultValue={fontWeight}

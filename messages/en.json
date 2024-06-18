@@ -37,7 +37,11 @@
   },
   "Components": {
     "Align": "Align",
+    "FontSize": "Font Size",
+    "FontWeight": "Font Weight",
     "Continue Button": "Continue Button",
+    "HeadlineDescription": "Headline for your business",
+    "TextDescription": "A good description of your cause",
     "Element": "Element",
     "Theme": "Theme",
     "Delete": "Delete",

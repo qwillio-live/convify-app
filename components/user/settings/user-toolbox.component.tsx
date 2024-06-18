@@ -391,7 +391,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
-                        Headline for your business
+                        {t("HeadlineDescription")}
                       </h1>
                     </div>
                   </HoverCardComponent>
@@ -415,7 +415,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
-                        A good description of your cause
+                      {t("TextDescription")}
                       </h1>
                     </div>
                   </HoverCardComponent>
