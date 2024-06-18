@@ -314,8 +314,8 @@ export const Select = ({
             style={{
               fontFamily: `var(${fontFamily?.value})`,
               maxWidth: mobileScreen
-                ? SelectMobileSizeValues[size || "medium"]
-                : SelectSizeValues[size || "medium"],
+                ? SelectMobileSizeValues[size || "small"]
+                : SelectSizeValues[size || "small"],
             }}
           >
             <ContentEditable
@@ -453,9 +453,9 @@ export const SelectDefaultProps: SelectProps = {
   disabled: false,
   required: false,
   sortAlphabetically: false,
-  width: "366",
+  width: SelectSizes.small,
   height: "auto",
-  size: SelectSizes.medium,
+  size: SelectSizes.small,
   label: "",
   fieldName: "",
   placeholder: "",

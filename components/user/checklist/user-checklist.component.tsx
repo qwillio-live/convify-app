@@ -175,8 +175,8 @@ export const Checklist = ({
           style={{
             flexDirection: layout,
             maxWidth: mobileScreen
-              ? ChecklistMobileSizeValues[size || "medium"]
-              : ChecklistSizeValues[size || "medium"],
+              ? ChecklistMobileSizeValues[size || "small"]
+              : ChecklistSizeValues[size || "small"],
           }}
         >
           {checklistItems.map((item, index) => (
@@ -262,9 +262,9 @@ export const ChecklistDefaultProps: ChecklistProps = {
   layout: ChecklistLayouts.column,
   containerBackground: "transparent",
   iconColor: "green",
-  width: "366",
+  width: ChecklistSizes.small,
   height: "auto",
-  size: ChecklistSizes.medium,
+  size: ChecklistSizes.small,
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,
