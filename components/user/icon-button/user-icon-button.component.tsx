@@ -47,6 +47,7 @@ import { RootState } from "@/lib/state/flows-state/store";
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -345,10 +346,28 @@ export const IconButton = ({
   const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
 
   const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
+  const nextScreenId = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenId) || "";
+  const screenNames = useScreenNames();
 
+
+  //editor load needs to be refreshed so that screenName value is re-populated but
+  // it is working now because it refers screenId rather then screenName
   useEffect(() => {
     if(buttonAction === "next-screen"){
-    setProp((props) => (props.nextScreen = nextScreenName), 1000)
+    setProp((props) => (props.nextScreen = {
+      screenName: nextScreenName,
+      screenId: nextScreenId
+    }), 200)
+    }else{
+      screenNames?.map(screen => {
+        if(screen.screenId === nextScreen.screenId){
+          setProp((props) => (props.nextScreen = {
+            screenName: screen.screenName,
+            screenId: screen.screenId
+          }), 200)
+        }
+      })
+
     }
 },[nextScreenName,buttonAction])
 
@@ -581,7 +600,10 @@ export type IconButtonProps = {
   tracking: boolean
   trackingEvent: string
   buttonAction: "next-screen" | "custom-action" | "none"
-  nextScreen: string
+  nextScreen: {
+    screenId: string
+    screenName: string
+  }
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -653,7 +675,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   settingsTab: 'content',
   tracking: false,
   trackingEvent: 'button_clicked',
-  nextScreen: '',
+  nextScreen: {
+    screenId: "",
+    screenName: "",
+  },
   buttonAction: "next-screen",
 }
 

@@ -633,7 +633,7 @@ export const UserInputDefaultProps: UserInputProps = {
   paddingTop: 0,
   paddingBottom: 0,
   placeholder: "Placeholder",
-  backgroundColor: "#fff",
+  backgroundColor: "transparent",
   borderColor: {
     value: "#eaeaeb",
     globalStyled: false,
