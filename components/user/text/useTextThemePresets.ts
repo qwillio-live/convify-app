@@ -88,7 +88,6 @@ const useTextThemePresets = () => {
     border: 2,
     fullWidth: true,
     preset: "filled",
-    settingsTab: "content",
     buttonSize: "medium",
   }
 
@@ -161,7 +160,6 @@ const useTextThemePresets = () => {
     border: 2,
     fullWidth: true,
     preset: "outline",
-    settingsTab: "content",
     buttonSize: "medium",
   }
 
