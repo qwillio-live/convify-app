@@ -20,6 +20,7 @@ import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flow
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { SelectGen } from "../select/user-select.component"
+import { ChecklistGen } from "../checklist/user-checklist.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -37,6 +38,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
+  [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
 }
 

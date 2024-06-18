@@ -22,6 +22,7 @@ import {
   Image as ImageIcon,
   ImagePlus,
   Linkedin,
+  ListChecks,
   Loader as LoaderIcon,
   Navigation,
   Pencil,
@@ -93,6 +94,8 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { is } from "date-fns/locale"
 import { Select, SelectGen } from "../select/user-select.component"
 import useSelectThemePresets from "../select/useSelectThemePresets"
+import { Checklist, ChecklistGen } from "../checklist/user-checklist.component"
+import useChecklistThemePresets from "../checklist/useChecklistThemePresets"
 
 const MultipleChoiceOptions = [
   {
@@ -350,6 +353,7 @@ export const UserToolbox = () => {
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { selectPreset } = useSelectThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
+  const { normalPreset: checklistNormalPreset } = useChecklistThemePresets()
 
   {
     /**
@@ -767,6 +771,27 @@ export const UserToolbox = () => {
                           className="size-full"
                         />
                       </div>
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      //@ts-ignore
+                      connectors.create(
+                        ref,
+                        //@ts-ignore
+                        <Checklist {...checklistNormalPreset} />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
+                  >
+                    <HoverCardComponent
+                      title={t("Checklist")}
+                      icon={<ListChecks className="mr-2 size-3" />}
+                    >
+                      <ChecklistGen {...checklistNormalPreset} />
                     </HoverCardComponent>
                   </div>
                 </AccordionContent>

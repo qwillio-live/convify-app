@@ -56,6 +56,7 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
+import { Checklist } from "../user/checklist/user-checklist.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -174,6 +175,7 @@ export function CreateFlowComponent() {
           Image,
           PictureChoice,
           MultipleChoice,
+          Checklist,
           LogoBar,
           LogoBarItem,
           LayoutContainer,
@@ -295,6 +297,7 @@ export function CreateFlowComponent() {
                 Image,
                 PictureChoice,
                 MultipleChoice,
+                Checklist,
                 LogoBar,
                 LogoBarItem,
                 LayoutContainer,
