@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Controller } from "./controller.component"
 import styled from "styled-components"
+import { useAppDispatch } from "@/lib/state/flows-state/hooks"
+import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 
 interface StyledNodeDivProps {
@@ -50,6 +52,7 @@ export default StyledNodeDiv;
 
 
 export const RenderNode = ({ render }: { render: React.ReactNode }) => {
+  const dispatch = useAppDispatch();
   const { id } = useNode()
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
@@ -92,7 +95,13 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       }
     }
   }, [dom, isHover, isSelected,id]);
-  console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
+  useEffect(() => {
+    if(isSelected) {
+      dispatch(setSelectedComponent(id));
+    }
+  }
+  , [isSelected])
+  // console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
 
   return (
     // <div

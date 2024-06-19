@@ -127,6 +127,14 @@ export const PictureChoiceSettings = () => {
         ]?.screenName
     ) || "";
 
+    const nextScreenId =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenId
+    ) || "";
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popoverRef.current && !popoverRef.current.contains(event.target)) {
@@ -188,6 +196,7 @@ export const PictureChoiceSettings = () => {
                 index={index}
                 screenNames={screenNames}
                 nextScreenName={nextScreenName}
+                nextScreenId={nextScreenId}
               />
             ))}
           </Reorder.Group>
@@ -510,6 +519,7 @@ export const PictureChoiceItem = ({
   index,
   screenNames,
   nextScreenName,
+  nextScreenId,
 }) => {
   const [pickerType, setPickerType] = useState("image")
   const y = useMotionValue(0)
@@ -777,7 +787,7 @@ export const PictureChoiceItem = ({
         </div>
 
         <div className="screen-action-container flex flex-col gap-2">
-          <Select
+          {/* <Select
             defaultValue={
               item.buttonAction === "next-screen"
                 ? "next-screen"
@@ -834,7 +844,46 @@ export const PictureChoiceItem = ({
                 ))}
               </SelectGroup>
             </SelectContent>
-          </Select>
+          </Select> */}
+          <Select
+                  defaultValue={item.buttonAction === "next-screen" ? "next-screen" : item.nextScreen.screenId}
+                  value={item.buttonAction === "next-screen" ? "next-screen" : item.nextScreen.screenId}
+                  onValueChange={(e) => {
+                      if(e === "next-screen") {
+                        setProp((props) => (props.pictureItems[index].buttonAction = "next-screen" ))
+                        setProp((props) => (props.pictureItems[index].nextScreen = {
+                          screenId: nextScreenId,
+                          screenName: nextScreenName
+                        } ))
+                      } else {
+                        setProp((props) => (props.pictureItems[index].buttonAction = "custom-action" ))
+                        setProp((props) => (props.pictureItems[index].nextScreen = {
+                          screenId: e,
+                          screenName: screenNames?.find(screen => screen.screenId === e)?.screenName
+                        }))
+                      }
+                }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select screen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                    <SelectItem value={"next-screen"}>
+                      Next Screen
+                    </SelectItem>
+                    {
+                      screenNames?.map((screen,index) => {
+                        return (
+                          <SelectItem value={screen.screenId}>
+                            {index+1} : {screen.screenName}
+                          </SelectItem>
+                        )
+                      })
+                      }
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
         </div>
       </div>
 
