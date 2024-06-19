@@ -19,6 +19,7 @@ const useSelectThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
+    labelColor: theme?.text?.primaryColor || "#000000",
     containerBackground: "transparent",
     borderColor: {
       value: "#eaeaeb",
@@ -30,11 +31,7 @@ const useSelectThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    selectedOptionTextColor: {
-      value: theme?.general?.backgroundColor || "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
+    selectedOptionTextColor: "#ffffff",
     selectedOptionBackgroundColor: {
       value: theme?.general?.primaryColor || "#3182ce",
       globalStyled: true,
@@ -47,7 +44,7 @@ const useSelectThemePresets = () => {
     height: 50,
     size: SelectSizes.small,
     label: t("Select"),
-    fieldName: t("Select").toLowerCase()+ "-" + hexoid(6)().toLowerCase(),
+    fieldName: t("Select").toLowerCase() + "-" + hexoid(6)().toLowerCase(),
     placeholder: t("Please select an option"),
     marginLeft: 0,
     marginTop: 20,

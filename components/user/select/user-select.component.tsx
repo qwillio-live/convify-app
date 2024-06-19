@@ -46,6 +46,7 @@ export const SelectGen = ({
   height,
   marginRight,
   marginTop,
+  labelColor,
   containerBackground,
   marginBottom,
   paddingLeft,
@@ -87,6 +88,7 @@ export const SelectGen = ({
         <div
           className="w-full p-1"
           style={{
+            color: labelColor,
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: SelectSizeValues[size || "medium"],
           }}
@@ -94,7 +96,7 @@ export const SelectGen = ({
           <label>{label}</label>
         </div>
         <StyledCustomSelectTrigger
-          className={`!outline-none !ring-transparent [&>span]:break-all [&>span]:line-clamp-1 [&>span]:text-ellipsis ${
+          className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
           }`}
           fontFamily={fontFamily?.value}
@@ -216,6 +218,7 @@ export const Select = ({
   marginRight,
   marginTop,
   marginBottom,
+  labelColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -244,10 +247,10 @@ export const Select = ({
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
-
-  const backgroundColor = useAppSelector(
-    (state) => state.theme?.general?.backgroundColor
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
   )
+
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
   useEffect(() => {
@@ -261,17 +264,17 @@ export const Select = ({
       setProp((props) => {
         props.borderHoverColor.value = primaryColor
         props.selectedOptionBackgroundColor.value = primaryColor
+
+        return props
       }, 200)
     }
   }, [primaryColor])
 
   useEffect(() => {
-    if (backgroundColor) {
-      setProp((props) => {
-        props.selectedOptionTextColor.value = backgroundColor
-      }, 200)
+    if (primaryTextColor) {
+      setProp((props) => (props.labelColor = primaryTextColor), 200)
     }
-  }, [backgroundColor])
+  }, [primaryTextColor])
 
   return (
     <div
@@ -325,13 +328,14 @@ export const Select = ({
                 setProp((props) => (props.label = e.target.value))
               }
               style={{
+                color: labelColor,
                 outlineColor: borderHoverColor.value,
                 borderRadius: "4px",
               }}
             />
           </div>
           <StyledCustomSelectTrigger
-            className={`!outline-none !ring-transparent [&>span]:break-all [&>span]:line-clamp-1 [&>span]:text-ellipsis ${
+            className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
               !selectedOptionId ? "text-muted-foreground" : ""
             }`}
             fontFamily={fontFamily.value}
@@ -388,6 +392,7 @@ export type SelectProps = {
   selectOptions: object[]
   selectedOptionId: string | undefined
   fontFamily: StyleProperty
+  labelColor: string
   containerBackground: string
   disabled: boolean
   required: boolean
@@ -403,7 +408,7 @@ export type SelectProps = {
   border: number
   borderColor: StyleProperty
   borderHoverColor: StyleProperty
-  selectedOptionTextColor: StyleProperty
+  selectedOptionTextColor: string
   selectedOptionBackgroundColor: StyleProperty
   marginLeft: number | number
   marginTop: number | number
@@ -429,6 +434,7 @@ export const SelectDefaultProps: SelectProps = {
     globalStyled: true,
     isCustomized: false,
   },
+  labelColor: "#000000",
   containerBackground: "transparent",
   borderColor: {
     value: "inherit",
@@ -440,11 +446,7 @@ export const SelectDefaultProps: SelectProps = {
     globalStyled: false,
     isCustomized: false,
   },
-  selectedOptionTextColor: {
-    value: "inherit",
-    globalStyled: false,
-    isCustomized: false,
-  },
+  selectedOptionTextColor: "inherit",
   selectedOptionBackgroundColor: {
     value: "inherit",
     globalStyled: false,
