@@ -11,9 +11,12 @@ export const CRAFT_ELEMENTS = {
   PROGRESSBAR: "ProgressBar",
   ICONBUTTON: "IconButton",
   USERINPUT: "UserInput",
+  INPUTCHECKBOX: "InputCheckbox",
   USERTEXT: "UserText",
   HEADLINETEXT: "HeadlineText",
   PICTURECHOICE: "PictureChoice",
   MULTIPLECHOICE: "MultipleChoice",
   SCREENFOOTER: "ScreenFooter",
+  INPUTMAIL: "InputMail",
+  INPUTPHONE: "InputPhone",
 }

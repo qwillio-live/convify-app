@@ -24,6 +24,7 @@ import {
   ImagePlus,
   Linkedin,
   Loader as LoaderIcon,
+  Mail,
   Navigation,
   Pencil,
   Rocket,
@@ -31,9 +32,12 @@ import {
   TextCursorInput,
   Trophy,
   Type,
+  Phone
 } from "lucide-react"
-import { useTranslations } from "next-intl"
+// import { SquareCheck } from "lucide-react/dist/esm/lucide-react";
 
+import { useTranslations } from "next-intl"
+import { UserInputPhone, UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { useEditor } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
@@ -53,6 +57,7 @@ import {
 import CustomLoader from "@/components/ui/loader"
 import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Icons } from "@/components/icons"
 // import { Toggle, ToggleItem } from "@/components/ui/toggle-group"
 import {
   Loader,
@@ -74,7 +79,18 @@ import {
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
 import { Img, ImgDefaultProps } from "../image/user-image-component"
+import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
+import {
+  UserInputCheckbox,
+  UserInputCheckboxGen,
+} from "../input-checkbox/user-input-checkbox.component"
+import useInputMailThemePresets from "../input-email/useInputMailThemePresets"
+import {
+  UserInputMail,
+  UserInputMailGen,
+} from "../input-email/user-input-mail.component"
 import useInputThemePresets from "../input/useInputThemePresets"
+import useInputPhoneThemePresets from "../input-phone/useInputPhoneThemePresets"
 import { UserInput, UserInputGen } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
@@ -90,6 +106,8 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
+
+const SquareCheckIcon = Icons.SquareCheck
 
 const MultipleChoiceOptions = [
   {
@@ -346,6 +364,12 @@ export const UserToolbox = () => {
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
+  const { outlinedPresetChecbox, underlinedPresetChecbox } =
+    useInputCheckboxThemePresets()
+  const { outlinedPresetMail, underlinedPresetMail } =
+    useInputMailThemePresets()
+  const { outlinedPresetPhone, underlinedPresetPhone } =
+    useInputPhoneThemePresets()
 
   {
     /**
@@ -415,7 +439,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <h1 className="text-lg font-semibold">
-                      {t("TextDescription")}
+                        {t("TextDescription")}
                       </h1>
                     </div>
                   </HoverCardComponent>
@@ -449,6 +473,111 @@ export const UserToolbox = () => {
                       />
                     </HoverCardComponent>
                   </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <UserInputCheckbox {...outlinedPresetChecbox} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Checkbox")}
+                      icon={<SquareCheckIcon className="mr-2 size-3" />}
+                    >
+                      <UserInputCheckboxGen
+                        {...outlinedPresetChecbox}
+                        label={t("Checkbox")}
+                        // label={t("Label")}
+                        placeholder={t("Checkbox")}
+                        // placeholder={t("Placeholder")}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
+                  {/* <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <UserInputCheckbox {...outlinedPresetChecbox} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Checkbox")}
+                      icon={<SquareCheckIcon className="mr-2 size-3" />}
+                    >
+                      <UserInputCheckboxGen
+                        {...outlinedPresetChecbox}
+                        label={t("Checkbox")}
+                        // label={t("Label")}
+                        placeholder={t("Checkbox")}
+                        // placeholder={t("Placeholder")}
+                      />
+                    </HoverCardComponent>
+                  </div> */}
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <UserInputMail {...outlinedPresetMail} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("InputMail")}
+                      icon={<Mail className="mr-2 size-3" />}
+                    >
+                      <UserInputMailGen
+                        {...outlinedPresetMail}
+                        label={t("InputMail")}
+                        // label={t("Label")}
+                        placeholder={t("InputMail")}
+                        // placeholder={t("Placeholder")}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <UserInputPhone {...outlinedPresetPhone} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("InputPhone")}
+                      icon={<Phone className="mr-2 size-3" />}
+                    >
+                      <UserInputPhoneGen
+                        {...outlinedPresetPhone}
+                        label={t("InputPhone")}
+                        // label={t("Label")}
+                        placeholder={t("InputPhone")}
+                        // placeholder={t("Placeholder")}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line

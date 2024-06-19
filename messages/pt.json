@@ -37,8 +37,11 @@
   },
   "Components": {
     "Align": "Alinhar",
+    "InputMail": "Email",
     "FontSize": "Tamanho da Fonte",
+    "InputPhone": "Telefone",
     "FontWeight": "Peso da Fonte",
+    "Checkbox": "Caixa de Seleção",
     "HeadlineDescription": "Título para o seu negócio",
     "TextDescription": "Uma boa descrição da sua causa",
     "Continue Button": "Botão Continuar",

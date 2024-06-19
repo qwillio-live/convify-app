@@ -7,7 +7,6 @@ import { UserLogo } from "@/components/user/logo/user-logo.component"
 // import lz from "lzutf8";
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import { UserTextInputGen } from "@/components/user/text/user-text.component"
-
 import { UserInputGen } from "../input/user-input.component"
 import { LogoBarGen } from "../logo-bar/logo-bar.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
@@ -19,6 +18,10 @@ import { CardContentGen, CardGen } from "../card/user-card.component"
 import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { UserInputCheckboxGen } from "../input-checkbox/user-input-checkbox.component"
+import { UserInputMailGen } from "../input-email/user-input-mail.component"
+import { User } from "lucide-react"
+import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -36,6 +39,9 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
+  [CRAFT_ELEMENTS.INPUTCHECKBOX]: UserInputCheckboxGen,
+  [CRAFT_ELEMENTS.INPUTMAIL]: UserInputMailGen,
+  [CRAFT_ELEMENTS.INPUTPHONE]: UserInputPhoneGen,
 }
 
 interface Props {

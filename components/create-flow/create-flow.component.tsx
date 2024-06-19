@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import {
   ArrowRight,
   Check,
@@ -10,7 +11,6 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React from "react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -24,7 +24,6 @@ import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
 import { UserText } from "@/components/user/text/user-text.component"
-import { IconButton } from "../user/icon-button/user-icon-button.component"
 
 import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
@@ -36,7 +35,11 @@ import {
   UserContainer,
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
+import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { Img } from "../user/image/user-image-component"
+import { UserInputCheckbox } from "../user/input-checkbox/user-input-checkbox.component"
+import { UserInputMail } from "../user/input-email/user-input-mail.component"
+import { UserInputPhone } from "../user/input-phone/user-input-phone.component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
 import { List, ListItem } from "../user/list/list.component"
@@ -99,9 +102,15 @@ export function CreateFlowComponent() {
     (state) => state?.theme?.general?.backgroundImage
   )
 
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  const startScreen = useAppSelector(
+    (state) => state?.screen?.screens[0].screenData || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
@@ -142,6 +151,9 @@ export function CreateFlowComponent() {
           HeadlineText,
           UserText,
           UserButton,
+          UserInputCheckbox,
+          UserInputMail,
+          UserInputPhone,
           ProgressBar,
           Element,
           Progress,
@@ -216,17 +228,13 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  {
-                  !headerMode && !footerMode &&
-                   <ResolvedComponentsFromCraftState screen={screensHeader} />
-                  }
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  )}
                   <Frame data={editorLoad}></Frame>
-                  {
-                    !headerMode && !footerMode &&
-                  <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
-
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  )}
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -256,53 +264,55 @@ export function CreateFlowComponent() {
         </div>
       </Editor>
       <Editor
-              resolver={{
-                Controller,
-                Logo,
-                HeadlineText,
-                UserText,
-                UserButton,
-                ProgressBar,
-                Element,
-                Progress,
-                ButtonChoiceScreen,
-                ScreenHeader,
-                UserInput,
-                ScreenFooter,
-                ScreensList,
-                ScreenOneChoice,
-                // UserProgressBar,
-                ScreenOneInput,
-                Input,
-                Button,
-                ArrowRight,
-                Check,
-                Cross,
-                Facebook,
-                Github,
-                Globe,
-                Linkedin,
-                Container,
-                Card,
-                CardContent,
-                UserContainer,
-                IconButton,
-                DragDrop,
-                UserToolbox,
-                Image,
-                PictureChoice,
-                MultipleChoice,
-                LogoBar,
-                LogoBarItem,
-                LayoutContainer,
-                Loader,
-                List,
-                ListItem,
-              }}
-              onRender={RenderNode}
+        resolver={{
+          Controller,
+          Logo,
+          HeadlineText,
+          UserText,
+          UserButton,
+          ProgressBar,
+          Element,
+          Progress,
+          ButtonChoiceScreen,
+          ScreenHeader,
+          UserInput,
+          ScreenFooter,
+          ScreensList,
+          ScreenOneChoice,
+          UserInputMail,
+          UserInputPhone,
+          // UserProgressBar,
+          ScreenOneInput,
+          Input,
+          Button,
+          ArrowRight,
+          Check,
+          Cross,
+          Facebook,
+          Github,
+          Globe,
+          Linkedin,
+          Container,
+          Card,
+          CardContent,
+          UserContainer,
+          IconButton,
+          DragDrop,
+          UserToolbox,
+          Image,
+          PictureChoice,
+          MultipleChoice,
+          LogoBar,
+          LogoBarItem,
+          LayoutContainer,
+          Loader,
+          List,
+          ListItem,
+        }}
+        onRender={RenderNode}
       >
         <div className="special-editor">
-        <Frame data={screenRoller}></Frame>
+          <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>

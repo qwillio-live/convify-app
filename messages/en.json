@@ -37,8 +37,11 @@
   },
   "Components": {
     "Align": "Align",
+    "InputMail": "Email",
     "FontSize": "Font Size",
     "FontWeight": "Font Weight",
+    "InputPhone": "Phone",
+    "Checkbox": "Checkbox",
     "Continue Button": "Continue Button",
     "HeadlineDescription": "Headline for your business",
     "TextDescription": "A good description of your cause",
