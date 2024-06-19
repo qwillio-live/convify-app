@@ -167,6 +167,7 @@ export const ChecklistSettings = () => {
                   key={`checklist-item-${item.id}`}
                   item={item}
                   index={index}
+                  handlePropChange={handlePropChange}
                 />
               ))}
             </Reorder.Group>
@@ -420,20 +421,11 @@ export const ChecklistSettings = () => {
   )
 }
 
-export const ChecklistItemSettings = ({ item, index }) => {
+export const ChecklistItemSettings = ({ item, index, handlePropChange }) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setProp(
-        (props) => (props.listItems[index].src = URL.createObjectURL(file)),
-        1000
-      )
-    }
-  }
+
   const {
     actions: { setProp },
     props: { checklistItems },
@@ -442,18 +434,18 @@ export const ChecklistItemSettings = ({ item, index }) => {
   }))
 
   const handleItemDelete = () => {
-    setProp(
-      (props) =>
-        (props.checklistItems = checklistItems.filter((_, i) => i !== index)),
-      1000
+    handlePropChange(
+      "checklistItems",
+      checklistItems.filter((_, i) => i !== index)
     )
   }
 
   const handleItemEdit = (e) => {
-    setProp(
-      (props) => (props.checklistItems[index].value = e.target.value),
-      1000
-    )
+    handlePropChange("checklistItems", [
+      ...checklistItems.slice(0, index),
+      { id: item.id, value: e.target.value },
+      ...checklistItems.slice(index + 1),
+    ])
   }
 
   return (
@@ -478,7 +470,7 @@ export const ChecklistItemSettings = ({ item, index }) => {
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible hover:cursor-pointer"
+        className="reorder-handle invisible hover:cursor-move"
       >
         <GripVertical className="text-muted-foreground size-4" />
       </div>

@@ -137,6 +137,7 @@ export const SelectSettings = () => {
                   key={`select-option-item-${item.id}`}
                   item={item}
                   index={index}
+                  handlePropChange={handlePropChange}
                 />
               ))}
             </Reorder.Group>
@@ -365,20 +366,15 @@ export const SelectSettings = () => {
   )
 }
 
-export const SelectOptionSettingsItem = ({ item, index }) => {
+export const SelectOptionSettingsItem = ({
+  item,
+  index,
+  handlePropChange,
+}) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setProp(
-        (props) => (props.listItems[index].src = URL.createObjectURL(file)),
-        1000
-      )
-    }
-  }
+
   const {
     actions: { setProp },
     props: { selectOptions, selectedOptionId },
@@ -388,19 +384,19 @@ export const SelectOptionSettingsItem = ({ item, index }) => {
 
   const handleOptionDelete = () => {
     if (item.value === selectedOptionId)
-      setProp((props) => (props.selectedOptionId = undefined), 1000)
-    setProp(
-      (props) =>
-        (props.selectOptions = selectOptions.filter((_, i) => i !== index)),
-      1000
+      handlePropChange("selectedOptionId", undefined)
+    handlePropChange(
+      "selectOptions",
+      selectOptions.filter((_, i) => i !== index)
     )
   }
 
   const handleOptionEdit = (e) => {
-    setProp(
-      (props) => (props.selectOptions[index].value = e.target.value),
-      1000
-    )
+    handlePropChange("selectOptions", [
+      ...selectOptions.slice(0, index),
+      { ...item, value: e.target.value },
+      ...selectOptions.slice(index + 1),
+    ])
   }
 
   return (
@@ -411,7 +407,7 @@ export const SelectOptionSettingsItem = ({ item, index }) => {
       transition={{ duration: 0 }}
       id={`select-option-item-${item.id}`}
       style={{ y }}
-      className="flex w-full select-none items-center gap-2 [&>svg]:hover:visible [&>div]:hover:visible"
+      className="flex w-full select-none items-center gap-2 [&>div]:hover:visible [&>svg]:hover:visible"
     >
       <Input
         className="h-8 flex-1"
@@ -420,12 +416,12 @@ export const SelectOptionSettingsItem = ({ item, index }) => {
         onChange={handleOptionEdit}
       />
       <Trash2
-        className="text-muted-foreground size-3 hover:cursor-pointer invisible"
+        className="text-muted-foreground invisible size-3 hover:cursor-pointer"
         onClick={handleOptionDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle hover:cursor-pointer invisible"
+        className="reorder-handle invisible hover:cursor-move"
       >
         <GripVertical className="text-muted-foreground size-4" />
       </div>

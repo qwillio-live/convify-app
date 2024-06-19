@@ -36,6 +36,7 @@ export const ChecklistGen = ({
   height,
   marginRight,
   marginTop,
+  textColor,
   containerBackground,
   iconColor,
   marginBottom,
@@ -82,6 +83,7 @@ export const ChecklistGen = ({
             <span
               className="flex-1"
               style={{
+                color: textColor,
                 fontFamily: `var(${fontFamily?.value})`,
                 fontWeight: fontWeight,
                 fontSize: `${fontSize}px`,
@@ -111,6 +113,7 @@ export const Checklist = ({
   marginRight,
   marginTop,
   marginBottom,
+  textColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -132,6 +135,9 @@ export const Checklist = ({
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
   useEffect(() => {
@@ -139,6 +145,12 @@ export const Checklist = ({
       setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
   }, [primaryFont])
+
+  useEffect(() => {
+    if (primaryTextColor) {
+      setProp((props) => (props.textColor = primaryTextColor), 200)
+    }
+  }, [primaryTextColor])
 
   return (
     <div
@@ -152,7 +164,7 @@ export const Checklist = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Select")} />}
+      {hover && <Controller nameOfComponent={t("Checklist")} />}
       <div
         className="relative w-full"
         style={{
@@ -192,6 +204,7 @@ export const Checklist = ({
               <span
                 className="flex-1"
                 style={{
+                  color: textColor,
                   fontFamily: `var(${fontFamily?.value})`,
                   fontWeight: fontWeight,
                   fontSize: `${fontSize}px`,
@@ -236,6 +249,7 @@ export type ChecklistProps = {
   paddingBottom: string | number
   icon: string
   iconColor: string
+  textColor: string
   containerBackground: string
   layout: string
   marginLeft: number | number
@@ -258,8 +272,9 @@ export const ChecklistDefaultProps: ChecklistProps = {
   },
   fontWeight: "normal",
   fontSize: 16,
-  icon: "check",
+  icon: "interface-validation-check-circle-checkmark-addition-circle-success-check-validation-add-form",
   layout: ChecklistLayouts.column,
+  textColor: "#000000",
   containerBackground: "transparent",
   iconColor: "green",
   width: ChecklistSizes.small,
