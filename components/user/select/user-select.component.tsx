@@ -94,7 +94,7 @@ export const SelectGen = ({
           <label>{label}</label>
         </div>
         <StyledCustomSelectTrigger
-          className={`!outline-none !ring-transparent ${
+          className={`!outline-none !ring-transparent [&>span]:break-all [&>span]:line-clamp-1 [&>span]:text-ellipsis ${
             !selectedOptionId ? "text-muted-foreground" : ""
           }`}
           fontFamily={fontFamily?.value}
@@ -331,7 +331,7 @@ export const Select = ({
             />
           </div>
           <StyledCustomSelectTrigger
-            className={`!outline-none !ring-transparent ${
+            className={`!outline-none !ring-transparent [&>span]:break-all [&>span]:line-clamp-1 [&>span]:text-ellipsis ${
               !selectedOptionId ? "text-muted-foreground" : ""
             }`}
             fontFamily={fontFamily.value}
