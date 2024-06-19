@@ -467,7 +467,7 @@ export const UserText = ({
 
   const handleTextChange = useCallback(
     (e) => {
-      const value = e.target.textContent
+      const value = e.target.innerHTML
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.text = value
