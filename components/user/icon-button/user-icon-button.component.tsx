@@ -353,6 +353,7 @@ export const IconButton = ({
   //editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
   useEffect(() => {
+    let screenNameChanged = false;
     if(buttonAction === "next-screen"){
     setProp((props) => (props.nextScreen = {
       screenName: nextScreenName,
@@ -365,10 +366,18 @@ export const IconButton = ({
             screenName: screen.screenName,
             screenId: screen.screenId
           }), 200)
+          screenNameChanged = true;
         }
       })
-
+      if(!screenNameChanged){
+        setProp((props) => props.buttonAction = "next-screen", 200);
+        setProp((props) => props.nextScreen = {
+          screenId: nextScreenId,
+          screenName: nextScreenName
+        });
+      }
     }
+
 },[nextScreenName,buttonAction])
 
   useEffect(() => {
