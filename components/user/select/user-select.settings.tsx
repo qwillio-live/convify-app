@@ -132,12 +132,11 @@ export const SelectSettings = () => {
               className="flex w-full flex-col gap-2"
               onReorder={(e) => handlePropChange("selectOptions", e)}
             >
-              {selectOptions.map((item, index) => (
-                <SelectOptionSettingsItem
-                  key={`select-option-item-${item.id}`}
-                  item={item}
+              {selectOptions.map((option, index) => (
+                <SelectOptionSettings
+                  key={`select-option-item-${option.id}`}
+                  option={option}
                   index={index}
-                  handlePropChange={handlePropChange}
                 />
               ))}
             </Reorder.Group>
@@ -366,54 +365,49 @@ export const SelectSettings = () => {
   )
 }
 
-export const SelectOptionSettingsItem = ({
-  item,
-  index,
-  handlePropChange,
-}) => {
+export const SelectOptionSettings = ({ option, index }) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
 
   const {
     actions: { setProp },
-    props: { selectOptions, selectedOptionId },
+    props: { selectedOptionId },
   } = useNode((node) => ({
     props: node.data.props,
   }))
 
   const handleOptionDelete = () => {
-    if (item.value === selectedOptionId)
-      handlePropChange("selectedOptionId", undefined)
-    handlePropChange(
-      "selectOptions",
-      selectOptions.filter((_, i) => i !== index)
+    if (option.id === selectedOptionId)
+      setProp((props) => (props.selectedOptionId = undefined), 200)
+    setProp(
+      (props) =>
+        (props.selectOptions = props.selectOptions.filter(
+          (_, i) => i !== index
+        )),
+      200
     )
   }
 
-  const handleOptionEdit = (e) => {
-    handlePropChange("selectOptions", [
-      ...selectOptions.slice(0, index),
-      { ...item, value: e.target.value },
-      ...selectOptions.slice(index + 1),
-    ])
+  const handleOptionEdit = (newValue) => {
+    setProp((props) => (props.selectOptions[index].value = newValue), 200)
   }
 
   return (
     <Reorder.Item
       dragListener={false}
       dragControls={controls}
-      value={item}
+      value={option}
       transition={{ duration: 0 }}
-      id={`select-option-item-${item.id}`}
+      id={`select-option-item-${option.id}`}
       style={{ y }}
       className="flex w-full select-none items-center gap-2 [&>div]:hover:visible [&>svg]:hover:visible"
     >
       <Input
         className="h-8 flex-1"
-        value={item.value}
+        value={option.value}
         placeholder={`${t("Option")} ${index + 1}`}
-        onChange={handleOptionEdit}
+        onChange={(e) => handleOptionEdit(e.target.value)}
       />
       <Trash2
         className="text-muted-foreground invisible size-3 hover:cursor-pointer"

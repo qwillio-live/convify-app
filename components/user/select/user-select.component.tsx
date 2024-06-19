@@ -325,7 +325,7 @@ export const Select = ({
               className="px-1"
               html={label}
               onChange={(e) =>
-                setProp((props) => (props.label = e.target.value))
+                setProp((props) => (props.label = e.target.value), 200)
               }
               style={{
                 color: labelColor,

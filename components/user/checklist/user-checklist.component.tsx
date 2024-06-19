@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import {
@@ -220,7 +220,7 @@ export const Checklist = ({
                     setProp(
                       (props) =>
                         (props.checklistItems[index].value = e.target.value),
-                      1000
+                      200
                     )
                   }
                   style={{
@@ -230,6 +230,7 @@ export const Checklist = ({
                     fontSize: `${fontSize}px`,
                     outlineColor: borderColor,
                     borderRadius: "4px",
+                    wordBreak: "break-word",
                   }}
                 />
               </div>

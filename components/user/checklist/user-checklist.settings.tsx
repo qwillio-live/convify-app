@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import {
   MoveHorizontal,
   GripVertical,
@@ -167,7 +167,6 @@ export const ChecklistSettings = () => {
                   key={`checklist-item-${item.id}`}
                   item={item}
                   index={index}
-                  handlePropChangeDebounced={handlePropChangeDebounced}
                 />
               ))}
             </Reorder.Group>
@@ -421,20 +420,10 @@ export const ChecklistSettings = () => {
   )
 }
 
-export const ChecklistItemSettings = ({
-  item,
-  index,
-  handlePropChangeDebounced,
-}) => {
+export const ChecklistItemSettings = ({ item, index }) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
-
-  const [itemValue, setItemValue] = useState(item.value)
-
-  useEffect(() => {
-    handleItemValueEdit(itemValue)
-  }, [itemValue])
 
   const {
     actions: { setProp },
@@ -444,18 +433,15 @@ export const ChecklistItemSettings = ({
   }))
 
   const handleItemDelete = () => {
-    handlePropChangeDebounced(
-      "checklistItems",
-      checklistItems.filter((_, i) => i !== index)
+    setProp(
+      (props) =>
+        (props.checklistItems = checklistItems.filter((_, i) => i !== index)),
+      200
     )
   }
 
   const handleItemValueEdit = (updatedValue) => {
-    handlePropChangeDebounced("checklistItems", [
-      ...checklistItems.slice(0, index),
-      { id: item.id, value: updatedValue },
-      ...checklistItems.slice(index + 1),
-    ])
+    setProp((props) => (props.checklistItems[index].value = updatedValue), 200)
   }
 
   return (
@@ -470,9 +456,9 @@ export const ChecklistItemSettings = ({
     >
       <Input
         className="h-8 flex-1"
-        value={itemValue}
+        value={item.value}
         placeholder={`${t("Item")} ${index + 1}`}
-        onChange={(e) => setItemValue(e.target.value)}
+        onChange={(e) => handleItemValueEdit(e.target.value)}
       />
       <Trash2
         className="text-muted-foreground invisible size-3 hover:cursor-pointer"
