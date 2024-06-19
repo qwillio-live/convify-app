@@ -8,6 +8,7 @@ import {
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
 
 const ChecklistSizeValues = {
   small: "300px",
@@ -114,6 +115,7 @@ export const Checklist = ({
   marginTop,
   marginBottom,
   textColor,
+  borderColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -135,6 +137,9 @@ export const Checklist = ({
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -145,6 +150,12 @@ export const Checklist = ({
       setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
   }, [primaryFont])
+
+  useEffect(() => {
+    if (primaryColor) {
+      setProp((props) => (props.borderColor = primaryColor), 200)
+    }
+  }, [primaryColor])
 
   useEffect(() => {
     if (primaryTextColor) {
@@ -192,7 +203,7 @@ export const Checklist = ({
           }}
         >
           {checklistItems.map((item, index) => (
-            <li key={index} className="flex flex-1 items-center gap-3">
+            <li key={index} className="flex w-full flex-1 items-center gap-3">
               <ChecklistIconRenderer
                 iconName={icon}
                 style={{
@@ -201,17 +212,27 @@ export const Checklist = ({
                   color: iconColor,
                 }}
               />
-              <span
-                className="flex-1"
-                style={{
-                  color: textColor,
-                  fontFamily: `var(${fontFamily?.value})`,
-                  fontWeight: fontWeight,
-                  fontSize: `${fontSize}px`,
-                }}
-              >
-                {item.value}
-              </span>
+              <div className="flex-1">
+                <ContentEditable
+                  className="w-full px-1"
+                  html={item.value}
+                  onChange={(e) =>
+                    setProp(
+                      (props) =>
+                        (props.checklistItems[index].value = e.target.value),
+                      1000
+                    )
+                  }
+                  style={{
+                    color: textColor,
+                    fontFamily: `var(${fontFamily?.value})`,
+                    fontWeight: fontWeight,
+                    fontSize: `${fontSize}px`,
+                    outlineColor: borderColor,
+                    borderRadius: "4px",
+                  }}
+                />
+              </div>
             </li>
           ))}
         </ul>
@@ -250,6 +271,7 @@ export type ChecklistProps = {
   icon: string
   iconColor: string
   textColor: string
+  borderColor: string
   containerBackground: string
   layout: string
   marginLeft: number | number
@@ -275,6 +297,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   icon: "interface-validation-check-circle-checkmark-addition-circle-success-check-validation-add-form",
   layout: ChecklistLayouts.column,
   textColor: "#000000",
+  borderColor: "#3182ce",
   containerBackground: "transparent",
   iconColor: "green",
   width: ChecklistSizes.small,

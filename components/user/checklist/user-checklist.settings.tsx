@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   MoveHorizontal,
   GripVertical,
@@ -167,7 +167,7 @@ export const ChecklistSettings = () => {
                   key={`checklist-item-${item.id}`}
                   item={item}
                   index={index}
-                  handlePropChange={handlePropChange}
+                  handlePropChangeDebounced={handlePropChangeDebounced}
                 />
               ))}
             </Reorder.Group>
@@ -421,10 +421,20 @@ export const ChecklistSettings = () => {
   )
 }
 
-export const ChecklistItemSettings = ({ item, index, handlePropChange }) => {
+export const ChecklistItemSettings = ({
+  item,
+  index,
+  handlePropChangeDebounced,
+}) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
+
+  const [itemValue, setItemValue] = useState(item.value)
+
+  useEffect(() => {
+    handleItemValueEdit(itemValue)
+  }, [itemValue])
 
   const {
     actions: { setProp },
@@ -434,16 +444,16 @@ export const ChecklistItemSettings = ({ item, index, handlePropChange }) => {
   }))
 
   const handleItemDelete = () => {
-    handlePropChange(
+    handlePropChangeDebounced(
       "checklistItems",
       checklistItems.filter((_, i) => i !== index)
     )
   }
 
-  const handleItemEdit = (e) => {
-    handlePropChange("checklistItems", [
+  const handleItemValueEdit = (updatedValue) => {
+    handlePropChangeDebounced("checklistItems", [
       ...checklistItems.slice(0, index),
-      { id: item.id, value: e.target.value },
+      { id: item.id, value: updatedValue },
       ...checklistItems.slice(index + 1),
     ])
   }
@@ -460,9 +470,9 @@ export const ChecklistItemSettings = ({ item, index, handlePropChange }) => {
     >
       <Input
         className="h-8 flex-1"
-        value={item.value}
+        value={itemValue}
         placeholder={`${t("Item")} ${index + 1}`}
-        onChange={handleItemEdit}
+        onChange={(e) => setItemValue(e.target.value)}
       />
       <Trash2
         className="text-muted-foreground invisible size-3 hover:cursor-pointer"
