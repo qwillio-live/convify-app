@@ -122,8 +122,6 @@ model Flow {
 model Integration {
   id                   String   @id @default(cuid())
   flowId               String
-  name                 String?
-  settings             Json?
   createdAt            DateTime @default(now()) @map(name: "created_at")
   updatedAt            DateTime @default(now()) @map(name: "updated_at")
   googleAnalyticsId    String?
