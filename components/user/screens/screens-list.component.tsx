@@ -201,7 +201,11 @@ const ScreensList = () => {
             onClick={() => handleHeaderScreenClick()}
           >
             <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
-            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
+            {/* position: absolute;
+    width: max-content;
+    top: -60%;
+    height: max-content; */}
+            <div className="text-xs top-[-65%] text-muted-foreground scale-[.30] absolute w-max h-max">
 
               <ResolvedComponentsFromCraftState screen={screensHeader} />
 
@@ -227,7 +231,7 @@ const ScreensList = () => {
             onClick={() => handleFooterScreenClick()}
           >
             <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] flex flex-col justify-start bottom-[110%] absolute">
+            <div className="text-xs w-max h-max text-muted-foreground scale-[.30] flex flex-col justify-start bottom-[-142%] absolute">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
 
             </div>
@@ -287,7 +291,7 @@ const ScreensList = () => {
                       className={cn(
                         "h-60 w-[13.5vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": selectedScreenIndex === index,
+                          "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
