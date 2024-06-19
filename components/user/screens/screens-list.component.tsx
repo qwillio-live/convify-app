@@ -227,7 +227,7 @@ const ScreensList = () => {
             onClick={() => handleFooterScreenClick()}
           >
             <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative flex flex-col justify-start">
+            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] flex flex-col justify-start bottom-[110%] absolute">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
 
             </div>

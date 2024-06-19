@@ -92,7 +92,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       }
     }
   }, [dom, isHover, isSelected,id]);
-  console.log(`Name of component is: ${name} and color is ${borderColor}`)
+  console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
 
   return (
     // <div
