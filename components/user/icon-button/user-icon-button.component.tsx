@@ -316,7 +316,6 @@ export const IconButton = ({
   borderColor,
   buttonAction,
   nextScreen,
-  compId,
   ...props
 }) => {
   const {
@@ -325,7 +324,6 @@ export const IconButton = ({
     selected,
     isHovered,
   } = useNode((state) => ({
-    compId: state.id,
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
