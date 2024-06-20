@@ -31,12 +31,7 @@ import {
   useScreensLength,
 } from "@/lib/state/flows-state/features/screenHooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import {
-  Reorder,
-  useDragControls,
-  useInView,
-  useMotionValue,
-} from "framer-motion"
+import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import hexoid from "hexoid"
 import {
   MultipleChoiceGen,
@@ -714,7 +709,10 @@ const MultipleChoiceItemNavigationSettings = ({
   onChange,
 }) => {
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
+  const screenNames = useAppSelector(
+    (state: RootState) =>
+      state.screen?.screens.map(({ screenName }) => screenName) ?? []
+  )
   const screensLength = useScreensLength()
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0

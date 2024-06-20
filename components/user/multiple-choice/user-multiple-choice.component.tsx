@@ -418,7 +418,7 @@ const MultipleChoiceItem = ({
             </span>
           ) : (
             <ContentEditable
-              className="w-full whitespace-break-spaces p-1"
+              className="max-w-full w-fit whitespace-break-spaces p-1"
               style={{ wordBreak: "break-word" }}
               html={choice.value}
               disabled={onValueChange === null}
