@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { MultipleChoiceSettings } from "./user-multiple-choice.settings"
@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
 import { PictureTypes } from "@/components/PicturePicker"
+import { debounce } from "lodash"
+import ContentEditable from "react-contenteditable"
 
 const MultipleChoiceSizeValues = {
   small: "300px",
@@ -100,6 +102,7 @@ export const MultipleChoiceGen = ({
             defaultStyles={defaultStyles}
             hoverStyles={hoverStyles}
             selectedStyles={selectedStyles}
+            onValueChange={null}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
@@ -148,7 +151,7 @@ export const MultipleChoice = ({
   hoverStyles,
   selectedStyles,
   selections,
-  choices,
+  choices: originalChoices,
   tracking,
   ...props
 }) => {
@@ -162,6 +165,7 @@ export const MultipleChoice = ({
     isHovered: state.events.hovered,
   }))
 
+  const [choices, setChoices] = useState(originalChoices)
   const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
 
@@ -170,6 +174,23 @@ export const MultipleChoice = ({
     (state) => state.theme?.general?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
+  const debouncedSetProp = useCallback(
+    debounce((property, value) => {
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
+    [setProp]
+  )
+
+  const handlePropChangeDebounced = (property, value) => {
+    debouncedSetProp(property, value)
+  }
+
+  useEffect(() => {
+    setChoices(originalChoices)
+  }, [originalChoices])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -279,9 +300,19 @@ export const MultipleChoice = ({
               defaultStyles={defaultStyles}
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
-              // onValueChange={(newValue) => {
-              //   setProp((props) => (props.choices[index].value = newValue), 200)
-              // }}
+              onValueChange={(updatedValue) => {
+                setChoices(
+                  choices.map((choice, i) =>
+                    i === index ? { ...choice, value: updatedValue } : choice
+                  )
+                )
+                handlePropChangeDebounced(
+                  "choices",
+                  choices.map((choice, i) =>
+                    i === index ? { ...choice, value: updatedValue } : choice
+                  )
+                )
+              }}
               onSelectChange={() => {
                 if (multiSelect) {
                   setProp((props) => {
@@ -326,8 +357,10 @@ const MultipleChoiceItem = ({
   defaultStyles,
   hoverStyles,
   selectedStyles,
+  onValueChange,
   onSelectChange,
 }) => {
+  const [isEditing, setIsEditing] = useState(false)
   return (
     <li className="w-full">
       <StyledMultipleChoiceItem
@@ -337,7 +370,7 @@ const MultipleChoiceItem = ({
         borderBottomRounded={isCollapsed ? isLast : true}
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
-        onClick={onSelectChange}
+        onClick={isEditing ? null : onSelectChange}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}
@@ -376,12 +409,24 @@ const MultipleChoiceItem = ({
           ))}
 
         <div className="flex-1 text-start">
-          <span
-            className="w-full whitespace-break-spaces"
-            style={{ wordBreak: "break-word" }}
-          >
-            {choice.value}
-          </span>
+          {onValueChange === null ? (
+            <span
+              className="w-full whitespace-break-spaces"
+              style={{ wordBreak: "break-word" }}
+            >
+              {choice.value}
+            </span>
+          ) : (
+            <ContentEditable
+              className="w-full whitespace-break-spaces p-1"
+              style={{ wordBreak: "break-word" }}
+              html={choice.value}
+              disabled={onValueChange === null}
+              onChange={(e) => onValueChange(e.target.value)}
+              onFocus={() => setIsEditing(true)}
+              onBlur={() => setIsEditing(false)}
+            />
+          )}
         </div>
       </StyledMultipleChoiceItem>
     </li>

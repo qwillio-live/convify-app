@@ -66,7 +66,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/custom-select"
 
 export const MultipleChoiceSettings = () => {
   const t = useTranslations("Components")
@@ -99,7 +99,6 @@ export const MultipleChoiceSettings = () => {
       selections,
       choices,
       tracking,
-      trackingEvents,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -165,7 +164,27 @@ export const MultipleChoiceSettings = () => {
 
   useEffect(() => {
     setProp((props) => (props.selections = []), 200)
+    setProp(
+      (props) =>
+        (props.choices = choices.map((choice) => ({
+          ...choice,
+          buttonAction: null,
+          nextScreen: null,
+        }))),
+      200
+    )
   }, [multiSelect])
+
+  useEffect(() => {
+    setProp(
+      (props) =>
+        (props.choices = choices.map((choice) => ({
+          ...choice,
+          trackingEvent: null,
+        }))),
+      200
+    )
+  }, [tracking])
 
   return (
     <>
@@ -208,6 +227,7 @@ export const MultipleChoiceSettings = () => {
                   key={`input-${choice.id}`}
                   choice={choice}
                   index={index}
+                  handlePropChangeDebounced={handlePropChangeDebounced}
                 />
               ))}
             </Reorder.Group>
@@ -527,22 +547,15 @@ export const MultipleChoiceSettings = () => {
           <AccordionContent className="w-full space-y-2 p-2">
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <Checkbox
+                id="tracking"
                 className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={tracking}
                 onCheckedChange={(e) => {
                   handlePropChange("tracking", e)
-                  setProp(
-                    (props) =>
-                      (props.choices = props.choices.map((choice) => ({
-                        ...choice,
-                        trackingEvent: null,
-                      }))),
-                    200
-                  )
                 }}
               />
               <label
-                htmlFor="required"
+                htmlFor="tracking"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Tracking activated")}
@@ -555,28 +568,21 @@ export const MultipleChoiceSettings = () => {
                   {t("Tracking Event")}
                 </div>
                 {choices.map((choice, index) => (
-                  <div className="style-control col-span-2 mt-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
-                    <label
-                      htmlFor="label-event"
-                      className="shrink-0 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {`${t("Option")} ${index + 1}`}
-                    </label>
-                    <Input
-                      value={choice.trackingEvent ?? ""}
-                      defaultValue={choice.trackingEvent ?? ""}
-                      placeholder={choice.value.replaceAll(" ", "_")}
-                      onChange={(e) => {
-                        setProp(
-                          (props) =>
-                            (props.choices[index].trackingEvent =
-                              e.target.value),
-                          200
+                  <MultipleChoiceItemTrackingSettings
+                    key={`multiple-choice-tracking-event-${choice.id}`}
+                    choice={choice}
+                    index={index}
+                    onChange={(updatedTrackingEvent) => {
+                      handlePropChangeDebounced(
+                        "choices",
+                        choices.map((choice, i) =>
+                          i === index
+                            ? { ...choice, trackingEvent: updatedTrackingEvent }
+                            : choice
                         )
-                      }}
-                      type={"text"}
-                    />
-                  </div>
+                      )
+                    }}
+                  />
                 ))}
               </div>
             )}
@@ -587,7 +593,11 @@ export const MultipleChoiceSettings = () => {
   )
 }
 
-export const MultipleChoiceItemSettings = ({ choice, index }) => {
+export const MultipleChoiceItemSettings = ({
+  choice: originalChoice,
+  index,
+  handlePropChangeDebounced,
+}) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
@@ -598,6 +608,12 @@ export const MultipleChoiceItemSettings = ({ choice, index }) => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+  const [choice, setChoice] = useState(originalChoice)
+
+  useEffect(() => {
+    setChoice(originalChoice)
+  }, [originalChoice])
 
   const handleChoiceDelete = () => {
     if (selections.includes(choice.id))
@@ -612,8 +628,31 @@ export const MultipleChoiceItemSettings = ({ choice, index }) => {
     )
   }
 
+  const handlePictureChange = (picture, pictureType) => {
+    setChoice({ ...choice, picture, pictureType })
+    handlePropChangeDebounced("choices", [
+      ...choices.slice(0, index),
+      { ...choice, picture, pictureType },
+      ...choices.slice(index + 1),
+    ])
+  }
+
   const handleChoiceTextEdit = (newValue) => {
-    setProp((props) => (props.choices[index].value = newValue), 200)
+    setChoice({ ...choice, value: newValue })
+    handlePropChangeDebounced("choices", [
+      ...choices.slice(0, index),
+      { ...choice, value: newValue },
+      ...choices.slice(index + 1),
+    ])
+  }
+
+  const handleNavigationChange = (buttonAction, nextScreen) => {
+    setChoice({ ...choice, buttonAction, nextScreen })
+    handlePropChangeDebounced("choices", [
+      ...choices.slice(0, index),
+      { ...choice, buttonAction, nextScreen },
+      ...choices.slice(index + 1),
+    ])
   }
 
   return (
@@ -637,14 +676,7 @@ export const MultipleChoiceItemSettings = ({ choice, index }) => {
               <CloudUpload className="invisible hidden size-4" />
             </>
           }
-          onChange={(picture, pictureType) =>
-            setProp((props) => {
-              props.choices[index].picture = picture
-              props.choices[index].pictureType = pictureType
-
-              return props
-            }, 200)
-          }
+          onChange={handlePictureChange}
         />
 
         <Input
@@ -670,16 +702,7 @@ export const MultipleChoiceItemSettings = ({ choice, index }) => {
           <MultipleChoiceItemNavigationSettings
             buttonAction={choice.buttonAction}
             nextScreen={choice.nextScreen}
-            onChange={(buttonAction, nextScreen) =>
-              setProp(
-                (props) =>
-                  (props.choices[index] = {
-                    ...choice,
-                    buttonAction,
-                    nextScreen,
-                  })
-              )
-            }
+            onChange={handleNavigationChange}
           />
         )}
       </div>
@@ -708,26 +731,14 @@ const MultipleChoiceItemNavigationSettings = ({
 
   useEffect(() => {
     if (!screenNames?.includes(nextScreen)) {
-      onChange(null, null)
+      onChange("next-screen", nextScreenName)
     }
   }, [screenNames])
 
   return (
     <Select
-      defaultValue={
-        buttonAction === null
-          ? undefined
-          : buttonAction === "next-screen"
-          ? "next-screen"
-          : nextScreen
-      }
-      value={
-        buttonAction === null
-          ? undefined
-          : buttonAction === "next-screen"
-          ? "next-screen"
-          : nextScreen
-      }
+      defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen}
+      value={buttonAction === "next-screen" ? "next-screen" : nextScreen}
       onValueChange={(e) => {
         if (e === "next-screen") {
           onChange("next-screen", nextScreenName)
@@ -737,21 +748,14 @@ const MultipleChoiceItemNavigationSettings = ({
       }}
     >
       <SelectTrigger
-        className={`h-7 p-2 text-xs [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all${
+        className={`[&>span]:line-clamp-1 [&>span]:flex-1 [&>span]:text-ellipsis [&>span]:break-all${
           buttonAction === null ? " text-muted-foreground" : ""
         }`}
       >
         <SelectValue placeholder={t("Navigate to screen")} />
       </SelectTrigger>
       <SelectContent className="text-left">
-        <SelectItem className="text-xs" value="next-screen">
-          <div className="flex items-center gap-0.5">
-            <ArrowRight className="-translate-x-0.5" size={13} />
-            <span className="line-clamp-1 flex-1 text-ellipsis break-all">
-              {t("Next Screen")}
-            </span>
-          </div>
-        </SelectItem>
+        <SelectItem value="next-screen">{t("Next Screen")}</SelectItem>
         {screenNames?.map((screenName, index) => (
           <SelectItem className="text-xs" value={screenName}>
             {index + 1} : {screenName}
@@ -759,5 +763,42 @@ const MultipleChoiceItemNavigationSettings = ({
         ))}
       </SelectContent>
     </Select>
+  )
+}
+
+const MultipleChoiceItemTrackingSettings = ({
+  choice: originalChoice,
+  index,
+  onChange,
+}) => {
+  const t = useTranslations("Components")
+
+  const [choice, setChoice] = useState(originalChoice)
+
+  useEffect(() => {
+    setChoice(originalChoice)
+  }, [originalChoice])
+
+  const handleTrackingEventChange = (updatedTrackingEvent) => {
+    setChoice({ ...choice, trackingEvent: updatedTrackingEvent })
+    onChange(updatedTrackingEvent)
+  }
+
+  return (
+    <div className="style-control col-span-2 mt-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
+      <label
+        htmlFor="label-event"
+        className="shrink-0 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        {`${t("Option")} ${index + 1}`}
+      </label>
+      <Input
+        value={choice.trackingEvent ?? ""}
+        defaultValue={choice.trackingEvent ?? ""}
+        placeholder={choice.value.replaceAll(" ", "_")}
+        onChange={(e) => handleTrackingEventChange(e.target.value)}
+        type={"text"}
+      />
+    </div>
   )
 }
