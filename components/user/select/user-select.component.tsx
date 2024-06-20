@@ -127,7 +127,7 @@ export const SelectGen = ({
                   ...(selectedOptionId === item.id
                     ? {
                         backgroundColor: selectedOptionBackgroundColor.value,
-                        color: selectedOptionTextColor.value,
+                        color: selectedOptionTextColor,
                       }
                     : {}),
                 }}
@@ -385,7 +385,7 @@ export const Select = ({
                     ...(selectedOptionId === item.id
                       ? {
                           backgroundColor: selectedOptionBackgroundColor.value,
-                          color: selectedOptionTextColor.value,
+                          color: selectedOptionTextColor,
                         }
                       : {}),
                   }}
