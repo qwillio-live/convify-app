@@ -21,6 +21,7 @@ import {
   setHeaderMode,
   setScreenName,
   setScreens,
+  setSelectedComponent,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -202,16 +203,12 @@ const ScreensList = () => {
             )}
             onClick={() => handleHeaderScreenClick()}
           >
+                        <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
+
+<ResolvedComponentsFromCraftState screen={screensHeader} />
+
+</div>
             <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
-            {/* position: absolute;
-    width: max-content;
-    top: -60%;
-    height: max-content; */}
-            <div className="text-xs top-[-65%] text-muted-foreground scale-[.30] absolute w-max h-max">
-
-              <ResolvedComponentsFromCraftState screen={screensHeader} />
-
-            </div>
           </Card>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
@@ -233,9 +230,8 @@ const ScreensList = () => {
             onClick={() => handleFooterScreenClick()}
           >
             <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs w-max h-max text-muted-foreground scale-[.30] flex flex-col justify-start bottom-[-142%] absolute">
+            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
-
             </div>
           </Card>
         </AccordionContent>
@@ -273,6 +269,7 @@ const ScreensList = () => {
                 key={screen.screenName + screen.screenId}
                 id={screen.screenName + screen.screenId}
                 value={screen}
+                onClick={() => dispatch(setSelectedComponent("ROOT"))}
                 // className="relative"
               >
                 <ContextMenu>

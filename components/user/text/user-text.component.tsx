@@ -52,6 +52,7 @@ export const UserTextGen = ({
           textAlign,
           fontWeight: `${fontWeight}`,
           marginLeft: `${marginLeft}px`,
+          lineHeight: `normal`,
           marginRight: `${marginRight}px`,
           marginTop: `${marginTop}px`,
           marginBottom: `${marginBottom}px`,
@@ -129,6 +130,7 @@ export const UserText = ({
           fontFamily: `var(${secondaryFont})`,
           fontSize: `${fontSize}px`,
           textAlign,
+          lineHeight: `normal`,
           fontWeight: `${fontWeight}`,
           marginLeft: `${marginLeft}px`,
           marginRight: `${marginRight}px`,
@@ -142,12 +144,13 @@ export const UserText = ({
 }
 
 export const TextDefaultProps = {
+  fullWidth: true,
   fontFamily: "inherit",
   text: "Your text here",
   fontSize: 24,
   textColor: "inherit",
   fontWeight: "400",
-  textAlign: "left",
+  textAlign: "center",
   marginLeft: 0,
   marginRight: 0,
   marginTop: 0,

@@ -98,16 +98,19 @@ export const screensSlice = createSlice({
       state.headerId = action.payload;
     },
     setHeaderMode: (state, action: PayloadAction<boolean>) => {
+      state.selectedComponent="ROOT";
       state.footerMode = false;
       state.headerMode = action.payload;
       state.editorLoad = state.screensHeader; // Ensure new reference
     },
     setFooterMode: (state, action: PayloadAction<boolean>) => {
+      state.selectedComponent="ROOT";
       state.headerMode = false;
       state.footerMode = action.payload;
       state.editorLoad = state.screensFooter; // Ensure new reference
     },
     setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
+      state.selectedComponent="ROOT";
       state.headerMode = action.payload;
       state.footerMode = action.payload;
     },
