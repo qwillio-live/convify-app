@@ -146,6 +146,13 @@ export const HeadlineTextGen = ({
   borderHoverColor,
   ...props
 }) => {
+  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+
+  const processedText = text
+    .replace(/<div><br><\/div>/g, "\n")
+    .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
+    .replace(/<br>/g, "\n") // Replace <br> tags with new lines
+
   return (
     <div
       className="w-full relative"
@@ -203,12 +210,17 @@ export const HeadlineTextGen = ({
             color: `${color?.value}`,
             fontSize: `${fontSize}px`,
             fontWeight: `${fontWeight.value}`,
-            fontFamily: `${fontFamily}`,
+            fontFamily: `var(${primaryFont})`,
             height: "fit-content",
             wordWrap: "break-word",
           }}
         >
-          {text}
+          {processedText.split("\n").map((line, index) => (
+            <span key={index}>
+              {line}
+              <br />
+            </span>
+          ))}
         </h1>
       </StyledCustomHeadlineInput>
     </div>
@@ -454,7 +466,7 @@ export const HeadlineText = ({
         >
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
-              html={text}
+              html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
               style={{
                 maxWidth: "1008px",
@@ -479,7 +491,7 @@ export const HeadlineText = ({
 }
 
 export type HeadlineTextProps = {
-  fontFamily: string
+  fontFamily: StyleProperty
   size: TextContainerSize
   fontSize: number
   fontWeight: string | number
@@ -518,7 +530,11 @@ export enum TextContainerSize {
 
 export const HeadlineTextDefaultProps: HeadlineTextProps = {
   text: "Headlines for your business",
-  fontFamily: "inherit",
+  fontFamily: {
+    value: "inherit",
+    globalStyled: true,
+    isCustomized: false,
+  },
   containerBackground: "transparent",
   background: {
     value: "#4050ff",

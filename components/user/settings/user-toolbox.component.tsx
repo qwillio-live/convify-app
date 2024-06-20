@@ -500,32 +500,6 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
 
-                  {/* <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                    //eslint-disable-next-line
-                    ref={(ref: any) =>
-                      ref &&
-                      connectors.create(
-                        ref,
-                        <UserInputCheckbox {...outlinedPresetChecbox} />
-                      )
-                    }
-                    data-cy="toolbox-text"
-                  >
-                    <HoverCardComponent
-                      title={t("Checkbox")}
-                      icon={<SquareCheckIcon className="mr-2 size-3" />}
-                    >
-                      <UserInputCheckboxGen
-                        {...outlinedPresetChecbox}
-                        label={t("Checkbox")}
-                        // label={t("Label")}
-                        placeholder={t("Checkbox")}
-                        // placeholder={t("Placeholder")}
-                      />
-                    </HoverCardComponent>
-                  </div> */}
-
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line

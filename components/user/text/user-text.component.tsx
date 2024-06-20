@@ -224,7 +224,7 @@ export const TextInputDefaultProps: TextInputProps = {
   alignItems: "center",
   border: 0,
   fullWidth: true,
-  preset: "paragraph"
+  preset: "paragraph",
 }
 
 export const UserTextInputGen = ({
@@ -260,6 +260,11 @@ export const UserTextInputGen = ({
   borderHoverColor,
   ...props
 }) => {
+  const processedText = text
+    .replace(/<div><br><\/div>/g, "\n")
+    .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
+    .replace(/<br>/g, "\n") // Replace <br> tags with new lines
+
   return (
     <div
       className="w-full relative"
@@ -320,9 +325,15 @@ export const UserTextInputGen = ({
             fontFamily: `${fontFamily}`,
             height: "fit-content",
             wordWrap: "break-word",
+            whiteSpace: "pre-wrap", // Ensure white-space is preserved
           }}
         >
-          {text}
+          {processedText.split("\n").map((line, index) => (
+            <span key={index}>
+              {line}
+              <br />
+            </span>
+          ))}
         </p>
       </StyledCustomTextInput>
     </div>
@@ -573,7 +584,7 @@ export const UserText = ({
         >
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
-              html={text}
+              html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
               style={{
                 maxWidth: "1008px",

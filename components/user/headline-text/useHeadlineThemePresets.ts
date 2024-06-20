@@ -19,10 +19,18 @@ const useHeadlineThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce",
     0.1
   )
+
+
+  
+
   const h1Preset: HeadlineTextProps = {
     fontSize: 42,
     fontWeight: "700",
-    fontFamily: theme?.text?.secondaryFont || "inherit",
+    fontFamily: {
+      value: theme?.text?.primaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
@@ -84,7 +92,11 @@ const useHeadlineThemePresets = () => {
   const h2Preset: HeadlineTextProps = {
     fontSize: 42,
     fontWeight: "700",
-    fontFamily: theme?.text?.primaryFont || "inherit",
+    fontFamily: {
+      value: theme?.text?.primaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
