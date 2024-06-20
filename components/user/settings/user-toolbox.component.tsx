@@ -81,7 +81,7 @@ import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
   MultipleChoice,
-  MultipleChoiceDefaultProps,
+  MultipleChoiceGen,
 } from "../multiple-choice/user-multiple-choice.component"
 import {
   PictureChoice,
@@ -335,8 +335,8 @@ export const UserToolbox = () => {
   const { normalPreset: checklistNormalPreset } = useChecklistThemePresets()
   const {
     filledPreset: multipleChoiceFilledPreset,
-    semifilledPreset: multipleChoiceSemiFilledPreset,
-    outlinedPreset: multipleChoiceOutlinedPreset,
+    previewChoices: multipleChoicePreviewChoices,
+    previewSelections: multipleChoicePreviewSelections,
   } = useMultipleChoiceThemePresets()
 
   {
@@ -547,7 +547,18 @@ export const UserToolbox = () => {
                       title={t("Multiple Choice")}
                       icon={<LayoutList className="mr-2 size-3" />}
                     >
-                      <></>
+                      <MultipleChoiceGen
+                        {...{
+                          ...multipleChoiceFilledPreset,
+                          disabled: true,
+                          marginTop: 8,
+                          marginBottom: 8,
+                          marginLeft: 8,
+                          marginRight: 8,
+                          selections: multipleChoicePreviewSelections,
+                          choices: multipleChoicePreviewChoices,
+                        }}
+                      />
                     </HoverCardComponent>
                   </div>
                 </AccordionContent>

@@ -8,7 +8,6 @@ import {
   LayoutList,
   Image,
   CloudUpload,
-  ArrowRight,
 } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
@@ -39,16 +38,6 @@ import {
   useMotionValue,
 } from "framer-motion"
 import hexoid from "hexoid"
-import icons from "@/constant/streamline.json"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import {
   MultipleChoiceGen,
   MultipleChoiceLayouts,
@@ -77,7 +66,7 @@ export const MultipleChoiceSettings = () => {
       fontFamily,
       size,
       required,
-      fieldName,
+      fieldName: originalFieldName,
       layout,
       containerBackground,
       paddingLeft,
@@ -103,6 +92,12 @@ export const MultipleChoiceSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+  const [fieldName, setFieldName] = useState(originalFieldName)
+
+  useEffect(() => {
+    setFieldName(originalFieldName)
+  }, [originalFieldName])
 
   const {
     filledPreset,
@@ -286,7 +281,10 @@ export const MultipleChoiceSettings = () => {
               </label>
               <Input
                 value={fieldName}
-                onChange={(e) => handlePropChange("fieldName", e.target.value)}
+                onChange={(e) => {
+                  setFieldName(e.target.value)
+                  handlePropChangeDebounced("fieldName", e.target.value)
+                }}
                 type={"text"}
                 placeholder={t("Enter field name here")}
               />

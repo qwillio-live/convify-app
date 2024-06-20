@@ -17,30 +17,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/custom-slider"
 
-import useSelectThemePresets from "./useSelectThemePresets"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import {
-  useScreenNames,
-  useScreensLength,
-} from "@/lib/state/flows-state/features/screenHooks"
-import { RootState } from "@/lib/state/flows-state/store"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import hexoid from "hexoid"
 
 export const SelectSettings = () => {
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
-  const screensLength = useScreensLength()
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
-  const nextScreenName =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
-        ]?.screenName
-    ) || ""
 
   const {
     actions: { setProp },
@@ -50,8 +32,8 @@ export const SelectSettings = () => {
       required,
       sortAlphabetically,
       label,
-      fieldName,
-      placeholder,
+      fieldName: originalFieldname,
+      placeholder: originalPlaceholder,
       size,
       containerBackground,
       custom,
@@ -75,6 +57,17 @@ export const SelectSettings = () => {
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+  const [placeholder, setPlaceholder] = useState(originalPlaceholder)
+  const [fieldName, setFieldname] = useState(originalFieldname)
+
+  useEffect(() => {
+    setPlaceholder(originalPlaceholder)
+  }, [originalPlaceholder])
+
+  useEffect(() => {
+    setFieldname(originalFieldname)
+  }, [originalFieldname])
 
   const throttledSetProp = useCallback(
     throttle((property, value) => {
@@ -208,9 +201,10 @@ export const SelectSettings = () => {
               </label>
               <Input
                 value={placeholder}
-                onChange={(e) =>
-                  handlePropChange("placeholder", e.target.value)
-                }
+                onChange={(e) => {
+                  setPlaceholder(e.target.value)
+                  handlePropChangeDebounced("placeholder", e.target.value)
+                }}
                 type={"text"}
                 placeholder={t("Enter placeholder text")}
               />
@@ -225,7 +219,10 @@ export const SelectSettings = () => {
               </label>
               <Input
                 value={fieldName}
-                onChange={(e) => handlePropChange("fieldName", e.target.value)}
+                onChange={(e) => {
+                  setFieldname(e.target.value)
+                  handlePropChangeDebounced("fieldName", e.target.value)
+                }}
                 type={"text"}
                 placeholder={t("Enter field name here")}
               />
