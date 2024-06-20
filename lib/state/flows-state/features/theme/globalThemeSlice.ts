@@ -44,7 +44,7 @@ const initialState: GlobalThemeState = {
   general: {
     primaryColor: "#4050ff",
     secondaryColor: "#4050ff",
-    backgroundColor: "rgba(255,255,255,.0)",
+    backgroundColor: "rgba(255,255,255,.1)",
     backgroundImage: undefined,
   },
   defaultText: {

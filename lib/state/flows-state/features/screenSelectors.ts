@@ -10,3 +10,7 @@ export const selectScreenDetails = (state: RootState) =>
     screenId: screen?.screenId,
     screenName: screen?.screenName,
   }));
+
+
+  export const selectSelectedCompoenent = (state: RootState) =>
+  state?.screen?.selectedComponent;

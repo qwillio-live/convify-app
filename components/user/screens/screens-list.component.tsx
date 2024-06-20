@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Reorder } from "framer-motion"
 import {
   ClipboardCopy,
@@ -75,6 +75,7 @@ const ScreensList = () => {
   )
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
+    actions: state.events.selected,
   }))
 
   const themeSettings = useAppSelector((state: RootState) => state.theme)
@@ -96,6 +97,7 @@ const ScreensList = () => {
   // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
   // }
   // }, []);
+
 
   const handleReorder = (data) => {
     dispatch(setScreens(data))

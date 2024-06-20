@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Layers } from "@craftjs/layers/"
 
 import { useEditor } from "@/lib/craftjs"
@@ -16,14 +16,17 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {GlobalThemeSettings} from "./global-theme-settings"
 import { useTranslations } from "next-intl"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const SettingsPanel = () => {
   const t= useTranslations("Components")
-  const { actions, selected, isEnabled } = useEditor((state, query) => {
-    const currentNodeId = query.getEvent("selected").last()
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
+  const { actions, selected, isEnabled,query } = useEditor((state, query) => {
+    const currentNodeId = selectedComponent ? selectedComponent : query.getEvent("selected").last()
     let selected
 
-    if (currentNodeId) {
+    if (currentNodeId && state.nodes[currentNodeId]) {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
@@ -39,6 +42,10 @@ export const SettingsPanel = () => {
       isEnabled: state.options.enabled,
     }
   })
+  useEffect(() => {
+    if(selected || selectedComponent)
+    actions.selectNode(selectedComponent || "ROOT")
+  }, [mobileScreen,selectedComponent])
   return (
     <Tabs defaultValue="element" className="mb-10">
       <TabsList>

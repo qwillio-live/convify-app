@@ -16,7 +16,7 @@ export type ScreenType = {
 };
 
 export interface ScreensState {
-  selectedComponent: string | null;
+  selectedComponent: string;
   selectedScreen: number;
   headerId: string;
   headerMode: boolean;
@@ -30,7 +30,7 @@ export interface ScreensState {
 }
 
 const initialState: ScreensState = {
-  selectedComponent: null,
+  selectedComponent: "ROOT",
   headerId: "",
   selectedScreen: 0,
   screensHeader: JSON.stringify(headerScreenData),
@@ -64,7 +64,7 @@ export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
-    setSelectedComponent: (state, action: PayloadAction<string | null>) => {
+    setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload;
     },
     resetScreensState: (state) => {
