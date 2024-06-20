@@ -21,6 +21,7 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   ImagePlus,
+  LayoutList,
   Linkedin,
   ListChecks,
   Loader as LoaderIcon,
@@ -96,29 +97,7 @@ import { Select, SelectGen } from "../select/user-select.component"
 import useSelectThemePresets from "../select/useSelectThemePresets"
 import { Checklist, ChecklistGen } from "../checklist/user-checklist.component"
 import useChecklistThemePresets from "../checklist/useChecklistThemePresets"
-
-const MultipleChoiceOptions = [
-  {
-    id: "1",
-    text: "Option 1",
-    icon: <Chrome className="size-6 text-lg" />,
-  },
-  {
-    id: "2",
-    text: "Option 2",
-    icon: <Facebook className="size-6" />,
-  },
-  {
-    id: "3",
-    text: "Option 3",
-    icon: <Linkedin className="size-6" />,
-  },
-  {
-    id: "4",
-    text: "Option 4",
-    icon: <Globe className="size-6" />,
-  },
-]
+import useMultipleChoiceThemePresets from "../multiple-choice/useMultipleChoiceThemePresets"
 
 const ListOptions = [
   {
@@ -326,7 +305,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
             className="w-full"
           ></HoverCardTrigger>
           <HoverCardContent
-            className="flex flex-row items-center justify-center px-10 min-w-[382px]"
+            className="flex min-w-[382px] flex-row items-center justify-center px-10"
             forceMount={true}
             style={{
               background: themeBackgroundColor,
@@ -354,6 +333,11 @@ export const UserToolbox = () => {
   const { selectPreset } = useSelectThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
   const { normalPreset: checklistNormalPreset } = useChecklistThemePresets()
+  const {
+    filledPreset: multipleChoiceFilledPreset,
+    semifilledPreset: multipleChoiceSemiFilledPreset,
+    outlinedPreset: multipleChoiceOutlinedPreset,
+  } = useMultipleChoiceThemePresets()
 
   {
     /**
@@ -362,8 +346,9 @@ export const UserToolbox = () => {
      *
      */
   }
-  const isHeaderFooterMode = useAppSelector((state:RootState) => state?.screen?.footerMode || state?.screen?.headerMode);
-
+  const isHeaderFooterMode = useAppSelector(
+    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+  )
 
   return (
     <div className="p-y" draggable={false}>
@@ -453,7 +438,7 @@ export const UserToolbox = () => {
                       />
                     </HoverCardComponent>
                   </div>
-                  
+
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
@@ -461,10 +446,7 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <Select
-                          {...selectPreset}
-                          disabled={false}
-                        />
+                        <Select {...selectPreset} disabled={false} />
                       )
                     }
                     data-cy="toolbox-text"
@@ -549,41 +531,25 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
 
-                  {/* <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                  //eslint-disable-next-line
-                  ref={(ref: any) =>
-                    ref &&
-                    connectors.create(
-                      ref,
-                      <MultipleChoice {...MultipleChoiceDefaultProps} />
-                    )
-                  }
-                  data-cy="toolbox-text"
-                >
-                  <HoverCardComponent
-                    title="Multiple Choice"
-                    icon={<Copy className="mr-2 size-3" />}
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <MultipleChoice {...multipleChoiceFilledPreset} />
+                      )
+                    }
+                    data-cy="toolbox-text"
                   >
-                    <div className="flex w-full flex-col gap-2">
-                      {MultipleChoiceOptions.map((option, index) => (
-                        <div
-                          key={index}
-                          className="
-                      hover:
-                      option flex
-                      flex-row items-center gap-2
-                      rounded-[8px] border-2
-                        border-[#eaeaeb]
-                      bg-white p-4 text-lg font-bold hover:border-[#4050ff] hover:bg-[#4050ff] hover:text-white"
-                        >
-                          <input type="radio" className="hidden" />
-                          <label>{option.text}</label>
-                        </div>
-                      ))}
-                    </div>
-                  </HoverCardComponent>
-                </div> */}
+                    <HoverCardComponent
+                      title={t("Multiple Choice")}
+                      icon={<LayoutList className="mr-2 size-3" />}
+                    >
+                      <></>
+                    </HoverCardComponent>
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             )}

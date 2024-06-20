@@ -154,7 +154,7 @@ export const SelectSettings = () => {
                 ])
               }
             >
-              <Plus className="mr-2 size-4" /> {t("Add new option")}
+              <Plus className="mr-2 size-4" /> {t("Add new")}
             </Button>
           </AccordionContent>
         </AccordionItem>

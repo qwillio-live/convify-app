@@ -184,7 +184,7 @@ export const ChecklistSettings = () => {
                 ])
               }
             >
-              <Plus className="mr-2 size-4" /> {t("Add new item")}
+              <Plus className="mr-2 size-4" /> {t("Add new")}
             </Button>
           </AccordionContent>
         </AccordionItem>
