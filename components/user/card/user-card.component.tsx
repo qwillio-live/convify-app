@@ -359,7 +359,7 @@ export const Card = ({ children,backgroundColor ,...props }) => {
 }
 
 Card.craft = {
-  props: CardContentDefaultProps,
+  // props: CardContentDefaultProps,
   displayName: "Card",
   rules: {
     canDrag: () => true,

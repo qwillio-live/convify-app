@@ -304,7 +304,7 @@ export const IconButtonSettings = () => {
                   {t("Background Color")}
                 </label>
                 <Input
-                  defaultValue={containerBackground}
+                  defaultValue={"#fff"}
                   value={containerBackground}
                   onChange={(e) => {
                     debouncedSetProp("containerBackground",e.target.value)

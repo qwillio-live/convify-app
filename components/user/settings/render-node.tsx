@@ -8,6 +8,7 @@ import { Controller } from "./controller.component"
 import styled from "styled-components"
 import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useRouter } from "next/navigation"
 
 
 interface StyledNodeDivProps {

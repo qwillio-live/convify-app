@@ -316,6 +316,7 @@ export const IconButton = ({
   borderColor,
   buttonAction,
   nextScreen,
+  compId,
   ...props
 }) => {
   const {
@@ -324,6 +325,7 @@ export const IconButton = ({
     selected,
     isHovered,
   } = useNode((state) => ({
+    compId: state.id,
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
@@ -341,7 +343,7 @@ export const IconButton = ({
   const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
   const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
-  const screens = useAppSelector((state:RootState) => state?.screen?.screens);
+  const screens = useAppSelector((state) => state?.screen?.screens);
   const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
   const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
 
@@ -481,6 +483,7 @@ export const IconButton = ({
   const handlePropChangeDebounced = (property,value) => {
     debouncedSetProp(property,value);
   }
+
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
@@ -621,7 +624,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
     globalStyled: true,
     isCustomized: false,
   },
-  containerBackground: "#ffffff",
+  containerBackground: "rgba(255, 255, 255, 0.886)",
   background: {
     value: "#4050ff",
     globalStyled: false,

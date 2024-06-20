@@ -16,10 +16,12 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {GlobalThemeSettings} from "./global-theme-settings"
 import { useTranslations } from "next-intl"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const SettingsPanel = () => {
   const t= useTranslations("Components")
+  const dispatch = useAppDispatch()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
   const { actions, selected, isEnabled,query } = useEditor((state, query) => {
@@ -42,10 +44,12 @@ export const SettingsPanel = () => {
       isEnabled: state.options.enabled,
     }
   })
+
   useEffect(() => {
     if(selected || selectedComponent)
     actions.selectNode(selectedComponent || "ROOT")
   }, [mobileScreen,selectedComponent])
+
   return (
     <Tabs defaultValue="element" className="mb-10">
       <TabsList>
@@ -77,7 +81,8 @@ export const SettingsPanel = () => {
                 {selected.isDeletable ? (
                   <Button
                     onClick={() => {
-                      actions.delete(selected.id)
+                      actions.delete(selected.id),
+                      dispatch(setSelectedComponent("ROOT"))
                     }}
                     variant="destructive"
                     className="mb-4"

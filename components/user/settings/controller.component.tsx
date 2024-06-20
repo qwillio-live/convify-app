@@ -2,8 +2,11 @@ import { useEditor } from "@/lib/craftjs"
 import { GripHorizontal, GripVertical, Trash2 } from "lucide-react"
 import React from "react"
 import { Move } from "lucide-react"
+import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 
 export const Controller = ({ nameOfComponent }) => {
+  const dispatch = useAppDispatch();
   const { actions, selected, isEnabled, isHovered } = useEditor(
     (state, query) => {
       const currentNodeId = query.getEvent("selected").last()
@@ -44,16 +47,17 @@ export const Controller = ({ nameOfComponent }) => {
       <span className="hover:cursor-move">
         <Move />
       </span>
-      {isHovered?.isDeletable && (
+      {/* {isHovered?.isDeletable && ( */}
         <button
           onClick={() => {
-            actions.delete(selected.id)
+            actions.delete(selected.id),
+            dispatch(setSelectedComponent("ROOT"))
           }}
           className="hover:cursor-pointer"
         >
           <Trash2 />
         </button>
-      )}
+      {/* )} */}
     </div>
   )
 }
