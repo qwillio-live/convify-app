@@ -411,9 +411,9 @@ export const SelectOptionSettings = ({
     <Reorder.Item
       dragListener={false}
       dragControls={controls}
-      value={option}
+      value={originalOption}
       transition={{ duration: 0 }}
-      id={`select-option-item-${option.id}`}
+      id={`select-option-item-${originalOption.id}`}
       style={{ y }}
       className="flex w-full select-none items-center gap-2 [&>div]:hover:visible [&>svg]:hover:visible"
     >

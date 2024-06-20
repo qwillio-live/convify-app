@@ -464,9 +464,9 @@ export const ChecklistItemSettings = ({
     <Reorder.Item
       dragListener={false}
       dragControls={controls}
-      value={item}
+      value={originalItem}
       transition={{ duration: 0 }}
-      id={`checklist-item-${item.id}`}
+      id={`checklist-item-${originalItem.id}`}
       style={{ y }}
       className="flex w-full select-none items-center gap-2 [&>div]:hover:visible [&>svg]:hover:visible"
     >

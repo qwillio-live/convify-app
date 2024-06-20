@@ -652,9 +652,9 @@ export const MultipleChoiceItemSettings = ({
     <Reorder.Item
       dragListener={false}
       dragControls={controls}
-      value={choice}
+      value={originalChoice}
       transition={{ duration: 0 }}
-      id={`multiple-choice-${choice.id}`}
+      id={`multiple-choice-${originalChoice.id}`}
       style={{ y }}
       className="flex w-full select-none flex-col gap-2 [&>div>div>button>div>button>svg]:hover:visible [&>div>div]:hover:visible [&>div>svg]:hover:visible"
     >
@@ -744,7 +744,7 @@ const MultipleChoiceItemNavigationSettings = ({
       }}
     >
       <SelectTrigger
-        className={`[&>span]:line-clamp-1 [&>span]:flex-1 [&>span]:text-ellipsis [&>span]:break-all${
+        className={`h-8 [&>span]:line-clamp-1 [&>span]:flex-1 [&>span]:text-ellipsis [&>span]:break-all${
           buttonAction === null ? " text-muted-foreground" : ""
         }`}
       >
