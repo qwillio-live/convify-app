@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import {
@@ -9,6 +9,7 @@ import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
+import { debounce } from "lodash"
 
 const ChecklistSizeValues = {
   small: "300px",
@@ -100,7 +101,7 @@ export const ChecklistGen = ({
 }
 
 export const Checklist = ({
-  checklistItems,
+  checklistItems: originalChecklistItems,
   fontFamily,
   fontWeight,
   fontSize,
@@ -132,8 +133,8 @@ export const Checklist = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-
-  const [hover, setHover] = React.useState(false)
+  const [checklistItems, setChecklistItems] = useState(originalChecklistItems)
+  const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -144,6 +145,23 @@ export const Checklist = ({
     (state) => state.theme?.text?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
+  const debouncedSetProp = useCallback(
+    debounce((property, value) => {
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
+    [setProp]
+  )
+
+  const handlePropChangeDebounced = (property, value) => {
+    debouncedSetProp(property, value)
+  }
+
+  useEffect(() => {
+    setChecklistItems(originalChecklistItems)
+  }, [originalChecklistItems])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -216,13 +234,19 @@ export const Checklist = ({
                 <ContentEditable
                   className="w-full px-1"
                   html={item.value}
-                  onChange={(e) =>
-                    setProp(
-                      (props) =>
-                        (props.checklistItems[index].value = e.target.value),
-                      200
+                  onChange={(e) => {
+                    setChecklistItems(
+                      checklistItems.map((item, i) =>
+                        i === index ? { ...item, value: e.target.value } : item
+                      )
                     )
-                  }
+                    handlePropChangeDebounced(
+                      "checklistItems",
+                      checklistItems.map((item, i) =>
+                        i === index ? { ...item, value: e.target.value } : item
+                      )
+                    )
+                  }}
                   style={{
                     color: textColor,
                     fontFamily: `var(${fontFamily?.value})`,

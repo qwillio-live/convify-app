@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { MoveHorizontal, GripVertical, Trash2, Plus } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
@@ -137,6 +137,7 @@ export const SelectSettings = () => {
                   key={`select-option-item-${option.id}`}
                   option={option}
                   index={index}
+                  handlePropChangeDebounced={handlePropChangeDebounced}
                 />
               ))}
             </Reorder.Group>
@@ -365,17 +366,27 @@ export const SelectSettings = () => {
   )
 }
 
-export const SelectOptionSettings = ({ option, index }) => {
+export const SelectOptionSettings = ({
+  option: originalOption,
+  index,
+  handlePropChangeDebounced,
+}) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
 
   const {
     actions: { setProp },
-    props: { selectedOptionId },
+    props: { selectedOptionId, selectOptions },
   } = useNode((node) => ({
     props: node.data.props,
   }))
+
+  const [option, setOption] = useState(originalOption)
+
+  useEffect(() => {
+    setOption(originalOption)
+  }, [originalOption])
 
   const handleOptionDelete = () => {
     if (option.id === selectedOptionId)
@@ -389,8 +400,14 @@ export const SelectOptionSettings = ({ option, index }) => {
     )
   }
 
-  const handleOptionEdit = (newValue) => {
-    setProp((props) => (props.selectOptions[index].value = newValue), 200)
+  const handleOptionEdit = (updatedValue) => {
+    setOption({ ...option, value: updatedValue })
+    handlePropChangeDebounced("selectOptions", [
+      ...selectOptions.slice(0, index),
+      { ...option, value: updatedValue },
+      ...selectOptions.slice(index + 1),
+    ])
+    // setProp((props) => (props.selectOptions[index].value = newValue), 200)
   }
 
   return (

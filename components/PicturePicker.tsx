@@ -88,6 +88,7 @@ export const PicturePicker = ({
       // const dataUrl = `data:image/svg+xml;base64,${btoa(svgData)}`
       setCurrentPicture({ data: svgData, type: PictureTypes.ICON })
     }
+    setIconPickerSearchQuery("")
     setIconPickerDialogOpen(false)
   }
 

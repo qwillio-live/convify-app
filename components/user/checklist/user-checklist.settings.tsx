@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   MoveHorizontal,
   GripVertical,
@@ -167,6 +167,7 @@ export const ChecklistSettings = () => {
                   key={`checklist-item-${item.id}`}
                   item={item}
                   index={index}
+                  handlePropChangeDebounced={handlePropChangeDebounced}
                 />
               ))}
             </Reorder.Group>
@@ -420,7 +421,11 @@ export const ChecklistSettings = () => {
   )
 }
 
-export const ChecklistItemSettings = ({ item, index }) => {
+export const ChecklistItemSettings = ({
+  item: originalItem,
+  index,
+  handlePropChangeDebounced,
+}) => {
   const t = useTranslations("Components")
   const y = useMotionValue(0)
   const controls = useDragControls()
@@ -432,6 +437,12 @@ export const ChecklistItemSettings = ({ item, index }) => {
     props: node.data.props,
   }))
 
+  const [item, setItem] = useState(originalItem)
+
+  useEffect(() => {
+    setItem(originalItem)
+  }, [originalItem])
+
   const handleItemDelete = () => {
     setProp(
       (props) =>
@@ -441,7 +452,12 @@ export const ChecklistItemSettings = ({ item, index }) => {
   }
 
   const handleItemValueEdit = (updatedValue) => {
-    setProp((props) => (props.checklistItems[index].value = updatedValue), 200)
+    setItem({ ...item, value: updatedValue })
+    handlePropChangeDebounced("checklistItems", [
+      ...checklistItems.slice(0, index),
+      { ...item, value: updatedValue },
+      ...checklistItems.slice(index + 1),
+    ])
   }
 
   return (
@@ -459,6 +475,9 @@ export const ChecklistItemSettings = ({ item, index }) => {
         value={item.value}
         placeholder={`${t("Item")} ${index + 1}`}
         onChange={(e) => handleItemValueEdit(e.target.value)}
+        // onBlur={() =>
+        //   setProp((props) => (props.checklistItems[index] = item), 200)
+        // }
       />
       <Trash2
         className="text-muted-foreground invisible size-3 hover:cursor-pointer"

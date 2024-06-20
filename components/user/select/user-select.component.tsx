@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import styled from "styled-components"
 import { useNode } from "@/lib/craftjs"
 import {
@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl"
 import hexoid from "hexoid"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
 import ContentEditable from "react-contenteditable"
+import { debounce } from "lodash"
 
 const SelectSizeValues = {
   small: "300px",
@@ -203,7 +204,7 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
 export const Select = ({
   required,
   sortAlphabetically,
-  label,
+  label: originalLabel,
   fieldName,
   placeholder,
   selectOptions,
@@ -240,7 +241,8 @@ export const Select = ({
     isHovered: state.events.hovered,
   }))
 
-  const [hover, setHover] = React.useState(false)
+  const [label, setLabel] = useState(originalLabel)
+  const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -252,6 +254,23 @@ export const Select = ({
   )
 
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
+  const debouncedSetProp = useCallback(
+    debounce((property, value) => {
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
+    [setProp]
+  )
+
+  const handlePropChangeDebounced = (property, value) => {
+    debouncedSetProp(property, value)
+  }
+
+  useEffect(() => {
+    setLabel(originalLabel)
+  }, [originalLabel])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -324,9 +343,10 @@ export const Select = ({
             <ContentEditable
               className="px-1"
               html={label}
-              onChange={(e) =>
-                setProp((props) => (props.label = e.target.value), 200)
-              }
+              onChange={(e) => {
+                setLabel(e.target.value)
+                handlePropChangeDebounced("label", e.target.value)
+              }}
               style={{
                 color: labelColor,
                 outlineColor: borderHoverColor.value,
