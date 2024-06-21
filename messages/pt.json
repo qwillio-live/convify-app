@@ -37,10 +37,12 @@
   },
   "Components": {
     "Continue Button": "Botão Continuar",
+    "Back Button": "Botão Voltar",
     "Element": "Elemento",
     "Theme": "Tema",
     "Delete": "Excluir",
     "Continue": "Continuar",
+    "Back": "Voltar",
     "Button": "Botão",
     "Content": "Conteúdo",
     "Enable Icon": "Ativar Ícone",

@@ -10,6 +10,7 @@ export const CRAFT_ELEMENTS = {
   LOGOBARITEM: "LogoBarItem",
   PROGRESSBAR: "ProgressBar",
   ICONBUTTON: "IconButton",
+  BACKBUTTON: "BackButton",
   USERINPUT: "UserInput",
   USERTEXT: "UserText",
   HEADLINETEXT: "HeadlineText",

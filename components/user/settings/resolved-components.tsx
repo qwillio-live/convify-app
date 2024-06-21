@@ -19,6 +19,7 @@ import { CardContentGen, CardGen } from "../card/user-card.component"
 import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { BackButtonGen } from "../back-button/back-button.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -30,6 +31,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
+  [CRAFT_ELEMENTS.BACKBUTTON]: BackButtonGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
   [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
