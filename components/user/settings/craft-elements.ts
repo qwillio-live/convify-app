@@ -19,4 +19,5 @@ export const CRAFT_ELEMENTS = {
   SCREENFOOTER: "ScreenFooter",
   INPUTMAIL: "InputMail",
   INPUTPHONE: "InputPhone",
+  INPUTTEXTAREA: "InputTextarea",
 }

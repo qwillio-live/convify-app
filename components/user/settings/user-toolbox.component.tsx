@@ -27,17 +27,17 @@ import {
   Mail,
   Navigation,
   Pencil,
+  Phone,
   Rocket,
   Target,
   TextCursorInput,
   Trophy,
   Type,
-  Phone
 } from "lucide-react"
 // import { SquareCheck } from "lucide-react/dist/esm/lucide-react";
 
 import { useTranslations } from "next-intl"
-import { UserInputPhone, UserInputPhoneGen } from "../input-phone/user-input-phone.component"
+
 import { useEditor } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
@@ -89,8 +89,17 @@ import {
   UserInputMail,
   UserInputMailGen,
 } from "../input-email/user-input-mail.component"
-import useInputThemePresets from "../input/useInputThemePresets"
 import useInputPhoneThemePresets from "../input-phone/useInputPhoneThemePresets"
+import {
+  UserInputPhone,
+  UserInputPhoneGen,
+} from "../input-phone/user-input-phone.component"
+import useInputTextareaThemePrests from "../input-textarea/useInputTextareaThemePresets"
+import {
+  UserInputTextarea,
+  UserInputTextareaGen,
+} from "../input-textarea/user-input-textarea.component"
+import useInputThemePresets from "../input/useInputThemePresets"
 import { UserInput, UserInputGen } from "../input/user-input.component"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
@@ -370,6 +379,8 @@ export const UserToolbox = () => {
     useInputMailThemePresets()
   const { outlinedPresetPhone, underlinedPresetPhone } =
     useInputPhoneThemePresets()
+  const { outlinedPresetTextarea, underlinedPresetTextarea } =
+    useInputTextareaThemePrests()
 
   {
     /**
@@ -547,6 +558,33 @@ export const UserToolbox = () => {
                         label={t("InputPhone")}
                         // label={t("Label")}
                         placeholder={t("InputPhone")}
+                        // placeholder={t("Placeholder")}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <UserInputTextarea {...outlinedPresetTextarea} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title="InputTextArea"
+                      icon={<Phone className="mr-2 size-3" />}
+                    >
+                      <UserInputTextareaGen
+                        {...outlinedPresetTextarea}
+                        // label={t("InputPhone")}
+                        label="InputTextArea"
+                        // label={t("Label")}
+                        placeholder="InputTextArea"
                         // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>

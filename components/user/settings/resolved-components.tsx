@@ -22,6 +22,7 @@ import { UserInputCheckboxGen } from "../input-checkbox/user-input-checkbox.comp
 import { UserInputMailGen } from "../input-email/user-input-mail.component"
 import { User } from "lucide-react"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
+import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -42,6 +43,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.INPUTCHECKBOX]: UserInputCheckboxGen,
   [CRAFT_ELEMENTS.INPUTMAIL]: UserInputMailGen,
   [CRAFT_ELEMENTS.INPUTPHONE]: UserInputPhoneGen,
+  [CRAFT_ELEMENTS.INPUTTEXTAREA]: UserInputTextareaGen,
 }
 
 interface Props {

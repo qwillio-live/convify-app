@@ -34,6 +34,7 @@ import {
   Container,
   UserContainer,
 } from "../user/container/user-container.component"
+import { UserInputTextarea } from "../user/input-textarea/user-input-textarea.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { Img } from "../user/image/user-image-component"
@@ -159,6 +160,7 @@ export function CreateFlowComponent() {
           Progress,
           ButtonChoiceScreen,
           ScreenHeader,
+          
           UserInput,
           ScreenFooter,
           ScreensList,
@@ -190,6 +192,7 @@ export function CreateFlowComponent() {
           Loader,
           List,
           ListItem,
+          UserInputTextarea,
           Img,
         }}
         onRender={RenderNode}
@@ -302,6 +305,7 @@ export function CreateFlowComponent() {
           Image,
           PictureChoice,
           MultipleChoice,
+          UserInputTextarea,
           LogoBar,
           LogoBarItem,
           LayoutContainer,
