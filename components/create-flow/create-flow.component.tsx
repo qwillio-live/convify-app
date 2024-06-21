@@ -56,6 +56,7 @@ import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { BackButton } from "../user/back-button/back-button.component"
+import { LinkButton } from "../user/link-button/link-button.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -169,6 +170,7 @@ export function CreateFlowComponent() {
           UserContainer,
           IconButton,
           BackButton,
+          LinkButton,
           DragDrop,
           UserToolbox,
           Image,
@@ -290,6 +292,7 @@ export function CreateFlowComponent() {
                 UserContainer,
                 IconButton,
                 BackButton,
+                LinkButton,
                 DragDrop,
                 UserToolbox,
                 Image,

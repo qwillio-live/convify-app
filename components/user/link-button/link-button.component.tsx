@@ -23,7 +23,7 @@ import { Button as CustomButton } from "@/components/ui/button"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
-import { BackButtonSettings } from "./back-button.settings"
+import { LinkButtonSettings } from "./link-button.settings"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -79,7 +79,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
-export const BackButtonGen = ({
+export const LinkButtonGen = ({
   disabled,
   fontFamily,
   enableIcon,
@@ -111,9 +111,27 @@ export const BackButtonGen = ({
   borderColor,
   borderHoverColor,
   prevScreen,
+  url,
+  open,
+  buttonAction,
   ...props
 }) => {
   const pathName = usePathname()
+
+  const target =
+    (buttonAction === "redirect" && open === "new-window"
+      ? "_blank"
+      : "_self") || "_blank"
+
+  const getRedirectUrl = () => {
+    if (!buttonAction || !url) return `${pathName}#${prevScreen.screenName}`
+
+    if (buttonAction === "redirect") {
+      return url
+    }
+
+    return `${pathName}#${prevScreen.screenName}`
+  }
 
   return (
     <div
@@ -130,7 +148,7 @@ export const BackButtonGen = ({
         paddingRight: `${props.marginRight}px`,
       }}
     >
-      <Link href={`${pathName}#${prevScreen.screenName}`} className="contents">
+      <Link target={target} href={getRedirectUrl()} className="contents">
         <StyledCustomButton
           fontFamily={fontFamily?.value}
           color={color.value}
@@ -162,9 +180,6 @@ export const BackButtonGen = ({
           className="text-[1rem]"
           onClick={() => console.log("Button clicked", text)}
         >
-          {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
-          )}
           <div
             style={{
               maxWidth: "100%",
@@ -175,6 +190,9 @@ export const BackButtonGen = ({
           >
             {text}
           </div>
+          {enableIcon && (
+            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+          )}
         </StyledCustomButton>
       </Link>
     </div>
@@ -266,7 +284,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   }
 `
 
-export const BackButton = ({
+export const LinkButton = ({
   fontFamily,
   disabled,
   borderHoverColor,
@@ -469,9 +487,6 @@ export const BackButton = ({
           buttonSize={buttonSize}
           {...props}
         >
-          {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
-          )}
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
               html={text}
@@ -490,6 +505,9 @@ export const BackButton = ({
               tagName="div"
             />
           </div>
+          {enableIcon && (
+            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+          )}
         </StyledCustomButton>
       </div>
     </div>
@@ -539,11 +557,13 @@ export type IconButtonProps = {
   buttonSize: string
   tracking: boolean
   trackingEvent: string
-  buttonAction: "prev-screen" | "custom-action" | "none"
+  buttonAction: "redirect" | "custom-action" | "none"
   prevScreen: {
     screenId: string
     screenName: string
   }
+  url: string
+  open: string
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -618,12 +638,14 @@ export const IconButtonDefaultProps: IconButtonProps = {
     screenId: "",
     screenName: "",
   },
-  buttonAction: "prev-screen",
+  buttonAction: "redirect",
+  url: "",
+  open: "new-window",
 }
 
-BackButton.craft = {
+LinkButton.craft = {
   props: IconButtonDefaultProps,
   related: {
-    settings: BackButtonSettings,
+    settings: LinkButtonSettings,
   },
 }

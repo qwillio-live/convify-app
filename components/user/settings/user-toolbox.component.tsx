@@ -78,6 +78,7 @@ import {
 import { Img, ImgDefaultProps } from "../image/user-image-component"
 import useInputThemePresets from "../input/useInputThemePresets"
 import { UserInput, UserInputGen } from "../input/user-input.component"
+import useLinkButtonThemePreset from "../link-button/useLinkButtonThemePresets"
 import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
@@ -92,6 +93,7 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
+import { LinkButton, LinkButtonGen } from "../link-button/link-button.component"
 
 const MultipleChoiceOptions = [
   {
@@ -348,6 +350,7 @@ export const UserToolbox = () => {
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { filledPreset: backButtonFilledPreset } = useBackButtonThemePresets()
+  const { outLinePreset: linkButtonOutlinePreset } = useLinkButtonThemePreset()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
 
   {
@@ -621,6 +624,35 @@ export const UserToolbox = () => {
                       marginTop={0}
                       marginBottom={0}
                       text={t("Back")}
+                    />
+                  </HoverCardComponent>
+                </div>
+                <div
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
+                      <LinkButton
+                        {...linkButtonOutlinePreset}
+                        disabled={false}
+                      />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title={t("Link Button")}
+                    icon={<Navigation className="mr-2 size-3" />}
+                  >
+                    <LinkButtonGen
+                      className="w-full"
+                      {...linkButtonOutlinePreset}
+                      size="small"
+                      marginTop={0}
+                      marginBottom={0}
+                      text={t("Link")}
                     />
                   </HoverCardComponent>
                 </div>

@@ -20,6 +20,7 @@ import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flow
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { BackButtonGen } from "../back-button/back-button.component"
+import { LinkButtonGen } from "../link-button/link-button.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -32,6 +33,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
   [CRAFT_ELEMENTS.BACKBUTTON]: BackButtonGen,
+  [CRAFT_ELEMENTS.LINKBUTTON]: LinkButtonGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
   [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,

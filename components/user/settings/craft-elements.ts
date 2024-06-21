@@ -11,6 +11,7 @@ export const CRAFT_ELEMENTS = {
   PROGRESSBAR: "ProgressBar",
   ICONBUTTON: "IconButton",
   BACKBUTTON: "BackButton",
+  LINKBUTTON: "LinkButton",
   USERINPUT: "UserInput",
   USERTEXT: "UserText",
   HEADLINETEXT: "HeadlineText",
