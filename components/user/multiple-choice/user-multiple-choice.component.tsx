@@ -365,6 +365,8 @@ const MultipleChoiceItem = ({
   return (
     <li className="w-full">
       <StyledMultipleChoiceItem
+        isLast={isLast}
+        isCollapsed={isCollapsed}
         isSelected={isSelected}
         contentReversed={contentReversed}
         borderTopRounded={isCollapsed ? isFirst : true}
@@ -438,6 +440,8 @@ const MultipleChoiceItem = ({
 }
 
 type StyledMultipleChoiceItemProps = {
+  isLast: boolean
+  isCollapsed: boolean
   isSelected: boolean
   contentReversed: boolean
   borderTopRounded: boolean
@@ -482,17 +486,21 @@ const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
   border-bottom-right-radius: ${({ borderBottomRounded }) =>
     borderBottomRounded ? 8 : 0}px;
 
-  transition: all 0.2s ease-in-out;
-
-  transform: translateY(${({ isSelected }) => (isSelected ? -2 : 0)}px);
+  transition: transform 0.1s ease-in-out;
 
   border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor.value};
+
+  border-bottom-width: ${({ isLast, isCollapsed }) =>
+    isLast || !isCollapsed ? "2px" : "0px"};
+
   color: ${({ defaultStyles }) => defaultStyles.textColor.value};
   background-color: ${({ defaultStyles }) =>
     defaultStyles.backgroundColor.value};
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(${({ isSelected }) => (!isSelected ? -2 : 0)}px);
+
+    border-bottom-width: 2px;
 
     border-color: ${({ hoverStyles }) => hoverStyles.borderColor.value};
     color: ${({ hoverStyles }) => hoverStyles.textColor.value};

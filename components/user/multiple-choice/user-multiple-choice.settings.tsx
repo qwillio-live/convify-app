@@ -8,6 +8,7 @@ import {
   LayoutList,
   Image,
   CloudUpload,
+  AlignJustify,
 } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
@@ -329,7 +330,7 @@ export const MultipleChoiceSettings = () => {
                     <Rows3 size={20} />
                   </TabsTrigger>
                   <TabsTrigger value={MultipleChoiceLayouts.list}>
-                    <LayoutList size={20} />
+                    <AlignJustify size={20} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
