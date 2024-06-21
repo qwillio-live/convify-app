@@ -163,7 +163,7 @@ export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
   bottomLeftRadius: 8,
   bottomRightRadius: 8,
   isActive: false,
-  inputRequired: true,
+  inputRequired: false,
   fullWidth: true,
   size: UserInputSizes.medium,
   label: "Phone",
