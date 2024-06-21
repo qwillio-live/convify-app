@@ -660,15 +660,15 @@ export const MultipleChoiceItemSettings = ({
     >
       <div className="flex w-full items-center gap-2">
         <PicturePicker
-          className="transition-all duration-100 ease-in-out [&>button>div>button>svg:first-child]:hover:hidden [&>button>div>button>svg:last-child]:hover:block"
-          picture={choice.picture}
-          pictureType={choice.pictureType}
-          nullIcon={
-            <>
+          className="transition-all duration-100 ease-in-out"
+          picture={
+            choice.pictureType === PictureTypes.NULL ? (
               <Image className="text-muted-foreground invisible size-4" />
-              <CloudUpload className="invisible hidden size-4" />
-            </>
+            ) : (
+              choice.picture
+            )
           }
+          pictureType={choice.pictureType}
           onChange={handlePictureChange}
         />
 

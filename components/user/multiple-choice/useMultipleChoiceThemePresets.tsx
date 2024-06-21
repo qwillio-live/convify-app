@@ -19,7 +19,7 @@ const useMultipleChoiceThemePresets = () => {
     {
       id: `input-1`,
       picture:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="20px" height="20px"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="7" cy="3" rx="6.5" ry="2.5"/><path d="M.5 3v8c0 1.38 2.91 2.5 6.5 2.5s6.5-1.12 6.5-2.5V3"/><path d="M13.5 7c0 1.38-2.91 2.5-6.5 2.5S.5 8.38.5 7"/></g></svg>',
+        '<g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="7" cy="3" rx="6.5" ry="2.5"/><path d="M.5 3v8c0 1.38 2.91 2.5 6.5 2.5s6.5-1.12 6.5-2.5V3"/><path d="M13.5 7c0 1.38-2.91 2.5-6.5 2.5S.5 8.38.5 7"/></g>',
       pictureType: PictureTypes.ICON,
       value: `Idle`,
       buttonAction: null,
@@ -29,7 +29,7 @@ const useMultipleChoiceThemePresets = () => {
     {
       id: `input-2`,
       picture:
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="20px" height="20px"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2H1a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h12a.5.5 0 0 0 .5-.5v-8A.5.5 0 0 0 13 2m-7 9l-1 2.5M8 11l1 2.5m-5 0h6"/><path d="m4.5 5.25l-1.75 1.5L4.25 8m5.5-2.5l1.5 1.25l-1.75 1.5m-3.25.5l1.5-4.5"/></g></svg>',
+        '<g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2H1a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h12a.5.5 0 0 0 .5-.5v-8A.5.5 0 0 0 13 2m-7 9l-1 2.5M8 11l1 2.5m-5 0h6"/><path d="m4.5 5.25l-1.75 1.5L4.25 8m5.5-2.5l1.5 1.25l-1.75 1.5m-3.25.5l1.5-4.5"/></g>',
       pictureType: PictureTypes.ICON,
       value: `Selected`,
       buttonAction: null,
@@ -84,7 +84,9 @@ const useMultipleChoiceThemePresets = () => {
     },
     size: MultipleChoiceSizes.medium,
     required: false,
-    fieldName: `${t("Multiple Choice").replace(" ", "-").toLowerCase()}-${hexoid(6)()}`,
+    fieldName: `${t("Multiple Choice")
+      .replace(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
     containerBackground: "transparent",
     paddingLeft: "16",
@@ -225,7 +227,9 @@ const useMultipleChoiceThemePresets = () => {
     },
     size: MultipleChoiceSizes.medium,
     required: false,
-    fieldName: `${t("Multiple Choice").replace(" ", "-").toLowerCase()}-${hexoid(6)()}`,
+    fieldName: `${t("Multiple Choice")
+      .replace(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
     containerBackground: "transparent",
     paddingLeft: "16",
@@ -366,7 +370,9 @@ const useMultipleChoiceThemePresets = () => {
     },
     size: MultipleChoiceSizes.medium,
     required: false,
-    fieldName: `${t("Multiple Choice").replace(" ", "-").toLowerCase()}-${hexoid(6)()}`,
+    fieldName: `${t("Multiple Choice")
+      .replace(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
     containerBackground: "transparent",
     paddingLeft: "16",

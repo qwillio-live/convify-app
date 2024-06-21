@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import {
   Dialog,
   DialogClose,
@@ -44,33 +44,23 @@ export const PicturePicker = ({
   className = "",
   picture,
   pictureType,
-  nullIcon,
   onChange,
 }: {
   className?: string
-  picture: string | null
+  picture: string | React.ReactNode
   pictureType: PictureTypes
-  nullIcon: React.ReactNode
-  onChange: (picture: string | null, pictureType: PictureTypes) => void
+  onChange: (
+    picture: string | React.ReactNode,
+    pictureType: PictureTypes
+  ) => void
 }) => {
   const t = useTranslations("CreateFlow")
   const imagePickerRef = useRef<HTMLInputElement>(null)
 
-  const [currentPicture, setCurrentPicture] = useState<{
-    data: any
-    type: PictureTypes
-  }>({
-    data: picture,
-    type: pictureType,
-  })
   const [iconPickerDialogOpen, setIconPickerDialogOpen] = useState(false)
   const [emojiPickerPopoverOpen, setEmojiPickerPopoverOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [iconPickerSearchQuery, setIconPickerSearchQuery] = useState("")
-
-  useEffect(() => {
-    onChange(currentPicture.data, currentPicture.type)
-  }, [currentPicture])
 
   const filteredIcons = useMemo(
     () =>
@@ -81,12 +71,9 @@ export const PicturePicker = ({
   )
 
   const handleIconChange = (iconName) => {
-    const svgData = convertToSvg(icons[iconName]?.body)
-    if (svgData) {
-      // console.log("SVG Data", svgData);
-
-      // const dataUrl = `data:image/svg+xml;base64,${btoa(svgData)}`
-      setCurrentPicture({ data: svgData, type: PictureTypes.ICON })
+    const iconData = icons[iconName]?.body
+    if (iconData) {
+      onChange(iconData, PictureTypes.ICON)
     }
     setIconPickerSearchQuery("")
     setIconPickerDialogOpen(false)
@@ -94,7 +81,7 @@ export const PicturePicker = ({
 
   const handleEmojiChange = (emoji) => {
     if (emoji.imageUrl) {
-      setCurrentPicture({ data: emoji.imageUrl, type: PictureTypes.EMOJI })
+      onChange(emoji.imageUrl, PictureTypes.EMOJI)
     }
     setEmojiPickerPopoverOpen(false)
   }
@@ -105,13 +92,13 @@ export const PicturePicker = ({
 
     if (file) {
       imageToDataURL(file).then((imageData) => {
-        setCurrentPicture({ data: imageData, type: PictureTypes.IMAGE })
+        onChange(imageData as string, PictureTypes.IMAGE)
       })
     }
   }
 
   const handlePictureRemove = () => {
-    setCurrentPicture({ data: null, type: PictureTypes.NULL })
+    onChange(null, PictureTypes.NULL)
   }
 
   const imageToDataURL = async (image) => {
@@ -170,30 +157,22 @@ export const PicturePicker = ({
               >
                 <div className="flex flex-row flex-wrap items-center gap-3">
                   <Button
-                    className="border-input !size-8 border p-0"
+                    className={`border-input !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
                     variant="ghost"
-                    {...(currentPicture.type === PictureTypes.ICON
-                      ? {
-                          dangerouslySetInnerHTML: {
-                            __html: currentPicture.data,
-                          },
-                        }
-                      : {
-                          children: (
-                            <>
-                              {currentPicture.type === PictureTypes.NULL &&
-                                nullIcon}
-                              {(currentPicture.type === PictureTypes.EMOJI ||
-                                currentPicture.type === PictureTypes.IMAGE) && (
-                                <img
-                                  src={currentPicture.data}
-                                  className="size-5 object-cover"
-                                />
-                              )}
-                            </>
-                          ),
-                        })}
-                  />
+                  >
+                    <CloudUpload className="hidden size-4" />
+                    {pictureType === PictureTypes.NULL && picture}
+                    {pictureType === PictureTypes.ICON && (
+                      <SvgRenderer svgData={picture as string} />
+                    )}
+                    {(pictureType === PictureTypes.EMOJI ||
+                      pictureType === PictureTypes.IMAGE) && (
+                      <img
+                        src={picture as string}
+                        className="size-5 object-cover"
+                      />
+                    )}
+                  </Button>
                 </div>
               </PopoverTrigger>
             </DropdownMenuTrigger>
@@ -304,10 +283,6 @@ export const PicturePicker = ({
   )
 }
 
-const convertToSvg = (svgBody) => {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="20px" height="20px">${svgBody}</svg>`
-}
-
 const IconRenderer = ({ iconName, onClick }) => {
   const ref = useRef(null)
   const isInView = useInView(ref)
@@ -328,5 +303,25 @@ const IconRenderer = ({ iconName, onClick }) => {
         )}
       </div>
     </div>
+  )
+}
+
+export const SvgRenderer = ({
+  svgData,
+  width,
+  height,
+}: {
+  svgData: string
+  width?: string
+  height?: string
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 14 14"
+      width={width ?? "20px"}
+      height={height ?? "20px"}
+      dangerouslySetInnerHTML={{ __html: svgData }}
+    />
   )
 }

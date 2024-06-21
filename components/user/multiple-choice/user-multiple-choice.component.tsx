@@ -10,7 +10,7 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes } from "@/components/PicturePicker"
+import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 
@@ -403,7 +403,7 @@ const MultipleChoiceItem = ({
 
         {choice.pictureType !== PictureTypes.NULL &&
           (choice.pictureType === PictureTypes.ICON ? (
-            <span dangerouslySetInnerHTML={{ __html: choice.picture }} />
+            <SvgRenderer svgData={choice.picture} width="24px" height="24px" />
           ) : (
             <img src={choice.picture} className="size-6 object-cover" />
           ))}
@@ -418,7 +418,7 @@ const MultipleChoiceItem = ({
             </span>
           ) : (
             <ContentEditable
-              className="max-w-full w-fit whitespace-break-spaces p-1"
+              className="w-fit max-w-full whitespace-break-spaces p-1"
               style={{ wordBreak: "break-word" }}
               html={choice.value}
               disabled={onValueChange === null}
@@ -539,11 +539,11 @@ const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
       hoverStyles.checkBoxBackgroundColor.value};
   }
 
-  & > span > svg {
+  & > svg {
     color: ${({ defaultStyles }) => defaultStyles.iconColor.value};
   }
 
-  &:hover > span > svg {
+  &:hove > svg {
     color: ${({ hoverStyles }) => hoverStyles.iconColor.value};
   }
 `
