@@ -60,6 +60,7 @@ export type UserInputPhoneProps = {
   inputValue: string
   fontSize: number
   color: string
+  textColor: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -118,6 +119,7 @@ export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
   inputValue: "",
   fontSize: 16,
   color: "#000000",
+  textColor: "#000000",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -363,7 +365,6 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   style={{
                     color: `${primaryTextColor}`,
                   }}
-
                 />
               </div>
             )}

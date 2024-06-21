@@ -20,6 +20,7 @@ const useInputPhoneThemePresets = () => {
   const outlinedPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
+    color: "#000",
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -95,6 +96,7 @@ const useInputPhoneThemePresets = () => {
   const underlinedPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
+    color: "#000",
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
