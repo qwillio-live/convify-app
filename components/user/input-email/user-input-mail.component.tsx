@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import icons from "@/constant/streamline.json"
 import {
   Activity,
   Anchor,
@@ -237,12 +238,21 @@ const UserInputMailStyled = styled(Input)<StyledUserInputMailProps>`
   align-self: center;
 `
 
+const convertToSvg = (svgBody) => {
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 cursor-pointer" width="15"
+  height="15">${svgBody}</svg>`
+}
+
 export const UserInputMailGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
+
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
 
   console.log(props.backgroundImage)
 
@@ -288,6 +298,7 @@ export const UserInputMailGen = ({ ...props }) => {
                 className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
+                  color: `${primaryTextColor}`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
                 }}
@@ -319,6 +330,7 @@ export const UserInputMailGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${props.textColor}`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -348,7 +360,14 @@ export const UserInputMailGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: convertToSvg(icons[props.icon]?.body),
+                  }}
+                  style={{
+                    color: `${primaryTextColor}`,
+                  }}
+                />
               </div>
             )}
             <UserInputMailStyled
@@ -377,6 +396,7 @@ export const UserInputMailGen = ({ ...props }) => {
               size={props.size}
               onFocus={() => setIsActive(true)}
               className={cn(
+                `placeholder:text-${primaryTextColor}`,
                 {
                   "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
                   "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
@@ -462,6 +482,10 @@ export const UserInputMail = ({ ...props }) => {
     (state) => state?.theme?.general?.primaryColor
   )
 
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
+
   useEffect(() => {
     if (
       parentContainer.id !== "ROOT" &&
@@ -469,19 +493,19 @@ export const UserInputMail = ({ ...props }) => {
     ) {
       setProp((props) => (props.size = "full"))
     }
-  }, [parentContainer])
+  }, [parentContainer, setProp])
 
   useEffect(() => {
     if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
       setProp((props) => (props.primaryFont.value = primaryFont), 200)
     }
-  }, [primaryFont])
+  }, [primaryFont, props.primaryFont, setProp])
 
   useEffect(() => {
     if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
       setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
     }
-  }, [secondaryFont])
+  }, [secondaryFont, props.secondaryFont, setProp])
 
   useEffect(() => {
     if (
@@ -490,7 +514,13 @@ export const UserInputMail = ({ ...props }) => {
     ) {
       setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
     }
-  }, [primaryColor])
+  }, [primaryColor, props.activeBorderColor, setProp])
+
+  useEffect(() => {
+    if (props.textColor.globalStyled && !props.textColor.isCustomized) {
+      setProp((props) => (props.textColor.value = primaryTextColor), 200)
+    }
+  }, [primaryTextColor, props.textColor, setProp])
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -555,6 +585,7 @@ export const UserInputMail = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${primaryTextColor}`,
                 }}
               />
             </>
@@ -582,6 +613,8 @@ export const UserInputMail = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${primaryTextColor}`,
+
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -613,12 +646,19 @@ export const UserInputMail = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: convertToSvg(icons[props.icon]?.body),
+                  }}
+                  style={{
+                    color: `${primaryTextColor}`,
+                  }}
+                />
               </div>
             )}
             <UserInputMailStyled
               ref={inputRef}
-              textColor={props.textColor}
+              textColor={`${primaryTextColor}`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
