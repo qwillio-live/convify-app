@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import icons from "@/constant/streamline.json"
 import {
   Activity,
   Anchor,
@@ -19,18 +20,6 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
@@ -70,7 +59,7 @@ const UserInputSizeValues = {
 export type UserInputPhoneProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  color: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -128,7 +117,7 @@ export type UserInputPhoneProps = {
 export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  color: "#000000",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -179,7 +168,7 @@ export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
   fieldName: "Phone number",
   floatingLabel: false,
   enableIcon: true,
-  icon: "arrowright",
+  icon: "arrow-right",
   preset: "outlined",
   error: false,
   errorText: "Please specify an answer",
@@ -216,6 +205,11 @@ interface StyledUserInputPhoneProps {
   error: boolean
 }
 
+const convertToSvg = (svgBody) => {
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 cursor-pointer" width="15"
+  height="15">${svgBody}</svg>`
+}
+
 const UserInputPhoneStyled = styled(Input)<StyledUserInputPhoneProps>`
   color: ${(props) => props.textColor};
   max-width: 100%;
@@ -243,8 +237,20 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
+  const [uniqueId, setUniqueId] = useState("")
+  const [iconHtml, setIconHtml] = useState("")
 
-  console.log(props.backgroundImage)
+  useEffect(() => {
+    const generateUniqueId = () => {
+      return Math.random().toString(36).substring(7)
+    }
+
+    setUniqueId(generateUniqueId())
+  }, [])
+
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -290,6 +296,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${primaryTextColor}`,
                 }}
               >
                 {props.label}
@@ -319,6 +326,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${props.textColor}`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -348,7 +356,15 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: convertToSvg(icons[props.icon]?.body),
+                  }}
+                  style={{
+                    color: `${primaryTextColor}`,
+                  }}
+
+                />
               </div>
             )}
             <UserInputPhoneStyled
@@ -465,6 +481,10 @@ export const UserInputPhone = ({ ...props }) => {
     (state) => state?.theme?.general?.secondaryColor
   )
 
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
+
   useEffect(() => {
     if (
       parentContainer.id !== "ROOT" &&
@@ -480,7 +500,6 @@ export const UserInputPhone = ({ ...props }) => {
     }
   }, [primaryFont, props.primaryFont, setProp])
 
-
   useEffect(() => {
     if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
       setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
@@ -495,6 +514,12 @@ export const UserInputPhone = ({ ...props }) => {
       setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
     }
   }, [primaryColor, props.activeBorderColor, setProp])
+
+  useEffect(() => {
+    if (props.textColor.globalStyled && !props.textColor.isCustomized) {
+      setProp((props) => (props.textColor.value = primaryTextColor), 200)
+    }
+  }, [primaryTextColor, props.textColor, setProp])
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -559,6 +584,7 @@ export const UserInputPhone = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${primaryTextColor}`,
                 }}
               />
             </>
@@ -586,6 +612,7 @@ export const UserInputPhone = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${primaryTextColor}`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -617,12 +644,25 @@ export const UserInputPhone = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                {
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: convertToSvg(icons[props.icon]?.body),
+                    }}
+                    style={{
+                      color: `${primaryTextColor}`,
+                    }}
+                    // className={cn(
+                    //   `text-${props.primaryColor} bg-${props.backgroundColor}`
+                    // )
+                    // }
+                  />
+                }
               </div>
             )}
             <UserInputPhoneStyled
               ref={inputRef}
-              textColor={props.textColor}
+              textColor={`${primaryTextColor}`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -653,16 +693,16 @@ export const UserInputPhone = ({ ...props }) => {
                   "rounded-l-none": props.enableIcon,
                 },
                 `ring-0
-          outline-none
-          focus-visible:outline-none
-          peer-focus-visible:outline-none
-          focus-visible:ring-0
-          ring-opacity-0/0
-          bg-white
-          transition-all
-          duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0`
+                  outline-none
+                  focus-visible:outline-none
+                  peer-focus-visible:outline-none
+                  focus-visible:ring-0
+                  ring-opacity-0/0
+                  bg-white
+                  transition-all
+                  duration-200
+                  ease-in-out
+                  focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
               onChange={(e) => {
                 if (!props.inputRequired) {

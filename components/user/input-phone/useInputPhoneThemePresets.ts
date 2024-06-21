@@ -75,7 +75,7 @@ const useInputPhoneThemePresets = () => {
     fieldName: "Phone",
     floatingLabel: false,
     enableIcon: true,
-    icon: "phone",
+    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
