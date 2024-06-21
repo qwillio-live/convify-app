@@ -13,6 +13,7 @@ import hexoid from "hexoid"
 import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const MultipleChoiceSizeValues = {
   small: "300px",
@@ -385,21 +386,24 @@ const MultipleChoiceItem = ({
           {...(required ? { required: true } : {})}
           style={{ display: "none" }}
         />
-        {checkboxVisible &&
-          (multiSelect ? (
-            checkboxVisible && (
-              <Checkbox
-                className="!size-5 [&>span>svg]:!size-4"
-                checked={true}
-              />
-            )
-          ) : (
-            <div>
-              <Button className="flex !size-5 items-center justify-center rounded-full !bg-transparent p-0">
-                {<div className="size-3.5 rounded-full" />}
-              </Button>
-            </div>
-          ))}
+        <div>
+          {checkboxVisible &&
+            (multiSelect ? (
+              checkboxVisible && (
+                <Checkbox
+                  className="!size-5 [&>span>svg]:!size-4"
+                  checked={true}
+                />
+              )
+            ) : (
+              <RadioGroup value="checked">
+                <RadioGroupItem
+                  className="!size-5 [&>span>svg]:!size-3.5"
+                  value="checked"
+                />
+              </RadioGroup>
+            ))}
+        </div>
 
         {choice.pictureType !== PictureTypes.NULL &&
           (choice.pictureType === PictureTypes.ICON ? (
@@ -495,37 +499,37 @@ const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
     background-color: ${({ hoverStyles }) => hoverStyles.backgroundColor.value};
   }
 
-  & > button {
+  & > div > button {
     background-color: ${({ defaultStyles }) =>
       defaultStyles.checkBoxBackgroundColor.value};
     border-color: ${({ defaultStyles }) =>
       defaultStyles.checkboxBorderColor.value} !important;
   }
 
-  & > button > span > svg {
+  & > div > button > span > svg {
     color: ${({ defaultStyles }) =>
       defaultStyles.checkBoxIconColor.value} !important;
   }
 
-  &:hover > button {
+  &:hover > div > button {
     background-color: ${({ hoverStyles }) =>
       hoverStyles.checkBoxBackgroundColor.value};
     border-color: ${({ hoverStyles }) =>
       hoverStyles.checkboxBorderColor.value} !important;
   }
 
-  &:hover > button > span > svg {
+  &:hover > div > button > span > svg {
     color: ${({ hoverStyles }) =>
       hoverStyles.checkBoxIconColor.value} !important;
   }
 
-  & > div > button {
+  & > div > div > button {
     border: 1px solid
       ${({ defaultStyles }) => defaultStyles.checkboxBorderColor.value};
   }
 
-  & > div > button > div {
-    background-color: ${({ defaultStyles }) =>
+  & > div > div > button > span > svg {
+    color: ${({ defaultStyles }) =>
       defaultStyles.checkBoxBackgroundColor.value};
   }
 
@@ -534,16 +538,15 @@ const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
       ${({ hoverStyles }) => hoverStyles.checkboxBorderColor.value};
   }
 
-  &:hover > div > button > div {
-    background-color: ${({ hoverStyles }) =>
-      hoverStyles.checkBoxBackgroundColor.value};
+  &:hover > div > button > svg {
+    color: ${({ hoverStyles }) => hoverStyles.checkBoxBackgroundColor.value};
   }
 
   & > svg {
     color: ${({ defaultStyles }) => defaultStyles.iconColor.value};
   }
 
-  &:hove > svg {
+  &:hover > svg {
     color: ${({ hoverStyles }) => hoverStyles.iconColor.value};
   }
 `
