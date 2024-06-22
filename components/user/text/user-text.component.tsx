@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
+import local from "next/font/local"
 import { usePathname, useRouter } from "next/navigation"
 import { track } from "@vercel/analytics/react"
 import { set } from "date-fns"
@@ -20,7 +21,6 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
-import local from "next/font/local"
 
 const ContainerWidthValues = {
   small: "300px",
@@ -43,20 +43,18 @@ export enum TextContainerSize {
   full = "full",
 }
 
-
 const sanitizeText = (htmlText) => {
   // Replace <br> with newline character
-  let sanitized = htmlText.replace(/<br\s*\/?>/gi, "\n");
-  
+  let sanitized = htmlText.replace(/<br\s*\/?>/gi, "\n")
+
   // Replace <div> with newline character if it's empty or contains only <br>
-  sanitized = sanitized.replace(/<div><br\s*\/?><\/div>/gi, "\n");
-  
+  sanitized = sanitized.replace(/<div><br\s*\/?><\/div>/gi, "\n")
+
   // Remove any other HTML tags, but preserve their content
-  sanitized = sanitized.replace(/<\/?[^>]+(>|$)/g, "");
+  sanitized = sanitized.replace(/<\/?[^>]+(>|$)/g, "")
 
-  return sanitized;
-};
-
+  return sanitized
+}
 
 export type TextInputProps = {
   fontFamily: StyleProperty
@@ -214,7 +212,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   }
 `
 
-
 export const UserTextInputGen = ({
   fontFamily,
   size,
@@ -255,13 +252,10 @@ export const UserTextInputGen = ({
     (state) => state.theme?.text?.secondaryFont
   )
 
-
   const sanitizedText = text
-    .replace(/<br>/g, '\n')
-    .replace(/<\/?div>/g, '\n')
-    .replace(/<\/?[^>]+(>|$)/g, ""); // Removes all other HTML tags
-
-
+    .replace(/<br>/g, "\n")
+    .replace(/<\/?div>/g, "\n")
+    .replace(/<\/?[^>]+(>|$)/g, "") // Removes all other HTML tags
 
   return (
     <div
@@ -317,7 +311,7 @@ export const UserTextInputGen = ({
             color: `${secondaryTextColor}`,
           }}
         >
-          {sanitizedText}
+          {text}
         </div>
       </StyledCustomTextInput>
     </div>
@@ -506,20 +500,19 @@ export const UserText = ({
 
   const handleTextChange = useCallback(
     (e) => {
-      const value = sanitizeText(e.target.value);
+      const value = e.target.value
       if (typeof value === "string") {
-        setLocalText(value)
+        // setLocalText(value)
         handlePropChangeDebounced("text", value)
       }
     },
     [handlePropChangeDebounced]
   )
 
-  useEffect(() => {
-    setLocalText(text) // Keep localText in sync with the prop text
-  }, [text])
+  // useEffect(() => {
+  //   setLocalText(text) // Keep localText in sync with the prop text
+  // }, [text])
 
-  
   return (
     <div
       ref={(el: any) => connect(drag(el))}
@@ -578,7 +571,7 @@ export const UserText = ({
         >
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
-              html={localText.replace(/\n/g, '<br>')}
+              html={text}
               innerRef={ref}
               style={{
                 maxWidth: "1008px",
