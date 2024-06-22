@@ -96,6 +96,11 @@ const useLinkButtonThemePreset = () => {
     buttonAction: "redirect",
     url: "",
     open: "new-window",
+    choice: {
+      picture: "",
+      pictureType: null,
+      value: "",
+    },
   }
 
   const outLinePreset: IconButtonProps = {
@@ -179,6 +184,11 @@ const useLinkButtonThemePreset = () => {
     buttonAction: "redirect",
     url: "",
     open: "new-window",
+    choice: {
+      picture: "",
+      pictureType: null,
+      value: "",
+    },
   }
 
   return { filledPreset, outLinePreset }

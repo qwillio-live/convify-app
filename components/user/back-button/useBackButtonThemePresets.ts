@@ -83,6 +83,11 @@ const useBackButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "prev-screen",
+    choice: {
+      picture: "",
+      pictureType: null,
+      value: "",
+    },
   }
 
   const outLinePreset: IconButtonProps = {
@@ -158,6 +163,11 @@ const useBackButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "prev-screen",
+    choice: {
+      picture: "",
+      pictureType: null,
+      value: "",
+    },
   }
 
   return { filledPreset, outLinePreset }
