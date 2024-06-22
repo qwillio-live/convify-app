@@ -330,7 +330,7 @@ export const UserInputMailGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `${props.textColor}`,
+                color: `#9CA3AF`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -396,9 +396,8 @@ export const UserInputMailGen = ({ ...props }) => {
               size={props.size}
               onFocus={() => setIsActive(true)}
               className={cn(
-                `placeholder:text-${primaryTextColor}`,
                 {
-                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
+                  "font-semibold pt-8 px-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light": props.floatingLabel,
                   "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
@@ -613,8 +612,7 @@ export const UserInputMail = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `${primaryTextColor}`,
-
+                color: `#9CA3AF`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
