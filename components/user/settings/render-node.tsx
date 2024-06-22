@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Controller } from "./controller.component"
 import styled from "styled-components"
-import { useAppDispatch } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useRouter } from "next/navigation"
 
 
 interface StyledNodeDivProps {
   borderColor: string;
+  selectedComponent: string | undefined;
   fullWidth: boolean;
   selected: boolean;
   isActive: boolean;
@@ -30,10 +31,10 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
       return '1px';
     }
   }};
-  border-style: ${(props) => (props.selected ? 'dotted' : 'solid')};
+  border-style: ${(props) => (props.selected || props.selectedComponent === props.id ? 'dotted' : 'solid')};
   width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   border-color: ${(props) => {
-    if(props.selected) {
+    if(props.selected || props.selectedComponent === props.id) {
       return '#60A5FA';
     }
     if (props.isActive && props.id !== 'ROOT') {
@@ -102,8 +103,9 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     }
   }
   , [isSelected])
+  const router = useRouter();
   // console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
-
+  const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
   return (
     // <div
     //   className={cn('relative border z-10 border-transparent border-dotted',
@@ -118,8 +120,14 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       borderColor={borderColor}
       fullWidth={fullWidth}
       id={id}
+      selectedComponent={selectedComponent}
       name={name}
       isActive={isActive}
+      onClick={(e) => {
+        // e.preventDefault()
+        // if(id !== "ROOT")
+        // router.push(`#${id}`)
+      }}
       // className={cn('relative z-10', fullWidth && 'w-full')}
     >
       {/* <div className='flex flex-col justify-center items-center w-full'> */}
