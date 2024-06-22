@@ -57,7 +57,7 @@ export const PictureChoiceGen = ({
   ...props
 }) => {
   const [selectedChoices, setSelectedChoices] = useState(selections)
-  
+
   useEffect(() => {
     setSelectedChoices(selections)
   }, [selections])
@@ -151,7 +151,7 @@ export const PictureChoice = ({
   hoverStyles,
   selectedStyles,
   selections,
-  choices: originalChoices,
+  choices,
   tracking,
   ...props
 }) => {
@@ -165,7 +165,6 @@ export const PictureChoice = ({
     isHovered: state.events.hovered,
   }))
 
-  const [choices, setChoices] = useState(originalChoices)
   const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
 
@@ -187,10 +186,6 @@ export const PictureChoice = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-
-  useEffect(() => {
-    setChoices(originalChoices)
-  }, [originalChoices])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -303,11 +298,6 @@ export const PictureChoice = ({
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
               onValueChange={(updatedValue) => {
-                setChoices(
-                  choices.map((choice, i) =>
-                    i === index ? { ...choice, value: updatedValue } : choice
-                  )
-                )
                 handlePropChangeDebounced(
                   "choices",
                   choices.map((choice, i) =>
@@ -362,7 +352,12 @@ const PictureChoiceItem = ({
   onValueChange,
   onSelectChange,
 }) => {
+  const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    setChoiceValue(choice.value)
+  }, [choice.value])
 
   const getFlexBasis = (n) => {
     if (
@@ -468,9 +463,12 @@ const PictureChoiceItem = ({
             <ContentEditable
               className="w-fit max-w-full whitespace-break-spaces p-1"
               style={{ wordBreak: "break-word" }}
-              html={choice.value}
+              html={choiceValue}
               disabled={onValueChange === null}
-              onChange={(e) => onValueChange(e.target.value)}
+              onChange={(e) => {
+                setChoiceValue(e.target.value)
+                onValueChange(e.target.value)
+              }}
               onFocus={() => setIsEditing(true)}
               onBlur={() => setIsEditing(false)}
             />

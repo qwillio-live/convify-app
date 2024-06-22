@@ -727,10 +727,10 @@ const MultipleChoiceItemNavigationSettings = ({
     ) || ""
 
   useEffect(() => {
-    if (!screenNames?.includes(nextScreen)) {
+    if (!nextScreen) {
       onChange("next-screen", nextScreenName)
     }
-  }, [screenNames])
+  }, [onChange])
 
   return (
     <Select

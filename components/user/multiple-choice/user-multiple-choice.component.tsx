@@ -152,7 +152,7 @@ export const MultipleChoice = ({
   hoverStyles,
   selectedStyles,
   selections,
-  choices: originalChoices,
+  choices,
   tracking,
   ...props
 }) => {
@@ -166,7 +166,6 @@ export const MultipleChoice = ({
     isHovered: state.events.hovered,
   }))
 
-  const [choices, setChoices] = useState(originalChoices)
   const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
 
@@ -188,10 +187,6 @@ export const MultipleChoice = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-
-  useEffect(() => {
-    setChoices(originalChoices)
-  }, [originalChoices])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -302,11 +297,6 @@ export const MultipleChoice = ({
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
               onValueChange={(updatedValue) => {
-                setChoices(
-                  choices.map((choice, i) =>
-                    i === index ? { ...choice, value: updatedValue } : choice
-                  )
-                )
                 handlePropChangeDebounced(
                   "choices",
                   choices.map((choice, i) =>
@@ -361,7 +351,13 @@ const MultipleChoiceItem = ({
   onValueChange,
   onSelectChange,
 }) => {
+  const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    setChoiceValue(choice.value)
+  }, [choice.value])
+
   return (
     <li className="w-full">
       <StyledMultipleChoiceItem
@@ -426,11 +422,14 @@ const MultipleChoiceItem = ({
             <ContentEditable
               className="w-fit max-w-full whitespace-break-spaces p-1"
               style={{ wordBreak: "break-word" }}
-              html={choice.value}
+              html={choiceValue}
               disabled={onValueChange === null}
-              onChange={(e) => onValueChange(e.target.value)}
+              onChange={(e) => {
+                setChoiceValue(e.target.value)
+                onValueChange(e.target.value)
+              }}
               onFocus={() => setIsEditing(true)}
-              onBlur={() => setIsEditing(false)}
+              onBlur={(e) => setIsEditing(false)}
             />
           )}
         </div>

@@ -101,7 +101,7 @@ export const ChecklistGen = ({
 }
 
 export const Checklist = ({
-  checklistItems: originalChecklistItems,
+  checklistItems,
   fontFamily,
   fontWeight,
   fontSize,
@@ -133,7 +133,6 @@ export const Checklist = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const [checklistItems, setChecklistItems] = useState(originalChecklistItems)
   const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
 
@@ -145,23 +144,6 @@ export const Checklist = ({
     (state) => state.theme?.text?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-
-  const debouncedSetProp = useCallback(
-    debounce((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }),
-    [setProp]
-  )
-
-  const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value)
-  }
-
-  useEffect(() => {
-    setChecklistItems(originalChecklistItems)
-  }, [originalChecklistItems])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -221,48 +203,76 @@ export const Checklist = ({
           }}
         >
           {checklistItems.map((item, index) => (
-            <li key={index} className="flex w-full flex-1 items-center gap-3">
-              <ChecklistIconRenderer
-                iconName={icon}
-                style={{
-                  width: `${fontSize}px`,
-                  height: `${fontSize}px`,
-                  color: iconColor,
-                }}
-              />
-              <div className="flex-1">
-                <ContentEditable
-                  className="w-full px-1"
-                  html={item.value}
-                  onChange={(e) => {
-                    setChecklistItems(
-                      checklistItems.map((item, i) =>
-                        i === index ? { ...item, value: e.target.value } : item
-                      )
-                    )
-                    handlePropChangeDebounced(
-                      "checklistItems",
-                      checklistItems.map((item, i) =>
-                        i === index ? { ...item, value: e.target.value } : item
-                      )
-                    )
-                  }}
-                  style={{
-                    color: textColor,
-                    fontFamily: `var(${fontFamily?.value})`,
-                    fontWeight: fontWeight,
-                    fontSize: `${fontSize}px`,
-                    outlineColor: borderColor,
-                    borderRadius: "4px",
-                    wordBreak: "break-word",
-                  }}
-                />
-              </div>
-            </li>
+            <ChecklistItemSettings
+              key={index}
+              fontSize={fontSize}
+              fontFamily={fontFamily}
+              fontWeight={fontWeight}
+              iconColor={iconColor}
+              textColor={textColor}
+              borderColor={borderColor}
+              item={item}
+              index={index}
+              onValueChange={(updatedValue) =>
+                setProp((prop) => {
+                  prop.checklistItems[index].value = updatedValue
+                }, 200)
+              }
+            />
           ))}
         </ul>
       </div>
     </div>
+  )
+}
+
+const ChecklistItemSettings = ({
+  fontSize,
+  fontFamily,
+  fontWeight,
+  iconColor,
+  textColor,
+  borderColor,
+  item,
+  index,
+  onValueChange,
+}) => {
+  const [itemValue, setItemValue] = useState(item.value)
+
+  useEffect(() => {
+    setItemValue(item.value)
+  }, [item.value])
+
+  return (
+    <li key={index} className="flex w-full flex-1 items-center gap-3">
+      <ChecklistIconRenderer
+        iconName={item.icon}
+        style={{
+          width: `${fontSize}px`,
+          height: `${fontSize}px`,
+          color: iconColor,
+        }}
+      />
+      <div className="flex-1">
+        <ContentEditable
+          className="w-full px-1"
+          html={itemValue}
+          onChange={(e) => {
+            setItemValue(e.target.value)
+            onValueChange(e.target.value)
+          }}
+          style={{
+            color: textColor,
+            fontFamily: `var(${fontFamily?.value})`,
+            fontWeight: fontWeight,
+            fontSize: `${fontSize}px`,
+            outlineColor: borderColor,
+            borderRadius: "4px",
+            wordBreak: "break-word",
+          }}
+        />
+      </div>
+    </li>
   )
 }
 
