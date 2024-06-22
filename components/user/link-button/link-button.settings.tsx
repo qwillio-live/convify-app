@@ -522,7 +522,8 @@ export const LinkButtonSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
               <Card
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
                   addPresetStyles(outLinePreset)
                 }}
                 className={cn(
@@ -543,7 +544,8 @@ export const LinkButtonSettings = () => {
                 />
               </Card>
               <Card
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
                   addPresetStyles(filledPreset)
                 }}
                 className={cn(

@@ -24,6 +24,10 @@ import { Button as CustomButton } from "@/components/ui/button"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { LinkButtonSettings } from "./link-button.settings"
+import {
+  getBackgroundForPreset,
+  getHoverBackgroundForPreset,
+} from "./useLinkButtonThemePresets"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -121,7 +125,7 @@ export const LinkButtonGen = ({
   const target =
     (buttonAction === "redirect" && open === "new-window"
       ? "_blank"
-      : "_self") || "_blank"
+      : "_self") || "_self"
 
   const getRedirectUrl = () => {
     if (!buttonAction || !url) return `${pathName}#${prevScreen.screenName}`
@@ -333,7 +337,9 @@ export const LinkButton = ({
   const ref = useRef<HTMLDivElement>(null)
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
-
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
   const selectedScreen = useAppSelector(
@@ -392,6 +398,48 @@ export const LinkButton = ({
       }
     }
   }, [prevScreenName, buttonAction])
+
+  useEffect(() => {
+    if (primaryColor) {
+      const backgroundPrimaryColor = getBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
+      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
+
+      if (background.globalStyled && !background.isCustomized) {
+        setProp(
+          (props) => (props.background.value = backgroundPrimaryColor),
+          200
+        )
+      }
+      if (color.globalStyled && !color.isCustomized) {
+        setProp((props) => (props.color.value = primaryColor), 200)
+      }
+      if (borderColor.globalStyled && !borderColor.isCustomized) {
+        setProp((props) => (props.borderColor.value = primaryColor), 200)
+      }
+
+      // hover colors
+
+      if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
+        setProp(
+          (props) =>
+            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+          200
+        )
+      }
+      if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
+        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
+      }
+      if (colorHover.globalStyled && !colorHover.isCustomized) {
+        setProp((props) => (props.colorHover.value = primaryColor), 200)
+      }
+    }
+  }, [primaryColor])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
