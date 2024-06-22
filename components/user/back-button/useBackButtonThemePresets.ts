@@ -84,8 +84,8 @@ const useBackButtonThemePresets = () => {
     },
     buttonAction: "prev-screen",
     choice: {
-      picture: "",
-      pictureType: null,
+      picture: `<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M13.5 7H.5M4 3.5L.5 7L4 10.5"/>`,
+      pictureType: "icon",
       value: "",
     },
   }
@@ -164,8 +164,8 @@ const useBackButtonThemePresets = () => {
     },
     buttonAction: "prev-screen",
     choice: {
-      picture: "",
-      pictureType: null,
+      picture: `<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M13.5 7H.5M4 3.5L.5 7L4 10.5"/>`,
+      pictureType: "icon",
       value: "",
     },
   }

@@ -166,6 +166,8 @@ export const BackButtonSettings = () => {
     )
   }
 
+  console.log(choice, 'choice')
+
   return (
     <>
       <Accordion
@@ -270,7 +272,7 @@ export const BackButtonSettings = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value={"prev-screen"}>
-                      Previous Screen
+                      {t("Previous Screen")}
                     </SelectItem>
                     {screenNames?.map((screen, index) => {
                       return (
