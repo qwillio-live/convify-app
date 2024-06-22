@@ -44,11 +44,13 @@ export const PicturePicker = ({
   className = "",
   picture,
   pictureType,
+  customImageSize,
   onChange,
 }: {
   className?: string
   picture: string | React.ReactNode
   pictureType: PictureTypes
+  customImageSize?: number
   onChange: (
     picture: string | React.ReactNode,
     pictureType: PictureTypes
@@ -88,10 +90,9 @@ export const PicturePicker = ({
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
-    console.log("Original File Size", file.size)
 
     if (file) {
-      imageToDataURL(file).then((imageData) => {
+      imageToDataURL(customImageSize, file).then((imageData) => {
         onChange(imageData as string, PictureTypes.IMAGE)
       })
     }
@@ -101,32 +102,29 @@ export const PicturePicker = ({
     onChange(null, PictureTypes.NULL)
   }
 
-  const imageToDataURL = async (image) => {
+  const imageToDataURL = async (customSize, image) => {
     const canvas = document.createElement("canvas")
-    canvas.width = 128
-    canvas.height = 128
+    canvas.width = customSize ?? 128
+    canvas.height = customSize ?? 128
     const ctx = canvas.getContext("2d")
     const img = new Image()
     img.src = URL.createObjectURL(image)
 
     const imageData = await new Promise((resolve) => {
       img.onload = () => {
-        var hRatio = canvas.width / img.width
-        var vRatio = canvas.height / img.height
-        var ratio = Math.min(hRatio, vRatio)
-        var centerShift_x = (canvas.width - img.width * ratio) / 2
-        var centerShift_y = (canvas.height - img.height * ratio) / 2
-        ctx?.drawImage(
-          img,
-          0,
-          0,
-          img.width,
-          img.height,
-          centerShift_x,
-          centerShift_y,
-          img.width * ratio,
-          img.height * ratio
-        )
+        const imgRatio = img.width / img.height
+
+        if (imgRatio > 1) {
+          canvas.height /= imgRatio
+        } else {
+          canvas.width *= imgRatio
+        }
+
+        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+        canvas.toBlob((blob) => {
+          console.log(blob?.size)
+        })
 
         const imageData = canvas.toDataURL("image/wepg")
 
@@ -169,7 +167,7 @@ export const PicturePicker = ({
                       pictureType === PictureTypes.IMAGE) && (
                       <img
                         src={picture as string}
-                        className="size-5 object-cover"
+                        className="size-5 object-contain"
                       />
                     )}
                   </Button>
@@ -308,17 +306,19 @@ const IconRenderer = ({ iconName, onClick }) => {
 
 export const SvgRenderer = ({
   svgData,
+  viewBox,
   width,
   height,
 }: {
   svgData: string
+  viewBox?: string
   width?: string
   height?: string
 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 14 14"
+      viewBox={viewBox ?? "0 0 14 14"}
       width={width ?? "20px"}
       height={height ?? "20px"}
       dangerouslySetInnerHTML={{ __html: svgData }}

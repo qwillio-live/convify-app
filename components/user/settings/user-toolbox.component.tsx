@@ -21,6 +21,7 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   ImagePlus,
+  Images,
   LayoutList,
   Linkedin,
   ListChecks,
@@ -85,8 +86,8 @@ import {
 } from "../multiple-choice/user-multiple-choice.component"
 import {
   PictureChoice,
-  PictureChoiceDefaultProps,
-} from "../picture-choice/picture-choice.component"
+  PictureChoiceGen,
+} from "../picture-choice/user-picture-choice.component"
 import {
   ProgressBar,
   ProgressBarDefaultProps,
@@ -98,6 +99,7 @@ import useSelectThemePresets from "../select/useSelectThemePresets"
 import { Checklist, ChecklistGen } from "../checklist/user-checklist.component"
 import useChecklistThemePresets from "../checklist/useChecklistThemePresets"
 import useMultipleChoiceThemePresets from "../multiple-choice/useMultipleChoiceThemePresets"
+import usePictureChoiceThemePresets from "../picture-choice/usePictureChoiceThemePresets"
 
 const ListOptions = [
   {
@@ -339,6 +341,12 @@ export const UserToolbox = () => {
     previewSelections: multipleChoicePreviewSelections,
   } = useMultipleChoiceThemePresets()
 
+  const {
+    outlinedPreset: pictureChoiceOutlinedPreset,
+    defaultChoices: pictureChoiceDefaultChoices,
+    defaultSelections: pictureChoiceDefaultSelections,
+  } = usePictureChoiceThemePresets()
+
   {
     /**
      * isHeaderFooterMode: flag is used to determine if the header or footer mode is active
@@ -465,71 +473,6 @@ export const UserToolbox = () => {
                       />
                     </HoverCardComponent>
                   </div>
-                  <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                    //eslint-disable-next-line
-                    ref={(ref: any) =>
-                      ref &&
-                      connectors.create(
-                        ref,
-                        <PictureChoice {...PictureChoiceDefaultProps} />
-                      )
-                    }
-                    data-cy="toolbox-text"
-                  >
-                    <HoverCardComponent
-                      title="Picture Choice"
-                      icon={<ImagePlus className="mr-2 size-3" />}
-                    >
-                      <div className="grid grid-cols-2 gap-2">
-                        <div
-                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
-                                      border-2 border-[#eaeaeb]
-                                    bg-white p-4 text-lg
-                                    font-bold hover:border-[#4050ff]
-                                      hover:bg-[#4050ff]
-                                    hover:text-white
-                        "
-                        >
-                          <Target className="size-10" />
-                          Target
-                        </div>
-                        <div
-                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
-                                      border-2 border-[#eaeaeb]
-                                    bg-white p-4 text-lg
-                                    font-bold hover:border-[#4050ff]
-                                      hover:bg-[#4050ff]
-                                    hover:text-white"
-                        >
-                          <Rocket className="size-10" />
-                          Launch
-                        </div>
-                        <div
-                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
-                                      border-2 border-[#eaeaeb]
-                                    bg-white p-4 text-lg
-                                    font-bold hover:border-[#4050ff]
-                                      hover:bg-[#4050ff]
-                                    hover:text-white"
-                        >
-                          <HeartHandshake className="size-10" />
-                          Agree
-                        </div>
-                        <div
-                          className="hover: flex flex-col items-center justify-center gap-4 rounded-[8px]
-                                      border-2 border-[#eaeaeb]
-                                    bg-white p-4 text-lg
-                                    font-bold hover:border-[#4050ff]
-                                      hover:bg-[#4050ff]
-                                    hover:text-white"
-                        >
-                          <Trophy className="size-10" />
-                          Achieve
-                        </div>
-                      </div>
-                    </HoverCardComponent>
-                  </div>
 
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
@@ -557,6 +500,37 @@ export const UserToolbox = () => {
                           marginRight: 8,
                           selections: multipleChoicePreviewSelections,
                           choices: multipleChoicePreviewChoices,
+                        }}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <PictureChoice {...pictureChoiceOutlinedPreset} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Picture Choice")}
+                      icon={<Images className="mr-2 size-3" />}
+                    >
+                      <PictureChoiceGen
+                        {...{
+                          ...pictureChoiceOutlinedPreset,
+                          disabled: true,
+                          marginTop: 8,
+                          marginBottom: 8,
+                          marginLeft: 8,
+                          marginRight: 8,
+                          selections: pictureChoiceDefaultSelections,
+                          choices: pictureChoiceDefaultChoices,
                         }}
                       />
                     </HoverCardComponent>
