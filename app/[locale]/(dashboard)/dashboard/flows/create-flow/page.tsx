@@ -25,7 +25,7 @@ export default function CreateFlowsPage() {
   // store the current tab value
   const onTabChange = (value: string) => {
     setTab(value)
-    router.replace(`/dashboard/flows/${value}`);
+    // router.replace(`/dashboard/flows/${value}`);
   }
 
   return (
@@ -81,11 +81,11 @@ export default function CreateFlowsPage() {
               <div className="max-h-[4.75rem] min-w-0 pb-6">
                 <div className="flex max-h-[3.25rem] items-center rounded-[8px] bg-[rgb(255,250,235)] p-4 text-[rgb(100,82,22)]">
                   <span className="block w-full text-sm text-[rgb(100,82,22)]">
-                    ⚠️ {t("This typeform is not published yet.")}{" "}
+                    ⚠️ {t("This flow is not published yet.")}{" "}
                     <Link className="underline" href="#">
                       {t("Click here to publish the latest version")}
                     </Link>{" "}
-                    {t("before you share your typeform.")}
+                    {t("before you share your flow.")}
                   </span>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function CreateFlowsPage() {
           //       <DialogTitle className="">CUSTOM LINK</DialogTitle>
           //       <DialogTitle>Create a custom link</DialogTitle>
           //       <DialogDescription>
-          //         Edit the link and let people know what your typeform is about.
+          //         Edit the link and let people know what your flow is about.
           //       </DialogDescription>
           //     </DialogHeader>
           //   </DialogContent>

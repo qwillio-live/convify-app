@@ -46,11 +46,11 @@ const ShareFlowComponents = ({ isPublished }) => {
             <div className="max-h-[4.75rem] min-w-0 pb-6">
               <div className="flex max-h-[3.25rem] items-center rounded-[8px] bg-[rgb(255,250,235)] p-4 text-[rgb(100,82,22)]">
                 <span className="block w-full text-sm text-[rgb(100,82,22)]">
-                  ⚠️ {t("This typeform is not published yet.")}{" "}
+                  ⚠️ {t("This flow is not published yet")}{" "}
                   <Link className="underline" href="#">
                     {t("Click here to publish the latest version")}
                   </Link>{" "}
-                  {t("before you share your typeform.")}
+                  {t("before you share your flow")}
                 </span>
               </div>
             </div>
@@ -318,7 +318,7 @@ const ShareFlowComponents = ({ isPublished }) => {
                         </defs>
                       </svg>
                       <span className="flex-[0_0_auto]">
-                        {t("Publish your typeform to preview it here")}
+                        {t("Publish your flow to preview it here")}
                       </span>
                     </div>
                   </div>
@@ -350,7 +350,7 @@ const ShareFlowComponents = ({ isPublished }) => {
               <div className="min-h-0 min-w-0 shrink-0">
                 <span className="block text-center text-xl text-[rgb(115,115,115)]">
                   {t(
-                    "Edit the link and let people know what your typeform is about."
+                    "Edit the link and let people know what your flow is about."
                   )}
                 </span>
               </div>
