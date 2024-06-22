@@ -182,6 +182,7 @@ export const LinkButtonGen = ({
           alignItems={alignItems}
           gap={gap}
           mobileScreen={false}
+          choice={choice}
           {...props}
           className="text-[1rem]"
           onClick={() => console.log("Button clicked", text)}
@@ -231,6 +232,11 @@ interface StyledCustomButtonProps {
   borderColor?: string
   borderHoverColor?: string
   mobileScreen: boolean
+  choice: {
+    picture: string
+    pictureType: string | null
+    value: string
+  }
 }
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -536,6 +542,7 @@ export const LinkButton = ({
           gap={gap}
           size={size}
           buttonSize={buttonSize}
+          choice={choice}
           {...props}
         >
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">

@@ -116,6 +116,7 @@ export const BackButtonSettings = () => {
       "marginTop",
       "marginRight",
       "marginBottom",
+      "choice",
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
@@ -200,7 +201,7 @@ export const BackButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">
+                  <p className="text-sm mr-11 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     {t("Icon")}
                   </p>
                   <div className="flex w-full items-center gap-2">
@@ -532,7 +533,7 @@ export const BackButtonSettings = () => {
                 id="enableTracking"
               />
               <label
-                htmlFor="enableIcon"
+                htmlFor="enableTracking"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Tracking activated")}
