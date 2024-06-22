@@ -144,7 +144,7 @@ const useTextThemePresets = () => {
       isCustomized: false,
     },
     borderColor: {
-      value: theme?.general?.primaryColor || "#4050ff",
+      value: "#ffffff",
       globalStyled: true,
       isCustomized: false,
     },
@@ -155,7 +155,7 @@ const useTextThemePresets = () => {
     },
     justifyContent: "center",
     width: TextContainerSize.medium,
-    height: "40",
+    height: "50",
     size: TextContainerSize.medium,
     text: t("TextDescription"),
     marginLeft: 0,

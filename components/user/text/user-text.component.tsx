@@ -126,7 +126,7 @@ export const TextInputDefaultProps: TextInputProps = {
   },
   justifyContent: "center",
   borderColor: {
-    value: "#000",
+    value: "inherit",
     globalStyled: false,
     isCustomized: false,
   },
@@ -161,6 +161,58 @@ export const TextInputDefaultProps: TextInputProps = {
   fullWidth: true,
   preset: "paragraph",
 }
+
+const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
+  font-family: ${(props) => `var(${props?.fontFamily})`};
+  background: ${(props) => `var(${props?.background})`};
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  font-size: 18;
+  font-weight: 400;
+  border: 1px dashed transparent;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-style: solid;
+    border-color: ${(props) =>
+      props.borderHoverColor}; /* Change to your desired hover border color */
+    background: ${(props) => props.backgroundHover};
+    color: ${(props) => props.colorHover};
+  }
+
+  &:focus {
+    border-color: ${(props) =>
+      props.borderHoverColor}; /* Change to your desired focus border color */
+  }
+
+  color: ${(props) => `var(${props?.color})`};
+  overflow: hidden;
+  max-width: ${(props) =>
+    props.mobileScreen
+      ? MobileContainerWidthValues[props.size || "medium"]
+      : ContainerWidthValues[props.size || "medium"]};
+  width: 100%;
+  box-sizing: border-box;
+  height: ${(props) => props.height}px;
+  margin-top: ${(props) => props.marginTop}px;
+  margin-left: ${(props) => props.marginLeft}px;
+  margin-right: ${(props) => props.marginRight}px;
+  margin-bottom: ${(props) => props.marginBottom}px;
+  border-radius: ${(props) => props.radius}px;
+  flex-direction: ${(props) => props.flexDirection};
+  align-items: ${(props) => props.alignItems};
+  justify-content: ${(props) => props.justifyContent};
+  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+  @media (max-width: 760px) {
+    width: 100%; /* Make the container take the full width on smaller screens */
+    max-width: 600px;
+  }
+  @media (max-width: 660px) {
+    width: 100%; /* Make the container take the full width on smaller screens */
+    max-width: 400px;
+  }
+`
 
 
 export const UserTextInputGen = ({
@@ -271,58 +323,6 @@ export const UserTextInputGen = ({
     </div>
   )
 }
-
-const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  background: ${(props) => `var(${props?.background})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  font-size: 18;
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-
-  color: ${(props) => `var(${props?.color})`};
-  overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
-  }
-`
 
 export const UserText = ({
   fontFamily,
