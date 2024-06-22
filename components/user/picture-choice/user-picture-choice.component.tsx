@@ -272,7 +272,7 @@ export const PictureChoice = ({
         }}
       >
         <ul
-          className="flex w-full flex-wrap justify-center gap-3 px-4"
+          className="flex w-full flex-wrap justify-center gap-3"
           style={{
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: mobileScreen
@@ -360,10 +360,7 @@ const PictureChoiceItem = ({
   }, [choice.value])
 
   const getFlexBasis = (n) => {
-    if (
-      size === PictureChoiceSizes.small ||
-      size === PictureChoiceSizes.medium
-    ) {
+    if (size === PictureChoiceSizes.small) {
       return 50
     }
     if (n === 1) {
@@ -379,14 +376,14 @@ const PictureChoiceItem = ({
       return 33.33
     }
     if ((n - 4) % 2 === 0) {
-      return 25
+      return size === PictureChoiceSizes.medium ? 50 : 25
     }
   }
   return (
     <li
-      className=" flex min-w-[0] max-w-[185px] flex-[1] flex-grow-0 justify-center"
+      className=" flex min-w-[0] max-w-[190px] flex-[1] flex-grow-0 justify-center"
       style={{
-        flexBasis: `calc(${getFlexBasis(choicesLength)}% - 12px)`,
+        flexBasis: `${getFlexBasis(choicesLength)}%`,
       }}
     >
       <StyledPictureChoiceItem
@@ -408,7 +405,7 @@ const PictureChoiceItem = ({
           {...(required ? { required: true } : {})}
           style={{ display: "none" }}
         />
-        <div className="absolute right-2 top-2">
+        <div className="absolute right-1 top-1">
           {checkboxVisible &&
             (multiSelect ? (
               checkboxVisible && (
@@ -431,18 +428,19 @@ const PictureChoiceItem = ({
           <div
             className="flex w-full items-center justify-center"
             style={{
-              padding: choice.pictureType !== PictureTypes.IMAGE ? "24px" : "",
+              padding:
+                choice.pictureType !== PictureTypes.IMAGE ? "12px 0 4px" : "",
             }}
           >
             {choice.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
                 svgData={choice.picture}
                 // viewBox="-0.3 0 14.5 14"
-                width="64px"
-                height="64px"
+                width="50px"
+                height="50px"
               />
             ) : choice.pictureType === PictureTypes.EMOJI ? (
-              <img src={choice.picture} className="size-16 object-cover" />
+              <img src={choice.picture} className="size-12 object-cover" />
             ) : (
               <img
                 src={choice.picture}
@@ -597,6 +595,8 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   // For Text
 
   & > div:last-child {
+    margin-top: ${({ defaultStyles }) =>
+      defaultStyles.textTopBorderColor !== "transparent" ? "8px" : ""};
     border-top: 1px solid
       ${({ defaultStyles }) => defaultStyles.textTopBorderColor};
     background-color: ${({ defaultStyles }) =>
