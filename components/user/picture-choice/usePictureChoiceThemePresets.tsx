@@ -15,7 +15,6 @@ const usePictureChoiceThemePresets = () => {
 
   const defaultIcon = `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`
 
-
   const defaultChoices = [
     {
       id: `input-${hexoid(6)()}`,
@@ -55,7 +54,6 @@ const usePictureChoiceThemePresets = () => {
     },
   ]
 
-  
   const defaultSelections = [defaultChoices[1].id]
 
   const outlinedPreset: PictureChoiceProps = {
@@ -65,10 +63,13 @@ const usePictureChoiceThemePresets = () => {
       isCustomized: false,
     },
     size: PictureChoiceSizes.medium,
+    label: t("Please select an option"),
     required: false,
-    fieldName: `${t("Picture Choice").replaceAll(" ", "-").toLowerCase()}-${hexoid(
-      6
-    )()}`,
+    fieldName: `${t("Picture Choice")
+      .replaceAll(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
+    labelColor: "#000000",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",
@@ -128,10 +129,13 @@ const usePictureChoiceThemePresets = () => {
       isCustomized: false,
     },
     size: PictureChoiceSizes.medium,
+    label: t("Please select an option"),
     required: false,
-    fieldName: `${t("Picture Choice").replace(" ", "-").toLowerCase()}-${hexoid(
-      6
-    )()}`,
+    fieldName: `${t("Picture Choice")
+      .replaceAll(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
+    labelColor: "#000000",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",
@@ -191,10 +195,13 @@ const usePictureChoiceThemePresets = () => {
       isCustomized: false,
     },
     size: PictureChoiceSizes.medium,
+    label: t("Please select an option"),
     required: false,
-    fieldName: `${t("Picture Choice").replace(" ", "-").toLowerCase()}-${hexoid(
-      6
-    )()}`,
+    fieldName: `${t("Picture Choice")
+      .replaceAll(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
+    labelColor: "#000000",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",

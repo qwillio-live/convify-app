@@ -33,9 +33,11 @@ export const MultipleChoiceGen = ({
   disabled = false,
   fontFamily,
   size,
+  label,
   required,
   fieldName,
   layout,
+  labelColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -86,6 +88,16 @@ export const MultipleChoiceGen = ({
           maxWidth: MultipleChoiceSizeValues[size || "nedium"],
         }}
       >
+        <div
+          className="w-full p-1 text-center"
+          style={{
+            color: labelColor,
+            fontFamily: `var(${fontFamily?.value})`,
+            maxWidth: MultipleChoiceSizeValues[size || "small"],
+          }}
+        >
+          <label>{label}</label>
+        </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem
             key={index}
@@ -131,9 +143,12 @@ export const MultipleChoiceGen = ({
 export const MultipleChoice = ({
   fontFamily,
   size,
+  label: originalLabel,
   required,
   fieldName,
   layout,
+  labelColor,
+  labelBorderColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -166,12 +181,16 @@ export const MultipleChoice = ({
     isHovered: state.events.hovered,
   }))
 
+  const [label, setLabel] = useState(originalLabel)
   const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
+  )
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
@@ -187,6 +206,10 @@ export const MultipleChoice = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
+
+  useEffect(() => {
+    setLabel(originalLabel)
+  }, [originalLabel])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -225,19 +248,31 @@ export const MultipleChoice = ({
       ],
     }
 
-    Object.keys(updatedStyles).forEach((key) => {
-      if (preset === key) {
-        updatedStyles[key].forEach(([style, field, alpha]) => {
-          setProp((props) => {
+    setProp(
+      (props) => (props.labelBorderColor = primaryColor || "#3182ce"),
+      200
+    )
+
+    setProp((props) => {
+      Object.keys(updatedStyles).forEach((key) => {
+        if (preset === key) {
+          updatedStyles[key].forEach(([style, field, alpha]) => {
             props[style][field].value = alpha
-              ? rgba(primaryColor || "#ffffff", alpha)
+              ? rgba(primaryColor || "#3182ce", alpha)
               : primaryColor
-            return props
-          }, 200)
-        })
-      }
-    })
+          })
+        }
+      })
+      return props
+    }, 200)
   }, [primaryColor])
+
+  useEffect(() => {
+    setProp(
+      (props) => (props.labelColor = primaryTextColor || "#000000"),
+      200
+    )
+  }, [primaryTextColor])
 
   return (
     <div
@@ -269,6 +304,29 @@ export const MultipleChoice = ({
           paddingRight: `${marginRight}px`,
         }}
       >
+        <div
+          className="w-full p-1 text-center"
+          style={{
+            fontFamily: `var(${fontFamily?.value})`,
+            maxWidth: mobileScreen
+              ? MultipleChoiceMobileSizeValues[size || "small"]
+              : MultipleChoiceSizeValues[size || "small"],
+          }}
+        >
+          <ContentEditable
+            className="px-1"
+            html={label}
+            onChange={(e) => {
+              setLabel(e.target.value)
+              handlePropChangeDebounced("label", e.target.value)
+            }}
+            style={{
+              color: labelColor,
+              outlineColor: labelBorderColor,
+              borderRadius: "4px",
+            }}
+          />
+        </div>
         <ul
           className="flex w-full flex-col items-center justify-center"
           style={{
@@ -579,9 +637,12 @@ export enum MultipleChoicePresets {
 export type MultipleChoiceProps = {
   fontFamily: StyleProperty
   size: MultipleChoiceSizes
+  label: string
   required: boolean
   fieldName: string
   layout: MultipleChoiceLayouts
+  labelColor: string
+  labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
   paddingTop: string | number
@@ -644,9 +705,12 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
     isCustomized: false,
   },
   size: MultipleChoiceSizes.medium,
+  label: "Please choose an option",
   required: false,
   fieldName: "",
   layout: MultipleChoiceLayouts.collapsed,
+  labelColor: "#000000",
+  labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",
   paddingTop: "20",

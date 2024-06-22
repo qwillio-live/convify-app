@@ -33,8 +33,10 @@ export const PictureChoiceGen = ({
   disabled = false,
   fontFamily,
   size,
+  label,
   required,
   fieldName,
+  labelColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -80,6 +82,16 @@ export const PictureChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
+      <div
+        className="w-full p-1 text-center"
+        style={{
+          color: labelColor,
+          fontFamily: `var(${fontFamily?.value})`,
+          maxWidth: PictureChoiceSizeValues[size || "small"],
+        }}
+      >
+        <label>{label}</label>
+      </div>
       <ul
         className="flex w-full flex-wrap justify-center gap-3 px-2"
         style={{
@@ -132,8 +144,11 @@ export const PictureChoiceGen = ({
 export const PictureChoice = ({
   fontFamily,
   size,
+  label: originalLabel,
   required,
   fieldName,
+  labelColor,
+  labelBorderColor,
   containerBackground,
   paddingLeft,
   paddingTop,
@@ -165,12 +180,16 @@ export const PictureChoice = ({
     isHovered: state.events.hovered,
   }))
 
-  const [hover, setHover] = React.useState(false)
+  const [label, setLabel] = useState(originalLabel)
+  const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
+  )
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
@@ -186,6 +205,10 @@ export const PictureChoice = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
+
+  useEffect(() => {
+    setLabel(originalLabel)
+  }, [originalLabel])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
@@ -227,19 +250,28 @@ export const PictureChoice = ({
       ],
     }
 
-    Object.keys(updatedStyles).forEach((key) => {
-      if (preset === key) {
-        updatedStyles[key].forEach(([style, field, alpha]) => {
-          setProp((props) => {
+    setProp(
+      (props) => (props.labelBorderColor = primaryColor || "#3182ce"),
+      200
+    )
+
+    setProp((props) => {
+      Object.keys(updatedStyles).forEach((key) => {
+        if (preset === key) {
+          updatedStyles[key].forEach(([style, field, alpha]) => {
             props[style][field] = alpha
-              ? rgba(primaryColor || "#ffffff", alpha)
+              ? rgba(primaryColor || "#3182ce", alpha)
               : primaryColor
-            return props
-          }, 200)
-        })
-      }
-    })
+          })
+        }
+      })
+      return props
+    }, 200)
   }, [primaryColor])
+
+  useEffect(() => {
+    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
+  }, [primaryTextColor])
 
   return (
     <div
@@ -271,6 +303,29 @@ export const PictureChoice = ({
           paddingRight: `${marginRight}px`,
         }}
       >
+        <div
+          className="w-full p-1 text-center"
+          style={{
+            fontFamily: `var(${fontFamily?.value})`,
+            maxWidth: mobileScreen
+              ? PictureChoiceMobileSizeValues[size || "small"]
+              : PictureChoiceSizeValues[size || "small"],
+          }}
+        >
+          <ContentEditable
+            className="px-1"
+            html={label}
+            onChange={(e) => {
+              setLabel(e.target.value)
+              handlePropChangeDebounced("label", e.target.value)
+            }}
+            style={{
+              color: labelColor,
+              outlineColor: labelBorderColor,
+              borderRadius: "4px",
+            }}
+          />
+        </div>
         <ul
           className="flex w-full flex-wrap justify-center gap-3"
           style={{
@@ -381,9 +436,9 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className=" flex min-w-[0] max-w-[190px] flex-[1] flex-grow-0 justify-center"
+      className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center"
       style={{
-        flexBasis: `${getFlexBasis(choicesLength)}%`,
+        flexBasis: `calc(${getFlexBasis(choicesLength)}% - 12px)`,
       }}
     >
       <StyledPictureChoiceItem
@@ -429,15 +484,15 @@ const PictureChoiceItem = ({
             className="flex w-full items-center justify-center"
             style={{
               padding:
-                choice.pictureType !== PictureTypes.IMAGE ? "12px 0 4px" : "",
+                choice.pictureType !== PictureTypes.IMAGE ? "24px 0 4px" : "",
             }}
           >
             {choice.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
                 svgData={choice.picture}
                 // viewBox="-0.3 0 14.5 14"
-                width="50px"
-                height="50px"
+                width="48px"
+                height="48px"
               />
             ) : choice.pictureType === PictureTypes.EMOJI ? (
               <img src={choice.picture} className="size-12 object-cover" />
@@ -449,7 +504,7 @@ const PictureChoiceItem = ({
             )}
           </div>
         )}
-        <div className="flex w-full flex-1 items-center justify-center p-2">
+        <div className="flex w-full flex-1 items-center justify-center p-2 text-lg">
           {onValueChange === null ? (
             <span
               className="w-full whitespace-break-spaces"
@@ -625,8 +680,11 @@ export enum PictureChoicePresets {
 export type PictureChoiceProps = {
   fontFamily: StyleProperty
   size: PictureChoiceSizes
+  label: string
   required: boolean
   fieldName: string
+  labelColor: string
+  labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
   paddingTop: string | number
@@ -695,7 +753,10 @@ export const PictureChoiceDefaultProps: PictureChoiceProps = {
   },
   size: PictureChoiceSizes.medium,
   required: false,
+  label: "Please select an option",
   fieldName: "",
+  labelColor: "#000000",
+  labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",
   paddingTop: "20",

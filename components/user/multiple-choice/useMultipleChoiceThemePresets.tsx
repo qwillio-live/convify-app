@@ -19,7 +19,7 @@ const useMultipleChoiceThemePresets = () => {
     {
       id: `input-1`,
       picture:
-        '<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M13.39 3a.47.47 0 0 0-.21-.16l-6-2.27a.45.45 0 0 0-.36 0l-6 2.31A.47.47 0 0 0 .61 3a.48.48 0 0 0-.11.3v7.32a.5.5 0 0 0 .32.46l6 2.31h.36l6-2.31a.5.5 0 0 0 .32-.46V3.34a.48.48 0 0 0-.11-.34Z\"/><path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.46V5.5m0 0v7.96M.61 3.04L7 5.5l6.39-2.46\"/>',
+        '<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M13.39 3a.47.47 0 0 0-.21-.16l-6-2.27a.45.45 0 0 0-.36 0l-6 2.31A.47.47 0 0 0 .61 3a.48.48 0 0 0-.11.3v7.32a.5.5 0 0 0 .32.46l6 2.31h.36l6-2.31a.5.5 0 0 0 .32-.46V3.34a.48.48 0 0 0-.11-.34Z"/><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M7 13.46V5.5m0 0v7.96M.61 3.04L7 5.5l6.39-2.46"/>',
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 1`,
       buttonAction: null,
@@ -29,7 +29,7 @@ const useMultipleChoiceThemePresets = () => {
     {
       id: `input-2`,
       picture:
-        '<g fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><rect width=\"13\" height=\"13\" x=\".5\" y=\".5\" rx=\"1\"/><path d=\"M.5 3.5h13M4 9l2 1.5l3.5-4\"/></g>',
+        '<g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><rect width="13" height="13" x=".5" y=".5" rx="1"/><path d="M.5 3.5h13M4 9l2 1.5l3.5-4"/></g>',
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 2`,
       buttonAction: null,
@@ -103,11 +103,14 @@ const useMultipleChoiceThemePresets = () => {
       isCustomized: false,
     },
     size: MultipleChoiceSizes.medium,
+    label: `${t("Please select an option")}`,
     required: false,
     fieldName: `${t("Multiple Choice")
       .replace(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
+    labelColor: "#000000",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",
@@ -246,11 +249,14 @@ const useMultipleChoiceThemePresets = () => {
       isCustomized: false,
     },
     size: MultipleChoiceSizes.medium,
+    label: `${t("Please select an option")}`,
     required: false,
     fieldName: `${t("Multiple Choice")
       .replace(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
+    labelColor: "#000000",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",
@@ -389,11 +395,14 @@ const useMultipleChoiceThemePresets = () => {
       isCustomized: false,
     },
     size: MultipleChoiceSizes.medium,
+    label: `${t("Please select an option")}`,
     required: false,
     fieldName: `${t("Multiple Choice")
       .replace(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
+    labelColor: "#000000",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",
