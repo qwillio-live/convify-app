@@ -20,6 +20,7 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { Button as CustomButton } from "@/components/ui/button"
+import { PictureTypes } from "@/components/PicturePicker"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
@@ -29,27 +30,27 @@ import {
   getHoverBackgroundForPreset,
 } from "./useLinkButtonThemePresets"
 
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-  arrowleft: (props) => <ArrowLeft {...props} />,
+const convertToSvg = (svgBody) => {
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 cursor-pointer" width="15"
+  height="15">${svgBody}</svg>`
 }
 
 const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  const IconComponent = IconsList[icon]
+  if (!icon) return null
 
-  if (!IconComponent) {
-    return null
+  if (icon.pictureType === PictureTypes.ICON) {
+    const svgData = convertToSvg(icon?.picture)
+
+    return (
+      <div
+        dangerouslySetInnerHTML={{ __html: svgData }}
+        className={`w-${size} h-${size} ${className}`}
+        {...rest}
+      />
+    )
   }
 
-  return (
-    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
-  )
+  return <img src={icon?.picture} alt="icon" className="w-6 h-6" {...rest} />
 }
 
 const IconButtonSizeValues = {
@@ -116,11 +117,14 @@ export const LinkButtonGen = ({
   borderHoverColor,
   prevScreen,
   url,
+  choice,
   open,
   buttonAction,
   ...props
 }) => {
   const pathName = usePathname()
+
+  console.log(choice, "choice")
 
   const target =
     (buttonAction === "redirect" && open === "new-window"
@@ -195,7 +199,7 @@ export const LinkButtonGen = ({
             {text}
           </div>
           {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+            <IconGenerator icon={choice} size={IconSizeValues[buttonSize]} />
           )}
         </StyledCustomButton>
       </Link>
@@ -321,6 +325,7 @@ export const LinkButton = ({
   borderColor,
   buttonAction,
   prevScreen,
+  choice,
   ...props
 }) => {
   const {
@@ -554,7 +559,7 @@ export const LinkButton = ({
             />
           </div>
           {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+            <IconGenerator icon={choice} size={IconSizeValues[buttonSize]} />
           )}
         </StyledCustomButton>
       </div>
@@ -612,6 +617,11 @@ export type IconButtonProps = {
   }
   url: string
   open: string
+  choice: {
+    picture: string
+    pictureType: string
+    value: string
+  }
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -689,6 +699,11 @@ export const IconButtonDefaultProps: IconButtonProps = {
   buttonAction: "redirect",
   url: "",
   open: "new-window",
+  choice: {
+    picture: "",
+    pictureType: "",
+    value: "",
+  },
 }
 
 LinkButton.craft = {

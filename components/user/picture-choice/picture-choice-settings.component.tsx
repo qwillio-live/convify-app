@@ -899,7 +899,7 @@ type PortalEmojiPickerProps = {
   dropdownRef: React.RefObject<HTMLInputElement>;
 };
 
-const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, position, onEmojiClick, setPickerType }) => {
+export const PortalEmojiPicker: React.FC<PortalEmojiPickerProps> = ({ isVisible, position, onEmojiClick, setPickerType }) => {
   const emojiRef = useRef<HTMLInputElement>(null);
   const { top, left } = position;
 
