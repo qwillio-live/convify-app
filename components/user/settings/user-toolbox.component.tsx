@@ -16,6 +16,7 @@ import {
   Copy,
   Dice2,
   Facebook,
+  ExternalLink,
   Globe,
   GripVertical,
   Hand,
@@ -31,6 +32,7 @@ import {
   TextCursorInput,
   Trophy,
   Type,
+  ArrowLeftCircle,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -615,7 +617,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Back Button")}
-                    icon={<Navigation className="mr-2 size-3" />}
+                    icon={<ArrowLeftCircle className="mr-2 size-3" />}
                   >
                     <BackButtonGen
                       className="w-full"
@@ -644,7 +646,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Link Button")}
-                    icon={<Navigation className="mr-2 size-3" />}
+                    icon={<ExternalLink className="mr-2 size-3" />}
                   >
                     <LinkButtonGen
                       className="w-full"

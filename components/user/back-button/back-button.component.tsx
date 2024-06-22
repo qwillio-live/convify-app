@@ -24,6 +24,7 @@ import { Button as CustomButton } from "@/components/ui/button"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { BackButtonSettings } from "./back-button.settings"
+import { PictureTypes } from "@/components/PicturePicker"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -36,20 +37,31 @@ const IconsList = {
   arrowleft: (props) => <ArrowLeft {...props} />,
 }
 
-const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  const IconComponent = IconsList[icon]
+const convertToSvg = (svgBody) => {
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 cursor-pointer" width="15"
+  height="15">${svgBody}</svg>`
+}
 
-  if (!IconComponent) {
-    return null
+const IconGenerator = ({ icon, size, className = "", ...rest }) => {
+  if (!icon?.picture) return null
+
+  if (icon.pictureType === PictureTypes.ICON) {
+    const svgData = convertToSvg(icon?.picture)
+
+    return (
+      <div
+        dangerouslySetInnerHTML={{ __html: svgData }}
+        className={`w-${size} h-${size} ${className}`}
+        {...rest}
+      />
+    )
   }
 
-  return (
-    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
-  )
+  return <img src={icon?.picture} alt="icon" className="w-6 h-6" {...rest} />
 }
 
 const IconButtonSizeValues = {
-  small: "100px",
+  small: "150px",
   medium: "200px",
   large: "376px",
   full: "100%",
@@ -67,7 +79,7 @@ const IconSizeValues = {
 }
 
 const IconButtonMobileSizeValues = {
-  small: "100px",
+  small: "150px",
   medium: "200px",
   large: "360px",
   full: "100%",
@@ -111,6 +123,7 @@ export const BackButtonGen = ({
   borderColor,
   borderHoverColor,
   prevScreen,
+  choice,
   ...props
 }) => {
   const pathName = usePathname()
@@ -163,7 +176,7 @@ export const BackButtonGen = ({
           onClick={() => console.log("Button clicked", text)}
         >
           {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+            <IconGenerator icon={choice} size={IconSizeValues[buttonSize]} />
           )}
           <div
             style={{
@@ -299,6 +312,7 @@ export const BackButton = ({
   borderColor,
   buttonAction,
   prevScreen,
+  choice,
   ...props
 }) => {
   const {
@@ -470,7 +484,7 @@ export const BackButton = ({
           {...props}
         >
           {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+            <IconGenerator icon={choice} size={IconSizeValues[buttonSize]} />
           )}
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
@@ -543,6 +557,11 @@ export type IconButtonProps = {
   prevScreen: {
     screenId: string
     screenName: string
+  }
+  choice: {
+    picture: string
+    pictureType: string | null
+    value: string
   }
 }
 
@@ -619,6 +638,11 @@ export const IconButtonDefaultProps: IconButtonProps = {
     screenName: "",
   },
   buttonAction: "prev-screen",
+  choice: {
+    picture: "",
+    pictureType: null,
+    value: "",
+  },
 }
 
 BackButton.craft = {

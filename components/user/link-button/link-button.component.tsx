@@ -36,7 +36,7 @@ const convertToSvg = (svgBody) => {
 }
 
 const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  if (!icon) return null
+  if (!icon?.picture) return null
 
   if (icon.pictureType === PictureTypes.ICON) {
     const svgData = convertToSvg(icon?.picture)
@@ -54,7 +54,7 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
 }
 
 const IconButtonSizeValues = {
-  small: "100px",
+  small: "150px",
   medium: "200px",
   large: "376px",
   full: "100%",
@@ -72,7 +72,7 @@ const IconSizeValues = {
 }
 
 const IconButtonMobileSizeValues = {
-  small: "100px",
+  small: "150px",
   medium: "200px",
   large: "360px",
   full: "100%",
@@ -123,8 +123,6 @@ export const LinkButtonGen = ({
   ...props
 }) => {
   const pathName = usePathname()
-
-  console.log(choice, "choice")
 
   const target =
     (buttonAction === "redirect" && open === "new-window"
@@ -619,7 +617,7 @@ export type IconButtonProps = {
   open: string
   choice: {
     picture: string
-    pictureType: string
+    pictureType: string | null
     value: string
   }
 }
@@ -701,7 +699,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   open: "new-window",
   choice: {
     picture: "",
-    pictureType: "",
+    pictureType: null,
     value: "",
   },
 }

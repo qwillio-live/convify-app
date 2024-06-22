@@ -161,8 +161,10 @@ export const PicturePicker = ({
                     className={`w-12 border-input !size-8 border p-0`}
                     variant="ghost"
                   >
-                    <Cloud className="hidden size-4" />
-                    {pictureType === PictureTypes.NULL && picture}
+                    {(pictureType === PictureTypes.NULL ||
+                      pictureType === null) && (
+                      <ImageIcon className="text-muted-foreground size-4" />
+                    )}
                     {pictureType === PictureTypes.ICON && (
                       <SvgRenderer svgData={picture as string} />
                     )}

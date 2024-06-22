@@ -1,18 +1,11 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { debounce, throttle } from "lodash"
 import {
-  Activity,
   AlignHorizontalJustifyCenter,
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyStart,
   AlignHorizontalSpaceBetween,
-  Anchor,
-  Aperture,
-  ArrowLeft,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  Mountain,
+  Image as ImageIcon,
   MoveHorizontal,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -31,6 +24,7 @@ import {
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 import { Checkbox } from "@/components/custom-checkbox"
 import {
   Select,
@@ -86,6 +80,7 @@ export const BackButtonSettings = () => {
       trackingEvent,
       prevScreen,
       buttonAction,
+      choice: originalChoice,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -159,6 +154,17 @@ export const BackButtonSettings = () => {
     (state) => state?.theme?.general?.backgroundColor
   )
 
+  const [choice, setChoice] = useState(originalChoice)
+
+  const handlePictureChange = (picture, pictureType) => {
+    setChoice({ ...choice, picture, pictureType })
+
+    setProp(
+      (props) => (props.choice = { ...choice, picture, pictureType }),
+      200
+    )
+  }
+
   return (
     <>
       <Accordion
@@ -197,44 +203,20 @@ export const BackButtonSettings = () => {
                   <p className="text-md flex-1 text-muted-foreground">
                     {t("Icon")}
                   </p>
-                  <Select
-                    defaultValue={icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="arrowleft">
-                          <ArrowLeft />
-                        </SelectItem>
-                        <SelectItem value="arrowright">
-                          <ArrowRight />
-                        </SelectItem>
-                        <SelectItem value="aperture">
-                          <Aperture />
-                        </SelectItem>
-                        <SelectItem value="activity">
-                          <Activity />
-                        </SelectItem>
-                        <SelectItem value="dollarsign">
-                          <DollarSign />
-                        </SelectItem>
-                        <SelectItem value="anchor">
-                          <Anchor />
-                        </SelectItem>
-                        <SelectItem value="disc">
-                          <Disc />
-                        </SelectItem>
-                        <SelectItem value="mountain">
-                          <Mountain />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex w-full items-center gap-2">
+                    <PicturePicker
+                      className="transition-all duration-100 ease-in-out !w-24"
+                      picture={
+                        choice.pictureType === PictureTypes.NULL ? (
+                          <ImageIcon className="text-muted-foreground size-4" />
+                        ) : (
+                          choice.picture
+                        )
+                      }
+                      pictureType={choice.pictureType}
+                      onChange={handlePictureChange}
+                    />
+                  </div>
                 </>
               )}
             </div>
@@ -244,7 +226,7 @@ export const BackButtonSettings = () => {
                 htmlFor="text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Navigation
+                {t("Navigation")}
               </label>
               <Select
                 defaultValue={
