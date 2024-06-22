@@ -10,14 +10,14 @@ const EmptyResponse = () => {
       <div className="mb-60 mt-56  flex h-full w-full items-center justify-center ">
         <div className="max-w-[360px]">
           <div className="mb-2 flex items-center justify-center ">
-            <Image src={LocalImages.noresponse} alt="no response" className="mt-8 w-56 "/>
+            <Image src={LocalImages.noresponse} alt="no response" className="mt-8 w-56 " />
           </div>
           <span className="leading-32 block text-center text-xl font-light  ">
             No signs of movement...
           </span>
           <div className="mt-2">
             <span className="block text-center text-xs leading-5 opacity-90">
-              This typeform doesn’t have any responses yet. If you haven’t set
+              This flow doesn’t have any responses yet. If you haven’t set
               up notifications, you can do that now and we’ll message you when
               someone responds.
             </span>

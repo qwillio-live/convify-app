@@ -24,7 +24,7 @@ const ShareFlowComponents = ({ isPublished }) => {
             </Link>
             <div
               onClick={() => setIsCustomLinkOpen(true)}
-              className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background]  delay-0 duration-200  ease-in hover:bg-[rgb(240,240,240)]"
+              className="flex-0 cursor-pointer border-b border-solid border-b-[rgba(0,0,0,0.07)] px-4  py-2 font-medium leading-8 text-[rgb(38,38,39)]  no-underline transition-[background]  delay-0 duration-200  ease-in hover:bg-[rgb(240,240,240)] "
             >
               {t("Embed in an email")}
             </div>

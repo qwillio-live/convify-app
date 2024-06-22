@@ -31,9 +31,29 @@ import {
 } from "@/components/ui/table"
 
 import { Badge } from "./ui/badge"
+import { useEffect, useState } from "react"
 
 export function FlowsList() {
   const t = useTranslations("Dashboard")
+  const flow_id = "flows";
+  const [flows, setFlows] = useState([]);
+  const [latestFlowId, setLatestFlowId] = useState(null);
+
+  useEffect(() => {
+    async function fetchFlowData() {
+      const response = await fetch('/api/flows'); // Adjust this endpoint to your needs
+      if (response.ok) {
+        const data = await response.json();
+        setFlows(data);
+        if (data.length > 0) {
+          setLatestFlowId(data[data.length - 1].id); // Assuming the latest flow is at the end of the list
+        }
+      } else {
+        console.error('Failed to fetch flow data');
+      }
+    }
+    fetchFlowData();
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -41,13 +61,15 @@ export function FlowsList() {
         <div className="flex flex-col">
           <Link
             className="flex items-center justify-start self-start"
-            href="/dashboard/flows/create-flow"
+            // href="/dashboard/flows/create-flow"
+            href={`/dashboard/${flow_id}/create-flow`}
           >
             <Button size="sm" className="my-4 h-8 gap-1 py-2">
               <Plus className="size-3.5" />
               <span className="whitespace-nowrap">{t("Create new flow")}</span>
             </Button>
           </Link>
+
           <Card>
             <CardHeader>
               <CardTitle>{t("My flows")}</CardTitle>
