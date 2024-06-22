@@ -131,7 +131,6 @@ export const HeadlineTextGen = ({
   background,
   backgroundHover,
   colorHover,
-  icon,
   paddingLeft,
   paddingTop,
   paddingRight,
@@ -148,6 +147,13 @@ export const HeadlineTextGen = ({
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
 
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
+
+  const primarycolor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
   const processedText = text
     .replace(/<div><br><\/div>/g, "\n")
     .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
@@ -170,7 +176,7 @@ export const HeadlineTextGen = ({
       }}
     >
       <StyledCustomHeadlineInput
-        fontFamily={fontFamily?.value}
+        fontFamily={primaryFont}
         color={color?.value}
         background={background?.value}
         backgroundHover={backgroundHover?.value}
@@ -181,7 +187,7 @@ export const HeadlineTextGen = ({
         fontWeight={fontWeight?.value}
         // textAlign={textAlign?.value}
         // justifyContent={justifyContent}
-        borderColor={borderColor?.value}
+        borderColor={primarycolor}
         border={border}
         marginLeft={marginLeft}
         width={width}
@@ -207,10 +213,9 @@ export const HeadlineTextGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${color?.value}`,
+            color: `${primaryTextColor}`,
             fontSize: `${fontSize}px`,
             fontWeight: `${fontWeight.value}`,
-            fontFamily: `var(${primaryFont})`,
             height: "fit-content",
             wordWrap: "break-word",
           }}
@@ -440,7 +445,7 @@ export const HeadlineText = ({
         <StyledCustomHeadlineInput
           fontFamily={primaryFont}
           fontSize={`${fontSize}px`}
-          color={primaryTextColor}
+          color={color.value}
           colorHover={colorHover.value}
           flexDirection={flexDirection}
           fontWeight={fontWeight.value}
@@ -473,7 +478,7 @@ export const HeadlineText = ({
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${color?.value}`,
+                color: `${primaryTextColor}`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}

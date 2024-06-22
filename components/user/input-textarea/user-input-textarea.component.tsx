@@ -212,7 +212,6 @@ export const UserInputTextareaGen = ({ ...props }) => {
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={() => setIsActive(false)}
               autoFocus={isFocused}
-              rows={props.defaultRows || 3}
             />
           </div>
           {/** End field container */}
@@ -261,7 +260,6 @@ const UserInputTextareaStyled = styled(TextArea)<{
   primaryFont: string
   size: UserInputSizes
   error: boolean
-  rows: number
 }>`
   color: ${(props) => props.textColor};
   max-width: 100%;
@@ -477,7 +475,6 @@ export const UserInputTextarea = ({ ...props }) => {
               }
               onBlur={() => setProp((props) => (props.isActive = false))}
               autoFocus={props.isFocused}
-              rows={3}
             />
           </div>
           {/** End field container */}

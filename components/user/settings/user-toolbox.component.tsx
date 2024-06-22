@@ -66,11 +66,13 @@ import {
 import {
   TextInputDefaultProps,
   UserText,
+  UserTextInputGen,
 } from "@/components/user/text/user-text.component"
 
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
 import {
   HeadlineText,
+  HeadlineTextGen,
   HeadlineTextDefaultProps,
 } from "../headline-text/headline-text.component"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
@@ -115,6 +117,8 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
+import useTextThemePresets from "../text/useTextThemePresets"
+import useHeadlineThemePresets from "../headline-text/useHeadlineThemePresets"
 
 const SquareCheckIcon = Icons.SquareCheck
 
@@ -381,7 +385,8 @@ export const UserToolbox = () => {
     useInputPhoneThemePresets()
   const { outlinedPresetTextarea, underlinedPresetTextarea } =
     useInputTextareaThemePrests()
-
+  const { h2Preset } = useHeadlineThemePresets()
+  const { parapgraphPreset, spanPreset } = useTextThemePresets()
   {
     /**
      * isHeaderFooterMode: flag is used to determine if the header or footer mode is active
@@ -423,11 +428,15 @@ export const UserToolbox = () => {
                   <HoverCardComponent
                     title={t("Headline")}
                     icon={<Type className="mr-2 size-3" />}
+                    data-cy="toolbox-text"
+
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
-                      <h1 className="text-lg font-semibold">
-                        {t("HeadlineDescription")}
-                      </h1>
+                    <HeadlineTextGen
+                      {...h2Preset}
+                      label={t("Text")}
+                      placeholder={t("Placeholder")}
+                    />
                     </div>
                   </HoverCardComponent>
                 </div>
@@ -437,22 +446,21 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(
-                      ref,
-                      <UserText {...TextInputDefaultProps} />
-                    )
+                    connectors.create(ref, <UserText {...parapgraphPreset} />)
                   }
                   data-cy="toolbox-text"
                 >
                   <HoverCardComponent
                     title={t("Text")}
                     icon={<Pencil className="mr-2 size-3" />}
+                    data-cy="toolbox-text"
+
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
-                      <h1 className="text-lg font-semibold">
-                        {t("TextDescription")}
-                      </h1>
-                    </div>
+                    <UserTextInputGen
+                      {...spanPreset}
+                      label={t("Text")}
+                      placeholder={t("Placeholder")}
+                    />
                   </HoverCardComponent>
                 </div>
               </AccordionContent>

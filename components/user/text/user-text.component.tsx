@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { track } from "@vercel/analytics/react"
 import { set } from "date-fns"
@@ -20,6 +20,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
+import local from "next/font/local"
 
 const ContainerWidthValues = {
   small: "300px",
@@ -42,39 +43,235 @@ export enum TextContainerSize {
   full = "full",
 }
 
-interface StyleCustomTextContainerProps {
-  fontFamily?: string
-  color?: string
-  background?: string
-  backgroundHover?: string
-  colorHover?: string
-  size?: string
-  buttonSize?: string
-  marginLeft?: string | number
-  width?: string | number
-  height?: string | number
-  marginRight?: string | number
-  marginTop?: string | number
-  marginBottom?: string | number
-  paddingLeft?: string | number
-  paddingTop?: string | number
-  paddingRight?: string | number
-  paddingBottom?: string | number
-  radius?: number
-  flexDirection?: string
-  alignItems?: string
-  justifyContent?: string
-  border?: number
-  borderColor?: string
-  borderHoverColor?: string
-  mobileScreen: boolean
-  fontSize?: string
-  fontWeight?: number
-  textAlign?: string
-  borderRadius?: string
-  padding?: string
-  preset?: string
+
+const sanitizeText = (htmlText) => {
+  // Replace <br> with newline character
+  let sanitized = htmlText.replace(/<br\s*\/?>/gi, "\n");
+  
+  // Replace <div> with newline character if it's empty or contains only <br>
+  sanitized = sanitized.replace(/<div><br\s*\/?><\/div>/gi, "\n");
+  
+  // Remove any other HTML tags, but preserve their content
+  sanitized = sanitized.replace(/<\/?[^>]+(>|$)/g, "");
+
+  return sanitized;
+};
+
+
+export type TextInputProps = {
+  fontFamily: StyleProperty
+  size: TextContainerSize
+  fontSize: number
+  fontWeight: string | number
+  textAlign: StyleProperty
+  containerBackground: string
+  background: StyleProperty
+  backgroundHover: StyleProperty
+  color: StyleProperty
+  colorHover: StyleProperty
+  text: string
+  paddingLeft: string | number
+  paddingTop: string | number
+  paddingRight: string | number
+  paddingBottom: string | number
+  radius: StyleProperty
+  flexDirection: string
+  alignItems: string
+  justifyContent: string
+  border: number
+  borderColor: StyleProperty
+  borderHoverColor: StyleProperty
+  marginLeft: number | number
+  marginTop: number | number
+  marginRight: number | number
+  marginBottom: number | number
+  width: string | number
+  height: string | number
+  fullWidth: boolean
+  preset: string
+  buttonSize: string
 }
+
+export const TextInputDefaultProps: TextInputProps = {
+  fontFamily: {
+    value: "inherit",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  containerBackground: "transparent",
+  background: {
+    value: "#4050ff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  color: {
+    value: "#000",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  backgroundHover: {
+    value: "transparent",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  colorHover: {
+    value: "#ffffff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  radius: {
+    value: "0",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  justifyContent: "center",
+  borderColor: {
+    value: "#000",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  borderHoverColor: {
+    value: "transparent",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  width: "366",
+  height: "40",
+  size: TextContainerSize.medium,
+  buttonSize: "medium",
+  text: "Text Description",
+  marginLeft: 0,
+  marginTop: 20,
+  marginRight: 0,
+  marginBottom: 20,
+  fontSize: 18,
+  fontWeight: "400",
+  textAlign: {
+    value: "center",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  paddingLeft: "0",
+  paddingTop: "0",
+  paddingRight: "0",
+  paddingBottom: "0",
+  flexDirection: "row",
+  alignItems: "center",
+  border: 2,
+  fullWidth: true,
+  preset: "paragraph",
+}
+
+
+export const UserTextInputGen = ({
+  fontFamily,
+  size,
+  buttonSize,
+  color,
+  text,
+  marginLeft,
+  width: width,
+  height: height,
+  marginRight,
+  marginTop,
+  containerBackground,
+  marginBottom,
+  background,
+  backgroundHover,
+  colorHover,
+  paddingLeft,
+  paddingTop,
+  paddingRight,
+  paddingBottom,
+  radius,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  fontSize: fontSize,
+  fontWeight: fontWeight,
+  textAlign,
+  border,
+  borderColor,
+  borderHoverColor,
+  ...props
+}) => {
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
+
+  const primaryFont = useAppSelector(
+    (state) => state.theme?.text?.secondaryFont
+  )
+
+
+  const sanitizedText = text
+    .replace(/<br>/g, '\n')
+    .replace(/<\/?div>/g, '\n')
+    .replace(/<\/?[^>]+(>|$)/g, ""); // Removes all other HTML tags
+
+
+
+  return (
+    <div
+      className="w-full relative"
+      style={{
+        width: "100%",
+        background: `${containerBackground}`,
+        display: "flex",
+        justifyContent: "center",
+        minWidth: "100%",
+        paddingTop: `${props.marginTop}px`,
+        paddingBottom: `${props.marginBottom}px`,
+        paddingLeft: `${props.marginLeft}px`,
+        paddingRight: `${props.marginRight}px`,
+      }}
+    >
+      <StyledCustomTextInput
+        fontFamily={primaryFont}
+        color={color.value}
+        background={background.value}
+        backgroundHover={backgroundHover.value}
+        borderHoverColor={borderHoverColor?.value}
+        colorHover={colorHover.value}
+        radius={radius?.value}
+        flexDirection={flexDirection}
+        justifyContent={justifyContent}
+        borderColor={borderColor.value}
+        border={2}
+        marginLeft={marginLeft}
+        width={width}
+        size={size}
+        buttonSize={buttonSize}
+        height={height}
+        marginRight={marginRight}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        paddingLeft={paddingLeft}
+        paddingTop={paddingTop}
+        paddingRight={paddingRight}
+        paddingBottom={paddingBottom}
+        alignItems={alignItems}
+        mobileScreen={false}
+        {...props}
+        className="text-[1rem]"
+        onClick={() => console.log("Button clicked", text)}
+      >
+        <div
+          style={{
+            maxWidth: "100%",
+            transitionProperty: "all",
+            overflowX: "clip",
+            textOverflow: "ellipsis",
+            color: `${secondaryTextColor}`,
+          }}
+        >
+          {sanitizedText}
+        </div>
+      </StyledCustomTextInput>
+    </div>
+  )
+}
+
 const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   background: ${(props) => `var(${props?.background})`};
@@ -127,218 +324,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   }
 `
 
-export type TextInputProps = {
-  fontFamily: string
-  size: TextContainerSize
-  fontSize: number
-  fontWeight: string | number
-  textAlign: StyleProperty
-  containerBackground: string
-  background: StyleProperty
-  backgroundHover: StyleProperty
-  color: StyleProperty
-  colorHover: StyleProperty
-  text: string
-  paddingLeft: string | number
-  paddingTop: string | number
-  paddingRight: string | number
-  paddingBottom: string | number
-  radius: StyleProperty
-  flexDirection: string
-  alignItems: string
-  justifyContent: string
-  border: number
-  borderColor: StyleProperty
-  borderHoverColor: StyleProperty
-  marginLeft: number | number
-  marginTop: number | number
-  marginRight: number | number
-  marginBottom: number | number
-  width: string | number
-  height: string | number
-  fullWidth: boolean
-  preset: string
-  buttonSize: string
-}
-
-export const TextInputDefaultProps: TextInputProps = {
-  fontFamily: "inherit",
-  containerBackground: "transparent",
-  background: {
-    value: "#4050ff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  color: {
-    value: "#000",
-    globalStyled: true,
-    isCustomized: false,
-  },
-  backgroundHover: {
-    value: "transparent",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  colorHover: {
-    value: "#ffffff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  radius: {
-    value: "0",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  justifyContent: "center",
-  borderColor: {
-    value: "inherit",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  borderHoverColor: {
-    value: "transparent",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  width: "366",
-  height: "auto",
-  size: TextContainerSize.medium,
-  buttonSize: "medium",
-  text: "Text Content",
-  marginLeft: 0,
-  marginTop: 20,
-  marginRight: 0,
-  marginBottom: 20,
-  fontSize: 18,
-  fontWeight: "400",
-  textAlign: {
-    value: "center",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  paddingLeft: "0",
-  paddingTop: "0",
-  paddingRight: "0",
-  paddingBottom: "0",
-  flexDirection: "row",
-  alignItems: "center",
-  border: 0,
-  fullWidth: true,
-  preset: "paragraph",
-}
-
-export const UserTextInputGen = ({
-  fontFamily,
-  size,
-  buttonSize,
-  color,
-  text,
-  marginLeft,
-  width: width,
-  height: height,
-  marginRight,
-  marginTop,
-  containerBackground,
-  marginBottom,
-  background,
-  backgroundHover,
-  colorHover,
-  icon,
-  paddingLeft,
-  paddingTop,
-  paddingRight,
-  paddingBottom,
-  radius,
-  flexDirection,
-  alignItems,
-  justifyContent,
-  fontSize: fontSize,
-  fontWeight: fontWeight,
-  textAlign,
-  border,
-  borderColor,
-  borderHoverColor,
-  ...props
-}) => {
-  const processedText = text
-    .replace(/<div><br><\/div>/g, "\n")
-    .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
-    .replace(/<br>/g, "\n") // Replace <br> tags with new lines
-
-  return (
-    <div
-      className="w-full relative"
-      style={{
-        width: "100%",
-        background: `${containerBackground}`,
-        display: "flex",
-        justifyContent: "center",
-        minWidth: "100%",
-        maxWidth: "1400px",
-        paddingTop: `${props.marginTop}px`,
-        paddingBottom: `${props.marginBottom}px`,
-        paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `${props.marginRight}px`,
-      }}
-    >
-      <StyledCustomTextInput
-        fontFamily={fontFamily}
-        color={color?.value}
-        background={background?.value}
-        backgroundHover={backgroundHover?.value}
-        borderHoverColor={borderHoverColor?.value}
-        colorHover={colorHover?.value}
-        flexDirection={flexDirection}
-        fontSize={fontSize?.value}
-        fontWeight={fontWeight?.value}
-        textAlign={textAlign?.value}
-        // justifyContent={justifyContent}
-        borderColor={borderColor?.value}
-        border={border}
-        marginLeft={marginLeft}
-        width={width}
-        size={size}
-        buttonSize={buttonSize}
-        height={height}
-        marginRight={marginRight}
-        marginTop={marginTop}
-        marginBottom={marginBottom}
-        paddingLeft={paddingLeft}
-        paddingTop={paddingTop}
-        paddingRight={paddingRight}
-        paddingBottom={paddingBottom}
-        alignItems={alignItems}
-        mobileScreen={false}
-        {...props}
-        className="text-[1rem]"
-        onClick={() => console.log(text)}
-      >
-        <p
-          style={{
-            maxWidth: "100%",
-            transitionProperty: "all",
-            overflowX: "clip",
-            textOverflow: "ellipsis",
-            color: `${color?.value}`,
-            fontSize: `${fontSize}px`,
-            fontWeight: `${fontWeight.value}`,
-            fontFamily: `${fontFamily}`,
-            height: "fit-content",
-            wordWrap: "break-word",
-            whiteSpace: "pre-wrap", // Ensure white-space is preserved
-          }}
-        >
-          {processedText.split("\n").map((line, index) => (
-            <span key={index}>
-              {line}
-              <br />
-            </span>
-          ))}
-        </p>
-      </StyledCustomTextInput>
-    </div>
-  )
-}
 export const UserText = ({
   fontFamily,
   borderHoverColor,
@@ -387,6 +372,8 @@ export const UserText = ({
   const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
   const [displayController, setDisplayController] = React.useState(false)
+  const [localText, setLocalText] = useState(text)
+
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -476,30 +463,17 @@ export const UserText = ({
     props.preset,
   ])
 
-  const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.innerHTML
-      if (typeof value === "string" && value.length) {
-        setProp((props) => {
-          props.text = value
-          return { ...props }
-        })
-      }
-    },
-    [setProp]
-  )
-
-  useEffect(() => {
-    const currentRef = ref.current
-    if (currentRef) {
-      currentRef.addEventListener("input", handleTextChange)
-    }
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener("input", handleTextChange)
-      }
-    }
-  }, [handleTextChange])
+  // useEffect(() => {
+  //   const currentRef = ref.current
+  //   if (currentRef) {
+  //     currentRef.addEventListener("input", handleTextChange)
+  //   }
+  //   return () => {
+  //     if (currentRef) {
+  //       currentRef.removeEventListener("input", handleTextChange)
+  //     }
+  //   }
+  // }, [handleTextChange])
 
   const throttledSetProp = useCallback(
     throttle((property, value) => {
@@ -523,9 +497,29 @@ export const UserText = ({
     [setProp]
   )
 
-  const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value)
-  }
+  const handlePropChangeDebounced = useCallback(
+    (property, value) => {
+      debouncedSetProp(property, value)
+    },
+    [debouncedSetProp]
+  )
+
+  const handleTextChange = useCallback(
+    (e) => {
+      const value = sanitizeText(e.target.value);
+      if (typeof value === "string") {
+        setLocalText(value)
+        handlePropChangeDebounced("text", value)
+      }
+    },
+    [handlePropChangeDebounced]
+  )
+
+  useEffect(() => {
+    setLocalText(text) // Keep localText in sync with the prop text
+  }, [text])
+
+  
   return (
     <div
       ref={(el: any) => connect(drag(el))}
@@ -556,7 +550,7 @@ export const UserText = ({
         <StyledCustomTextInput
           fontFamily={primaryFont}
           fontSize={`${fontSize}px`}
-          color={secondaryTextColor}
+          color={color?.value}
           colorHover={colorHover.value}
           radius={radius.value}
           flexDirection={flexDirection}
@@ -565,7 +559,7 @@ export const UserText = ({
           justifyContent={justifyContent}
           borderColor={borderColor.value}
           borderHoverColor={borderHoverColor.value}
-          border={border}
+          border={0}
           marginLeft={marginLeft}
           mobileScreen={mobileScreen || false}
           width={width}
@@ -584,14 +578,14 @@ export const UserText = ({
         >
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
-              html={text.replace(/\n/g, "<br>")}
+              html={localText.replace(/\n/g, '<br>')}
               innerRef={ref}
               style={{
                 maxWidth: "1008px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${color?.value}`,
+                color: `${secondaryTextColor}`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
@@ -606,6 +600,40 @@ export const UserText = ({
       </div>
     </div>
   )
+}
+
+interface StyleCustomTextContainerProps {
+  fontFamily?: string
+  color?: string
+  background?: string
+  backgroundHover?: string
+  colorHover?: string
+  size?: string
+  buttonSize?: string
+  marginLeft?: string | number
+  width?: string | number
+  height?: string | number
+  marginRight?: string | number
+  marginTop?: string | number
+  marginBottom?: string | number
+  paddingLeft?: string | number
+  paddingTop?: string | number
+  paddingRight?: string | number
+  paddingBottom?: string | number
+  radius?: number
+  flexDirection?: string
+  alignItems?: string
+  justifyContent?: string
+  border?: number
+  borderColor?: string
+  borderHoverColor?: string
+  mobileScreen: boolean
+  fontSize?: string
+  fontWeight?: number
+  textAlign?: string
+  borderRadius?: string
+  padding?: string
+  preset?: string
 }
 
 UserText.craft = {

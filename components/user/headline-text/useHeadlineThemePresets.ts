@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
-import { TextContainerSize, HeadlineTextProps } from "./headline-text.component"
+import { HeadlineTextProps, TextContainerSize } from "./headline-text.component"
 
 const useHeadlineThemePresets = () => {
   const t = useTranslations("Components")
@@ -19,9 +19,6 @@ const useHeadlineThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce",
     0.1
   )
-
-
-  
 
   const h1Preset: HeadlineTextProps = {
     fontSize: 42,
@@ -86,11 +83,11 @@ const useHeadlineThemePresets = () => {
     border: 2,
     fullWidth: true,
     buttonSize: "medium",
-    tagType: "h1"
+    tagType: "h1",
   }
 
   const h2Preset: HeadlineTextProps = {
-    fontSize: 42,
+    fontSize: 20,
     fontWeight: "700",
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -135,10 +132,10 @@ const useHeadlineThemePresets = () => {
       isCustomized: false,
     },
     justifyContent: "center",
-    width: TextContainerSize.medium,
+    width: "fit-content",
     height: "auto",
     size: TextContainerSize.medium,
-    text: t("Text"),
+    text: t("HeadlineDescription"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -149,10 +146,10 @@ const useHeadlineThemePresets = () => {
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
-    border: 2,
+    border: 0,
     fullWidth: true,
     buttonSize: "medium",
-    tagType: "h1"
+    tagType: "h2",
   }
 
   return { h1Preset, h2Preset }

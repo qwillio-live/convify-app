@@ -11,6 +11,9 @@ import { TextContainerSize, TextInputProps } from "./user-text.component"
 const useTextThemePresets = () => {
   const t = useTranslations("Components")
   const theme = useAppSelector((state) => state.theme)
+
+  const secondaryFont = theme?.text?.secondaryFont || "inherit"
+
   const darkenedPrimaryColor = darken(
     0.05,
     theme?.general?.primaryColor || "#3182ce"
@@ -27,7 +30,11 @@ const useTextThemePresets = () => {
       globalStyled: false,
       isCustomized: true,
     },
-    fontFamily: theme?.text?.secondaryFont || "inherit",
+    fontFamily: {
+      value: theme?.text?.secondaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
@@ -38,8 +45,8 @@ const useTextThemePresets = () => {
       isCustomized: false,
     },
     color: {
-      value: "#ffffff",
-      globalStyled: false,
+      value: theme?.text?.secondaryColor || "#3182ce",
+      globalStyled: true,
       isCustomized: true,
     },
     backgroundHover: {
@@ -56,7 +63,7 @@ const useTextThemePresets = () => {
       isCustomized: true,
     },
     radius: {
-      value: "8",
+      value: "3",
       globalStyled: false,
       isCustomized: false,
     },
@@ -74,7 +81,7 @@ const useTextThemePresets = () => {
     width: TextContainerSize.medium,
     height: "auto",
     size: TextContainerSize.medium,
-    text: t("Text"),
+    text: t("TextDescription"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -99,41 +106,45 @@ const useTextThemePresets = () => {
       globalStyled: false,
       isCustomized: true,
     },
-    fontFamily: theme?.text?.primaryFont || "inherit",
+    fontFamily: {
+      value: theme?.text?.secondaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
         theme?.general?.backgroundColor || "#3182ce",
-        "ghost"
+        "filled"
       ),
       globalStyled: true,
       isCustomized: false,
     },
     color: {
-      value: theme?.general?.secondaryColor || "#3182ce",
+      value: theme?.text?.secondaryColor || "#3182ce",
       globalStyled: true,
-      isCustomized: false,
+      isCustomized: true,
     },
     backgroundHover: {
       value: getHoverBackgroundForPreset(
-        theme?.general?.primaryColor || "#ffffff",
-        "outline"
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
       ),
       globalStyled: true,
       isCustomized: false,
     },
     colorHover: {
-      value: darkenedPrimaryColor || "#3180ca",
-      globalStyled: true,
-      isCustomized: false,
+      value: "#ffffff",
+      globalStyled: false,
+      isCustomized: true,
     },
     radius: {
-      value: "8",
+      value: "3",
       globalStyled: false,
       isCustomized: false,
     },
     borderColor: {
-      value: theme?.general?.primaryColor || "#3182ce",
+      value: theme?.general?.primaryColor || "#4050ff",
       globalStyled: true,
       isCustomized: false,
     },
@@ -144,9 +155,9 @@ const useTextThemePresets = () => {
     },
     justifyContent: "center",
     width: TextContainerSize.medium,
-    height: "auto",
+    height: "40",
     size: TextContainerSize.medium,
-    text: t("Text"),
+    text: t("TextDescription"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -159,7 +170,7 @@ const useTextThemePresets = () => {
     alignItems: "center",
     border: 2,
     fullWidth: true,
-    preset: "outline",
+    preset: "filled",
     buttonSize: "medium",
   }
 
