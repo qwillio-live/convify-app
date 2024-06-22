@@ -443,6 +443,7 @@ const PictureChoiceItem = ({
     >
       <StyledPictureChoiceItem
         isSelected={isSelected}
+        pictureType={choice.pictureType}
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
@@ -484,7 +485,7 @@ const PictureChoiceItem = ({
             className="flex w-full items-center justify-center"
             style={{
               padding:
-                choice.pictureType !== PictureTypes.IMAGE ? "24px 0 4px" : "",
+                choice.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
             }}
           >
             {choice.pictureType === PictureTypes.ICON ? (
@@ -534,6 +535,7 @@ const PictureChoiceItem = ({
 
 type StyledPictureChoiceItemProps = {
   isSelected: boolean
+  pictureType: PictureTypes
   defaultStyles: {
     checkBoxIconColor: string
     checkboxBorderColor: string
@@ -650,8 +652,11 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   // For Text
 
   & > div:last-child {
-    margin-top: ${({ defaultStyles }) =>
-      defaultStyles.textTopBorderColor !== "transparent" ? "8px" : ""};
+    margin-top: ${({ defaultStyles, pictureType }) =>
+      defaultStyles.textTopBorderColor !== "transparent" &&
+      pictureType !== PictureTypes.IMAGE
+        ? "12.5%"
+        : ""};
     border-top: 1px solid
       ${({ defaultStyles }) => defaultStyles.textTopBorderColor};
     background-color: ${({ defaultStyles }) =>
