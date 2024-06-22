@@ -278,7 +278,9 @@ export const LinkButtonSettings = () => {
                       )
                     })}
                   </SelectGroup>
-                  <SelectItem value={"redirect"}>Redirect</SelectItem>
+                  <SelectItem value={"redirect"}>
+                    {t("Redirect")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
