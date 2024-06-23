@@ -19,7 +19,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import { Checkbox } from "./ui/checkbox"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignUpSchema>
 
@@ -56,16 +56,16 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
 
       // Log in the user immediately after successful signup
       const signInResult = await signIn("credentials", {
-        redirect: false,
+        redirect: true,
         username: data.email,
         password: data.password,
       })
 
-      if (signInResult?.status === 200) {
-        router.push("/dashboard") // Redirect immediately to the dashboard on successful login
-      } else {
-        throw new Error("Failed to log in")
-      }
+      // if (signInResult?.status === 200) {
+      //   router.push("/dashboard") // Redirect immediately to the dashboard on successful login
+      // } else {
+      //   throw new Error("Failed to log in")
+      // }
     } catch (error) {
       setIsLoading(false) // Stop loading on error
       toast({

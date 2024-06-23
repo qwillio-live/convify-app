@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignInSchema>
 
@@ -37,7 +37,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const signInResult = await signIn("credentials", {
       username: data.email,
       password: data.password,
-      redirect: false, // Continue with no auto-redirect
+      redirect: true, // Continue with auto-redirect
       callbackUrl: searchParams?.get("from") || "/dashboard",
     })
 
@@ -56,9 +56,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       title: "Login Successful",
       description: "You are being redirected...",
     })
+    console.log('signInResult', signInResult);
 
     // Redirecting manually after successful login
-    window.location.href = signInResult.url || "/dashboard"
+    // window.location.href = signInResult.url || "/dashboard"
   }
 
   return (
