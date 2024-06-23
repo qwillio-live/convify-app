@@ -130,5 +130,11 @@ export const authOptions: NextAuthOptions = {
         picture: dbUser.image,
       }
     },
+    async redirect(url) {
+      if (url.url === url.baseUrl + "/login" || url.url === url.baseUrl + "/register") {
+        return '/dashboard'; // Redirect to your dashboard after Google authentication
+      }
+      return url.url;
+    },
   },
 }
