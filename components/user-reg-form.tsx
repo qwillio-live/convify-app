@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signUp } from "@/actions/users/signUp"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
@@ -18,7 +18,11 @@ import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import { Checkbox } from "./ui/checkbox"
-
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignUpSchema>
@@ -37,7 +41,17 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const [isEmailLoading, setIsEmailLoading] = React.useState<boolean>(false)
   const [showEmailSignup, setShowEmailSignup] = React.useState<boolean>(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [error, setError] = React.useState<string | null>(searchParams.get('error') || null)
 
+  React.useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null)
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
   async function onSubmit(data: FormData) {
     setIsLoading(true) // Start loading when form is submitted
 
@@ -46,6 +60,8 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
 
       if (signUpResult.error) {
         setIsLoading(false) // Stop loading if there's an error
+        console.log("Sign up failed:", signUpResult.error);
+        setError(signUpResult.error)
         toast({
           title: "Sign Up Failed",
           description: signUpResult.error,
@@ -224,6 +240,37 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
             </>
           )}
         </>
+      )}
+      {error && (
+        <Alert variant="destructive" style={{
+          backgroundColor: 'red',
+          color: 'white',
+          padding: '1rem',
+          position: 'fixed',
+          bottom: '25px',
+          right: '25px',
+          maxWidth: '350px',
+          opacity: '0.7',
+        }}>
+          <div>
+            <AlertTitle>Something went wrong.</AlertTitle>
+            <AlertDescription>
+              {error}
+            </AlertDescription>
+          </div>
+          <button
+            onClick={() => setError(null)}
+            className="ml-4 text-white font-bold focus:outline-none"
+            style={{
+              position: 'absolute',
+              top: '0',
+              right: '10px',
+            }}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </Alert>
       )}
     </div>
   )

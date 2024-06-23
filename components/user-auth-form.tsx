@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
@@ -14,7 +14,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
-
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignInSchema>
@@ -30,6 +35,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
+  const router = useRouter()
+  const [error, setError] = React.useState<string | null>(searchParams.get('error'))
+
+  React.useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null)
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   async function onSubmit(data: FormData) {
     setIsLoading(true)
@@ -37,12 +53,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const signInResult = await signIn("credentials", {
       username: data.email,
       password: data.password,
-      redirect: true, // Continue with auto-redirect
-      callbackUrl: searchParams?.get("from") || "/dashboard",
+      callbackUrl: "/dashboard",
     })
 
     setIsLoading(false)
-
     if (!signInResult?.ok) {
       toast({
         title: "Something went wrong.",
@@ -56,12 +70,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       title: "Login Successful",
       description: "You are being redirected...",
     })
-    console.log('signInResult', signInResult);
-
-    // Redirecting manually after successful login
-    // window.location.href = signInResult.url || "/dashboard"
   }
-
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -146,6 +155,37 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           Sign In with Google
         </span>
       </button>
+      {error && (
+        <Alert variant="destructive" style={{
+          backgroundColor: 'red',
+          color: 'white',
+          padding: '1rem',
+          position: 'fixed',
+          bottom: '25px',
+          right: '25px',
+          maxWidth: '350px',
+          opacity: '0.7',
+        }}>
+          <div>
+            <AlertTitle>Something went wrong.</AlertTitle>
+            <AlertDescription>
+              Your password is incorrect or this email address is not registered with Convify
+            </AlertDescription>
+          </div>
+          <button
+            onClick={() => setError(null)}
+            className="ml-4 text-white font-bold focus:outline-none"
+            style={{
+              position: 'absolute',
+              top: '0',
+              right: '10px',
+            }}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </Alert>
+      )}
     </div>
   )
 }
