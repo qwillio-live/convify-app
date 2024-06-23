@@ -175,7 +175,7 @@ export default function CreateFlowsPage() {
                 <div className="min-h-0 min-w-0 shrink-0">
                   <span className="block text-center text-xl text-[rgb(115,115,115)]">
                     {t(
-                      "Edit the link and let people know what your flow is about."
+                      "Edit the link and let people know what your flow is about"
                     )}
                   </span>
                 </div>
@@ -200,6 +200,9 @@ export default function CreateFlowsPage() {
               aria-label="Close dialog"
               color="#737373"
               data-qa="upgrade-nag-screen-close-button"
+              style={{
+                marginTop: "60px",
+              }}
               className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
             >
               <div className="flex size-auto items-center justify-center ">

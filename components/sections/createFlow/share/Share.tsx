@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 
@@ -6,10 +6,25 @@ import { toast } from "@/components/ui/use-toast"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 const ShareFlowComponents = ({ isPublished }) => {
+  const [view, setView] = useState("desktop")
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState("https://convify.app/your-link-here")
 
   const t = useTranslations("CreateFlow.SharePage")
+
+  const updateView = () => {
+    if (window.innerWidth >= 1024) {
+      setView("desktop");
+    } else {
+      setView("mobile");
+    }
+  };
+
+  useEffect(() => {
+    updateView();
+    window.addEventListener('resize', updateView);
+    return () => window.removeEventListener('resize', updateView);
+  }, []);
 
   return (
     <>
@@ -273,7 +288,12 @@ const ShareFlowComponents = ({ isPublished }) => {
             </div>
             {/* Main Content */}
             <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center  pt-6">
-              <div className="max-h-[585px] w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]">
+
+              <div className="max-h-[585px] w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]"
+                style={{
+                  maxWidth: view === "desktop" ? "100%" : "360px",
+                }}
+              >
                 {isPublished ? (
                   <iframe
                     src="https://convify.io/survey"
@@ -324,20 +344,33 @@ const ShareFlowComponents = ({ isPublished }) => {
                   </div>
                 )}
               </div>
-              {isPublished && (
-                <div className="relative mt-5  flex w-full items-end justify-center">
-                  <Tabs defaultValue="desktop" className="w-[200px]">
+
+              {!isPublished ? (
+                <div className="relative mt-5  flex w-full items-end justify-center" style={{
+                  marginBottom: "50px",
+                }}>
+                  <Tabs defaultValue={view} className="w-[200px]">
                     <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="desktop">{t("Desktop")}</TabsTrigger>{" "}
-                      <TabsTrigger value="mobile">{t("Mobile")}</TabsTrigger>{" "}
+                      <TabsTrigger value="desktop" onClick={() => setView("desktop")} >{t("Desktop")}</TabsTrigger>{" "}
+                      <TabsTrigger value="mobile" onClick={() => setView("mobile")}>{t("Mobile")}</TabsTrigger>{" "}
                     </TabsList>
                   </Tabs>
                 </div>
-              )}
+              ) : (
+                <div className="relative mt-5  flex w-full items-end justify-center">
+                  <Tabs defaultValue={view} className="w-[200px]">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="desktop" onClick={() => setView("desktop")} > {t("Desktop")}</TabsTrigger>{" "}
+                      <TabsTrigger value="mobile" onClick={() => setView("mobile")}>{t("Mobile")}</TabsTrigger>{" "}
+                    </TabsList>
+                  </Tabs>
+                </div>
+              )
+              }
             </div>
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
       {isCustomLinkOpen && (
         <div className="fixed inset-0 z-[99] flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
           <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
@@ -350,7 +383,7 @@ const ShareFlowComponents = ({ isPublished }) => {
               <div className="min-h-0 min-w-0 shrink-0">
                 <span className="block text-center text-xl text-[rgb(115,115,115)]">
                   {t(
-                    "Edit the link and let people know what your flow is about."
+                    "Edit the link and let people know what your flow is about"
                   )}
                 </span>
               </div>
@@ -376,6 +409,9 @@ const ShareFlowComponents = ({ isPublished }) => {
             color="#737373"
             data-qa="upgrade-nag-screen-close-button"
             className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+            style={{
+              marginTop: "60px",
+            }}
           >
             <div className="flex size-auto items-center justify-center ">
               <span
