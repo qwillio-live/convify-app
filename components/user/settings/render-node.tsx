@@ -25,7 +25,7 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
   position: relative;
   /* border-width: ${(props) => (props.id === 'ROOT' ? '0' : '1px')}; */
   border-width: ${(props) => {
-    if(props.id === 'ROOT' || ((props.name === 'Card Content') && !props.isActive)) {
+    if(props.id === 'ROOT' || ((props.name === 'Card') && !props.isActive)) {
       return '0';
     }else{
       return '1px';

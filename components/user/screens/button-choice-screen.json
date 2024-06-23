@@ -380,6 +380,11 @@
 					"text": "Yes",
 					"pic": null,
 					"icon": "check",
+          "buttonAction": "next-screen",
+          "nextScreen": {
+            "screenId": "",
+            "screenName": ""
+          },
 					"itemType": "icon"
 				},
 				{
@@ -387,6 +392,11 @@
 					"text": "No",
 					"pic": null,
 					"icon": "x",
+          "buttonAction": "next-screen",
+          "nextScreen": {
+            "screenId": "",
+            "screenName": ""
+          },
 					"itemType": "icon"
 				}
 			]
