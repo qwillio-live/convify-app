@@ -879,6 +879,9 @@ export const PictureChoiceItem = ({
                     <SelectItem value={"next-screen"}>
                       Next Screen
                     </SelectItem>
+                    <SelectItem value={"none"}>
+                      Do Nothing
+                    </SelectItem>
                     {
                       screenNames?.map((screen,index) => {
                         return (
