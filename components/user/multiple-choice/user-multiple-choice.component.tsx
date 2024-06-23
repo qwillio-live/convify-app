@@ -105,6 +105,9 @@ export const MultipleChoiceGen = ({
             isLast={index === choices.length - 1}
             isCollapsed={layout === MultipleChoiceLayouts.collapsed}
             isSelected={selectedChoices.includes(choice.id)}
+            isPreviousSelected={
+              index > 0 && selections.includes(choices[index - 1].id)
+            }
             required={required}
             tracking={tracking}
             choice={choice}
@@ -268,10 +271,7 @@ export const MultipleChoice = ({
   }, [primaryColor])
 
   useEffect(() => {
-    setProp(
-      (props) => (props.labelColor = primaryTextColor || "#000000"),
-      200
-    )
+    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
   }, [primaryTextColor])
 
   return (
@@ -344,6 +344,9 @@ export const MultipleChoice = ({
               isLast={index === choices.length - 1}
               isCollapsed={layout === MultipleChoiceLayouts.collapsed}
               isSelected={selections.includes(choice.id)}
+              isPreviousSelected={
+                index > 0 && selections.includes(choices[index - 1].id)
+              }
               required={required}
               tracking={tracking}
               choice={choice}
@@ -396,6 +399,7 @@ const MultipleChoiceItem = ({
   isLast,
   isCollapsed,
   isSelected,
+  isPreviousSelected,
   choice,
   fieldName,
   required,
@@ -419,9 +423,11 @@ const MultipleChoiceItem = ({
   return (
     <li className="w-full">
       <StyledMultipleChoiceItem
+        isFirst={isFirst}
         isLast={isLast}
         isCollapsed={isCollapsed}
         isSelected={isSelected}
+        isPreviousSelected={isPreviousSelected}
         contentReversed={contentReversed}
         borderTopRounded={isCollapsed ? isFirst : true}
         borderBottomRounded={isCollapsed ? isLast : true}
@@ -497,9 +503,11 @@ const MultipleChoiceItem = ({
 }
 
 type StyledMultipleChoiceItemProps = {
+  isFirst: boolean
   isLast: boolean
   isCollapsed: boolean
   isSelected: boolean
+  isPreviousSelected: boolean
   contentReversed: boolean
   borderTopRounded: boolean
   borderBottomRounded: boolean
@@ -543,12 +551,15 @@ const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
   border-bottom-right-radius: ${({ borderBottomRounded }) =>
     borderBottomRounded ? 8 : 0}px;
 
-  transition: transform 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 
   border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor.value};
 
-  border-bottom-width: ${({ isLast, isCollapsed }) =>
-    isLast || !isCollapsed ? "2px" : "0px"};
+  border-top-width: ${({ isFirst, isCollapsed, isPreviousSelected }) =>
+    isFirst || !isCollapsed || !isPreviousSelected ? "2px" : "0px"};
+
+  border-bottom-width: ${({ isLast, isCollapsed, isSelected }) =>
+    isLast || !isCollapsed || isSelected ? "2px" : "0px"};
 
   color: ${({ defaultStyles }) => defaultStyles.textColor.value};
   background-color: ${({ defaultStyles }) =>
@@ -557,6 +568,8 @@ const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
   &:hover {
     transform: translateY(${({ isSelected }) => (!isSelected ? -2 : 0)}px);
 
+    border-top-width: ${({ isFirst, isPreviousSelected }) =>
+      isFirst || !isPreviousSelected ? 2 : 0}px;
     border-bottom-width: 2px;
 
     border-color: ${({ hoverStyles }) => hoverStyles.borderColor.value};

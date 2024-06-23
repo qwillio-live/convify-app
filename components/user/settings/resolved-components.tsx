@@ -21,6 +21,7 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { SelectGen } from "../select/user-select.component"
 import { ChecklistGen } from "../checklist/user-checklist.component"
+import { ListGen } from "../list/user-list.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -39,6 +40,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
+  [CRAFT_ELEMENTS.LIST]: ListGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
 }
 

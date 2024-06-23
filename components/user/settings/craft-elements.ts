@@ -17,5 +17,6 @@ export const CRAFT_ELEMENTS = {
   MULTIPLECHOICE: "MultipleChoice",
   PICTURECHOICE: "PictureChoice",
   CHECKLIST: "Checklist",
+  LIST: "List",
   SCREENFOOTER: "ScreenFooter",
 }

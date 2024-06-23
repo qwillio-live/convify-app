@@ -194,7 +194,7 @@ export const Checklist = ({
         }}
       >
         <ul
-          className="flex w-full gap-2 px-4"
+          className="flex w-full gap-2"
           style={{
             flexDirection: layout,
             maxWidth: mobileScreen
@@ -211,6 +211,7 @@ export const Checklist = ({
               iconColor={iconColor}
               textColor={textColor}
               borderColor={borderColor}
+              icon={icon}
               item={item}
               index={index}
               onValueChange={(updatedValue) =>
@@ -233,6 +234,7 @@ const ChecklistItemSettings = ({
   iconColor,
   textColor,
   borderColor,
+  icon,
   item,
   index,
   onValueChange,
@@ -246,7 +248,7 @@ const ChecklistItemSettings = ({
   return (
     <li key={index} className="flex w-full flex-1 items-center gap-3">
       <ChecklistIconRenderer
-        iconName={item.icon}
+        iconName={icon}
         style={{
           width: `${fontSize}px`,
           height: `${fontSize}px`,

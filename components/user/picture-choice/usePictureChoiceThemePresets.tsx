@@ -8,17 +8,18 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
+import icons from "@/constant/streamline.json"
 
 const usePictureChoiceThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
 
-  const defaultIcon = `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`
+  const defaultIcon = icons["add-circle"].body
 
   const defaultChoices = [
     {
       id: `input-${hexoid(6)()}`,
-      picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
+      picture: defaultIcon,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 1`,
       buttonAction: null,
@@ -27,7 +28,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
+      picture: defaultIcon,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 2`,
       buttonAction: null,
@@ -36,7 +37,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
+      picture: defaultIcon,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 3`,
       buttonAction: null,
@@ -45,7 +46,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
+      picture: defaultIcon,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 4`,
       buttonAction: null,

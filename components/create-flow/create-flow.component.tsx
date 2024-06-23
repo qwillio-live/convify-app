@@ -40,7 +40,6 @@ import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
-import { List, ListItem } from "../user/list/list.component"
 import { Loader } from "../user/loader/user-loader.component"
 import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { Logo } from "../user/logo/user-logo.component"
@@ -57,6 +56,7 @@ import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { Checklist } from "../user/checklist/user-checklist.component"
+import { List } from "../user/list/user-list.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -101,9 +101,15 @@ export function CreateFlowComponent() {
     (state) => state?.theme?.general?.backgroundImage
   )
 
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  const startScreen = useAppSelector(
+    (state) => state?.screen?.screens[0].screenData || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
@@ -176,12 +182,11 @@ export function CreateFlowComponent() {
           PictureChoice,
           MultipleChoice,
           Checklist,
+          List,
           LogoBar,
           LogoBarItem,
           LayoutContainer,
           Loader,
-          List,
-          ListItem,
           Img,
         }}
         onRender={RenderNode}
@@ -213,24 +218,20 @@ export function CreateFlowComponent() {
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
-                    footerMode ? "flex justify-center items-end" : "",
+                    footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
                       : "w-96 border px-0"
                   )}
                   value={view}
                 >
-                  {
-                  !headerMode && !footerMode &&
-                   <ResolvedComponentsFromCraftState screen={screensHeader} />
-                  }
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  )}
                   <Frame data={editorLoad}></Frame>
-                  {
-                    !headerMode && !footerMode &&
-                  <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
-
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  )}
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -260,55 +261,54 @@ export function CreateFlowComponent() {
         </div>
       </Editor>
       <Editor
-              resolver={{
-                Controller,
-                Logo,
-                HeadlineText,
-                UserText,
-                UserButton,
-                ProgressBar,
-                Element,
-                Progress,
-                ButtonChoiceScreen,
-                ScreenHeader,
-                UserInput,
-                ScreenFooter,
-                ScreensList,
-                ScreenOneChoice,
-                // UserProgressBar,
-                ScreenOneInput,
-                Input,
-                Button,
-                ArrowRight,
-                Check,
-                Cross,
-                Facebook,
-                Github,
-                Globe,
-                Linkedin,
-                Container,
-                Card,
-                CardContent,
-                UserContainer,
-                IconButton,
-                Select,
-                DragDrop,
-                UserToolbox,
-                Image,
-                PictureChoice,
-                MultipleChoice,
-                Checklist,
-                LogoBar,
-                LogoBarItem,
-                LayoutContainer,
-                Loader,
-                List,
-                ListItem,
-              }}
-              onRender={RenderNode}
+        resolver={{
+          Controller,
+          Logo,
+          HeadlineText,
+          UserText,
+          UserButton,
+          ProgressBar,
+          Element,
+          Progress,
+          ButtonChoiceScreen,
+          ScreenHeader,
+          UserInput,
+          ScreenFooter,
+          ScreensList,
+          ScreenOneChoice,
+          // UserProgressBar,
+          ScreenOneInput,
+          Input,
+          Button,
+          ArrowRight,
+          Check,
+          Cross,
+          Facebook,
+          Github,
+          Globe,
+          Linkedin,
+          Container,
+          Card,
+          CardContent,
+          UserContainer,
+          IconButton,
+          Select,
+          DragDrop,
+          UserToolbox,
+          Image,
+          PictureChoice,
+          MultipleChoice,
+          Checklist,
+          List,
+          LogoBar,
+          LogoBarItem,
+          LayoutContainer,
+          Loader,
+        }}
+        onRender={RenderNode}
       >
         <div className="special-editor">
-        <Frame data={screenRoller}></Frame>
+          <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>
