@@ -33,7 +33,7 @@ export function BreadCrumbs() {
         <BreadcrumbSeparator className="hidden lg:inline-block">
           /
         </BreadcrumbSeparator>
-        <BreadcrumbItem>
+        <BreadcrumbItem className="max-lg:ml-3.5">
           <BreadcrumbPage>My new form</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
