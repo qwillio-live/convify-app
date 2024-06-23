@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LocalIcons } from "@/public/icons"
 import { TIntegrationCardData } from "@/types"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
@@ -15,15 +15,34 @@ type HandleStatusUpdateFunction = (newStatus: string) => void
 interface ContentProps {
   handleStatusUpdate: HandleStatusUpdateFunction
   status: string
+  userEmail: string
 }
-
+interface User {
+  name: string
+  email: string
+  image: string
+  id: string
+}
 export const EmailContent: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [email, setEmail] = useState<string>("user@email.com")
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [userData, setUserData] = useState<User>()
+  const [email, setEmail] = useState<string>(userData ? userData.email : "user@email.com")
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => setUserData(data))
+      .catch((error) => console.error("Error fetching user data:", error))
+  }, [])
 
+  useEffect(() => {
+    if (userData) {
+      setEmail(userData.email)
+    }
+  }, [userData])
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const t = useTranslations("CreateFlow.ConnectPage")
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +62,7 @@ export const EmailContent: React.FC<ContentProps> = ({
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
         <Input
-          placeholder="user@email.com"
+          placeholder={email}
           id="email"
           onChange={handleInputChange}
           value={email}

@@ -8,10 +8,17 @@ import SearchBar from "@/components/SearchBar"
 
 import { DummyIntregationCardData } from "./collapsibleContents"
 
+
 const ConnectFlowComponents = () => {
+  const [email, setEmail] = useState<string>("user@email.com")
   const [search, setSearch] = useState("")
   const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
-
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => setEmail(data.email))
+      .catch((error) => console.error("Error fetching user data:", error))
+  }, [])
   // Define the update function
   const updateStatus = (id, newStatus) => {
     // Find the index of the object in the array
@@ -19,7 +26,10 @@ const ConnectFlowComponents = () => {
     if (index !== -1) {
       // Update the status of the object
       const updatedData = [...filteredDatas]
-      updatedData[index] = { ...updatedData[index], status: newStatus }
+      updatedData[index] = {
+        ...updatedData[index], status: newStatus,
+        userEmail: email
+      }
       // Update the state with the new array
       setFilteredDatas(updatedData)
     }
@@ -40,8 +50,7 @@ const ConnectFlowComponents = () => {
   return (
     <div className="min-h-screen w-full">
       <div
-        className="mx-auto mt-8 flex lg:w-7/12
-        flex-col items-center justify-center"
+        className="mx-auto mt-8 flex w-full max-w-7xl flex-col items-center justify-center px-2 sm:px-4 lg:px-8"
       >
         <SearchBar search={search} setSearch={setSearch} />
         <div className="mt-10 flex w-full flex-col">
@@ -67,5 +76,6 @@ const ConnectFlowComponents = () => {
     </div>
   )
 }
+
 
 export default ConnectFlowComponents
