@@ -19,7 +19,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { useTranslations } from "next-intl"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignInSchema>
@@ -32,6 +32,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userSignInSchema),
   })
+  const t = useTranslations("Login")
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
@@ -59,15 +60,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(false)
     if (!signInResult?.ok) {
       toast({
-        title: "Something went wrong.",
-        description: "Your sign in request failed. Please try again.",
+        title: t("Something went wrong"),
+        description: t("Your sign in request failed Please try again"),
         variant: "destructive",
       })
       return
     }
 
     toast({
-      title: "Login Successful",
+      title: t("Login Successful"),
       description: "You are being redirected...",
     })
   }
@@ -77,11 +78,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
-              Email
+              {t("Email")}
             </Label>
             <Input
               id="email"
-              placeholder="Email"
+              placeholder={t("Email")}
               type="email"
               autoCapitalize="none"
               autoComplete="email"
@@ -95,12 +96,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </p>
             )}
             <Label className="sr-only" htmlFor="password">
-              Password
+              {t("Password")}
             </Label>
             <Input
               type="password"
               id="password"
-              placeholder="Password"
+              placeholder={t("Password")}
               disabled={isLoading || isGoogleLoading}
               {...register("password")}
             />
@@ -118,7 +119,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            {t("Sign In with Email")}
           </button>
         </div>
       </form>
@@ -152,7 +153,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         )}{" "}
         <Icons.googleSignup className="h-5 w-5" />
         <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
-          Sign In with Google
+          {t("Sign In with Google")}
         </span>
       </button>
       {error && (
@@ -167,9 +168,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           opacity: '0.7',
         }}>
           <div>
-            <AlertTitle>Something went wrong.</AlertTitle>
+            <AlertTitle>{t("Something went wrong")}</AlertTitle>
             <AlertDescription>
-              Your password is incorrect or this email address is not registered with Convify
+              {t("Your password is incorrect or this email address is not registered with Convify")}
             </AlertDescription>
           </div>
           <button

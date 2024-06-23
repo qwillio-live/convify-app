@@ -5,7 +5,18 @@
     "subtext": "Estou construindo um aplicativo web com Next.js 13 e disponibilizando tudo de código aberto. Siga junto enquanto descobrimos isso juntos."
   },
   "Login": {
-    "Welcome back": "Bem-vindo de volta"
+    "Welcome back": "Bem-vindo de volta",
+    "Enter your email to sign in to your account": "Digite seu email para entrar em sua conta",
+    "Don't have an account? Sign Up": "Não tem uma conta? Inscreva-se",
+    "Back": "Voltar",
+    "Something went wrong": "Algo deu errado",
+    "Your sign in request failed Please try again": "Sua solicitação de login falhou. Por favor, tente novamente",
+    "Login Successful": "Login bem-sucedido",
+    "Password": "Senha",
+    "Email": "Email",
+    "Sign In with Email": "Entrar com Email",
+    "Sign In with Google": "Entrar com Google",
+    "Your password is incorrect or this email address is not registered with Convify": "Sua senha está incorreta ou este endereço de email não está registrado no Convify"
   },
   "Dashboard": {
     "Dashboard": "Painel",

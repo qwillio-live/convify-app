@@ -5,7 +5,18 @@
     "subtext": "I'm building a web app with Next.js 13 and open sourcing everything. Follow along as we figure this out together."
   },
   "Login": {
-    "Welcome back": "Welcome back"
+    "Welcome back": "Welcome back",
+    "Enter your email to sign in to your account": "Enter your email to sign in to your account",
+    "Don't have an account? Sign Up": "Don't have an account? Sign Up",
+    "Back": "Back",
+    "Something went wrong": "Something went wrong",
+    "Your sign in request failed Please try again": "Your sign in request failed Please try again",
+    "Login Successful": "Login Successful",
+    "Password": "Password",
+    "Email": "Email",
+    "Sign In with Email": "Sign In with Email",
+    "Sign In with Google": "Sign In with Google",
+    "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
   },
   "Dashboard": {
     "Dashboard": "Dashboard",
