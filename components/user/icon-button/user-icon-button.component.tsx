@@ -359,7 +359,7 @@ export const IconButton = ({
       screenName: nextScreenName,
       screenId: nextScreenId
     }), 200)
-    }else{
+    }else if(buttonAction === "custom-action"){
       screenNames?.map(screen => {
         if(screen.screenId === nextScreen.screenId){
           setProp((props) => (props.nextScreen = {

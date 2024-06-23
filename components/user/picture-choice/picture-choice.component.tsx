@@ -241,7 +241,7 @@ export const PictureChoice = ({
         screenName: nextScreenName,
         screenId: nextScreenId
       }), 200)
-      }else{
+      }else if(item.buttonAction === "custom-action"){
         screenNames?.map(screen => {
           if(screen.screenId === item?.nextScreen?.screenId){
             setProp((props) => (props.pictureItems[index].nextScreen = {
@@ -261,7 +261,7 @@ export const PictureChoice = ({
       }
     })
 
-},[pictureItems])
+},[pictureItems,nextScreenName])
 
   const [editable, setEditable] = useState(false)
   useEffect(() => {

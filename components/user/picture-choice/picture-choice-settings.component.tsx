@@ -855,7 +855,14 @@ export const PictureChoiceItem = ({
                           screenId: nextScreenId,
                           screenName: nextScreenName
                         } ))
-                      } else {
+                      } else if(e === "none") {
+                        setProp((props) => (props.pictureItems[index].buttonAction = "none" ))
+                        setProp((props) => (props.pictureItems[index].nextScreen = {
+                          screenId: "none",
+                          screenName: ""
+                        }))
+
+                      }else {
                         setProp((props) => (props.pictureItems[index].buttonAction = "custom-action" ))
                         setProp((props) => (props.pictureItems[index].nextScreen = {
                           screenId: e,
