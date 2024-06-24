@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -8,7 +9,10 @@ import {
 } from "./user-input-phone.component"
 
 const useInputPhoneThemePresets = () => {
+  const t = useTranslations("Components")
+
   const theme = useAppSelector((state) => state.theme)
+
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
@@ -32,7 +36,7 @@ const useInputPhoneThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Phone Number",
+    placeholder: t("PhonePlaceholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -69,11 +73,11 @@ const useInputPhoneThemePresets = () => {
     bottomLeftRadius: 8,
     bottomRightRadius: 8,
     isActive: false,
-    inputRequired: true,
+    inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Phone",
-    fieldName: "Phone",
+    label: t("PhoneLabel"),
+    fieldName: t("PhoneFieldName"),
     floatingLabel: false,
     enableIcon: true,
     icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
@@ -108,7 +112,7 @@ const useInputPhoneThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Phone number",
+    placeholder: t("PhoneNumberPlaceholder"),
     backgroundColor: "transparent",
     borderColor: {
       value: "#eaeaeb",
@@ -141,7 +145,7 @@ const useInputPhoneThemePresets = () => {
     bottomLeftRadius: 0,
     bottomRightRadius: 0,
     isActive: false,
-    inputRequired: true,
+    inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
     label: "Phone",

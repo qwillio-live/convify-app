@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -5,6 +6,8 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { UserInputMailProps, UserInputSizes } from "./user-input-mail.component"
 
 const useInputMailThemePresets = () => {
+  const t = useTranslations("Components")
+
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -28,7 +31,7 @@ const useInputMailThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "email@example.com",
+    placeholder: t("EmailPlaceholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -68,8 +71,8 @@ const useInputMailThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Email",
-    fieldName: "Email",
+    label: t("EmailLabel"),
+    fieldName: t("EmailFieldName"),
     floatingLabel: false,
     enableIcon: true,
     icon: "mail-send-envelope",

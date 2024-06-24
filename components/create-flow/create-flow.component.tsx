@@ -285,6 +285,7 @@ export function CreateFlowComponent() {
           UserInputMail,
           UserInputPhone,
           // UserProgressBar,
+          UserInputCheckbox,
           ScreenOneInput,
           Input,
           Button,

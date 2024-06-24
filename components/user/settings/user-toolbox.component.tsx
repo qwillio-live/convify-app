@@ -420,7 +420,7 @@ export const UserToolbox = () => {
                     ref &&
                     connectors.create(
                       ref,
-                      <HeadlineText {...HeadlineTextDefaultProps} />
+                      <HeadlineText {...h2Preset} />
                     )
                   }
                   data-cy="toolbox-headline"
