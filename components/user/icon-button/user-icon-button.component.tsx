@@ -421,7 +421,7 @@ export const IconButton = ({
   const handleTextChange = (e) => {
 
     const value = e.target.innerText;
-    if (value.length <= maxLength) {
+    if (value && value.length <= maxLength) {
       setProp((props) => props.text = value);
       // handlePropChangeDebounced('text',value);
       // handlePropChangeThrottled('text',value)

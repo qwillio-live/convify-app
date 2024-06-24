@@ -40,6 +40,8 @@ interface CardOuterStyles {
   gap: number;
   border: number;
   borderColor: string;
+  isHovered: boolean;
+  selected: boolean;
 }
 
 
@@ -65,9 +67,14 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   overflow-y: ${(props) => props.overflowY};
   overflow-x: ${(props) => props.overflowX};
   gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid;
-  border-color: ${(props) => props.borderColor};
-  border-width: 0;
+  /* border: ${(props) => props.selected ? '1px dotted' : '0'} solid ${(props) => props.borderColor}; */
+  border-color: ${(props) => props.selected ? '#60A5FA' : props.backgroundColor};
+  border-style: ${(props) => props.selected ? 'dotted' : 'solid'};
+  border-width: 1px;
+  &:hover {
+    border-color: ${(props) => props.isHovered && '#60A5FA'};
+    border-style: dotted;
+  }
 `;
 
 interface CardInnerStyles {
@@ -123,6 +130,7 @@ export const CardContentGen = ({ children, ...props }) => {
     marginTop={props.marginTop}
     marginRight={props.marginRight}
     marginBottom={props.marginBottom}
+    isHovered={props.isHovered}
     paddingLeft={props.paddingLeft}
     paddingTop={props.paddingTop}
     paddingRight={props.paddingRight}
@@ -137,6 +145,7 @@ export const CardContentGen = ({ children, ...props }) => {
     overflowX={props.overflowX}
     gap={props.gap}
     border={props.border}
+    selected={props.selected}
     borderColor={props.backgroundColor}
     >
     <CardContentInner
@@ -187,6 +196,8 @@ export const CardContent = ({ children, ...props }) => {
           marginTop={props.marginTop}
           marginRight={props.marginRight}
           marginBottom={props.marginBottom}
+          isHovered={isHovered}
+          selected={selected}
           mobileFlexDirection={props.mobileFlexDirection}
           size={props.size}
           paddingLeft={props.paddingLeft}
@@ -345,7 +356,7 @@ export const Card = ({ children,backgroundColor ,...props }) => {
       {...props}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      style={{ minWidth: "100%", height: "100%", borderWidth: "0"}}
+      style={{ minWidth: "100%", height: "100%"}}
     >
       {hover && <Controller nameOfComponent={t("Container")} />}
       <Element
