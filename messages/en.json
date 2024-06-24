@@ -16,6 +16,8 @@
     "Email": "Email",
     "Sign In with Email": "Sign In with Email",
     "Sign In with Google": "Sign In with Google",
+    "Invalidemail": "Invalid email",
+    "Stringmustcontainatleast8character": "String must contain at least 8 character(s)",
     "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
   },
   "SignUp": {
@@ -29,7 +31,11 @@
     "Or": "Or",
     "Sign Up with Email": "Sign Up with Email",
     "Something went wrong": "Something went wrong",
-    "You must accept the terms and privacy policy": "You must accept the terms and privacy policy",
+    "Emailisrequired": "Email is required",
+    "Invalidemailaddress": "Invalid email address",
+    "Passwordisrequired": "Password is required",
+    "Passwordmustbeatleast8characterslong": "Password must be at least 8 characters long",
+    "termsAcceptanceError": "You must accept the terms and privacy policy",
     "User with that email already exists! Try logging in instead": "User with that email already exists! Try logging in instead",
     "I agree to the Terms of Service and Privacy Policy": "I agree to the Terms of Service and Privacy Policy.",
     "Get started its free No credit card needed": "Get started – it’s free. No credit card needed",
