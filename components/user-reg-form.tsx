@@ -256,7 +256,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
           <div>
             <AlertTitle>{t("Something went wrong")}</AlertTitle>
             <AlertDescription>
-              {t(`${error}`)}
+              {t(`${error.slice(0, -1)}`)}
             </AlertDescription>
           </div>
           <button
