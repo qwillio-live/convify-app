@@ -203,6 +203,7 @@ model FlowStep {
   content   Json
   order     Int
   isDeleted Boolean  @default(false)
+  templateId String? // Ensuring it is nullable
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
 
