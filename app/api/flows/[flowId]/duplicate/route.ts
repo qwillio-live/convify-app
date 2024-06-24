@@ -52,11 +52,11 @@ export async function POST(
       data: newFlowData,
     });
     flow.steps = flow.steps? flow.steps : {};
-      const newFlowSteps = flow.steps.map((step) => ({
+      const newFlowSteps = flow.steps.map(({ id, ...step }) => ({
         ...step,
         flowId: newFlow.id,
       }));
-   
+
 
     await prisma.flowStep.createMany({
       data: newFlowSteps,

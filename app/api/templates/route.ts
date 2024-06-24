@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
-  const userId = 'clwpczg9u0000kqzv9sbdvfvh';
+  const userId = data.user.id
 
   try {
     const templates = await prisma.template.findMany({
