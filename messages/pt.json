@@ -18,6 +18,23 @@
     "Sign In with Google": "Entrar com Google",
     "Your password is incorrect or this email address is not registered with Convify": "Sua senha está incorreta ou este endereço de email não está registrado no Convify"
   },
+  "SignUp": {
+    "Already have an account?": "Já tem uma conta?",
+    "Get started for free": "Comece de graça",
+    "Sign Up Failed": "Falha ao se inscrever",
+    "Email": "Email",
+    "Password": "Senha",
+    "Create my Free Account": "Criar minha Conta Gratuita",
+    "Sign Up with Google": "Inscrever-se com Google",
+    "Or": "Ou",
+    "Sign Up with Email": "Inscrever-se com Email",
+    "Something went wrong": "Algo deu errado",
+    "You must accept the terms and privacy policy": "Você deve aceitar os termos e a política de privacidade",
+    "User with that email already exists! Try logging in instead": "Usuário com esse email já existe! Tente fazer login em vez disso",
+    "I agree to the Terms of Service and Privacy Policy": "Eu concordo com os Termos de Serviço e a Política de Privacidade",
+    "Get started its free No credit card needed": "Comece agora – é grátis. Não é necessário cartão de crédito.",
+    "Your password is incorrect or this email address is not registered with Convify": "Sua senha está incorreta ou este endereço de email não está registrado no Convify"
+  },
   "Dashboard": {
     "Dashboard": "Painel",
     "There's not a flow in sight": "Não há um fluxo à vista",

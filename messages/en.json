@@ -18,6 +18,23 @@
     "Sign In with Google": "Sign In with Google",
     "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
   },
+  "SignUp": {
+    "Already have an account?": "Already have an account?",
+    "Get started for free": "Get started for free",
+    "Sign Up Failed": "Sign Up Failed",
+    "Email": "Email",
+    "Password": "Password",
+    "Create my Free Account": "Create my Free Account",
+    "Sign Up with Google": "Sign Up with Google",
+    "Or": "Or",
+    "Sign Up with Email": "Sign Up with Email",
+    "Something went wrong": "Something went wrong",
+    "You must accept the terms and privacy policy": "You must accept the terms and privacy policy",
+    "User with that email already exists! Try logging in instead": "User with that email already exists! Try logging in instead",
+    "I agree to the Terms of Service and Privacy Policy": "I agree to the Terms of Service and Privacy Policy.",
+    "Get started its free No credit card needed": "Get started – it’s free. No credit card needed",
+    "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
+  },
   "Dashboard": {
     "Dashboard": "Dashboard",
     "There's not a flow in sight": "There's not a flow in sight",

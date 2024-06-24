@@ -23,6 +23,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert"
+import { useTranslations } from "next-intl"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignUpSchema>
@@ -35,6 +36,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userSignUpSchema),
   })
+  const t = useTranslations("SignUp")
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
@@ -60,10 +62,9 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
 
       if (signUpResult.error) {
         setIsLoading(false) // Stop loading if there's an error
-        console.log("Sign up failed:", signUpResult.error);
         setError(signUpResult.error)
         toast({
-          title: "Sign Up Failed",
+          title: t("Sign Up Failed"),
           description: signUpResult.error,
           variant: "destructive",
         })
@@ -99,11 +100,11 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
           <div className="grid gap-2">
             <div className="grid gap-1">
               <Label className="sr-only" htmlFor="email">
-                Email
+                {t("Email")}
               </Label>
               <Input
                 id="email"
-                placeholder="Email"
+                placeholder={t("Email")}
                 type="email"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -119,13 +120,13 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 </p>
               )}
               <Label className="sr-only" htmlFor="password">
-                Password
+                {t("Password")}
               </Label>
               <Input
                 className="mt-5"
                 type="password"
                 id="password"
-                placeholder="Password"
+                placeholder={t("Password")}
                 disabled={isLoading}
                 {...register("password")}
               />
@@ -146,7 +147,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 {...register("termsAccepted")}
               />
               <span className="pl-1">
-                I agree to the Terms of Service and Privacy Policy.
+                {t("I agree to the Terms of Service and Privacy Policy")}
               </span>
             </label>
             {errors.termsAccepted && (
@@ -175,7 +176,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Create my Free Account
+              {t("Create my Free Account")}
             </button>
           </div>
         </form>
@@ -210,13 +211,13 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 )}
                 <Icons.googleSignup className="h-5 w-5" />
                 <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
-                  Sign Up with Google
+                  {t("Sign Up with Google")}
                 </span>
               </button>
               <div className="relative">
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background text-muted-foreground px-2 text-sm">
-                    Or
+                    {t("Or")}
                   </span>
                 </div>
               </div>
@@ -235,7 +236,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                   }, 1000)
                 }}
               >
-                Sign Up with Email
+                {t("Sign Up with Email")}
               </button>
             </>
           )}
@@ -253,9 +254,9 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
           opacity: '0.7',
         }}>
           <div>
-            <AlertTitle>Something went wrong.</AlertTitle>
+            <AlertTitle>{t("Something went wrong")}</AlertTitle>
             <AlertDescription>
-              {error}
+              {t(`${error}`)}
             </AlertDescription>
           </div>
           <button
