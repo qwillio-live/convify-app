@@ -64,6 +64,7 @@ import { PictureChoiceSettings } from "./picture-choice-settings.component"
 import styled from "styled-components"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 
 const ICONS = {
   check: CheckIcon.src,
@@ -224,17 +225,57 @@ export const PictureChoice = ({
   const [hover, setHover] = useState(false)
   const screens = useAppSelector((state:RootState) => state?.screen?.screens);
   const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
-  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+  const selectedScreenIndex = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.screens[selectedScreenIndex]);
+  const selectedScreenId = useAppSelector((state:RootState) => state.screen?.screens[selectedScreenIndex]?.screenId) || "";
+  const screenFields = useAppSelector((state:RootState) => state.screen?.screens[selectedScreenIndex]?.screenFields) || {};
+  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreenIndex+1 < screensLength) ? selectedScreenIndex+1 : 0)]?.screenName) || "";
+  const nextScreenId = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreenIndex+1 < screensLength) ? selectedScreenIndex+1 : 0)]?.screenId) || "";
+  const screenNames = useScreenNames();
 
-  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
-
+  // editor load needs to be refreshed so that screenName value is re-populated but
+  // it is working now because it refers screenId rather then screenName
   useEffect(() => {
     pictureItems.map((item, index) => {
+      let screenNameChanged = false;
       if(item.buttonAction === "next-screen"){
-        setProp((props) => (props.pictureItems[index].nextScreen = nextScreenName))
+      setProp((props) => (props.pictureItems[index].nextScreen = {
+        screenName: nextScreenName,
+        screenId: nextScreenId
+      }), 200)
+      }else if(item.buttonAction === "custom-action"){
+        screenNames?.map(screen => {
+          if(screen.screenId === item?.nextScreen?.screenId){
+            setProp((props) => (props.pictureItems[index].nextScreen = {
+              screenName: screen.screenName,
+              screenId: screen.screenId
+            }), 200)
+            screenNameChanged = true;
+          }
+        })
+        if(!screenNameChanged){
+          setProp((props) => props.pictureItems[index].buttonAction = "next-screen", 200);
+          setProp((props) => props.pictureItems[index].nextScreen = {
+            screenId: nextScreenId,
+            screenName: nextScreenName
+          });
+        }
       }
     })
-},[nextScreenName,pictureItems])
+
+},[pictureItems,nextScreenName])
+
+  useEffect(() => {
+    console.log("FIELDS ARE: ", JSON.stringify(screenFields));
+    for(const field in screenFields){
+      console.log("FIELD IS: ", screenFields[field].fieldName);
+    }
+    // if(screenFields){
+    //   screenFields?.map((item) => {
+    //     console.log("ITEM IS: ", item.fieldName);
+    //   })
+    // }
+  },[])
 
   const [editable, setEditable] = useState(false)
   useEffect(() => {
@@ -386,7 +427,10 @@ type PictureChoiceTypes = {
     pic: any
     icon: any
     buttonAction: "next-screen" | "custom-action" | "none"
-    nextScreen: string
+    nextScreen: {
+      screenId: string
+      screenName: string
+    }
     itemType: ItemType
   }[]
 }
@@ -437,7 +481,10 @@ export const PictureChoiceDefaultProps: PictureChoiceTypes = {
       pic: null,
       icon: "check",
       buttonAction: "next-screen",
-      nextScreen: "",
+      nextScreen: {
+        screenId: "",
+        screenName: "",
+      },
       itemType: ItemType.ICON,
     },
     {
@@ -446,7 +493,10 @@ export const PictureChoiceDefaultProps: PictureChoiceTypes = {
       pic: null,
       icon: "x",
       buttonAction: "next-screen",
-      nextScreen: "",
+      nextScreen: {
+        screenId: "",
+        screenName: "",
+      },
       itemType: ItemType.ICON,
     },
   ],
