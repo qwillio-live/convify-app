@@ -120,31 +120,6 @@ export function CreateFlowComponent() {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
-  React.useEffect(() => {
-    // if(selectedComponent !== 'ROOT'){
-      router.push(`#${selectedComponent}`)
-    // }
-    // const parent = document.getElementById('scroll-container');
-    const child = document.getElementById(selectedComponent || 'ROOT');
-    // child?.scrollIntoView({
-    //   behavior: 'auto',
-    //   block: 'center',
-    //   inline: 'center'
-    // });
-    if (child) {
-      child.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      });
-    }
-
-  },[mobileScreen,setSelectedComponent])
-
-  // React.useEffect(() => {
-  //   dispatch(resetScreensState())
-  // },[dispatch])
-
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor

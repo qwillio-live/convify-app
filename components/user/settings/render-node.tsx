@@ -58,6 +58,7 @@ export default StyledNodeDiv;
 export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const { id } = useNode()
+  const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
   }))
@@ -105,9 +106,16 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     }
   }
   , [isSelected])
+
+  useEffect(() => {
+    if(selectedComponent){
+      const child = document.getElementById(selectedComponent);
+      child?.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+    }
+  }, [selectedComponent])
+
   const router = useRouter();
   // console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
-  const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
   return (
     // <div
     //   className={cn('relative border z-10 border-transparent border-dotted',
