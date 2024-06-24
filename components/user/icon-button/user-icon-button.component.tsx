@@ -545,13 +545,20 @@ export const IconButton = ({
     disabled={disabled}
     style={{
       maxWidth: '100%',
+      border: text.length <= 0 && '1px dotted white',
       transitionProperty: 'all',
       overflowX: 'clip',
       textOverflow: 'ellipsis',
     }}
     className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+
     onChange={(e) => {
-        handleTextChange(e);
+        // handleTextChange(e);
+        setProp(
+          (props) =>
+            (props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")),
+          500
+        )
     }}
     tagName="div"
 />
