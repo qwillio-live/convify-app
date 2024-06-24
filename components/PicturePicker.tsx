@@ -318,7 +318,7 @@ export const SvgRenderer = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox={viewBox ?? "0 0 14 14"}
+      viewBox={viewBox ?? "-1 -1 16 16"}
       width={width ?? "20px"}
       height={height ?? "20px"}
       dangerouslySetInnerHTML={{ __html: svgData }}

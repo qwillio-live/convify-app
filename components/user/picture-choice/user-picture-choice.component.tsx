@@ -483,7 +483,6 @@ const PictureChoiceItem = ({
             {choice.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
                 svgData={choice.picture}
-                // viewBox="-0.3 0 14.5 14"
                 width="50px"
                 height="50px"
               />
@@ -563,7 +562,6 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
   border-radius: 15px;
 
   transition: transform 0.1s ease-in-out;
@@ -650,14 +648,18 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
       pictureType !== PictureTypes.IMAGE
         ? "12.5%"
         : ""};
-    border-top: 1px solid
+    border-top: 2px solid
       ${({ defaultStyles }) => defaultStyles.textTopBorderColor};
     background-color: ${({ defaultStyles }) =>
       defaultStyles.textBackgroundColor};
+
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 13px;
+    transform: scale(1.01);
   }
 
   &:hover > div:last-child {
-    border-top: 1px solid ${({ hoverStyles }) => hoverStyles.textTopBorderColor};
+    border-top-color: ${({ hoverStyles }) => hoverStyles.textTopBorderColor};
     background-color: ${({ hoverStyles }) => hoverStyles.textBackgroundColor};
   }
 `

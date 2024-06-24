@@ -431,6 +431,8 @@ export const PictureChoiceSettings = () => {
                     disabled: true,
                     marginTop: 16,
                     marginBottom: 16,
+                    marginLeft: 16,
+                    marginRight: 6,
                     selections: defaultSelections,
                     choices: defaultChoices.slice(0, 2),
                   }}
@@ -456,6 +458,8 @@ export const PictureChoiceSettings = () => {
                     disabled: true,
                     marginTop: 16,
                     marginBottom: 16,
+                    marginLeft: 16,
+                    marginRight: 6,
                     selections: defaultSelections,
                     choices: defaultChoices.slice(0, 2),
                   }}
@@ -481,6 +485,8 @@ export const PictureChoiceSettings = () => {
                     disabled: true,
                     marginTop: 16,
                     marginBottom: 16,
+                    marginLeft: 16,
+                    marginRight: 6,
                     selections: defaultSelections,
                     choices: defaultChoices.slice(0, 2),
                   }}
