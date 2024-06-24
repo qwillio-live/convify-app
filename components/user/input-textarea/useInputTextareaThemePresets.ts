@@ -1,10 +1,15 @@
+import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
-import { UserInputTextareaProps, UserInputSizes } from "./user-input-textarea.component"
+import {
+  UserInputSizes,
+  UserInputTextareaProps,
+} from "./user-input-textarea.component"
 
 const useInputTextareaThemePresets = () => {
+  const t = useTranslations("Components")
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -15,11 +20,12 @@ const useInputTextareaThemePresets = () => {
   )
 
   const outlinedPresetTextarea: UserInputTextareaProps = {
-    inputValue: "",
+    inputValue: t("Text Area"),
     fontSize: 16,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
+    height: 95,
     marginLeft: 0,
     marginRight: 0,
     marginTop: 20,
@@ -28,7 +34,7 @@ const useInputTextareaThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("Placeholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -68,8 +74,8 @@ const useInputTextareaThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("Label"),
+    fieldName: t("Field Name"),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
@@ -87,11 +93,10 @@ const useInputTextareaThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    rows: 3, 
   }
 
   const underlinedPresetTextarea: UserInputTextareaProps = {
-    inputValue: "",
+    inputValue: t("Text Area"),
     fontSize: 16,
     textColor: "#000",
     width: 366,
@@ -104,7 +109,7 @@ const useInputTextareaThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("Placeholder"),
     backgroundColor: "transparent",
     borderColor: {
       value: "#eaeaeb",
@@ -140,8 +145,8 @@ const useInputTextareaThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("Label"),
+    fieldName: t("Field Name"),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
@@ -158,8 +163,8 @@ const useInputTextareaThemePresets = () => {
       bottomLeftRadius: 0,
       bottomRightRadius: 0,
     },
+    height: 50,
     settingsTab: "content",
-    rows: 3,
   }
 
   return { outlinedPresetTextarea, underlinedPresetTextarea }

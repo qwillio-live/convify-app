@@ -77,7 +77,7 @@
     "Input Field": "Campo de Entrada",
     "Required": "Obrigatório",
     "Floating Label": "Rótulo Flutuante",
-    "Placeholder": "Placeholder",
+    "Placeholder": "Espaço reservado",
     "Field Name": "Nome do Campo",
     "Enter field name here": "Digite o nome do campo aqui",
     "Enter label text": "Digite o texto do rótulo",
@@ -131,7 +131,10 @@
     "Add Screen" : "Adicionar Tela",
     "Duplicate" : "Duplicar",
     "Right-Click" : "Clique Direito",
-    "Click on a screen to edit it" : "Clique em uma tela para editá-la"
+    "Click on a screen to edit it" : "Clique em uma tela para editá-la",
+    "Rows": "Linhas",
+    "TextArea": "Área de Texto"
+
   },
   "CreateFlow": {
     "Create": "Criar",

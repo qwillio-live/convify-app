@@ -67,6 +67,7 @@ export const UserInputTextareaSettings = () => {
     width,
     props,
     parent,
+    height,
   } = useNode((node) => ({
     parent: node.data.parent,
     props: node.data.props,
@@ -76,6 +77,7 @@ export const UserInputTextareaSettings = () => {
     marginBottom: node.data.props.marginBottom,
     textColor: node.data.props.textColor,
     width: node.data.props.width,
+    height: node.data.props.height,
   }))
 
   const {
@@ -101,7 +103,8 @@ export const UserInputTextareaSettings = () => {
     outlined = "outlined",
     underlined = "underlined",
   }
-  const { outlinedPresetTextarea, underlinedPresetTextarea } = useInputTextareaThemePresets()
+  const { outlinedPresetTextarea, underlinedPresetTextarea } =
+    useInputTextareaThemePresets()
   const addPresetStyles = (preset) => {
     const staticStyles = [
       "error",
@@ -128,6 +131,7 @@ export const UserInputTextareaSettings = () => {
       })
     }, 1000)
   }
+
   const throttledSetProp = useCallback(
     throttle((property, value) => {
       setProp((prop) => {
@@ -136,6 +140,15 @@ export const UserInputTextareaSettings = () => {
     }, 200), // Throttle to 50ms to 200ms
     [setProp]
   )
+
+  const heightToRows = (height) => {
+    const baseHeight = 50 // Base height equals to 1 row
+    const step = 18 // Each step equals to an additional row
+    if (height < baseHeight) return 1 // If height is less than baseHeight, return 1 row
+    return 1 + Math.floor((height - baseHeight) / step)
+  }
+
+  const rows = heightToRows(height)
 
   const handlePropChange = (property, value) => {
     throttledSetProp(property, value)
@@ -251,7 +264,7 @@ export const UserInputTextareaSettings = () => {
             <span className="text-sm font-medium">{t("Design")}</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            {/* <div className="flex flex-row items-center col-span-2 space-x-2">
               <Checkbox
                 className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
                 checked={props.enableIcon}
@@ -267,9 +280,9 @@ export const UserInputTextareaSettings = () => {
               >
                 {t("Decorator")}
               </label>
-            </div>
+            </div> */}
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
+            {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
               {props.enableIcon && (
                 <>
                   <p className="text-md flex-1 text-muted-foreground">
@@ -312,7 +325,7 @@ export const UserInputTextareaSettings = () => {
                   </Select>
                 </>
               )}
-            </div>
+            </div> */}
 
             <div className="flex flex-row items-center col-span-2 space-x-2">
               <label
@@ -341,6 +354,27 @@ export const UserInputTextareaSettings = () => {
             <span className="text-sm font-medium">{t("Spacing")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+                {/* <Label htmlFor="marginTop">{t("Top")}</Label> */}
+                <Label htmlFor="height">{t("Rows")}</Label>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {rows}
+                </span>
+              </div>
+              <Slider
+                className=""
+                defaultValue={[height]}
+                value={[height]}
+                max={302}
+                min={50}
+                step={18}
+                onValueChange={(e) =>
+                  // setProp((props) => (props.marginTop = e),200)
+                  handlePropChange("height", e)
+                }
+              />
+            </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs
@@ -363,7 +397,7 @@ export const UserInputTextareaSettings = () => {
                     {t("M")}
                   </TabsTrigger>
                   <TabsTrigger disabled={disableSize} value="large">
-                    {"L"}
+                    {t("L")}
                   </TabsTrigger>
                   <TabsTrigger disabled={disableSize} value="full">
                     <MoveHorizontal />
@@ -453,7 +487,7 @@ export const UserInputTextareaSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="styles">
+        {/* <AccordionItem value="styles">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Styles")}</span>
           </AccordionTrigger>
@@ -471,7 +505,7 @@ export const UserInputTextareaSettings = () => {
                 <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
                 <UserInputTextareaGen
                   {...outlinedPresetTextarea}
-                  floatingLabel={true}
+                  floatingLabel={false}
                   size="full"
                   enableIcon={false}
                   marginLeft="0"
@@ -492,7 +526,7 @@ export const UserInputTextareaSettings = () => {
                 <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
                 <UserInputTextareaGen
                   {...underlinedPresetTextarea}
-                  floatingLabel={true}
+                  floatingLabel={false}
                   size="full"
                   enableIcon={false}
                   marginLeft="0"
@@ -503,7 +537,7 @@ export const UserInputTextareaSettings = () => {
               </Card>
             </div>
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
       </Accordion>
     </>
   )

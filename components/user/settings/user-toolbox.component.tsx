@@ -29,6 +29,7 @@ import {
   Pencil,
   Phone,
   Rocket,
+  Square,
   Target,
   TextCursorInput,
   Trophy,
@@ -72,9 +73,10 @@ import {
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
 import {
   HeadlineText,
-  HeadlineTextGen,
   HeadlineTextDefaultProps,
+  HeadlineTextGen,
 } from "../headline-text/headline-text.component"
+import useHeadlineThemePresets from "../headline-text/useHeadlineThemePresets"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import {
   IconButton,
@@ -118,9 +120,10 @@ import {
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
 import useTextThemePresets from "../text/useTextThemePresets"
-import useHeadlineThemePresets from "../headline-text/useHeadlineThemePresets"
 
 const SquareCheckIcon = Icons.SquareCheck
+const SqarePen = Icons.SquarePen
+
 
 const MultipleChoiceOptions = [
   {
@@ -144,6 +147,7 @@ const MultipleChoiceOptions = [
     icon: <Globe className="size-6" />,
   },
 ]
+
 
 const ListOptions = [
   {
@@ -418,10 +422,7 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(
-                      ref,
-                      <HeadlineText {...h2Preset} />
-                    )
+                    connectors.create(ref, <HeadlineText {...h2Preset} />)
                   }
                   data-cy="toolbox-headline"
                 >
@@ -429,14 +430,13 @@ export const UserToolbox = () => {
                     title={t("Headline")}
                     icon={<Type className="mr-2 size-3" />}
                     data-cy="toolbox-text"
-
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
-                    <HeadlineTextGen
-                      {...h2Preset}
-                      label={t("Text")}
-                      placeholder={t("Placeholder")}
-                    />
+                      <HeadlineTextGen
+                        {...h2Preset}
+                        label={t("Text")}
+                        placeholder={t("Placeholder")}
+                      />
                     </div>
                   </HoverCardComponent>
                 </div>
@@ -454,7 +454,6 @@ export const UserToolbox = () => {
                     title={t("Text")}
                     icon={<Pencil className="mr-2 size-3" />}
                     data-cy="toolbox-text"
-
                   >
                     <UserTextInputGen
                       {...spanPreset}
@@ -584,15 +583,15 @@ export const UserToolbox = () => {
                     data-cy="toolbox-text"
                   >
                     <HoverCardComponent
-                      title="InputTextArea"
-                      icon={<Phone className="mr-2 size-3" />}
+                      title={t("TextArea")}
+                      icon={<SqarePen className="mr-2 size-3" />}
                     >
                       <UserInputTextareaGen
                         {...outlinedPresetTextarea}
                         // label={t("InputPhone")}
-                        label="InputTextArea"
+                        label={t("TextArea")}
                         // label={t("Label")}
-                        placeholder="InputTextArea"
+                        placeholder={t("TextArea")}
                         // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>

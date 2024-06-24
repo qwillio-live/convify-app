@@ -131,7 +131,9 @@
     "Add Screen": "Add Screen",
     "Duplicate": "Duplicate",
     "Right-Click": "Right Click",
-    "Click on a screen to edit it": "Click on a screen to edit it"
+    "Click on a screen to edit it": "Click on a screen to edit it",
+    "Rows": "Rows",
+    "TextArea": "Text Area"
   },
   "CreateFlow": {
     "Create": "Create",
