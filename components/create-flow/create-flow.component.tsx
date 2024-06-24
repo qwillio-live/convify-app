@@ -41,7 +41,6 @@ import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
 import { Loader } from "../user/loader/user-loader.component"
-import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { Logo } from "../user/logo/user-logo.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { PictureChoice } from "../user/picture-choice/user-picture-choice.component"
@@ -57,6 +56,7 @@ import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { Checklist } from "../user/checklist/user-checklist.component"
 import { List } from "../user/list/user-list.component"
+import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -184,7 +184,6 @@ export function CreateFlowComponent() {
           Checklist,
           List,
           LogoBar,
-          LogoBarItem,
           LayoutContainer,
           Loader,
           Img,
@@ -301,7 +300,6 @@ export function CreateFlowComponent() {
           Checklist,
           List,
           LogoBar,
-          LogoBarItem,
           LayoutContainer,
           Loader,
         }}

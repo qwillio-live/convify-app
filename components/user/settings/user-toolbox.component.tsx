@@ -27,10 +27,14 @@ import {
   ListChecks,
   ListOrdered,
   Loader as LoaderIcon,
+  LucidePaintbrush,
   Navigation,
+  Paintbrush,
+  Paintbrush2,
   Pencil,
   Rocket,
   SquareMousePointer,
+  SwatchBook,
   Target,
   TextCursorInput,
   Trophy,
@@ -79,7 +83,7 @@ import {
 import { Img, ImgDefaultProps } from "../image/user-image-component"
 import useInputThemePresets from "../input/useInputThemePresets"
 import { UserInput, UserInputGen } from "../input/user-input.component"
-import { LogoBar, LogoBarDefaultProps } from "../logo-bar/logo-bar.component"
+import { LogoBarGen, LogoBar } from "../logo-bar/user-logo-bar.component"
 import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
 import {
   MultipleChoice,
@@ -104,6 +108,7 @@ import usePictureChoiceThemePresets from "../picture-choice/usePictureChoiceThem
 import useListThemePresets from "../list/useListThemePresets"
 import { List, ListGen } from "../list/user-list.component"
 import { PictureTypes } from "@/components/PicturePicker"
+import useLogoBarThemePresets from "../logo-bar/useLogoBarThemePresets"
 
 function HelperInformation() {
   return (
@@ -201,6 +206,8 @@ export const UserToolbox = () => {
     horizontalPreset: listHorizontalPreset,
     defaultIcon: listPreviewIcon,
   } = useListThemePresets()
+
+  const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
 
   {
     /**
@@ -626,6 +633,27 @@ export const UserToolbox = () => {
                       icon={<ListChecks className="mr-2 size-3" />}
                     >
                       <ChecklistGen {...checklistNormalPreset} />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      //@ts-ignore
+                      connectors.create(
+                        ref,
+                        //@ts-ignore
+                        <LogoBar {...logoBarDefaultPreset} />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
+                  >
+                    <HoverCardComponent
+                      title={t("Logo Bar")}
+                      icon={<SwatchBook className="mr-2 size-3" />}
+                    >
+                      <LogoBarGen {...logoBarDefaultPreset} />
                     </HoverCardComponent>
                   </div>
                 </AccordionContent>

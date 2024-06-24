@@ -9,7 +9,6 @@ import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import { UserTextGen } from "@/components/user/text/user-text.component"
 
 import { UserInputGen } from "../input/user-input.component"
-import { LogoBarGen } from "../logo-bar/logo-bar.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
 import jsonData from "./parse.json"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
@@ -22,6 +21,7 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { SelectGen } from "../select/user-select.component"
 import { ChecklistGen } from "../checklist/user-checklist.component"
 import { ListGen } from "../list/user-list.component"
+import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",

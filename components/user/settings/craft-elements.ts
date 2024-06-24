@@ -7,7 +7,6 @@ export const CRAFT_ELEMENTS = {
   LOGO: "Logo",
   DIV: "div",
   LOGOBAR: "LogoBar",
-  LOGOBARITEM: "LogoBarItem",
   PROGRESSBAR: "ProgressBar",
   ICONBUTTON: "IconButton",
   SELECT: "Select",
