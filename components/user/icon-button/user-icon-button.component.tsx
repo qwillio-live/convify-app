@@ -427,7 +427,7 @@ export const IconButton = ({
       // handlePropChangeThrottled('text',value)
     } else {
       if(ref.current){
-        e.target.innerText = text || ''; // Restore the previous text
+        // e.target.innerText = text || ''; // Restore the previous text
         const selection = window.getSelection();
         const range = document.createRange();
         range.selectNodeContents(ref.current);

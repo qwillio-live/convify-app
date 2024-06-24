@@ -174,11 +174,14 @@ export const CardContent = ({ children, ...props }) => {
     connectors: { connect, drag },
     selected,
     isHovered,
+    id,
   } = useNode((state) => ({
+    id: state.id,
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
+  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent);
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
@@ -197,7 +200,7 @@ export const CardContent = ({ children, ...props }) => {
           marginRight={props.marginRight}
           marginBottom={props.marginBottom}
           isHovered={isHovered}
-          selected={selected}
+          selected={id === selectedComponent}
           mobileFlexDirection={props.mobileFlexDirection}
           size={props.size}
           paddingLeft={props.paddingLeft}
