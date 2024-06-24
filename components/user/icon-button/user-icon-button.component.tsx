@@ -424,10 +424,12 @@ export const IconButton = ({
     if(ref.current){
       const currentText = ref.current.innerText;
       if (currentText.length <= maxLength) {
-        handlePropChangeThrottled('text',currentText);
+        // handlePropChangeThrottled('text',currentText);
+        handlePropChangeDebounced('text',currentText);
       } else {
         const trimmedText = currentText.substring(0, maxLength);
-        handlePropChangeThrottled('text',trimmedText);
+        // handlePropChangeThrottled('text',trimmedText);
+        handlePropChangeDebounced('text',trimmedText);
         ref.current.innerText = trimmedText;
         placeCaretAtEnd(ref.current);
       }
