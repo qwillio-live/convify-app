@@ -56,7 +56,6 @@ export async function POST(
         ...step,
         flowId: newFlow.id,
       }));
-console.log(newFlowSteps)
 
     await prisma.flowStep.createMany({
       data: newFlowSteps,

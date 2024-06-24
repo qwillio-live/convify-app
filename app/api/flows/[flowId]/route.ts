@@ -41,9 +41,9 @@ export async function GET(
         userId,
         isDeleted: false,
       },
-      include: {
-        flowSteps: true,
-      },
+      // include: {
+      //   flowSteps: true,
+      // },
     })
 
     if (!flow) {
