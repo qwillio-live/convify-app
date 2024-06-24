@@ -409,9 +409,6 @@ const ShareFlowComponents = ({ isPublished }) => {
             color="#737373"
             data-qa="upgrade-nag-screen-close-button"
             className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
-            style={{
-              marginTop: "60px",
-            }}
           >
             <div className="flex size-auto items-center justify-center ">
               <span
