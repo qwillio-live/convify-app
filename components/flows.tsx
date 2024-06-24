@@ -160,56 +160,6 @@ export function FlowsList() {
                       />
                     </TableCell>
                     <TableCell className="font-bold">
-                      Hypernova Headphones
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>129</TableCell>
-                    <TableCell className="hidden md:table-cell">100</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-10-18 15:21
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
                       AeroGlow Desk Lamp
                     </TableCell>
                     <TableCell>
@@ -369,6 +319,56 @@ export function FlowsList() {
                     <TableCell className="hidden md:table-cell">30</TableCell>
                     <TableCell className="hidden md:table-cell">
                       2024-02-14 14:14
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="size-4" />
+                            <span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-start"
+                            >
+                              {t("Delete")}
+                            </Button>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="hidden sm:table-cell">
+                      <Image
+                        alt="Product image"
+                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        height="64"
+                        width="113"
+                        src={placeholder.src}
+                      />
+                    </TableCell>
+                    <TableCell className="font-bold " style={{ overflowWrap: 'break-word', maxWidth: '100px' }}>
+                      Hypernova Headphones
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">Active</Badge>
+                    </TableCell>
+                    <TableCell>129</TableCell>
+                    <TableCell className="hidden md:table-cell">100</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      2023-10-18 15:21
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
