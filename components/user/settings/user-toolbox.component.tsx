@@ -511,7 +511,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
 
-                {/* <div
+                <div
                   className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
@@ -545,7 +545,7 @@ export const UserToolbox = () => {
                       ))}
                     </div>
                   </HoverCardComponent>
-                </div> */}
+                </div>
               </AccordionContent>
               </AccordionItem>
             )

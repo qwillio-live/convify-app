@@ -8,6 +8,7 @@ import { Controller } from "../settings/controller.component"
 import { MultipleChoiceSettings } from "./user-multiple-choice-settings"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 
 const MultipleChoiceItem = styled.div<{
   fontSize: string | number
@@ -239,13 +240,38 @@ export const MultipleChoice = ({
   const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
 
   const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
-
+  const nextScreenId = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenId) || "";
+  const screenNames = useScreenNames();
   useEffect(() => {
     if(singleChoice){
       multipleChoices.map((item, index) => {
-        if(item.buttonAction === "next-screen"){
-          setProp((props) => (props.multipleChoices[index].nextScreen = nextScreenName))
+        // if(item.buttonAction === "next-screen"){
+        //   setProp((props) => (props.multipleChoices[index].nextScreen = nextScreenName))
+        // }
+        let screenNameChanged = false;
+      if(item.buttonAction === "next-screen"){
+      setProp((props) => (props.multipleChoices[index].nextScreen = {
+        screenName: nextScreenName,
+        screenId: nextScreenId
+      }), 200)
+      }else if(item.buttonAction === "custom-action"){
+        screenNames?.map(screen => {
+          if(screen.screenId === item?.nextScreen?.screenId){
+            setProp((props) => (props.multipleChoices[index].nextScreen = {
+              screenName: screen.screenName,
+              screenId: screen.screenId
+            }), 200)
+            screenNameChanged = true;
+          }
+        })
+        if(!screenNameChanged){
+          setProp((props) => props.multipleChoices[index].buttonAction = "next-screen", 200);
+          setProp((props) => props.multipleChoices[index].nextScreen = {
+            screenId: nextScreenId,
+            screenName: nextScreenName
+          });
         }
+      }
       })
     }
 },[nextScreenName,multipleChoices])
@@ -320,7 +346,10 @@ export type MultipleChoiceProps = {
     optionValue: string
     optionSelected: boolean
     buttonAction: "next-screen" | "custom-action" | "none",
-    nextScreen: string
+    nextScreen: {
+      screenId: string
+      screenName: string
+    }
   }[]
 }
 
@@ -361,7 +390,10 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionValue: "option1",
       optionSelected: false,
       buttonAction: "next-screen",
-      nextScreen: ""
+      nextScreen: {
+        screenId: "",
+        screenName: "",
+      }
     },
     {
       id: "2",
@@ -370,7 +402,10 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionValue: "option2",
       optionSelected: false,
       buttonAction: "next-screen",
-      nextScreen: ""
+      nextScreen: {
+        screenId: "",
+        screenName: "",
+      }
     },
     {
       id: "3",
@@ -379,7 +414,10 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionValue: "option3",
       optionSelected: false,
       buttonAction: "next-screen",
-      nextScreen: ""
+      nextScreen: {
+        screenId: "",
+        screenName: "",
+      }
     },
     {
       id: "4",
@@ -388,7 +426,10 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       optionValue: "option4",
       optionSelected: false,
       buttonAction: "next-screen",
-      nextScreen: ""
+      nextScreen: {
+        screenId: "",
+        screenName: "",
+      }
     },
   ],
 }

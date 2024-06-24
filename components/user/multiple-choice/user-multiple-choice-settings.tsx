@@ -82,6 +82,14 @@ export const MultipleChoiceSettings = () => {
         ]?.screenName
     ) || "";
 
+    const nextScreenId =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenId
+    ) || "";
+
   return (
     <>
       <Card className="p-2">
@@ -119,6 +127,7 @@ export const MultipleChoiceSettings = () => {
                 singleChoice={singleChoice}
                 screenNames={screenNames}
                 nextScreenName={nextScreenName}
+                nextScreenId={nextScreenId}
               />
               </div>
             ))}
@@ -294,7 +303,7 @@ export const MultipleChoiceSettings = () => {
     </>
   )
 }
-export const MultipleChoiceSettingsItem = ({ item, index,singleChoice,screenNames,nextScreenName }) => {
+export const MultipleChoiceSettingsItem = ({ item, index,singleChoice,screenNames,nextScreenName, nextScreenId }) => {
   const y = useMotionValue(0)
   const controls = useDragControls()
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -366,57 +375,76 @@ export const MultipleChoiceSettingsItem = ({ item, index,singleChoice,screenName
               defaultValue={
                 item.buttonAction === "next-screen"
                   ? "next-screen"
-                  : item.nextScreen
+                  : item.nextScreen.screenId
               }
               value={
                 item.buttonAction === "next-screen"
                   ? "next-screen"
-                  : item.nextScreen
+                  : item.nextScreen.screenId
               }
+              // onValueChange={(e) => {
+              //   if (e === "next-screen") {
+              //     setProp(
+              //       (props) =>
+              //         (props.multipleChoices[index].buttonAction = "next-screen")
+              //     )
+              //     setProp(
+              //       (props) =>
+              //         (props.multipleChoices[index].nextScreen = nextScreenName)
+              //     )
+              //   } else {
+              //     setProp(
+              //       (props) =>
+              //         (props.multipleChoices[index].buttonAction = "custom-action")
+              //     )
+              //     setProp((props) => (props.multipleChoices[index].nextScreen = e))
+              //   }
+              // }}
               onValueChange={(e) => {
-                if (e === "next-screen") {
-                  setProp(
-                    (props) =>
-                      (props.multipleChoices[index].buttonAction = "next-screen")
-                  )
-                  setProp(
-                    (props) =>
-                      (props.multipleChoices[index].nextScreen = nextScreenName)
-                  )
-                } else {
-                  setProp(
-                    (props) =>
-                      (props.multipleChoices[index].buttonAction = "custom-action")
-                  )
-                  setProp((props) => (props.multipleChoices[index].nextScreen = e))
+                if(e === "next-screen") {
+                  setProp((props) => (props.multipleChoices[index].buttonAction = "next-screen" ))
+                  setProp((props) => (props.multipleChoices[index].nextScreen = {
+                    screenId: nextScreenId,
+                    screenName: nextScreenName
+                  } ))
+                } else if(e === "none") {
+                  setProp((props) => (props.multipleChoices[index].buttonAction = "none" ))
+                  setProp((props) => (props.multipleChoices[index].nextScreen = {
+                    screenId: "none",
+                    screenName: ""
+                  }))
+
+                }else {
+                  setProp((props) => (props.multipleChoices[index].buttonAction = "custom-action" ))
+                  setProp((props) => (props.multipleChoices[index].nextScreen = {
+                    screenId: e,
+                    screenName: screenNames?.find(screen => screen.screenId === e)?.screenName
+                  }))
                 }
-              }}
+          }}
             >
-              <SelectTrigger className="">
-                <SelectValue placeholder="Select screen" defaultValue={"next-screen"} />
+              <SelectTrigger>
+                <SelectValue placeholder="Select screen" />
               </SelectTrigger>
-              <SelectContent className="text-left min-w-[80px]">
+              <SelectContent>
                 <SelectGroup>
                   <SelectItem
                     value="next-screen"
-                    className="flex flex-row items-center text-[10px]"
                   >
-                    <div className="flex flex-row items-center text-xs gap-2">
-                      <ArrowRight size={14} /> <span>Next Screen</span>
-                    </div>
+                    Next Screen
                   </SelectItem>
-                  {screenNames.map((screenName, index) => (
-                    <SelectItem
-                      value={screenName}
-                      className="flex flex-row items-center text-[10px]"
-                    >
-                      <div className="flex flex-row items-center text-xs gap-2">
-                        <span>
-                          {index + 1} : {screenName}
-                        </span>
-                      </div>
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="none">
+                    Do Nothing
+                  </SelectItem>
+                  {
+                      screenNames?.map((screen,index) => {
+                        return (
+                          <SelectItem value={screen.screenId}>
+                            {index+1} : {screen.screenName}
+                          </SelectItem>
+                        )
+                      })
+                      }
                 </SelectGroup>
               </SelectContent>
             </Select>
