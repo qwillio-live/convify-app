@@ -125,7 +125,7 @@ export function CreateFlowComponent() {
       router.push(`#${selectedComponent}`)
     // }
     // const parent = document.getElementById('scroll-container');
-    // const child = document.getElementById(selectedComponent || 'ROOT');
+    const child = document.getElementById(selectedComponent || 'ROOT');
     // child?.scrollIntoView({
     //   behavior: 'auto',
     //   block: 'center',
