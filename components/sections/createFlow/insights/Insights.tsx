@@ -2,7 +2,7 @@ import { useState } from "react"
 import { InsightsDevices } from "@/constant"
 import { TabsList, TabsTrigger } from "@radix-ui/react-tabs"
 import { Percent, User } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import {
   Bar,
   BarChart,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/table"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange"
-
+import { pt } from 'date-fns/locale';
 const visitsData: SubmitData[] = [
   {
     time: 5.05,
@@ -101,6 +101,8 @@ const InsightsFlowComponents = () => {
   const [data, setData] = useState<SubmitData[]>(visitsData)
 
   const t = useTranslations("CreateFlow.ResultsPage")
+  const locale = useLocale() // Get the locale from the query parameters
+  const datePickerLocale = locale === 'pt' ? pt : undefined
 
   return (
     <Tabs defaultValue="custom">
@@ -111,7 +113,7 @@ const InsightsFlowComponents = () => {
               className="[&>div>button]:data-[state=active]:border-input [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=inactive]:bg-transparent [&>div>button]:data-[state=active]:bg-muted [&>div>button]:font-medium"
               value="custom"
             >
-              <DatePickerWithRange className="" />
+              <DatePickerWithRange className="" locale={datePickerLocale} />
             </TabsTrigger>
             <TabsTrigger
               className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"

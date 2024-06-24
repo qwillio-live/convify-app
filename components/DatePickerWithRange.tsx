@@ -4,7 +4,7 @@ import { addDays, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import * as React from "react"
 import { DateRange } from "react-day-picker"
-
+import { enUS, es } from "date-fns/locale"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils"
 
 export function DatePickerWithRange({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  locale = enUS, // Default locale
+}: React.HTMLAttributes<HTMLDivElement> & { locale?: Locale }) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
@@ -38,11 +39,11 @@ export function DatePickerWithRange({
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "LLL dd, y", { locale })} -{" "}
+                  {format(date.to, "LLL dd, y", { locale })}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "LLL dd, y", { locale })
               )
             ) : (
               <span>Pick a date</span>
@@ -57,9 +58,11 @@ export function DatePickerWithRange({
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            locale={locale}
           />
         </PopoverContent>
       </Popover>
     </div>
   )
 }
+

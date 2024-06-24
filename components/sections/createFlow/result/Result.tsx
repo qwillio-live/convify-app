@@ -32,7 +32,7 @@ const ResultFlowComponents = () => {
         <main className="content relative  z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 ">
           <div className="tabs-content flex w-full items-center">
             <TabsContent
-              className="mt-0 w-full h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+              className="mt-0 w-full h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)] sm:mt-[10px]"
               value="insights"
             >
               <InsightsFlowComponents />

@@ -29,7 +29,7 @@ const Header = () => {
     console.log("currentPath", currentPath);
 
     const linkClasses = (path) => (
-        `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm px-3 ${currentPath === path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
+        `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm px-3 ${currentPath === path || currentPath === "/pt" + path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
     );
 
     return (
