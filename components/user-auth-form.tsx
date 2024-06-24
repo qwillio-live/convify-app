@@ -36,8 +36,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
-  const router = useRouter()
-  const [error, setError] = React.useState<string | null>(searchParams.get('error'))
+  const [error, setError] = React.useState<string | null>(searchParams?.get('error') ?? null)
 
   React.useEffect(() => {
     if (error) {

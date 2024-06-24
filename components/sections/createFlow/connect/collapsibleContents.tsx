@@ -28,22 +28,20 @@ export const EmailContent: React.FC<ContentProps> = ({
   status,
 }) => {
   const [userData, setUserData] = useState<User>()
-  const [email, setEmail] = useState<string>(userData ? userData.email : "user@email.com")
+  const [email, setEmail] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const t = useTranslations("CreateFlow.ConnectPage")
+
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
-      .then((data) => setUserData(data))
+      .then((data) => {
+        setUserData(data)
+        setEmail(data.email)
+      })
       .catch((error) => console.error("Error fetching user data:", error))
+      .finally(() => setIsLoading(false))
   }, [])
-
-  useEffect(() => {
-    if (userData) {
-      setEmail(userData.email)
-    }
-  }, [userData])
-
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const t = useTranslations("CreateFlow.ConnectPage")
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
@@ -58,11 +56,15 @@ export const EmailContent: React.FC<ContentProps> = ({
     }
   }
 
+  if (isLoading) {
+    return null  // Render nothing while loading
+  }
+
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
         <Input
-          placeholder={email}
+          placeholder="Enter your email"
           id="email"
           onChange={handleInputChange}
           value={email}
@@ -77,10 +79,7 @@ export const EmailContent: React.FC<ContentProps> = ({
         </AccordionPrimitive.Trigger>
         <div>
           {status !== "active" ? (
-            <Button disabled={!email.trim() || isLoading} onClick={handleClick}>
-              {isLoading && (
-                <Icons.spinner className="mr-2 size-4 animate-spin" />
-              )}
+            <Button disabled={!email.trim()} onClick={handleClick}>
               {t("Connect")}
             </Button>
           ) : (

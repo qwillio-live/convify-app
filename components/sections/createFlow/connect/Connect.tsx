@@ -10,15 +10,15 @@ import { DummyIntregationCardData } from "./collapsibleContents"
 
 
 const ConnectFlowComponents = () => {
-  const [email, setEmail] = useState<string>("user@email.com")
+  // const [email, setEmail] = useState<string>("user@email.com")
   const [search, setSearch] = useState("")
   const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
-  useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => setEmail(data.email))
-      .catch((error) => console.error("Error fetching user data:", error))
-  }, [])
+  // useEffect(() => {
+  //   fetch("/api/users")
+  //     .then((res) => res.json())
+  //     .then((data) => setEmail(data.email))
+  //     .catch((error) => console.error("Error fetching user data:", error))
+  // }, [])
   // Define the update function
   const updateStatus = (id, newStatus) => {
     // Find the index of the object in the array
@@ -28,7 +28,6 @@ const ConnectFlowComponents = () => {
       const updatedData = [...filteredDatas]
       updatedData[index] = {
         ...updatedData[index], status: newStatus,
-        userEmail: email
       }
       // Update the state with the new array
       setFilteredDatas(updatedData)
