@@ -6,13 +6,25 @@ import oneInputData from "@/components/user/screens/one-input-screen.json";
 import footerScreenData from "@/components/user/screens/screen-footer.json";
 import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
-import { stat } from "fs";
 
+
+
+export type ScreenFieldType = {
+  fieldId: string;
+  fieldName: string;
+  fieldValue: string | number | boolean | any;
+  fieldRequired: boolean;
+}
+
+export type ScreenFieldsObject = {
+  [key: string]: ScreenFieldType;
+}
 
 export type ScreenType = {
   screenId: string;
   screenName: string;
   screenData: any;
+  screenFields: ScreenFieldsObject | {};
 };
 
 export interface ScreensState {
@@ -43,16 +55,32 @@ const initialState: ScreensState = {
       screenId: "1",
       screenName: "button-choice",
       screenData: JSON.stringify(buttonChoiceData),
+      screenFields: {
+        "field1" : {
+          fieldId: "123",
+  fieldName: 'Random field name',
+  fieldValue: "This is a value",
+  fieldRequired: false
+        },
+        "field2" : {
+          fieldId: "123",
+  fieldName: 'Random second field name',
+  fieldValue: "This second is a value",
+  fieldRequired: false
+        }
+      }
     },
     {
       screenId: "2",
       screenName: "one-choice",
       screenData: JSON.stringify(oneChoiceData),
+      screenFields: {}
     },
     {
       screenId: "3",
       screenName: "one-input",
       screenData: JSON.stringify(oneInputData),
+      screenFields: {}
     },
   ],
   screensFooter: JSON.stringify(footerScreenData),
@@ -137,7 +165,8 @@ export const screensSlice = createSlice({
       const newId = hexoid(8)();
       const newScreens = [...state.screens]; // Create new array
       const screenName = "screen-"+newId;
-      newScreens.splice(action.payload + 1, 0, {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData)});
+      newScreens.splice(action.payload + 1, 0,
+        {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData),screenFields:{}});
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
@@ -148,6 +177,7 @@ export const screensSlice = createSlice({
         screenId: hexoid(8)(),
         screenName: "",
         screenData: "",
+        screenFields: {}
       }
       newScreen.screenData = state.screens[action.payload].screenData; // Create new object
       newScreen.screenName = "screen-"+newScreen.screenId;

@@ -225,10 +225,12 @@ export const PictureChoice = ({
   const [hover, setHover] = useState(false)
   const screens = useAppSelector((state:RootState) => state?.screen?.screens);
   const screensLength = useAppSelector((state:RootState) => state?.screen?.screens?.length ?? 0);
-  const selectedScreen = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
-
-  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenName) || "";
-  const nextScreenId = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreen+1 < screensLength) ? selectedScreen+1 : 0)]?.screenId) || "";
+  const selectedScreenIndex = useAppSelector((state:RootState) => state.screen?.selectedScreen ?? 0)
+  const selectedScreen = useAppSelector((state:RootState) => state.screen?.screens[selectedScreenIndex]);
+  const selectedScreenId = useAppSelector((state:RootState) => state.screen?.screens[selectedScreenIndex]?.screenId) || "";
+  const screenFields = useAppSelector((state:RootState) => state.screen?.screens[selectedScreenIndex]?.screenFields) || {};
+  const nextScreenName = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreenIndex+1 < screensLength) ? selectedScreenIndex+1 : 0)]?.screenName) || "";
+  const nextScreenId = useAppSelector((state:RootState) => state?.screen?.screens[((selectedScreenIndex+1 < screensLength) ? selectedScreenIndex+1 : 0)]?.screenId) || "";
   const screenNames = useScreenNames();
 
   // editor load needs to be refreshed so that screenName value is re-populated but
@@ -262,6 +264,18 @@ export const PictureChoice = ({
     })
 
 },[pictureItems,nextScreenName])
+
+  useEffect(() => {
+    console.log("FIELDS ARE: ", JSON.stringify(screenFields));
+    for(const field in screenFields){
+      console.log("FIELD IS: ", screenFields[field].fieldName);
+    }
+    // if(screenFields){
+    //   screenFields?.map((item) => {
+    //     console.log("ITEM IS: ", item.fieldName);
+    //   })
+    // }
+  },[])
 
   const [editable, setEditable] = useState(false)
   useEffect(() => {

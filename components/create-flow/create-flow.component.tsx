@@ -124,7 +124,13 @@ export function CreateFlowComponent() {
     // if(selectedComponent !== 'ROOT'){
       router.push(`#${selectedComponent}`)
     // }
-    const child = document.getElementById(selectedComponent || 'ROOT');
+    // const parent = document.getElementById('scroll-container');
+    // const child = document.getElementById(selectedComponent || 'ROOT');
+    // child?.scrollIntoView({
+    //   behavior: 'auto',
+    //   block: 'center',
+    //   inline: 'center'
+    // });
     if (child) {
       child.scrollIntoView({
         behavior: 'smooth',
