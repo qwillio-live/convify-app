@@ -43,17 +43,38 @@ export enum TextContainerSize {
   full = "full",
 }
 
-const sanitizeText = (htmlText) => {
-  // Replace <br> with newline character
-  let sanitized = htmlText.replace(/<br\s*\/?>/gi, "\n")
-
-  // Replace <div> with newline character if it's empty or contains only <br>
-  sanitized = sanitized.replace(/<div><br\s*\/?><\/div>/gi, "\n")
-
-  // Remove any other HTML tags, but preserve their content
-  sanitized = sanitized.replace(/<\/?[^>]+(>|$)/g, "")
-
-  return sanitized
+interface StyleCustomTextContainerProps {
+  fontFamily?: string
+  color?: string
+  background?: string
+  backgroundHover?: string
+  colorHover?: string
+  size?: string
+  buttonSize?: string
+  marginLeft?: string | number
+  width?: string | number
+  height?: string | number
+  marginRight?: string | number
+  marginTop?: string | number
+  marginBottom?: string | number
+  paddingLeft?: string | number
+  paddingTop?: string | number
+  paddingRight?: string | number
+  paddingBottom?: string | number
+  radius?: number
+  flexDirection?: string
+  alignItems?: string
+  justifyContent?: string
+  border?: number
+  borderColor?: string
+  borderHoverColor?: string
+  mobileScreen: boolean
+  fontSize?: string
+  fontWeight?: number
+  textAlign?: string
+  borderRadius?: string
+  padding?: string
+  preset?: string
 }
 
 export type TextInputProps = {
@@ -274,15 +295,15 @@ export const UserTextInputGen = ({
     >
       <StyledCustomTextInput
         fontFamily={primaryFont}
-        color={color.value}
-        background={background.value}
-        backgroundHover={backgroundHover.value}
+        color={color?.value}
+        background={background?.value}
+        backgroundHover={backgroundHover?.value}
         borderHoverColor={borderHoverColor?.value}
-        colorHover={colorHover.value}
+        colorHover={colorHover?.value}
         radius={radius?.value}
         flexDirection={flexDirection}
         justifyContent={justifyContent}
-        borderColor={borderColor.value}
+        borderColor={borderColor?.value}
         border={2}
         marginLeft={marginLeft}
         width={width}
@@ -593,40 +614,6 @@ export const UserText = ({
       </div>
     </div>
   )
-}
-
-interface StyleCustomTextContainerProps {
-  fontFamily?: string
-  color?: string
-  background?: string
-  backgroundHover?: string
-  colorHover?: string
-  size?: string
-  buttonSize?: string
-  marginLeft?: string | number
-  width?: string | number
-  height?: string | number
-  marginRight?: string | number
-  marginTop?: string | number
-  marginBottom?: string | number
-  paddingLeft?: string | number
-  paddingTop?: string | number
-  paddingRight?: string | number
-  paddingBottom?: string | number
-  radius?: number
-  flexDirection?: string
-  alignItems?: string
-  justifyContent?: string
-  border?: number
-  borderColor?: string
-  borderHoverColor?: string
-  mobileScreen: boolean
-  fontSize?: string
-  fontWeight?: number
-  textAlign?: string
-  borderRadius?: string
-  padding?: string
-  preset?: string
 }
 
 UserText.craft = {

@@ -37,6 +37,7 @@ interface StyledCustomHeadlineInput {
   color?: string
   background?: string
   backgroundHover?: string
+  text: string
   colorHover?: string
   size?: string
   buttonSize?: string
@@ -146,6 +147,7 @@ export const HeadlineTextGen = ({
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const t = useTranslations("Components")
 
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
@@ -203,6 +205,7 @@ export const HeadlineTextGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
+        text={t("HeadlineDescription")}
         {...props}
         className="text-[1rem]"
         onClick={() => console.log(text)}
@@ -214,7 +217,6 @@ export const HeadlineTextGen = ({
             overflowX: "clip",
             textOverflow: "ellipsis",
             color: `${primaryTextColor}`,
-            fontSize: `${fontSize}px`,
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
@@ -468,6 +470,7 @@ export const HeadlineText = ({
           size={size}
           buttonSize={buttonSize}
           {...props}
+          text={t("HeadlineDescription")}
         >
           <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
             <ContentEditable
@@ -525,6 +528,8 @@ export type HeadlineTextProps = {
   fullWidth: boolean
   buttonSize: string
   tagType: string
+  preset: string
+  lineHeight: string | number
 }
 export enum TextContainerSize {
   small = "small",
@@ -534,7 +539,8 @@ export enum TextContainerSize {
 }
 
 export const HeadlineTextDefaultProps: HeadlineTextProps = {
-  text: "Headlines for your business",
+  text: "HeadlineDescription",
+  lineHeight: "1.5",
   fontFamily: {
     value: "inherit",
     globalStyled: true,
@@ -591,6 +597,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   border: 0,
   fullWidth: true,
   tagType: "h1",
+  preset: "h2",
 }
 
 HeadlineText.craft = {

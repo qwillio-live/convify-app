@@ -21,6 +21,7 @@ const useHeadlineThemePresets = () => {
   )
 
   const h1Preset: HeadlineTextProps = {
+    lineHeight: "1.5",
     fontSize: 42,
     fontWeight: "700",
     fontFamily: {
@@ -69,7 +70,7 @@ const useHeadlineThemePresets = () => {
     width: TextContainerSize.medium,
     height: "auto",
     size: TextContainerSize.medium,
-    text: t("Text"),
+    text: t("HeadlineDescription"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -84,10 +85,11 @@ const useHeadlineThemePresets = () => {
     fullWidth: true,
     buttonSize: "medium",
     tagType: "h1",
+    preset: "h1"
   }
 
   const h2Preset: HeadlineTextProps = {
-    fontSize: 20,
+    fontSize: 42,
     fontWeight: "700",
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -133,13 +135,14 @@ const useHeadlineThemePresets = () => {
     },
     justifyContent: "center",
     width: "fit-content",
-    height: "auto",
+    height: "fit-content",
     size: TextContainerSize.medium,
     text: t("HeadlineDescription"),
     marginLeft: 0,
-    marginTop: 20,
+    marginTop: 0,
     marginRight: 0,
-    marginBottom: 20,
+    marginBottom: 0,
+    lineHeight: "1.5",
     paddingLeft: "16",
     paddingTop: "14",
     paddingRight: "16",
@@ -150,6 +153,7 @@ const useHeadlineThemePresets = () => {
     fullWidth: true,
     buttonSize: "medium",
     tagType: "h2",
+    preset: "h2"
   }
 
   return { h1Preset, h2Preset }
