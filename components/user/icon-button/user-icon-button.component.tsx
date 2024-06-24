@@ -545,7 +545,7 @@ export const IconButton = ({
     disabled={disabled}
     style={{
       maxWidth: '100%',
-      border: text.length <= 0 && '1px dotted white',
+      border: text?.length <= 0 && '1px dotted white',
       transitionProperty: 'all',
       overflowX: 'clip',
       textOverflow: 'ellipsis',
