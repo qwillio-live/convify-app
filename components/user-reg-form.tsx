@@ -44,7 +44,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const [showEmailSignup, setShowEmailSignup] = React.useState<boolean>(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [error, setError] = React.useState<string | null>(searchParams.get('error') || null)
+  const [error, setError] = React.useState<string | null>(searchParams?.get('error') ?? null)
 
   React.useEffect(() => {
     if (error) {
