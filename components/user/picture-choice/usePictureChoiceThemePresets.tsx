@@ -19,7 +19,7 @@ const usePictureChoiceThemePresets = () => {
   const defaultChoices = [
     {
       id: `input-${hexoid(6)()}`,
-      picture: defaultIcon,
+      picture: icons["ai-generate-music-spark"].body,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 1`,
       buttonAction: null,
@@ -28,7 +28,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: defaultIcon,
+      picture: icons["ai-generate-landscape-image-spark"].body,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 2`,
       buttonAction: null,
@@ -37,7 +37,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: defaultIcon,
+      picture: icons["camera-video"].body,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 3`,
       buttonAction: null,
@@ -46,7 +46,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: defaultIcon,
+      picture: icons["image-photo-four-photos-camera-picture-photography-pictures-four-photo"].body,
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 4`,
       buttonAction: null,

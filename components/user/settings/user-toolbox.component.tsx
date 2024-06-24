@@ -384,6 +384,7 @@ export const UserToolbox = () => {
                           marginBottom: 8,
                           marginLeft: 8,
                           marginRight: 8,
+                          size: "small",
                           selections: pictureChoiceDefaultSelections,
                           choices: pictureChoiceDefaultChoices,
                         }}
@@ -600,13 +601,8 @@ export const UserToolbox = () => {
                       <ListGen
                         {...{
                           ...listHorizontalPreset,
-                          columnsDesktop: 2,
-                          columnsMobile: 2,
-                          items: listHorizontalPreset.items.map((item) => ({
-                            ...item,
-                            picture: listPreviewIcon,
-                            pictureType: PictureTypes.ICON,
-                          })),
+                          columnsDesktop: 1,
+                          columnsMobile: 1,
                         }}
                       />
                     </HoverCardComponent>

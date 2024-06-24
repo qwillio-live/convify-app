@@ -15,29 +15,34 @@ const useListThemePresets = () => {
   const defaultItems = [
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: null,
-      pictureType: PictureTypes.NULL,
+      picture: icons["startup"].body,
+      pictureType: PictureTypes.ICON,
       title: `${t("Title")} 1`,
       description: `${t("Description")}`,
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: null,
-      pictureType: PictureTypes.NULL,
+      picture:
+        icons["interface-edit-brush-2-brush-color-colors-design-paint-painting"]
+          .body,
+      pictureType: PictureTypes.ICON,
       title: `${t("Title")} 2`,
       description: `${t("Description")}`,
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: null,
-      pictureType: PictureTypes.NULL,
+      picture: icons["graph-arrow-increase"].body,
+      pictureType: PictureTypes.ICON,
       title: `${t("Title")} 3`,
       description: `${t("Description")}`,
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: null,
-      pictureType: PictureTypes.NULL,
+      picture:
+        icons[
+          "interface-pad-lock-shield-combination-combo-lock-locked-padlock-secure-security-shield-square"
+        ].body,
+      pictureType: PictureTypes.ICON,
       title: `${t("Title")} 4`,
       description: `${t("Description")}`,
     },
@@ -61,7 +66,7 @@ const useListThemePresets = () => {
     marginRight: 0,
     marginBottom: 20,
     columnsMobile: 1,
-    columnsDesktop: 4,
+    columnsDesktop: 2,
     fullWidth: true,
     flexDirection: "row",
     settingTabs: ["content"],
@@ -87,7 +92,7 @@ const useListThemePresets = () => {
     marginRight: 0,
     marginBottom: 20,
     columnsMobile: 1,
-    columnsDesktop: 4,
+    columnsDesktop: 2,
     fullWidth: true,
     flexDirection: "column",
     settingTabs: ["content"],

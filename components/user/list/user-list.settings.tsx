@@ -158,8 +158,8 @@ export const ListSettings = () => {
                   ...items,
                   {
                     id: `list-item-${hexoid(6)()}`,
-                    picture: null,
-                    pictureType: PictureTypes.NULL,
+                    picture: defaultIcon,
+                    pictureType: PictureTypes.ICON,
                     title: `${t("Title")} ${items.length + 1}`,
                     description: `${t("Description")}`,
                   },

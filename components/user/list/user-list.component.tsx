@@ -16,16 +16,9 @@ import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const ListSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ListMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
+  small: "400px",
+  medium: "800px",
+  large: "1200px",
   full: "100%",
 }
 
@@ -76,6 +69,7 @@ export const ListGen = ({
         columnsDesktop={columnsDesktop}
         columnsMobile={columnsMobile}
         mobileScreen={false}
+        width={textAlign === "center" ? "100%" : "fit-content"}
         maxWidth={ListSizeValues[size || "medium"]}
       >
         {items.map((item, index) => (
@@ -221,11 +215,8 @@ export const List = ({
           columnsDesktop={columnsDesktop}
           columnsMobile={columnsMobile}
           mobileScreen={mobileScreen ?? false}
-          maxWidth={
-            mobileScreen
-              ? ListMobileSizeValues[size || "medium"]
-              : ListSizeValues[size || "medium"]
-          }
+          width={textAlign === "center" ? "100%" : "fit-content"}
+          maxWidth={ListSizeValues[size || "medium"]}
         >
           {items.map((item, index) => (
             <ListItem
@@ -366,6 +357,7 @@ const ListItem = ({
 }
 
 type StyledListContainerProps = {
+  width: string
   columnsDesktop: number
   columnsMobile: number
   mobileScreen: boolean
@@ -373,7 +365,7 @@ type StyledListContainerProps = {
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
-  width: 100%;
+  width: ${({ width }) => width};
   max-width: ${({ maxWidth }) => maxWidth};
   display: grid;
   gap: 40px;

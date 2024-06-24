@@ -16,16 +16,9 @@ import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const PictureChoiceSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const PictureChoiceMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
+  small: "400px",
+  medium: "800px",
+  large: "1200px",
   full: "100%",
 }
 
@@ -93,7 +86,7 @@ export const PictureChoiceGen = ({
         <label>{label}</label>
       </div>
       <ul
-        className="flex w-full flex-wrap justify-center gap-3 px-2"
+        className="flex w-full flex-wrap justify-center"
         style={{
           fontFamily: `var(${fontFamily?.value})`,
           maxWidth: PictureChoiceSizeValues[size || "medium"],
@@ -307,9 +300,7 @@ export const PictureChoice = ({
           className="w-full p-1 text-center"
           style={{
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: mobileScreen
-              ? PictureChoiceMobileSizeValues[size || "small"]
-              : PictureChoiceSizeValues[size || "small"],
+            maxWidth: PictureChoiceSizeValues[size || "medium"],
           }}
         >
           <ContentEditable
@@ -327,12 +318,10 @@ export const PictureChoice = ({
           />
         </div>
         <ul
-          className="flex w-full flex-wrap justify-center gap-3"
+          className="flex w-full flex-wrap justify-center"
           style={{
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: mobileScreen
-              ? PictureChoiceMobileSizeValues[size || "medium"]
-              : PictureChoiceSizeValues[size || "medium"],
+            maxWidth: PictureChoiceSizeValues[size || "medium"],
           }}
         >
           {choices.map((choice, index) => (
@@ -421,24 +410,27 @@ const PictureChoiceItem = ({
     if (n === 1) {
       return 100
     }
+    if (n === 7 || n == 11) {
+      return 25
+    }
     if (n === 2) {
       return 50
     }
-    if (n % 3 === 0) {
-      return 33.33
+    if ((n - 4) % 2 === 0 && n !== 6) {
+      return 25
     }
     if ((n - 3) % 2 === 0) {
       return 33.33
     }
-    if ((n - 4) % 2 === 0) {
-      return size === PictureChoiceSizes.medium ? 50 : 25
+    if (n % 3 === 0) {
+      return 33.33
     }
   }
   return (
     <li
-      className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center"
+      className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]"
       style={{
-        flexBasis: `calc(${getFlexBasis(choicesLength)}% - 12px)`,
+        flexBasis: `${getFlexBasis(choicesLength)}%`,
       }}
     >
       <StyledPictureChoiceItem
@@ -492,11 +484,11 @@ const PictureChoiceItem = ({
               <SvgRenderer
                 svgData={choice.picture}
                 // viewBox="-0.3 0 14.5 14"
-                width="48px"
-                height="48px"
+                width="50px"
+                height="50px"
               />
             ) : choice.pictureType === PictureTypes.EMOJI ? (
-              <img src={choice.picture} className="size-12 object-cover" />
+              <img src={choice.picture} className="size-[50px] object-cover" />
             ) : (
               <img
                 src={choice.picture}
@@ -572,6 +564,7 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   justify-content: center;
   position: relative;
   overflow: hidden;
+  border-radius: 15px;
 
   transition: transform 0.1s ease-in-out;
   transform: translateY(${({ isSelected }) => (isSelected ? -2 : 0)}px);
