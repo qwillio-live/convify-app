@@ -316,9 +316,9 @@ const StepItem = ({
                 />
               </div>
             ) : step.pictureType === PictureTypes.EMOJI ? (
-              <span className="step-picture-emoji text-[26px] leading-[28px]">
-                {step.picture as string}
-              </span>
+              <div className="step-picture-emoji flex size-7 items-center justify-center">
+                <span className="text-[26px]"> {step.picture as string}</span>
+              </div>
             ) : (
               <img
                 src={step.picture as string}
