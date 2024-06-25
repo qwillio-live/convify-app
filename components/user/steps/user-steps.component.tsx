@@ -63,7 +63,7 @@ export const StepsGen = ({
       }}
     >
       <ul
-        className="flex w-full flex-wrap items-center justify-center"
+        className="flex w-full flex-wrap justify-center gap-y-2"
         style={{
           fontFamily: `var(${fontFamily})`,
           maxWidth: StepsSizeValues[size || "medium"],
@@ -183,7 +183,7 @@ export const Steps = ({
         }}
       >
         <ul
-          className="flex w-full flex-wrap justify-center gap-y-4"
+          className="flex w-full flex-wrap justify-center gap-y-2"
           style={{
             fontFamily: `var(${fontFamily})`,
             maxWidth: StepsSizeValues[size || "medium"],
@@ -322,7 +322,7 @@ const StepItem = ({
             ) : (
               <img
                 src={step.picture as string}
-                className="step-picture-image size-7 object-fill"
+                className="step-picture-image size-7 object-contain"
               />
             )}
           </>
