@@ -23,6 +23,7 @@ export async function POST(
   }
 
   const userId = data.user.id
+  const userEmail = data.user.email
 
   try {
     const flow = await prisma.flow.findUnique({
@@ -48,6 +49,13 @@ export async function POST(
     const newFlow = await prisma.flow.create({
       data: newFlowData,
     });
+
+    await prisma.integration.create({
+      data: {
+        flowId: newFlow.id,
+        email: userEmail
+      },
+    })
     // flow.steps = flow.steps? flow.steps : {};
     //   const newFlowSteps = flow.steps.map(({ id, ...step }) => ({
     //     ...step,

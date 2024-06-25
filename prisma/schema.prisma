@@ -126,6 +126,8 @@ model Integration {
   isDeleted            Boolean?
   metaPixelAccessToken String?
   metaPixelId          String?
+  email                String?
+   
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 

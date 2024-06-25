@@ -57,7 +57,6 @@ export async function POST(
     const existingIntegration = await prisma.integration.findFirst({
       where: {
         flowId: String(flowId),
-        isDeleted: false,
       },
     })
 
@@ -124,7 +123,6 @@ export async function GET(
     const integration = await prisma.integration.findFirst({
       where: {
         flowId: String(flowId),
-        isDeleted: false,
       },
     })
     return NextResponse.json(integration)
