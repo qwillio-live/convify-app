@@ -238,7 +238,14 @@
       "Edit the link and let people know what your flow is about": "Edit the link and let people know what your flow is about.",
       "Available on these plans: Plus, Business, Enterprise": "Available on these plans: Plus, Business, Enterprise",
       "Upgrade my plan": "Upgrade my plan",
-      "My workspace": "My workspace"
+      "My workspace": "My workspace",
+      "Share your convify": "Share your convify",
+      "Embed your convify on desktop": "Embed your convify on desktop",
+      "Continue on desktop": "Continue on desktop",
+      "Email me a direct link": "Email me a direct link",
+      "Dismiss": "Dismiss",
+      "continue on desktop desc": "continue on desktop desc",
+      "Don't miss the full power of convify on desktop and embed directly on your site": "Don't miss the full power of convify on desktop and embed directly on your site"
     },
     "PictureChoice": {
       "icon": "Select Icons",
