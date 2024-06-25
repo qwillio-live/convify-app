@@ -309,13 +309,13 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
 CardContent.craft = {
   props: CardContentDefaultProps,
   displayName: "Card Content",
-  rules: {
-    canDrag: () => true,
-    canDrop: () => true,
-    canDragIn: () => true,
-    canDragOut: () => true,
-    isDeleteAble: () => true,
-  },
+  // rules: {
+  //   canDrag: () => true,
+  //   canDrop: () => true,
+  //   canDragIn: () => true,
+  //   canDragOut: () => true,
+  //   isDeleteAble: () => true,
+  // },
   related:{
     settings: CardContainerSettings
   }
@@ -375,10 +375,11 @@ export const Card = ({ children,backgroundColor ,...props }) => {
 Card.craft = {
   // props: CardContentDefaultProps,
   displayName: "Card",
-  rules: {
-    canDrag: () => true,
-    canDrop: () => true,
-    canDragIn: () => true,
-    canDragOut: () => true,
-  }
+  // rules: {
+  //   canDrag: () => true,
+  //   canDrop: () => true,
+  //   canDragIn: () => true,
+  //   canDragOut: () => true,
+  //   isDeleteAble: () => true,
+  // },
 };

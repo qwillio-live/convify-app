@@ -108,7 +108,6 @@ export function CreateFlowComponent() {
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
-
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])

@@ -59,6 +59,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const { id } = useNode()
   const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
   }))
@@ -108,11 +109,11 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   , [isSelected])
 
   useEffect(() => {
-    if(selectedComponent){
+    if(selectedComponent && selectedComponent !== "ROOT"){
       const child = document.getElementById(selectedComponent);
-      child?.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+      child?.scrollIntoView({behavior: "instant" as ScrollBehavior, block: "center", inline: "center"});
     }
-  }, [selectedComponent])
+  }, [mobileScreen])
 
   const router = useRouter();
   // console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
