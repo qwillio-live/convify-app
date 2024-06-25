@@ -206,7 +206,7 @@ type StyledLogoBarContainerProps = {
 const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
   width: 100%;
   height: auto;
-  padding: 0 10px;
+  padding: 0 16px;
   max-width: ${({ maxWidth }) => maxWidth};
   display: ${({ alignMobile, mobileScreen }) =>
     alignMobile && mobileScreen ? "grid" : "flex"};
