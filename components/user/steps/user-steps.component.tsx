@@ -295,7 +295,7 @@ const StepItem = ({
                 )}
                 {isFutureStep && (
                   <RadioGroup
-                    className="step-future-icon [&>button>span>svg]:size-5 [&>button]:size-7 [&>button]:border-none"
+                    className="step-future-icon [&>button>span>svg]:size-5 [&>button]:w-5 [&>button]:h-7 [&>button]:border-none -translate-x-[1px]"
                     value="check"
                   >
                     <RadioGroupItem value="check" />
@@ -318,12 +318,12 @@ const StepItem = ({
             ) : step.pictureType === PictureTypes.EMOJI ? (
               <img
                 src={step.picture as string}
-                className="step-picture-emoji size-7 object-contain"
+                className="step-picture-emoji size-7 object-fill"
               />
             ) : (
               <img
                 src={step.picture as string}
-                className="step-picture-image size-7 object-contain"
+                className="step-picture-image size-7 object-fill"
               />
             )}
           </>

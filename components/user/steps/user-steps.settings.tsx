@@ -400,7 +400,7 @@ export const StepsItemSettings = ({
         )}
         {isPresentStep && (
           <RadioGroup
-            className="step-present-icon [&>button>span>svg]:size-4 [&>button]:size-6 [&>button]:border-blue-500 [&>button]:text-blue-500"
+            className="step-present-icon [&>button>span>svg]:size-4 [&>button]:size-6"
             value="check"
           >
             <RadioGroupItem value="check" />
