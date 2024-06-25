@@ -78,336 +78,339 @@ export function FlowsList() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="hidden w-[144px] sm:table-cell">
-                      <span className="sr-only">Image</span>
-                    </TableHead>
-                    <TableHead>{t("Name")}</TableHead>
-                    <TableHead>{t("Status")}</TableHead>
-                    <TableHead>{t("Steps")}</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      {t("Responses")}
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      {t("Created at")}
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">{t("Actions")}</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Laser Lemonade Machine
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Draft</Badge>
-                    </TableCell>
-                    <TableCell>499</TableCell>
-                    <TableCell className="hidden md:table-cell">25</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-07-12 10:42
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
+              <div className="overflow-x-auto">
+                <Table className="min-w-full">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="hidden w-[144px] sm:table-cell">
+                        <span className="sr-only">Image</span>
+                      </TableHead>
+                      <TableHead>{t("Name")}</TableHead>
+                      <TableHead>{t("Status")}</TableHead>
+                      <TableHead>{t("Steps")}</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        {t("Responses")}
+                      </TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        {t("Created at")}
+                      </TableHead>
+                      <TableHead>
+                        <span className="sr-only">{t("Actions")}</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt="Product image"
+                          className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                          height="64"
+                          width="113"
+                          src={placeholder.src}
+                        />
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        Laser Lemonade Machine
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Draft</Badge>
+                      </TableCell>
+                      <TableCell>499</TableCell>
+                      <TableCell className="hidden md:table-cell">25</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        2023-07-12 10:42
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
                             >
-                              {t("Delete")}
+                              <MoreHorizontal className="size-4" />
+                              <span className="sr-only">Toggle menu</span>
                             </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      AeroGlow Desk Lamp
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>39</TableCell>
-                    <TableCell className="hidden md:table-cell">50</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-11-29 08:15
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="w-full justify-start"
+                              >
+                                {t("Delete")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt="Product image"
+                          className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                          height="64"
+                          width="113"
+                          src={placeholder.src}
+                        />
+                      </TableCell>
+                      <TableCell className="font-bold" style={{ overflowWrap: 'break-word', maxWidth: '100px' }}>
+                        Hypernova Headphones
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Active</Badge>
+                      </TableCell>
+                      <TableCell>129</TableCell>
+                      <TableCell className="hidden md:table-cell">100</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        2023-10-18 15:21
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
                             >
-                              {t("Delete")}
+                              <MoreHorizontal className="size-4" />
+                              <span className="sr-only">Toggle menu</span>
                             </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      TechTonic Energy Drink
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">Draft</Badge>
-                    </TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell className="hidden md:table-cell">0</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-12-25 23:59
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="w-full justify-start"
+                              >
+                                {t("Delete")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt="Product image"
+                          className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                          height="64"
+                          width="113"
+                          src={placeholder.src}
+                        />
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        AeroGlow Desk Lamp
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Active</Badge>
+                      </TableCell>
+                      <TableCell>39</TableCell>
+                      <TableCell className="hidden md:table-cell">50</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        2023-11-29 08:15
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
                             >
-                              {t("Delete")}
+                              <MoreHorizontal className="size-4" />
+                              <span className="sr-only">Toggle menu</span>
                             </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Gamer Gear Pro Controller
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>59</TableCell>
-                    <TableCell className="hidden md:table-cell">75</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2024-01-01 00:00
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="w-full justify-start"
+                              >
+                                {t("Delete")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt="Product image"
+                          className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                          height="64"
+                          width="113"
+                          src={placeholder.src}
+                        />
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        TechTonic Energy Drink
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">Draft</Badge>
+                      </TableCell>
+                      <TableCell>2</TableCell>
+                      <TableCell className="hidden md:table-cell">0</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        2023-12-25 23:59
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
                             >
-                              {t("Delete")}
+                              <MoreHorizontal className="size-4" />
+                              <span className="sr-only">Toggle menu</span>
                             </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Luminous VR Headset
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>199</TableCell>
-                    <TableCell className="hidden md:table-cell">30</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2024-02-14 14:14
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="w-full justify-start"
+                              >
+                                {t("Delete")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt="Product image"
+                          className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                          height="64"
+                          width="113"
+                          src={placeholder.src}
+                        />
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        Gamer Gear Pro Controller
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Active</Badge>
+                      </TableCell>
+                      <TableCell>59</TableCell>
+                      <TableCell className="hidden md:table-cell">75</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        2024-01-01 00:00
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
                             >
-                              {t("Delete")}
+                              <MoreHorizontal className="size-4" />
+                              <span className="sr-only">Toggle menu</span>
                             </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  {/* <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold " style={{ overflowWrap: 'break-word', maxWidth: '50px' }}>
-                      Hypernova Headphones
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>129</TableCell>
-                    <TableCell className="hidden md:table-cell">100</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-10-18 15:21
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="w-full justify-start"
+                              >
+                                {t("Delete")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt="Product image"
+                          className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                          height="64"
+                          width="113"
+                          src={placeholder.src}
+                        />
+                      </TableCell>
+                      <TableCell className="font-bold">
+                        Luminous VR Headset
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Active</Badge>
+                      </TableCell>
+                      <TableCell>199</TableCell>
+                      <TableCell className="hidden md:table-cell">30</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        2024-02-14 14:14
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
                             <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
                             >
-                              {t("Delete")}
+                              <MoreHorizontal className="size-4" />
+                              <span className="sr-only">Toggle menu</span>
                             </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow> */}
-                </TableBody>
-              </Table>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                            <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
+                            <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="w-full justify-start"
+                              >
+                                {t("Delete")}
+                              </Button>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
             {/* <CardFooter>
-              <div className="text-xs text-muted-foreground">
-                Showing <strong>1-10</strong> of <strong>32</strong> products
-              </div>
-            </CardFooter> */}
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of <strong>32</strong> products
+                  </div>
+                </CardFooter> */}
           </Card>
+
         </div>
       </main>
     </div>
