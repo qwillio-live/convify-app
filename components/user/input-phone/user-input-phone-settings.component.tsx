@@ -182,7 +182,7 @@ export const UserInputPhoneSettings = () => {
       "marginLeft",
       "marginTop",
       "marginRight",
-      "marginBottom",
+      "marginBottom"
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {

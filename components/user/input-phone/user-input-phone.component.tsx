@@ -208,8 +208,8 @@ interface StyledUserInputPhoneProps {
 }
 
 const convertToSvg = (svgBody) => {
-  return `<svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20" viewBox="-5 -5 24 24" width="45"
-  height="45">${svgBody}</svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20"viewBox="-4.5 -5.5 24 24" width="40.6"
+  height="40.6">${svgBody}</svg>`
 }
 
 const UserInputPhoneStyled = styled(Input)<StyledUserInputPhoneProps>`
@@ -240,7 +240,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
   const [uniqueId, setUniqueId] = useState("")
-  const [svgIcon, setSvgIcon] = useState("");
+  const [svgIcon, setSvgIcon] = useState("")
 
   useEffect(() => {
     const generateUniqueId = () => {
@@ -259,7 +259,6 @@ export const UserInputPhoneGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
-
 
   // const memoizedConvertToSvg = useCallback(() => {
   //   return convertToSvg(icons[icon]?.body);
@@ -372,7 +371,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                     __html: convertToSvg(icons[props.icon]?.body),
                   }}
                   style={{
-                    color: `${primaryTextColor}`,
+                    color: `#9CA3AF`,
                     // fontSize: "1.5rem",
                   }}
                 />
@@ -479,7 +478,6 @@ export const UserInputPhone = ({ ...props }) => {
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
   const [hover, setHover] = useState(false)
-
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
@@ -538,6 +536,36 @@ export const UserInputPhone = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
+
+  useEffect(() => {
+    const input = inputRef.current
+
+    const handleInput = (e: InputEvent) => {
+      const telRegex = /^[0-9\s\-()]*$/
+      if (!telRegex.test((e.target as HTMLInputElement).value)) {
+        e.preventDefault()
+        // Reset the input value to the previous valid value
+        if (input) {
+          input.value = props.inputValue
+        }
+      } else {
+        setProp((props) => {
+          props.inputValue = (e.target as HTMLInputElement).value
+          return { ...props }
+        }, 500)
+      }
+    }
+
+    if (input) {
+      input.addEventListener("input", handleInput)
+    }
+
+    return () => {
+      if (input) {
+        input.removeEventListener("input", handleInput)
+      }
+    }
+  }, [props.inputValue, setProp])
 
   return (
     <div
@@ -662,7 +690,7 @@ export const UserInputPhone = ({ ...props }) => {
                       __html: convertToSvg(icons[props.icon]?.body),
                     }}
                     style={{
-                      color: `${primaryTextColor}`,
+                      color: `#9CA3AF`,
                     }}
 
                     // className={cn(

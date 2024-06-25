@@ -25,7 +25,7 @@ const useInputPhoneThemePresets = () => {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#000",
+    textColor: "#9CA3AF",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
