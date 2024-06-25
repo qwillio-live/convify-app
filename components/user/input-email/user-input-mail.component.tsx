@@ -239,10 +239,9 @@ const UserInputMailStyled = styled(Input)<StyledUserInputMailProps>`
 `
 
 const convertToSvg = (svgBody) => {
-  return `<svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20"viewBox="-4.5 -5.5 24 24" width="40.6"
-  height="40.6">${svgBody}</svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20"viewBox="-4.5 -5.5 24 24" width="33.5"
+  height="33.5">${svgBody}</svg>`
 }
-
 
 export const UserInputMailGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
@@ -398,7 +397,8 @@ export const UserInputMailGen = ({ ...props }) => {
               onFocus={() => setIsActive(true)}
               className={cn(
                 {
-                  "font-semibold pt-8 px-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light": props.floatingLabel,
+                  "font-semibold pt-8 px-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light":
+                    props.floatingLabel,
                   "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
