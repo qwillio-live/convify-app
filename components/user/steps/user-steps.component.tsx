@@ -333,7 +333,7 @@ const StepItem = ({
           {!isLastStep && <hr className="w-full" />}
         </div>
       </div>
-      <div className="w-full max-w-[150px]">
+      <div className="w-full max-w-[200px]">
         <ContentEditable
           className="w-full text-enter text-lg text-center"
           disabled={disabled}
@@ -424,7 +424,7 @@ const StyledStepsItem = styled.div<StyledStepItemProps>`
   }
 
   & > div:last-child {
-    padding: 5px;
+    padding: 5px 10px;
     flex: 1;
     color: ${({ isFutureStep, selectedColor, disabledColor }) =>
       isFutureStep ? disabledColor : selectedColor};
