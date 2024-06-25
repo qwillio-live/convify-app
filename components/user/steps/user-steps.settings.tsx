@@ -115,7 +115,19 @@ export const StepsSettings = () => {
               axis="y"
               values={steps}
               className="flex w-full flex-col gap-2"
-              onReorder={(e) => handlePropChange("steps", e)}
+              onReorder={(e) => {
+                setProp((props) => {
+                  props.currentStep =
+                    currentStep < 0 || currentStep === steps.length
+                      ? currentStep
+                      : e.findIndex(
+                          (step: { id: string }) =>
+                            step.id === steps[currentStep]?.id
+                        )
+                  props.steps = e
+                  return props
+                })
+              }}
             >
               {steps.map((step, index) => (
                 <StepsItemSettings
@@ -331,6 +343,7 @@ export const StepsItemSettings = ({
   }, [originalStep])
 
   const handleItemDelete = () => {
+    if (index <= currentStep) setProp((props) => (props.currentStep -= 1), 200)
     setProp((props) => (props.steps = steps.filter((_, i) => i !== index)), 200)
   }
 
