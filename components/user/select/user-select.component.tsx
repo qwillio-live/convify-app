@@ -325,6 +325,16 @@ export const Select = ({
           paddingRight: `${marginRight}px`,
         }}
       >
+        <input
+          className="input-select"
+          data-field-name={fieldName}
+          data-value={
+            selectOptions.find((option) => option.id === selectedOptionId)
+              ?.value || ""
+          }
+          {...(required ? { required: true } : {})}
+          style={{ display: "none" }}
+        />
         <CustomSelect
           value={selectedOptionId}
           onValueChange={(value) =>
