@@ -50,8 +50,8 @@ export const LogoBarGen = ({
         minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
-        paddingLeft: `${marginLeft}px`,
-        paddingRight: `${marginRight}px`,
+        paddingLeft: `${marginLeft + 10}px`,
+        paddingRight: `${marginRight + 10}px`,
       }}
     >
       <StyledLogoBarContainer
@@ -159,8 +159,8 @@ export const LogoBar = ({
           maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft}px`,
-          paddingRight: `${marginRight}px`,
+          paddingLeft: `${marginLeft + 10}px`,
+          paddingRight: `${marginRight + 10}px`,
         }}
       >
         <StyledLogoBarContainer
@@ -206,7 +206,6 @@ type StyledLogoBarContainerProps = {
 const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
   width: 100%;
   height: auto;
-  padding: 0 16px;
   max-width: ${({ maxWidth }) => maxWidth};
   display: ${({ alignMobile, mobileScreen }) =>
     alignMobile && mobileScreen ? "grid" : "flex"};

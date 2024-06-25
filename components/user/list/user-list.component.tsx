@@ -62,8 +62,8 @@ export const ListGen = ({
         minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
-        paddingLeft: `${marginLeft}px`,
-        paddingRight: `${marginRight}px`,
+        paddingLeft: `${marginLeft + 10}px`,
+        paddingRight: `${marginRight + 10}px`,
       }}
     >
       <StyledListContainer
@@ -146,7 +146,7 @@ export const List = ({
     (state) => state.theme?.general?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  
+
   const debouncedSetProp = useCallback(
     debounce((property, value) => {
       setProp((prop) => {
@@ -209,8 +209,8 @@ export const List = ({
           maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft}px`,
-          paddingRight: `${marginRight}px`,
+          paddingLeft: `${marginLeft + 10}px`,
+          paddingRight: `${marginRight + 10}px`,
         }}
       >
         <StyledListContainer
