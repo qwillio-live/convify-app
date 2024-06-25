@@ -349,7 +349,7 @@ export function FlowsList() {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                  <TableRow>
+                  {/* <TableRow>
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
@@ -359,7 +359,7 @@ export function FlowsList() {
                         src={placeholder.src}
                       />
                     </TableCell>
-                    <TableCell className="font-bold " style={{ overflowWrap: 'break-word', maxWidth: '100px' }}>
+                    <TableCell className="font-bold " style={{ overflowWrap: 'break-word', maxWidth: '50px' }}>
                       Hypernova Headphones
                     </TableCell>
                     <TableCell>
@@ -398,7 +398,7 @@ export function FlowsList() {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
-                  </TableRow>
+                  </TableRow> */}
                 </TableBody>
               </Table>
             </CardContent>
