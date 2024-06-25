@@ -53,12 +53,23 @@
     "Navigate to screen": "Navigate to screen",
     "Next Screen": "Next Screen",
     "Picture Choice": "Picture Choice",
+    "Music": "Music",
+    "Video": "Video",
+    "Gallery": "Gallery",
     "List": "List",
     "Title": "Title",
     "Description": "Description",
     "Enter Description": "Enter Description",
     "Columns Mobile": "Columns Mobile",
     "Columns Desktop": "Columns Desktop",
+    "Streamlined Access": "Streamlined Access",
+    "Quick entry points to all features": "Quick entry points to all features",
+    "Customizable Interface": "Customizable Interface",
+    "Tailor your workspace to your needs": "Tailor your workspace to your needs",
+    "Rock-Solid Reliability": "Rock-Solid Reliability",
+    "Depend on consistent, uninterrupted service": "Depend on consistent, uninterrupted service",
+    "Behavioral Analytics": "Behavioral Analytics",
+    "Explore comprehensive user activity data": "Explore comprehensive user activity data",
     "Logo Bar": "Logo Bar",
     "Grayscale": "Grayscale",
     "Align": "Align",
@@ -244,7 +255,11 @@
       "iconNotFound": "No icons found.",
       "emoji": "Select Emoji",
       "image": "Select Image",
-      "remove": "Remove"
+      "remove": "Remove",
+      "source": "Source",
+      "custom": "Custom",
+      "Upload_original": "Upload original",
+      "Upload_crop": "Upload crop"
     }
   }
 }

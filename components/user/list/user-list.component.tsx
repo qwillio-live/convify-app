@@ -27,6 +27,7 @@ export const ListGen = ({
   descriptionFontFamily,
   size,
   textAlign,
+  verticalGap,
   iconColor,
   titleColor,
   descriptionColor,
@@ -66,10 +67,10 @@ export const ListGen = ({
       }}
     >
       <StyledListContainer
+        verticalGap={verticalGap}
         columnsDesktop={columnsDesktop}
         columnsMobile={columnsMobile}
         mobileScreen={false}
-        width={textAlign === "center" ? "100%" : "fit-content"}
         maxWidth={ListSizeValues[size || "medium"]}
       >
         {items.map((item, index) => (
@@ -96,6 +97,7 @@ export const List = ({
   descriptionFontFamily,
   size,
   textAlign,
+  verticalGap,
   iconColor,
   titleColor,
   descriptionColor,
@@ -144,7 +146,7 @@ export const List = ({
     (state) => state.theme?.general?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-
+  
   const debouncedSetProp = useCallback(
     debounce((property, value) => {
       setProp((prop) => {
@@ -212,10 +214,10 @@ export const List = ({
         }}
       >
         <StyledListContainer
+          verticalGap={verticalGap}
           columnsDesktop={columnsDesktop}
           columnsMobile={columnsMobile}
           mobileScreen={mobileScreen ?? false}
-          width={textAlign === "center" ? "100%" : "fit-content"}
           maxWidth={ListSizeValues[size || "medium"]}
         >
           {items.map((item, index) => (
@@ -318,10 +320,9 @@ const ListItem = ({
               height="40px"
             />
           ) : item.pictureType === PictureTypes.EMOJI ? (
-            <img
-              src={item.picture as string}
-              className="size-10 object-contain"
-            />
+            <span className="flex size-10 items-center justify-center text-[38px] leading-[40px]">
+              {item.picture as string}
+            </span>
           ) : (
             <img
               src={item.picture as string}
@@ -342,7 +343,7 @@ const ListItem = ({
         />
 
         <ContentEditable
-          className="w-fit max-w-full whitespace-break-spaces px-1 text-sm"
+          className="w-fit max-w-full gap-x-0 whitespace-break-spaces px-1 text-sm"
           style={{ wordBreak: "break-word" }}
           disabled={disabled}
           html={descriptionValue}
@@ -357,7 +358,7 @@ const ListItem = ({
 }
 
 type StyledListContainerProps = {
-  width: string
+  verticalGap: number
   columnsDesktop: number
   columnsMobile: number
   mobileScreen: boolean
@@ -365,10 +366,11 @@ type StyledListContainerProps = {
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
-  width: ${({ width }) => width};
+  width: 100%;
   max-width: ${({ maxWidth }) => maxWidth};
   display: grid;
-  gap: 40px;
+  column-gap: 40px;
+  row-gap: ${({ verticalGap }) => `${verticalGap}px`};
   grid-template-columns: repeat(
     ${({ columnsDesktop, columnsMobile, mobileScreen }) =>
       mobileScreen ? columnsMobile : columnsDesktop},
@@ -441,6 +443,7 @@ export type ListProps = {
   titleFontFamily: string
   descriptionFontFamily: string
   textAlign: string
+  verticalGap: number
   size: ListSizes
   iconColor: string
   titleColor: string
@@ -473,6 +476,7 @@ export const ListDefaultProps: ListProps = {
   titleFontFamily: "inherit",
   descriptionFontFamily: "inherit",
   textAlign: "start",
+  verticalGap: 20,
   size: ListSizes.medium,
   iconColor: "#3182ce",
   titleColor: "#000000",

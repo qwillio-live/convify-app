@@ -47,6 +47,7 @@ export const ListSettings = () => {
       titleFontFamily,
       descriptionFontFamily,
       size,
+      verticalGap,
       iconColor,
       titleColor,
       descriptionColor,
@@ -192,6 +193,25 @@ export const ListSettings = () => {
                 className="basis-1/3"
                 type={"color"}
                 id="backgroundcolor"
+              />
+            </div>
+
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+                <Label>{t("Vertical Gap")}</Label>
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
+                  {verticalGap}
+                </span>
+              </div>
+              <Slider
+                defaultValue={[verticalGap]}
+                value={[verticalGap]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) =>
+                  handlePropChangeDebounced("verticalGap", e)
+                }
               />
             </div>
 
@@ -499,7 +519,7 @@ export const ListItemSettings = ({
         />
         <div
           onPointerDown={(e) => controls.start(e)}
-          className="reorder-handle invisible hover:cursor-pointer"
+          className="reorder-handle invisible  hover:cursor-move"
         >
           <GripVertical className="text-muted-foreground size-4" />
         </div>

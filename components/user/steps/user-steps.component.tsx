@@ -295,7 +295,7 @@ const StepItem = ({
                 )}
                 {isFutureStep && (
                   <RadioGroup
-                    className="step-future-icon [&>button>span>svg]:size-5 [&>button]:w-5 [&>button]:h-7 [&>button]:border-none -translate-x-[1px]"
+                    className="step-future-icon -translate-x-[1px] [&>button>span>svg]:size-5 [&>button]:h-7 [&>button]:w-5 [&>button]:border-none"
                     value="check"
                   >
                     <RadioGroupItem value="check" />
@@ -316,10 +316,9 @@ const StepItem = ({
                 />
               </div>
             ) : step.pictureType === PictureTypes.EMOJI ? (
-              <img
-                src={step.picture as string}
-                className="step-picture-emoji size-7 object-fill"
-              />
+              <span className="step-picture-emoji text-[26px] leading-[28px]">
+                {step.picture as string}
+              </span>
             ) : (
               <img
                 src={step.picture as string}
@@ -335,7 +334,7 @@ const StepItem = ({
       </div>
       <div className="w-full max-w-[200px]">
         <ContentEditable
-          className="w-full text-enter text-lg text-center"
+          className="text-enter w-full text-center text-lg"
           disabled={disabled}
           html={textValue}
           onChange={(e) => {
@@ -429,6 +428,10 @@ const StyledStepsItem = styled.div<StyledStepItemProps>`
     color: ${({ isFutureStep, selectedColor, disabledColor }) =>
       isFutureStep ? disabledColor : selectedColor};
     font-weight: ${({ isPresentStep }) => (isPresentStep ? "bold" : "normal")};
+  }
+
+  & > div:last-child > div {
+    outline-color: ${({ selectedColor }) => selectedColor};
   }
 `
 

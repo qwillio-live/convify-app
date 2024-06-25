@@ -32,6 +32,9 @@ import icons from "@/constant/streamline.json"
 import { useInView } from "framer-motion"
 import EmojiPicker, { EmojiStyle, SuggestionMode } from "emoji-picker-react"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { Cropper, ReactCropperElement } from "react-cropper"
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs"
+import { Icons } from "./icons"
 
 export enum PictureTypes {
   NULL = "null",
@@ -58,11 +61,16 @@ export const PicturePicker = ({
 }) => {
   const t = useTranslations("CreateFlow")
   const imagePickerRef = useRef<HTMLInputElement>(null)
+  const imageCropperRef = useRef<ReactCropperElement>(null)
 
   const [iconPickerDialogOpen, setIconPickerDialogOpen] = useState(false)
   const [emojiPickerPopoverOpen, setEmojiPickerPopoverOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [iconPickerSearchQuery, setIconPickerSearchQuery] = useState("")
+  const [imageCropperDialogOpen, setImageCropperDialogOpen] = useState(false)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+
+  const [pickedImage, setPickedImage] = useState<string>("")
 
   const filteredIcons = useMemo(
     () =>
@@ -82,20 +90,75 @@ export const PicturePicker = ({
   }
 
   const handleEmojiChange = (emoji) => {
-    if (emoji.imageUrl) {
-      onChange(emoji.imageUrl, PictureTypes.EMOJI)
+    if (emoji.emoji) {
+      onChange(emoji.emoji, PictureTypes.EMOJI)
     }
     setEmojiPickerPopoverOpen(false)
   }
 
-  const handleImageChange = (e) => {
+  const handleImageInput = (e) => {
     const file = e.target.files[0]
-
     if (file) {
-      imageToDataURL(customImageSize, file).then((imageData) => {
-        onChange(imageData as string, PictureTypes.IMAGE)
-      })
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        if (imagePickerRef.current) imagePickerRef.current.value = ""
+        setPickedImage(reader.result as any)
+        setImageCropperDialogOpen(true)
+      }
+      reader.readAsDataURL(file)
     }
+
+    // const file = e.target.files[0]
+
+    // if (file) {
+    //   imageToDataURL(customImageSize, file).then((imageData) => {
+    //     onChange(imageData as string, PictureTypes.IMAGE)
+    //   })
+    // }
+  }
+
+  const handleImageUploadOriginal = () => {
+    if (pickedImage) {
+      imageCropperRef.current?.cropper.setAspectRatio(NaN)
+      imageCropperRef.current?.cropper.reset()
+      handleImageUploadCropped()
+    }
+  }
+
+  const handleImageUploadCropped = () => {
+    setIsUploadingImage(true)
+
+    if (typeof imageCropperRef.current?.cropper !== "undefined") {
+      handleImageChange(
+        imageCropperRef.current?.cropper
+          .getCroppedCanvas({
+            width: 512,
+            height: 512,
+          })
+          .toDataURL("image/wepg")
+      )
+
+      setImageCropperDialogOpen(false)
+    }
+    setIsUploadingImage(false)
+  }
+
+  const handleAspectRatioChange = (newAspectRatio) => {
+    if (newAspectRatio === "source") {
+      imageCropperRef.current?.cropper.setAspectRatio(
+        imageCropperRef.current?.cropper.getImageData().width /
+          imageCropperRef.current?.cropper.getImageData().height
+      )
+    } else if (newAspectRatio === "custom") {
+      imageCropperRef.current?.cropper.setAspectRatio(NaN)
+    } else {
+      const [width, height] = newAspectRatio.split(":")
+      imageCropperRef.current?.cropper.setAspectRatio(width / height)
+    }
+  }
+
+  const handleImageChange = (newImage) => {
+    onChange(newImage as string, PictureTypes.IMAGE)
   }
 
   const handlePictureRemove = () => {
@@ -137,80 +200,80 @@ export const PicturePicker = ({
 
   return (
     <div className={className}>
-      <Dialog
-        open={iconPickerDialogOpen}
-        onOpenChange={setIconPickerDialogOpen}
+      <Popover
+        open={emojiPickerPopoverOpen}
+        onOpenChange={setEmojiPickerPopoverOpen}
       >
-        <Popover
-          open={emojiPickerPopoverOpen}
-          onOpenChange={setEmojiPickerPopoverOpen}
-        >
-          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-            <DropdownMenuTrigger asChild>
-              <PopoverTrigger
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                }}
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <DropdownMenuTrigger asChild>
+            <PopoverTrigger
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+              }}
+            >
+              <div className="flex flex-row flex-wrap items-center gap-3">
+                <Button
+                  className={`border-input !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
+                  variant="ghost"
+                >
+                  <CloudUpload className="hidden size-4" />
+                  {pictureType === PictureTypes.NULL && picture}
+                  {pictureType === PictureTypes.ICON && (
+                    <SvgRenderer svgData={picture as string} />
+                  )}
+                  {pictureType === PictureTypes.EMOJI && (
+                    <span className="flex size-5 items-center justify-center text-[18px] leading-[20px]">
+                      {picture as string}
+                    </span>
+                  )}
+                  {pictureType === PictureTypes.IMAGE && (
+                    <img
+                      src={picture as string}
+                      className="size-5 object-contain"
+                    />
+                  )}
+                </Button>
+              </div>
+            </PopoverTrigger>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40">
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={() => setIconPickerDialogOpen(true)}>
+                <ThumbsUp className="mr-2 size-4" />
+                <span>{t("PictureChoice.icon")}</span>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => setEmojiPickerPopoverOpen(true)}>
+                <SmilePlus className="mr-2 size-4" />
+                <span>{t("PictureChoice.emoji")}</span>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() =>
+                  (imagePickerRef.current as HTMLInputElement)?.click()
+                }
               >
-                <div className="flex flex-row flex-wrap items-center gap-3">
-                  <Button
-                    className={`border-input !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
-                    variant="ghost"
-                  >
-                    <CloudUpload className="hidden size-4" />
-                    {pictureType === PictureTypes.NULL && picture}
-                    {pictureType === PictureTypes.ICON && (
-                      <SvgRenderer svgData={picture as string} />
-                    )}
-                    {(pictureType === PictureTypes.EMOJI ||
-                      pictureType === PictureTypes.IMAGE) && (
-                      <img
-                        src={picture as string}
-                        className="size-5 object-contain"
-                      />
-                    )}
-                  </Button>
-                </div>
-              </PopoverTrigger>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40">
-              <DropdownMenuGroup>
-                <DialogTrigger asChild>
-                  <DropdownMenuItem>
-                    <ThumbsUp className="mr-2 size-4" />
-                    <span>{t("PictureChoice.icon")}</span>
-                  </DropdownMenuItem>
-                </DialogTrigger>
+                <ImageIcon className="mr-2 size-4" />
+                <span>{t("PictureChoice.image")}</span>
+              </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onClick={() => setEmojiPickerPopoverOpen(true)}
-                >
-                  <SmilePlus className="mr-2 size-4" />
-                  <span>{t("PictureChoice.emoji")}</span>
-                </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={handlePictureRemove}
+                className="focus:bg-red-500 focus:text-white"
+              >
+                <Trash2 className="mr-2 size-4" />
+                <span>{t("PictureChoice.remove")}</span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-                <DropdownMenuItem
-                  onClick={() =>
-                    (imagePickerRef.current as HTMLInputElement)?.click()
-                  }
-                >
-                  <ImageIcon className="mr-2 size-4" />
-                  <span>{t("PictureChoice.image")}</span>
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handlePictureRemove}
-                  className="focus:bg-red-500 focus:text-white"
-                >
-                  <Trash2 className="mr-2 size-4" />
-                  <span>{t("PictureChoice.remove")}</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
+        <Dialog
+          open={iconPickerDialogOpen}
+          onOpenChange={setIconPickerDialogOpen}
+        >
           <DialogContent className="h-[70%] overflow-y-auto p-0 sm:max-h-[70%] sm:max-w-[80%]">
             <DialogHeader className="sticky top-0 z-10 bg-white px-8 pb-4 pt-10">
               <div className="flex items-center justify-start gap-4">
@@ -253,30 +316,94 @@ export const PicturePicker = ({
               )}
             </div>
           </DialogContent>
+        </Dialog>
 
-          <PopoverContent className="p-0">
-            <EmojiPicker
-              emojiStyle={EmojiStyle.NATIVE}
-              onEmojiClick={handleEmojiChange}
-              lazyLoadEmojis={true}
-              skinTonesDisabled={true}
-              width={280}
-              height={350}
-              suggestedEmojisMode={SuggestionMode.RECENT}
-              emojiVersion={"4.0"}
-              previewConfig={{ showPreview: false }}
-            />
-          </PopoverContent>
-
-          <Input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            ref={imagePickerRef}
-            onChange={handleImageChange}
+        <PopoverContent className="p-0">
+          <EmojiPicker
+            emojiStyle={EmojiStyle.NATIVE}
+            onEmojiClick={handleEmojiChange}
+            lazyLoadEmojis={true}
+            skinTonesDisabled={true}
+            width={280}
+            height={350}
+            suggestedEmojisMode={SuggestionMode.RECENT}
+            emojiVersion={"4.0"}
+            previewConfig={{ showPreview: false }}
           />
-        </Popover>
-      </Dialog>
+        </PopoverContent>
+
+        <Input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          ref={imagePickerRef}
+          onChange={handleImageInput}
+        />
+
+        <Dialog
+          open={imageCropperDialogOpen}
+          onOpenChange={setImageCropperDialogOpen}
+        >
+          <DialogContent className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8">
+            <Cropper
+              ref={imageCropperRef}
+              style={{
+                width: "100%",
+                height: "calc(100% - 56px)",
+              }}
+              initialAspectRatio={NaN}
+              guides={false}
+              autoCropArea={1}
+              src={pickedImage}
+              minCropBoxHeight={100}
+              minCropBoxWidth={100}
+              background={false}
+              highlight={true}
+              responsive={true}
+            />
+
+            <div className="flex items-center justify-between gap-4">
+              <Tabs
+                defaultValue={"custom"}
+                onValueChange={handleAspectRatioChange}
+              >
+                <TabsList className="flex">
+                  <TabsTrigger value="custom">{t("PictureChoice.custom")}</TabsTrigger>
+                  <TabsTrigger value="source">{t("PictureChoice.source")}</TabsTrigger>
+                  <TabsTrigger value="1:1">1:1</TabsTrigger>
+                  <TabsTrigger value="4:3">4:3</TabsTrigger>
+                  <TabsTrigger value="16:9">16:9</TabsTrigger>
+                  <TabsTrigger value="3:4">3:4</TabsTrigger>
+                  <TabsTrigger value="9:16">9:16</TabsTrigger>
+                </TabsList>
+              </Tabs>
+
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleImageUploadOriginal}
+                  variant="secondary"
+                  disabled={isUploadingImage}
+                >
+                  {isUploadingImage && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {t("PictureChoice.Upload_original")}
+                </Button>
+                <Button
+                  onClick={handleImageUploadCropped}
+                  className="bg-black text-white"
+                  disabled={isUploadingImage}
+                >
+                  {isUploadingImage && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {t("PictureChoice.Upload_crop")}
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </Popover>
     </div>
   )
 }

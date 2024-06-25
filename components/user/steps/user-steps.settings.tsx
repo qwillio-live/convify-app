@@ -442,7 +442,7 @@ export const StepsItemSettings = ({
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible hover:cursor-pointer"
+        className="reorder-handle invisible hover:cursor-move"
       >
         <GripVertical className="text-muted-foreground size-4" />
       </div>

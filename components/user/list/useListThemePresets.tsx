@@ -15,10 +15,10 @@ const useListThemePresets = () => {
   const defaultItems = [
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: icons["startup"].body,
+      picture: icons["graph-arrow-increase"].body,
       pictureType: PictureTypes.ICON,
-      title: `${t("Title")} 1`,
-      description: `${t("Description")}`,
+      title: t("Streamlined Access"),
+      description: t("Quick entry points to all features"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
@@ -26,25 +26,23 @@ const useListThemePresets = () => {
         icons["interface-edit-brush-2-brush-color-colors-design-paint-painting"]
           .body,
       pictureType: PictureTypes.ICON,
-      title: `${t("Title")} 2`,
-      description: `${t("Description")}`,
+      title: t("Customizable Interface"),
+      description: t("Tailor your workspace to your needs"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: icons["graph-arrow-increase"].body,
+      picture: icons["check"].body,
       pictureType: PictureTypes.ICON,
-      title: `${t("Title")} 3`,
-      description: `${t("Description")}`,
+      title: t("Rock-Solid Reliability"),
+      description: t("Depend on consistent, uninterrupted service"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
       picture:
-        icons[
-          "interface-pad-lock-shield-combination-combo-lock-locked-padlock-secure-security-shield-square"
-        ].body,
+        icons["interface-edit-binocular-binocular-binoculars-view-zoom"].body,
       pictureType: PictureTypes.ICON,
-      title: `${t("Title")} 4`,
-      description: `${t("Description")}`,
+      title: t("Behavioral Analytics"),
+      description: t("Explore comprehensive user activity data"),
     },
   ]
 
@@ -52,6 +50,7 @@ const useListThemePresets = () => {
     titleFontFamily: theme?.text?.primaryFont || "inherit",
     descriptionFontFamily: theme?.text?.secondaryFont || "inherit",
     textAlign: "start",
+    verticalGap: 20,
     size: ListSizes.medium,
     iconColor: theme?.general?.primaryColor || "#3182ce",
     titleColor: theme?.text?.primaryColor || "#000000",
@@ -78,6 +77,7 @@ const useListThemePresets = () => {
     titleFontFamily: theme?.text?.primaryFont || "inherit",
     descriptionFontFamily: theme?.text?.secondaryFont || "inherit",
     textAlign: "center",
+    verticalGap: 20,
     size: ListSizes.medium,
     iconColor: theme?.general?.primaryColor || "#3182ce",
     titleColor: theme?.text?.primaryColor || "#000000",

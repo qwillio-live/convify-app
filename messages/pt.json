@@ -53,12 +53,23 @@
     "Navigate to screen": "Navegue até a tela",
     "Next Screen": "Próxima tela",
     "Picture Choice": "Escolha de imagem",
+    "Music": "Música",
+    "Video": "Vídeo",
+    "Gallery": "Galeria",
     "List": "Lista",
     "Title": "Título",
     "Description": "Descrição",
     "Enter Description": "Insira a descrição",
     "Columns Mobile": "Colunas Móveis",
     "Columns Desktop": "Colunas da área de trabalho",
+    "Streamlined Access": "Acesso simplificado",
+    "Quick entry points to all features": "Pontos de entrada rápidos para todos os recursos",
+    "Customizable Interface": "Interface Personalizável",
+    "Tailor your workspace to your needs": "Adapte seu espaço de trabalho às suas necessidades",
+    "Rock-Solid Reliability": "Confiabilidade sólida",
+    "Depend on consistent, uninterrupted service": "Depende de serviço consistente e ininterrupto",
+    "Behavioral Analytics": "Análise Comportamental",
+    "Explore comprehensive user activity data": "Explorar dados abrangentes de atividades do usuário",
     "Logo Bar": "Barra de logotipo",
     "Grayscale": "Tons de cinza",
     "Align": "Alinhar",
@@ -244,7 +255,11 @@
       "iconNotFound": "Nenhum ícone encontrado.",
       "emoji": "Selecionar Emoji",
       "image": "Selecionar Imagem",
-      "remove": "Remover"
+      "remove": "Remover",
+      "source": "Fonte",
+      "custom": "Personalizado",
+      "Upload_original": "Carregar original",
+      "Upload_crop": "Carregar recorte"
     }
   }
 }

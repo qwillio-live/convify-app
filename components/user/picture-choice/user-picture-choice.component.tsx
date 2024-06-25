@@ -290,9 +290,9 @@ export const PictureChoice = ({
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
-          paddingTop: `${marginTop}px`,
+          paddingTop: `${marginTop + 10}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft}px`,
+          paddingLeft: `${marginLeft + 10}px`,
           paddingRight: `${marginRight}px`,
         }}
       >
@@ -487,11 +487,13 @@ const PictureChoiceItem = ({
                 height="50px"
               />
             ) : choice.pictureType === PictureTypes.EMOJI ? (
-              <img src={choice.picture} className="size-[50px] object-cover" />
+              <span className="flex size-[50px] items-center justify-center text-[48px] leading-[50px]">
+                {choice.picture}
+              </span>
             ) : (
               <img
                 src={choice.picture}
-                className="h-auto w-full object-cover"
+                className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
               />
             )}
           </div>
@@ -655,10 +657,16 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
 
     border-bottom-left-radius: 13px;
     border-bottom-right-radius: 13px;
-    transform: scale(1.01);
+
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    margin-bottom: -1px;
   }
 
   &:hover > div:last-child {
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    margin-bottom: -1px;
     border-top-color: ${({ hoverStyles }) => hoverStyles.textTopBorderColor};
     background-color: ${({ hoverStyles }) => hoverStyles.textBackgroundColor};
   }

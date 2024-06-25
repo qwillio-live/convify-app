@@ -415,7 +415,6 @@ export const LogoBarItemSettings = ({ item, index }) => {
   const controls = useDragControls()
 
   const inputRef = useRef<HTMLInputElement>(null)
-  const dialogRef = useRef<HTMLDivElement>(null)
   const cropperRef = useRef<ReactCropperElement>(null)
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false)
   const [image, setImage] = useState<string>(item.src)
@@ -519,15 +518,12 @@ export const LogoBarItemSettings = ({ item, index }) => {
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible hover:cursor-pointer"
+        className="reorder-handle invisible hover:cursor-move"
       >
         <GripVertical className="text-muted-foreground size-4" />
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent
-          className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8"
-          ref={dialogRef}
-        >
+        <DialogContent className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8">
           <Cropper
             ref={cropperRef}
             style={{
