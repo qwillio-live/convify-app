@@ -208,8 +208,8 @@ interface StyledUserInputPhoneProps {
 }
 
 const convertToSvg = (svgBody) => {
-  return `<svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 cursor-pointer" width="15"
-  height="15">${svgBody}</svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20" viewBox="-5 -5 24 24" width="45"
+  height="45">${svgBody}</svg>`
 }
 
 const UserInputPhoneStyled = styled(Input)<StyledUserInputPhoneProps>`
@@ -240,7 +240,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
   const [uniqueId, setUniqueId] = useState("")
-  const [iconHtml, setIconHtml] = useState("")
+  const [svgIcon, setSvgIcon] = useState("");
 
   useEffect(() => {
     const generateUniqueId = () => {
@@ -259,6 +259,15 @@ export const UserInputPhoneGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
+
+
+  // const memoizedConvertToSvg = useCallback(() => {
+  //   return convertToSvg(icons[icon]?.body);
+  // }, [icon]);
+
+  // useEffect(() => {
+  //   setSvgIcon(memoizedConvertToSvg());
+  // }, [memoizedConvertToSvg]);
 
   return (
     <div
@@ -364,6 +373,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   }}
                   style={{
                     color: `${primaryTextColor}`,
+                    // fontSize: "1.5rem",
                   }}
                 />
               </div>
@@ -654,6 +664,7 @@ export const UserInputPhone = ({ ...props }) => {
                     style={{
                       color: `${primaryTextColor}`,
                     }}
+
                     // className={cn(
                     //   `text-${props.primaryColor} bg-${props.backgroundColor}`
                     // )
