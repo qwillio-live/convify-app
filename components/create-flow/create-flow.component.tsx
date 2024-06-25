@@ -57,6 +57,7 @@ import ResolvedComponentsFromCraftState from "../user/settings/resolved-componen
 import { Checklist } from "../user/checklist/user-checklist.component"
 import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
+import { Steps } from "../user/steps/user-steps.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -181,6 +182,7 @@ export function CreateFlowComponent() {
           Image,
           PictureChoice,
           MultipleChoice,
+          Steps,
           Checklist,
           List,
           LogoBar,
@@ -297,6 +299,7 @@ export function CreateFlowComponent() {
           Image,
           PictureChoice,
           MultipleChoice,
+          Steps,
           Checklist,
           List,
           LogoBar,

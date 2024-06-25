@@ -1,5 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { MoveHorizontal, GripVertical, Trash2, Plus, Image } from "lucide-react"
+import React, { useCallback, useEffect, useState } from "react"
+import {
+  MoveHorizontal,
+  GripVertical,
+  Trash2,
+  Plus,
+  Image,
+  CircleCheck,
+  ArrowDown01,
+} from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
 
@@ -17,39 +25,27 @@ import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/custom-slider"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import {
-  useScreenNames,
-  useScreensLength,
-} from "@/lib/state/flows-state/features/screenHooks"
-import { RootState } from "@/lib/state/flows-state/store"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import hexoid from "hexoid"
-import { ListGen, ListPresets } from "./user-list.component"
-import { Card } from "@/components/ui/card"
-import useListThemePresets from "./useListThemePresets"
-import { Switch } from "@/components/ui/switch"
-import { Checkbox } from "@/components/custom-checkbox"
-import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/custom-select"
+  PicturePicker,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import icons from "@/constant/streamline.json"
+import { StepsStyles } from "./user-steps.component"
 
-export const ListSettings = () => {
+export const StepsSettings = () => {
   const t = useTranslations("Components")
 
   const {
     actions: { setProp },
     props: {
-      titleFontFamily,
-      descriptionFontFamily,
+      fontFamily,
       size,
-      iconColor,
-      titleColor,
-      descriptionColor,
+      selectedColor,
+      disabledColor,
       containerBackground,
       paddingLeft,
       paddingTop,
@@ -59,30 +55,15 @@ export const ListSettings = () => {
       marginTop,
       marginRight,
       marginBottom,
-      columnsDesktop,
-      columnsMobile,
-      flexDirection,
       fullWidth,
       settingTabs,
-      preset,
-      items,
+      style,
+      currentStep,
+      steps,
     },
   } = useNode((node) => ({
     props: node.data.props,
   }))
-
-  const { horizontalPreset, verticalPreset, defaultIcon, defaultItems } =
-    useListThemePresets()
-
-  const changePresetStyles = (preset) => {
-    const updatedStyles = ["preset", "textAlign", "flexDirection"]
-
-    setProp((props) => {
-      Object.keys(preset).forEach((key) => {
-        if (updatedStyles.includes(key)) props[key] = preset[key]
-      })
-    }, 1000)
-  }
 
   const throttledSetProp = useCallback(
     throttle((property, value) => {
@@ -110,10 +91,6 @@ export const ListSettings = () => {
     debouncedSetProp(property, value)
   }
 
-  const primaryColor = useAppSelector(
-    (state) => state?.theme?.general?.primaryColor
-  )
-
   return (
     <>
       <Accordion
@@ -136,14 +113,14 @@ export const ListSettings = () => {
 
             <Reorder.Group
               axis="y"
-              values={items}
+              values={steps}
               className="flex w-full flex-col gap-2"
-              onReorder={(e) => handlePropChange("items", e)}
+              onReorder={(e) => handlePropChange("steps", e)}
             >
-              {items.map((item, index) => (
-                <ListItemSettings
-                  key={`input-${item.id}`}
-                  item={item}
+              {steps.map((step, index) => (
+                <StepsItemSettings
+                  key={`step-${step.id}`}
+                  step={step}
                   index={index}
                   handlePropChangeDebounced={handlePropChangeDebounced}
                 />
@@ -154,14 +131,13 @@ export const ListSettings = () => {
               variant="secondary"
               size="sm"
               onClick={() =>
-                handlePropChange("items", [
-                  ...items,
+                handlePropChange("steps", [
+                  ...steps,
                   {
-                    id: `list-item-${hexoid(6)()}`,
-                    picture: defaultIcon,
-                    pictureType: PictureTypes.ICON,
-                    title: `${t("Title")} ${items.length + 1}`,
-                    description: `${t("Description")}`,
+                    id: `steps-${hexoid(6)()}`,
+                    picture: null,
+                    pictureType: PictureTypes.NULL,
+                    text: `${t("Step")} ${steps.length + 1}`,
                   },
                 ])
               }
@@ -178,6 +154,30 @@ export const ListSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
+                htmlFor="style"
+                className="basis-1/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {t("Style")}
+              </label>
+              <Tabs
+                value={style}
+                defaultValue={StepsStyles.icon}
+                onValueChange={(value) => debouncedSetProp("style", value)}
+                className="basis-2/3"
+              >
+                <TabsList className="grid w-full grid-cols-2 [&>button]:h-full">
+                  <TabsTrigger value={StepsStyles.icon}>
+                    <CircleCheck size={20} />
+                  </TabsTrigger>
+                  <TabsTrigger value={StepsStyles.number}>
+                    <ArrowDown01 size={20} />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
+            <div className="col-span-2 flex flex-row items-center space-x-2">
+              <label
                 htmlFor="backgroundcolor"
                 className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
@@ -192,44 +192,6 @@ export const ListSettings = () => {
                 className="basis-1/3"
                 type={"color"}
                 id="backgroundcolor"
-              />
-            </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label>{t("Columns Desktop")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {columnsDesktop}
-                </span>
-              </div>
-              <Slider
-                defaultValue={[columnsDesktop]}
-                value={[columnsDesktop]}
-                max={5}
-                min={1}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("columnsDesktop", e)
-                }
-              />
-            </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label>{t("Columns Mobile")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {columnsMobile}
-                </span>
-              </div>
-              <Slider
-                defaultValue={[columnsMobile]}
-                value={[columnsMobile]}
-                max={5}
-                min={1}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("columnsMobile", e)
-                }
               />
             </div>
           </AccordionContent>
@@ -337,79 +299,13 @@ export const ListSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="styles">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
-              <Card
-                onClick={() => {
-                  changePresetStyles(horizontalPreset)
-                }}
-                className="px-4 transition-all duration-300 hover:cursor-pointer"
-                style={{
-                  ...(preset === ListPresets.horizontal
-                    ? {
-                        border: `1px solid ${primaryColor}`,
-                      }
-                    : {}),
-                }}
-              >
-                <ListGen
-                  {...{
-                    ...horizontalPreset,
-                    columnsDesktop: 1,
-                    columnsMobile: 1,
-                    items: [
-                      {
-                        ...horizontalPreset.items[0],
-                        picture: defaultIcon,
-                        pictureType: PictureTypes.ICON,
-                      },
-                    ],
-                  }}
-                />
-              </Card>
-              <Card
-                onClick={() => {
-                  changePresetStyles(verticalPreset)
-                }}
-                className="p-0 transition-all duration-300 hover:cursor-pointer"
-                style={{
-                  ...(preset === ListPresets.vertical
-                    ? {
-                        border: `1px solid ${primaryColor}`,
-                      }
-                    : {}),
-                }}
-              >
-                <ListGen
-                  {...{
-                    ...verticalPreset,
-                    columnsDesktop: 1,
-                    columnsMobile: 1,
-                    items: [
-                      {
-                        ...verticalPreset.items[0],
-                        picture: defaultIcon,
-                        pictureType: PictureTypes.ICON,
-                      },
-                    ],
-                  }}
-                />
-              </Card>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
       </Accordion>
     </>
   )
 }
 
-export const ListItemSettings = ({
-  item: originalItem,
+export const StepsItemSettings = ({
+  step: originalStep,
   index,
   handlePropChangeDebounced,
 }) => {
@@ -419,45 +315,48 @@ export const ListItemSettings = ({
 
   const {
     actions: { setProp },
-    props: { items },
+    props: { steps, currentStep },
   } = useNode((node) => ({
     props: node.data.props,
   }))
 
-  const [item, setItem] = useState(originalItem)
+  const isPastStep = index < currentStep
+  const isPresentStep = index === currentStep
+  const isFutureStep = index > currentStep
+
+  const [step, setItem] = useState(originalStep)
 
   useEffect(() => {
-    setItem(originalItem)
-  }, [originalItem])
+    setItem(originalStep)
+  }, [originalStep])
 
   const handleItemDelete = () => {
-    setProp((props) => (props.items = items.filter((_, i) => i !== index)), 200)
+    setProp((props) => (props.steps = steps.filter((_, i) => i !== index)), 200)
   }
 
   const handlePictureChange = (picture, pictureType) => {
-    setItem({ ...item, picture, pictureType })
-    handlePropChangeDebounced("items", [
-      ...items.slice(0, index),
-      { ...item, picture, pictureType },
-      ...items.slice(index + 1),
+    setItem({ ...step, picture, pictureType })
+    handlePropChangeDebounced("steps", [
+      ...steps.slice(0, index),
+      { ...step, picture, pictureType },
+      ...steps.slice(index + 1),
     ])
   }
 
-  const handleItemTitleEdit = (newTitle) => {
-    setItem({ ...item, title: newTitle })
-    handlePropChangeDebounced("items", [
-      ...items.slice(0, index),
-      { ...item, title: newTitle },
-      ...items.slice(index + 1),
-    ])
+  const handleCurrentStepChange = () => {
+    if (isPastStep) setProp((props) => (props.currentStep = index - 1), 200)
+
+    if (isPresentStep) setProp((props) => (props.currentStep = index + 1), 200)
+
+    if (isFutureStep) setProp((props) => (props.currentStep = index), 200)
   }
 
-  const handleItemDescriptionEdit = (newDescription) => {
-    setItem({ ...item, description: newDescription })
-    handlePropChangeDebounced("items", [
-      ...items.slice(0, index),
-      { ...item, description: newDescription },
-      ...items.slice(index + 1),
+  const handleItemTextEdit = (newTitle) => {
+    setItem({ ...step, text: newTitle })
+    handlePropChangeDebounced("steps", [
+      ...steps.slice(0, index),
+      { ...step, text: newTitle },
+      ...steps.slice(index + 1),
     ])
   }
 
@@ -465,52 +364,74 @@ export const ListItemSettings = ({
     <Reorder.Item
       dragListener={false}
       dragControls={controls}
-      value={originalItem}
+      value={originalStep}
       transition={{ duration: 0 }}
-      id={`list-item-${originalItem.id}`}
+      id={`step-${originalStep.id}`}
       style={{ y }}
-      className="flex w-full select-none flex-col gap-2 [&>div>div>button>div>button>svg]:hover:visible [&>div>div]:hover:visible [&>div>svg]:hover:visible"
+      className="flex w-full select-none items-center gap-2 [&>div>button>div>button>svg]:hover:visible [&>div]:hover:visible [&>svg]:hover:visible"
     >
-      <div className="flex w-full items-center gap-2">
-        <PicturePicker
-          className="transition-all duration-100 ease-in-out"
-          picture={
-            item.pictureType === PictureTypes.NULL ? (
-              <Image className="text-muted-foreground invisible size-4" />
-            ) : (
-              item.picture
-            )
-          }
-          pictureType={item.pictureType}
-          customImageSize={256}
-          onChange={handlePictureChange}
-        />
+      <PicturePicker
+        className="transition-all duration-100 ease-in-out"
+        picture={
+          step.pictureType === PictureTypes.NULL ? (
+            <Image className="text-muted-foreground invisible size-4" />
+          ) : (
+            step.picture
+          )
+        }
+        pictureType={step.pictureType}
+        customImageSize={256}
+        onChange={handlePictureChange}
+      />
 
-        <Input
-          className="h-8 flex-1"
-          value={item.title}
-          placeholder={`${t("Title")} ${index + 1}`}
-          onChange={(e) => handleItemTitleEdit(e.target.value)}
-        />
+      <Button
+        variant="ghost"
+        className="h-fit rounded-full p-0 hover:bg-transparent"
+        onClick={handleCurrentStepChange}
+      >
+        {isPastStep && (
+          <div className="step-past-icon flex size-6 items-center justify-center rounded-full bg-green-500 text-white">
+            <SvgRenderer
+              svgData={icons["check-solid"].body}
+              width="16"
+              height="16"
+            />
+          </div>
+        )}
+        {isPresentStep && (
+          <RadioGroup
+            className="step-present-icon [&>button>span>svg]:size-4 [&>button]:size-6 [&>button]:border-blue-500 [&>button]:text-blue-500"
+            value="check"
+          >
+            <RadioGroupItem value="check" />
+          </RadioGroup>
+        )}
+        {isFutureStep && (
+          <RadioGroup
+            className="step-future-icon [&>button>span>svg]:size-4 [&>button>span]:hidden [&>button]:size-6 [&>button]:border-[#eaeaeb]"
+            value="check"
+          >
+            <RadioGroupItem value="check" />
+          </RadioGroup>
+        )}
+      </Button>
 
-        <Trash2
-          className="text-muted-foreground invisible size-3 hover:cursor-pointer"
-          onClick={handleItemDelete}
-        />
-        <div
-          onPointerDown={(e) => controls.start(e)}
-          className="reorder-handle invisible hover:cursor-pointer"
-        >
-          <GripVertical className="text-muted-foreground size-4" />
-        </div>
-      </div>
-      <div className="pl-10 pr-11">
-        <Input
-          className="h-8 flex-1 text-[#5a5a5a]"
-          value={item.description}
-          placeholder={`${t("Enter Description")}`}
-          onChange={(e) => handleItemDescriptionEdit(e.target.value)}
-        />
+      <Input
+        className="h-8 flex-1"
+        value={step.text}
+        placeholder={`${t("Step")} ${index + 1}`}
+        onChange={(e) => handleItemTextEdit(e.target.value)}
+      />
+
+      <Trash2
+        className="text-muted-foreground invisible size-3 hover:cursor-pointer"
+        onClick={handleItemDelete}
+      />
+      <div
+        onPointerDown={(e) => controls.start(e)}
+        className="reorder-handle invisible hover:cursor-pointer"
+      >
+        <GripVertical className="text-muted-foreground size-4" />
       </div>
     </Reorder.Item>
   )

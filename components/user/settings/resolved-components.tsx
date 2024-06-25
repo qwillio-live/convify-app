@@ -22,6 +22,7 @@ import { SelectGen } from "../select/user-select.component"
 import { ChecklistGen } from "../checklist/user-checklist.component"
 import { ListGen } from "../list/user-list.component"
 import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
+import { StepsGen } from "../steps/user-steps.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -39,6 +40,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
+  [CRAFT_ELEMENTS.STEPS]: StepsGen,
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,

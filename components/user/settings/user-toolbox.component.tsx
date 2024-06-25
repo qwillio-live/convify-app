@@ -14,6 +14,7 @@ import {
   Columns,
   Copy,
   Dice2,
+  Ellipsis,
   Facebook,
   Globe,
   GripVertical,
@@ -109,6 +110,8 @@ import useListThemePresets from "../list/useListThemePresets"
 import { List, ListGen } from "../list/user-list.component"
 import { PictureTypes } from "@/components/PicturePicker"
 import useLogoBarThemePresets from "../logo-bar/useLogoBarThemePresets"
+import useStepsThemePresets from "../steps/useStepsThemePresets"
+import { Steps, StepsGen } from "../steps/user-steps.component"
 
 function HelperInformation() {
   return (
@@ -201,6 +204,8 @@ export const UserToolbox = () => {
     defaultChoices: pictureChoiceDefaultChoices,
     defaultSelections: pictureChoiceDefaultSelections,
   } = usePictureChoiceThemePresets()
+
+  const { defaultPreset: stepsDefaultPreset } = useStepsThemePresets()
 
   const {
     horizontalPreset: listHorizontalPreset,
@@ -585,6 +590,27 @@ export const UserToolbox = () => {
                           className="size-full"
                         />
                       </div>
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      //@ts-ignore
+                      connectors.create(
+                        ref,
+                        //@ts-ignore
+                        <Steps {...stepsDefaultPreset} />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
+                  >
+                    <HoverCardComponent
+                      title={t("Steps")}
+                      icon={<Ellipsis className="mr-2 size-3" />}
+                    >
+                      <StepsGen {...stepsDefaultPreset} />
                     </HoverCardComponent>
                   </div>
 
