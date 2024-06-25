@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { templateId, status, previewImage, link ,name, flowSettings, steps, content} = reqBody
+  const { templateId, status, previewImage, link ,name, flowSettings} = reqBody
 
   if (!templateId) {
     const statusCode = 400
@@ -109,15 +109,12 @@ export async function POST(req: NextRequest) {
         link: link || "",
         numberOfSteps: templateSteps.length,
         numberOfResponses: 0,
-        content:content || "",
-        templateSettings: template.templateSettings || {},
-        steps: steps || templateSteps,
         userId,
       },
     })
 
     const flowId = flow.id
-    const flowSteps = steps || templateSteps.map((step) => ({
+    const flowSteps = templateSteps.map((step) => ({
       flowId,
       name: step.name,
       link: step.link,
