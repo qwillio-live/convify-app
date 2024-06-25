@@ -317,7 +317,9 @@ const StepItem = ({
               </div>
             ) : step.pictureType === PictureTypes.EMOJI ? (
               <div className="step-picture-emoji flex size-7 items-center justify-center">
-                <span className="text-[26px]"> {step.picture as string}</span>
+                <span className="translate-y-[1px] text-[26px]">
+                  {step.picture as string}
+                </span>
               </div>
             ) : (
               <img
@@ -358,7 +360,6 @@ type StyledStepItemProps = {
 const StyledStepsItem = styled.div<StyledStepItemProps>`
   min-width: 100px;
   flex: 1 1 auto;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;

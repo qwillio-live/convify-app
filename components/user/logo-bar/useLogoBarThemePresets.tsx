@@ -6,11 +6,11 @@ import {
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
 import { useTranslations } from "next-intl"
-import defaultLogo1 from "@/assets/images/logo-bar-default-logo-1.png"
-import defaultLogo2 from "@/assets/images/logo-bar-default-logo-2.png"
-import defaultLogo3 from "@/assets/images/logo-bar-default-logo-3.png"
-import defaultLogo4 from "@/assets/images/logo-bar-default-logo-4.png"
-import defaultLogoImage from "@/assets/images/logo-bar-default-logo.png"
+import defaultLogo1 from "@/assets/images/logo-bar-default-logo-1.svg"
+import defaultLogo2 from "@/assets/images/logo-bar-default-logo-2.svg"
+import defaultLogo3 from "@/assets/images/logo-bar-default-logo-3.svg"
+import defaultLogo4 from "@/assets/images/logo-bar-default-logo-4.svg"
+import defaultLogoImage from "@/assets/images/logo-bar-default-logo.svg"
 
 const useLogoBarThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
