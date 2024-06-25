@@ -136,7 +136,7 @@ const InsightsFlowComponents = () => {
           </TabsList>
         </div>
       </header>
-      <main className="content relative z-50 flex items-start bg-transparent px-0 lg:px-6">
+      <main className="content relative z-50 flex items-start bg-transparent px-0 lg:px-6 mt-2">
         <div className="tabs-content flex w-full items-center justify-start">
           <TabsContent
             className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
