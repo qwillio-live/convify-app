@@ -44,7 +44,7 @@ const IntegrationCard = ({
           <Image src={image} width={60} height={60} alt={alt} />
         </div>
         <div className="mt-2 md:mt-0 ml-0 md:ml-4 lg:ml-10 flex w-full items-center justify-between">
-          <div className="w-4/5 flex-col justify-start text-base font-normal text-black">
+          <div className=" w-full sm:w-3/5 flex-col justify-start text-base font-normal text-black">
             <div className="mb-1 flex items-center ">
               <h1 className="text-black dark:text-white">{t(title)}</h1>
               {status === "active" && (
