@@ -1,5 +1,6 @@
 import { Element, useNode } from '@/lib/craftjs';
 import { useAppSelector } from '@/lib/state/flows-state/hooks';
+import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import styled from 'styled-components';
@@ -18,7 +19,7 @@ interface CardOuterStyles {
   fullWidth: boolean;
   width: string;
   height: string;
-  background: string;
+  backgroundColor: string;
   color: string;
   marginLeft: string;
   marginTop: string;
@@ -48,11 +49,11 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   flex-basis: 100%;
   min-width: 100%;
   height: auto;
-  background: ${(props) => props.background};
+  background: ${(props) => props.backgroundColor};
   color: ${(props) => props.color};
-  padding-left: ${(props) => props.paddingLeft}px;
+  padding-left: 0;
   padding-top: ${(props) => props.paddingTop}px;
-  padding-right: ${(props) => props.paddingRight}px;
+  padding-right: 0;
   padding-bottom: ${(props) => props.paddingBottom}px;
   border-radius: ${(props) => props.radius};
   display: flex;
@@ -66,6 +67,7 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid;
   border-color: ${(props) => props.borderColor};
+  border-width: 0;
 `;
 
 interface CardInnerStyles {
@@ -95,7 +97,7 @@ const CardContentInner=styled.div<CardInnerStyles>`
   flex-direction: ${(props) => props.direction};
   flex: 1;
   align-items: ${(props) => props.alignItems};
-
+  border-width: 0;
   justify-content: ${(props) => props.justifyContent};
   flex-wrap: nowrap;
   gap: ${(props) => props.gap}px;
@@ -115,7 +117,7 @@ export const CardContentGen = ({ children, ...props }) => {
     fullWidth={props.fullWidth}
     width={props.width}
     height={props.height}
-    background={props.background}
+    backgroundColor={props.backgroundColor}
     color={props.color}
     marginLeft={props.marginLeft}
     marginTop={props.marginTop}
@@ -135,7 +137,7 @@ export const CardContentGen = ({ children, ...props }) => {
     overflowX={props.overflowX}
     gap={props.gap}
     border={props.border}
-    borderColor={props.borderColor}
+    borderColor={props.backgroundColor}
     >
     <CardContentInner
     size={props.size}
@@ -171,13 +173,15 @@ export const CardContent = ({ children, ...props }) => {
   return (
     <div
     ref={(ref: any) => connect(drag(ref))}
-    style={{ width: "100%", height: "100%" }}
-    className={`${isHovered ? 'border border-blue-500 border-dotted' : ''} border border-transparent relative`}>
+    {...props}
+    style={{ width: "100%", height: "100%", borderWidth: "0"}}
+    // className={`${isHovered ? 'border border-blue-500 border-dotted' : ''} border border-transparent relative`}
+    >
       <CardContentGen
           fullWidth={props.fullWidth}
           width={props.width}
           height={props.height}
-          background={props.background}
+          backgroundColor={props.backgroundColor}
           color={props.color}
           marginLeft={props.marginLeft}
           marginTop={props.marginTop}
@@ -204,7 +208,8 @@ export const CardContent = ({ children, ...props }) => {
           mobileJustifyContent={props.mobileJustifyContent}
     >
 
-      {children}
+        {children ? children : <div className='flex flex-col gap-2 justify-center items-center text-current opacity-50'><Plus size={32} /> Add blocks here</div>}
+        {/* {children} */}
     </CardContentGen>
     </div>
   );
@@ -226,7 +231,8 @@ export type CardContentDefaultPropsTypes= {
   fullWidth: boolean
   width: string
   height: string
-  background: string
+  backgroundColor: string
+  containerBackground: string
   color: string
   marginLeft: string
   marginTop: string
@@ -257,7 +263,8 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
     width: "400",
     height: "200",
-    background: "transparent",
+    backgroundColor: "transparent",
+    containerBackground: "transparent",
     color: "#000000",
     marginLeft: "2",
     marginTop: "2",
@@ -280,7 +287,7 @@ export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     overflowX: "hidden",
     gap: 20,
     border: 0,
-    borderColor: "inherit",
+    borderColor: "transparent",
     size: CardSizes.medium,
     settingsTab: "layout",
 }
@@ -301,23 +308,23 @@ CardContent.craft = {
 };
 
 const CardContainer = styled.div<{
-background: string;
+backgroundColor: string;
 }>`
-  background: ${({ background }) => background};
+  background: ${({ backgroundColor }) => `${backgroundColor}`};
   max-width: fit-content;
   width: 100%;
 `;
 export const CardGen = ({ children, ...props }) => {
   return(
    <div
-   style={{ width: "100%", height: "100%" }}
+   style={{ width: "100%", height: "100%", borderWidth: "0", borderColor: props.backgroundColor }}
    >
         {children}
     </div>
   )
 }
 
-export const Card = ({ children, ...props }) => {
+export const Card = ({ children,backgroundColor ,...props }) => {
   const [hover, setHover] = React.useState(false)
   const {
     actions: { setProp },
@@ -332,12 +339,13 @@ export const Card = ({ children, ...props }) => {
   return (
 
     <CardContainer
-      background={props.background}
-      className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col'
-      ref={(ref: any) => connect(drag(ref))}
+    ref={(ref: any) => connect(drag(ref))}
+      backgroundColor={props.backgroundColor}
+      className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col border-0'
+      {...props}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      style={{ minWidth: "100%", height: "100%" }}
+      style={{ minWidth: "100%", height: "100%", borderWidth: "0"}}
     >
       {hover && <Controller nameOfComponent={t("Container")} />}
       <Element

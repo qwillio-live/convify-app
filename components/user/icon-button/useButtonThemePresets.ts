@@ -79,7 +79,10 @@ const useButtonThemePresets = () => {
     buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-"+hexoid(6)().toLowerCase(),
-    nextScreen: '',
+    nextScreen: {
+      screenId: "",
+      screenName: "",
+    },
     buttonAction: "next-screen",
   };
 
@@ -151,7 +154,10 @@ const useButtonThemePresets = () => {
     buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-"+hexoid(6)().toLowerCase(),
-    nextScreen: '',
+    nextScreen: {
+      screenId: "",
+      screenName: "",
+    },
     buttonAction: "next-screen",
   };
 

@@ -4,7 +4,7 @@
 		"isCanvas": true,
 		"props": {
 			"padding": 5,
-			"background": "#ad2121",
+			"background": "transparent",
 			"expanded": "true",
 			"className": "min-h-[400px] min-w-full flex flex-col items-center py-5"
 		},

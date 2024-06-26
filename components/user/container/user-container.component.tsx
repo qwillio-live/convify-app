@@ -630,7 +630,7 @@ export const ContainerDefaultProps = {
   height: "200",
   minHeight: "200px",
   minWidth: "400px",
-  background: "inherit",
+  background: "transparent",
   color: "inherit",
   marginLeft: "2",
   marginTop: "2",
