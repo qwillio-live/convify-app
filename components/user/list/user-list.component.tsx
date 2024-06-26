@@ -318,7 +318,7 @@ const ListItem = ({
         {item.pictureType !== PictureTypes.NULL &&
           (item.pictureType === PictureTypes.ICON ? (
             <SvgRenderer
-              svgData={item.picture as string}
+              iconName={item.picture as string}
               // viewBox="-0.3 0 14.5 14"
               width="40px"
               height="40px"

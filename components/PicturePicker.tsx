@@ -92,7 +92,7 @@ export const PicturePicker = ({
   const handleIconChange = (iconName) => {
     const iconData = icons[iconName]?.body
     if (iconData) {
-      onChange(iconData, PictureTypes.ICON)
+      onChange(iconName, PictureTypes.ICON)
     }
     setIconPickerSearchQuery("")
     setIconPickerDialogOpen(false)
@@ -278,7 +278,7 @@ export const PicturePicker = ({
                   {pictureType === PictureTypes.NULL &&
                     (picture as React.ReactNode)}
                   {pictureType === PictureTypes.ICON && (
-                    <SvgRenderer svgData={picture as string} />
+                    <SvgRenderer iconName={picture as string} />
                   )}
                   {pictureType === PictureTypes.EMOJI && (
                     <span className="flex size-5 items-center justify-center text-[18px] leading-[20px]">
@@ -504,16 +504,17 @@ const IconRenderer = ({ iconName, onClick }) => {
 }
 
 export const SvgRenderer = ({
-  svgData,
+  iconName,
   viewBox,
   width,
   height,
 }: {
-  svgData: string
+  iconName: string
   viewBox?: string
   width?: string
   height?: string
 }) => {
+  const svgData = icons[iconName]?.body
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

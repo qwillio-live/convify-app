@@ -486,7 +486,7 @@ const PictureChoiceItem = ({
           >
             {choice.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
-                svgData={choice.picture}
+                iconName={choice.picture}
                 width="50px"
                 height="50px"
               />

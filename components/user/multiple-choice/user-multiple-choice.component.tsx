@@ -473,7 +473,7 @@ const MultipleChoiceItem = ({
 
         {choice.pictureType !== PictureTypes.NULL &&
           (choice.pictureType === PictureTypes.ICON ? (
-            <SvgRenderer svgData={choice.picture} width="24px" height="24px" />
+            <SvgRenderer iconName={choice.picture} width="24px" height="24px" />
           ) : choice.pictureType === PictureTypes.EMOJI ? (
             <span className="flex size-6 items-center justify-center text-[22px] leading-[24px]">
               {choice.picture}
