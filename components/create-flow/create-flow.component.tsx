@@ -10,7 +10,9 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React from "react"
+import React, { useCallback } from "react"
+import { throttle,debounce } from 'lodash';
+
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -119,16 +121,23 @@ export function CreateFlowComponent() {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
+  const debouncedSetEditorLoad = useCallback(
+    debounce((json) => {
+      dispatch(setEditorLoad(JSON.stringify(json)))
+    },1200),
+    [dispatch]
+  )
+  // React.useEffect(() => {
+  //   dispatch(resetScreensState())
+  // },[dispatch])
+
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
-          let jsonString = JSON.stringify(json)
-          // let editorLoadLength = Object.keys(editorLoad).length;
-          // if(jsonString !== editorLoad){
-          dispatch(setEditorLoad(JSON.stringify(json)))
+          debouncedSetEditorLoad(json)
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -255,56 +264,6 @@ export function CreateFlowComponent() {
               <SettingsPanel />
             </div>
           </ScrollArea>
-        </div>
-      </Editor>
-      <Editor
-              resolver={{
-                Controller,
-                Logo,
-                HeadlineText,
-                UserText,
-                UserButton,
-                ProgressBar,
-                Element,
-                Progress,
-                ButtonChoiceScreen,
-                ScreenHeader,
-                UserInput,
-                ScreenFooter,
-                ScreensList,
-                ScreenOneChoice,
-                // UserProgressBar,
-                ScreenOneInput,
-                Input,
-                Button,
-                ArrowRight,
-                Check,
-                Cross,
-                Facebook,
-                Github,
-                Globe,
-                Linkedin,
-                Container,
-                Card,
-                CardContent,
-                UserContainer,
-                IconButton,
-                DragDrop,
-                UserToolbox,
-                Image,
-                PictureChoice,
-                MultipleChoice,
-                LogoBar,
-                LogoBarItem,
-                LayoutContainer,
-                Loader,
-                List,
-                ListItem,
-              }}
-              onRender={RenderNode}
-      >
-        <div className="special-editor">
-        <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>
