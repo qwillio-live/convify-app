@@ -670,6 +670,8 @@ export const MultipleChoiceItemSettings = ({
             )
           }
           pictureType={choice.pictureType}
+          maxWidthMobile={400}
+          maxWidthDesktop={400}
           onChange={handlePictureChange}
         />
 

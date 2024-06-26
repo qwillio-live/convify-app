@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -491,10 +495,21 @@ const PictureChoiceItem = ({
                 {choice.picture}
               </span>
             ) : (
-              <img
-                src={choice.picture}
-                className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
-              />
+              <picture key={(choice.picture as ImagePictureTypes).original}>
+                <source
+                  media="(min-width:1080px)"
+                  srcSet={(choice.picture as ImagePictureTypes).desktop}
+                />
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(choice.picture as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(choice.picture as ImagePictureTypes).original}
+                  className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
+                  loading="lazy"
+                />
+              </picture>
             )}
           </div>
         )}
@@ -743,7 +758,7 @@ export type PictureChoiceProps = {
   selections: string[]
   choices: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     value: string
     buttonAction: string | null

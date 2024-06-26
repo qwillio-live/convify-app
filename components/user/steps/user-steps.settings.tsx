@@ -393,7 +393,8 @@ export const StepsItemSettings = ({
           )
         }
         pictureType={step.pictureType}
-        customImageSize={256}
+        maxWidthMobile={400}
+        maxWidthDesktop={400}
         onChange={handlePictureChange}
       />
 

@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -475,7 +479,21 @@ const MultipleChoiceItem = ({
               {choice.picture}
             </span>
           ) : (
-            <img src={choice.picture} className="size-6 object-contain" />
+            <picture key={(choice.picture as ImagePictureTypes).original}>
+              <source
+                media="(min-width:1080px)"
+                srcSet={(choice.picture as ImagePictureTypes).desktop}
+              />
+              <source
+                media="(min-width:560px)"
+                srcSet={(choice.picture as ImagePictureTypes).mobile}
+              />
+              <img
+                src={(choice.picture as ImagePictureTypes).original}
+                className="size-6 object-contain"
+                loading="lazy"
+              />
+            </picture>
           ))}
 
         <div className="flex-1 text-start">
@@ -705,7 +723,7 @@ export type MultipleChoiceProps = {
   selections: string[]
   choices: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     value: string
     buttonAction: string | null

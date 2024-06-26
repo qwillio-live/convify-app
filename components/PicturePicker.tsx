@@ -35,6 +35,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import { Cropper, ReactCropperElement } from "react-cropper"
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs"
 import { Icons } from "./icons"
+import axios from "axios"
 
 export enum PictureTypes {
   NULL = "null",
@@ -43,19 +44,27 @@ export enum PictureTypes {
   IMAGE = "image",
 }
 
+export type ImagePictureTypes = {
+  original: string | undefined
+  mobile: string | undefined
+  desktop: string | undefined
+}
+
 export const PicturePicker = ({
   className = "",
   picture,
   pictureType,
-  customImageSize,
+  maxWidthMobile,
+  maxWidthDesktop,
   onChange,
 }: {
   className?: string
-  picture: string | React.ReactNode
+  picture: ImagePictureTypes | string | React.ReactNode
   pictureType: PictureTypes
-  customImageSize?: number
+  maxWidthMobile: number
+  maxWidthDesktop: number
   onChange: (
-    picture: string | React.ReactNode,
+    picture: ImagePictureTypes | string | React.ReactNode,
     pictureType: PictureTypes
   ) => void
 }) => {
@@ -107,14 +116,34 @@ export const PicturePicker = ({
       }
       reader.readAsDataURL(file)
     }
+  }
 
-    // const file = e.target.files[0]
+  const calculateImageDimensions = (aspectRatio, maxWidth) => {
+    const height = Math.round(maxWidth / aspectRatio)
+    return {
+      width: maxWidth,
+      height: height,
+      dimension: `${maxWidth}x${height}`,
+    }
+  }
 
-    // if (file) {
-    //   imageToDataURL(customImageSize, file).then((imageData) => {
-    //     onChange(imageData as string, PictureTypes.IMAGE)
-    //   })
-    // }
+  const uploadToS3 = async (imageData, mobileDimension, desktopDimenstion) => {
+    const formData = new FormData()
+    formData.append("image", imageData)
+    formData.append("file", imageData)
+    formData.append("sizes[0]", mobileDimension)
+    formData.append("sizes[1]", desktopDimenstion)
+    formData.append("bucket_name", "convify-images")
+
+    try {
+      const response = await axios.post("/api/upload", formData)
+      return {
+        data: response.data,
+      }
+    } catch (error) {
+      console.error("Error uploading image to S3:", error)
+      return null
+    }
   }
 
   const handleImageUploadOriginal = () => {
@@ -125,22 +154,83 @@ export const PicturePicker = ({
     }
   }
 
-  const handleImageUploadCropped = () => {
+  const handleImageUploadCropped = async () => {
     setIsUploadingImage(true)
 
     if (typeof imageCropperRef.current?.cropper !== "undefined") {
-      handleImageChange(
-        imageCropperRef.current?.cropper
-          .getCroppedCanvas({
-            width: 512,
-            height: 512,
-          })
-          .toDataURL("image/wepg")
+      const aspectRatio =
+        imageCropperRef.current?.cropper.getImageData().width /
+        imageCropperRef.current?.cropper.getImageData().height
+
+      const mobileDimensions = calculateImageDimensions(
+        aspectRatio,
+        maxWidthMobile
+      )
+      const desktopDimenstions = calculateImageDimensions(
+        aspectRatio,
+        maxWidthDesktop
       )
 
+      const resizedImageData = imageCropperRef.current?.cropper
+        .getCroppedCanvas({
+          width: desktopDimenstions.width,
+          height: desktopDimenstions.height,
+        })
+        .toDataURL("image/webp")
+
+      let uploadedImage: ImagePictureTypes = {
+        original: resizedImageData,
+        mobile: undefined,
+        desktop: undefined,
+      }
+
+      handleImageChange({ ...uploadedImage })
+
+      const imageData = await new Promise((resolve) => {
+        imageCropperRef.current?.cropper
+          .getCroppedCanvas()
+          .toBlob(async (imageBlob) => {
+            resolve(imageBlob)
+          }, "image/wepg")
+      })
+
       setImageCropperDialogOpen(false)
+      setIsUploadingImage(false)
+
+      const uploadImageResponse = await uploadToS3(
+        imageData,
+        mobileDimensions.dimension,
+        desktopDimenstions.dimension
+      )
+
+      if (
+        uploadImageResponse &&
+        uploadImageResponse.data.data.images.original
+      ) {
+        uploadedImage.original = uploadImageResponse.data.data.images
+          .original as string
+      }
+
+      if (
+        uploadImageResponse &&
+        uploadImageResponse.data.data.images[mobileDimensions.dimension]
+      ) {
+        uploadedImage.mobile = uploadImageResponse.data.data.images[
+          mobileDimensions.dimension
+        ] as string
+      }
+
+      if (
+        uploadImageResponse &&
+        uploadImageResponse.data.data.images[desktopDimenstions.dimension]
+      ) {
+        uploadedImage.desktop = uploadImageResponse.data.data.images[
+          desktopDimenstions.dimension
+        ] as string
+      }
+
+      handleImageChange(uploadedImage)
     }
-    setIsUploadingImage(false)
   }
 
   const handleAspectRatioChange = (newAspectRatio) => {
@@ -165,39 +255,6 @@ export const PicturePicker = ({
     onChange(null, PictureTypes.NULL)
   }
 
-  const imageToDataURL = async (customSize, image) => {
-    const canvas = document.createElement("canvas")
-    canvas.width = customSize ?? 128
-    canvas.height = customSize ?? 128
-    const ctx = canvas.getContext("2d")
-    const img = new Image()
-    img.src = URL.createObjectURL(image)
-
-    const imageData = await new Promise((resolve) => {
-      img.onload = () => {
-        const imgRatio = img.width / img.height
-
-        if (imgRatio > 1) {
-          canvas.height /= imgRatio
-        } else {
-          canvas.width *= imgRatio
-        }
-
-        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-        canvas.toBlob((blob) => {
-          console.log(blob?.size)
-        })
-
-        const imageData = canvas.toDataURL("image/wepg")
-
-        resolve(imageData)
-      }
-    })
-
-    return imageData
-  }
-
   return (
     <div className={className}>
       <Popover
@@ -218,7 +275,8 @@ export const PicturePicker = ({
                   variant="ghost"
                 >
                   <CloudUpload className="hidden size-4" />
-                  {pictureType === PictureTypes.NULL && picture}
+                  {pictureType === PictureTypes.NULL &&
+                    (picture as React.ReactNode)}
                   {pictureType === PictureTypes.ICON && (
                     <SvgRenderer svgData={picture as string} />
                   )}
@@ -228,10 +286,20 @@ export const PicturePicker = ({
                     </span>
                   )}
                   {pictureType === PictureTypes.IMAGE && (
-                    <img
-                      src={picture as string}
-                      className="size-5 object-contain"
-                    />
+                    <picture>
+                      <source
+                        media="(min-width:1080px)"
+                        srcSet={(picture as ImagePictureTypes).desktop}
+                      />
+                      <source
+                        media="(min-width:560px)"
+                        srcSet={(picture as ImagePictureTypes).mobile}
+                      />
+                      <img
+                        src={(picture as ImagePictureTypes).original}
+                        className="size-5 object-contain"
+                      />
+                    </picture>
                   )}
                 </Button>
               </div>
@@ -368,8 +436,12 @@ export const PicturePicker = ({
                 onValueChange={handleAspectRatioChange}
               >
                 <TabsList className="flex">
-                  <TabsTrigger value="custom">{t("PictureChoice.custom")}</TabsTrigger>
-                  <TabsTrigger value="source">{t("PictureChoice.source")}</TabsTrigger>
+                  <TabsTrigger value="custom">
+                    {t("PictureChoice.custom")}
+                  </TabsTrigger>
+                  <TabsTrigger value="source">
+                    {t("PictureChoice.source")}
+                  </TabsTrigger>
                   <TabsTrigger value="1:1">1:1</TabsTrigger>
                   <TabsTrigger value="4:3">4:3</TabsTrigger>
                   <TabsTrigger value="16:9">16:9</TabsTrigger>

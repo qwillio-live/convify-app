@@ -11,6 +11,7 @@ import defaultLogo2 from "@/assets/images/logo-bar-default-logo-2.svg"
 import defaultLogo3 from "@/assets/images/logo-bar-default-logo-3.svg"
 import defaultLogo4 from "@/assets/images/logo-bar-default-logo-4.svg"
 import defaultLogoImage from "@/assets/images/logo-bar-default-logo.svg"
+import { ImagePictureTypes } from "@/components/PicturePicker"
 
 const useLogoBarThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
@@ -21,19 +22,19 @@ const useLogoBarThemePresets = () => {
   const defaultItems = [
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: defaultLogo1.src,
+      src: { original: defaultLogo1.src } as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: defaultLogo2.src,
+      src: { original: defaultLogo2.src } as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: defaultLogo3.src,
+      src: { original: defaultLogo3.src } as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: defaultLogo4.src,
+      src: { original: defaultLogo4.src } as ImagePictureTypes,
     },
   ]
 

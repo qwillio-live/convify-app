@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -243,7 +247,7 @@ const StepItem = ({
   style: StepsStyles
   step: {
     id: string
-    picture: string | null
+    picture: object | string | null
     pictureType: PictureTypes
     text: string
   }
@@ -322,10 +326,21 @@ const StepItem = ({
                 </span>
               </div>
             ) : (
-              <img
-                src={step.picture as string}
-                className="step-picture-image size-7 object-contain"
-              />
+              <picture key={(step.picture as ImagePictureTypes).original}>
+                <source
+                  media="(min-width:1080px)"
+                  srcSet={(step.picture as ImagePictureTypes).desktop}
+                />
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(step.picture as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(step.picture as ImagePictureTypes).original}
+                  className="step-picture-image size-7 object-contain"
+                  loading="lazy"
+                />
+              </picture>
             )}
           </>
         )}
@@ -468,7 +483,7 @@ export type StepsProps = {
   currentStep: number
   steps: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     text: string
   }[]

@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -280,7 +284,7 @@ const ListItem = ({
   flexDirection: string
   item: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     title: string
     description: string
@@ -324,10 +328,21 @@ const ListItem = ({
               {item.picture as string}
             </span>
           ) : (
-            <img
-              src={item.picture as string}
-              className="size-10 object-contain"
-            />
+            <picture key={(item.picture as ImagePictureTypes).original}>
+              <source
+                media="(min-width:1080px)"
+                srcSet={(item.picture as ImagePictureTypes).desktop}
+              />
+              <source
+                media="(min-width:560px)"
+                srcSet={(item.picture as ImagePictureTypes).mobile}
+              />
+              <img
+                src={(item.picture as ImagePictureTypes).original}
+                className="size-10 object-contain"
+                loading="lazy"
+              />
+            </picture>
           ))}
       </div>
       <div className="flex flex-1 flex-col justify-center gap-1">
@@ -465,7 +480,7 @@ export type ListProps = {
   preset: ListPresets
   items: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     title: string
     description: string
