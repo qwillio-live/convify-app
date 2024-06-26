@@ -49,7 +49,7 @@ const ConnectFlowComponents = () => {
   return (
     <div className="min-h-screen w-full">
       <div
-        className="mx-auto mt-8 flex w-full max-w-7xl flex-col items-center justify-center px-2 sm:px-4 lg:px-8"
+        className="mx-auto mt-8  flex lg:w-7/12 px-4 flex-col items-center justify-center"
       >
         <SearchBar search={search} setSearch={setSearch} />
         <div className="mt-10 flex w-full flex-col">
