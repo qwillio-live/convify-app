@@ -11,7 +11,7 @@ export default function CreateFlowsPage() {
         <div className="sticky top-0 z-[60]">
           <Header />
         </div>
-        <main className="content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full">
+        <main className="content border-t relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full">
           <ConnectFlowComponents />
         </main>
       </div>

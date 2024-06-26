@@ -20,6 +20,7 @@ import {
 const ShareFlowComponents = ({
   isPublished }) => {
   const [view, setView] = useState("desktop")
+  const [innerview, setInnerView] = useState("desktop")
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState("https://convify.app/your-link-here")
   const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
@@ -31,8 +32,10 @@ const ShareFlowComponents = ({
     if (window.innerWidth >= 1024) {
       setShareDrawerOpen(false)
       setView("desktop");
+      setInnerView("desktop")
     } else {
       setView("mobile");
+      setInnerView("mobile")
       setShareDrawerOpen(true)
     }
   };
@@ -46,7 +49,7 @@ const ShareFlowComponents = ({
   return (
     <div>
       {
-        view === "desktop" && (
+        innerview === "desktop" && (
           <div className="flex h-[calc(-52px+99vh)] flex-row items-start justify-between">
             <div className="relative flex h-full  w-64  flex-col overflow-hidden border-r border-[rgba(0,0,0,0.07)] bg-white">
               <nav className="grid items-start  text-sm font-medium ">
@@ -454,7 +457,6 @@ const ShareFlowComponents = ({
           </button>
         </div>
       )}
-
       <Drawer open={shareDrawerOpen} onOpenChange={setShareDrawerOpen}>
         <DrawerContent>
           <div className="p-4">

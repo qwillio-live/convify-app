@@ -12,7 +12,7 @@ export default function CreateFlowsPage() {
           <Header />
         </div>
         <main
-          className={`content relative overflow-hidden bg-[#FAFAFA] flex-1 h-full`}
+          className={`content border-t relative overflow-hidden bg-[#FAFAFA] flex-1 h-full`}
         >
           <ShareFlowComponents isPublished={true} />
         </main>

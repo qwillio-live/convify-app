@@ -39,7 +39,7 @@ export default function CreateFlowsPage() {
           <Header />
         </div>
         <main
-          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 ${tab === "results" ? "" : tab === "share" ? "" : ""
+          className={`content relative border-t z-50 overflow-hidden bg-[#FAFAFA] flex-1 ${tab === "results" ? "" : tab === "share" ? "" : ""
             }`}
         >
           <div className="tabs-content">

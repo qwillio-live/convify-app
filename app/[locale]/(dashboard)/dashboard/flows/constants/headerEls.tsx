@@ -33,7 +33,7 @@ const Header = () => {
     );
 
     return (
-        <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
+        <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
                 <div className="flex h-14 items-center lg:h-[60px]">
                     <BreadCrumbs />
