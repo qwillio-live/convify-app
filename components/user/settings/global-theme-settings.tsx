@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 
-import { setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { setHeaderPosition, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import {
@@ -14,15 +14,15 @@ import {
 import ImageUpload from "@/components/ui/image-upload"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Select,
+
+import { FontSelector } from "./font-selector.component"
+import {   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
-import { FontSelector } from "./font-selector.component"
+  SelectValue,SelectGroup } from "@/components/custom-select"
+import { applyHeaderPosition } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
+import { updateHeaderPosition } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 type Props = {}
 
@@ -57,6 +57,10 @@ export const GlobalThemeSettings = (props: Props) => {
   )
   const defaultBackgroundColor = useAppSelector(
     (state) => state.theme?.defaultGeneral?.backgroundColor
+  )
+
+  const headerPosition = useAppSelector(
+    (state) => state.theme?.header?.headerPosition
   )
 
   /** TEXT STYLES */
@@ -158,6 +162,36 @@ export const GlobalThemeSettings = (props: Props) => {
               <span className="text-sm font-medium">{t("General")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
+                <label
+                  htmlFor="headerscroll"
+                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {t("Header Scroll")}
+                </label>
+                <Select
+                  defaultValue={headerPosition || "relative"}
+                  value={headerPosition || "relative"}
+                  onValueChange={(e) => {
+                    dispatch(setHeaderPosition(e)),
+                    dispatch(updateHeaderPosition(e))
+                }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Header scroll" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                    <SelectItem value={"fixed"}>
+                      Fixed
+                    </SelectItem>
+                    <SelectItem value={"relative"}>
+                      Scroll
+                    </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="primarycolor"

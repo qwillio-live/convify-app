@@ -12,8 +12,9 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json";
 export type ScreenFieldType = {
   fieldId: string;
   fieldName: string;
-  fieldValue: string | number | boolean | any;
+  fieldValue: string | number | boolean | any | null | undefined;
   fieldRequired: boolean;
+  toggleError: boolean;
 }
 
 export type ScreenFieldsObject = {
@@ -25,6 +26,7 @@ export type ScreenType = {
   screenName: string;
   screenData: any;
   screenFields: ScreenFieldsObject | {};
+  screenValidated: boolean | null | undefined;
 };
 
 export interface ScreensState {
@@ -55,32 +57,22 @@ const initialState: ScreensState = {
       screenId: "1",
       screenName: "button-choice",
       screenData: JSON.stringify(buttonChoiceData),
-      screenFields: {
-        "field1" : {
-          fieldId: "123",
-  fieldName: 'Random field name',
-  fieldValue: "This is a value",
-  fieldRequired: false
-        },
-        "field2" : {
-          fieldId: "123",
-  fieldName: 'Random second field name',
-  fieldValue: "This second is a value",
-  fieldRequired: false
-        }
-      }
+      screenFields: {},
+      screenValidated: false
     },
     {
       screenId: "2",
       screenName: "one-choice",
       screenData: JSON.stringify(oneChoiceData),
-      screenFields: {}
+      screenFields: {},
+      screenValidated: false
     },
     {
       screenId: "3",
       screenName: "one-input",
       screenData: JSON.stringify(oneInputData),
-      screenFields: {}
+      screenFields: {},
+      screenValidated: false
     },
   ],
   screensFooter: JSON.stringify(footerScreenData),
@@ -94,6 +86,49 @@ export const screensSlice = createSlice({
   reducers: {
     setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload;
+    },
+    updateHeaderPosition: (state, action: PayloadAction<string>) => {
+      console.log("UPDATE HEADER POSITION: ", action.payload)
+    },
+    addField: (state, action: PayloadAction<ScreenFieldType>) => {
+      // console.log("Add field");
+      const selectedScreen = state.selectedScreen;
+      const field = action.payload;
+      const screenFields = state.screens[selectedScreen].screenFields;
+      screenFields[field.fieldId] = field;
+      state.screens[selectedScreen].screenFields = screenFields;
+    },
+    removeField: (state,action: PayloadAction<string>) => {
+      const selectedScreen = state.selectedScreen;
+      const fieldId = action.payload;
+      const screenFields = state.screens[selectedScreen].screenFields;
+
+      delete screenFields[fieldId];
+      state.screens[selectedScreen].screenFields = screenFields;
+    },
+    setFieldProp: (state,action: PayloadAction<{fieldId: string, fieldName: string, fieldValue: any}>) => {
+      const selectedScreen = state.selectedScreen;
+      const { fieldId, fieldName, fieldValue } = action.payload;
+      const screenFields = state.screens[selectedScreen].screenFields;
+      const field = screenFields[fieldId];
+      if (field) {
+        field[fieldName] = fieldValue;
+        screenFields[fieldId] = field;
+        state.screens[selectedScreen].screenFields = screenFields;
+      }
+    },
+    validateScreen: (state, action: PayloadAction<number>) => {
+      const screen = state.screens[action.payload];
+      const screenFields = screen.screenFields as ScreenFieldsObject;
+      let screenValidated = true;
+      Object.values(screenFields).forEach((field: ScreenFieldType) => {
+        if (field.fieldRequired && !field.fieldValue) {
+          field.toggleError = true;
+          screenValidated = false;
+        }
+      });
+      state.screens[action.payload].screenValidated = screenValidated;
+      state.screens[action.payload].screenFields = screenFields;
     },
     resetScreensState: (state) => {
       state.selectedScreen = 0;
@@ -166,7 +201,7 @@ export const screensSlice = createSlice({
       const newScreens = [...state.screens]; // Create new array
       const screenName = "screen-"+newId;
       newScreens.splice(action.payload + 1, 0,
-        {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData),screenFields:{}});
+        {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData),screenFields:{},screenValidated:false});
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
@@ -177,7 +212,8 @@ export const screensSlice = createSlice({
         screenId: hexoid(8)(),
         screenName: "",
         screenData: "",
-        screenFields: {}
+        screenFields: {},
+        screenValidated: false
       }
       newScreen.screenData = state.screens[action.payload].screenData; // Create new object
       newScreen.screenName = "screen-"+newScreen.screenId;
@@ -233,6 +269,11 @@ export const screensSlice = createSlice({
 
 export const {
   setSelectedComponent,
+  removeField,
+  updateHeaderPosition,
+  addField,
+  validateScreen,
+  setFieldProp,
   rollScreens,
   navigateToScreen,
   setHeaderMode,

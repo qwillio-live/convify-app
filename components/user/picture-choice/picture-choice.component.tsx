@@ -265,18 +265,6 @@ export const PictureChoice = ({
 
 },[pictureItems,nextScreenName])
 
-  useEffect(() => {
-    console.log("FIELDS ARE: ", JSON.stringify(screenFields));
-    for(const field in screenFields){
-      console.log("FIELD IS: ", screenFields[field].fieldName);
-    }
-    // if(screenFields){
-    //   screenFields?.map((item) => {
-    //     console.log("ITEM IS: ", item.fieldName);
-    //   })
-    // }
-  },[])
-
   const [editable, setEditable] = useState(false)
   useEffect(() => {
     if (selected) {

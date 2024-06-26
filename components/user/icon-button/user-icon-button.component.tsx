@@ -44,7 +44,7 @@ import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButton
 import { useTranslations } from "next-intl";
 import { track } from "@vercel/analytics/react";
 import { RootState } from "@/lib/state/flows-state/store";
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { navigateToScreen, validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
@@ -141,9 +141,11 @@ export const IconButtonGen = ({
   ...props
 }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const pathName = usePathname();
   const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
+    dispatch(validateScreen(0))
+    router.push(`${pathName}#${nextScreen?.screenName}`);
   };
   return (
     <div className="w-full relative" style={{
@@ -157,7 +159,7 @@ export const IconButtonGen = ({
     paddingLeft: `${props.marginLeft}px`,
     paddingRight: `${props.marginRight}px`,
      }}>
-<Link href={`${pathName}#${nextScreen}`} className="contents">
+{/* <Link href={`${pathName}#${nextScreen}`} className="contents"> */}
 <StyledCustomButton
         fontFamily={fontFamily?.value}
         color={color.value}
@@ -187,7 +189,7 @@ export const IconButtonGen = ({
         mobileScreen={false}
         {...props}
         className="text-[1rem]"
-        onClick={() => console.log("Button clicked", text)}
+        onClick={() => handleNavigateToContent()}
       >
       <div style={{
       maxWidth: '100%',
@@ -197,7 +199,7 @@ export const IconButtonGen = ({
     }}>{text}</div>
       {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
     </StyledCustomButton>
-    </Link>
+    {/* </Link> */}
     </div>
   )
 }
@@ -492,6 +494,7 @@ const placeCaretAtEnd = (element) => {
     throttledSetProp(property,value);
   };
   const handleNavigateToScreen =async () => {
+    dispatch(validateScreen(selectedScreen));
     return;
     // dispatch(navigateToScreen(nextScreen));
       // if(screens){

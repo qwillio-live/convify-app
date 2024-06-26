@@ -22,7 +22,7 @@ import {
 
 import { Controller } from "../settings/controller.component"
 
-const UserContainerGenInner = styled.div`
+const UserContainerGenInner= styled.div<{position: string}>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,7 +33,7 @@ const UserContainerGenInner = styled.div`
   box-shadow: none;
   flex: 1;
   background-color: "#000000";
-  display: flex;
+  position: ${(props) => props.position};
   overflow-y: hidden;
   overflow-x: hidden;
   gap: 0px;
@@ -61,6 +61,7 @@ export const UserContainerGen = ({
   fillSpace,
   alignItems,
   justifyContent,
+  containerType,
   flexWrap,
   children,
   overflowY,
@@ -72,6 +73,7 @@ export const UserContainerGen = ({
 }) => {
   return (
     <UserContainerGenInner
+      position={containerType === "header" ? "fixed" : "relative"}
     // {...props}
     // style={{
     //   width: `${width}px`,
@@ -120,6 +122,7 @@ export const UserContainer = ({
   marginLeft,
   marginTop,
   marginRight,
+  containerType,
   marginBottom,
   paddingLeft,
   paddingTop,
@@ -165,6 +168,7 @@ export const UserContainer = ({
           height: `${height}px`,
           backgroundColor: `${backgroundColor}`,
           backgroundImage: `${backgroundImage}`,
+          position: containerType === "header" ? "fixed" : "relative",
           color: `${color}`,
           marginLeft: `${marginLeft}px`,
           marginTop: `${marginTop}px`,
@@ -624,6 +628,10 @@ export const UserContainerSettings = () => {
   )
 }
 
+
+{
+  // container type can be container | header | footer
+}
 export const ContainerDefaultProps = {
   padding: 40,
   width: "400",
@@ -631,6 +639,7 @@ export const ContainerDefaultProps = {
   minHeight: "200px",
   minWidth: "400px",
   background: "transparent",
+  containerType: "container",
   color: "inherit",
   marginLeft: "2",
   marginTop: "2",
@@ -672,7 +681,7 @@ export const Container = ({ ...props }) => {
   }))
   return (
     <div
-      className="relative border border-dashed border-transparent transition-all duration-200"
+      className="border border-dashed border-transparent transition-all duration-200 fixed"
       // {...props}
       // ref={(ref: any) => ref && connect(drag(ref))}
     >

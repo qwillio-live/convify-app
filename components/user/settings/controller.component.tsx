@@ -2,7 +2,7 @@ import { useEditor } from "@/lib/craftjs"
 import { GripHorizontal, GripVertical, Trash2 } from "lucide-react"
 import React from "react"
 import { Move } from "lucide-react"
-import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 
 export const Controller = ({ nameOfComponent }) => {
@@ -17,6 +17,7 @@ export const Controller = ({ nameOfComponent }) => {
         selected = {
           id: currentNodeId,
           name: state.nodes[currentNodeId].data.name,
+          fieldType: state.nodes[currentNodeId]?.data?.props.fieldType || 'design',
           settings:
             state.nodes[currentNodeId].related &&
             state.nodes[currentNodeId].related.settings,
@@ -51,7 +52,10 @@ export const Controller = ({ nameOfComponent }) => {
         <button
           onClick={() => {
             actions.delete(selected.id),
-            dispatch(setSelectedComponent("ROOT"))
+            dispatch(setSelectedComponent("ROOT"));
+            if(selected.fieldType === 'data') {
+              dispatch(removeField(selected.id))
+            }
           }}
           className="hover:cursor-pointer"
         >

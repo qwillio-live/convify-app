@@ -236,7 +236,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {<SaveButton />}
+              {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
