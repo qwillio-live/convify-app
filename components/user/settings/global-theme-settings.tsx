@@ -165,7 +165,7 @@ export const GlobalThemeSettings = (props: Props) => {
             <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="headerscroll"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 whitespace-nowrap text-nowrap font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Header Scroll")}
                 </label>
