@@ -362,12 +362,10 @@ export const MultipleChoice = ({
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
               onValueChange={(updatedValue) => {
-                handlePropChangeDebounced(
-                  "choices",
-                  choices.map((choice, i) =>
-                    i === index ? { ...choice, value: updatedValue } : choice
-                  )
-                )
+                setProp((props) => {
+                  props.choices[index].value = updatedValue
+                  return props
+                }, 200)
               }}
               onSelectChange={() => {
                 if (multiSelect) {

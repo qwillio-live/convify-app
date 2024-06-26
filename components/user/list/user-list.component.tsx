@@ -236,22 +236,14 @@ export const List = ({
               flexDirection={flexDirection}
               item={item}
               onTitleChange={(updatedTitle) => {
-                handlePropChangeDebounced(
-                  "items",
-                  items.map((item, i) =>
-                    i === index ? { ...item, title: updatedTitle } : item
-                  )
-                )
+                setProp((prop) => {
+                  prop.items[index].title = updatedTitle
+                }, 200)
               }}
               onDescriptionChange={(updatedDescription) => {
-                handlePropChangeDebounced(
-                  "items",
-                  items.map((item, i) =>
-                    i === index
-                      ? { ...item, description: updatedDescription }
-                      : item
-                  )
-                )
+                setProp((prop) => {
+                  prop.items[index].description = updatedDescription
+                }, 200)
               }}
             />
           ))}

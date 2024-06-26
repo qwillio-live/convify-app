@@ -207,12 +207,9 @@ export const Steps = ({
               step={step}
               index={index}
               onTextChange={(updatedText) =>
-                handlePropChangeDebounced(
-                  "steps",
-                  steps.map((s, i) =>
-                    i === index ? { ...s, text: updatedText } : s
-                  )
-                )
+                setProp((prop) => {
+                  prop.steps[index].text = updatedText
+                }, 200)
               }
             />
           ))}
