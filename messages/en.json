@@ -116,7 +116,11 @@
     "Add Screen" : "Add Screen",
     "Duplicate" : "Duplicate",
     "Right-Click" : "Right Click",
-    "Click on a screen to edit it" : "Click on a screen to edit it"
+    "Click on a screen to edit it" : "Click on a screen to edit it",
+    "Header Scroll" : "Header Scroll",
+    "Fixed" : "Fixed",
+    "Scroll" : "Scroll",
+    "Add blocks here" : "Add blocks here"
   },
   "CreateFlow": {
     "Create": "Create",

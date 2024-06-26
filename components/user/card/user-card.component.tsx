@@ -180,6 +180,7 @@ export const CardContent = ({ children, ...props }) => {
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const t = useTranslations("Components")
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
   const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent);
   return (
@@ -222,7 +223,7 @@ export const CardContent = ({ children, ...props }) => {
           mobileJustifyContent={props.mobileJustifyContent}
     >
 
-        {children ? children : <div className='flex flex-col gap-2 justify-center items-center text-current opacity-50'><Plus size={32} /> Add blocks here</div>}
+        {children ? children : <div className='flex flex-col gap-2 justify-center items-center text-current opacity-50'><Plus size={32} /> {t("Add blocks here")}</div>}
         {/* {children} */}
     </CardContentGen>
     </div>

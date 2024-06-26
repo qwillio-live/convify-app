@@ -183,10 +183,10 @@ export const GlobalThemeSettings = (props: Props) => {
                   <SelectContent>
                     <SelectGroup>
                     <SelectItem value={"fixed"}>
-                      Fixed
+                      {t("Fixed")}
                     </SelectItem>
                     <SelectItem value={"relative"}>
-                      Scroll
+                      {t("Scroll")}
                     </SelectItem>
                     </SelectGroup>
                   </SelectContent>
