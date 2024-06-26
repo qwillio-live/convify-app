@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
     const templates = await prisma.template.findMany({
       where: {
         isActive: true,
+        language: 'en',
       },
     })
     return NextResponse.json(templates)

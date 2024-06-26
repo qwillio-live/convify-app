@@ -258,7 +258,13 @@ export const IconButtonSettings = () => {
                           screenId: nextScreenId,
                           screenName: nextScreenName
                         } ))
-                      } else {
+                      } else if( e === "none") {
+                        setProp((props) => (props.buttonAction = "none" ))
+                        setProp((props) => (props.nextScreen = {
+                          screenId: "none",
+                          screenName: ""
+                        }))
+                      }else {
                         setProp((props) => (props.buttonAction = "custom-action" ))
                         setProp((props) => (props.nextScreen = {
                           screenId: e,
@@ -274,6 +280,9 @@ export const IconButtonSettings = () => {
                     <SelectGroup>
                     <SelectItem value={"next-screen"}>
                       Next Screen
+                    </SelectItem>
+                    <SelectItem value={"none"}>
+                      Do Nothing
                     </SelectItem>
                     {
                       screenNames?.map((screen,index) => {
@@ -304,7 +313,7 @@ export const IconButtonSettings = () => {
                   {t("Background Color")}
                 </label>
                 <Input
-                  defaultValue={themeBackgroundColor}
+                  defaultValue={"#fff"}
                   value={containerBackground}
                   onChange={(e) => {
                     debouncedSetProp("containerBackground",e.target.value)

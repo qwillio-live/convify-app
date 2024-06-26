@@ -10,4 +10,3 @@ export const useScreenNames = () => {
 export const useScreensLength = () => {
   return useAppSelector((state: RootState) => selectScreenNames(state)?.length);
 }
-
