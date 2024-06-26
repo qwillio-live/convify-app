@@ -32,3 +32,8 @@ jobs:
         if: github.ref == 'refs/heads/dev/shahzaib'
         run: |
           curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6ImYxNmI2YWI3LWUxZmQtNDYyMC04NmY0LTg4ZjY2ZTAwYThiYyIsImFwcE5hbWUiOiJjb252aWZ5LXNoYWh6YWliIiwibmFtZXNwYWNlIjoiY2FwdGFpbiJ9LCJpYXQiOjE3MTU2MDUwOTd9.Gp7sQutylR0SgStgmErpCwBhyjDHim8OtiJu1eCe-BM"
+
+      - name: Trigger Webhook for dev/shahzaib
+        if: github.ref == 'refs/heads/dev/dawood'
+        run: |
+          curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6IjE1MTI2Nzg3LTliNmItNDcxNS1hYTFkLWU0NTgwN2IyOTNmMyIsImFwcE5hbWUiOiJjb252aWZ5LWRhd29vZCIsIm5hbWVzcGFjZSI6ImNhcHRhaW4ifSwiaWF0IjoxNzE4NjQwNzc4fQ.ynCE4TUZ2V8bcUz2sHAXbenFUNqN1DX3uzRrngU-Jhw"

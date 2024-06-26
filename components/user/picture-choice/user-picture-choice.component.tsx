@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
-import { MultipleChoiceSettings } from "./user-multiple-choice.settings"
+import { PictureChoiceSettings } from "./user-picture-choice.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
@@ -15,28 +15,20 @@ import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-const MultipleChoiceSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+const PictureChoiceSizeValues = {
+  small: "400px",
+  medium: "800px",
+  large: "1200px",
   full: "100%",
 }
 
-const MultipleChoiceMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
-
-export const MultipleChoiceGen = ({
+export const PictureChoiceGen = ({
   disabled = false,
   fontFamily,
   size,
   label,
   required,
   fieldName,
-  layout,
   labelColor,
   containerBackground,
   paddingLeft,
@@ -50,7 +42,6 @@ export const MultipleChoiceGen = ({
   settingTabs,
   multiSelect,
   checkboxVisible,
-  contentReversed,
   preset,
   defaultStyles,
   hoverStyles,
@@ -61,6 +52,10 @@ export const MultipleChoiceGen = ({
   ...props
 }) => {
   const [selectedChoices, setSelectedChoices] = useState(selections)
+
+  useEffect(() => {
+    setSelectedChoices(selections)
+  }, [selections])
 
   return (
     <div
@@ -80,41 +75,37 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <ul
-        className="flex w-full flex-col items-center justify-center"
+      <div
+        className="w-full p-1 text-center"
         style={{
-          gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
+          color: labelColor,
           fontFamily: `var(${fontFamily?.value})`,
-          maxWidth: MultipleChoiceSizeValues[size || "nedium"],
+          maxWidth: PictureChoiceSizeValues[size || "small"],
         }}
       >
-        <div
-          className="w-full p-1 text-center"
-          style={{
-            color: labelColor,
-            fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: MultipleChoiceSizeValues[size || "small"],
-          }}
-        >
-          <label>{label}</label>
-        </div>
-        {choices.map((choice, index) => (
-          <MultipleChoiceItem
+        <label>{label}</label>
+      </div>
+      <ul
+        className="flex w-full flex-wrap justify-center"
+        style={{
+          fontFamily: `var(${fontFamily?.value})`,
+          maxWidth: PictureChoiceSizeValues[size || "medium"],
+        }}
+      >
+        {choices?.map((choice, index) => (
+          <PictureChoiceItem
             key={index}
             isFirst={index === 0}
             isLast={index === choices.length - 1}
-            isCollapsed={layout === MultipleChoiceLayouts.collapsed}
-            isSelected={selectedChoices.includes(choice.id)}
-            isPreviousSelected={
-              index > 0 && selections.includes(choices[index - 1].id)
-            }
+            isSelected={selectedChoices?.includes(choice.id)}
+            size={size}
             required={required}
             tracking={tracking}
+            choicesLength={choices.length}
             choice={choice}
             fieldName={fieldName}
             multiSelect={multiSelect}
             checkboxVisible={checkboxVisible}
-            contentReversed={contentReversed}
             defaultStyles={defaultStyles}
             hoverStyles={hoverStyles}
             selectedStyles={selectedStyles}
@@ -143,13 +134,12 @@ export const MultipleChoiceGen = ({
   )
 }
 
-export const MultipleChoice = ({
+export const PictureChoice = ({
   fontFamily,
   size,
   label: originalLabel,
   required,
   fieldName,
-  layout,
   labelColor,
   labelBorderColor,
   containerBackground,
@@ -164,7 +154,6 @@ export const MultipleChoice = ({
   settingTabs,
   multiSelect,
   checkboxVisible,
-  contentReversed,
   preset,
   defaultStyles,
   hoverStyles,
@@ -185,7 +174,7 @@ export const MultipleChoice = ({
   }))
 
   const [label, setLabel] = useState(originalLabel)
-  const [hover, setHover] = React.useState(false)
+  const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
 
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -222,32 +211,35 @@ export const MultipleChoice = ({
 
   useEffect(() => {
     const updatedStyles = {
-      [MultipleChoicePresets.filled]: [
-        ["hoverStyles", "iconColor"],
-        ["hoverStyles", "textColor"],
-        ["hoverStyles", "borderColor"],
-        ["selectedStyles", "borderColor"],
-        ["selectedStyles", "backgroundColor"],
-      ],
-      [MultipleChoicePresets.semifilled]: [
-        ["hoverStyles", "checkBoxIconColor"],
-        ["hoverStyles", "checkboxBorderColor"],
+      [PictureChoicePresets.outlined]: [
+        ["defaultStyles", "iconColor"],
         ["hoverStyles", "iconColor"],
         ["hoverStyles", "borderColor"],
-        ["selectedStyles", "checkboxBorderColor"],
-        ["selectedStyles", "checkBoxBackgroundColor"],
+        ["selectedStyles", "backgroundColor", 0.05],
         ["selectedStyles", "iconColor"],
         ["selectedStyles", "borderColor"],
         ["selectedStyles", "backgroundColor", 0.1],
       ],
-      [MultipleChoicePresets.outlined]: [
+      [PictureChoicePresets.semifilled]: [
+        ["hoverStyles", "checkBoxIconColor"],
         ["hoverStyles", "checkboxBorderColor"],
         ["hoverStyles", "iconColor"],
+        ["hoverStyles", "textTopBorderColor"],
+        ["hoverStyles", "textBackgroundColor"],
         ["hoverStyles", "borderColor"],
         ["selectedStyles", "checkboxBorderColor"],
         ["selectedStyles", "checkBoxBackgroundColor"],
         ["selectedStyles", "iconColor"],
+        ["selectedStyles", "textTopBorderColor"],
+        ["selectedStyles", "textBackgroundColor"],
         ["selectedStyles", "borderColor"],
+      ],
+      [PictureChoicePresets.filled]: [
+        ["defaultStyles", "iconColor"],
+        ["hoverStyles", "borderColor"],
+        ["hoverStyles", "backgroundColor"],
+        ["selectedStyles", "borderColor"],
+        ["selectedStyles", "backgroundColor"],
       ],
     }
 
@@ -260,7 +252,7 @@ export const MultipleChoice = ({
       Object.keys(updatedStyles).forEach((key) => {
         if (preset === key) {
           updatedStyles[key].forEach(([style, field, alpha]) => {
-            props[style][field].value = alpha
+            props[style][field] = alpha
               ? rgba(primaryColor || "#3182ce", alpha)
               : primaryColor
           })
@@ -286,7 +278,7 @@ export const MultipleChoice = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Multiple Choice")} />}
+      {hover && <Controller nameOfComponent={t("Picture Choice")} />}
       <div
         className="relative w-full"
         style={{
@@ -298,9 +290,9 @@ export const MultipleChoice = ({
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
-          paddingTop: `${marginTop}px`,
+          paddingTop: `${marginTop + 10}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft}px`,
+          paddingLeft: `${marginLeft + 10}px`,
           paddingRight: `${marginRight}px`,
         }}
       >
@@ -308,9 +300,7 @@ export const MultipleChoice = ({
           className="w-full p-1 text-center"
           style={{
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: mobileScreen
-              ? MultipleChoiceMobileSizeValues[size || "small"]
-              : MultipleChoiceSizeValues[size || "small"],
+            maxWidth: PictureChoiceSizeValues[size || "medium"],
           }}
         >
           <ContentEditable
@@ -328,32 +318,26 @@ export const MultipleChoice = ({
           />
         </div>
         <ul
-          className="flex w-full flex-col items-center justify-center"
+          className="flex w-full flex-wrap justify-center"
           style={{
-            gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: mobileScreen
-              ? MultipleChoiceMobileSizeValues[size || "medium"]
-              : MultipleChoiceSizeValues[size || "nedium"],
+            maxWidth: PictureChoiceSizeValues[size || "medium"],
           }}
         >
           {choices.map((choice, index) => (
-            <MultipleChoiceItem
+            <PictureChoiceItem
               key={index}
               isFirst={index === 0}
               isLast={index === choices.length - 1}
-              isCollapsed={layout === MultipleChoiceLayouts.collapsed}
               isSelected={selections.includes(choice.id)}
-              isPreviousSelected={
-                index > 0 && selections.includes(choices[index - 1].id)
-              }
               required={required}
               tracking={tracking}
+              size={size}
+              choicesLength={choices.length}
               choice={choice}
               fieldName={fieldName}
               multiSelect={multiSelect}
               checkboxVisible={checkboxVisible}
-              contentReversed={contentReversed}
               defaultStyles={defaultStyles}
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
@@ -394,19 +378,18 @@ export const MultipleChoice = ({
   )
 }
 
-const MultipleChoiceItem = ({
+const PictureChoiceItem = ({
   isFirst,
   isLast,
-  isCollapsed,
   isSelected,
-  isPreviousSelected,
+  size,
+  choicesLength,
   choice,
   fieldName,
   required,
   tracking,
   multiSelect,
   checkboxVisible,
-  contentReversed,
   defaultStyles,
   hoverStyles,
   selectedStyles,
@@ -420,17 +403,39 @@ const MultipleChoiceItem = ({
     setChoiceValue(choice.value)
   }, [choice.value])
 
+  const getFlexBasis = (n) => {
+    if (size === PictureChoiceSizes.small) {
+      return 50
+    }
+    if (n === 1) {
+      return 100
+    }
+    if (n === 7 || n == 11) {
+      return 25
+    }
+    if (n === 2) {
+      return 50
+    }
+    if ((n - 4) % 2 === 0 && n !== 6) {
+      return 25
+    }
+    if ((n - 3) % 2 === 0) {
+      return 33.33
+    }
+    if (n % 3 === 0) {
+      return 33.33
+    }
+  }
   return (
-    <li className="w-full">
-      <StyledMultipleChoiceItem
-        isFirst={isFirst}
-        isLast={isLast}
-        isCollapsed={isCollapsed}
+    <li
+      className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]"
+      style={{
+        flexBasis: `${getFlexBasis(choicesLength)}%`,
+      }}
+    >
+      <StyledPictureChoiceItem
         isSelected={isSelected}
-        isPreviousSelected={isPreviousSelected}
-        contentReversed={contentReversed}
-        borderTopRounded={isCollapsed ? isFirst : true}
-        borderBottomRounded={isCollapsed ? isLast : true}
+        pictureType={choice.pictureType}
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
@@ -448,7 +453,7 @@ const MultipleChoiceItem = ({
           {...(required ? { required: true } : {})}
           style={{ display: "none" }}
         />
-        <div>
+        <div className="absolute right-1 top-1">
           {checkboxVisible &&
             (multiSelect ? (
               checkboxVisible && (
@@ -467,18 +472,33 @@ const MultipleChoiceItem = ({
             ))}
         </div>
 
-        {choice.pictureType !== PictureTypes.NULL &&
-          (choice.pictureType === PictureTypes.ICON ? (
-            <SvgRenderer svgData={choice.picture} width="24px" height="24px" />
-          ) : choice.pictureType === PictureTypes.EMOJI ? (
-            <span className="flex size-6 items-center justify-center text-[22px] leading-[24px]">
-              {choice.picture}
-            </span>
-          ) : (
-            <img src={choice.picture} className="size-6 object-contain" />
-          ))}
-
-        <div className="flex-1 text-start">
+        {choice.pictureType !== PictureTypes.NULL && (
+          <div
+            className="flex w-full items-center justify-center"
+            style={{
+              padding:
+                choice.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
+            }}
+          >
+            {choice.pictureType === PictureTypes.ICON ? (
+              <SvgRenderer
+                svgData={choice.picture}
+                width="50px"
+                height="50px"
+              />
+            ) : choice.pictureType === PictureTypes.EMOJI ? (
+              <span className="flex size-[50px] items-center justify-center text-[48px] leading-[50px]">
+                {choice.picture}
+              </span>
+            ) : (
+              <img
+                src={choice.picture}
+                className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
+              />
+            )}
+          </div>
+        )}
+        <div className="flex w-full flex-1 items-center justify-center p-2 text-lg">
           {onValueChange === null ? (
             <span
               className="w-full whitespace-break-spaces"
@@ -497,167 +517,180 @@ const MultipleChoiceItem = ({
                 onValueChange(e.target.value)
               }}
               onFocus={() => setIsEditing(true)}
-              onBlur={(e) => setIsEditing(false)}
+              onBlur={() => setIsEditing(false)}
             />
           )}
         </div>
-      </StyledMultipleChoiceItem>
+      </StyledPictureChoiceItem>
     </li>
   )
 }
 
-type StyledMultipleChoiceItemProps = {
-  isFirst: boolean
-  isLast: boolean
-  isCollapsed: boolean
+type StyledPictureChoiceItemProps = {
   isSelected: boolean
-  isPreviousSelected: boolean
-  contentReversed: boolean
-  borderTopRounded: boolean
-  borderBottomRounded: boolean
+  pictureType: PictureTypes
   defaultStyles: {
-    checkBoxIconColor: StyleProperty
-    checkboxBorderColor: StyleProperty
-    checkBoxBackgroundColor: StyleProperty
-    iconColor: StyleProperty
-    textColor: StyleProperty
-    borderColor: StyleProperty
-    backgroundColor: StyleProperty
+    checkBoxIconColor: string
+    checkboxBorderColor: string
+    checkBoxBackgroundColor: string
+    iconColor: string
+    textColor: string
+    textTopBorderColor: string
+    textBackgroundColor: string
+    borderColor: string
+    backgroundColor: string
   }
   hoverStyles: {
-    checkBoxIconColor: StyleProperty
-    checkboxBorderColor: StyleProperty
-    checkBoxBackgroundColor: StyleProperty
-    iconColor: StyleProperty
-    textColor: StyleProperty
-    borderColor: StyleProperty
-    backgroundColor: StyleProperty
+    checkBoxIconColor: string
+    checkboxBorderColor: string
+    checkBoxBackgroundColor: string
+    iconColor: string
+    textColor: string
+    textTopBorderColor: string
+    textBackgroundColor: string
+    borderColor: string
+    backgroundColor: string
   }
 }
 
-const StyledMultipleChoiceItem = styled(Button)<StyledMultipleChoiceItemProps>`
+const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   width: 100%;
-  min-height: 50px;
   height: auto;
+  padding: 0;
   font-size: 16px;
+  flex: 1;
   display: flex;
-  flex-direction: ${({ contentReversed }) =>
-    contentReversed ? "row-reverse" : "row"};
-  gap: 12px;
+  flex-direction: column;
   align-items: center;
-  justify-content: start;
-  border-top-left-radius: ${({ borderTopRounded }) =>
-    borderTopRounded ? 8 : 0}px;
-  border-top-right-radius: ${({ borderTopRounded }) =>
-    borderTopRounded ? 8 : 0}px;
-  border-bottom-left-radius: ${({ borderBottomRounded }) =>
-    borderBottomRounded ? 8 : 0}px;
-  border-bottom-right-radius: ${({ borderBottomRounded }) =>
-    borderBottomRounded ? 8 : 0}px;
+  justify-content: center;
+  position: relative;
+  border-radius: 15px;
 
-  transition: all 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out;
+  transform: translateY(${({ isSelected }) => (isSelected ? -2 : 0)}px);
 
-  border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor.value};
-
-  border-top-width: ${({ isFirst, isCollapsed, isPreviousSelected }) =>
-    isFirst || !isCollapsed || !isPreviousSelected ? "2px" : "0px"};
-
-  border-bottom-width: ${({ isLast, isCollapsed, isSelected }) =>
-    isLast || !isCollapsed || isSelected ? "2px" : "0px"};
-
-  color: ${({ defaultStyles }) => defaultStyles.textColor.value};
-  background-color: ${({ defaultStyles }) =>
-    defaultStyles.backgroundColor.value};
+  border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor};
+  color: ${({ defaultStyles }) => defaultStyles.textColor};
+  background-color: ${({ defaultStyles }) => defaultStyles.backgroundColor};
 
   &:hover {
-    transform: translateY(${({ isSelected }) => (!isSelected ? -2 : 0)}px);
-
-    border-top-width: ${({ isFirst, isPreviousSelected }) =>
-      isFirst || !isPreviousSelected ? 2 : 0}px;
-    border-bottom-width: 2px;
-
-    border-color: ${({ hoverStyles }) => hoverStyles.borderColor.value};
-    color: ${({ hoverStyles }) => hoverStyles.textColor.value};
-    background-color: ${({ hoverStyles }) => hoverStyles.backgroundColor.value};
+    transform: translateY(-2px);
+    border-color: ${({ hoverStyles }) => hoverStyles.borderColor};
+    color: ${({ hoverStyles }) => hoverStyles.textColor};
+    background-color: ${({ hoverStyles }) => hoverStyles.backgroundColor};
   }
+
+  //For Checkbox
 
   & > div > button {
     background-color: ${({ defaultStyles }) =>
-      defaultStyles.checkBoxBackgroundColor.value};
+      defaultStyles.checkBoxBackgroundColor};
     border-color: ${({ defaultStyles }) =>
-      defaultStyles.checkboxBorderColor.value} !important;
+      defaultStyles.checkboxBorderColor} !important;
   }
 
   & > div > button > span > svg {
-    color: ${({ defaultStyles }) =>
-      defaultStyles.checkBoxIconColor.value} !important;
+    color: ${({ defaultStyles }) => defaultStyles.checkBoxIconColor} !important;
   }
 
   &:hover > div > button {
     background-color: ${({ hoverStyles }) =>
-      hoverStyles.checkBoxBackgroundColor.value};
+      hoverStyles.checkBoxBackgroundColor};
     border-color: ${({ hoverStyles }) =>
-      hoverStyles.checkboxBorderColor.value} !important;
+      hoverStyles.checkboxBorderColor} !important;
   }
 
   &:hover > div > button > span > svg {
-    color: ${({ hoverStyles }) =>
-      hoverStyles.checkBoxIconColor.value} !important;
+    color: ${({ hoverStyles }) => hoverStyles.checkBoxIconColor} !important;
   }
 
+  //For Radio Button
+
   & > div > div > button {
-    border: 1px solid
-      ${({ defaultStyles }) => defaultStyles.checkboxBorderColor.value};
+    background-color: ${({ defaultStyles, isSelected }) =>
+      !isSelected
+        ? defaultStyles.checkBoxBackgroundColor
+        : defaultStyles.checkBoxIconColor};
+    border-color: ${({ defaultStyles }) =>
+      defaultStyles.checkboxBorderColor} !important;
   }
 
   & > div > div > button > span > svg {
-    color: ${({ defaultStyles }) =>
-      defaultStyles.checkBoxBackgroundColor.value};
+    color: ${({ defaultStyles, isSelected }) =>
+      !isSelected
+        ? defaultStyles.checkBoxIconColor
+        : defaultStyles.checkBoxBackgroundColor} !important;
   }
 
-  &:hover > div > button {
-    border: 1px solid
-      ${({ hoverStyles }) => hoverStyles.checkboxBorderColor.value};
+  &:hover > div > div > button {
+    border-color: ${({ hoverStyles }) =>
+      hoverStyles.checkboxBorderColor} !important;
   }
 
-  &:hover > div > button > svg {
-    color: ${({ hoverStyles }) => hoverStyles.checkBoxBackgroundColor.value};
+  &:hover > div > div > button > span > svg {
+    color: ${({ hoverStyles }) =>
+      hoverStyles.checkBoxBackgroundColor} !important;
   }
 
-  & > svg {
-    color: ${({ defaultStyles }) => defaultStyles.iconColor.value};
+  // For Icon
+
+  & > div > svg {
+    color: ${({ defaultStyles }) => defaultStyles.iconColor};
   }
 
-  &:hover > svg {
-    color: ${({ hoverStyles }) => hoverStyles.iconColor.value};
+  &:hover > div > svg {
+    color: ${({ hoverStyles }) => hoverStyles.iconColor};
+  }
+
+  // For Text
+
+  & > div:last-child {
+    margin-top: ${({ defaultStyles, pictureType }) =>
+      defaultStyles.textTopBorderColor !== "transparent" &&
+      pictureType !== PictureTypes.IMAGE
+        ? "12.5%"
+        : ""};
+    border-top: 2px solid
+      ${({ defaultStyles }) => defaultStyles.textTopBorderColor};
+    background-color: ${({ defaultStyles }) =>
+      defaultStyles.textBackgroundColor};
+
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 13px;
+
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    margin-bottom: -1px;
+  }
+
+  &:hover > div:last-child {
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    margin-bottom: -1px;
+    border-top-color: ${({ hoverStyles }) => hoverStyles.textTopBorderColor};
+    background-color: ${({ hoverStyles }) => hoverStyles.textBackgroundColor};
   }
 `
 
-export enum MultipleChoiceSizes {
+export enum PictureChoiceSizes {
   small = "small",
   medium = "medium",
   large = "large",
   full = "full",
 }
 
-export enum MultipleChoiceLayouts {
-  collapsed = "collapsed",
-  list = "list",
-}
-
-export enum MultipleChoicePresets {
+export enum PictureChoicePresets {
   filled = "filled",
   semifilled = "semifilled",
   outlined = "outlined",
 }
 
-export type MultipleChoiceProps = {
+export type PictureChoiceProps = {
   fontFamily: StyleProperty
-  size: MultipleChoiceSizes
+  size: PictureChoiceSizes
   label: string
   required: boolean
   fieldName: string
-  layout: MultipleChoiceLayouts
   labelColor: string
   labelBorderColor: string
   containerBackground: string
@@ -673,34 +706,39 @@ export type MultipleChoiceProps = {
   settingTabs: string[]
   multiSelect: boolean
   checkboxVisible: boolean
-  contentReversed: boolean
-  preset: MultipleChoicePresets
+  preset: PictureChoicePresets
   defaultStyles: {
-    checkBoxIconColor: StyleProperty
-    checkboxBorderColor: StyleProperty
-    checkBoxBackgroundColor: StyleProperty
-    iconColor: StyleProperty
-    textColor: StyleProperty
-    borderColor: StyleProperty
-    backgroundColor: StyleProperty
+    checkBoxIconColor: string
+    checkboxBorderColor: string
+    checkBoxBackgroundColor: string
+    iconColor: string
+    textColor: string
+    textTopBorderColor: string
+    textBackgroundColor: string
+    borderColor: string
+    backgroundColor: string
   }
   hoverStyles: {
-    checkBoxIconColor: StyleProperty
-    checkboxBorderColor: StyleProperty
-    checkBoxBackgroundColor: StyleProperty
-    iconColor: StyleProperty
-    textColor: StyleProperty
-    borderColor: StyleProperty
-    backgroundColor: StyleProperty
+    checkBoxIconColor: string
+    checkboxBorderColor: string
+    checkBoxBackgroundColor: string
+    iconColor: string
+    textColor: string
+    textTopBorderColor: string
+    textBackgroundColor: string
+    borderColor: string
+    backgroundColor: string
   }
   selectedStyles: {
-    checkBoxIconColor: StyleProperty
-    checkboxBorderColor: StyleProperty
-    checkBoxBackgroundColor: StyleProperty
-    iconColor: StyleProperty
-    textColor: StyleProperty
-    borderColor: StyleProperty
-    backgroundColor: StyleProperty
+    checkBoxIconColor: string
+    checkboxBorderColor: string
+    checkBoxBackgroundColor: string
+    iconColor: string
+    textColor: string
+    textTopBorderColor: string
+    textBackgroundColor: string
+    borderColor: string
+    backgroundColor: string
   }
   selections: string[]
   choices: {
@@ -715,17 +753,16 @@ export type MultipleChoiceProps = {
   tracking: boolean
 }
 
-export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
+export const PictureChoiceDefaultProps: PictureChoiceProps = {
   fontFamily: {
     value: "inherit",
     globalStyled: true,
     isCustomized: false,
   },
-  size: MultipleChoiceSizes.medium,
-  label: "Please choose an option",
+  size: PictureChoiceSizes.medium,
   required: false,
+  label: "Please select an option",
   fieldName: "",
-  layout: MultipleChoiceLayouts.collapsed,
   labelColor: "#000000",
   labelBorderColor: "#3182ce",
   containerBackground: "transparent",
@@ -741,120 +778,40 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
   settingTabs: ["content"],
   multiSelect: false,
   checkboxVisible: false,
-  contentReversed: false,
-  preset: MultipleChoicePresets.filled,
+  preset: PictureChoicePresets.filled,
   defaultStyles: {
-    checkBoxIconColor: {
-      value: "transparent",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    checkboxBorderColor: {
-      value: "transparent",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    checkBoxBackgroundColor: {
-      value: "transparent",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    iconColor: {
-      value: "#000000",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    textColor: {
-      value: "#000000",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    borderColor: {
-      value: "#eaeaeb",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    backgroundColor: {
-      value: "transparent",
-      globalStyled: false,
-      isCustomized: false,
-    },
+    checkBoxIconColor: "transparent",
+    checkboxBorderColor: "#eaeaeb",
+    checkBoxBackgroundColor: "transparent",
+    iconColor: "#3182ce",
+    textColor: "#000000",
+    textTopBorderColor: "#transparent",
+    textBackgroundColor: "transparent",
+    borderColor: "#eaeaeb",
+    backgroundColor: "transparent",
   },
   hoverStyles: {
-    checkBoxIconColor: {
-      value: "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    checkboxBorderColor: {
-      value: "transparent",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    checkBoxBackgroundColor: {
-      value: "transparent",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    iconColor: {
-      value: "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    textColor: {
-      value: "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    borderColor: {
-      value: "#3182ce",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    backgroundColor: {
-      value: "#3182ce",
-      globalStyled: true,
-      isCustomized: false,
-    },
+    checkBoxIconColor: "transparent",
+    checkboxBorderColor: "transparent",
+    checkBoxBackgroundColor: "transparent",
+    iconColor: "#3182ce",
+    textColor: "#000000",
+    textTopBorderColor: "#transparent",
+    textBackgroundColor: "transparent",
+    borderColor: "#3182ce",
+    backgroundColor: "transparent",
   },
   selectedStyles: {
-    checkBoxIconColor: {
-      value: "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    checkboxBorderColor: {
-      value: "transparent",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    checkBoxBackgroundColor: {
-      value: "transparent",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    iconColor: {
-      value: "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    textColor: {
-      value: "#ffffff",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    borderColor: {
-      value: "#3182ce",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    backgroundColor: {
-      value: "#3182ce",
-      globalStyled: true,
-      isCustomized: false,
-    },
+    checkBoxIconColor: "transparent",
+    checkboxBorderColor: "transparent",
+    checkBoxBackgroundColor: "transparent",
+    iconColor: "#3182ce",
+    textColor: "#000000",
+    textTopBorderColor: "#transparent",
+    textBackgroundColor: "transparent",
+    borderColor: "#3182ce",
+    backgroundColor: rgba("#3182ce", 0.1),
   },
-
   selections: [],
   choices: [
     {
@@ -884,13 +841,22 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
       nextScreen: null,
       trackingEvent: null,
     },
+    {
+      id: `input-${hexoid(4)()}`,
+      picture: null,
+      pictureType: PictureTypes.NULL,
+      value: "Option 4",
+      buttonAction: null,
+      nextScreen: null,
+      trackingEvent: null,
+    },
   ],
   tracking: false,
 }
 
-MultipleChoice.craft = {
-  props: MultipleChoiceDefaultProps,
+PictureChoice.craft = {
+  props: PictureChoiceDefaultProps,
   related: {
-    settings: MultipleChoiceSettings,
+    settings: PictureChoiceSettings,
   },
 }
