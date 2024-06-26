@@ -170,8 +170,8 @@ export const GlobalThemeSettings = (props: Props) => {
                   {t("Header Scroll")}
                 </label>
                 <Select
-                  defaultValue={headerPosition || "relative"}
-                  value={headerPosition || "relative"}
+                  defaultValue={headerPosition}
+                  value={headerPosition}
                   onValueChange={(e) => {
                     dispatch(setHeaderPosition(e)),
                     dispatch(updateHeaderPosition(e))

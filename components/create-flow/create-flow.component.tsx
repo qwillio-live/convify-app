@@ -94,6 +94,7 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
+type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 export function CreateFlowComponent() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
@@ -115,6 +116,7 @@ export function CreateFlowComponent() {
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+  const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
 
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
@@ -229,7 +231,15 @@ export function CreateFlowComponent() {
                 >
                   {
                   !headerMode && !footerMode &&
+                   <div style={{
+                    position: headerPosition as Position,
+                    width: headerPosition === 'fixed' ? '53.5%' : '100%',
+                    top: headerPosition === 'fixed' ? '66px' : '0',
+                    zIndex: 20
+
+                    }}>
                    <ResolvedComponentsFromCraftState screen={screensHeader} />
+                   </div>
                   }
                   <Frame data={editorLoad}></Frame>
                   {

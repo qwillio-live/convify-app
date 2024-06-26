@@ -8,12 +8,13 @@
 			"expanded": "true",
       "containerType" : "header",
       "style" : {
-        "minHeight": "100px",
-        "minWidth": "200px",
+        "minHeight": "40px",
+        "minWidth": "100%",
         "flexDirection": "column",
         "width" : "100%",
         "zIndex" : 20,
         "top" : 0,
+        "position" : "relative",
         "justifyContent": "start"
       },
 			"className": "min-h-auto min-w-full flex flex-col items-center"

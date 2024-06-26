@@ -88,7 +88,10 @@ export const screensSlice = createSlice({
       state.selectedComponent = action.payload;
     },
     updateHeaderPosition: (state, action: PayloadAction<string>) => {
-      console.log("UPDATE HEADER POSITION: ", action.payload)
+      const headerSlice = JSON.parse(state.screensHeader);
+      console.log("HEADER SLICE", headerSlice)
+      headerSlice.ROOT.props.style.position=action.payload;
+      state.screensHeader = JSON.stringify(headerSlice);
     },
     addField: (state, action: PayloadAction<ScreenFieldType>) => {
       // console.log("Add field");
