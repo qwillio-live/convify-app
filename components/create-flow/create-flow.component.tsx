@@ -236,7 +236,6 @@ export function CreateFlowComponent() {
                     width: headerPosition === 'fixed' ? '53.5%' : '100%',
                     top: headerPosition === 'fixed' ? '66px' : '0',
                     zIndex: 20
-
                     }}>
                    <ResolvedComponentsFromCraftState screen={screensHeader} />
                    </div>

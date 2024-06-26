@@ -173,8 +173,8 @@ export const GlobalThemeSettings = (props: Props) => {
                   defaultValue={headerPosition}
                   value={headerPosition}
                   onValueChange={(e) => {
-                    dispatch(setHeaderPosition(e)),
-                    dispatch(updateHeaderPosition(e))
+                    dispatch(setHeaderPosition(e))
+                    // dispatch(updateHeaderPosition(e))
                 }}
                 >
                   <SelectTrigger className="w-full">
