@@ -58,6 +58,7 @@ import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { useRouter } from "next/navigation"
+import { RootState } from "@/lib/state/flows-state/store";
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -95,9 +96,14 @@ const NodesToSerializedNodes = (nodes) => {
   return result
 }
 type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
+
 export function CreateFlowComponent() {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const editorHeaderRef = React.useRef(null);
+  const [height, setHeight] = React.useState(90);
+
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
+  const [topMargin,setTopMargin] = React.useState<number>(0);
   const dispatch = useAppDispatch()
 
   const backgroundImage = useAppSelector(
@@ -115,7 +121,7 @@ export function CreateFlowComponent() {
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
-  const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+  const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
   const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
 
   const editorLoadLength = useAppSelector(
@@ -129,9 +135,23 @@ export function CreateFlowComponent() {
     },1200),
     [dispatch]
   )
-  // React.useEffect(() => {
-  //   dispatch(resetScreensState())
-  // },[dispatch])
+  React.useEffect(() => {
+    if(headerMode){
+      const height = document?.getElementById("editor-content")?.offsetHeight || 0;
+      setHeight(height)
+    }else{
+      if (editorHeaderRef.current) {
+        setHeight(editorHeaderRef?.current?.offsetHeight);
+        console.log("Height is: ", editorHeaderRef?.current?.offsetHeight)
+      }
+      if (editorHeaderRef.current) {
+        setHeight(editorHeaderRef.current.offsetHeight);
+      }
+    }
+
+    // const height = document?.getElementById("editor-header")?.offsetHeight || 0;
+    // setHeight(height)
+  }, [headerMode,height]);
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -139,7 +159,15 @@ export function CreateFlowComponent() {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
+          if(headerMode){
+            // const height = document?.getElementById("editor-header")?.offsetHeight | 0;
+            console.log("HEADER HEIGHT IS: ", height)
+            // setHeight(height)
+          }
+          console.log("HEADER: ", headerMode)
+
           debouncedSetEditorLoad(json)
+
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -218,7 +246,7 @@ export function CreateFlowComponent() {
                     backgroundImage: backgroundImage,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundPosition: "center"
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
@@ -231,16 +259,25 @@ export function CreateFlowComponent() {
                 >
                   {
                   !headerMode && !footerMode &&
-                   <div style={{
+                   <div
+                   ref={editorHeaderRef}
+                   id="editor-header"
+                   style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'fixed' ? '53.5%' : '100%',
-                    top: headerPosition === 'fixed' ? '66px' : '0',
+                    width: headerPosition === 'fixed' ? '54.3%' : '100%',
+                    top: headerPosition === 'fixed' && !headerMode ? '125px' : '0',
                     zIndex: 20
                     }}>
                    <ResolvedComponentsFromCraftState screen={screensHeader} />
                    </div>
                   }
+                  <div
+                  id="editor-content"
+                  style={{
+          marginTop: !headerMode && headerPosition === 'fixed' ? `${height + 10}px` : 0,
+        }}>
                   <Frame data={editorLoad}></Frame>
+                  </div>
                   {
                     !headerMode && !footerMode &&
                   <ResolvedComponentsFromCraftState screen={screensFooter} />

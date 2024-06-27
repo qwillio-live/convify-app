@@ -168,10 +168,10 @@ const ScreensList = () => {
     actions.deserialize(screensFooter)
   }
 
-  const handleHeaderScreenClick = () => {
+  const handleHeaderScreenClick = async () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true))
-    actions.deserialize(screensHeader)
+    await actions.deserialize(screensHeader)
   }
 
   return (
@@ -269,7 +269,10 @@ const ScreensList = () => {
                 key={screen.screenName + screen.screenId}
                 id={screen.screenName + screen.screenId}
                 value={screen}
-                onClick={() => dispatch(setSelectedComponent("ROOT"))}
+                onClick={() => {
+                  dispatch(setSelectedComponent("ROOT")),
+                  dispatch(setHeaderFooterMode(false))
+                }}
                 // className="relative"
               >
                 <ContextMenu>
