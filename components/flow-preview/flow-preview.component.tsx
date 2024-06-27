@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
-
+import { useForm, FormProvider, useFormContext } from "react-hook-form"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
 type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
@@ -48,7 +48,6 @@ export default function FlowPreview() {
       }}>
       <ResolvedComponentsFromCraftState screen={screenHeader} />
     </div>
-
       {screens?.map((screen, index) => {
         return (
           <div

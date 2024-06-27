@@ -85,7 +85,7 @@ export const SettingsPanel = () => {
                       actions.delete(selected.id),
                       dispatch(setSelectedComponent("ROOT"));
                       if(selected.fieldType === 'data'){
-                        dispatch(removeField(selected.fieldId))
+                        dispatch(removeField(selected.id))
                       }
                     }}
                     variant="destructive"

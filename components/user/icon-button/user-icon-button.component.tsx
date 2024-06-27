@@ -143,9 +143,15 @@ export const IconButtonGen = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const pathName = usePathname();
+  const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[0].screenValidated ?? false);
   const handleNavigateToContent = () => {
     dispatch(validateScreen(0))
-    router.push(`${pathName}#${nextScreen?.screenName}`);
+    if(screenValidated){
+      console.log("SCREEN NOT VALIDATED BUT YES")
+      router.push(`${pathName}#${nextScreen?.screenName}`);
+    }else{
+      console.log("SCREEN NOT VALIDATED")
+    }
   };
   return (
     <div className="w-full relative" style={{

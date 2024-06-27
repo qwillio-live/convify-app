@@ -35,7 +35,7 @@ import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputSettings } from "./user-input-settings.component"
 import { setFieldProp } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-
+import { useForm, useFormContext } from "react-hook-form"
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
 
@@ -65,7 +65,6 @@ const UserInputSizeValues = {
 }
 
 export const UserInputGen = ({ ...props }) => {
-  console.log("PROPS ARE: ", {...props})
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
@@ -74,20 +73,32 @@ export const UserInputGen = ({ ...props }) => {
   ) || {};
 
   const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.id]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
-
+  const inputField = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.nodeId])
+  const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.nodeId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
+  // const fieldError = true;
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
 
-  console.log(props.backgroundImage)
 
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }
+
+  useEffect(() => {
+    if(inputField){
+      if(inputField.fieldValue==0){
+        dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: true}))
+      }else{
+        dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: false}))
+      }
+    }
+
+  },[inputField])
+
 
   return (
     <div
@@ -189,7 +200,7 @@ export const UserInputGen = ({ ...props }) => {
               </div>
             )}
             <UserInputStyled
-              ref={inputRef}
+              // ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
@@ -235,8 +246,8 @@ export const UserInputGen = ({ ...props }) => {
               )}
               onChange={(e) => {
                 setInputValue(e.target.value),
-                console.log("FIELD ID IS: ", props.id)
-                dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value}))
+                dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value})),
+                console.log("FIELD VALUE IS: ", e.target.value)
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -400,8 +411,8 @@ export const UserInput = ({ ...props }) => {
         display: "flex",
         justifyContent: "center",
       }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseOver={() => setHover(true)}
+      onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={t("Input Field")} />}
       <div
