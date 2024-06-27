@@ -42,7 +42,6 @@ export async function GET(req: NextRequest) {
     const submits = await prisma.response.findMany({
       where: {
         flowId: String(flowId),
-        isFinished: true,
         createdAt: {
           gte: startDateObj,
           lte: endDateObj,

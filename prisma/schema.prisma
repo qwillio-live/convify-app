@@ -140,7 +140,6 @@ model Response {
   content    Json
   ip         String
   userAgent  String
-  isFinished Boolean  @default(false)
   isDeleted  Boolean  @default(false)
   createdAt  DateTime @default(now()) @map(name: "created_at")
   updatedAt  DateTime @default(now()) @map(name: "updated_at")

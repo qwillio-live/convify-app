@@ -5,9 +5,9 @@ import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
 export async function GET(req: NextRequest,
-    { params }: { params: { lang: string } }
+    { params }: { params: { id: string } }
 ) {
-    let { lang } = params
+    let { id } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -19,13 +19,12 @@ export async function GET(req: NextRequest,
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
   const userId = data.user.id
-  lang = lang? lang : 'en';
 
   try {
     const templates = await prisma.template.findMany({
       where: {
         isActive: true,
-        language: String(lang),
+        id: id,
       },
     })
     return NextResponse.json(templates)

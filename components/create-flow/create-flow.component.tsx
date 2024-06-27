@@ -10,7 +10,7 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React from "react"
+import React, { useCallback } from "react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -59,6 +59,8 @@ import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
+import { debounce, throttle } from "lodash"
+
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -143,7 +145,12 @@ export function CreateFlowComponent() {
     }
 
   },[mobileScreen,setSelectedComponent])
-
+  const debouncedSetEditorLoad = useCallback(
+    debounce((json) => {
+      dispatch(setEditorLoad(JSON.stringify(json)))
+    },1200),
+    [dispatch]
+  )
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
   // },[dispatch])
@@ -154,10 +161,10 @@ export function CreateFlowComponent() {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
-          let jsonString = JSON.stringify(json)
+          debouncedSetEditorLoad(json)
           // let editorLoadLength = Object.keys(editorLoad).length;
           // if(jsonString !== editorLoad){
-          dispatch(setEditorLoad(JSON.stringify(json)))
+          // dispatch(setEditorLoad(JSON.stringify(json)))
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -262,7 +269,7 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {<SaveButton />}
+              {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
           <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-7">
@@ -281,57 +288,6 @@ export function CreateFlowComponent() {
               <SettingsPanel />
             </div>
           </ScrollArea>
-        </div>
-      </Editor>
-      <Editor
-        resolver={{
-          Controller,
-          Logo,
-          HeadlineText,
-          UserText,
-          UserButton,
-          ProgressBar,
-          Element,
-          Progress,
-          ButtonChoiceScreen,
-          ScreenHeader,
-          UserInput,
-          ScreenFooter,
-          ScreensList,
-          ScreenOneChoice,
-          // UserProgressBar,
-          ScreenOneInput,
-          Input,
-          Button,
-          ArrowRight,
-          Check,
-          Cross,
-          Facebook,
-          Github,
-          Globe,
-          Linkedin,
-          Container,
-          Card,
-          CardContent,
-          UserContainer,
-          IconButton,
-          Select,
-          DragDrop,
-          UserToolbox,
-          Image,
-          PictureChoice,
-          MultipleChoice,
-          Steps,
-          Checklist,
-          List,
-          LogoBar,
-          LayoutContainer,
-          Loader,
-        }}
-        onRender={RenderNode}
-      >
-        <div className="special-editor">
-          <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>
