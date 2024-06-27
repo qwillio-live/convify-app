@@ -29,6 +29,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     register,
     handleSubmit,
     formState: { errors },
+    setValue, // Access setValue from useForm to set form field values
   } = useForm<FormData>({
     resolver: zodResolver(userSignInSchema),
   })
@@ -44,11 +45,32 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         setError(null)
       }, 5000);
       return () => clearTimeout(timer);
+    } else {
+      sessionStorage.removeItem("userFormData");
     }
   }, [error]);
 
+  // State to temporarily store form data
+  const [formData, setFormData] = React.useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
+
+  React.useEffect(() => {
+    // Check if there's stored form data in sessionStorage
+    const storedFormData = sessionStorage.getItem("userFormData");
+    if (storedFormData) {
+      const { email, password } = JSON.parse(storedFormData);
+      setFormData({ email, password });
+      // Pre-fill form fields with stored data
+      setValue("email", email);
+      setValue("password", password);
+    }
+  }, []);
+
   async function onSubmit(data: FormData) {
     setIsLoading(true)
+    sessionStorage.setItem("userFormData", JSON.stringify(data));
 
     const signInResult = await signIn("credentials", {
       username: data.email,
@@ -167,7 +189,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           opacity: '0.7',
         }}>
           <div>
-            <AlertTitle>{t("Something went wrong")}</AlertTitle>
+            {/* <AlertTitle>{t("Something went wrong")}</AlertTitle> */}
             <AlertDescription>
               {t("Your password is incorrect or this email address is not registered with Convify")}
             </AlertDescription>

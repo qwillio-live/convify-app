@@ -33,6 +33,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
     register,
     handleSubmit,
     formState: { errors },
+    setValue, // Access setValue from useForm to set form field values
   } = useForm<FormData>({
     resolver: zodResolver(userSignUpSchema),
   })
@@ -52,10 +53,32 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         setError(null)
       }, 5000);
       return () => clearTimeout(timer);
+    } else {
+      sessionStorage.removeItem("userFormData");
     }
   }, [error]);
+
+  // State to temporarily store form data
+  const [formData, setFormData] = React.useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
+
+  React.useEffect(() => {
+    // Check if there's stored form data in sessionStorage
+    const storedFormData = sessionStorage.getItem("userFormData");
+    if (storedFormData) {
+      const { email, password } = JSON.parse(storedFormData);
+      setFormData({ email, password });
+      // Pre-fill form fields with stored data
+      setValue("email", email);
+      setValue("password", password);
+    }
+  }, []);
+
   async function onSubmit(data: FormData) {
     setIsLoading(true) // Start loading when form is submitted
+    sessionStorage.setItem("userFormData", JSON.stringify(data));
 
     try {
       const signUpResult = await signUp(data) // Sign up the user
@@ -254,7 +277,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
           opacity: '0.7',
         }}>
           <div>
-            <AlertTitle>{t("Something went wrong")}</AlertTitle>
+            {/* <AlertTitle>{t("Something went wrong")}</AlertTitle> */}
             <AlertDescription>
               {t(`${error.slice(0, -1)}`)}
             </AlertDescription>

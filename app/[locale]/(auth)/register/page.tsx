@@ -43,7 +43,7 @@ export default function RegisterPage() {
           )}
           style={{ borderColor: "black", fontSize: "0.7rem" }}
         >
-          Log in
+          {t("Login")}
         </Link>
       </div>
 
