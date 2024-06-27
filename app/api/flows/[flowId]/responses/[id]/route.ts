@@ -5,7 +5,6 @@ import { z } from "zod"
 
 const ResponseUpdateRequestSchema = z
   .object({
-    isFinished: z.boolean().optional(),
     content: z.record(z.unknown()).optional(),
   })
   .strict()
@@ -59,12 +58,12 @@ const ResponseUpdateRequestSchema = z
         data,
       });
   
-      if (data.isFinished) {
-        await prisma.flow.update({
-          where: { id: String(flowId) },
-          data: { numberOfResponses: { increment: 1 } },
-        });
-      }
+      // if (data.isFinished) {
+      //   await prisma.flow.update({
+      //     where: { id: String(flowId) },
+      //     data: { numberOfResponses: { increment: 1 } },
+      //   });
+      // }
   
       return NextResponse.json(response);
     } catch (error) {

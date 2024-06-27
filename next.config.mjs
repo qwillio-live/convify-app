@@ -9,6 +9,7 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     domains: ["avatars.githubusercontent.com"],
+    domains: ['s3.eu-central-2.wasabisys.com'],
   },
   experimental: {
     appDir: true,

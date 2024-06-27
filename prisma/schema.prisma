@@ -93,8 +93,8 @@ model Flow {
   id                String   @id @default(cuid())
   userId            String
   name              String
-  description       String? // Ensuring it is nullable
   isDeleted         Boolean  @default(false)
+  isPublished       Boolean  @default(false)
   createdAt         DateTime @default(now()) @map(name: "created_at")
   updatedAt         DateTime @default(now()) @map(name: "updated_at")
   customDomain      String   @default("") @db.VarChar(50)
@@ -105,9 +105,6 @@ model Flow {
   previewImage      String? // Ensuring it is nullable
   status            String? // Ensuring it is nullable
   templateId        String? // Ensuring it is nullable
-  content           Json?
-  templateSettings  Json?
-  steps             Json?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -129,6 +126,8 @@ model Integration {
   isDeleted            Boolean?
   metaPixelAccessToken String?
   metaPixelId          String?
+  email                String?
+   
 
   flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
 
@@ -141,7 +140,6 @@ model Response {
   content    Json
   ip         String
   userAgent  String
-  isFinished Boolean  @default(false)
   isDeleted  Boolean  @default(false)
   createdAt  DateTime @default(now()) @map(name: "created_at")
   updatedAt  DateTime @default(now()) @map(name: "updated_at")
@@ -172,6 +170,7 @@ model Template {
   templateSettings Json
   tags             Json
   isActive         Boolean        @default(true)
+  isPopular        Boolean        @default(false)
   preview          String?
   createdAt        DateTime       @default(now()) @map(name: "created_at")
   updatedAt        DateTime       @default(now()) @map(name: "updated_at")
@@ -202,6 +201,7 @@ model FlowStep {
   content   Json
   order     Int
   isDeleted Boolean  @default(false)
+  templateId String? // Ensuring it is nullable
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
 

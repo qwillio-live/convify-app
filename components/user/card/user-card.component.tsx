@@ -338,9 +338,9 @@ export const Card = ({ children,backgroundColor ,...props }) => {
   const t = useTranslations("Components")
   return (
 
-    <CardContainer
+    <div
     ref={(ref: any) => connect(drag(ref))}
-      backgroundColor={props.backgroundColor}
+      // backgroundColor={props.backgroundColor}
       className='card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col border-0'
       {...props}
       onMouseEnter={() => setHover(true)}
@@ -354,12 +354,12 @@ export const Card = ({ children,backgroundColor ,...props }) => {
       >
         {children}
       </Element>
-    </CardContainer>
+    </div>
   )
 }
 
 Card.craft = {
-  props: CardContentDefaultProps,
+  // props: CardContentDefaultProps,
   displayName: "Card",
   rules: {
     canDrag: () => true,

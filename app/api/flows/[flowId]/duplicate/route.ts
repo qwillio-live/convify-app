@@ -23,6 +23,7 @@ export async function POST(
   }
 
   const userId = data.user.id
+  const userEmail = data.user.email
 
   try {
     const flow = await prisma.flow.findUnique({
@@ -42,25 +43,28 @@ export async function POST(
       name: `${flow.name} - Copy`,
       flowSettings: flow.flowSettings || {},
       status: "draft",
-      isDeleted: false,
-      content:flow.content || {},
-      templateSettings: flow.templateSettings || {},
-      steps: flow.steps || {}
+      isDeleted: false
     };
 
     const newFlow = await prisma.flow.create({
       data: newFlowData,
     });
-    flow.steps = flow.steps? flow.steps : {};
-      const newFlowSteps = flow.steps.map((step) => ({
-        ...step,
-        flowId: newFlow.id,
-      }));
-   
 
-    await prisma.flowStep.createMany({
-      data: newFlowSteps,
-    });
+    await prisma.integration.create({
+      data: {
+        flowId: newFlow.id,
+        email: userEmail
+      },
+    })
+    // flow.steps = flow.steps? flow.steps : {};
+    //   const newFlowSteps = flow.steps.map(({ id, ...step }) => ({
+    //     ...step,
+    //     flowId: newFlow.id,
+    //   }));
+
+    // await prisma.flowStep.createMany({
+    //   data: newFlowSteps,
+    // });
 
     return NextResponse.json(newFlow);
   } catch (error) {

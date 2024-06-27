@@ -10,10 +10,10 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React from "react"
+import React, { useCallback } from "react"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setEditorLoad } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -36,15 +36,14 @@ import {
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
-import { List, ListItem } from "../user/list/list.component"
 import { Loader } from "../user/loader/user-loader.component"
-import { LogoBar, LogoBarItem } from "../user/logo-bar/logo-bar.component"
 import { Logo } from "../user/logo/user-logo.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
-import { PictureChoice } from "../user/picture-choice/picture-choice.component"
+import { PictureChoice } from "../user/picture-choice/user-picture-choice.component"
 import { ProgressBar } from "../user/progress/user-progress.component"
 import { DragDrop } from "../user/screens/drag-drop-screens.component"
 import { ButtonChoiceScreen } from "../user/screens/screen-button-choice.component"
@@ -55,6 +54,13 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
+import { Checklist } from "../user/checklist/user-checklist.component"
+import { List } from "../user/list/user-list.component"
+import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
+import { Steps } from "../user/steps/user-steps.component"
+import { useRouter } from "next/navigation"
+import { debounce, throttle } from "lodash"
+
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -92,6 +98,7 @@ const NodesToSerializedNodes = (nodes) => {
   return result
 }
 export function CreateFlowComponent() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const dispatch = useAppDispatch()
 
@@ -99,6 +106,7 @@ export function CreateFlowComponent() {
     (state) => state?.theme?.general?.backgroundImage
   )
 
+  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
@@ -115,7 +123,34 @@ export function CreateFlowComponent() {
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const router = useRouter()
+  React.useEffect(() => {
+    // if(selectedComponent !== 'ROOT'){
+      router.push(`#${selectedComponent}`)
+    // }
+    // const parent = document.getElementById('scroll-container');
+    const child = document.getElementById(selectedComponent || 'ROOT');
+    // child?.scrollIntoView({
+    //   behavior: 'auto',
+    //   block: 'center',
+    //   inline: 'center'
+    // });
+    if (child) {
+      child.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    }
 
+  },[mobileScreen,setSelectedComponent])
+  const debouncedSetEditorLoad = useCallback(
+    debounce((json) => {
+      dispatch(setEditorLoad(JSON.stringify(json)))
+    },1200),
+    [dispatch]
+  )
   // React.useEffect(() => {
   //   dispatch(resetScreensState())
   // },[dispatch])
@@ -126,10 +161,10 @@ export function CreateFlowComponent() {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
-          let jsonString = JSON.stringify(json)
+          debouncedSetEditorLoad(json)
           // let editorLoadLength = Object.keys(editorLoad).length;
           // if(jsonString !== editorLoad){
-          dispatch(setEditorLoad(JSON.stringify(json)))
+          // dispatch(setEditorLoad(JSON.stringify(json)))
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -167,28 +202,32 @@ export function CreateFlowComponent() {
           CardContent,
           UserContainer,
           IconButton,
+          Select,
           DragDrop,
           UserToolbox,
           Image,
           PictureChoice,
           MultipleChoice,
+          Steps,
+          Checklist,
+          List,
           LogoBar,
-          LogoBarItem,
           LayoutContainer,
           Loader,
-          List,
-          ListItem,
           Img,
         }}
         onRender={RenderNode}
       >
-        <div className="flex h-full min-h-screen flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 pr-0">
+        <div className="flex h-[calc(-60px+99vh)] max-h-[calc(-60px+99vh)] flex-row justify-between gap-0">
+          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-7 pr-0">
             <div className="section-body">
               <ScreensList />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-4 ">
+          <ScrollArea
+          ref={containerRef}
+          id="scroll-container"
+          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-7 ">
             <div className="section-header mt-8 flex items-center justify-between"></div>
             <div className="section-body">
               <Tabs
@@ -209,24 +248,20 @@ export function CreateFlowComponent() {
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
-                    footerMode ? "flex justify-center items-end" : "",
+                    footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
                       : "w-96 border px-0"
                   )}
                   value={view}
                 >
-                  {
-                  !headerMode && !footerMode &&
-                   <ResolvedComponentsFromCraftState screen={screensHeader} />
-                  }
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  )}
                   <Frame data={editorLoad}></Frame>
-                  {
-                    !headerMode && !footerMode &&
-                  <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
-
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  )}
                 </TabsContent>
                 <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -234,10 +269,10 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-              {<SaveButton />}
+              {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4 ">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-7">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -245,7 +280,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-4">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-7">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -253,56 +288,6 @@ export function CreateFlowComponent() {
               <SettingsPanel />
             </div>
           </ScrollArea>
-        </div>
-      </Editor>
-      <Editor
-              resolver={{
-                Controller,
-                Logo,
-                HeadlineText,
-                UserText,
-                UserButton,
-                ProgressBar,
-                Element,
-                Progress,
-                ButtonChoiceScreen,
-                ScreenHeader,
-                UserInput,
-                ScreenFooter,
-                ScreensList,
-                ScreenOneChoice,
-                // UserProgressBar,
-                ScreenOneInput,
-                Input,
-                Button,
-                ArrowRight,
-                Check,
-                Cross,
-                Facebook,
-                Github,
-                Globe,
-                Linkedin,
-                Container,
-                Card,
-                CardContent,
-                UserContainer,
-                IconButton,
-                DragDrop,
-                UserToolbox,
-                Image,
-                PictureChoice,
-                MultipleChoice,
-                LogoBar,
-                LogoBarItem,
-                LayoutContainer,
-                Loader,
-                List,
-                ListItem,
-              }}
-              onRender={RenderNode}
-      >
-        <div className="special-editor">
-        <Frame data={screenRoller}></Frame>
         </div>
       </Editor>
     </div>

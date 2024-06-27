@@ -46,6 +46,9 @@ export default function DashboardPage() {
   const [userData, setUserData] = useState<User>()
   const router = useRouter()
   const t = useTranslations("Dashboard")
+  // const [flows, setFlows] = useState([{ name: "Flow 1", description: "This is a flow", id: "1", steps: 0, status: "active", created_at: "2021-10-10", updated_at: "2021-10-10", previewImage: null }]);
+  const [flows, setFlows] = useState([]);
+  const [status, setStatus] = useState(false);
 
   useEffect(() => {
     fetch("/api/users")
@@ -53,10 +56,19 @@ export default function DashboardPage() {
       .then((data) => setUserData(data))
       .catch((error) => console.error("Error fetching user data:", error))
   }, [])
+  console.log("userData", userData);
+  useEffect(() => {
+    fetch("/api/flows")
+      .then((res) => res.json())
+      .then((data) => setFlows(data))
+      .catch((error) => console.error("Error fetching user data:", error))
 
-  const handleOpenCreateFlow = () => {
-    setOpenCreatedFlow(true)
-  }
+    if (flows.length > 0) {
+      setOpenCreatedFlow(true)
+    }
+  }, [])
+
+  console.log("flows", flows);
 
   const handleLogout = async () => {
     await signOut({ redirect: false })
@@ -377,13 +389,12 @@ export default function DashboardPage() {
             </h1>
           </div>
           <div
-            className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
-              openCreateFlow ? "border-none" : "border"
-            }`}
+            className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${openCreateFlow ? "border-none" : "border"
+              }`}
             x-chunk="dashboard-02-chunk-1"
           >
             {openCreateFlow ? (
-              <FlowsList />
+              <FlowsList flows={flows} setStatus={setStatus} />
             ) : (
               <div className="flex flex-col items-center gap-1 text-center">
                 <img
@@ -402,12 +413,16 @@ export default function DashboardPage() {
                     }
                   )}
                 </p>
-                <Button
-                  className="itmes-center mt-4 flex gap-2"
-                  onClick={handleOpenCreateFlow}
+                <Link
+                  className="flex items-center "
+                  href="/dashboard/flows/create-flow"
                 >
-                  <Plus size={16} /> {t("Create new flow")}
-                </Button>
+                  <Button
+                    className="itmes-center mt-4 flex gap-2"
+                  >
+                    <Plus size={16} /> {t("Create new flow")}
+                  </Button>
+                </Link>
               </div>
             )}
           </div>

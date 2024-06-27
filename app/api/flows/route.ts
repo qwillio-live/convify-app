@@ -22,6 +22,9 @@ export async function GET(req: NextRequest) {
         userId,
         isDeleted: false,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
     return NextResponse.json(flows)
   } catch (error) {
@@ -53,6 +56,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
   const userId = data.user.id
+  const userEmail = data.user.email
 
   let reqBody
   try {
@@ -70,7 +74,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { templateId, status, previewImage, link ,name, flowSettings, steps, content} = reqBody
+  const { templateId, status, previewImage, link ,name, flowSettings} = reqBody
 
   if (!templateId) {
     const statusCode = 400
@@ -109,15 +113,12 @@ export async function POST(req: NextRequest) {
         link: link || "",
         numberOfSteps: templateSteps.length,
         numberOfResponses: 0,
-        content:content || "",
-        templateSettings: template.templateSettings || {},
-        steps: steps || templateSteps,
         userId,
       },
     })
 
     const flowId = flow.id
-    const flowSteps = steps || templateSteps.map((step) => ({
+    const flowSteps = templateSteps.map((step) => ({
       flowId,
       name: step.name,
       link: step.link,
@@ -125,6 +126,13 @@ export async function POST(req: NextRequest) {
       order: step.order,
     }))
     await prisma.flowStep.createMany({ data: flowSteps })
+
+    await prisma.integration.create({
+      data: {
+        flowId: flow.id,
+        email: userEmail
+      },
+    })
 
     return NextResponse.json({ id: flow.id })
   } catch (error) {
