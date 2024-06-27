@@ -33,6 +33,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { FlowsList } from "@/components/flows"
+import SkeletonFlowCard from "@/components/flows-skeleton"
 
 interface User {
   name: string
@@ -46,9 +47,9 @@ export default function DashboardPage() {
   const [userData, setUserData] = useState<User>()
   const router = useRouter()
   const t = useTranslations("Dashboard")
-  // const [flows, setFlows] = useState([{ name: "Flow 1", description: "This is a flow", id: "1", steps: 0, status: "active", created_at: "2021-10-10", updated_at: "2021-10-10", previewImage: null }]);
   const [flows, setFlows] = useState([]);
   const [status, setStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch("/api/users")
@@ -58,16 +59,17 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    fetch("/api/flows")
-      .then((res) => res.json())
-      .then((data) => {
-        setFlows(data);
-        console.log("flows are inside ", data); // Log the fetched data
-        if (data.length > 0) {
-          setOpenCreatedFlow(true);
-        }
-      })
-      .catch((error) => console.error("Error fetching flows:", error));
+    async function fetchFlows() {
+      setLoading(true);
+      const response = await fetch("/api/flows");
+      const data = await response.json();
+      if (data.length > 0) {
+        setOpenCreatedFlow(true);
+      }
+      setFlows(data);
+      setLoading(false);
+    }
+    fetchFlows();
   }, [status]);
 
 
@@ -389,44 +391,49 @@ export default function DashboardPage() {
               {t("My workspace")}
             </h1>
           </div>
-          <div
-            className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${openCreateFlow ? "border-none" : "border"
-              }`}
-            x-chunk="dashboard-02-chunk-1"
-          >
-            {openCreateFlow ? (
-              <FlowsList flows={flows} setStatus={setStatus} status={status} />
-            ) : (
-              <div className="flex flex-col items-center gap-1 text-center">
-                <img
-                  src="/images/character.svg"
-                  alt=""
-                  className="mb-4 h-[104px]"
-                />
-                <h3 className="text-2xl font-bold tracking-tight">
-                  {t("There's not a flow in sight")}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {t.rich(
-                    "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
-                    {
-                      br: () => <br />,
-                    }
-                  )}
-                </p>
-                <Link
-                  className="flex items-center "
-                  href="/dashboard/flows/create-flow"
-                >
-                  <Button
-                    className="itmes-center mt-4 flex gap-2"
-                  >
-                    <Plus size={16} /> {t("Create new flow")}
-                  </Button>
-                </Link>
+          {
+            loading ? <div className={`flex flex-1 items-center justify-center rounded-lg shadow-sm border-none`}
+              x-chunk="dashboard-02-chunk-1"><SkeletonFlowCard /></div> : (
+              <div
+                className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${openCreateFlow ? "border-none" : "border"
+                  }`}
+                x-chunk="dashboard-02-chunk-1"
+              >
+                {openCreateFlow ? (
+                  <FlowsList flows={flows} setStatus={setStatus} status={status} />
+                ) : (
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <img
+                      src="/images/character.svg"
+                      alt=""
+                      className="mb-4 h-[104px]"
+                    />
+                    <h3 className="text-2xl font-bold tracking-tight">
+                      {t("There's not a flow in sight")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {t.rich(
+                        "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
+                        {
+                          br: () => <br />,
+                        }
+                      )}
+                    </p>
+                    <Link
+                      className="flex items-center "
+                      href="/dashboard/flows/create-flow"
+                    >
+                      <Button
+                        className="itmes-center mt-4 flex gap-2"
+                      >
+                        <Plus size={16} /> {t("Create new flow")}
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            )
+          }
         </main>
       </div>
     </div>
