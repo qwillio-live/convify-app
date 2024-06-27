@@ -1,8 +1,8 @@
-import {FlowsList} from "@/components/flows"
-export default function FlowsPage(){
+import { FlowsList } from "@/components/flows"
+export default function FlowsPage() {
   return (
     <>
-      <FlowsList />
+      <FlowsList flows setStatus status />
     </>
   )
 }
