@@ -112,7 +112,7 @@ export async function GET(
       })
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
-
+    flow.responses.sort((a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt)))
     return NextResponse.json(flow.responses)
   } catch (error) {
     const statusCode = 500
