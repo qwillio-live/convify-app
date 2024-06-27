@@ -1,5 +1,5 @@
 import { darken, rgba } from "polished"
-
+import { useTranslations } from "next-intl"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import {
@@ -8,6 +8,8 @@ import {
 } from "./user-input-checkbox.component"
 
 const useInputCheckboxThemePresets = () => {
+  const t = useTranslations("Components")
+
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -31,7 +33,7 @@ const useInputCheckboxThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("CheckboxPlaceholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -71,8 +73,8 @@ const useInputCheckboxThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
-    fieldName: "Agreement",
+    label: t("CheckboxPlaceholder"),
+    fieldName: t("CheckboxFieldName"),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",

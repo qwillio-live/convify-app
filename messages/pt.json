@@ -133,7 +133,10 @@
     "Right-Click" : "Clique Direito",
     "Click on a screen to edit it" : "Clique em uma tela para editá-la",
     "Rows": "Linhas",
-    "TextArea": "Área de Texto"
+    "TextArea": "Área de Texto",
+    "CheckboxPlaceholder": "Concordo com os termos e condições e também estou feliz em assinar seu boletim informativo.",
+    "CheckboxFieldName": "Caixa de seleção"
+
 
   },
   "CreateFlow": {

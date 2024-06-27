@@ -510,10 +510,8 @@ export const UserToolbox = () => {
                     >
                       <UserInputCheckboxGen
                         {...outlinedPresetChecbox}
-                        label={t("Checkbox")}
-                        // label={t("Label")}
-                        placeholder={t("Checkbox")}
-                        // placeholder={t("Placeholder")}
+                        label={t("CheckboxPlaceholder")}
+                        placeholder={t("CheckboxPlaceholder")}
                       />
                     </HoverCardComponent>
                   </div>

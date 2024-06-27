@@ -17,16 +17,16 @@ import {
 } from "./useHeadlineThemePresets"
 
 const ContainerWidthValues = {
-  small: "450px",
-  medium: "670px",
-  large: "750px",
+  small: "300px",
+  medium: "376px",
+  large: "576px",
   full: "100%",
 }
 
 const MobileContainerWidthValues = {
-  small: "150px",
-  medium: "236px",
-  large: "336px",
+  small: "120px",
+  medium: "220px",
+  large: "320px",
   full: "100%",
 }
 
