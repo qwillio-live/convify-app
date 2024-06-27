@@ -70,13 +70,24 @@ export const LogoBarGen = ({
             key={index}
             style={{ height: `${height}px` }}
           >
-            <img
-              className="h-full w-auto object-contain"
-              src={item.src}
-              style={{
-                ...(grayscale ? { filter: "grayscale(1)" } : {}),
-              }}
-            />
+            <picture key={(item.src as ImagePictureTypes).original}>
+              <source
+                media="(min-width:1080px)"
+                srcSet={(item.src as ImagePictureTypes).desktop}
+              />
+              <source
+                media="(min-width:560px)"
+                srcSet={(item.src as ImagePictureTypes).mobile}
+              />
+              <img
+                src={(item.src as ImagePictureTypes).original}
+                className="h-full w-auto object-contain"
+                loading="lazy"
+                style={{
+                  ...(grayscale ? { filter: "grayscale(1)" } : {}),
+                }}
+              />
+            </picture>
           </li>
         ))}
       </StyledLogoBarContainer>
@@ -179,17 +190,20 @@ export const LogoBar = ({
               key={index}
               style={{ height: `${height}px` }}
             >
-              <picture key={(item.picture as ImagePictureTypes).original}>
+              <picture
+                key={(item.src as ImagePictureTypes).original}
+                className="h-full"
+              >
                 <source
                   media="(min-width:1080px)"
-                  srcSet={(item.picture as ImagePictureTypes).desktop}
+                  srcSet={(item.src as ImagePictureTypes).desktop}
                 />
                 <source
                   media="(min-width:560px)"
-                  srcSet={(item.picture as ImagePictureTypes).mobile}
+                  srcSet={(item.src as ImagePictureTypes).mobile}
                 />
                 <img
-                  src={(item.picture as ImagePictureTypes).original}
+                  src={(item.src as ImagePictureTypes).original}
                   className="h-full w-auto object-contain"
                   loading="lazy"
                   style={{

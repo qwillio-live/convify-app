@@ -152,7 +152,7 @@ export const LogoBarSettings = () => {
                   ...items,
                   {
                     id: `logo-bar-item-${hexoid(6)()}`,
-                    src: defaultLogo,
+                    src: { original: defaultLogo } as ImagePictureTypes,
                   },
                 ])
               }
@@ -604,7 +604,21 @@ export const LogoBarItemSettings = ({ item, index }) => {
         className="flex-1"
         onClick={() => inputRef.current?.click()}
       >
-        <img className="h-6 w-full object-contain" src={item.src} />
+        <picture key={(item.src as ImagePictureTypes).original}>
+          <source
+            media="(min-width:1080px)"
+            srcSet={(item.src as ImagePictureTypes).desktop}
+          />
+          <source
+            media="(min-width:560px)"
+            srcSet={(item.src as ImagePictureTypes).mobile}
+          />
+          <img
+            src={(item.src as ImagePictureTypes).original}
+            className="h-6 w-full object-contain"
+            loading="lazy"
+          />
+        </picture>
       </Button>
       <Trash2
         className="text-muted-foreground invisible size-3 hover:cursor-pointer"
