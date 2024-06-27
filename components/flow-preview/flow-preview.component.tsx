@@ -1,12 +1,15 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
 type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 
 export default function FlowPreview() {
+  const previewHeaderRef = React.useRef<HTMLDivElement>(null)
+  const [headerHeight,setHeaderHeight] = React.useState(90)
+
   const selectedScreenIdex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
@@ -21,17 +24,27 @@ export default function FlowPreview() {
   const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
 
   const screenFooter = useAppSelector((state) => state?.screen?.screensFooter)
-  React.useEffect(() => {
-    console.log(selectedScreen)
-  }, [selectedScreen])
+  const headerMode = useAppSelector((state) => state?.screen?.headerMode) || false
+  useEffect(() => {
+    if(headerMode){
+      const height = document.getElementById('preview_header')?.offsetHeight || 0;
+      setHeaderHeight(height)
+    }else{
+     const height = previewHeaderRef.current?.offsetHeight || 0;
+      setHeaderHeight(height)
+    }
+  }, [headerMode,headerHeight,headerPosition])
   return (
     <>
-    <div style={{
+    <div
+    ref={previewHeaderRef}
+    id="preview_header"
+    style={{
       position: headerPosition as Position,
-      width: headerPosition === 'fixed' ? '53.5%' : '100%',
-      top: headerPosition === 'fixed' ? '6px' : '0',
-      zIndex: 20
-
+      width: '100%',
+      top: '0',
+      zIndex: 20,
+      backgroundColor: backgroundColor,
       }}>
       <ResolvedComponentsFromCraftState screen={screenHeader} />
     </div>
@@ -41,7 +54,10 @@ export default function FlowPreview() {
           <div
             key={index}
             id={screen?.screenName}
-            style={{ backgroundColor: backgroundColor }}
+            style={{
+              backgroundColor: backgroundColor,
+              marginTop: headerPosition === 'fixed' ? headerHeight+'px' : '0'
+             }}
             className="my-14 min-h-screen
           shrink-0
           basis-full

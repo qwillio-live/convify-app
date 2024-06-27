@@ -141,16 +141,11 @@ export function CreateFlowComponent() {
       setHeight(height)
     }else{
       if (editorHeaderRef.current) {
+        //@ts-ignore
         setHeight(editorHeaderRef?.current?.offsetHeight);
-        console.log("Height is: ", editorHeaderRef?.current?.offsetHeight)
-      }
-      if (editorHeaderRef.current) {
-        setHeight(editorHeaderRef.current.offsetHeight);
       }
     }
 
-    // const height = document?.getElementById("editor-header")?.offsetHeight || 0;
-    // setHeight(height)
   }, [headerMode,height]);
 
   return (
@@ -159,13 +154,6 @@ export function CreateFlowComponent() {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
-          if(headerMode){
-            // const height = document?.getElementById("editor-header")?.offsetHeight | 0;
-            console.log("HEADER HEIGHT IS: ", height)
-            // setHeight(height)
-          }
-          console.log("HEADER: ", headerMode)
-
           debouncedSetEditorLoad(json)
 
           // }else{
@@ -264,9 +252,10 @@ export function CreateFlowComponent() {
                    id="editor-header"
                    style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'fixed' ? '54.3%' : '100%',
+                    width: headerPosition === 'fixed' ? '54.2%' : '100%',
                     top: headerPosition === 'fixed' && !headerMode ? '125px' : '0',
-                    zIndex: 20
+                    zIndex: 20,
+                    backgroundColor: backgroundColor,
                     }}>
                    <ResolvedComponentsFromCraftState screen={screensHeader} />
                    </div>
@@ -274,7 +263,7 @@ export function CreateFlowComponent() {
                   <div
                   id="editor-content"
                   style={{
-          marginTop: !headerMode && headerPosition === 'fixed' ? `${height + 10}px` : 0,
+          marginTop: !headerMode && headerPosition === 'fixed' ? `${height + 8}px` : 0,
         }}>
                   <Frame data={editorLoad}></Frame>
                   </div>
