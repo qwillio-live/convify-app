@@ -1,0 +1,6 @@
+/* Responsive styles */
+@media (max-width: 450px) {
+    .connect-flow-content {
+        padding-bottom: 150px !important;
+    }
+}

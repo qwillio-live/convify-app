@@ -8,6 +8,7 @@ import SearchBar from "@/components/SearchBar"
 
 import { DummyIntregationCardData } from "./collapsibleContents"
 
+import "./ConnectFlowComponents.css";
 
 const ConnectFlowComponents = () => {
   // const [email, setEmail] = useState<string>("user@email.com")
@@ -47,7 +48,7 @@ const ConnectFlowComponents = () => {
   }, [search])
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full overflow-auto pb-[80px] connect-flow-content" style={{ height: '100vh' }}>
       <div
         className="mx-auto mt-8  flex lg:w-7/12 px-4 flex-col items-center justify-center"
       >
