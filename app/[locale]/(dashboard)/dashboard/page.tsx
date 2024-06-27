@@ -56,19 +56,20 @@ export default function DashboardPage() {
       .then((data) => setUserData(data))
       .catch((error) => console.error("Error fetching user data:", error))
   }, [])
-  console.log("userData", userData);
+
   useEffect(() => {
     fetch("/api/flows")
       .then((res) => res.json())
-      .then((data) => setFlows(data))
-      .catch((error) => console.error("Error fetching user data:", error))
+      .then((data) => {
+        setFlows(data);
+        console.log("flows are inside ", data); // Log the fetched data
+        if (data.length > 0) {
+          setOpenCreatedFlow(true);
+        }
+      })
+      .catch((error) => console.error("Error fetching flows:", error));
+  }, [status]);
 
-    if (flows.length > 0) {
-      setOpenCreatedFlow(true)
-    }
-  }, [])
-
-  console.log("flows", flows);
 
   const handleLogout = async () => {
     await signOut({ redirect: false })
@@ -206,7 +207,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div style={{ height: '100vh', overflow: 'auto' }} className="flex flex-col">
         <div className="sticky top-0 z-20">
           <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
             <Sheet>
@@ -394,7 +395,7 @@ export default function DashboardPage() {
             x-chunk="dashboard-02-chunk-1"
           >
             {openCreateFlow ? (
-              <FlowsList flows={flows} setStatus={setStatus} />
+              <FlowsList flows={flows} setStatus={setStatus} status={status} />
             ) : (
               <div className="flex flex-col items-center gap-1 text-center">
                 <img

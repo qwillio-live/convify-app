@@ -42,6 +42,7 @@ import {
 import { Badge } from "./ui/badge"
 import { useEffect, useState } from "react"
 import { Icons } from "@/components/icons"
+
 function formatDate(isoString: string): string {
   const date = new Date(isoString);
 
@@ -75,7 +76,7 @@ interface Flow {
 
 }
 
-export function FlowsList({ flows, setStatus }) {
+export function FlowsList({ flows, setStatus, status }) {
   const t = useTranslations("Dashboard")
   const [deleteDialog, setDeleteDialog] = useState(false)
   const [flow, setFlow] = useState<Flow>();
@@ -95,7 +96,7 @@ export function FlowsList({ flows, setStatus }) {
       const result = await res.json()
       if (res.ok) {
         console.log("Flow edited successfully:", result)
-        setStatus(true)
+        setStatus(!status)
       }
     } catch (error) {
       console.error("Error creating flow:", error)
@@ -111,30 +112,31 @@ export function FlowsList({ flows, setStatus }) {
           "Content-Type": "application/json"
         },
       })
-      setStatus(true)
+      setStatus(!status)
     } catch (error) {
       console.error("Error duplicate flow:", error)
     }
     return null
   }
 
-  const deleteFlow = (flow_id) => {
+  const deleteFlow = async (flow_id) => {
     try {
       setIsLoading(true)
-      fetch(`/api/flows/${flow_id}`, {
+      await fetch(`/api/flows/${flow_id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
         },
       })
-      setStatus(true)
-      // setIsLoading(false)
+      setStatus(!status)
+      setIsLoading(false)
+      setDeleteDialog(false)
     } catch (error) {
       console.error("Error delete flow:", error)
     }
     return null
   }
-  console.log("flows", flows)
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="sm:py-0 md:gap-8">
@@ -219,7 +221,7 @@ export function FlowsList({ flows, setStatus }) {
                                   <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                                   <DropdownMenuItem onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
                                   <DropdownMenuItem onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => { setDeleteDialog(true); setFlow(flow.id) }}>
+                                  <DropdownMenuItem onClick={() => { setDeleteDialog(true); setFlow(flow) }}>
                                     <Button
                                       variant="destructive"
                                       size="sm"
@@ -228,13 +230,53 @@ export function FlowsList({ flows, setStatus }) {
                                       {t("Delete")}
                                     </Button>
                                   </DropdownMenuItem>
+
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>
                           </TableRow>)
                       })
                     }
-                    {/* <TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+            {/* <CardFooter>
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of <strong>32</strong> products
+                  </div>
+                </CardFooter> */}
+          </Card>
+
+          <AlertDialog open={deleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t("Are you sure want to delete the Flow")}</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setDeleteDialog(false)}>Cancel</AlertDialogCancel>
+                <button
+                  className={cn(buttonVariants())}
+                  disabled={isLoading}
+                  style={{ fontWeight: "600", background: 'red' }}
+                  onClick={() => deleteFlow(flow && flow?.id)}
+                >
+                  {isLoading && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {t("Delete")}
+                </button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </main>
+
+    </div>
+  )
+}
+
+{/* <TableRow>
                       <TableCell className="hidden sm:table-cell">
                         <Image
                           alt="Product image"
@@ -283,8 +325,8 @@ export function FlowsList({ flows, setStatus }) {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
+</TableRow> */}
+{/* <TableRow>
                       <TableCell className="hidden sm:table-cell">
                         <Image
                           alt="Product image"
@@ -333,8 +375,8 @@ export function FlowsList({ flows, setStatus }) {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
+</TableRow> */}
+{/* <TableRow>
                       <TableCell className="hidden sm:table-cell">
                         <Image
                           alt="Product image"
@@ -383,8 +425,8 @@ export function FlowsList({ flows, setStatus }) {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
+</TableRow> */}
+{/* <TableRow>
                       <TableCell className="hidden sm:table-cell">
                         <Image
                           alt="Product image"
@@ -433,8 +475,8 @@ export function FlowsList({ flows, setStatus }) {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
+</TableRow> */}
+{/* <TableRow>
                       <TableCell className="hidden sm:table-cell">
                         <Image
                           alt="Product image"
@@ -483,8 +525,8 @@ export function FlowsList({ flows, setStatus }) {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
+</TableRow> */}
+{/* <TableRow>
                       <TableCell className="hidden sm:table-cell">
                         <Image
                           alt="Product image"
@@ -533,46 +575,4 @@ export function FlowsList({ flows, setStatus }) {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow> */}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-            {/* <CardFooter>
-                  <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-10</strong> of <strong>32</strong> products
-                  </div>
-                </CardFooter> */}
-          </Card>
-
-        </div>
-      </main>
-
-      <AlertDialog open={deleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("Are you sure want to delete the Flow")}</AlertDialogTitle>
-            {/* <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription> */}
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteDialog(false)}>Cancel</AlertDialogCancel>
-            <button
-              className={cn(buttonVariants())}
-              disabled={isLoading}
-              style={{ fontWeight: "600", background: 'red' }}
-              onClick={() => deleteFlow(flow && flow?.id)}
-            >
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {t("Delete")}
-            </button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-  )
-}
+</TableRow> */}
