@@ -458,7 +458,7 @@ const ShareFlowComponents = ({
         </div>
       )}
       <Drawer open={shareDrawerOpen} onOpenChange={setShareDrawerOpen}>
-        <DrawerContent>
+        <DrawerContent className="focus-visible:ring-offset-0 focus-visible:ring-0 outline-none">
           <div className="p-4">
             <h3 className="text-lg text-[rgb(38,38,38)]">
               {t("Share your convify")}
