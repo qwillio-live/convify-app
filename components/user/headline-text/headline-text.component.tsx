@@ -17,9 +17,9 @@ import {
 } from "./useHeadlineThemePresets"
 
 const ContainerWidthValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "400px",
+  medium: "697px",
+  large: "1200px",
   full: "100%",
 }
 
