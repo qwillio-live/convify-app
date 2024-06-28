@@ -42,10 +42,10 @@ const initialState: GlobalThemeState = {
   primaryFonts: FONTS.primaryFonts,
   secondaryFonts: FONTS.secondaryFonts,
   defaultHeader: {
-    headerPosition: "fixed"
+    headerPosition: "absolute"
   },
   header: {
-    headerPosition: "fixed"
+    headerPosition: "absolute"
   },
   defaultGeneral: {
     primaryColor: "#4050ff",

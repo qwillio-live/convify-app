@@ -77,7 +77,7 @@ const SaveButton = () => {
   console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
   return (
     <a
-      className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
+      className="absolute left-3 top-3 z-10 bg-black p-3 text-white"
       onClick={() => console.log(query.serialize())}
     >
       Get JSON
@@ -96,7 +96,7 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
-type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
+type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
 
 export function CreateFlowComponent() {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -234,7 +234,7 @@ export function CreateFlowComponent() {
           ref={containerRef}
           id="scroll-container"
           className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 ">
-            <div className="section-header mt-8 flex items-center justify-between"></div>
+            {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
@@ -268,8 +268,8 @@ export function CreateFlowComponent() {
                    id="editor-header"
                    style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'fixed' ? width+'px' : '100%',
-                    top: headerPosition === 'fixed' && !headerMode ? '92px' : '0',
+                    width: headerPosition === 'absolute' ? width+'px' : '100%',
+                    top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
                     // top: headerPosition === 'absolute' ? '66px' : '0',
                     // width: width,
                     zIndex: 20,
@@ -281,7 +281,7 @@ export function CreateFlowComponent() {
                   <div
                   id="editor-content"
                   style={{
-          marginTop: !headerMode && headerPosition === 'fixed' ? `${height + 8}px` : 0,
+          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+8}px` : 0,
         }}>
                   <Frame data={editorLoad}></Frame>
                   </div>
@@ -292,7 +292,7 @@ export function CreateFlowComponent() {
 
 
                 </TabsContent>
-                <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
+                <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
                   <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>

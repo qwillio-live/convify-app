@@ -182,7 +182,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                    <SelectItem value={"fixed"}>
+                    <SelectItem value={"absolute"}>
                       {t("Fixed")}
                     </SelectItem>
                     <SelectItem value={"relative"}>
