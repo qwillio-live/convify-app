@@ -17,12 +17,12 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
+import { Checkbox } from "./checkbox-element"
 import { UserInputCheckboxSettings } from "./user-input-checkbox-settings.component"
 
 export enum UserInputSizes {
@@ -206,7 +206,6 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   border-bottom-width: ${(props) => props.borderBottomWidth}px;
   border-left-width: ${(props) => props.borderLeftWidth}px;
   border-right-width: ${(props) => props.borderRightWidth}px;
-
   align-self: center;
 `
 
@@ -217,7 +216,6 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   console.log(props.backgroundImage)
-
 
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
@@ -271,13 +269,13 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           </div> */}
 
           <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
-          <Checkbox
-                  className={cn(`h-6 w-6 mb-5 mr-2 z-50 `)}
-                  checkmarkColor={primaryTextColor}
-                  style={{
-                    borderColor: `${primaryTextColor}`,
-                  }}
-                />
+            <Checkbox
+              className={cn(`h-6 w-6 mb-5 mr-2 z-50 `)}
+              checkmarkColor={primaryTextColor}
+              style={{
+                borderColor: `${primaryTextColor}`,
+              }}
+            />
 
             {/* <UserInputCheckboxStyled
               ref={inputRef}
@@ -365,12 +363,11 @@ export const UserInputCheckbox = ({ ...props }) => {
 
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
+  const [isActive, setIsActive] = useState(false)
   const parentContainer = node(parent || "").get()
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const [hover, setHover] = useState(false)
-  const [inputValue, setInputValue] = useState(props.label || "")
-  const [showCheckbox, setShowCheckbox] = useState(false)
 
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const secondaryFont = useAppSelector(
@@ -465,7 +462,11 @@ export const UserInputCheckbox = ({ ...props }) => {
               ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
-              borderColor={"transparent"}
+              borderColor={
+                props.isActive
+                  ? props.activeBorderColor.value
+                  : props.borderColor.value
+              }
               error={props.error}
               primaryFont={props.primaryFont.value}
               borderWidth={props.borderWidth}
@@ -474,7 +475,6 @@ export const UserInputCheckbox = ({ ...props }) => {
               borderLeftWidth={props.borderLeftWidth}
               borderRightWidth={props.borderRightWidth}
               borderRadius={props.borderRadius}
-              // placeholder={props.placeholder}
               topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
               topRightRadius={props.topRightRadius}
               bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
@@ -483,23 +483,17 @@ export const UserInputCheckbox = ({ ...props }) => {
               size={props.size}
               onFocus={() => setProp((props) => (props.isActive = true))}
               className={cn(
-                {
-                  "font-semibold text-base placeholder:text-gray-400 placeholder:font-light":
-                    !props.floatingLabel,
-                  "rounded-l-none": props.enableIcon,
-                },
-                `ring-0
-                border-transparent
-              outline-none
-              focus-visible:outline-none
-              peer-focus-visible:outline-none
-              focus-visible:ring-0
-              ring-opacity-0/0
-              bg-inherit
-              transition-all
-              duration-200
-              ease-in-out
-              focus-visible:ring-transparent focus-visible:ring-offset-0`
+                `font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light
+                ring-0
+          outline-none
+          focus-visible:outline-none
+          peer-focus-visible:outline-none
+          focus-visible:ring-0
+          ring-opacity-0/0
+          transition-all
+          duration-200
+          ease-in-out
+          focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
               // onChange={
               //   (e) => setProp((props) => (props.inputValue = e.target.value))
@@ -509,15 +503,6 @@ export const UserInputCheckbox = ({ ...props }) => {
               onBlur={() => setProp((props) => (props.isActive = false))}
               autoFocus={props.isFocused}
             >
-              {props.label.length === 0 ? null : (
-                <Checkbox
-                  className={cn(`h-6 w-6 absolute left-4 top-4 z-50 `)}
-                  checkmarkColor={primaryTextColor}
-                  style={{
-                    borderColor: `${primaryTextColor}`,
-                  }}
-                />
-              )}
               <ContentEditable
                 html={props.label}
                 disabled={false}
@@ -532,14 +517,27 @@ export const UserInputCheckbox = ({ ...props }) => {
                     500
                   )
                 }
-                className={`mb-1 p-4 indent-8 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`mb-1 indent-7  text-[14.4px] border-none relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${primaryTextColor}`,
+
                   // minWidth: `${UserInputSizeValues[props.size]}`,
                   // width: `${UserInputSizeValues[props.size]}`,
                 }}
               />
+                
+              {props.label.length === 0 ? null : (
+                <Checkbox
+                  className={cn(
+                    `h-[18px] w-[18px] absolute left-4 bg-white top-7 z-50 `
+                  )}
+                  checkmarkColor={primaryTextColor}
+                  style={{
+                    borderColor: `${primaryTextColor}`,
+                  }}
+                />
+              )}
             </UserInputCheckboxStyled>
           </div>
         </div>
