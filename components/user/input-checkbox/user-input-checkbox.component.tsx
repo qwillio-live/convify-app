@@ -269,20 +269,12 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           </div> */}
 
           <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
-            <Checkbox
-              className={cn(`h-6 w-6 mb-5 mr-2 z-50 `)}
-              checkmarkColor={primaryTextColor}
-              style={{
-                borderColor: `${primaryTextColor}`,
-              }}
-            />
-
-            {/* <UserInputCheckboxStyled
+          <UserInputCheckboxStyled
               ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
-                isActive
+                props.isActive
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
@@ -300,41 +292,43 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               bottomRightRadius={props.bottomRightRadius}
               width={props.width}
               size={props.size}
-              onFocus={() => setIsActive(true)}
               className={cn(
-                {
-                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-                  "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
-                    !props.floatingLabel,
-                  "rounded-l-none": props.enableIcon,
-                },
-                `ring-0
+                `font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light
+                ring-0
           outline-none
           focus-visible:outline-none
           peer-focus-visible:outline-none
           focus-visible:ring-0
           ring-opacity-0/0
-          bg-white
           transition-all
           duration-200
           ease-in-out
           focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
-              // onChange={(e) => setInputValue(e.target.value)}
-              onBlur={() => setIsActive(false)}
-              autoFocus={isFocused}
-            /> */}
+              // onChange={
+              //   (e) => setProp((props) => (props.inputValue = e.target.value))
+              //   // not to set input prop when editing
+              //   // console.log("Input field value is: ", e.target.value)
+              // }
+            >
             <div
-              className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+              className={`mb-1 relative text-[14.5px] text-ellipsis transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                minWidth: `${UserInputSizeValues[props.size]}`,
-                width: `${UserInputSizeValues[props.size]}`,
                 color: `${primaryTextColor}`,
               }}
             >
+              <Checkbox
+                className={cn(`h-4 w-4 mr-2 z-50 bg-white `)}
+                checkmarkColor={primaryTextColor}
+                style={{
+                  borderColor: `${primaryTextColor}`,
+                }}
+              />
+              
               {props.label}
             </div>
+            </UserInputCheckboxStyled>
           </div>
           {/** End field container */}
         </div>
@@ -517,7 +511,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                     500
                   )
                 }
-                className={`mb-1 indent-7  text-[14.4px] border-none relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`mb-1 indent-7  text-[14.4px] border-none relative transition-all outline-none duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${primaryTextColor}`,
@@ -526,7 +520,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                   // width: `${UserInputSizeValues[props.size]}`,
                 }}
               />
-                
+
               {props.label.length === 0 ? null : (
                 <Checkbox
                   className={cn(
