@@ -11,7 +11,6 @@ import {
   Linkedin,
 } from "lucide-react"
 import React, { useCallback } from "react"
-import React, { useCallback } from "react"
 import { throttle,debounce } from 'lodash';
 
 
