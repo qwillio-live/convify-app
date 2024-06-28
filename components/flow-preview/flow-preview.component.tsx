@@ -40,7 +40,7 @@ export default function FlowPreview() {
     ref={previewHeaderRef}
     id="preview_header"
     style={{
-      position: headerPosition as Position,
+      position: headerPosition as Position === 'absolute' ? 'fixed' : 'relative',
       width: '100%',
       top: '0',
       zIndex: 20,
@@ -55,7 +55,7 @@ export default function FlowPreview() {
             id={screen?.screenName}
             style={{
               backgroundColor: backgroundColor,
-              marginTop: headerPosition === 'fixed' ? headerHeight+'px' : '0'
+              marginTop: headerPosition === 'absolute' ? headerHeight+'px' : '0'
              }}
             className="my-14 min-h-screen
           shrink-0
