@@ -323,17 +323,13 @@ const StepItem = ({
                 </span>
               </div>
             ) : (
-              <picture key={(step.picture as ImagePictureTypes).original}>
-                <source
-                  media="(min-width:1080px)"
-                  srcSet={(step.picture as ImagePictureTypes).desktop}
-                />
+              <picture key={(step.picture as ImagePictureTypes).desktop}>
                 <source
                   media="(min-width:560px)"
                   srcSet={(step.picture as ImagePictureTypes).mobile}
                 />
                 <img
-                  src={(step.picture as ImagePictureTypes).original}
+                  src={(step.picture as ImagePictureTypes).desktop}
                   className="step-picture-image size-7 object-contain"
                   loading="lazy"
                 />

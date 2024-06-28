@@ -604,17 +604,13 @@ export const LogoBarItemSettings = ({ item, index }) => {
         className="flex-1"
         onClick={() => inputRef.current?.click()}
       >
-        <picture key={(item.src as ImagePictureTypes).original}>
-          <source
-            media="(min-width:1080px)"
-            srcSet={(item.src as ImagePictureTypes).desktop}
-          />
+        <picture key={(item.src as ImagePictureTypes).desktop}>
           <source
             media="(min-width:560px)"
             srcSet={(item.src as ImagePictureTypes).mobile}
           />
           <img
-            src={(item.src as ImagePictureTypes).original}
+            src={(item.src as ImagePictureTypes).desktop}
             className="h-6 w-full object-contain"
             loading="lazy"
           />

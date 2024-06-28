@@ -179,9 +179,9 @@ export const PicturePicker = ({
         .toDataURL("image/webp")
 
       let uploadedImage: ImagePictureTypes = {
-        original: resizedImageData,
+        original: undefined,
         mobile: undefined,
-        desktop: undefined,
+        desktop: resizedImageData,
       }
 
       handleImageChange({ ...uploadedImage })

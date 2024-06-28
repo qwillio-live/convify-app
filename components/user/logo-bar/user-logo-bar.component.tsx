@@ -70,17 +70,13 @@ export const LogoBarGen = ({
             key={index}
             style={{ height: `${height}px` }}
           >
-            <picture key={(item.src as ImagePictureTypes).original}>
-              <source
-                media="(min-width:1080px)"
-                srcSet={(item.src as ImagePictureTypes).desktop}
-              />
+            <picture key={(item.src as ImagePictureTypes).desktop}>
               <source
                 media="(min-width:560px)"
                 srcSet={(item.src as ImagePictureTypes).mobile}
               />
               <img
-                src={(item.src as ImagePictureTypes).original}
+                src={(item.src as ImagePictureTypes).desktop}
                 className="h-full w-auto object-contain"
                 loading="lazy"
                 style={{
@@ -191,19 +187,15 @@ export const LogoBar = ({
               style={{ height: `${height}px` }}
             >
               <picture
-                key={(item.src as ImagePictureTypes).original}
+                key={(item.src as ImagePictureTypes).desktop}
                 className="h-full"
               >
-                <source
-                  media="(min-width:1080px)"
-                  srcSet={(item.src as ImagePictureTypes).desktop}
-                />
                 <source
                   media="(min-width:560px)"
                   srcSet={(item.src as ImagePictureTypes).mobile}
                 />
                 <img
-                  src={(item.src as ImagePictureTypes).original}
+                  src={(item.src as ImagePictureTypes).desktop}
                   className="h-full w-auto object-contain"
                   loading="lazy"
                   style={{

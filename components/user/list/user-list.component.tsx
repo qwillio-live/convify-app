@@ -320,17 +320,13 @@ const ListItem = ({
               {item.picture as string}
             </span>
           ) : (
-            <picture key={(item.picture as ImagePictureTypes).original}>
-              <source
-                media="(min-width:1080px)"
-                srcSet={(item.picture as ImagePictureTypes).desktop}
-              />
+            <picture key={(item.picture as ImagePictureTypes).desktop}>
               <source
                 media="(min-width:560px)"
                 srcSet={(item.picture as ImagePictureTypes).mobile}
               />
               <img
-                src={(item.picture as ImagePictureTypes).original}
+                src={(item.picture as ImagePictureTypes).desktop}
                 className="size-10 object-contain"
                 loading="lazy"
               />

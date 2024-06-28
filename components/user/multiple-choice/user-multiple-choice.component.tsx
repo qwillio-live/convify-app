@@ -477,17 +477,13 @@ const MultipleChoiceItem = ({
               {choice.picture}
             </span>
           ) : (
-            <picture key={(choice.picture as ImagePictureTypes).original}>
-              <source
-                media="(min-width:1080px)"
-                srcSet={(choice.picture as ImagePictureTypes).desktop}
-              />
+            <picture key={(choice.picture as ImagePictureTypes).desktop}>
               <source
                 media="(min-width:560px)"
                 srcSet={(choice.picture as ImagePictureTypes).mobile}
               />
               <img
-                src={(choice.picture as ImagePictureTypes).original}
+                src={(choice.picture as ImagePictureTypes).desktop}
                 className="size-6 object-contain"
                 loading="lazy"
               />
