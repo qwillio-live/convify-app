@@ -59,6 +59,7 @@ import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { useRouter } from "next/navigation"
 import { RootState } from "@/lib/state/flows-state/store";
+import { clear } from "console";
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -101,7 +102,7 @@ export function CreateFlowComponent() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const editorHeaderRef = React.useRef(null);
   const [height, setHeight] = React.useState(90);
-
+  const [width, setWidth] = React.useState(0);
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const [topMargin,setTopMargin] = React.useState<number>(0);
   const dispatch = useAppDispatch()
@@ -140,14 +141,29 @@ export function CreateFlowComponent() {
       const height = document?.getElementById("editor-content")?.offsetHeight || 0;
       setHeight(height)
     }else{
-      if (editorHeaderRef.current) {
+      if (editorHeaderRef.current && editorHeaderRef) {
         //@ts-ignore
         setHeight(editorHeaderRef?.current?.offsetHeight);
       }
     }
 
   }, [headerMode,height]);
+  React.useEffect(() => {
+    const updateWidth = () => {
+      const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
+      setWidth(newWidth);
+    };
 
+    // Initial width setting
+    updateWidth();
+
+    // Event listener for window resize
+    window.addEventListener('resize', updateWidth);
+    window.addEventListener('', updateWidth);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [headerMode, height]);
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -252,12 +268,14 @@ export function CreateFlowComponent() {
                    id="editor-header"
                    style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'fixed' ? '54%' : '100%',
-                    top: headerPosition === 'fixed' && !headerMode ? '124px' : '0',
+                    width: headerPosition === 'fixed' ? width+'px' : '100%',
+                    top: headerPosition === 'fixed' && !headerMode ? '92px' : '0',
+                    // top: headerPosition === 'absolute' ? '66px' : '0',
+                    // width: width,
                     zIndex: 20,
                     backgroundColor: backgroundColor,
                     }}>
-                   <ResolvedComponentsFromCraftState screen={screensHeader} />
+                    <ResolvedComponentsFromCraftState screen={screensHeader} />
                    </div>
                   }
                   <div
