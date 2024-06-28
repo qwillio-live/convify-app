@@ -132,7 +132,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect(url) {
-      if (url.url === url.baseUrl + "/login" || url.url === url.baseUrl + "/register") {
+      if (url.url === url.baseUrl + "/login" || url.url === url.baseUrl + "/register" || url.url === url.baseUrl + "/pt/login" || url.url === url.baseUrl + "/pt/register") {
         return '/dashboard'; // Redirect to your dashboard after Google authentication
       }
       return url.url;
