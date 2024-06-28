@@ -9,16 +9,20 @@ import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import { UserTextGen } from "@/components/user/text/user-text.component"
 
 import { UserInputGen } from "../input/user-input.component"
-import { LogoBarGen } from "../logo-bar/logo-bar.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
 import jsonData from "./parse.json"
-import { PictureChoiceGen } from "../picture-choice/picture-choice.component"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
+import { PictureChoiceGen } from "../picture-choice/user-picture-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
 import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { SelectGen } from "../select/user-select.component"
+import { ChecklistGen } from "../checklist/user-checklist.component"
+import { ListGen } from "../list/user-list.component"
+import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
+import { StepsGen } from "../steps/user-steps.component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -30,11 +34,15 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
+  [CRAFT_ELEMENTS.SELECT]: SelectGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
   [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
+  [CRAFT_ELEMENTS.STEPS]: StepsGen,
+  [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
+  [CRAFT_ELEMENTS.LIST]: ListGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
 }
 

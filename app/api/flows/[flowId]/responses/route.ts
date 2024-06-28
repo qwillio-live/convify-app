@@ -5,7 +5,6 @@ import { z } from "zod"
 
 const ResponseCreateRequestSchema = z
   .object({
-    isFinished: z.boolean(),
     content: z.record(z.unknown()),
   })
   .strict()
@@ -62,8 +61,7 @@ export async function POST(
         flowId: String(flowId),
         ip: ipAddr,
         userAgent: userAgent,
-        content: data.content,
-        isFinished: data.isFinished,
+        content: data.content
       },
     })
     flow.numberOfResponses = flow.numberOfResponses? flow.numberOfResponses : 0;
@@ -97,6 +95,9 @@ export async function GET(
       include: {
         responses: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
     if (!flow) {
@@ -111,7 +112,7 @@ export async function GET(
       })
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
-
+    flow.responses.sort((a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt)))
     return NextResponse.json(flow.responses)
   } catch (error) {
     const statusCode = 500

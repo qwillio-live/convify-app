@@ -1,58 +1,43 @@
 {
-	"ROOT": {
-		"type": "UserContainer",
-		"isCanvas": true,
-		"props": {
-			"padding": 5,
-			"background": "#ad2121",
-			"expanded": "true",
-			"className": "min-w-full flex flex-col items-center py-5"
-		},
-		"displayName": "One Input Screen",
-		"custom": {
-
-		},
-		"hidden": false,
-		"nodes": [
-			"mdsAe2aBSM",
-			"HsVEwi1W0N",
-			"WyPGuBF4RD",
-			"lWqDrGF2Nc"
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"mdsAe2aBSM": {
-		"type": {
-			"resolvedName": "ProgressBar"
-		},
-		"isCanvas": false,
-		"props": {
-			"color": "#4050ff",
-			"maxWidth": "366",
-			"fullWidth": false,
-			"progressvalue": "20"
-		},
-		"displayName": "ProgressBar",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"HsVEwi1W0N": {
-		"type": {
-			"resolvedName": "HeadlineText"
-		},
-		"isCanvas": false,
-		"props": {
+  "ROOT": {
+    "type": "UserContainer",
+    "isCanvas": true,
+    "props": {
+      "padding": 5,
+      "background": "#ad2121",
+      "expanded": "true",
+      "className": "min-w-full flex flex-col items-center py-5"
+    },
+    "displayName": "One Input Screen",
+    "custom": {},
+    "hidden": false,
+    "nodes": ["mdsAe2aBSM", "HsVEwi1W0N", "WyPGuBF4RD", "lWqDrGF2Nc"],
+    "linkedNodes": {}
+  },
+  "mdsAe2aBSM": {
+    "type": {
+      "resolvedName": "ProgressBar"
+    },
+    "isCanvas": false,
+    "props": {
+      "color": "#4050ff",
+      "maxWidth": "366",
+      "fullWidth": false,
+      "progressvalue": "20"
+    },
+    "displayName": "ProgressBar",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  },
+  "HsVEwi1W0N": {
+    "type": {
+      "resolvedName": "HeadlineText"
+    },
+    "isCanvas": false,
+    "props": {
       "text": "How many employees does your company have?",
       "fontSize": {
         "value": 42,
@@ -101,186 +86,278 @@
       },
       "tagType": "h1"
     },
-		"displayName": "HeadlineText",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"WyPGuBF4RD": {
-		"type": {
-			"resolvedName": "MultipleChoice"
-		},
-		"isCanvas": false,
-		"props": {
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"background": "#ffffff",
-			"radius": 0,
-			"width": 360,
-			"lastSelectedChoice": 1,
-			"singleChoice": true,
-			"viewWithIcon": true,
-			"choicesMade": [
-
-			],
-			"multipleChoiceStyles": {
-				"fontSize": 18,
-				"background": "#ffffff",
-				"hoverBackground": "#4050ff",
-				"radius": 8,
-				"fontWeight": "700",
-				"border": 2,
-				"borderColor": "#eaeaeb",
-				"hoverBorderColor": "#4050ff",
-				"textColor": "#000000",
-				"hoverTextColor": "#ffffff",
-				"paddingTop": 16,
-				"paddingBottom": 16,
-				"paddingLeft": 16,
-				"paddingRight": 16,
-				"gap": 8
-			},
-			"multipleChoices": [
-				{
-					"id": "1",
-					"optionLogo": null,
-					"optionLabel": "1 to 2",
-					"optionValue": "option1",
-					"optionSelected": false
-				},
-				{
-					"id": "2",
-					"optionLogo": null,
-					"optionLabel": "3 to 9",
-					"optionValue": "option2",
-					"optionSelected": true
-				},
-				{
-					"id": "3",
-					"optionLogo": null,
-					"optionLabel": "10 to 49",
-					"optionValue": "option3",
-					"optionSelected": false
-				},
-				{
-					"id": "4",
-					"optionLogo": null,
-					"optionLabel": "50 to 99",
-					"optionValue": "option4",
-					"optionSelected": false
-				}
-			]
-		},
-		"displayName": "MultipleChoice",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"lWqDrGF2Nc": {
-		"type": {
-			"resolvedName": "IconButton"
-		},
-		"isCanvas": false,
-		"props": {
-			"fontFamily": {
-				"value": "--font-heading",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"containerBackground": "#ffffff",
-			"background": {
-				"value": "#4050ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"color": {
-				"value": "#ffffff",
-				"globalStyled": false,
-				"isCustomized": true
-			},
-			"backgroundHover": {
-				"value": "#3142ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"colorHover": {
-				"value": "#ffffff",
-				"globalStyled": false,
-				"isCustomized": true
-			},
-			"radius": {
-				"value": "8",
-				"globalStyled": false,
-				"isCustomized": false
-			},
-			"justifyContent": "space-between",
-			"borderColor": {
-				"value": "#4050ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"borderHoverColor": {
-				"value": "#4050ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"disabled": false,
-			"enableIcon": true,
-			"width": "medium",
-			"height": "auto",
-			"size": "medium",
-			"text": "Get quote",
-			"marginLeft": 20,
-			"marginTop": [
-				40
-			],
-			"marginRight": 20,
-			"marginBottom": [
-				40
-			],
-			"icon": "arrowright",
-			"paddingLeft": "16",
-			"paddingTop": "14",
-			"paddingRight": "16",
-			"paddingBottom": "14",
-			"flexDirection": "row",
-			"alignItems": "center",
-			"gap": 4,
-			"border": 2,
-			"fullWidth": true,
-			"preset": "filled",
+    "displayName": "HeadlineText",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  },
+  "WyPGuBF4RD": {
+    "type": {
+      "resolvedName": "MultipleChoice"
+    },
+    "isCanvas": false,
+    "props": {
+      "fontFamily": {
+        "value": "inherit",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "size": "medium",
+      "required": false,
+      "fieldName": "",
+      "layout": "list",
+      "containerBackground": "transparent",
+      "paddingLeft": "16",
+      "paddingTop": "20",
+      "paddingRight": "16",
+      "paddingBottom": "20",
+      "marginLeft": 0,
+      "marginTop": 20,
+      "marginRight": 0,
+      "marginBottom": 20,
+      "fullWidth": true,
+      "settingTabs": ["content"],
+      "multiSelect": false,
+      "checkboxVisible": true,
+      "contentReversed": false,
+      "preset": "outlined",
+      "defaultStyles": {
+        "checkBoxIconColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "checkboxBorderColor": {
+          "value": "#eaeaeb",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "checkBoxBackgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "iconColor": {
+          "value": "#eaeaeb",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "textColor": {
+          "value": "#000000",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "borderColor": {
+          "value": "#eaeaeb",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "backgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        }
+      },
+      "hoverStyles": {
+        "checkBoxIconColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "checkboxBorderColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "checkBoxBackgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "iconColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "textColor": {
+          "value": "#000000",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "borderColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "backgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        }
+      },
+      "selectedStyles": {
+        "checkBoxIconColor": {
+          "value": "#ffffff",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "checkboxBorderColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "checkBoxBackgroundColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "iconColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "textColor": {
+          "value": "#000000",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "borderColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "backgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        }
+      },
+      "selections": [],
+      "choices": [
+        {
+          "id": "input-1",
+          "picture": null,
+          "pictureType": "null",
+          "value": "First",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        },
+        {
+          "id": "input-2",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Second",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        },
+        {
+          "id": "input-3",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Third",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        },
+        {
+          "id": "input-4",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Fourth",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        }
+      ]
+    },
+    "displayName": "MultipleChoice",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  },
+  "lWqDrGF2Nc": {
+    "type": {
+      "resolvedName": "IconButton"
+    },
+    "isCanvas": false,
+    "props": {
+      "fontFamily": {
+        "value": "--font-heading",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "containerBackground": "#ffffff",
+      "background": {
+        "value": "#4050ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "color": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": true
+      },
+      "backgroundHover": {
+        "value": "#3142ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "colorHover": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": true
+      },
+      "radius": {
+        "value": "8",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "justifyContent": "space-between",
+      "borderColor": {
+        "value": "#4050ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "borderHoverColor": {
+        "value": "#4050ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "disabled": false,
+      "enableIcon": true,
+      "width": "medium",
+      "height": "auto",
+      "size": "medium",
+      "text": "Get quote",
+      "marginLeft": 20,
+      "marginTop": [40],
+      "marginRight": 20,
+      "marginBottom": [40],
+      "icon": "arrowright",
+      "paddingLeft": "16",
+      "paddingTop": "14",
+      "paddingRight": "16",
+      "paddingBottom": "14",
+      "flexDirection": "row",
+      "alignItems": "center",
+      "gap": 4,
+      "border": 2,
+      "fullWidth": true,
+      "preset": "filled",
       "settingsTab": "content",
       "buttonSize": "medium"
-		},
-		"displayName": "IconButton",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	}
+    },
+    "displayName": "IconButton",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  }
 }
