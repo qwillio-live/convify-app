@@ -16,6 +16,11 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 
+import { Minus, Plus } from "lucide-react"
+
+import { Bar, BarChart, ResponsiveContainer } from "recharts"
+import './Share.css'
+import { ShareDrawerDesktop } from "./drawerDesktopShare"
 
 const ShareFlowComponents = ({
   isPublished }) => {
@@ -458,95 +463,122 @@ const ShareFlowComponents = ({
         </div>
       )}
       <Drawer open={shareDrawerOpen} onOpenChange={setShareDrawerOpen}>
-        <DrawerContent className="focus-visible:ring-offset-0 focus-visible:ring-0 outline-none">
+        <DrawerContent className="outline-none disable-after"
+          style={{ marginBottom: "3px", borderRadius: "10px" }}
+        >
           <div className="p-4">
-            <h3 className="text-lg text-[rgb(38,38,38)]">
-              {t("Share your convify")}
-            </h3>
+            <div
+              className="flex justify-between items-center"
+              style={{ fontSize: '20px', lineHeight: '28px', color: 'rgb(38, 38, 38)', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}
+            >
+              <h3 className="text-lg"
+
+                style={{ fontSize: '20px', lineHeight: '28px', color: 'rgb(38, 38, 38)', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}
+              >
+                {t("Share your convify")}
+              </h3>
+              <button
+                onClick={() => setShareDrawerOpen(false)}
+                aria-label="Close"
+                style={{ fontSize: '30px', cursor: 'pointer', color: 'rgb(137, 137, 137)' }}
+              >
+                ×
+              </button>
+            </div>
             <div className="mt-4">
-              <div className="flex mb-4">
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
+              <div className="flex mb-4 gap-[12px]">
+                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                  style={{ borderRadius: "50%", backgroundColor: "rgb(47, 130, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+                >
                   <svg
-                    width="16"
-                    height="16"
+                    width="18"
+                    height="18"
                     viewBox="0 0 16 16"
-                    fill="none"
+                    fill="#FFF"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       d="M16 8.04853C16 3.6032 12.4187 0 8 0C3.58133 0 0 3.6032 0 8.04853C0 12.0667 2.9248 15.3963 6.74987 16V10.3755H4.71893V8.048H6.74987V6.2752C6.74987 4.25813 7.944 3.14347 9.77173 3.14347C10.6464 3.14347 11.5627 3.3008 11.5627 3.3008V5.2816H10.5531C9.55947 5.2816 9.25013 5.9024 9.25013 6.5392V8.04853H11.4688L11.1141 10.3749H9.25013V16C13.0752 15.3963 16 12.0667 16 8.04853Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
+                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                  style={{ borderRadius: "50%", backgroundColor: "rgb(10, 102, 194)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+                >
                   <svg
-                    width="16"
-                    height="16"
+                    width="18"
+                    height="18"
                     viewBox="0 0 16 16"
-                    fill="none"
+                    fill="#FFF"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       fillRule="evenodd"
                       clipRule="evenodd"
                       d="M1.7778 0.888916C1.28689 0.888916 0.888916 1.28689 0.888916 1.7778V14.2222C0.888916 14.7132 1.28689 15.1111 1.7778 15.1111H14.2222C14.7132 15.1111 15.1111 14.7132 15.1111 14.2222V1.7778C15.1111 1.28689 14.7132 0.888916 14.2222 0.888916H1.7778ZM8.22149 6.30691H6.30691V13.0794H8.33865V9.82657C8.33865 8.6915 8.82559 8.00003 9.84688 8.00003C10.688 8.00003 11.0476 8.79038 11.0476 9.69112V13.0794H13.0794V9.32066C13.0794 7.30856 12.5085 6.22225 10.4625 6.22225C9.39652 6.22225 8.53438 6.7566 8.24248 7.28282H8.22149V6.30691ZM4.95241 13.0794H2.92066V6.30691H4.95241V13.0794ZM3.93653 5.20638C4.63816 5.20638 5.20638 4.63816 5.20638 3.93653C5.20638 3.23491 4.63816 2.66669 3.93653 2.66669C3.23491 2.66669 2.66669 3.23491 2.66669 3.93653C2.66669 4.63816 3.23491 5.20638 3.93653 5.20638Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
+                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                  style={{ borderRadius: "50%", backgroundColor: "rgb(30, 156, 241)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+                >
                   <svg
-                    width="16"
-                    height="16"
+                    width="18"
+                    height="18"
                     viewBox="0 0 16 16"
-                    fill="none"
+                    fill="#FFF"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       fillRule="evenodd"
                       clipRule="evenodd"
                       d="M8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16ZM6.536 12.22C10.084 12.22 12.024 9.28 12.024 6.732C12.024 6.64801 12.024 6.56398 12.02 6.484C12.396 6.212 12.724 5.872 12.984 5.484C12.64 5.636 12.268 5.74 11.876 5.788C12.276 5.548 12.58 5.172 12.724 4.72C12.352 4.94 11.94 5.1 11.5 5.188C11.148 4.812 10.648 4.58 10.092 4.58C9.028 4.58 8.164 5.444 8.164 6.508C8.164 6.66 8.18 6.808 8.216 6.948C6.612 6.868 5.192 6.1 4.24 4.932C4.076 5.216 3.98 5.548 3.98 5.9C3.98 6.568 4.32 7.16 4.84 7.504C4.524 7.496 4.228 7.408 3.968 7.264V7.288C3.968 8.224 4.632 9 5.516 9.18C5.356 9.224 5.184 9.248 5.008 9.248C4.884 9.248 4.764 9.236 4.644 9.212C4.888 9.98 5.6 10.536 6.444 10.552C5.784 11.068 4.952 11.376 4.048 11.376C3.892 11.376 3.74 11.368 3.588 11.348C4.432 11.9 5.448 12.22 6.536 12.22Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
+                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                  style={{ borderRadius: "50%", backgroundColor: "rgb(44, 75, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+                >
                   <svg
-                    width="14"
-                    height="16"
-                    viewBox="0 0 14 16"
-                    fill="none"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 16 16"
+                    fill="#FFF"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       d="M6.96165 0L0.249512 3.47691L6.96165 6.96599L13.7461 3.47691L6.96165 0Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                     <path
                       d="M2.38244 6.53061L6.96165 8.78254L11.5891 6.53061L13.7461 7.58152L6.96165 10.8844L0.249512 7.58152L2.38244 6.53061Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                     <path
                       d="M6.96165 12.9322L2.38244 10.449L0.249512 11.6019L6.96165 15.2381L13.7461 11.6019L11.5891 10.449L6.96165 12.9322Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
+                {/* <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                  style={{ borderRadius: "50%", backgroundColor: "rgb(47, 130, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+                >
                   <svg
-                    width="12"
-                    height="16"
-                    viewBox="0 0 12 16"
-                    fill="none"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 16 16"
+                    fill="#FFF"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       d="M7.04054 4.35316L9.42089 1.91823L10.8113 3.32384L8.30856 5.69236H11.8234V7.65137H8.28638L10.8002 10.0863L9.40976 11.4587L5.995 8.03871L2.58028 11.4587L1.20105 10.0863L3.71482 7.65137H0.177734V5.69236H3.69258L1.18992 3.32384L2.56916 1.91823L4.94947 4.35316V0.888916H7.01836V4.35316H7.04054ZM4.97172 10.4626H7.04054V15.1111H4.97172V10.4626Z"
-                      fill="currentColor"
+                      fill="#FFF"
                     ></path>
                   </svg>
-                </button>
+                </button> */}
               </div>
               <button
                 type="button"
@@ -556,12 +588,20 @@ const ShareFlowComponents = ({
                 }}
                 color="description"
                 className="relative m-0 inline-block cursor-pointer border-none p-0 text-[rgb(115,115,115)] underline outline-none"
+                style={{
+                  fontSize: '14px',
+                  color: '#737373',
+                }}
               >
                 {t("Customize link")}
               </button>
               <hr className="text-gray my-2" />
               <div className="flex flex-col gap-2 items-start my-5">
-                <button className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline  hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]">
+                <button className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline  hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                  style={{
+                    fontSize: '14px',
+                  }}
+                >
                   <svg
                     width="16"
                     height="12"
@@ -582,6 +622,9 @@ const ShareFlowComponents = ({
                 </button>
                 <button
                   aria-label="qr code"
+                  style={{
+                    fontSize: '14px',
+                  }}
                   className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                 >
                   <svg
@@ -626,10 +669,10 @@ const ShareFlowComponents = ({
                 </button>
               </div>
               <div className="p-4 rounded-[8px] bg-[rgb(240,240,240)] text-[rgb(38,38,38)]">
-                <p className="mb-2 font-semibold text-sm">
+                <p className="mb-2 font-semibold text-sm" style={{ fontSize: '14px', color: '#262627' }}>
                   {t("Embed your convify on desktop")}
                 </p>
-                <p className="mb-4 text-sm">
+                <p className="mb-4 text-sm" style={{ fontSize: '14px', color: '#262627' }}>
                   {t(
                     "Don't miss the full power of convify on desktop and embed directly on your site"
                   )}
@@ -649,42 +692,7 @@ const ShareFlowComponents = ({
           </div>
         </DrawerContent>
       </Drawer>
-      <Drawer open={desktopDrawerOpen} onOpenChange={setDesktopDrawerOpen}>
-        <DrawerContent>
-          <div className="p-4">
-            <h3 className="text-lg mb-2">{t("Continue on desktop")}</h3>
-            <p className="mb-4 text-sm text-[rgb(115,115,115)]">
-              {t("continue on desktop desc")}
-            </p>
-            <div className="mt-4">
-              <Button
-                className="w-full bg-[rgb(38,38,39)] text-white hover:bg-[rgb(71,71,71)] mb-2 text-base"
-                onClick={() => setDesktopDrawerOpen(false)}
-              >
-                <svg
-                  className="mr-2.5"
-                  width="16"
-                  height="12"
-                  viewBox="0 0 16 12"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M9.898 7.182C9.391 7.689 8.717 7.968 8 7.968C7.2825 7.968 6.6085 7.6885 6.102 7.1815L0 1.08V10C0 11.1045 0.8955 12 2 12H14C15.1045 12 16 11.1045 16 10V1.08L9.898 7.182Z"></path>
-                  <path d="M8 6.505C8.3165 6.505 8.633 6.3875 8.8685 6.1525L15.0205 0H0.9795L7.1315 6.1525C7.367 6.3875 7.6835 6.505 8 6.505Z"></path>
-                </svg>
-                {t("Email me a direct link")}
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full text-base bg-[rgb(227,227,227)] hover:bg-[rgb(227,227,227)]"
-                onClick={() => setDesktopDrawerOpen(false)}
-              >
-                {t("Dismiss")}
-              </Button>
-            </div>
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <ShareDrawerDesktop desktopDrawerOpen={desktopDrawerOpen} setDesktopDrawerOpen={setDesktopDrawerOpen} />
     </div>
   )
 }
