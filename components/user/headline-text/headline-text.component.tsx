@@ -17,9 +17,9 @@ import {
 } from "./useHeadlineThemePresets"
 
 const ContainerWidthValues = {
-  small: "400px",
-  medium: "697px",
-  large: "1200px",
+  small: "520px",
+  medium: "647px",
+  large: "770px",
   full: "100%",
 }
 
@@ -477,7 +477,7 @@ export const HeadlineText = ({
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
               style={{
-                maxWidth: "1008px",
+                maxWidth: "786px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",

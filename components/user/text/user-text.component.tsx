@@ -23,9 +23,9 @@ import {
 import { UserTextInputSettings } from "./user-text-settings"
 
 const ContainerWidthValues = {
-  small: "400px",
-  medium: "697px",
-  large: "1200px",
+  small: "520px",
+  medium: "647px",
+  large: "770px",
   full: "100%",
 }
 
@@ -590,12 +590,12 @@ export const UserText = ({
           buttonSize={buttonSize}
           {...props}
         >
-          <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
+          <div className="flex flex-col overflow-x-clip">
             <ContentEditable
               html={text}
               innerRef={ref}
               style={{
-                maxWidth: "1008px",
+                maxWidth: "787px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
