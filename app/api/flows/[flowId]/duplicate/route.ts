@@ -36,12 +36,19 @@ export async function POST(
         { status: 404 }
       );
     }
-    
+
+    const flowSteps = await prisma.flowStep.findMany({
+      where: { flowId: String(flowId) }
+    });
+    flow.numberOfSteps = flowSteps? flowSteps.length: flow.numberOfSteps;
+
     const newFlowData = {
       userId,
       templateId: flow.templateId,
       name: `${flow.name} - Copy`,
       flowSettings: flow.flowSettings || {},
+      numberOfSteps: flow.numberOfSteps || 0,
+      previewImage:  flow.previewImage || null,
       status: "draft",
       isDeleted: false
     };
@@ -55,17 +62,19 @@ export async function POST(
         flowId: newFlow.id,
         email: userEmail
       },
-    })
-    // flow.steps = flow.steps? flow.steps : {};
-    //   const newFlowSteps = flow.steps.map(({ id, ...step }) => ({
-    //     ...step,
-    //     flowId: newFlow.id,
-    //   }));
+    });
 
-    // await prisma.flowStep.createMany({
-    //   data: newFlowSteps,
-    // });
-
+    if(flowSteps) {
+      const newFlowSteps = flowSteps.map(({ id, ...step }) => ({
+        ...step,
+        flowId: newFlow.id,
+      }));
+  
+      await prisma.flowStep.createMany({
+        data: newFlowSteps,
+      });
+    }
+    
     return NextResponse.json(newFlow);
   } catch (error) {
     console.error(error);
