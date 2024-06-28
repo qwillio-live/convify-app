@@ -252,8 +252,8 @@ export function CreateFlowComponent() {
                    id="editor-header"
                    style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'fixed' ? '54.2%' : '100%',
-                    top: headerPosition === 'fixed' && !headerMode ? '125px' : '0',
+                    width: headerPosition === 'fixed' ? '54%' : '100%',
+                    top: headerPosition === 'fixed' && !headerMode ? '124px' : '0',
                     zIndex: 20,
                     backgroundColor: backgroundColor,
                     }}>

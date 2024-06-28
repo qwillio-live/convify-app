@@ -134,6 +134,7 @@ export const screensSlice = createSlice({
       state.screensFieldsList = screenFieldsList;
     },
     setFieldProp: (state,action: PayloadAction<{fieldId: string, fieldName: string, fieldValue: any}>) => {
+      const selectedScreenId= state.screens[state.selectedScreen].screenId;
       const selectedScreen = state.selectedScreen;
       const { fieldId, fieldName, fieldValue } = action.payload;
       const screenFields = state.screens[selectedScreen].screenFields;
@@ -143,6 +144,17 @@ export const screensSlice = createSlice({
         screenFields[fieldId] = field;
         state.screens[selectedScreen].screenFields = screenFields;
       }
+      const screenFieldsList = state.screensFieldsList;
+      const screenListItem = screenFieldsList[selectedScreenId];
+      if(screenListItem) {
+        const field = screenListItem[fieldId];
+        if(field) {
+          field[fieldName] = fieldValue;
+          screenListItem[fieldId] = field;
+          screenFieldsList[selectedScreenId] = screenListItem;
+        }
+      }
+      state.screensFieldsList = screenFieldsList;
     },
     validateScreen: (state, action: PayloadAction<number>) => {
       const screen = state.screens[action.payload];
