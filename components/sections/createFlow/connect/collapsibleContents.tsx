@@ -23,6 +23,7 @@ interface User {
   image: string
   id: string
 }
+
 export const EmailContent: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
@@ -30,9 +31,18 @@ export const EmailContent: React.FC<ContentProps> = ({
   const [userData, setUserData] = useState<User>()
   const [email, setEmail] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
   const t = useTranslations("CreateFlow.ConnectPage")
 
   useEffect(() => {
+    // Check if the URL contains "pt" for Portuguese
+    setIsPortuguese(window.location.href.includes('/pt'))
+
+    // Set initial window size
+    setIsSmallScreen(window.innerWidth < 400)
+
+    // Fetch user data
     fetch("/api/users")
       .then((res) => res.json())
       .then((data) => {
@@ -41,6 +51,17 @@ export const EmailContent: React.FC<ContentProps> = ({
       })
       .catch((error) => console.error("Error fetching user data:", error))
       .finally(() => setIsLoading(false))
+
+    // Handle window resize
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 400)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +81,8 @@ export const EmailContent: React.FC<ContentProps> = ({
     return null  // Render nothing while loading
   }
 
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
@@ -75,11 +98,11 @@ export const EmailContent: React.FC<ContentProps> = ({
       </p>
       <div className="flex w-full justify-between">
         <AccordionPrimitive.Trigger>
-          <Button variant="secondary">{t("Close")}</Button>
+          <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
         </AccordionPrimitive.Trigger>
         <div>
           {status !== "active" ? (
-            <Button disabled={!email.trim()} onClick={handleClick}>
+            <Button disabled={!email.trim()} onClick={handleClick} style={buttonStyle}>
               {t("Connect")}
             </Button>
           ) : (
@@ -88,10 +111,11 @@ export const EmailContent: React.FC<ContentProps> = ({
                 variant="ghost"
                 className="text-red-500 hover:bg-red-100 hover:text-red-500"
                 onClick={handleClick}
+                style={buttonStyle}
               >
                 {t("Disconnect")}
               </Button>
-              <Button>{t("Save changes")}</Button>
+              <Button style={buttonStyle}>{t("Save changes")}</Button>
             </div>
           )}
         </div>
@@ -106,8 +130,25 @@ export const GAnalytics: React.FC<ContentProps> = ({
 }) => {
   const [measurementId, setMeasurementId] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
+
+  useEffect(() => {
+    setIsPortuguese(window.location.href.includes('/pt'))
+    setIsSmallScreen(window.innerWidth < 400)
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 400)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMeasurementId(event.target.value)
@@ -122,10 +163,12 @@ export const GAnalytics: React.FC<ContentProps> = ({
     }
   }
 
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800">
+        <p className="mb-4 text-sm text-gray-800 text-justify">
           {t(
             "Changes to the Google Analytics 4 integration will only become active after re-publishing"
           )}
@@ -143,20 +186,21 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 value={measurementId}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600">
+            <p className="mt-0.5 text-xs text-gray-600 text-justify">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary">{t("Close")}</Button>
+            <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
               <Button
                 disabled={!measurementId.trim() || isLoading}
                 onClick={handleClick}
+                style={buttonStyle}
               >
                 {isLoading && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -169,10 +213,11 @@ export const GAnalytics: React.FC<ContentProps> = ({
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={handleClick}
+                  style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button>{t("Save changes")}</Button>
+                <Button style={buttonStyle}>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -188,8 +233,25 @@ export const GTagManager: React.FC<ContentProps> = ({
 }) => {
   const [containerId, setContainerId] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
+
+  useEffect(() => {
+    setIsPortuguese(window.location.href.includes('/pt'))
+    setIsSmallScreen(window.innerWidth < 400)
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 400)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContainerId(event.target.value)
@@ -204,10 +266,12 @@ export const GTagManager: React.FC<ContentProps> = ({
     }
   }
 
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800">
+        <p className="mb-4 text-sm text-gray-800 text-justify">
           {t(
             "Changes to the Google Tag Manager integration will only become active after re-publishing"
           )}
@@ -225,20 +289,21 @@ export const GTagManager: React.FC<ContentProps> = ({
                 value={containerId}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600">
+            <p className="mt-0.5 text-xs text-gray-600 text-justify">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary">{t("Close")}</Button>
+            <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
               <Button
                 disabled={!containerId.trim() || isLoading}
                 onClick={handleClick}
+                style={buttonStyle}
               >
                 {isLoading && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -251,10 +316,11 @@ export const GTagManager: React.FC<ContentProps> = ({
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={handleClick}
+                  style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button>{t("Save changes")}</Button>
+                <Button style={buttonStyle}>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -268,14 +334,31 @@ export const MetaPixel: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [pixelId, setpixelId] = useState<string>("")
+  const [pixelId, setPixelId] = useState<string>("")
   const [eventName, setEventName] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
 
+  useEffect(() => {
+    setIsPortuguese(window.location.href.includes('/pt'))
+    setIsSmallScreen(window.innerWidth < 400)
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 400)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   const handlePixelId = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setpixelId(event.target.value)
+    setPixelId(event.target.value)
   }
 
   const handleEventName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -285,17 +368,19 @@ export const MetaPixel: React.FC<ContentProps> = ({
   const handleClick = () => {
     if (status === "active") {
       handleStatusUpdate("inactive")
-      setpixelId("")
+      setPixelId("")
       setEventName("")
     } else {
       handleStatusUpdate("active")
     }
   }
 
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800">
+        <p className="mb-4 text-sm text-gray-800 text-justify">
           {t(
             "Changes to the Meta Pixel integration will only become active after re-publishing"
           )}
@@ -324,20 +409,21 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 value={eventName}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600">
+            <p className="mt-0.5 text-xs text-gray-600 text-justify">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary">{t("Close")}</Button>
+            <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
               <Button
                 disabled={!pixelId.trim() || isLoading}
                 onClick={handleClick}
+                style={buttonStyle}
               >
                 {isLoading && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -350,10 +436,11 @@ export const MetaPixel: React.FC<ContentProps> = ({
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={handleClick}
+                  style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button>{t("Save changes")}</Button>
+                <Button style={buttonStyle}>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -362,6 +449,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
     </div>
   )
 }
+
 
 export const DummyIntregationCardData: TIntegrationCardData[] = [
   {
