@@ -27,14 +27,15 @@ import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputSettings } from "./user-input-settings.component"
-
+import { setFieldProp } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useForm, useFormContext } from "react-hook-form"
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
 
@@ -64,19 +65,40 @@ const UserInputSizeValues = {
 }
 
 export const UserInputGen = ({ ...props }) => {
+  const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
+  const componentField = useAppSelector(
+    (state) => state?.screen?.screens[selectedScreen]?.screenFields[props.nodeId]
+  ) || {};
+
+  const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
+  const inputField = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.nodeId])
+  const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.nodeId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
+  // const fieldError = true;
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
 
-  console.log(props.backgroundImage)
 
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }
+
+  useEffect(() => {
+    if(inputField){
+      if(inputField.fieldValue==0){
+        dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: true}))
+      }else{
+        dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: false}))
+      }
+    }
+
+  },[inputField])
+
 
   return (
     <div
@@ -178,7 +200,7 @@ export const UserInputGen = ({ ...props }) => {
               </div>
             )}
             <UserInputStyled
-              ref={inputRef}
+              // ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
@@ -186,7 +208,8 @@ export const UserInputGen = ({ ...props }) => {
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
-              error={props.error}
+              // error={props.error}
+              error={fieldError}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -221,15 +244,21 @@ export const UserInputGen = ({ ...props }) => {
           ease-in-out
           focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
-              onChange={(e) => setInputValue(e.target.value)}
-              onBlur={() => setIsActive(false)}
+              onChange={(e) => {
+                setInputValue(e.target.value),
+                dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value})),
+                console.log("FIELD VALUE IS: ", e.target.value)
+              }}
+              onBlur={() => {
+                setIsActive(false)
+              }}
               autoFocus={isFocused}
             />
           </div>
           {/** End field container */}
 
           {/** Error container */}
-          {props.error && (
+          {fieldError && (
             <div
               className="error-container border flex flex-row items-center gap-0 mt-0"
               style={{
@@ -297,11 +326,13 @@ const UserInputStyled = styled(Input)<{
 export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
+    compId,
     parent,
     selected,
     isHovered,
     actions: { setProp },
   } = useNode((state) => ({
+    compId: state.id,
     parent: state.data.parent,
     selected: state.events.selected,
     dragged: state.events.dragged,
@@ -311,6 +342,7 @@ export const UserInput = ({ ...props }) => {
     // query,
     query: { node },
   } = useEditor()
+  const dispatch = useAppDispatch()
 
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
@@ -320,6 +352,15 @@ export const UserInput = ({ ...props }) => {
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
+  const componentField = useAppSelector(
+    (state) => state?.screen?.screens[selectedScreen]?.screenFields[compId]
+  ) || {};
+
+  const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
+  const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
+
+
   const secondaryFont = useAppSelector(
     (state) => state?.theme?.text?.secondaryFont
   )
@@ -359,24 +400,25 @@ export const UserInput = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
-
   return (
     <div
-      className="relative focus-visible:ring-0 focus-visible:ring-transparent"
+    className={cn("relative focus-visible:ring-0 focus-visible:ring-transparent", {
+      "animate-shake": (fieldError)
+    })}
       ref={(ref: any) => ref && connect(drag(ref))}
       style={{
         width: "100%",
         display: "flex",
         justifyContent: "center",
       }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseOver={() => setHover(true)}
+      onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={t("Input Field")} />}
       <div
         className={cn(
           "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent",
-          { "animate-shake": props.inputRequired }
+          // { "animate-shake": props.inputRequired }
         )}
         style={{
           display: "flex",
@@ -487,7 +529,8 @@ export const UserInput = ({ ...props }) => {
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
-              error={props.error}
+              // error={props.error}
+              error={fieldError}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -527,14 +570,17 @@ export const UserInput = ({ ...props }) => {
                 // not to set input prop when editing
                 // console.log("Input field value is: ", e.target.value)
               }
-              onBlur={() => setProp((props) => (props.isActive = false))}
+              onBlur={() => {
+                setProp((props) => (props.isActive = false)),
+                dispatch(setFieldProp({fieldId: compId, fieldName: 'fieldValue', fieldValue: props.inputValue}))
+              }}
               autoFocus={props.isFocused}
             />
           </div>
           {/** End field container */}
 
           {/** Error container */}
-          {props.error && (
+          {fieldError && (
             <div
               className="error-container border flex flex-row items-center gap-0 mt-0"
               style={{
@@ -562,6 +608,8 @@ export const UserInput = ({ ...props }) => {
 
 export type UserInputProps = {
   inputValue: string
+  fieldType: "data" | "action" | "design"
+  required: boolean
   fontSize: number
   textColor: string
   fontWeight: string
@@ -620,6 +668,8 @@ export type UserInputProps = {
 }
 export const UserInputDefaultProps: UserInputProps = {
   inputValue: "",
+  fieldType: "data",
+  required: false,
   fontSize: 16,
   textColor: "#000",
   width: 366,

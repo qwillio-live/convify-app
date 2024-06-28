@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Controller } from "./controller.component"
 import styled from "styled-components"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { addField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useRouter } from "next/navigation"
 
 
@@ -23,10 +23,11 @@ interface StyledNodeDivProps {
 
 const StyledNodeDiv = styled.div<StyledNodeDivProps>`
   position: relative;
-  /* border-width: ${(props) => (props.id === 'ROOT' ? '0' : '1px')}; */
   border-width: ${(props) => {
-    if(props.id === 'ROOT' || ((props.name === 'Card') && !props.isActive)) {
+    if(props.id === 'ROOT' || ((props.name === 'Card' || props.name === 'Card Content') && !props.isActive)) {
       return '0';
+    }else if((props.name === 'Card' || props.name === 'Card Content') && props.isActive){
+      return '0px';
     }else{
       return '1px';
     }
@@ -56,6 +57,8 @@ export default StyledNodeDiv;
 export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   const { id } = useNode()
+  const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
   }))
@@ -73,10 +76,12 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     deletable,
     props,
     name,
+    fieldType,
   } = useNode((node) => ({
     isHover: node.events.hovered,
     isSelected: node.events.selected,
     dom: node.dom,
+    fieldType: node.data.props.fieldType || 'design',
     borderColor: node.data.props.containerBackground || node.data.props.backgroundColor || node.data.props.background || undefined,
     amIBeingDragged: node.events.dragged,
     name: node.data.custom.displayName || node.data.displayName,
@@ -103,18 +108,28 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     }
   }
   , [isSelected])
-  const router = useRouter();
-  // console.log(`Name of component is: ${name} and props are is ${JSON.stringify(props)}`)
-  const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
+
+  useEffect(() => {
+    if(selectedComponent && selectedComponent !== "ROOT"){
+      const child = document.getElementById(selectedComponent);
+      child?.scrollIntoView({behavior: "instant" as ScrollBehavior, block: "center", inline: "center"});
+    }
+  }, [mobileScreen])
+
+  useEffect(() => {
+    if(fieldType === 'data'){
+      dispatch(addField({
+        fieldId: id,
+        fieldName: name,
+        fieldValue: null,
+        fieldRequired: true,
+        toggleError: false,
+      }));
+    }
+  },[])
+
   return (
-    // <div
-    //   className={cn('relative border z-10 border-transparent border-dotted',
-    //     (isActive) && (id !== 'ROOT') && (containerBackground) && `border-[${containerBackground}]`,
-    //     (isActive) && (id !== 'ROOT') && (!containerBackground && elementBackground) && `border-[${elementBackground}]`,
-    //     (id !== 'ROOT') && 'hover:border-blue-400',
-    //     fullWidth && 'w-full'
-    //   )}
-    // >
+
     <StyledNodeDiv
       selected={isSelected}
       borderColor={borderColor}
@@ -123,22 +138,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       selectedComponent={selectedComponent}
       name={name}
       isActive={isActive}
-      onClick={(e) => {
-        // e.preventDefault()
-        // if(id !== "ROOT")
-        // router.push(`#${id}`)
-      }}
-      // className={cn('relative z-10', fullWidth && 'w-full')}
     >
-      {/* <div className='flex flex-col justify-center items-center w-full'> */}
         {render}
-      {/* </div> */}
-      {/* {(isActive || isHover) && (
-        <div className='special absolute bottom-[100%] left-0 flex flex-row items-center gap-4 bg-blue-500 p-2 text-xs text-white'>
-          <span>{name}</span>
-          <span className='hover:cursor-move'><GripHorizontal /></span>
-        </div>
-      )} */}
     </StyledNodeDiv>
   )
 }
