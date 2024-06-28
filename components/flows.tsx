@@ -221,15 +221,16 @@ export function FlowsList({ flows, setStatus, status }) {
                                   <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
                                   <DropdownMenuItem onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
                                   <DropdownMenuItem onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => { setDeleteDialog(true); setFlow(flow) }}>
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="w-full justify-start"
-                                    >
-                                      {t("Delete")}
-                                    </Button>
-                                  </DropdownMenuItem>
+                                  {/* <DropdownMenuItem> */}
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="w-full justify-start mt-2"
+                                    onClick={() => { setDeleteDialog(true); setFlow(flow) }}
+                                  >
+                                    {t("Delete")}
+                                  </Button>
+                                  {/* </DropdownMenuItem> */}
 
                                 </DropdownMenuContent>
                               </DropdownMenu>
@@ -255,23 +256,23 @@ export function FlowsList({ flows, setStatus, status }) {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel onClick={() => setDeleteDialog(false)}>Cancel</AlertDialogCancel>
-                <button
-                  className={cn(buttonVariants())}
+                <Button
                   disabled={isLoading}
-                  style={{ fontWeight: "600", background: 'red' }}
+                  variant="destructive"
+                  size="sm"
+                  className="bg-[#DC2626]"
                   onClick={() => deleteFlow(flow && flow?.id)}
                 >
                   {isLoading && (
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   {t("Delete")}
-                </button>
+                </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </div>
       </main>
-
     </div>
   )
 }
