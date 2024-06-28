@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -232,22 +236,14 @@ export const List = ({
               flexDirection={flexDirection}
               item={item}
               onTitleChange={(updatedTitle) => {
-                handlePropChangeDebounced(
-                  "items",
-                  items.map((item, i) =>
-                    i === index ? { ...item, title: updatedTitle } : item
-                  )
-                )
+                setProp((prop) => {
+                  prop.items[index].title = updatedTitle
+                }, 200)
               }}
               onDescriptionChange={(updatedDescription) => {
-                handlePropChangeDebounced(
-                  "items",
-                  items.map((item, i) =>
-                    i === index
-                      ? { ...item, description: updatedDescription }
-                      : item
-                  )
-                )
+                setProp((prop) => {
+                  prop.items[index].description = updatedDescription
+                }, 200)
               }}
             />
           ))}
@@ -280,7 +276,7 @@ const ListItem = ({
   flexDirection: string
   item: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     title: string
     description: string
@@ -314,7 +310,7 @@ const ListItem = ({
         {item.pictureType !== PictureTypes.NULL &&
           (item.pictureType === PictureTypes.ICON ? (
             <SvgRenderer
-              svgData={item.picture as string}
+              iconName={item.picture as string}
               // viewBox="-0.3 0 14.5 14"
               width="40px"
               height="40px"
@@ -324,10 +320,17 @@ const ListItem = ({
               {item.picture as string}
             </span>
           ) : (
-            <img
-              src={item.picture as string}
-              className="size-10 object-contain"
-            />
+            <picture key={(item.picture as ImagePictureTypes).desktop}>
+              <source
+                media="(min-width:560px)"
+                srcSet={(item.picture as ImagePictureTypes).mobile}
+              />
+              <img
+                src={(item.picture as ImagePictureTypes).desktop}
+                className="size-10 object-contain"
+                loading="lazy"
+              />
+            </picture>
           ))}
       </div>
       <div className="flex flex-1 flex-col justify-center gap-1">
@@ -465,7 +468,7 @@ export type ListProps = {
   preset: ListPresets
   items: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     title: string
     description: string

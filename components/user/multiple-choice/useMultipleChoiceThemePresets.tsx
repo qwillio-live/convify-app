@@ -9,7 +9,6 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
-import icons from "@/constant/streamline.json"
 
 const useMultipleChoiceThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
@@ -19,8 +18,7 @@ const useMultipleChoiceThemePresets = () => {
   const previewChoices = [
     {
       id: `input-1`,
-      picture:
-        icons["programming-module-cube-code-module-programming-plugin"].body,
+      picture: "programming-module-cube-code-module-programming-plugin",
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 1`,
       buttonAction: null,
@@ -30,9 +28,7 @@ const useMultipleChoiceThemePresets = () => {
     {
       id: `input-2`,
       picture:
-        icons[
-          "programming-browser-check-checkmark-pass-window-app-code-programming-success-check-apps"
-        ].body,
+        "programming-browser-check-checkmark-pass-window-app-code-programming-success-check-apps",
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 2`,
       buttonAction: null,
@@ -41,7 +37,7 @@ const useMultipleChoiceThemePresets = () => {
     },
     {
       id: `input-3`,
-      picture: icons["database"].body,
+      picture: "database",
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 3`,
       buttonAction: null,
@@ -50,7 +46,7 @@ const useMultipleChoiceThemePresets = () => {
     },
     {
       id: `input-4`,
-      picture: icons["code-monitor-1"].body,
+      picture: "code-monitor-1",
       pictureType: PictureTypes.ICON,
       value: `${t("Option")} 4`,
       buttonAction: null,

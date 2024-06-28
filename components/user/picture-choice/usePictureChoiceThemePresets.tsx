@@ -8,18 +8,17 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
-import icons from "@/constant/streamline.json"
 
 const usePictureChoiceThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
 
-  const defaultIcon = icons["add-circle"].body
+  const defaultIcon = "add-circle"
 
   const defaultChoices = [
     {
       id: `input-${hexoid(6)()}`,
-      picture: icons["ai-generate-music-spark"].body,
+      picture: "ai-generate-music-spark",
       pictureType: PictureTypes.ICON,
       value: t("Music"),
       buttonAction: null,
@@ -28,7 +27,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: icons["ai-generate-landscape-image-spark"].body,
+      picture: "ai-generate-landscape-image-spark",
       pictureType: PictureTypes.ICON,
       value: t("Image"),
       buttonAction: null,
@@ -37,7 +36,7 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: icons["camera-video"].body,
+      picture: "camera-video",
       pictureType: PictureTypes.ICON,
       value: t("Video"),
       buttonAction: null,
@@ -47,9 +46,7 @@ const usePictureChoiceThemePresets = () => {
     {
       id: `input-${hexoid(6)()}`,
       picture:
-        icons[
-          "image-photo-four-photos-camera-picture-photography-pictures-four-photo"
-        ].body,
+        "image-photo-four-photos-camera-picture-photography-pictures-four-photo",
       pictureType: PictureTypes.ICON,
       value: t("Gallery"),
       buttonAction: null,

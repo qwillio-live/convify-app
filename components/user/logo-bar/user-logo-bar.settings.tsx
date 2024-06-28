@@ -34,6 +34,8 @@ import { Checkbox } from "@/components/custom-checkbox"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Cropper, ReactCropperElement } from "react-cropper"
 import { Icons } from "@/components/icons"
+import axios from "axios"
+import { ImagePictureTypes } from "@/components/PicturePicker"
 
 export const LogoBarSettings = () => {
   const t = useTranslations("Components")
@@ -444,6 +446,34 @@ export const LogoBarItemSettings = ({ item, index }) => {
     }
   }
 
+  const calculateImageDimensions = (aspectRatio, maxWidth) => {
+    const height = Math.round(maxWidth / aspectRatio)
+    return {
+      width: maxWidth,
+      height: height,
+      dimension: `${maxWidth}x${height}`,
+    }
+  }
+
+  const uploadToS3 = async (imageData, mobileDimension, desktopDimenstion) => {
+    const formData = new FormData()
+    formData.append("image", imageData)
+    formData.append("file", imageData)
+    formData.append("sizes[0]", mobileDimension)
+    formData.append("sizes[1]", desktopDimenstion)
+    formData.append("bucket_name", "convify-images")
+
+    try {
+      const response = await axios.post("/api/upload", formData)
+      return {
+        data: response.data,
+      }
+    } catch (error) {
+      console.error("Error uploading image to S3:", error)
+      return null
+    }
+  }
+
   const handleUploadOriginal = () => {
     if (image) {
       cropperRef.current?.cropper.setAspectRatio(NaN)
@@ -452,22 +482,86 @@ export const LogoBarItemSettings = ({ item, index }) => {
     }
   }
 
-  const handleUploadCropped = () => {
+  const handleUploadCropped = async () => {
     setIsLoading(true)
 
     if (typeof cropperRef.current?.cropper !== "undefined") {
-      handleLogoChange(
-        cropperRef.current?.cropper
-          .getCroppedCanvas({
-            width: 512,
-            height: 512,
-          })
-          .toDataURL("image/wepg")
+      const maxWidthMobile = 400
+      const maxWidthDesktop = 400
+
+      const aspectRatio =
+        cropperRef.current?.cropper.getImageData().width /
+        cropperRef.current?.cropper.getImageData().height
+
+      const mobileDimensions = calculateImageDimensions(
+        aspectRatio,
+        maxWidthMobile
+      )
+      const desktopDimenstions = calculateImageDimensions(
+        aspectRatio,
+        maxWidthDesktop
       )
 
+      const resizedImageData = cropperRef.current?.cropper
+        .getCroppedCanvas({
+          width: desktopDimenstions.width,
+          height: desktopDimenstions.height,
+        })
+        .toDataURL("image/webp")
+
+      let uploadedImage: ImagePictureTypes = {
+        original: undefined,
+        mobile: undefined,
+        desktop: resizedImageData,
+      }
+
+      handleLogoChange({ ...uploadedImage })
+
+      const imageData = await new Promise((resolve) => {
+        cropperRef.current?.cropper
+          .getCroppedCanvas()
+          .toBlob(async (imageBlob) => {
+            resolve(imageBlob)
+          }, "image/wepg")
+      })
+
       setDialogOpen(false)
+      setIsLoading(false)
+
+      const uploadImageResponse = await uploadToS3(
+        imageData,
+        mobileDimensions.dimension,
+        desktopDimenstions.dimension
+      )
+
+      if (
+        uploadImageResponse &&
+        uploadImageResponse.data.data.images.original
+      ) {
+        uploadedImage.original = uploadImageResponse.data.data.images
+          .original as string
+      }
+
+      if (
+        uploadImageResponse &&
+        uploadImageResponse.data.data.images[mobileDimensions.dimension]
+      ) {
+        uploadedImage.mobile = uploadImageResponse.data.data.images[
+          mobileDimensions.dimension
+        ] as string
+      }
+
+      if (
+        uploadImageResponse &&
+        uploadImageResponse.data.data.images[desktopDimenstions.dimension]
+      ) {
+        uploadedImage.desktop = uploadImageResponse.data.data.images[
+          desktopDimenstions.dimension
+        ] as string
+      }
+
+      handleLogoChange(uploadedImage)
     }
-    setIsLoading(false)
   }
 
   const handleAspectRatioChange = (newAspectRatio) => {
@@ -510,7 +604,17 @@ export const LogoBarItemSettings = ({ item, index }) => {
         className="flex-1"
         onClick={() => inputRef.current?.click()}
       >
-        <img className="h-6 w-full object-contain" src={item.src} />
+        <picture key={(item.src as ImagePictureTypes).desktop}>
+          <source
+            media="(min-width:560px)"
+            srcSet={(item.src as ImagePictureTypes).mobile}
+          />
+          <img
+            src={(item.src as ImagePictureTypes).desktop}
+            className="h-6 w-full object-contain"
+            loading="lazy"
+          />
+        </picture>
       </Button>
       <Trash2
         className="text-muted-foreground invisible size-3 hover:cursor-pointer"
