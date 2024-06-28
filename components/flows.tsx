@@ -219,19 +219,18 @@ export function FlowsList({ flows, setStatus, status }) {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                                  <DropdownMenuItem onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
+                                  <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
+                                  <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
                                   {/* <DropdownMenuItem> */}
                                   <Button
                                     variant="destructive"
                                     size="sm"
-                                    className="w-full justify-start mt-2"
+                                    className="bg-[none] text-black hover:text-[#FAFAFA] hover:bg-[#DC2626] w-full justify-start"
                                     onClick={() => { setDeleteDialog(true); setFlow(flow) }}
                                   >
                                     {t("Delete")}
                                   </Button>
                                   {/* </DropdownMenuItem> */}
-
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>
@@ -260,7 +259,7 @@ export function FlowsList({ flows, setStatus, status }) {
                   disabled={isLoading}
                   variant="destructive"
                   size="sm"
-                  className="bg-[#DC2626]"
+                  className="bg-[#DC2626] text-[#FAFAFA]"
                   onClick={() => deleteFlow(flow && flow?.id)}
                 >
                   {isLoading && (
