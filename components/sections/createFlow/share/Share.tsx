@@ -472,7 +472,6 @@ const ShareFlowComponents = ({
               style={{ fontSize: '20px', lineHeight: '28px', color: 'rgb(38, 38, 38)', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}
             >
               <h3 className="text-lg"
-
                 style={{ fontSize: '20px', lineHeight: '28px', color: 'rgb(38, 38, 38)', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}
               >
                 {t("Share your convify")}
@@ -487,8 +486,24 @@ const ShareFlowComponents = ({
             </div>
             <div className="mt-4">
               <div className="flex mb-4 gap-[12px]">
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                  style={{ borderRadius: "50%", backgroundColor: "rgb(47, 130, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+                <button
+                  className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] text-[rgb(115,115,115)]"
+                  style={{
+                    borderRadius: "50%",
+                    width: "44px",
+                    backgroundColor: "rgb(10, 102, 194)",
+                    height: "44px",
+                    transition: "background-color 0.2s ease 0s",
+                    color: "rgb(115, 115, 115)"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(8, 81, 155)";
+                    e.currentTarget.style.color = "rgb(76, 76, 76)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)";
+                    e.currentTarget.style.color = "rgb(115, 115, 115)";
+                  }}
                 >
                   <svg
                     width="18"
@@ -503,8 +518,24 @@ const ShareFlowComponents = ({
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                  style={{ borderRadius: "50%", backgroundColor: "rgb(10, 102, 194)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+
+                <button
+                  className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)]"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "rgb(10, 102, 194)",
+                    width: "44px",
+                    height: "44px",
+                    transition: "background-color 0.2s ease 0s"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(8, 81, 155)";
+                    e.currentTarget.style.color = "rgb(76, 76, 76)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)";
+                    e.currentTarget.style.color = "rgb(115, 115, 115)";
+                  }}
                 >
                   <svg
                     width="18"
@@ -521,8 +552,24 @@ const ShareFlowComponents = ({
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                  style={{ borderRadius: "50%", backgroundColor: "rgb(30, 156, 241)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+
+                <button
+                  className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)]"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "rgb(30, 156, 241)",
+                    width: "44px",
+                    height: "44px",
+                    transition: "background-color 0.2s ease 0s"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(8, 81, 155)";
+                    e.currentTarget.style.color = "rgb(76, 76, 76)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)";
+                    e.currentTarget.style.color = "rgb(115, 115, 115)";
+                  }}
                 >
                   <svg
                     width="18"
@@ -539,8 +586,24 @@ const ShareFlowComponents = ({
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                  style={{ borderRadius: "50%", backgroundColor: "rgb(44, 75, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+
+                <button
+                  className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)]"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "rgb(44, 75, 255)",
+                    width: "44px",
+                    height: "44px",
+                    transition: "background-color 0.2s ease 0s"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(8, 81, 155)";
+                    e.currentTarget.style.color = "rgb(76, 76, 76)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)";
+                    e.currentTarget.style.color = "rgb(115, 115, 115)";
+                  }}
                 >
                   <svg
                     width="18"
@@ -563,8 +626,24 @@ const ShareFlowComponents = ({
                     ></path>
                   </svg>
                 </button>
-                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                  style={{ borderRadius: "50%", backgroundColor: "rgb(47, 130, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
+
+                <button
+                  className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)]"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "rgb(47, 130, 255)",
+                    width: "44px",
+                    height: "44px",
+                    transition: "background-color 0.2s ease 0s"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(8, 81, 155)";
+                    e.currentTarget.style.color = "rgb(76, 76, 76)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)";
+                    e.currentTarget.style.color = "rgb(115, 115, 115)";
+                  }}
                 >
                   <svg
                     width="18"
@@ -579,6 +658,7 @@ const ShareFlowComponents = ({
                     ></path>
                   </svg>
                 </button>
+
               </div>
               <button
                 type="button"
