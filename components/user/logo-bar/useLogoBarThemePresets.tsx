@@ -17,24 +17,24 @@ const useLogoBarThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
 
-  const defaultLogo = defaultLogoImage.src
+  const defaultLogo = { desktop: defaultLogoImage.src } as ImagePictureTypes
 
   const defaultItems = [
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: { original: defaultLogo1.src } as ImagePictureTypes,
+      src: { desktop: defaultLogo1.src } as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: { original: defaultLogo2.src } as ImagePictureTypes,
+      src: { desktop: defaultLogo2.src } as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: { original: defaultLogo3.src } as ImagePictureTypes,
+      src: { desktop: defaultLogo3.src } as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: { original: defaultLogo4.src } as ImagePictureTypes,
+      src: { desktop: defaultLogo4.src } as ImagePictureTypes,
     },
   ]
 

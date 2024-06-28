@@ -70,7 +70,10 @@ export const LogoBarGen = ({
             key={index}
             style={{ height: `${height}px` }}
           >
-            <picture key={(item.src as ImagePictureTypes).desktop}>
+            <picture
+              key={(item.src as ImagePictureTypes).desktop}
+              className="h-full"
+            >
               <source
                 media="(min-width:560px)"
                 srcSet={(item.src as ImagePictureTypes).mobile}

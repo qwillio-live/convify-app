@@ -152,7 +152,7 @@ export const LogoBarSettings = () => {
                   ...items,
                   {
                     id: `logo-bar-item-${hexoid(6)()}`,
-                    src: { original: defaultLogo } as ImagePictureTypes,
+                    src: defaultLogo,
                   },
                 ])
               }
@@ -510,9 +510,9 @@ export const LogoBarItemSettings = ({ item, index }) => {
         .toDataURL("image/webp")
 
       let uploadedImage: ImagePictureTypes = {
-        original: resizedImageData,
+        original: undefined,
         mobile: undefined,
-        desktop: undefined,
+        desktop: resizedImageData,
       }
 
       handleLogoChange({ ...uploadedImage })
