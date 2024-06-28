@@ -563,7 +563,7 @@ const ShareFlowComponents = ({
                     ></path>
                   </svg>
                 </button>
-                {/* <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                <button className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                   style={{ borderRadius: "50%", backgroundColor: "rgb(47, 130, 255)", width: "44px", height: "44px", transition: 'background-color 0.2s ease 0s' }}
                 >
                   <svg
@@ -578,7 +578,7 @@ const ShareFlowComponents = ({
                       fill="#FFF"
                     ></path>
                   </svg>
-                </button> */}
+                </button>
               </div>
               <button
                 type="button"
