@@ -501,7 +501,6 @@ const placeCaretAtEnd = (element) => {
   };
   const handleNavigateToScreen =async () => {
     dispatch(validateScreen(selectedScreen));
-    return;
     // dispatch(navigateToScreen(nextScreen));
       // if(screens){
       //   const screen = screens.find(screen => screen.screenName === nextScreen);

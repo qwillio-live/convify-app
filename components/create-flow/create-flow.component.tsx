@@ -15,7 +15,7 @@ import { throttle,debounce } from 'lodash';
 
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setEditorLoad, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -116,7 +116,8 @@ export function CreateFlowComponent() {
 
   const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
+  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
@@ -139,6 +140,11 @@ export function CreateFlowComponent() {
     },1200),
     [dispatch]
   )
+
+  React.useEffect(() => {
+    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false}))
+
+  }, [])
   React.useEffect(() => {
     if(headerMode){
       const height = document?.getElementById("editor-content")?.offsetHeight || 0;
@@ -285,7 +291,7 @@ export function CreateFlowComponent() {
                   <div
                   id="editor-content"
                   style={{
-          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+8}px` : 0,
+          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+32}px` : 0,
         }}>
                   <Frame data={editorLoad}></Frame>
                   </div>

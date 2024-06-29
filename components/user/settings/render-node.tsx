@@ -122,7 +122,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
         fieldId: id,
         fieldName: name,
         fieldValue: null,
-        fieldRequired: true,
+        fieldRequired: false,
         toggleError: false,
       }));
     }

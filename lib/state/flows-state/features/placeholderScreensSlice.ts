@@ -158,16 +158,25 @@ export const screensSlice = createSlice({
     },
     validateScreen: (state, action: PayloadAction<number>) => {
       const screen = state.screens[action.payload];
-      const screenFields = screen.screenFields as ScreenFieldsObject;
-      let screenValidated = true;
+      // const screenFields = screen.screenFields as ScreenFieldsObject;
+      const screenFields = state.screensFieldsList[screen.screenId];
       Object.values(screenFields).forEach((field: ScreenFieldType) => {
         if (field.fieldRequired && !field.fieldValue) {
           field.toggleError = true;
-          screenValidated = false;
+        }else{
+          field.toggleError=false;
         }
       });
-      state.screens[action.payload].screenValidated = screenValidated;
+      state.screens[action.payload].screenValidated = true;
       state.screens[action.payload].screenFields = screenFields;
+      state.screensFieldsList[screen.screenId] = screenFields;
+    },
+    setValidateScreen: (state, action: PayloadAction<{screenId: string, screenValidated: boolean}>) => {
+      const { screenId, screenValidated } = action.payload;
+      const screen = state.screens.find(screen => screen.screenId === screenId);
+      if(screen) {
+        screen.screenValidated = screenValidated;
+      }
     },
     resetScreensState: (state) => {
       state.selectedScreen = 0;
@@ -317,6 +326,7 @@ export const screensSlice = createSlice({
 export const {
   setSelectedComponent,
   removeField,
+  setValidateScreen,
   updateHeaderPosition,
   addField,
   validateScreen,

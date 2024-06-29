@@ -34,7 +34,7 @@ import { Input } from "@/components/input-custom"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputSettings } from "./user-input-settings.component"
-import { setFieldProp } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setFieldProp, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useForm, useFormContext } from "react-hook-form"
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -88,16 +88,16 @@ export const UserInputGen = ({ ...props }) => {
     }
   }
 
-  useEffect(() => {
-    if(inputField){
-      if(inputField.fieldValue==0){
-        dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: true}))
-      }else{
-        dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: false}))
-      }
-    }
+  // useEffect(() => {
+  //   if(inputField){
+  //     if(inputField.fieldValue==0){
+  //       dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: true}))
+  //     }else{
+  //       dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'toggleError', fieldValue: false}))
+  //     }
+  //   }
 
-  },[inputField])
+  // },[inputField])
 
 
   return (
@@ -353,13 +353,14 @@ export const UserInput = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
-  const componentField = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreen]?.screenFields[compId]
-  ) || {};
-
+  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
   const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
-
+  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]);
+  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.fieldValue)
+  // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
+  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.fieldRequired) || false
+  // const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
+  const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated
 
   const secondaryFont = useAppSelector(
     (state) => state?.theme?.text?.secondaryFont
@@ -368,6 +369,22 @@ export const UserInput = ({ ...props }) => {
     (state) => state?.theme?.general?.primaryColor
   )
 
+
+  useEffect(() => {
+    // dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'toggleError', fieldValue: false}))
+    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
+    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+  },[])
+  // useEffect(() => {
+  //   console.log("FIELD ERROR", JSON.stringify({
+  //     compId,
+  //     fieldError,
+  //     fieldValue,
+  //     fieldRequired,
+  //     screenValidated,
+  //     inputRequired: props.inputRequired
+  //   }))
+  // } ,[selectedField,fieldError,screenValidated])
   useEffect(() => {
     if(parentContainer.id !== "ROOT" && parentContainer.data.name === "CardContent"){
       setProp((props) => props.size = "full");
@@ -566,13 +583,16 @@ export const UserInput = ({ ...props }) => {
           focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
               onChange={
-                (e) => setProp((props) => (props.inputValue = e.target.value))
+                (e) => {
+                  setProp((props) => (props.inputValue = e.target.value)),
+                  dispatch(setFieldProp({fieldId: compId, fieldName: 'fieldValue', fieldValue: e.target.value}))
+
+                }
                 // not to set input prop when editing
                 // console.log("Input field value is: ", e.target.value)
               }
               onBlur={() => {
-                setProp((props) => (props.isActive = false)),
-                dispatch(setFieldProp({fieldId: compId, fieldName: 'fieldValue', fieldValue: props.inputValue}))
+                setProp((props) => (props.isActive = false))
               }}
               autoFocus={props.isFocused}
             />
