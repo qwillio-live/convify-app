@@ -15,6 +15,7 @@ const useInputThemePresets = () => {
   )
 
   const outlinedPreset: UserInputProps = {
+    compId: "",
     inputValue: "",
     fontSize: 16,
     fieldType: "data",
@@ -92,6 +93,7 @@ const useInputThemePresets = () => {
   }
 
   const underlinedPreset: UserInputProps = {
+    compId: "",
     inputValue: "",
     fontSize: 16,
     fieldType: "data",

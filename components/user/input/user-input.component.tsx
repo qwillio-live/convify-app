@@ -68,19 +68,22 @@ export const UserInputGen = ({ ...props }) => {
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
-  const componentField = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreen]?.screenFields[props.nodeId]
-  ) || {};
-
+  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
   const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const inputField = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.nodeId])
-  const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[props.nodeId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
-  // const fieldError = true;
+  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[props.compId]);
+  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[props.compId]?.fieldValue)
+  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[props.compId]?.fieldRequired) || false
+  const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
 
+  useEffect(() => {
+    setInputValue(fieldValue)
+    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
+    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+  },[])
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -246,8 +249,7 @@ export const UserInputGen = ({ ...props }) => {
               )}
               onChange={(e) => {
                 setInputValue(e.target.value),
-                dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value})),
-                console.log("FIELD VALUE IS: ", e.target.value)
+                dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value}))
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -374,6 +376,7 @@ export const UserInput = ({ ...props }) => {
     // dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'toggleError', fieldValue: false}))
     dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
     dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+    setProp((props) => props.compId = compId)
   },[])
   // useEffect(() => {
   //   console.log("FIELD ERROR", JSON.stringify({
@@ -627,6 +630,7 @@ export const UserInput = ({ ...props }) => {
 }
 
 export type UserInputProps = {
+  compId: string
   inputValue: string
   fieldType: "data" | "action" | "design"
   required: boolean
@@ -687,6 +691,7 @@ export type UserInputProps = {
   settingsTab: string
 }
 export const UserInputDefaultProps: UserInputProps = {
+  compId: "",
   inputValue: "",
   fieldType: "data",
   required: false,
