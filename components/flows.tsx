@@ -159,7 +159,7 @@ export function FlowsList({ flows, setStatus, status }) {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
+              <div>
                 <Table className="min-w-full">
                   <TableHeader>
                     <TableRow>
