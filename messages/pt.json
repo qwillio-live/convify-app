@@ -210,6 +210,7 @@
     "Logout": "Sair",
     "My workspace": "Meu espaço de trabalho",
     "ResultsPage": {
+      "This flow doesnt have any responses yet": "Este typeform ainda não tem respostas.",
       "insights": "insights",
       "responses": "respostas",
       "Last 28 days": "Últimos 28 dias",

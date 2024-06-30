@@ -1,6 +1,6 @@
 "use client"
 
-import { addDays, format } from "date-fns"
+import { format, subDays } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import * as React from "react"
 import { DateRange } from "react-day-picker"
@@ -17,11 +17,29 @@ import { cn } from "@/lib/utils"
 export function DatePickerWithRange({
   className,
   locale = enUS, // Default locale
-}: React.HTMLAttributes<HTMLDivElement> & { locale?: Locale }) {
+  setDater,
+  setStatus,
+  status,
+  days
+}: React.HTMLAttributes<HTMLDivElement> & { status, days: number, setStatus, locale?: Locale; setDater: (v: { startDate: Date; endDate: Date }) => void }) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: subDays(new Date(), 7),
+    to: new Date(),
   })
+  React.useEffect(() => {
+    setDater({
+      startDate: date?.from || subDays(new Date(), 7),
+      endDate: date?.to || new Date(),
+    })
+    setStatus(!status)
+  }, [date])
+
+  React.useEffect(() => {
+    setDate({
+      from: subDays(new Date(), days),
+      to: new Date(),
+    })
+  }, [days])
 
   return (
     <div className={cn("grid gap-2", className)}>
