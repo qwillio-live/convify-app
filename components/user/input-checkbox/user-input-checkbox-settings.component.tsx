@@ -313,7 +313,7 @@ export const UserInputCheckboxSettings = () => {
                     {t("M")}
                   </TabsTrigger>
                   <TabsTrigger disabled={disableSize} value="large">
-                    {"L"}
+                    {t("L")}
                   </TabsTrigger>
                   <TabsTrigger disabled={disableSize} value="full">
                     <MoveHorizontal />
