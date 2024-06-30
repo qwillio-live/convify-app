@@ -285,17 +285,17 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               width={props.width}
               size={props.size}
               className={cn(
-                `font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light
+                `font-normal px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light
                 ring-0
-          outline-none
-          focus-visible:outline-none
-          peer-focus-visible:outline-none
-          focus-visible:ring-0
-          ring-opacity-0/0
-          transition-all
-          duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0`
+                outline-none
+                focus-visible:outline-none
+                peer-focus-visible:outline-none
+                focus-visible:ring-0
+                ring-opacity-0/0
+                transition-all
+                duration-200
+                ease-in-out
+                focus-visible:ring-transparent focus-visible:ring-offset-0`
               )}
               // onChange={
               //   (e) => setProp((props) => (props.inputValue = e.target.value))
