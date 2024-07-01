@@ -121,7 +121,9 @@ export const UserInputGen = ({ ...props }) => {
 
   return (
     <div
-      className="relative focus-visible:ring-0 focus-visible:ring-transparent"
+      className={cn("relative focus-visible:ring-0 focus-visible:ring-transparent",{
+        "animate-shake": (fieldError)
+      })}
       style={{
         width: "100%",
         display: "flex",

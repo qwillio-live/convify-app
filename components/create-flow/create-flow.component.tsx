@@ -243,7 +243,7 @@ export function CreateFlowComponent() {
           <ScrollArea
           ref={containerRef}
           id="scroll-container"
-          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 ">
+          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6">
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -291,7 +291,7 @@ export function CreateFlowComponent() {
                   <div
                   id="editor-content"
                   style={{
-          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+32}px` : 0,
+          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "38px",
         }}>
                   <Frame data={editorLoad}></Frame>
                   </div>

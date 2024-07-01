@@ -86,8 +86,9 @@ export default function FlowPreview() {
             key={index}
             id={screen?.screenName}
             style={{
+              display: currentScreenName === screen?.screenName ? "block" : "none",
               backgroundColor: backgroundColor,
-              marginTop: headerPosition === 'absolute' ? headerHeight+'px' : '0'
+              paddingTop: headerPosition === 'absolute' ? headerHeight+'px' : '0'
              }}
             className="my-14 min-h-screen
           shrink-0

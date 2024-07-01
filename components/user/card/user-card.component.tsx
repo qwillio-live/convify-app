@@ -351,6 +351,7 @@ export const Card = ({ children,backgroundColor ,...props }) => {
     isHovered: state.events.hovered,
   }))
   const t = useTranslations("Components")
+  console.log("LIST OF PROPS", JSON.stringify(props))
   return (
 
     <div
