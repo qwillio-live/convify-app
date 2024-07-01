@@ -203,6 +203,8 @@ const fakeDropOff = [
 ]
 
 const InsightsFlowComponents = () => {
+  const currentPath = usePathname();
+  const [fontSizeTable, setFontSizeTable] = useState<string>("inherit")
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   // Function to update window width on resize
@@ -213,6 +215,9 @@ const InsightsFlowComponents = () => {
   // Effect to add and remove resize event listener
   useEffect(() => {
     window.addEventListener('resize', handleResize);
+    if (windowWidth < 600 && currentPath?.includes("pt")) {
+      setFontSizeTable("10px")
+    }
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -220,7 +225,6 @@ const InsightsFlowComponents = () => {
 
   // Determine height based on window width
   const getHeight = () => {
-    console.log(windowWidth, "windowWidth")
     return windowWidth < 600 ? 'fit-content' : 350;
   };
 
@@ -232,7 +236,6 @@ const InsightsFlowComponents = () => {
   const [status, setStatus] = useState(false)
   // will be replaced dynamic flow id
   const [flowId, setFlowId] = useState<string | null>(null);
-  const currentPath = usePathname();
 
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
@@ -389,7 +392,7 @@ const InsightsFlowComponents = () => {
                 </p>
               </div>
               <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : analytics.desktopDevicePercentage.split('.')[0]} `}%
+                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : analytics.desktopDevicePercentage ? analytics.desktopDevicePercentage.split('.')[0] : '0'} `}%
               </span>
             </div>
             <div className="">
@@ -423,7 +426,7 @@ const InsightsFlowComponents = () => {
                 </p>
               </div>
               <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.mobileDevicePercentage) === "0" ? 0 : analytics.mobileDevicePercentage.split('.')[0]} `}%
+                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : analytics.desktopDevicePercentage ? analytics.desktopDevicePercentage.split('.')[0] : '0'} `}%
               </span>
             </div>
           </div>
@@ -492,7 +495,11 @@ const InsightsFlowComponents = () => {
         </Card>
         <Card className="w-full h-full min-h-[350px]">
           <div className="overflow-x-hidden sm:overflow-x-auto w-full h-full">
-            <Table className="w-full h-full">
+            <Table className="w-full h-full"
+              style={{
+                fontSize: currentPath && currentPath?.includes("pt") ? fontSizeTable : "",
+              }}
+            >
               <TableHeader>
                 <TableRow className="p-[0.70rem]">
                   <TableHead className="whitespace-nowrap p-[0.70rem] pr-0">#</TableHead>
@@ -528,7 +535,7 @@ const InsightsFlowComponents = () => {
             </Table>
           </div>
         </Card>
-      </div>
+      </div >
     </>
   )
 
