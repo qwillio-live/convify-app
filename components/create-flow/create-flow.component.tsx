@@ -142,7 +142,7 @@ export function CreateFlowComponent() {
   )
 
   React.useEffect(() => {
-    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false}))
+    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
 
   }, [])
   React.useEffect(() => {
