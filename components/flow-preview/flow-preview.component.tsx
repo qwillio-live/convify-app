@@ -2,20 +2,40 @@
 
 import React, { useEffect } from "react"
 import { useForm, FormProvider, useFormContext } from "react-hook-form"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
+import { setCurrentScreenName, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { usePathname, useRouter } from "next/navigation"
 type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 
 export default function FlowPreview() {
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const pathName = usePathname();
+
   const previewHeaderRef = React.useRef<HTMLDivElement>(null)
   const [headerHeight,setHeaderHeight] = React.useState(90)
 
   const selectedScreenIdex = useAppSelector(
     (state) => state?.screen?.selectedScreen
+  ) || 0
+  const firstScreenName= useAppSelector(
+    (state) => state?.screen?.firstScreenName
+  ) || ""
+
+  useEffect(() => {
+    dispatch(setCurrentScreenName(firstScreenName))
+  },[])
+  const currentScreenName = useAppSelector(
+    (state) => state?.screen?.currentScreenName
   )
   const selectedScreen = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreenIdex || 0]
-  )
+    (state) => state?.screen?.screens.findIndex((screen) => screen.screenName === currentScreenName)
+   || 0)
+
+  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
+  const selectedScreenError = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenToggleError || false);
+
   const screens = useAppSelector((state) => state?.screen?.screens)
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
@@ -25,6 +45,18 @@ export default function FlowPreview() {
 
   const screenFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode) || false
+
+  useEffect(() => {
+    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
+
+  }, [])
+  useEffect(() => {
+    if(!selectedScreenError){
+      // console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+      router.push(`${pathName}#${currentScreenName}`);
+    }
+  },[currentScreenName])
+
   useEffect(() => {
     if(headerMode){
       const height = document.getElementById('preview_header')?.offsetHeight || 0;

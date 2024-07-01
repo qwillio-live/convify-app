@@ -36,6 +36,7 @@ import { StyleProperty } from "../types/style.types"
 import { UserInputSettings } from "./user-input-settings.component"
 import { setFieldProp, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useForm, useFormContext } from "react-hook-form"
+import { RootState } from "@/lib/state/flows-state/store"
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
 
@@ -67,23 +68,38 @@ const UserInputSizeValues = {
 export const UserInputGen = ({ ...props }) => {
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
+  useEffect(() => {
+    setInputValue(fieldValue)
+    dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.compId, fieldName: 'fieldValue', fieldValue: null}))
+    dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.compId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+  },[])
+  // const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
+  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.screens.findIndex((screen) => screen.screenName === currentScreenName)
+   || 0)
+  //  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[selectedScreen]?.screenValidated) || false;
   const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
-  const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[props.compId]);
-  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[props.compId]?.fieldValue)
-  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[props.compId]?.fieldRequired) || false
-  const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated
+  // const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
+  // const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
+  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]);
+  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]?.fieldValue)
+  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]?.fieldRequired) || false
+  const fieldInScreen = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId])
+  const toggleError = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]?.toggleError) || false
+  const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated && fieldInScreen && toggleError || false;
+
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState(props.error)
 
-  useEffect(() => {
-    setInputValue(fieldValue)
-    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
-    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
-  },[])
+  // useEffect(() => {
+  //   setInputValue(fieldValue)
+  //   dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.compId, fieldName: 'fieldValue', fieldValue: null}))
+  //   dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.compId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+  // },[])
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -186,12 +202,12 @@ export const UserInputGen = ({ ...props }) => {
                 )}
                 style={{
                   backgroundColor: "#fff",
-                  borderColor: error
+                  borderColor: fieldError
                     ? "#cc0000"
                     : isActive
                     ? props.activeBorderColor.value
                     : props.borderColor.value,
-                  borderBottomLeftRadius: error ? 0 : props.bottomLeftRadius,
+                  borderBottomLeftRadius: fieldError ? 0 : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
                   borderTopWidth: props.borderTopWidth,
                   borderBottomWidth: props.borderBottomWidth,
@@ -249,7 +265,7 @@ export const UserInputGen = ({ ...props }) => {
               )}
               onChange={(e) => {
                 setInputValue(e.target.value),
-                dispatch(setFieldProp({fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value}))
+                dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value}))
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -355,12 +371,12 @@ export const UserInput = ({ ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
-  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
+  // const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
   const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]);
-  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.fieldValue)
+  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]);
+  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]?.fieldValue)
   // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
-  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.fieldRequired) || false
+  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]?.fieldRequired) || false
   // const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
   const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated
 
@@ -374,8 +390,9 @@ export const UserInput = ({ ...props }) => {
 
   useEffect(() => {
     // dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'toggleError', fieldValue: false}))
-    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
-    dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+    dispatch(setFieldProp({screenId:props.parentScreenId,fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
+    dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
+    dispatch(setValidateScreen({screenId: props.parentScreenId, screenValidated: false,screenToggleError: false }))
     setProp((props) => props.compId = compId)
   },[])
   // useEffect(() => {
@@ -588,7 +605,7 @@ export const UserInput = ({ ...props }) => {
               onChange={
                 (e) => {
                   setProp((props) => (props.inputValue = e.target.value)),
-                  dispatch(setFieldProp({fieldId: compId, fieldName: 'fieldValue', fieldValue: e.target.value}))
+                  dispatch(setFieldProp({screenId:props.parentScreenId,fieldId: compId, fieldName: 'fieldValue', fieldValue: e.target.value}))
 
                 }
                 // not to set input prop when editing
@@ -636,6 +653,7 @@ export type UserInputProps = {
   required: boolean
   fontSize: number
   textColor: string
+  parentScreenId: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -693,6 +711,7 @@ export type UserInputProps = {
 export const UserInputDefaultProps: UserInputProps = {
   compId: "",
   inputValue: "",
+  parentScreenId: "",
   fieldType: "data",
   required: false,
   fontSize: 16,

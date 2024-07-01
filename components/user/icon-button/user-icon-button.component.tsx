@@ -44,7 +44,7 @@ import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButton
 import { useTranslations } from "next-intl";
 import { track } from "@vercel/analytics/react";
 import { RootState } from "@/lib/state/flows-state/store";
-import { navigateToScreen, validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { navigateToScreen, setCurrentScreenName, validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
@@ -143,15 +143,23 @@ export const IconButtonGen = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const pathName = usePathname();
-  const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[0].screenValidated ?? false);
+  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.screens.findIndex((screen) => screen.screenName === currentScreenName)
+   || 0)
+  //  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+   const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[selectedScreen]?.screenValidated) || false;
+
   const handleNavigateToContent = () => {
-    dispatch(validateScreen(0))
-    if(screenValidated){
-      console.log("SCREEN NOT VALIDATED BUT YES")
-      router.push(`${pathName}#${nextScreen?.screenName}`);
-    }else{
-      console.log("SCREEN NOT VALIDATED")
-    }
+    console.log("NAVIGATE TO CONTENT",nextScreen.screenName)
+    dispatch(validateScreen({current:currentScreenName,next: nextScreen.screenName}))
+    // if(screenValidated){
+    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+    //   router.push(`${pathName}#${nextScreen?.screenName}`);
+    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+    // }else{
+    //   console.log("SCREEN NOT VALIDATED", screenValidated)
+    // }
   };
   return (
     <div className="w-full relative" style={{
@@ -500,7 +508,7 @@ const placeCaretAtEnd = (element) => {
     throttledSetProp(property,value);
   };
   const handleNavigateToScreen =async () => {
-    dispatch(validateScreen(selectedScreen));
+    dispatch(validateScreen({current:selectedScreen,next: nextScreen.screenName}));
     // dispatch(navigateToScreen(nextScreen));
       // if(screens){
       //   const screen = screens.find(screen => screen.screenName === nextScreen);
