@@ -363,7 +363,7 @@ const InsightsFlowComponents = () => {
           </div>
         </Card>
       </div>
-      <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start" style={{ marginBottom: '40px' }}>
+      <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start" style={{ marginBottom: '60px', height: 350 }}>
         <Card className="w-full">
           <div className="p-3 flex justify-start">
             <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
@@ -424,7 +424,7 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </Card>
-        <Card className="w-full h-[200px] overflow-x-hidden">
+        <Card className="w-full h-full overflow-x-hidden">
           <Table className="w-full h-full">
             <TableHeader>
               <TableRow>
