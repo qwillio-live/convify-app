@@ -498,7 +498,7 @@ const InsightsFlowComponents = () => {
           <div className="overflow-x-hidden sm:overflow-x-auto w-full h-full">
             <Table className="w-full h-full"
               style={{
-                fontSize: currentPath && currentPath?.includes("pt") ? fontSizeTable : "",
+                fontSize: currentPath && currentPath?.includes("pt") ? "10px" : "inherit",
               }}
             >
               <TableHeader>
