@@ -424,7 +424,7 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </Card>
-        <Card className="w-full h-full overflow-x-hidden">
+        <Card className="w-full h-full overflow-x-hidden min-h-[350px]">
           <Table className="w-full h-full">
             <TableHeader>
               <TableRow>
