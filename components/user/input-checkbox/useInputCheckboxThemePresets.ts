@@ -34,7 +34,7 @@ const useInputCheckboxThemePresets = () => {
     paddingTop: 0,
     paddingBottom: 0,
     placeholder: t("CheckboxPlaceholder"),
-    backgroundColor: "transparent",
+    backgroundColor: "inherit",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
