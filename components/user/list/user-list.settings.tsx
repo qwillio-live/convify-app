@@ -502,7 +502,8 @@ export const ListItemSettings = ({
             )
           }
           pictureType={item.pictureType}
-          customImageSize={256}
+          maxWidthMobile={100}
+          maxWidthDesktop={100}
           onChange={handlePictureChange}
         />
 

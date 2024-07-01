@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -358,12 +362,10 @@ export const MultipleChoice = ({
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
               onValueChange={(updatedValue) => {
-                handlePropChangeDebounced(
-                  "choices",
-                  choices.map((choice, i) =>
-                    i === index ? { ...choice, value: updatedValue } : choice
-                  )
-                )
+                setProp((props) => {
+                  props.choices[index].value = updatedValue
+                  return props
+                }, 200)
               }}
               onSelectChange={() => {
                 if (multiSelect) {
@@ -469,13 +471,23 @@ const MultipleChoiceItem = ({
 
         {choice.pictureType !== PictureTypes.NULL &&
           (choice.pictureType === PictureTypes.ICON ? (
-            <SvgRenderer svgData={choice.picture} width="24px" height="24px" />
+            <SvgRenderer iconName={choice.picture} width="24px" height="24px" />
           ) : choice.pictureType === PictureTypes.EMOJI ? (
             <span className="flex size-6 items-center justify-center text-[22px] leading-[24px]">
               {choice.picture}
             </span>
           ) : (
-            <img src={choice.picture} className="size-6 object-contain" />
+            <picture key={(choice.picture as ImagePictureTypes).desktop}>
+              <source
+                media="(min-width:560px)"
+                srcSet={(choice.picture as ImagePictureTypes).mobile}
+              />
+              <img
+                src={(choice.picture as ImagePictureTypes).desktop}
+                className="size-6 object-contain"
+                loading="lazy"
+              />
+            </picture>
           ))}
 
         <div className="flex-1 text-start">
@@ -705,7 +717,7 @@ export type MultipleChoiceProps = {
   selections: string[]
   choices: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     value: string
     buttonAction: string | null

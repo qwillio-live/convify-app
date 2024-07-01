@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
-import { GlobalThemeState, setBackgroundColor, setPartialStyles } from '../theme/globalThemeSlice';
-import { setSelectedScreen, resetScreensState,setEditorLoad, setScreens } from '../placeholderScreensSlice';
+import { GlobalThemeState, setBackgroundColor, setPartialStyles,setHeaderPosition } from '../theme/globalThemeSlice';
+import { setSelectedScreen, resetScreensState,setEditorLoad, setScreens,updateHeaderPosition } from '../placeholderScreensSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 
@@ -22,6 +22,11 @@ function* applyThemeAndCycleScreens(action: PayloadAction<any>) {
   // Reset to the original selected screen
   yield put(setSelectedScreen(originalSelectedScreen));
   yield put(setEditorLoad(screens[originalSelectedScreen])); // Ensure the editor load is reset correctly
+}
+
+export function* applyHeaderPosition(action: PayloadAction<string>) {
+  yield put(setHeaderPosition(action.payload));
+  yield put(updateHeaderPosition(action.payload));
 }
 
 // Helper delay function

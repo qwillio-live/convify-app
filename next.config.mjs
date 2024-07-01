@@ -16,6 +16,14 @@ const nextConfig = {
     serverComponentsExternalPackages: ["@prisma/client"],
     serverActions: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/upload",
+        destination: `${process.env.NEXT_PUBLIC_UPLOADER_URL}/upload`,
+      },
+    ]
+  },
 }
 
 export default withContentlayer(withNextIntl(nextConfig))

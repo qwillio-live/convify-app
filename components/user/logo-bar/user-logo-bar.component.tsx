@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl"
 import styled from "styled-components"
 import hexoid from "hexoid"
 import { debounce } from "lodash"
+import { ImagePictureTypes } from "@/components/PicturePicker"
 
 const LogoBarSizeValues = {
   small: "400px",
@@ -69,13 +70,23 @@ export const LogoBarGen = ({
             key={index}
             style={{ height: `${height}px` }}
           >
-            <img
-              className="h-full w-auto object-contain"
-              src={item.src}
-              style={{
-                ...(grayscale ? { filter: "grayscale(1)" } : {}),
-              }}
-            />
+            <picture
+              key={(item.src as ImagePictureTypes).desktop}
+              className="h-full"
+            >
+              <source
+                media="(min-width:560px)"
+                srcSet={(item.src as ImagePictureTypes).mobile}
+              />
+              <img
+                src={(item.src as ImagePictureTypes).desktop}
+                className="h-full w-auto object-contain"
+                loading="lazy"
+                style={{
+                  ...(grayscale ? { filter: "grayscale(1)" } : {}),
+                }}
+              />
+            </picture>
           </li>
         ))}
       </StyledLogoBarContainer>
@@ -178,13 +189,23 @@ export const LogoBar = ({
               key={index}
               style={{ height: `${height}px` }}
             >
-              <img
-                className="h-full w-auto object-contain"
-                src={item.src}
-                style={{
-                  ...(grayscale ? { filter: "grayscale(1)" } : {}),
-                }}
-              />
+              <picture
+                key={(item.src as ImagePictureTypes).desktop}
+                className="h-full"
+              >
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(item.src as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(item.src as ImagePictureTypes).desktop}
+                  className="h-full w-auto object-contain"
+                  loading="lazy"
+                  style={{
+                    ...(grayscale ? { filter: "grayscale(1)" } : {}),
+                  }}
+                />
+              </picture>
             </li>
           ))}
         </StyledLogoBarContainer>
@@ -257,7 +278,7 @@ export type LogoBarProps = {
   settingTabs: string[]
   items: {
     id: string
-    src: string
+    src: ImagePictureTypes
   }[]
 }
 
@@ -283,19 +304,19 @@ export const LogoBarDefaultProps: LogoBarProps = {
   items: [
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: "",
+      src: {} as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: "",
+      src: {} as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: "",
+      src: {} as ImagePictureTypes,
     },
     {
       id: `logo-bar-item-${hexoid(6)()}`,
-      src: "",
+      src: {} as ImagePictureTypes,
     },
   ],
 }

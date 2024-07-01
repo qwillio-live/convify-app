@@ -67,7 +67,7 @@
 }
 
 html{
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .node-render::before {
   content: '';

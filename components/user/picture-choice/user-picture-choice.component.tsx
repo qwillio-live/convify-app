@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -342,12 +346,10 @@ export const PictureChoice = ({
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
               onValueChange={(updatedValue) => {
-                handlePropChangeDebounced(
-                  "choices",
-                  choices.map((choice, i) =>
-                    i === index ? { ...choice, value: updatedValue } : choice
-                  )
-                )
+                setProp((props) => {
+                  props.choices[index].value = updatedValue
+                  return props
+                }, 200)
               }}
               onSelectChange={() => {
                 if (multiSelect) {
@@ -482,7 +484,7 @@ const PictureChoiceItem = ({
           >
             {choice.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
-                svgData={choice.picture}
+                iconName={choice.picture}
                 width="50px"
                 height="50px"
               />
@@ -491,10 +493,17 @@ const PictureChoiceItem = ({
                 {choice.picture}
               </span>
             ) : (
-              <img
-                src={choice.picture}
-                className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
-              />
+              <picture key={(choice.picture as ImagePictureTypes).desktop}>
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(choice.picture as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(choice.picture as ImagePictureTypes).desktop}
+                  className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
+                  loading="lazy"
+                />
+              </picture>
             )}
           </div>
         )}
@@ -743,7 +752,7 @@ export type PictureChoiceProps = {
   selections: string[]
   choices: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     value: string
     buttonAction: string | null

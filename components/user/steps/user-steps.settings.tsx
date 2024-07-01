@@ -393,7 +393,8 @@ export const StepsItemSettings = ({
           )
         }
         pictureType={step.pictureType}
-        customImageSize={256}
+        maxWidthMobile={400}
+        maxWidthDesktop={400}
         onChange={handlePictureChange}
       />
 
@@ -404,11 +405,7 @@ export const StepsItemSettings = ({
       >
         {isPastStep && (
           <div className="step-past-icon flex size-6 items-center justify-center rounded-full bg-green-500 text-white">
-            <SvgRenderer
-              svgData={icons["check-solid"].body}
-              width="16"
-              height="16"
-            />
+            <SvgRenderer iconName="check-solid" width="16" height="16" />
           </div>
         )}
         {isPresentStep && (

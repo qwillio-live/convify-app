@@ -11,6 +11,8 @@ import {
   Linkedin,
 } from "lucide-react"
 import React, { useCallback } from "react"
+import { throttle,debounce } from 'lodash';
+
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -59,8 +61,8 @@ import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
-import { debounce, throttle } from "lodash"
-
+import { RootState } from "@/lib/state/flows-state/store";
+import { clear } from "console";
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -78,7 +80,7 @@ const SaveButton = () => {
   console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
   return (
     <a
-      className="fixed left-3 top-3 z-10 bg-black p-3 text-white"
+      className="absolute left-3 top-3 z-10 bg-black p-3 text-white"
       onClick={() => console.log(query.serialize())}
     >
       Get JSON
@@ -97,9 +99,15 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
+type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
+
 export function CreateFlowComponent() {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const editorHeaderRef = React.useRef(null);
+  const [height, setHeight] = React.useState(90);
+  const [width, setWidth] = React.useState(0);
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
+  const [topMargin,setTopMargin] = React.useState<number>(0);
   const dispatch = useAppDispatch()
 
   const backgroundImage = useAppSelector(
@@ -113,48 +121,52 @@ export function CreateFlowComponent() {
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
-
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
-  const headerMode = useAppSelector((state) => state?.screen?.headerMode)
+  const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
+  const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
 
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
-  React.useEffect(() => {
-    // if(selectedComponent !== 'ROOT'){
-      router.push(`#${selectedComponent}`)
-    // }
-    // const parent = document.getElementById('scroll-container');
-    const child = document.getElementById(selectedComponent || 'ROOT');
-    // child?.scrollIntoView({
-    //   behavior: 'auto',
-    //   block: 'center',
-    //   inline: 'center'
-    // });
-    if (child) {
-      child.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      });
-    }
-
-  },[mobileScreen,setSelectedComponent])
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
     },1200),
     [dispatch]
   )
-  // React.useEffect(() => {
-  //   dispatch(resetScreensState())
-  // },[dispatch])
+  React.useEffect(() => {
+    if(headerMode){
+      const height = document?.getElementById("editor-content")?.offsetHeight || 0;
+      setHeight(height)
+    }else{
+      if (editorHeaderRef.current && editorHeaderRef) {
+        //@ts-ignore
+        setHeight(editorHeaderRef?.current?.offsetHeight);
+      }
+    }
 
+  }, [headerMode,height]);
+  React.useEffect(() => {
+    const updateWidth = () => {
+      const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
+      setWidth(newWidth);
+    };
+
+    // Initial width setting
+    updateWidth();
+
+    // Event listener for window resize
+    window.addEventListener('resize', updateWidth);
+    window.addEventListener('', updateWidth);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [headerMode, height]);
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -162,9 +174,7 @@ export function CreateFlowComponent() {
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
           debouncedSetEditorLoad(json)
-          // let editorLoadLength = Object.keys(editorLoad).length;
-          // if(jsonString !== editorLoad){
-          // dispatch(setEditorLoad(JSON.stringify(json)))
+
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -219,7 +229,7 @@ export function CreateFlowComponent() {
         onRender={RenderNode}
       >
         <div className="flex h-[calc(-60px+99vh)] max-h-[calc(-60px+99vh)] flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-7 pr-0">
+          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-6 pr-0">
             <div className="section-body">
               <ScreensList />
             </div>
@@ -227,8 +237,8 @@ export function CreateFlowComponent() {
           <ScrollArea
           ref={containerRef}
           id="scroll-container"
-          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-7 ">
-            <div className="section-header mt-8 flex items-center justify-between"></div>
+          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 ">
+            {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
@@ -244,7 +254,7 @@ export function CreateFlowComponent() {
                     backgroundImage: backgroundImage,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundPosition: "center"
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
@@ -255,24 +265,48 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  {!headerMode && !footerMode && (
+                  {
+                  !headerMode && !footerMode &&
+                   <div
+                   ref={editorHeaderRef}
+                   id="editor-header"
+                   style={{
+                    position: headerPosition as Position,
+                    width: headerPosition === 'absolute' ? width+'px' : '100%',
+                    top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
+                    // top: headerPosition === 'absolute' ? '66px' : '0',
+                    // width: width,
+                    zIndex: 20,
+                    backgroundColor: backgroundColor,
+                    }}>
                     <ResolvedComponentsFromCraftState screen={screensHeader} />
-                  )}
+                   </div>
+                  }
+                  <div
+                  id="editor-content"
+                  style={{
+          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+8}px` : 0,
+        }}>
                   <Frame data={editorLoad}></Frame>
-                  {!headerMode && !footerMode && (
-                    <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  )}
+                  </div>
+                  {
+                    !headerMode && !footerMode &&
+                  <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  }
+
+
                 </TabsContent>
-                <TabsList className="fixed bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
+                <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
                   <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
                 </TabsList>
               </Tabs>
 
+
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-7">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -280,7 +314,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-7">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>

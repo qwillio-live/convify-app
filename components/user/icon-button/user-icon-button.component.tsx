@@ -44,7 +44,7 @@ import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButton
 import { useTranslations } from "next-intl";
 import { track } from "@vercel/analytics/react";
 import { RootState } from "@/lib/state/flows-state/store";
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { navigateToScreen, validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
@@ -141,9 +141,17 @@ export const IconButtonGen = ({
   ...props
 }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const pathName = usePathname();
+  const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[0].screenValidated ?? false);
   const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
+    dispatch(validateScreen(0))
+    if(screenValidated){
+      console.log("SCREEN NOT VALIDATED BUT YES")
+      router.push(`${pathName}#${nextScreen?.screenName}`);
+    }else{
+      console.log("SCREEN NOT VALIDATED")
+    }
   };
   return (
     <div className="w-full relative" style={{
@@ -157,7 +165,7 @@ export const IconButtonGen = ({
     paddingLeft: `${props.marginLeft}px`,
     paddingRight: `${props.marginRight}px`,
      }}>
-<Link href={`${pathName}#${nextScreen}`} className="contents">
+{/* <Link href={`${pathName}#${nextScreen}`} className="contents"> */}
 <StyledCustomButton
         fontFamily={fontFamily?.value}
         color={color.value}
@@ -187,7 +195,7 @@ export const IconButtonGen = ({
         mobileScreen={false}
         {...props}
         className="text-[1rem]"
-        onClick={() => console.log("Button clicked", text)}
+        onClick={() => handleNavigateToContent()}
       >
       <div style={{
       maxWidth: '100%',
@@ -197,7 +205,7 @@ export const IconButtonGen = ({
     }}>{text}</div>
       {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
     </StyledCustomButton>
-    </Link>
+    {/* </Link> */}
     </div>
   )
 }
@@ -234,6 +242,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   display: flex;
   flex-direction: row;
   position: relative;
+  overflow: hidden;
+  max-width: 100%;
   gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
@@ -419,23 +429,51 @@ export const IconButton = ({
   },[primaryColor])
   const maxLength = ButtonTextLimit[size];
   const handleTextChange = (e) => {
-
-    const value = e.target.innerText;
-    if (value.length <= maxLength) {
-      setProp((props) => props.text = value);
-      // handlePropChangeDebounced('text',value);
-      // handlePropChangeThrottled('text',value)
-    } else {
-      if(ref.current){
-        e.target.innerText = text || ''; // Restore the previous text
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(ref.current);
-        range.collapse(false); // Move cursor to the end
-        selection?.removeAllRanges();
-        selection?.addRange(range);
+    if(ref.current){
+      const currentText = ref.current.innerText;
+      if (currentText.length <= maxLength) {
+        // handlePropChangeThrottled('text',currentText);
+        handlePropChangeDebounced('text',currentText);
+      } else {
+        const trimmedText = currentText.substring(0, maxLength);
+        // handlePropChangeThrottled('text',trimmedText);
+        handlePropChangeDebounced('text',trimmedText);
+        ref.current.innerText = trimmedText;
+        placeCaretAtEnd(ref.current);
       }
     }
+
+    // const value = e.target.innerText;
+    // if(value >= maxLength){
+    //   return;
+    // }
+    // if (parseInt(value?.length) <= parseInt(maxLength)) {
+    //   // setProp((props) => props.text = value);
+    //   // handlePropChangeDebounced('text',value);
+    //   handlePropChangeThrottled('text',value.substring(0,maxLength))
+    // } else {
+    //   if(ref.current){
+    //     // e.target.innerText = text || ''; // Restore the previous text
+    //     const selection = window.getSelection();
+    //     const range = document.createRange();
+    //     range.selectNodeContents(ref.current);
+    //     range.collapse(false); // Move cursor to the end
+    //     selection?.removeAllRanges();
+    //     selection?.addRange(range);
+    //   }
+    // }
+  };
+
+const placeCaretAtEnd = (element) => {
+    const range = document.createRange();
+    const selection = window.getSelection();
+    if(selection){
+      range.selectNodeContents(element);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
   };
 
   useEffect(() => {
@@ -462,6 +500,7 @@ export const IconButton = ({
     throttledSetProp(property,value);
   };
   const handleNavigateToScreen =async () => {
+    dispatch(validateScreen(selectedScreen));
     return;
     // dispatch(navigateToScreen(nextScreen));
       // if(screens){
@@ -538,20 +577,25 @@ export const IconButton = ({
         {...props}
         onClick={() => handleNavigateToScreen()}
       >
-      <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
+      <div className="relative overflow-hidden flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
       <ContentEditable
-    html={text}
+    html={text.substring(0,maxLength)} // innerHTML of the editable div
     innerRef={ref}
     disabled={disabled}
     style={{
       maxWidth: '100%',
+      position: 'relative',
+      border: text?.length <= 0 && '1px dotted white',
       transitionProperty: 'all',
       overflowX: 'clip',
       textOverflow: 'ellipsis',
     }}
     className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+
     onChange={(e) => {
         handleTextChange(e);
+      // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
+
     }}
     tagName="div"
 />

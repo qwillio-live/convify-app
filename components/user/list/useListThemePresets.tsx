@@ -4,18 +4,17 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
-import icons from "@/constant/streamline.json"
 
 const useListThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
 
-  const defaultIcon = icons["add-circle"].body
+  const defaultIcon = "add-circle"
 
   const defaultItems = [
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: icons["graph-arrow-increase"].body,
+      picture: "graph-arrow-increase",
       pictureType: PictureTypes.ICON,
       title: t("Streamlined Access"),
       description: t("Quick entry points to all features"),
@@ -23,23 +22,21 @@ const useListThemePresets = () => {
     {
       id: `list-item-${hexoid(6)()}`,
       picture:
-        icons["interface-edit-brush-2-brush-color-colors-design-paint-painting"]
-          .body,
+        "interface-edit-brush-2-brush-color-colors-design-paint-painting",
       pictureType: PictureTypes.ICON,
       title: t("Customizable Interface"),
       description: t("Tailor your workspace to your needs"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: icons["check"].body,
+      picture: "check",
       pictureType: PictureTypes.ICON,
       title: t("Rock-Solid Reliability"),
       description: t("Depend on consistent, uninterrupted service"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture:
-        icons["interface-edit-binocular-binocular-binoculars-view-zoom"].body,
+      picture: "interface-edit-binocular-binocular-binoculars-view-zoom",
       pictureType: PictureTypes.ICON,
       title: t("Behavioral Analytics"),
       description: t("Explore comprehensive user activity data"),

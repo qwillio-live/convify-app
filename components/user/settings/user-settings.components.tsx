@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {GlobalThemeSettings} from "./global-theme-settings"
 import { useTranslations } from "next-intl"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const SettingsPanel = () => {
   const t= useTranslations("Components")
@@ -32,6 +32,7 @@ export const SettingsPanel = () => {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
+        fieldType: state.nodes[currentNodeId]?.data?.props.fieldType || 'design',
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
@@ -82,7 +83,10 @@ export const SettingsPanel = () => {
                   <Button
                     onClick={() => {
                       actions.delete(selected.id),
-                      dispatch(setSelectedComponent("ROOT"))
+                      dispatch(setSelectedComponent("ROOT"));
+                      if(selected.fieldType === 'data'){
+                        dispatch(removeField(selected.id))
+                      }
                     }}
                     variant="destructive"
                     className="mb-4"

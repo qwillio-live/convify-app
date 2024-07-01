@@ -17,6 +17,8 @@ const useInputThemePresets = () => {
   const outlinedPreset: UserInputProps = {
     inputValue: "",
     fontSize: 16,
+    fieldType: "data",
+    required: false,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -92,6 +94,8 @@ const useInputThemePresets = () => {
   const underlinedPreset: UserInputProps = {
     inputValue: "",
     fontSize: 16,
+    fieldType: "data",
+    required: false,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",

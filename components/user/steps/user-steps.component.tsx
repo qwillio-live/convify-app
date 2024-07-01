@@ -10,7 +10,11 @@ import styled from "styled-components"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
-import { PictureTypes, SvgRenderer } from "@/components/PicturePicker"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -203,12 +207,9 @@ export const Steps = ({
               step={step}
               index={index}
               onTextChange={(updatedText) =>
-                handlePropChangeDebounced(
-                  "steps",
-                  steps.map((s, i) =>
-                    i === index ? { ...s, text: updatedText } : s
-                  )
-                )
+                setProp((prop) => {
+                  prop.steps[index].text = updatedText
+                }, 200)
               }
             />
           ))}
@@ -243,7 +244,7 @@ const StepItem = ({
   style: StepsStyles
   step: {
     id: string
-    picture: string | null
+    picture: object | string | null
     pictureType: PictureTypes
     text: string
   }
@@ -279,7 +280,7 @@ const StepItem = ({
                 {isPastStep && (
                   <div className="step-past-icon flex size-7 items-center justify-center rounded-full">
                     <SvgRenderer
-                      svgData={icons["check-solid"].body}
+                      iconName="check-solid"
                       width="18"
                       height="18"
                     />
@@ -309,7 +310,7 @@ const StepItem = ({
             {step.pictureType === PictureTypes.ICON ? (
               <div className="step-picture-icon">
                 <SvgRenderer
-                  svgData={step.picture as string}
+                  iconName={step.picture as string}
                   // viewBox="-0.3 0 14.5 14"
                   width="28px"
                   height="28px"
@@ -322,10 +323,17 @@ const StepItem = ({
                 </span>
               </div>
             ) : (
-              <img
-                src={step.picture as string}
-                className="step-picture-image size-7 object-contain"
-              />
+              <picture key={(step.picture as ImagePictureTypes).desktop}>
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(step.picture as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(step.picture as ImagePictureTypes).desktop}
+                  className="step-picture-image size-7 object-contain"
+                  loading="lazy"
+                />
+              </picture>
             )}
           </>
         )}
@@ -468,7 +476,7 @@ export type StepsProps = {
   currentStep: number
   steps: {
     id: string
-    picture: string | null
+    picture: ImagePictureTypes | string | null
     pictureType: PictureTypes
     text: string
   }[]

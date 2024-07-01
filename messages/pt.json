@@ -196,7 +196,11 @@
     "Add Screen": "Adicionar Tela",
     "Duplicate": "Duplicar",
     "Right-Click": "Clique Direito",
-    "Click on a screen to edit it": "Clique em uma tela para editá-la"
+    "Click on a screen to edit it": "Clique em uma tela para editá-la",
+    "Header Scroll" : "Rolagem do Cabeçalho",
+    "Fixed" : "Fixo",
+    "Scroll" : "Rolar",
+    "Add blocks here" : "Adicione blocos aqui"
   },
   "CreateFlow": {
     "Create": "Criar",

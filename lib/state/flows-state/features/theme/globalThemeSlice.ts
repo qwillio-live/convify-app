@@ -5,6 +5,12 @@ export interface GlobalThemeState {
   mobileScreen: boolean;
   primaryFonts?: PrimaryFontType;
   secondaryFonts?: SecondaryFontType;
+  defaultHeader? : {
+    headerPosition: string
+  },
+  header: {
+    headerPosition: string | undefined
+  }
   defaultGeneral?: {
     primaryColor?: string
     secondaryColor?: string
@@ -35,6 +41,12 @@ const initialState: GlobalThemeState = {
   mobileScreen: false,
   primaryFonts: FONTS.primaryFonts,
   secondaryFonts: FONTS.secondaryFonts,
+  defaultHeader: {
+    headerPosition: "absolute"
+  },
+  header: {
+    headerPosition: "absolute"
+  },
   defaultGeneral: {
     primaryColor: "#4050ff",
     secondaryColor: "#4050ff",
@@ -69,6 +81,9 @@ export const themeSlice = createSlice({
       state.general = { ...action.payload.general }
       state.text = { ...action.payload.text }
     },
+    setHeaderPosition: (state, action: PayloadAction<string>) => {
+      state.header.headerPosition = action.payload
+    },
     setPartialStyles: (
       state,
       action: PayloadAction<Partial<GlobalThemeState>>
@@ -91,6 +106,7 @@ export const themeSlice = createSlice({
 
 export const {
   setThemeStyles,
+  setHeaderPosition,
   setPartialStyles,
   setBackgroundColor,
   setMobileScreen,

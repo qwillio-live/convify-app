@@ -631,7 +631,8 @@ export const PictureChoiceItemSettings = ({
             )
           }
           pictureType={choice.pictureType}
-          customImageSize={256}
+          maxWidthMobile={400}
+          maxWidthDesktop={400}
           onChange={handlePictureChange}
         />
 
