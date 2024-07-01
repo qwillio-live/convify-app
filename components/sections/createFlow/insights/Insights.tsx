@@ -285,7 +285,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getDropoff()
     }
-  }, [status, days, flowId])
+  }, [status, days, flowId, dataKey])
 
   useEffect(() => {
     const getAnalytics = async () => {
@@ -302,7 +302,8 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getAnalytics()
     }
-  }, [status, days, flowId])
+  }, [status, days, flowId, dataKey])
+
   const repeatedJSX = (
     <>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
