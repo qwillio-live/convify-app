@@ -228,9 +228,9 @@ const InsightsFlowComponents = () => {
       const dataRes = await response.json()
       setAnalytics(dataRes)
       if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
       else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
       else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
-      else if (dataKey === "visits" && dataRes.submitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
     }
     getAnalytics()
   }, [status, days])
