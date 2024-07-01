@@ -13,6 +13,7 @@ import {
   YAxis,
 } from "recharts"
 
+import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -27,6 +28,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange"
 import { pt } from 'date-fns/locale';
 import { subDays } from "date-fns"
+
 const visitsData: SubmitData[] = [
   {
     time: convertDate(subDays(new Date(), 5).toISOString()),
@@ -184,8 +186,23 @@ const InsightsFlowComponents = () => {
   })
   const [status, setStatus] = useState(false)
   // will be replaced dynamic flow id
-  const [flowId, setFlowId] = useState("clwqfhfvh0001sja3q8nlhuat")
-  // const [flowId, setFlowId] = useState("clwpczg9u0000kqzv9sbdvfvh")
+  const [flowId, setFlowId] = useState<string | null>(null);
+  const currentPath = usePathname();
+
+  useEffect(() => {
+    const extractFlowIdFromUrl = async () => {
+      const url = currentPath; // Get the current URL
+      const match = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
+      if (match && match[1] && match[1] !== "flows") {
+        setFlowId(match[1]);
+      } else if (match && match[1] === "flows") {
+        // remove this logic on production, which is different for every user
+        setFlowId("clwqfhfvh0001sja3q8nlhuat")
+      }
+    };
+    extractFlowIdFromUrl();
+  }, []);
+
   const [selected, setSelected] = useState(InsightsDevices[0] || {})
   const [dataKey, setDataKey] = useState("visits")
   const [data, setData] = useState<SubmitData[]>(visitsData)
@@ -217,7 +234,9 @@ const InsightsFlowComponents = () => {
       const dataRes = await response.json()
       setDropoff(dataRes)
     }
-    getDropoff()
+    if (flowId) {
+      getDropoff()
+    }
   }, [status, days])
 
   useEffect(() => {
@@ -232,7 +251,9 @@ const InsightsFlowComponents = () => {
       else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
       else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
     }
-    getAnalytics()
+    if (flowId) {
+      getAnalytics()
+    }
   }, [status, days])
   const repeatedJSX = (
     <>
