@@ -179,6 +179,27 @@ const fakeDropOff = [
 ]
 
 const InsightsFlowComponents = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Function to update window width on resize
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  // Effect to add and remove resize event listener
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Determine height based on window width
+  const getHeight = () => {
+    console.log(windowWidth, "windowWidth")
+    return windowWidth < 600 ? 'fit-content' : 350;
+  };
+
   const [days, setDays] = useState(7)
   const [date, setDate] = useState({
     startDate: subDays(new Date(), 7),
@@ -237,7 +258,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getDropoff()
     }
-  }, [status, days])
+  }, [status, days, flowId])
 
   useEffect(() => {
     const getAnalytics = async () => {
@@ -254,7 +275,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getAnalytics()
     }
-  }, [status, days])
+  }, [status, days, flowId])
   const repeatedJSX = (
     <>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
@@ -384,9 +405,9 @@ const InsightsFlowComponents = () => {
           </div>
         </Card>
       </div>
-      <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start" style={{ marginBottom: '60px', height: 350 }}>
+      <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start" style={{ marginBottom: '70px', height: getHeight() }}>
         <Card className="w-full">
-          <div className="p-3 flex justify-start">
+          <div className="p-[0.70rem] flex justify-start">
             <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
               <Button
                 variant="secondary"
@@ -445,47 +466,43 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </Card>
-        <Card className="w-full h-full overflow-x-hidden min-h-[350px]">
-          <Table className="w-full h-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead>#</TableHead>
-                <TableHead className="whitespace-nowrap">
-                  {t("Step")}
-                </TableHead>
-                <TableHead className="whitespace-nowrap">
-                  {t("Views")}
-                </TableHead>
-                <TableHead className="whitespace-nowrap">
-                  {t("Exits")}
-                </TableHead>
-                <TableHead className="whitespace-nowrap">
-                  {t("Drop-off rate")}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody className="h-full overflow-y-hidden">
-              {
-                dropoff.length > 0 ? dropoff.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{item.stepName}</TableCell>
-                    <TableCell>{item.visits}</TableCell>
-                    <TableCell>{item.exits}</TableCell>
-                    <TableCell>{item.dropOffRate.split('.')[0]}%</TableCell>
-                  </TableRow>
-                )) : fakeDropOff.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{item.stepName}</TableCell>
-                    <TableCell>{item.visits}</TableCell>
-                    <TableCell>{item.exits}</TableCell>
-                    <TableCell>{item.dropOffRate}</TableCell>
-                  </TableRow>
-                ))
-              }
-            </TableBody>
-          </Table>
+        <Card className="w-full h-full min-h-[350px]">
+          <div className="overflow-x-hidden sm:overflow-x-auto w-full h-full">
+            <Table className="w-full h-full">
+              <TableHeader>
+                <TableRow className="p-[0.70rem]">
+                  <TableHead className="whitespace-nowrap p-[0.70rem] pr-0">#</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Step")}</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Views")}</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Exits")}</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Drop-off rate")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="h-full">
+                {dropoff.length > 0 ? (
+                  dropoff.map((item, index) => (
+                    <TableRow key={index} className="p-[0.70rem]"> {/* Reduced padding here */}
+                      <TableCell className="p-[0.70rem] pr-0">{index + 1}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.stepName}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.visits}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.exits}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.dropOffRate.split('.')[0]}%</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  fakeDropOff.map((item, index) => (
+                    <TableRow key={index} className="p-[0.70rem]"> {/* Reduced padding here */}
+                      <TableCell className="p-[0.70rem]">{index + 1}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.stepName}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.visits}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.exits}</TableCell>
+                      <TableCell className="p-[0.70rem]">{item.dropOffRate}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </Card>
       </div>
     </>
@@ -494,7 +511,7 @@ const InsightsFlowComponents = () => {
   return (
     <Tabs defaultValue="custom" className="">
       <header className="mt-4 flex items-center gap-4 px-0 lg:px-6">
-        <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-1 overflow-x-hidden">
+        <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-[0.70rem] overflow-x-hidden">
           <TabsList className="flex h-full bg-inherit py-0 overflow-x-auto" >
             <TabsTrigger
               className="[&>div>button]:data-[state=active]:border-input [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=inactive]:bg-transparent [&>div>button]:data-[state=active]:bg-muted [&>div>button]:font-medium"
