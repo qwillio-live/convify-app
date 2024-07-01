@@ -419,7 +419,7 @@ export const UserInputCheckbox = ({ ...props }) => {
     if (containerHover || props.isActive || isChecked) {
       return primaryTextColor;
     }
-    return `${primaryTextColor}99`; // Equivalent to primaryTextColor with 80% opacity
+    return `${primaryTextColor}`; 
   };
   
 

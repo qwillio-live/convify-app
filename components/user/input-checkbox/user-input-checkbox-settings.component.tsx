@@ -176,7 +176,7 @@ export const UserInputCheckboxSettings = () => {
             </div>
 
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
               <label
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -194,7 +194,7 @@ export const UserInputCheckboxSettings = () => {
                 placeholder={t("Enter label text")}
               />
             </div>
-
+ */}
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
               <label
