@@ -70,7 +70,7 @@ export default function FlowPreview() {
     <>
     <div
     ref={previewHeaderRef}
-    id="preview_header"
+    id={currentScreenName}
     style={{
       position: headerPosition as Position === 'absolute' ? 'fixed' : 'relative',
       width: '100%',
@@ -84,7 +84,7 @@ export default function FlowPreview() {
         return (
           <div
             key={index}
-            id={screen?.screenName}
+            id={screen?.screenName+'-preview'}
             style={{
               display: currentScreenName === screen?.screenName ? "block" : "none",
               backgroundColor: backgroundColor,
