@@ -1,6 +1,6 @@
 import EmptyResponse from "@/components/sections/createFlow/empty/Empty"
 
-import { ArrowDown, Check } from "lucide-react"
+import { ArrowDown, ArrowUp } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { Card } from "@/components/ui/card"
@@ -13,6 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useEffect, useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
+import { LoadingEl } from './ResponseLoading'
 interface Response {
   id?: string
   content?: Object
@@ -172,24 +174,41 @@ function convertTimestamp(timestamp: string): string {
 }
 const ResponseFlowComponents = () => {
   const t = useTranslations("CreateFlow.ResultsPage");
-  const flow_id = 'clwqfhfvh0001sja3q8nlhuat';
+  const [flowId, setFlowId] = useState<string | null>(null);
+  const currentPath = usePathname();
+
+  useEffect(() => {
+    const extractFlowIdFromUrl = async () => {
+      const url = currentPath; // Get the current URL
+      const match = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
+      if (match && match[1] && match[1] !== "flows") {
+        setFlowId(match[1]);
+      } else if (match && match[1] === "flows") {
+        // remove this logic on production, which is different for every user
+        setFlowId("clwqfhfvh0001sja3q8nlhuat")
+      }
+    };
+    extractFlowIdFromUrl();
+  }, []);
   // const flow_id = 'clxtcj8dm0005mokca440ysv4'
   const [responses, setResponses] = useState<Response[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isAscending, setIsAscending] = useState<boolean>(true);
+  const [isAscending, setIsAscending] = useState<boolean>(false);
   const [rows, setRows] = useState<Object[]>([]); // Add state for rows
 
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true);
-      const response = await fetch(`/api/flows/${flow_id}/responses/`);
-      const dataRes = await response.json();
-      // console.log("Responses", dataRes)
-      setResponses(dataRes);
+      if (flowId) {
+        const response = await fetch(`/api/flows/${flowId}/responses/`);
+        const dataRes = await response.json();
+        // console.log("Responses", dataRes)
+        setResponses(dataRes);
+      }
       setLoading(false);
     };
     getResponses();
-  }, []);
+  }, [flowId]);
 
   useEffect(() => {
     const uniqueLabels = new Set<string>();
@@ -237,7 +256,7 @@ const ResponseFlowComponents = () => {
   return (
     <div className="min-w-screen-md flex-1 items-center justify-center overflow-y-hidden mx-auto py-4 px-0 lg:px-8 lg:py-4">
       {loading ? (
-        <div>Loading...</div>
+        <LoadingEl />
       ) : responses.length > 0 ? (
         <Card className="overflow-y-auto max-h-[70vh]">
           <Table className="text-xs">
@@ -248,13 +267,15 @@ const ResponseFlowComponents = () => {
                   style={{ cursor: "pointer" }}
                   onClick={handleSort} // Use handleSort
                 >
-                  {t("Submission time")} <ArrowDown className="w-4 h-4" />
+                  {t("Submission time")} {
+                    isAscending ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                  }
                 </TableHead>
                 <TableHead className="whitespace-nowrap">{t("Label")}</TableHead>
                 {uniqueLabelsArray.length > 0 &&
                   uniqueLabelsArray.map((label: string) => (
                     <TableHead className="whitespace-nowrap" key={label as React.Key}>
-                      {label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()}
+                      {label !== "Submission time" && label !== "label" && label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()}
                     </TableHead>
                   ))}
               </TableRow>

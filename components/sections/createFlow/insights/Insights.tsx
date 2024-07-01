@@ -176,6 +176,30 @@ const fakeDropOff = [
     exits: 0,
     dropOffRate: "0",
   },
+  {
+    stepName: "Step 4",
+    visits: 0,
+    exits: 0,
+    dropOffRate: "0",
+  },
+  {
+    stepName: "Step 5",
+    visits: 0,
+    exits: 0,
+    dropOffRate: "0",
+  },
+  {
+    stepName: "Step 6",
+    visits: 0,
+    exits: 0,
+    dropOffRate: "0",
+  },
+  {
+    stepName: "Step 7",
+    visits: 0,
+    exits: 0,
+    dropOffRate: "0",
+  },
 ]
 
 const InsightsFlowComponents = () => {

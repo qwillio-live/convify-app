@@ -211,6 +211,7 @@
     "ResultsPage": {
       "This flow doesnt have any responses yet": "This flow doesn’t have any responses.",
       "insights": "insights",
+      "Loading": "Loading",
       "responses": "responses",
       "Last 28 days": "Last 28 days",
       "Last 14 days": "Last 14 days",
