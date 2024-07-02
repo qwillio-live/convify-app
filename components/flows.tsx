@@ -40,8 +40,9 @@ import {
 } from "@/components/ui/table"
 
 import { Badge } from "./ui/badge"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef, LegacyRef } from "react"
 import { Icons } from "@/components/icons"
+import { useRouter, usePathname } from "next/navigation"
 
 function formatDate(isoString: string): string {
   const date = new Date(isoString);
@@ -75,13 +76,83 @@ interface Flow {
   createdAt: string
 
 }
-
+function splitAndJoin(word: string, isClamped: boolean) {
+  if (isClamped) {
+    let segments: string[] = []; // Explicitly define the type of the segments array
+    for (let i = 0; i < word.length && i < 20; i += 1) {
+      segments.push(word.substring(i, i + 1));
+    }
+    return segments.join('').trim() + "...";
+  } else {
+    return word;
+  }
+}
 export function FlowsList({ flows, setStatus, status }) {
   const t = useTranslations("Dashboard")
   const [deleteDialog, setDeleteDialog] = useState(false)
   const [flow, setFlow] = useState<Flow>();
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [padding400, setPadding400] = useState<string>("inherit")
+  const [padding05Rem, setPadding05Rem] = useState<string>("inherit")
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+  const currentPath = usePathname();
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
+  useEffect(() => {
+    if (windowSize <= 360) {
+      setPadding400("0")
+    }
+    else if (windowSize <= 375) {
+      if (currentPath?.includes("pt")) {
+        setPadding400("0")
+        setPadding05Rem("0.5rem")
+      } else {
+        setPadding400("0.35rem")
+      }
+    }
+    else if (windowSize <= 400) {
+      setPadding400("0.75rem")
+    }
+  }, [windowSize])
+
+  // const cellRef = useRef(null);
+  const [isClamped, setIsClamped] = useState(false);
+  useEffect(() => {
+    if (windowSize > 600) {
+      setIsClamped(false)
+    }
+  }, [windowSize])
+  const cellRef = useRef<HTMLDivElement>(null); // Assign the correct type to cellRef
+
+  useEffect(() => {
+    const element = cellRef.current;
+    if (windowSize <= 600) {
+      if (element) {
+        const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
+        const maxLines = 3;
+        const maxHeight = lineHeight * maxLines; // Calculate max height for 3 lines
+        // Calculate content height based on actual content
+        const contentHeight = element.scrollHeight;
+
+        // Check if content exceeds maximum height
+        if (contentHeight > maxHeight) {
+          setIsClamped(true);
+        }
+      }
+    }
+  }, [windowSize]);
   const editFlow = async (flow) => {
     try {
       const filteredFlow = filterAllowedFields(flow)
@@ -152,13 +223,19 @@ export function FlowsList({ flows, setStatus, status }) {
           </Link>
 
           <Card>
-            <CardHeader>
+            <CardHeader style={{
+              padding: padding400 !== "inherit" ? "1rem" : "1.5rem"
+            }}>
               <CardTitle>{t("My flows")}</CardTitle>
               <CardDescription>
                 {t("Manage your flows and view their performance")}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent
+              style={{
+                padding: padding400 !== "inherit" ? padding400 : "1.5rem"
+              }}
+            >
               <div>
                 <Table className="min-w-full">
                   <TableHeader>
@@ -185,7 +262,11 @@ export function FlowsList({ flows, setStatus, status }) {
                       flows.length > 0 && flows.map((flow) => {
                         return (
                           <TableRow key={flow.id}>
-                            <TableCell className="hidden sm:table-cell">
+                            <TableCell className="hidden sm:table-cell"
+                              style={{
+                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              }}
+                            >
                               <Image
                                 alt="Product image"
                                 className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
@@ -194,18 +275,35 @@ export function FlowsList({ flows, setStatus, status }) {
                                 src={flow.previewImage ? flow.previewImage : placeholder.src}
                               />
                             </TableCell>
-                            <TableCell className="font-bold">
-                              {flow.name}
+                            <TableCell ref={cellRef as LegacyRef<HTMLTableCellElement> | undefined} className="font-bold"
+                              style={{
+                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              }}>
+                              {isClamped ? splitAndJoin(flow.name, isClamped) : flow.name}
                             </TableCell>
-                            <TableCell>
-                              <Badge variant="outline">{flow.status}</Badge>
+                            <TableCell
+                              style={{
+                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              }}>
+                              <Badge variant="outline">{t(flow.status)}</Badge>
                             </TableCell>
-                            <TableCell>{flow.numberOfSteps ? flow.numberOfSteps : 0}</TableCell>
-                            <TableCell className="hidden md:table-cell">{flow.numberOfResponses ? flow.numberOfResponses : 0}</TableCell>
-                            <TableCell className="hidden md:table-cell">
+                            <TableCell
+                              style={{
+                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              }}>{flow.numberOfSteps ? flow.numberOfSteps : 0}</TableCell>
+                            <TableCell className="hidden md:table-cell"
+                              style={{
+                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              }}>{flow.numberOfResponses ? flow.numberOfResponses : 0}</TableCell>
+                            <TableCell className="hidden md:table-cell"
+                              style={{
+                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              }}>
                               {formatDate(flow.createdAt)}
                             </TableCell>
-                            <TableCell>
+                            <TableCell style={{
+                              padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                            }}>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button

@@ -44,6 +44,8 @@
     "Your password is incorrect or this email address is not registered with Convify": "Sua senha está incorreta ou este endereço de email não está registrado no Convify"
   },
   "Dashboard": {
+    "draft": "rascunho",
+    "active": "ativo",
     "Dashboard": "Painel",
     "There's not a flow in sight": "Não há um fluxo à vista",
     "My workspace": "Meu espaço de trabalho",
@@ -197,10 +199,10 @@
     "Duplicate": "Duplicar",
     "Right-Click": "Clique Direito",
     "Click on a screen to edit it": "Clique em uma tela para editá-la",
-    "Header Scroll" : "Rolagem do Cabeçalho",
-    "Fixed" : "Fixo",
-    "Scroll" : "Rolar",
-    "Add blocks here" : "Adicione blocos aqui"
+    "Header Scroll": "Rolagem do Cabeçalho",
+    "Fixed": "Fixo",
+    "Scroll": "Rolar",
+    "Add blocks here": "Adicione blocos aqui"
   },
   "CreateFlow": {
     "Create": "Criar",
