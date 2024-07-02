@@ -15,7 +15,7 @@ import { throttle,debounce } from 'lodash';
 
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setEditorLoad, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setCurrentScreenName, setEditorLoad, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -128,7 +128,7 @@ export function CreateFlowComponent() {
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
   const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
-
+  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -143,7 +143,7 @@ export function CreateFlowComponent() {
 
   React.useEffect(() => {
     dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
-
+    dispatch(setCurrentScreenName(firstScreenName))
   }, [])
   React.useEffect(() => {
     if(headerMode){

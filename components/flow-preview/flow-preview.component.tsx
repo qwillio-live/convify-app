@@ -5,14 +5,21 @@ import { useForm, FormProvider, useFormContext } from "react-hook-form"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
 import { setCurrentScreenName, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 
 export default function FlowPreview() {
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const pathName = usePathname();
-
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const search = searchParams?.get('#')
+  useEffect(() => {
+    const url = `${pathname}?${searchParams}#${search}`
+    console.log("URL IS: ",url)
+    // You can now use the current URL
+    // ...
+  }, [pathname, searchParams])
   const previewHeaderRef = React.useRef<HTMLDivElement>(null)
   const [headerHeight,setHeaderHeight] = React.useState(90)
 
@@ -23,9 +30,11 @@ export default function FlowPreview() {
     (state) => state?.screen?.firstScreenName
   ) || ""
 
-  useEffect(() => {
-    dispatch(setCurrentScreenName(firstScreenName))
-  },[])
+  // useEffect(() => {
+  //   if(currentScreenName === ""){
+  //     dispatch(setCurrentScreenName(firstScreenName))
+  //   }
+  // },[])
   const currentScreenName = useAppSelector(
     (state) => state?.screen?.currentScreenName
   )
@@ -53,9 +62,11 @@ export default function FlowPreview() {
   useEffect(() => {
     if(!selectedScreenError){
       // console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
-      router.push(`${pathName}#${currentScreenName}`);
+      router.push(`${pathname}#${currentScreenName}`,{ scroll: false });
+      router.refresh()
+      // router.replace(`${pathName}#${currentScreenName}`);
     }
-  },[currentScreenName])
+  },[currentScreenName,pathname])
 
   useEffect(() => {
     if(headerMode){

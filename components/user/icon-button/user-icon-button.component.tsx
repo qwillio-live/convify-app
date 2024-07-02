@@ -151,7 +151,6 @@ export const IconButtonGen = ({
    const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[selectedScreen]?.screenValidated) || false;
 
   const handleNavigateToContent = () => {
-    console.log("NAVIGATE TO CONTENT",nextScreen.screenName)
     dispatch(validateScreen({current:currentScreenName,next: nextScreen.screenName}))
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
