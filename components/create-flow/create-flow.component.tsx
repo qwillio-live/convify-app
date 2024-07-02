@@ -274,7 +274,7 @@ export function CreateFlowComponent() {
           <ScrollArea
           ref={containerRef}
           id="scroll-container"
-          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6">
+          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r">
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
