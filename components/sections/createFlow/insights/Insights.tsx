@@ -427,7 +427,7 @@ const InsightsFlowComponents = () => {
                 </p>
               </div>
               <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : analytics.desktopDevicePercentage ? analytics.desktopDevicePercentage.split('.')[0] : '0'} `}%
+                {`${String(analytics.mobileDevicePercentage) === '0.00' || String(analytics.mobileDevicePercentage) === '0' ? 0 : analytics.mobileDevicePercentage ? analytics.mobileDevicePercentage.split('.')[0] : '0'} `}%
               </span>
             </div>
           </div>
