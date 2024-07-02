@@ -236,7 +236,7 @@ export const BackButtonGen = ({
                 )}
               </div>
             )}
-            <span className="ml-4">{text}</span>
+            <span className="ml-2">{text}</span>
           </span>
         </StyledCustomButton>
       </Link>
@@ -633,7 +633,7 @@ export const BackButton = ({
                   overflowX: "clip",
                   textOverflow: "ellipsis",
                 }}
-                className="min-w-8 border-dotted border-transparent leading-relaxed hover:border-blue-500"
+                className="ml-2 min-w-8 border-dotted border-transparent leading-relaxed hover:border-blue-500"
                 onChange={(e) => {
                   handleTextChange(e)
                 }}
