@@ -745,11 +745,27 @@ export const UserToolbox = () => {
                                 size: "full",
                                 forHeader: true,
                                 type: "header",
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
                               }
                             : {
                                 ...ProgressBarDefaultProps,
                                 forHeader: false,
                                 type: "body",
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                marginTop: 20,
+                                marginBottom: 20,
                               })}
                         />
                       )
@@ -757,10 +773,10 @@ export const UserToolbox = () => {
                     data-cy="toolbox-text"
                   >
                     <HoverCardComponent
-                      title="Progress"
+                      title={t("Progress Bar")}
                       icon={<CircleSlashed className="mr-2 size-3" />}
                     >
-                      <div className="flex w-[360px] flex-row items-center justify-between border p-4">
+                      <div className="flex w-[360px] flex-row items-center justify-between  p-4">
                         <ProgressBarGen
                           {...(isHeaderFooterMode
                             ? {
@@ -768,11 +784,29 @@ export const UserToolbox = () => {
                                 size: "full",
                                 forHeader: true,
                                 type: "header",
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
                               }
                             : {
                                 ...ProgressBarDefaultProps,
+                                size: "full",
                                 forHeader: false,
                                 type: "body",
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                marginTop: 0,
+                                marginBottom: 0,
+                                radius: 0,
                               })}
                           // Uncomment the following line if you need to set a value for the progress bar
                           // value={50}

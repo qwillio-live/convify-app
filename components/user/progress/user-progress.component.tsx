@@ -188,15 +188,15 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-top: ${(props) => props.paddingTop};
   padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-bottom: ${(props) => props.paddingBottom}px;
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+  border: none;
   @media (max-width: 760px) {
     width: 100%; /* Make the button take the full width on smaller screens */
     max-width: 600px;
@@ -275,81 +275,69 @@ export const ProgressBarGen = ({
     forHeader,
     selectedScreenName
   )
+  const bgColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
   return (
     <div
       className="relative w-full"
       style={{
-        width: "100%",
-        background: `${containerBackground}`,
+        background: `${bgColor}`,
         display: "flex",
         justifyContent: "center",
-        minWidth: "100%",
-        paddingTop: `${props.marginTop}px`,
-        paddingBottom: `${props.marginBottom}px`,
-        paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `${props.marginRight}px`,
+        boxSizing: "border-box",
+        width: "100%",
+        paddingTop: `${props.paddingTop}px`,
+        paddingBottom: `${props.paddingBottom}px`,
+        paddingLeft: `${props.paddingLeft}px`,
+        paddingRight: `${props.paddingRight}px`,
       }}
     >
-      <div
-        className="relative w-full"
-        style={{
-          background: `${containerBackground}`,
-          display: "flex",
-          justifyContent: "center",
-          boxSizing: "border-box",
-          width: "100%",
-          paddingTop: `${props.marginTop}px`,
-          paddingBottom: `${props.marginBottom}px`,
-          paddingLeft: `${props.marginLeft}px`,
-          paddingRight: `${props.marginRight}px`,
-        }}
+      <StyledCustomButton
+        fontFamily={fontFamily?.value}
+        color={color.value}
+        background={bgColor}
+        backgroundHover={bgColor}
+        borderHoverColor={bgColor}
+        colorHover={bgColor}
+        radius={radius?.value}
+        flexDirection={flexDirection}
+        justifyContent={justifyContent}
+        marginLeft={marginLeft}
+        width={width}
+        size={size}
+        buttonSize={buttonSize}
+        height={height}
+        marginRight={marginRight}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        paddingLeft={paddingLeft}
+        paddingTop={paddingTop}
+        paddingRight={paddingRight}
+        paddingBottom={paddingBottom}
+        alignItems={alignItems}
+        gap={gap}
+        mobileScreen={false}
+        {...props}
+        className="text-[1rem]"
       >
-        <StyledCustomButton
-          fontFamily={fontFamily?.value}
-          color={color.value}
-          background={containerBackground}
-          backgroundHover={containerBackground}
-          borderHoverColor={containerBackground}
-          colorHover={containerBackground}
-          radius={radius?.value}
-          flexDirection={flexDirection}
-          justifyContent={justifyContent}
-          marginLeft={marginLeft}
-          width={width}
-          size={size}
-          buttonSize={buttonSize}
-          height={height}
-          marginRight={marginRight}
-          marginTop={marginTop}
-          marginBottom={marginBottom}
-          paddingLeft={paddingLeft}
-          paddingTop={paddingTop}
-          paddingRight={paddingRight}
-          paddingBottom={paddingBottom}
-          alignItems={alignItems}
-          gap={gap}
-          mobileScreen={false}
-          {...props}
-          className="text-[1rem]"
-        >
-          <Progress
-            value={
-              progressvalue === 1 && maxValue === 5
-                ? ((selectedScreen + 1) / screensLength) * 100
-                : (progressvalue / maxValue) * 100
-            }
-            style={{
-              marginTop: `${props.marginTop}px`,
-              marginBottom: `${props.marginBottom}px`,
-              marginLeft: `${props.marginLeft}px`,
-              marginRight: `${props.marginRight}px`,
-            }}
-            // style={{ maxWidth: `${maxWidth}px` }}
-            className={`h-1 ${fullWidth ? "w-full" : ""}`}
-            indicatorColor={primaryColor || color}
-          />
-        </StyledCustomButton>
-      </div>
+        <Progress
+          value={
+            progressvalue === 1 && maxValue === 5
+              ? ((selectedScreen + 1) / screensLength) * 100
+              : (progressvalue / maxValue) * 100
+          }
+          style={{
+            marginTop: `${props.marginTop}px`,
+            marginBottom: `${props.marginBottom}px`,
+            marginLeft: `${props.marginLeft}px`,
+            marginRight: `${props.marginRight}px`,
+          }}
+          // style={{ maxWidth: `${maxWidth}px` }}
+          className={`h-1 ${fullWidth ? "w-full" : ""}`}
+          indicatorColor={primaryColor || color}
+        />
+      </StyledCustomButton>
     </div>
   )
 }
@@ -417,6 +405,9 @@ export const ProgressBar = ({
   )
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
+  )
+  const bgColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
   )
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const primaryColor = useAppSelector(
@@ -622,22 +613,38 @@ export const ProgressBar = ({
     for (let i = 0; i < maxValue; i++) {
       icons.push(
         <SelectedComponent
-          color={i < progressvalue ? primaryColor : "lightgray"}
+          color={
+            i < progressvalue && progressStyle === "grip"
+              ? primaryColor
+              : i < progressvalue && progressStyle === "rectangle"
+              ? primaryColor
+              : "#eaeaeb"
+          }
           style={{
-            margin: "0 4px",
+            margin: progressStyle === "grip" ? "0 6px" : "0 0",
             background:
               i < progressvalue && progressStyle === "grip"
                 ? primaryColor
-                : containerBackground,
+                : progressStyle === "rectangle"
+                ? bgColor
+                : "#eaeaeb",
             borderRadius: progressStyle === "grip" ? "50px" : "disabled",
           }}
-          size={progressStyle === "grip" ? 20 : 30}
+          size={progressStyle === "grip" ? 8 : 25}
         />
       )
     }
 
     return icons
   }
+  console.log(
+    "paddins tblr",
+    paddingTop,
+    paddingBottom,
+    paddingLeft,
+    paddingRight,
+    bgColor
+  )
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -651,80 +658,66 @@ export const ProgressBar = ({
       onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={t("Progress Bar")} />}
+
       <div
         className="relative w-full"
         style={{
-          width: "100%",
-          background: `${containerBackground}`,
+          background: `${bgColor}`,
           display: "flex",
           justifyContent: "center",
-          minWidth: "100%",
-          paddingTop: `${props.marginTop}px`,
-          paddingBottom: `${props.marginBottom}px`,
-          paddingLeft: `${props.marginLeft}px`,
-          paddingRight: `${props.marginRight}px`,
+          boxSizing: "border-box",
+          width: "100%",
+          paddingTop: `${props.paddingTop}px`,
+          paddingBottom: `${props.paddingBottom}px`,
+          paddingLeft: `${props.paddingLeft}px`,
+          paddingRight: `${props.paddingRight}px`,
         }}
       >
-        <div
-          className="relative w-full"
-          style={{
-            background: `${containerBackground}`,
-            display: "flex",
-            justifyContent: "center",
-            boxSizing: "border-box",
-            width: "100%",
-            paddingTop: `${props.marginTop}px`,
-            paddingBottom: `${props.marginBottom}px`,
-            paddingLeft: `${props.marginLeft}px`,
-            paddingRight: `${props.marginRight}px`,
-          }}
-        >
-          {progressStyle === "minus" ? (
-            <StyledCustomButton
-              fontFamily={fontFamily?.value}
-              color={color.value}
-              background={containerBackground}
-              backgroundHover={containerBackground}
-              borderHoverColor={containerBackground}
-              colorHover={containerBackground}
-              radius={radius?.value}
-              flexDirection={flexDirection}
-              justifyContent={justifyContent}
-              marginLeft={marginLeft}
-              width={width}
-              size={size}
-              buttonSize={buttonSize}
-              height={height}
-              marginRight={marginRight}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              paddingLeft={paddingLeft}
-              paddingTop={paddingTop}
-              paddingRight={paddingRight}
-              paddingBottom={paddingBottom}
-              alignItems={alignItems}
-              gap={gap}
-              mobileScreen={false}
-              {...props}
-              className="text-[1rem]"
-            >
-              <Progress
-                value={
-                  progressvalue === 1 && maxValue === 5
-                    ? ((selectedScreen + 1) / screensLength) * 100
-                    : (progressvalue / maxValue) * 100
-                }
-                // style={{ maxWidth: `${maxWidth}px` }}
-                className={`h-1 ${fullWidth ? "w-full" : ""}`}
-                indicatorColor={primaryColor || color}
-              />
-            </StyledCustomButton>
-          ) : (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {renderIcons()}
-            </div>
-          )}
-        </div>
+        {progressStyle === "minus" ? (
+          <StyledCustomButton
+            fontFamily={fontFamily?.value}
+            color={color.value}
+            background={bgColor}
+            backgroundHover={bgColor}
+            borderHoverColor={bgColor}
+            colorHover={bgColor}
+            radius={radius?.value}
+            flexDirection={flexDirection}
+            justifyContent={justifyContent}
+            marginLeft={marginLeft}
+            width={width}
+            size={size}
+            buttonSize={buttonSize}
+            height={height}
+            marginRight={marginRight}
+            marginTop={marginTop}
+            marginBottom={marginBottom}
+            paddingLeft={paddingLeft}
+            paddingTop={paddingTop}
+            paddingRight={paddingRight}
+            paddingBottom={paddingBottom}
+            alignItems={alignItems}
+            gap={gap}
+            mobileScreen={false}
+            {...props}
+            className="text-[1rem]"
+          >
+            <Progress
+              value={
+                progressvalue === 1 && maxValue === 5
+                  ? ((selectedScreen + 1) / screensLength) * 100
+                  : (progressvalue / maxValue) * 100
+              }
+              // style={{ maxWidth: `${maxWidth}px` }}
+              className={`h-1 ${fullWidth ? "w-full" : ""}`}
+              indicatorColor={primaryColor || color}
+            />
+          </StyledCustomButton>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {renderIcons()}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -840,10 +833,10 @@ export const ProgressBarDefaultProps: IconButtonProps = {
   marginRight: 0,
   marginBottom: 20,
   icon: "arrowright",
-  paddingLeft: "16",
-  paddingTop: "26",
-  paddingRight: "16",
-  paddingBottom: "26",
+  paddingLeft: "0",
+  paddingTop: "0",
+  paddingRight: "0",
+  paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
   gap: 4,

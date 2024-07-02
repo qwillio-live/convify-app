@@ -413,15 +413,16 @@ export const ProgressBarSettings = () => {
                   </span>
                 </div>
                 <Slider
+                  className=""
                   defaultValue={[marginRight]}
                   value={[marginRight]}
                   max={100}
                   min={0}
                   step={1}
                   onValueChange={(e) =>
-                    // setProp((props) => (props.marginRight = e),200)
-                    // handlePropChange("marginRight",e)
-                    handlePropChangeDebounced("marginRight", e)
+                    // setProp((props) => (props.marginTop = e),200)
+                    // handlePropChange("marginTop",e)
+                    handlePropChangeDebounced("marginTop", e)
                   }
                 />
               </div>
