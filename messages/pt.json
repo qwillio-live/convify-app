@@ -46,6 +46,7 @@
   "Dashboard": {
     "draft": "rascunho",
     "active": "ativo",
+    "Cancel": "Cancelar",
     "Dashboard": "Painel",
     "There's not a flow in sight": "Não há um fluxo à vista",
     "My workspace": "Meu espaço de trabalho",

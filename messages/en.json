@@ -45,6 +45,7 @@
   "Dashboard": {
     "draft": "draft",
     "active": "active",
+    "Cancel": "Cancel",
     "Dashboard": "Dashboard",
     "There's not a flow in sight": "There's not a flow in sight",
     "My workspace": "My workspace",

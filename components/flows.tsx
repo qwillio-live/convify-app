@@ -352,7 +352,7 @@ export function FlowsList({ flows, setStatus, status }) {
                 <AlertDialogTitle>{t("Are you sure want to delete the Flow")}</AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setDeleteDialog(false)}>Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setDeleteDialog(false)}>{t("Cancel")}</AlertDialogCancel>
                 <Button
                   disabled={isLoading}
                   variant="destructive"
