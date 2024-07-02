@@ -276,6 +276,7 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
+
                   {
                   !headerMode && !footerMode &&
                    <div
@@ -296,7 +297,9 @@ export function CreateFlowComponent() {
                   <div
                   id="editor-content"
                   style={{
-          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "38px",
+                    backgroundColor: backgroundColor,
+                    paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
+          // marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "0",
         }}>
                   <Frame data={editorLoad}></Frame>
                   </div>
@@ -304,7 +307,6 @@ export function CreateFlowComponent() {
                     !headerMode && !footerMode &&
                   <ResolvedComponentsFromCraftState screen={screensFooter} />
                   }
-
 
                 </TabsContent>
                 <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
