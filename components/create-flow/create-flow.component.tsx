@@ -15,7 +15,7 @@ import { throttle,debounce } from 'lodash';
 
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setCurrentScreenName, setEditorLoad, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setCurrentScreenName, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -119,6 +119,7 @@ export function CreateFlowComponent() {
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
   const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const startScreenName = useAppSelector((state) => state?.screen?.screens[0].screenName || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
@@ -128,7 +129,7 @@ export function CreateFlowComponent() {
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
   const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
-  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || ""
+  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName ) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -143,7 +144,11 @@ export function CreateFlowComponent() {
 
   React.useEffect(() => {
     dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
-    dispatch(setCurrentScreenName(firstScreenName))
+    dispatch(setFirstScreenName(startScreenName))
+    dispatch(setCurrentScreenName(startScreenName))
+
+
+
   }, [])
   React.useEffect(() => {
     if(headerMode){

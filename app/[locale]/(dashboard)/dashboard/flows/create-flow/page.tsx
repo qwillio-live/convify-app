@@ -114,7 +114,7 @@ export default function CreateFlowsPage() {
                 router.refresh(),
                 dispatch(setCurrentScreenName(firstScreenName))
               }}
-              href={`/dashboard/flows/preview-flow#${firstScreenName}`} target="_blank">
+              href={`/dashboard/flows/preview-flow?screen=${firstScreenName}`} target="_blank">
                 <Button
                   variant="outline"
                   size="sm"

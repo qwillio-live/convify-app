@@ -306,6 +306,9 @@ export const screensSlice = createSlice({
     setCurrentScreenName: (state, action: PayloadAction<string>) => {
       state.currentScreenName = action.payload;
     },
+    setFirstScreenName: (state, action: PayloadAction<string>) => {
+      state.firstScreenName = action.payload;
+    },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       const newScreens = [...state.screens]; // Create new array
       const newId = hexoid(8)();
@@ -383,6 +386,7 @@ export const screensSlice = createSlice({
 export const {
   setSelectedComponent,
   setCurrentScreenName,
+  setFirstScreenName,
   removeField,
   setValidateScreen,
   updateHeaderPosition,

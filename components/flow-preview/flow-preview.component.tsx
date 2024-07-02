@@ -13,13 +13,18 @@ export default function FlowPreview() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const search = searchParams?.get('#')
+  const search = searchParams?.get('screen') || "";
   useEffect(() => {
-    const url = `${pathname}?${searchParams}#${search}`
-    console.log("URL IS: ",url)
-    // You can now use the current URL
-    // ...
-  }, [pathname, searchParams])
+    const screens = document.querySelectorAll('.new-screens');
+    screens.forEach(screen => {
+    screen.classList.remove('min-h-[400px]');
+  });
+  },[])
+  useEffect(() => {
+    if(search !== currentScreenName){
+      dispatch(setCurrentScreenName(search))
+    }
+  }, [search])
   const previewHeaderRef = React.useRef<HTMLDivElement>(null)
   const [headerHeight,setHeaderHeight] = React.useState(90)
 
@@ -30,11 +35,6 @@ export default function FlowPreview() {
     (state) => state?.screen?.firstScreenName
   ) || ""
 
-  // useEffect(() => {
-  //   if(currentScreenName === ""){
-  //     dispatch(setCurrentScreenName(firstScreenName))
-  //   }
-  // },[])
   const currentScreenName = useAppSelector(
     (state) => state?.screen?.currentScreenName
   )
@@ -62,7 +62,7 @@ export default function FlowPreview() {
   useEffect(() => {
     if(!selectedScreenError){
       // console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
-      router.push(`${pathname}#${currentScreenName}`,{ scroll: false });
+      router.push(`${pathname}?screen=${currentScreenName}`,{ scroll: false });
       router.refresh()
       // router.replace(`${pathName}#${currentScreenName}`);
     }
@@ -101,7 +101,7 @@ export default function FlowPreview() {
               backgroundColor: backgroundColor,
               paddingTop: headerPosition === 'absolute' ? headerHeight+'px' : '0'
              }}
-            className="my-14 min-h-screen
+            className="my-14
           shrink-0
           basis-full
           min-w-full"
