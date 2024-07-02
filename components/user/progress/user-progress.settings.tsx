@@ -278,7 +278,7 @@ export const ProgressBarSettings = () => {
                   }}
                   className="flex-1"
                 >
-                  <TabsList className="grid w-full grid-cols-4">
+                  <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="minus">
                       <Minus />
                     </TabsTrigger>
@@ -422,7 +422,7 @@ export const ProgressBarSettings = () => {
                   onValueChange={(e) =>
                     // setProp((props) => (props.marginTop = e),200)
                     // handlePropChange("marginTop",e)
-                    handlePropChangeDebounced("marginTop", e)
+                    handlePropChangeDebounced("marginRight", e)
                   }
                 />
               </div>

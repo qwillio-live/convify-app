@@ -34,6 +34,7 @@ import {
   Paintbrush,
   Paintbrush2,
   Pencil,
+  RectangleEllipsis,
   Rocket,
   SeparatorHorizontal,
   SkipBack,
@@ -772,7 +773,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Progress Bar")}
-                      icon={<CircleSlashed className="mr-2 size-3" />}
+                      icon={<RectangleEllipsis className="mr-2 size-3" />}
                     >
                       <div className="flex w-[360px] flex-row items-center justify-between  p-4">
                         <ProgressBarGen

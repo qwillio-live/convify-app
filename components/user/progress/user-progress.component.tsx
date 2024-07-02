@@ -630,7 +630,7 @@ export const ProgressBar = ({
                 : "#eaeaeb",
             borderRadius: progressStyle === "grip" ? "50px" : "disabled",
           }}
-          size={progressStyle === "grip" ? 8 : 25}
+          size={progressStyle === "grip" ? 8 : 28}
         />
       )
     }
