@@ -92,8 +92,7 @@ export function FlowsList({ flows, setStatus, status }) {
   const [deleteDialog, setDeleteDialog] = useState(false)
   const [flow, setFlow] = useState<Flow>();
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [padding400, setPadding400] = useState<string>("inherit")
-  const [padding05Rem, setPadding05Rem] = useState<string>("inherit")
+  const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
   const [windowSize, setWindowSize] = useState(window.innerWidth);
   const currentPath = usePathname();
 
@@ -112,18 +111,20 @@ export function FlowsList({ flows, setStatus, status }) {
 
   useEffect(() => {
     if (windowSize <= 360) {
-      setPadding400("0")
+      setPaddingScreen("0.3rem")
     }
     else if (windowSize <= 375) {
       if (currentPath?.includes("pt")) {
-        setPadding400("0")
-        setPadding05Rem("0.5rem")
+        setPaddingScreen("0.3rem")
       } else {
-        setPadding400("0.35rem")
+        setPaddingScreen("0.35rem")
       }
     }
     else if (windowSize <= 400) {
-      setPadding400("0.75rem")
+      setPaddingScreen("0.75rem")
+    }
+    else if (windowSize <= 500) {
+      setPaddingScreen("0.85rem")
     }
   }, [windowSize])
 
@@ -138,18 +139,16 @@ export function FlowsList({ flows, setStatus, status }) {
 
   useEffect(() => {
     const element = cellRef.current;
-    if (windowSize <= 600) {
-      if (element) {
-        const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
-        const maxLines = 3;
-        const maxHeight = lineHeight * maxLines; // Calculate max height for 3 lines
-        // Calculate content height based on actual content
-        const contentHeight = element.scrollHeight;
+    if (element) {
+      const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
+      const maxLines = 3;
+      const maxHeight = lineHeight * maxLines; // Calculate max height for 3 lines
+      // Calculate content height based on actual content
+      const contentHeight = element.scrollHeight;
 
-        // Check if content exceeds maximum height
-        if (contentHeight > maxHeight) {
-          setIsClamped(true);
-        }
+      // Check if content exceeds maximum height
+      if (contentHeight >= maxHeight) {
+        setIsClamped(true);
       }
     }
   }, [windowSize]);
@@ -207,7 +206,6 @@ export function FlowsList({ flows, setStatus, status }) {
     }
     return null
   }
-
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="sm:py-0 md:gap-8">
@@ -224,7 +222,7 @@ export function FlowsList({ flows, setStatus, status }) {
 
           <Card>
             <CardHeader style={{
-              padding: padding400 !== "inherit" ? "1rem" : "1.5rem"
+              padding: paddingScreen !== "inherit" ? "1rem" : "1rem"
             }}>
               <CardTitle>{t("My flows")}</CardTitle>
               <CardDescription>
@@ -233,7 +231,7 @@ export function FlowsList({ flows, setStatus, status }) {
             </CardHeader>
             <CardContent
               style={{
-                padding: padding400 !== "inherit" ? padding400 : "1.5rem"
+                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
               }}
             >
               <div>
@@ -246,10 +244,10 @@ export function FlowsList({ flows, setStatus, status }) {
                       <TableHead>{t("Name")}</TableHead>
                       <TableHead>{t("Status")}</TableHead>
                       <TableHead>{t("Steps")}</TableHead>
-                      <TableHead className="hidden md:table-cell">
+                      <TableHead className="hidden lg:table-cell">
                         {t("Responses")}
                       </TableHead>
-                      <TableHead className="hidden md:table-cell">
+                      <TableHead className="hidden lg:table-cell">
                         {t("Created at")}
                       </TableHead>
                       <TableHead>
@@ -264,7 +262,7 @@ export function FlowsList({ flows, setStatus, status }) {
                           <TableRow key={flow.id}>
                             <TableCell className="hidden sm:table-cell"
                               style={{
-                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}
                             >
                               <Image
@@ -277,32 +275,32 @@ export function FlowsList({ flows, setStatus, status }) {
                             </TableCell>
                             <TableCell ref={cellRef as LegacyRef<HTMLTableCellElement> | undefined} className="font-bold"
                               style={{
-                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>
                               {isClamped ? splitAndJoin(flow.name, isClamped) : flow.name}
                             </TableCell>
                             <TableCell
                               style={{
-                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>
                               <Badge variant="outline">{t(flow.status)}</Badge>
                             </TableCell>
                             <TableCell
                               style={{
-                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>{flow.numberOfSteps ? flow.numberOfSteps : 0}</TableCell>
-                            <TableCell className="hidden md:table-cell"
+                            <TableCell className="hidden lg:table-cell"
                               style={{
-                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>{flow.numberOfResponses ? flow.numberOfResponses : 0}</TableCell>
-                            <TableCell className="hidden md:table-cell"
+                            <TableCell className="hidden lg:table-cell"
                               style={{
-                                padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>
                               {formatDate(flow.createdAt)}
                             </TableCell>
                             <TableCell style={{
-                              padding: padding05Rem !== "inherit" ? padding05Rem : "1rem"
+                              padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                             }}>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
