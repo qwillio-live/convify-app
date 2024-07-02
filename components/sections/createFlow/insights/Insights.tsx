@@ -33,47 +33,30 @@ const visitsData: SubmitData[] = [
   {
     time: convertDate(subDays(new Date(), 5).toISOString()),
     visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 4).toISOString()),
     visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 3).toISOString()),
     visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 2).toISOString()),
     visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 1).toISOString()),
     visits: 0,
+    submits: 0,
   },
 ]
 
-const submitsData: SubmitData[] = [
-  {
-    time: convertDate(subDays(new Date(), 5).toISOString()),
-    submits: 0,
-  },
-  {
-    time: convertDate(subDays(new Date(), 4).toISOString()),
-    submits: 0,
-  },
-  {
-    time: convertDate(subDays(new Date(), 3).toISOString()),
-    submits: 0,
-  },
-  {
-    time: convertDate(subDays(new Date(), 2).toISOString()),
-    submits: 0,
-  },
-  {
-    time: convertDate(subDays(new Date(), 1).toISOString()),
-    submits: 0,
-  },
-]
 function convertDate(dateStr: string): string {
   if (!dateStr) return "0";
   const date = new Date(dateStr);
@@ -82,12 +65,34 @@ function convertDate(dateStr: string): string {
   return `${day}.${month}`;
 }
 
-const visitConverter = (data: SubmitData[], startDate: string, endDate: string): { time: string; visits: number }[] => {
-  // Create an array of dates from startDate to endDate
-  const dateArray: string[] = [];
-  let currentDate = new Date(startDate);
 
-  while (currentDate <= new Date(endDate)) {
+function convertAndCheck(dateString: Date): string {
+  const incomingDate = dateString;
+  const hours = incomingDate.getHours();
+  const minutes = incomingDate.getMinutes();
+  const exactTime = `${hours}:${minutes}`
+  // Get the ISO string representation of the incoming date
+  const incomingISOString = incomingDate.toISOString();
+
+  if (exactTime === "0:0") {
+    // Clone the incoming date and add 1 day to it
+    const nextDay = new Date(incomingDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    return nextDay.toISOString();
+  }
+  // Return the ISO string of the incoming date as it is
+  return incomingISOString;
+}
+
+
+const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { time: string; visits: number }[] => {
+  // Create an array of dates from startDate to endDate
+  const startDateConverted = convertAndCheck(startDate)
+  const endDateConverted = convertAndCheck(endDate)
+  const dateArray: string[] = [];
+  let currentDate = new Date(startDateConverted);
+
+  while (currentDate <= new Date(endDateConverted)) {
     dateArray.push(convertDate(currentDate.toISOString().slice(0, 10)));
     currentDate.setDate(currentDate.getDate() + 1);
   }
@@ -103,12 +108,14 @@ const visitConverter = (data: SubmitData[], startDate: string, endDate: string):
 };
 
 
-const submitConverter = (data: SubmitData[], startDate: string, endDate: string): { time: string; submits: number }[] => {
+const submitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { time: string; submits: number }[] => {
   // Create an array of dates from startDate to endDate
+  const startDateConverted = convertAndCheck(startDate)
+  const endDateConverted = convertAndCheck(endDate)
   const dateArray: string[] = [];
-  let currentDate = new Date(startDate);
+  let currentDate = new Date(startDateConverted);
 
-  while (currentDate <= new Date(endDate)) {
+  while (currentDate <= new Date(endDateConverted)) {
     dateArray.push(convertDate(currentDate.toISOString().slice(0, 10)));
     currentDate.setDate(currentDate.getDate() + 1);
   }
@@ -122,8 +129,6 @@ const submitConverter = (data: SubmitData[], startDate: string, endDate: string)
     };
   });
 }
-
-
 
 interface SubmitData {
   time?: string
@@ -251,7 +256,6 @@ const InsightsFlowComponents = () => {
     extractFlowIdFromUrl();
   }, []);
 
-  const [selected, setSelected] = useState(InsightsDevices[0] || {})
   const [dataKey, setDataKey] = useState("visits")
   const [data, setData] = useState<SubmitData[]>(visitsData)
   let [dropoff, setDropoff] = useState<Dropoff[]>([])
@@ -294,10 +298,10 @@ const InsightsFlowComponents = () => {
       )
       const dataRes = await response.json()
       setAnalytics(dataRes)
-      if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
-      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
-      else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
-      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
+      if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate))
+      else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate))
     }
     if (flowId) {
       getAnalytics()
@@ -445,7 +449,7 @@ const InsightsFlowComponents = () => {
                   }`}
                 onClick={() => {
                   setDataKey("visits")
-                  setData(visitConverter(analytics.uniqueVisitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
+                  setData(visitConverter(analytics.uniqueVisitsArray, date.startDate, date.endDate))
                 }}
                 size="sm"
               >
@@ -459,7 +463,7 @@ const InsightsFlowComponents = () => {
                   }`}
                 onClick={() => {
                   setDataKey("submits")
-                  setData(submitConverter(analytics.submitsArray, date.startDate.toISOString(), date.endDate.toISOString()))
+                  setData(submitConverter(analytics.submitsArray, date.startDate, date.endDate))
                 }}
                 size="sm"
               >
