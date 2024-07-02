@@ -521,8 +521,6 @@ export const UserToolbox = () => {
                         disabled={false}
                         marginTop={20}
                         marginBottom={20}
-                        paddingTop={14}
-                        paddingBottom={14}
                         // marginLeft={20}
                         // marginRight={20}
                         justifyContent={"center"}

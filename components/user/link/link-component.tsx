@@ -305,21 +305,15 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? IconButtonMobileSizeValues[props.size || "medium"]
-      : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
+
+  width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding: 14.875px 17px;
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
@@ -519,7 +513,7 @@ export const LinkButton = ({
   const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
     const value = e.target.innerText
-    if (value.length <= maxLength) {
+    if (value?.length <= maxLength) {
       setProp((props) => (props.text = value))
       // handlePropChangeDebounced('text',value);
       // handlePropChangeThrottled('text',value)
@@ -643,7 +637,7 @@ export const LinkButton = ({
           onClick={() => handleNavigateToScreen()}
         >
           <div
-            className={`relative  flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip ${
+            className={`relative flex min-h-[16px]  min-w-[32px] max-w-[100%] flex-col items-center justify-center overflow-hidden overflow-x-clip ${
               enableIcon ? "ml-2" : ""
             }`}
           >
