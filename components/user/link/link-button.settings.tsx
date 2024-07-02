@@ -349,7 +349,6 @@ export const LinkButtonSettings = () => {
                     {t("Open in")}
                   </label>
                   <Select
-                    className="w-full"
                     defaultValue={"new-window"}
                     value={windowTarget ? "new-window" : "same-window"}
                     onValueChange={(e) =>
