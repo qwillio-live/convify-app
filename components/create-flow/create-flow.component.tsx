@@ -9,13 +9,16 @@ import {
   Globe,
   Image,
   Linkedin,
+  Smartphone,
+  Laptop,
+  PlusCircle
 } from "lucide-react"
 import React, { useCallback } from "react"
 import { throttle,debounce } from 'lodash';
 
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setCurrentScreenName, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setCurrentScreenName, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen, addScreen, setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -63,6 +66,8 @@ import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
 import { RootState } from "@/lib/state/flows-state/store";
 import { clear } from "console";
+import { useTranslations } from "next-intl"
+import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -102,6 +107,7 @@ const NodesToSerializedNodes = (nodes) => {
 type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
 
 export function CreateFlowComponent() {
+  const t = useTranslations("Components");
   const containerRef = React.useRef<HTMLDivElement>(null);
   const editorHeaderRef = React.useRef(null);
   const [height, setHeight] = React.useState(90);
@@ -135,6 +141,26 @@ export function CreateFlowComponent() {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  // const { actions } = useEditor((state, query) => ({
+  //   enabled: state.options.enabled,
+  //   actions: state.events.selected,
+  // }))
+  const selectedScreenIndex = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  const handleAddScreen = useCallback(
+    async (index: number) => {
+      if (screens && screens[index]) {
+        console.log(index)
+        dispatch(addScreen(index))
+        //await actions.deserialize(JSON.stringify(emptyScreenData))
+      } else {
+        console.error("screens is undefined or index is out of bounds")
+      }
+    },
+    [dispatch, screens]
+  )
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
@@ -309,9 +335,18 @@ export function CreateFlowComponent() {
                   }
 
                 </TabsContent>
-                <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
-                  <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
+                <TabsList className="absolute bottom-2 z-20  w-100 ">
+                  <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-[#f4f4f5]"
+                      onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+                    >
+                      <PlusCircle className="mr-2 size-4" />
+                      {t("Add Screen")}
+                    </Button>
+                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1"><Smartphone className="size-5"/></TabsTrigger>
+                  <TabsTrigger value={VIEWS.DESKTOP}><Laptop className="size-5" /></TabsTrigger>
                 </TabsList>
               </Tabs>
 

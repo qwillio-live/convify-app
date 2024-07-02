@@ -208,7 +208,7 @@ const ScreensList = () => {
 <ResolvedComponentsFromCraftState screen={screensHeader} />
 
 </div>
-            <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+            <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
           </Card>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
@@ -229,7 +229,7 @@ const ScreensList = () => {
             )}
             onClick={() => handleFooterScreenClick()}
           >
-            <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
+            <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
             <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
             </div>
@@ -245,7 +245,7 @@ const ScreensList = () => {
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
-          <div className="section-header flex items-center justify-end">
+          {/* <div className="section-header flex items-center justify-end">
             <Button
               variant={"secondary"}
               className=""
@@ -254,7 +254,7 @@ const ScreensList = () => {
               <PlusCircle className="mr-2 size-4" />
               {t("Add Screen")}
             </Button>
-          </div>
+          </div> */}
           {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
           <Reorder.Group
             axis="y"
@@ -298,7 +298,7 @@ const ScreensList = () => {
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
-                        <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
+                        <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <ResolvedComponentsFromCraftState screen={screensHeader} />
                         <ResolvedComponentsFromCraftState
