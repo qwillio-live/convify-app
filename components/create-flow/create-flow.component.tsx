@@ -266,7 +266,7 @@ export function CreateFlowComponent() {
         onRender={RenderNode}
       >
         <div className="flex h-[calc(-60px+99vh)] max-h-[calc(-60px+99vh)] flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-6 pr-0">
+          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-body">
               <ScreensList />
             </div>

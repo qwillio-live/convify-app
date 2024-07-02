@@ -235,7 +235,7 @@ export const UserToolbox = () => {
             type="multiple"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
           >
-            <AccordionItem value="item-1">
+            <AccordionItem value="item-1" className="border-b-0">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Text
               </AccordionTrigger>
@@ -288,7 +288,7 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             {!isHeaderFooterMode && (
-              <AccordionItem value="item-2">
+              <AccordionItem value="item-2" className="border-b-0">
                 <AccordionTrigger className="uppercase hover:no-underline">
                   {t("Input")}
                 </AccordionTrigger>
@@ -407,7 +407,7 @@ export const UserToolbox = () => {
               </AccordionItem>
             )}
 
-            <AccordionItem value="item-3">
+            <AccordionItem value="item-3" className="border-b-0">
               <AccordionTrigger className="uppercase hover:no-underline">
                 {t("Button")}
               </AccordionTrigger>
@@ -452,7 +452,7 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             {!isHeaderFooterMode && (
-              <AccordionItem value="item-4">
+              <AccordionItem value="item-4" className="border-b-0">
                 <AccordionTrigger className="uppercase hover:no-underline">
                   Display
                 </AccordionTrigger>
