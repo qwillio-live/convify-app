@@ -522,7 +522,7 @@ export default function CreateFlowsPage() {
           </div>
         </main>
       </Tabs>
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
+      {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
         <button className="relative size-8 cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
           <div className="flex size-auto cursor-pointer items-center justify-center">
             <span className="SVGInline">
@@ -544,7 +544,7 @@ export default function CreateFlowsPage() {
             </span>
           </div>
         </button>
-      </div>
+      </div> */}
       {isCustomLinkOpen && (
         <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
           <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
