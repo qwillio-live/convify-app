@@ -11,11 +11,13 @@ import {
   Linkedin,
 } from "lucide-react"
 import React, { useCallback } from "react"
-import { throttle,debounce } from 'lodash';
-
+import { throttle, debounce } from "lodash"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setEditorLoad,
+  setSelectedComponent,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -61,8 +63,11 @@ import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
-import { RootState } from "@/lib/state/flows-state/store";
-import { clear } from "console";
+import { RootState } from "@/lib/state/flows-state/store"
+import { clear } from "console"
+import { LineSelector } from "../user/lineSeperator/line-seperator-component"
+import { BackButton } from "../user/backButton/back-component"
+import { LinkButton } from "../user/link/link-component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -99,25 +104,33 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
-type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
+type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
 export function CreateFlowComponent() {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const editorHeaderRef = React.useRef(null);
-  const [height, setHeight] = React.useState(90);
-  const [width, setWidth] = React.useState(0);
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const editorHeaderRef = React.useRef(null)
+  const [height, setHeight] = React.useState(90)
+  const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
-  const [topMargin,setTopMargin] = React.useState<number>(0);
+  const [topMargin, setTopMargin] = React.useState<number>(0)
   const dispatch = useAppDispatch()
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
 
-  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const selectedComponent = useAppSelector(
+    (state) => state?.screen?.selectedComponent
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  const startScreen = useAppSelector(
+    (state) => state?.screen?.screens[0].screenData || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
@@ -125,8 +138,12 @@ export function CreateFlowComponent() {
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
-  const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
-  const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
+  const headerMode = useAppSelector(
+    (state: RootState) => state.screen?.headerMode
+  )
+  const headerPosition =
+    useAppSelector((state) => state?.theme?.header?.headerPosition) ||
+    "relative"
 
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
@@ -136,37 +153,38 @@ export function CreateFlowComponent() {
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
-    },1200),
+    }, 1200),
     [dispatch]
   )
   React.useEffect(() => {
-    if(headerMode){
-      const height = document?.getElementById("editor-content")?.offsetHeight || 0;
+    if (headerMode) {
+      const height =
+        document?.getElementById("editor-content")?.offsetHeight || 0
       setHeight(height)
-    }else{
+    } else {
       if (editorHeaderRef.current && editorHeaderRef) {
         //@ts-ignore
-        setHeight(editorHeaderRef?.current?.offsetHeight);
+        setHeight(editorHeaderRef?.current?.offsetHeight)
       }
     }
-
-  }, [headerMode,height]);
+  }, [headerMode, height])
   React.useEffect(() => {
     const updateWidth = () => {
-      const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
-      setWidth(newWidth);
-    };
+      const newWidth =
+        document.getElementById("editor-content")?.offsetWidth || 0
+      setWidth(newWidth)
+    }
 
     // Initial width setting
-    updateWidth();
+    updateWidth()
 
     // Event listener for window resize
-    window.addEventListener('resize', updateWidth);
-    window.addEventListener('', updateWidth);
+    window.addEventListener("resize", updateWidth)
+    window.addEventListener("", updateWidth)
 
     // Cleanup event listener on component unmount
-    return () => window.removeEventListener('resize', updateWidth);
-  }, [headerMode, height]);
+    return () => window.removeEventListener("resize", updateWidth)
+  }, [headerMode, height])
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -196,6 +214,9 @@ export function CreateFlowComponent() {
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
+          LineSelector,
+          BackButton,
+          LinkButton,
           // UserProgressBar,
           ScreenOneInput,
           Input,
@@ -235,9 +256,10 @@ export function CreateFlowComponent() {
             </div>
           </ScrollArea>
           <ScrollArea
-          ref={containerRef}
-          id="scroll-container"
-          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 ">
+            ref={containerRef}
+            id="scroll-container"
+            className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 "
+          >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -254,7 +276,7 @@ export function CreateFlowComponent() {
                     backgroundImage: backgroundImage,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundPosition: "center",
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
@@ -265,36 +287,43 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-                  {
-                  !headerMode && !footerMode &&
-                   <div
-                   ref={editorHeaderRef}
-                   id="editor-header"
-                   style={{
-                    position: headerPosition as Position,
-                    width: headerPosition === 'absolute' ? width+'px' : '100%',
-                    top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
-                    // top: headerPosition === 'absolute' ? '66px' : '0',
-                    // width: width,
-                    zIndex: 20,
-                    backgroundColor: backgroundColor,
-                    }}>
-                    <ResolvedComponentsFromCraftState screen={screensHeader} />
-                   </div>
-                  }
+                  {!headerMode && !footerMode && (
+                    <div
+                      ref={editorHeaderRef}
+                      id="editor-header"
+                      style={{
+                        position: headerPosition as Position,
+                        width:
+                          headerPosition === "absolute" ? width + "px" : "100%",
+                        top:
+                          headerPosition === "absolute" && !headerMode
+                            ? "32px"
+                            : "0",
+                        // top: headerPosition === 'absolute' ? '66px' : '0',
+                        // width: width,
+                        zIndex: 20,
+                        backgroundColor: backgroundColor,
+                      }}
+                    >
+                      <ResolvedComponentsFromCraftState
+                        screen={screensHeader}
+                      />
+                    </div>
+                  )}
                   <div
-                  id="editor-content"
-                  style={{
-          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+8}px` : 0,
-        }}>
-                  <Frame data={editorLoad}></Frame>
+                    id="editor-content"
+                    style={{
+                      marginTop:
+                        !headerMode && headerPosition === "absolute"
+                          ? `${height + 8}px`
+                          : 0,
+                    }}
+                  >
+                    <Frame data={editorLoad}></Frame>
                   </div>
-                  {
-                    !headerMode && !footerMode &&
-                  <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
-
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  )}
                 </TabsContent>
                 <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -302,11 +331,10 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -314,7 +342,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>

@@ -1,53 +1,14 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useReducer,
-} from "react"
-import {
-  Activity,
-  Anchor,
-  Aperture,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  GripHorizontal,
-  Mountain,
-  RectangleHorizontal,
-} from "lucide-react"
-import ContentEditable from "react-contenteditable"
+import React, { useCallback, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { throttle, debounce } from "lodash"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { borderRadius, darken, rgba } from "polished"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+
 import { Button as CustomButton } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
-import { ProgressBarSettings } from "./user-progress.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
@@ -55,35 +16,9 @@ import {
 import { useTranslations } from "next-intl"
 import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
-import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
-import { Progress } from "@/components/ui/progress-custom"
-import { Minus, Circle } from "lucide-react"
-
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-}
-
-const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  const IconComponent = IconsList[icon]
-
-  if (!IconComponent) {
-    return null // or some default icon or error handling
-  }
-
-  return (
-    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
-  )
-}
+import { LineSelectorSettings } from "./line-seperator-settings"
 
 const IconButtonSizeValues = {
   small: "300px",
@@ -121,6 +56,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+
 interface StyledCustomButtonProps {
   fontFamily?: string
   color?: string
@@ -181,7 +117,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
       ? IconButtonMobileSizeValues[props.size || "medium"]
       : IconButtonSizeValues[props.size || "medium"]};
   width: 100%;
-  box-sizing: border-box;
+  cursor: default;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
@@ -206,13 +142,140 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
     max-width: 400px;
   }
 `
-export const ProgressBarGen = ({
+
+export enum IconButtonSizes {
+  small = "small",
+  medium = "medium",
+  large = "large",
+  full = "full",
+}
+
+export type IconButtonProps = {
+  fontFamily: StyleProperty
+  disabled: boolean
+  enableIcon: boolean
+  size: IconButtonSizes
+  containerBackground: string
+  background: StyleProperty
+  backgroundHover: StyleProperty
+  color: StyleProperty
+  colorHover: StyleProperty
+  text: string
+  icon: string
+  paddingLeft: string | number
+  paddingTop: string | number
+  paddingRight: string | number
+  paddingBottom: string | number
+  radius: StyleProperty
+  flexDirection: string
+  alignItems: string
+  justifyContent: string
+  gap: number
+  border: number
+  borderColor: StyleProperty
+  borderHoverColor: StyleProperty
+  marginLeft: number | number
+  marginTop: number | number
+  marginRight: number | number
+  marginBottom: number | number
+  width: string | number
+  height: string | number
+  fullWidth: boolean
+  preset: string
+  settingsTab: string
+  buttonSize: string
+  tracking: boolean
+  trackingEvent: string
+  buttonAction: "next-screen" | "custom-action" | "none"
+  nextScreen: {
+    screenId: string
+    screenName: string
+  }
+}
+
+export const IconButtonDefaultProps: IconButtonProps = {
+  fontFamily: {
+    value: "inherit",
+    globalStyled: true,
+    isCustomized: false,
+  },
+  containerBackground: "rgba(255, 255, 255, 0.886)",
+  background: {
+    value: "#4050ff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  color: {
+    value: "#ffffff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  backgroundHover: {
+    value: "#3182ce",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  colorHover: {
+    value: "#ffffff",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  radius: {
+    value: "0",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  justifyContent: "center",
+  borderColor: {
+    value: "inherit",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  borderHoverColor: {
+    value: "inherit",
+    globalStyled: false,
+    isCustomized: false,
+  },
+  disabled: false,
+  enableIcon: true,
+  width: "366",
+  height: "auto",
+  size: IconButtonSizes.medium,
+  buttonSize: "medium",
+  text: "Get quote",
+  marginLeft: 0,
+  marginTop: 0,
+  marginRight: 0,
+  marginBottom: 0,
+  icon: "arrowright",
+  paddingLeft: "16",
+  paddingTop: "26",
+  paddingRight: "16",
+  paddingBottom: "26",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 4,
+  border: 0,
+  fullWidth: true,
+  preset: "filled",
+  settingsTab: "content",
+  tracking: false,
+  trackingEvent: "button_clicked",
+  nextScreen: {
+    screenId: "",
+    screenName: "",
+  },
+  buttonAction: "next-screen",
+}
+
+export const IconLineSeperator = ({
   disabled,
+  enableLine,
   fontFamily,
   enableIcon,
   size,
   buttonSize,
-  text,
+  color,
   marginLeft,
   width: width,
   height: height,
@@ -237,44 +300,15 @@ export const ProgressBarGen = ({
   borderColor,
   borderHoverColor,
   nextScreen,
-  color,
-  maxWidth,
-  fullWidth,
-  progressvalue,
-  maxValue,
-  forHeader,
   ...props
 }) => {
   const router = useRouter()
   const pathName = usePathname()
+
   const handleNavigateToContent = () => {
     // router.push(currentUrlWithHash);
   }
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const isHeaderFooterMode = useAppSelector(
-    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
-  )
-  const selectedScreenName =
-    useAppSelector(
-      (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
-    ) || ""
-  console.log(
-    "selectedScreen, screensLength",
-    selectedScreen,
-    screensLength,
-    ((selectedScreen + 1) / screensLength) * 100,
-    isHeaderFooterMode,
-    forHeader,
-    selectedScreenName
-  )
+
   return (
     <div
       className="relative w-full"
@@ -311,7 +345,7 @@ export const ProgressBarGen = ({
           backgroundHover={containerBackground}
           borderHoverColor={containerBackground}
           colorHover={containerBackground}
-          radius={radius?.value}
+          radius={radius.value}
           flexDirection={flexDirection}
           justifyContent={justifyContent}
           marginLeft={marginLeft}
@@ -332,33 +366,27 @@ export const ProgressBarGen = ({
           {...props}
           className="text-[1rem]"
         >
-          <Progress
-            value={
-              progressvalue === 1 && maxValue === 5
-                ? ((selectedScreen + 1) / screensLength) * 100
-                : (progressvalue / maxValue) * 100
-            }
-            style={{
-              marginTop: `${props.marginTop}px`,
-              marginBottom: `${props.marginBottom}px`,
-              marginLeft: `${props.marginLeft}px`,
-              marginRight: `${props.marginRight}px`,
-            }}
-            // style={{ maxWidth: `${maxWidth}px` }}
-            className={`h-1 ${fullWidth ? "w-full" : ""}`}
-            indicatorColor={primaryColor || color}
-          />
+          {enableLine && (
+            <hr
+              style={{
+                width: "100%",
+                border: "none",
+                borderTop: "1px solid #eaeaeb", // Add a solid gray top border
+                margin: 0,
+              }}
+            />
+          )}
         </StyledCustomButton>
       </div>
     </div>
   )
 }
-
-export const ProgressBar = ({
+export const LineSelector = ({
   fontFamily,
   disabled,
   borderHoverColor,
   enableIcon,
+  enableLine,
   size,
   buttonSize,
   color,
@@ -387,12 +415,6 @@ export const ProgressBar = ({
   borderColor,
   buttonAction,
   nextScreen,
-  maxWidth,
-  fullWidth,
-  progressvalue,
-  maxValue,
-  progressStyle,
-  forHeader,
   ...props
 }) => {
   const {
@@ -409,24 +431,12 @@ export const ProgressBar = ({
   }))
   const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full")
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
-  const secondaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.secondaryColor
-  )
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
-  const secondaryColor = useAppSelector(
-    (state) => state.theme?.general?.secondaryColor
-  )
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state) => state?.screen?.screens)
+
   const screensLength = useAppSelector(
     (state: RootState) => state?.screen?.screens?.length ?? 0
   )
@@ -448,14 +458,6 @@ export const ProgressBar = ({
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenId
     ) || ""
-  const selectedScreenName =
-    useAppSelector(
-      (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
-    ) || ""
-  const isHeaderFooterMode = useAppSelector(
-    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
-  )
-
   const screenNames = useScreenNames()
 
   //editor load needs to be refreshed so that screenName value is re-populated but
@@ -503,6 +505,7 @@ export const ProgressBar = ({
       setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
   }, [primaryFont])
+
   useEffect(() => {
     if (primaryColor) {
       const backgroundPrimaryColor = getBackgroundForPreset(
@@ -584,60 +587,6 @@ export const ProgressBar = ({
     [setProp]
   )
 
-  const handlePropChangeThrottled = (property, value) => {
-    throttledSetProp(property, value)
-  }
-  const handleNavigateToScreen = async () => {
-    return
-    // dispatch(navigateToScreen(nextScreen));
-    // if(screens){
-    //   const screen = screens.find(screen => screen.screenName === nextScreen);
-    //   if(screen){
-    //     const screenData = screen.screenData;
-    //     actions.deserialize(screenData);
-    //   }
-    // }
-  }
-
-  const debouncedSetProp = useCallback(
-    debounce((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }),
-    [setProp]
-  )
-
-  const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value)
-  }
-  const renderIcons = () => {
-    const icons: React.ReactElement[] = []
-    const progressComponents = {
-      rectangle: Minus,
-      grip: Circle,
-    }
-    const SelectedComponent =
-      progressComponents[progressStyle] || progressComponents["rectangle"]
-    for (let i = 0; i < maxValue; i++) {
-      icons.push(
-        <SelectedComponent
-          color={i < progressvalue ? primaryColor : "lightgray"}
-          style={{
-            margin: "0 4px",
-            background:
-              i < progressvalue && progressStyle === "grip"
-                ? primaryColor
-                : containerBackground,
-            borderRadius: progressStyle === "grip" ? "50px" : "disabled",
-          }}
-          size={progressStyle === "grip" ? 20 : 30}
-        />
-      )
-    }
-
-    return icons
-  }
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -650,224 +599,67 @@ export const ProgressBar = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Progress Bar")} />}
+      {hover && <Controller nameOfComponent={t("Separator")} />}
       <div
         className="relative w-full"
         style={{
-          width: "100%",
           background: `${containerBackground}`,
           display: "flex",
           justifyContent: "center",
-          minWidth: "100%",
+          boxSizing: "border-box",
+          width: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative w-full"
-          style={{
-            background: `${containerBackground}`,
-            display: "flex",
-            justifyContent: "center",
-            boxSizing: "border-box",
-            width: "100%",
-            paddingTop: `${props.marginTop}px`,
-            paddingBottom: `${props.marginBottom}px`,
-            paddingLeft: `${props.marginLeft}px`,
-            paddingRight: `${props.marginRight}px`,
-          }}
+        <StyledCustomButton
+          fontFamily={fontFamily?.value}
+          color={color.value}
+          background={containerBackground}
+          backgroundHover={containerBackground}
+          borderHoverColor={containerBackground}
+          colorHover={containerBackground}
+          radius={radius.value}
+          flexDirection={flexDirection}
+          justifyContent={justifyContent}
+          marginLeft={marginLeft}
+          width={width}
+          size={size}
+          buttonSize={buttonSize}
+          height={height}
+          marginRight={marginRight}
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          paddingLeft={paddingLeft}
+          paddingTop={paddingTop}
+          paddingRight={paddingRight}
+          paddingBottom={paddingBottom}
+          alignItems={alignItems}
+          gap={gap}
+          mobileScreen={false}
+          {...props}
+          className="text-[1rem]"
         >
-          {progressStyle === "minus" ? (
-            <StyledCustomButton
-              fontFamily={fontFamily?.value}
-              color={color.value}
-              background={containerBackground}
-              backgroundHover={containerBackground}
-              borderHoverColor={containerBackground}
-              colorHover={containerBackground}
-              radius={radius?.value}
-              flexDirection={flexDirection}
-              justifyContent={justifyContent}
-              marginLeft={marginLeft}
-              width={width}
-              size={size}
-              buttonSize={buttonSize}
-              height={height}
-              marginRight={marginRight}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              paddingLeft={paddingLeft}
-              paddingTop={paddingTop}
-              paddingRight={paddingRight}
-              paddingBottom={paddingBottom}
-              alignItems={alignItems}
-              gap={gap}
-              mobileScreen={false}
-              {...props}
-              className="text-[1rem]"
-            >
-              <Progress
-                value={
-                  progressvalue === 1 && maxValue === 5
-                    ? ((selectedScreen + 1) / screensLength) * 100
-                    : (progressvalue / maxValue) * 100
-                }
-                // style={{ maxWidth: `${maxWidth}px` }}
-                className={`h-1 ${fullWidth ? "w-full" : ""}`}
-                indicatorColor={primaryColor || color}
-              />
-            </StyledCustomButton>
-          ) : (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {renderIcons()}
-            </div>
+          {enableLine && (
+            <hr
+              style={{
+                width: "100%",
+                border: "none",
+                borderTop: "1px solid #eaeaeb", // Add a solid gray top border
+                margin: 0,
+              }}
+            />
           )}
-        </div>
+        </StyledCustomButton>
       </div>
     </div>
   )
 }
-
-export enum IconButtonSizes {
-  small = "small",
-  medium = "medium",
-  large = "large",
-  full = "full",
-}
-
-export type IconButtonProps = {
-  fontFamily: StyleProperty
-  disabled: boolean
-  enableIcon: boolean
-  size: IconButtonSizes
-  containerBackground: string
-  background: StyleProperty
-  backgroundHover: StyleProperty
-  color: StyleProperty
-  colorHover: StyleProperty
-  text: string
-  icon: string
-  paddingLeft: string | number
-  paddingTop: string | number
-  paddingRight: string | number
-  paddingBottom: string | number
-  radius: StyleProperty
-  flexDirection: string
-  alignItems: string
-  justifyContent: string
-  gap: number
-  border: number
-  borderColor: StyleProperty
-  borderHoverColor: StyleProperty
-  marginLeft: number | number
-  marginTop: number | number
-  marginRight: number | number
-  marginBottom: number | number
-  width: string | number
-  height: string | number
-  fullWidth: boolean
-  preset: string
-  settingsTab: string
-  buttonSize: string
-  tracking: boolean
-  trackingEvent: string
-  buttonAction: "next-screen" | "custom-action" | "none"
-  nextScreen: {
-    screenId: string
-    screenName: string
-  }
-  maxWidth: number | string
-  progressvalue: number
-  maxValue: number
-  progressStyle: string
-  forHeader: boolean
-}
-
-export const ProgressBarDefaultProps: IconButtonProps = {
-  fontFamily: {
-    value: "inherit",
-    globalStyled: true,
-    isCustomized: false,
-  },
-  containerBackground: "rgba(255, 255, 255, 0.886)",
-  background: {
-    value: "#4050ff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  color: {
-    value: "#ffffff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  backgroundHover: {
-    value: "#3182ce",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  colorHover: {
-    value: "#ffffff",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  radius: {
-    value: "0",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  justifyContent: "center",
-  borderColor: {
-    value: "inherit",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  borderHoverColor: {
-    value: "inherit",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  disabled: false,
-  enableIcon: true,
-  width: "366",
-  height: "auto",
-  size: IconButtonSizes.medium,
-  buttonSize: "medium",
-  text: "Get quote",
-  marginLeft: 0,
-  marginTop: 20,
-  marginRight: 0,
-  marginBottom: 20,
-  icon: "arrowright",
-  paddingLeft: "16",
-  paddingTop: "26",
-  paddingRight: "16",
-  paddingBottom: "26",
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 4,
-  border: 0,
-  fullWidth: true,
-  preset: "filled",
-  settingsTab: "content",
-  tracking: false,
-  trackingEvent: "button_clicked",
-  nextScreen: {
-    screenId: "",
-    screenName: "",
-  },
-  buttonAction: "next-screen",
-  progressvalue: 1,
-  maxValue: 5,
-  maxWidth: "366",
-  progressStyle: "minus",
-  forHeader: false,
-}
-
-ProgressBar.craft = {
-  props: ProgressBarDefaultProps,
+LineSelector.craft = {
+  props: IconButtonDefaultProps,
   related: {
-    settings: ProgressBarSettings,
+    settings: LineSelectorSettings,
   },
 }

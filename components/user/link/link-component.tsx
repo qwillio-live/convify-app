@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useReducer,
-} from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import {
   Activity,
   Anchor,
@@ -12,16 +6,14 @@ import {
   ArrowRight,
   Disc,
   DollarSign,
-  GripHorizontal,
   Mountain,
-  RectangleHorizontal,
 } from "lucide-react"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 import { throttle, debounce } from "lodash"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { borderRadius, darken, rgba } from "polished"
+import { darken, rgba } from "polished"
 import {
   Accordion,
   AccordionContent,
@@ -45,13 +37,13 @@ import {
 import { Slider } from "@/components/ui/slider"
 
 import { Controller } from "../settings/controller.component"
-import { ProgressBarSettings } from "./user-progress.settings"
+import { LinkButtonSettings } from "./link-button.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
-} from "../icon-button/useButtonThemePresets"
+} from "./link-theme"
 import { useTranslations } from "next-intl"
 import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
@@ -60,8 +52,11 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
-import { Progress } from "@/components/ui/progress-custom"
-import { Minus, Circle } from "lucide-react"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -86,9 +81,9 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
 }
 
 const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "70px",
+  medium: "90px",
+  large: "110px",
   full: "100%",
 }
 
@@ -104,9 +99,9 @@ const IconSizeValues = {
 }
 
 const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
+  small: "70px",
+  medium: "90px",
+  large: "110px",
   full: "100%",
 }
 
@@ -121,6 +116,162 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+export const LinkButtonGen = ({
+  disabled,
+  // windowTarget,
+  // href,
+  fontFamily,
+  enableIcon,
+  size,
+  buttonSize,
+  color,
+  text,
+  marginLeft,
+  width: width,
+  height: height,
+  marginRight,
+  marginTop,
+  containerBackground,
+  marginBottom,
+  background,
+  backgroundHover,
+  colorHover,
+  icon,
+  paddingLeft,
+  paddingTop,
+  paddingRight,
+  paddingBottom,
+  radius,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  gap,
+  border,
+  borderColor,
+  borderHoverColor,
+  nextScreen,
+  buttonAction,
+  iconType,
+  ...props
+}) => {
+  const router = useRouter()
+  const pathName = usePathname()
+  const handleNavigateToContent = () => {
+    // router.push(currentUrlWithHash);
+  }
+  return (
+    <div
+      className="relative w-full"
+      style={{
+        width: "100%",
+        background: `${containerBackground}`,
+        display: "flex",
+        justifyContent: "center",
+        minWidth: "100%",
+        paddingTop: `${props.marginTop}px`,
+        paddingBottom: `${props.marginBottom}px`,
+        paddingLeft: `${props.marginLeft}px`,
+        paddingRight: `${props.marginRight}px`,
+      }}
+    >
+      <Link
+        href={`${
+          buttonAction === "redirect"
+            ? "https://" + props.href
+            : pathName + "#" + nextScreen?.screenName
+        }`}
+        target={`${props.windowTarget ? "_blank" : ""}`}
+        className="contents"
+      >
+        <StyledCustomButton
+          fontFamily={fontFamily?.value}
+          color={color.value}
+          background={background.value}
+          backgroundHover={backgroundHover.value}
+          borderHoverColor={borderHoverColor?.value}
+          colorHover={colorHover.value}
+          radius={radius.value}
+          flexDirection={flexDirection}
+          justifyContent={justifyContent}
+          borderColor={borderColor.value}
+          border={border}
+          marginLeft={marginLeft}
+          width={width}
+          size={size}
+          buttonSize={buttonSize}
+          height={height}
+          marginRight={marginRight}
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          paddingLeft={paddingLeft}
+          paddingTop={paddingTop}
+          paddingRight={paddingRight}
+          paddingBottom={paddingBottom}
+          alignItems={alignItems}
+          gap={gap}
+          mobileScreen={false}
+          {...props}
+          className="text-[1rem]"
+        >
+          <div
+            style={{
+              // maxWidth: "100%",
+              transitionProperty: "all",
+              overflowX: "clip",
+              textOverflow: "ellipsis",
+            }}
+          ></div>
+          {/* {buttonAction === "redirect" ? (
+          <a
+            className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
+            href={`https://${props.href}`}
+            target={`${props.windowTarget ? "_blank" : ""}`}
+          >
+            {text}
+          </a>
+        ) : (
+      
+        {/* )} */}
+          <span className="flex items-center">
+            {iconType !== PictureTypes.NULL && enableIcon && (
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  padding:
+                    iconType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
+                }}
+              >
+                {iconType === PictureTypes.ICON ? (
+                  <SvgRenderer iconName={icon} width="1em" height="1em" />
+                ) : iconType === PictureTypes.EMOJI ? (
+                  <span className="text-[1em] leading-[1em]">{icon}</span>
+                ) : (
+                  <picture key={(icon as ImagePictureTypes).desktop}>
+                    <source
+                      media="(min-width:560px)"
+                      srcSet={(icon as ImagePictureTypes).mobile}
+                    />
+                    <img
+                      src={(icon as ImagePictureTypes).desktop}
+                      className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                      style={{ height: "1em", width: "auto" }}
+                      loading="lazy"
+                    />
+                  </picture>
+                )}
+              </div>
+            )}
+            <span className="ml-2">{text}</span>
+          </span>
+          {/* {enableIcon && (
+            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+          )} */}
+        </StyledCustomButton>
+      </Link>
+    </div>
+  )
+}
+
 interface StyledCustomButtonProps {
   fontFamily?: string
   color?: string
@@ -206,156 +357,11 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
     max-width: 400px;
   }
 `
-export const ProgressBarGen = ({
-  disabled,
-  fontFamily,
-  enableIcon,
-  size,
-  buttonSize,
-  text,
-  marginLeft,
-  width: width,
-  height: height,
-  marginRight,
-  marginTop,
-  containerBackground,
-  marginBottom,
-  background,
-  backgroundHover,
-  colorHover,
-  icon,
-  paddingLeft,
-  paddingTop,
-  paddingRight,
-  paddingBottom,
-  radius,
-  flexDirection,
-  alignItems,
-  justifyContent,
-  gap,
-  border,
-  borderColor,
-  borderHoverColor,
-  nextScreen,
-  color,
-  maxWidth,
-  fullWidth,
-  progressvalue,
-  maxValue,
-  forHeader,
-  ...props
-}) => {
-  const router = useRouter()
-  const pathName = usePathname()
-  const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
-  }
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const isHeaderFooterMode = useAppSelector(
-    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
-  )
-  const selectedScreenName =
-    useAppSelector(
-      (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
-    ) || ""
-  console.log(
-    "selectedScreen, screensLength",
-    selectedScreen,
-    screensLength,
-    ((selectedScreen + 1) / screensLength) * 100,
-    isHeaderFooterMode,
-    forHeader,
-    selectedScreenName
-  )
-  return (
-    <div
-      className="relative w-full"
-      style={{
-        width: "100%",
-        background: `${containerBackground}`,
-        display: "flex",
-        justifyContent: "center",
-        minWidth: "100%",
-        paddingTop: `${props.marginTop}px`,
-        paddingBottom: `${props.marginBottom}px`,
-        paddingLeft: `${props.marginLeft}px`,
-        paddingRight: `${props.marginRight}px`,
-      }}
-    >
-      <div
-        className="relative w-full"
-        style={{
-          background: `${containerBackground}`,
-          display: "flex",
-          justifyContent: "center",
-          boxSizing: "border-box",
-          width: "100%",
-          paddingTop: `${props.marginTop}px`,
-          paddingBottom: `${props.marginBottom}px`,
-          paddingLeft: `${props.marginLeft}px`,
-          paddingRight: `${props.marginRight}px`,
-        }}
-      >
-        <StyledCustomButton
-          fontFamily={fontFamily?.value}
-          color={color.value}
-          background={containerBackground}
-          backgroundHover={containerBackground}
-          borderHoverColor={containerBackground}
-          colorHover={containerBackground}
-          radius={radius?.value}
-          flexDirection={flexDirection}
-          justifyContent={justifyContent}
-          marginLeft={marginLeft}
-          width={width}
-          size={size}
-          buttonSize={buttonSize}
-          height={height}
-          marginRight={marginRight}
-          marginTop={marginTop}
-          marginBottom={marginBottom}
-          paddingLeft={paddingLeft}
-          paddingTop={paddingTop}
-          paddingRight={paddingRight}
-          paddingBottom={paddingBottom}
-          alignItems={alignItems}
-          gap={gap}
-          mobileScreen={false}
-          {...props}
-          className="text-[1rem]"
-        >
-          <Progress
-            value={
-              progressvalue === 1 && maxValue === 5
-                ? ((selectedScreen + 1) / screensLength) * 100
-                : (progressvalue / maxValue) * 100
-            }
-            style={{
-              marginTop: `${props.marginTop}px`,
-              marginBottom: `${props.marginBottom}px`,
-              marginLeft: `${props.marginLeft}px`,
-              marginRight: `${props.marginRight}px`,
-            }}
-            // style={{ maxWidth: `${maxWidth}px` }}
-            className={`h-1 ${fullWidth ? "w-full" : ""}`}
-            indicatorColor={primaryColor || color}
-          />
-        </StyledCustomButton>
-      </div>
-    </div>
-  )
-}
 
-export const ProgressBar = ({
+export const LinkButton = ({
   fontFamily,
+  // windowTarget,
+  // href,
   disabled,
   borderHoverColor,
   enableIcon,
@@ -387,12 +393,7 @@ export const ProgressBar = ({
   borderColor,
   buttonAction,
   nextScreen,
-  maxWidth,
-  fullWidth,
-  progressvalue,
-  maxValue,
-  progressStyle,
-  forHeader,
+  iconType,
   ...props
 }) => {
   const {
@@ -448,14 +449,6 @@ export const ProgressBar = ({
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenId
     ) || ""
-  const selectedScreenName =
-    useAppSelector(
-      (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
-    ) || ""
-  const isHeaderFooterMode = useAppSelector(
-    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
-  )
-
   const screenNames = useScreenNames()
 
   //editor load needs to be refreshed so that screenName value is re-populated but
@@ -503,6 +496,7 @@ export const ProgressBar = ({
       setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
   }, [primaryFont])
+
   useEffect(() => {
     if (primaryColor) {
       const backgroundPrimaryColor = getBackgroundForPreset(
@@ -611,33 +605,7 @@ export const ProgressBar = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-  const renderIcons = () => {
-    const icons: React.ReactElement[] = []
-    const progressComponents = {
-      rectangle: Minus,
-      grip: Circle,
-    }
-    const SelectedComponent =
-      progressComponents[progressStyle] || progressComponents["rectangle"]
-    for (let i = 0; i < maxValue; i++) {
-      icons.push(
-        <SelectedComponent
-          color={i < progressvalue ? primaryColor : "lightgray"}
-          style={{
-            margin: "0 4px",
-            background:
-              i < progressvalue && progressStyle === "grip"
-                ? primaryColor
-                : containerBackground,
-            borderRadius: progressStyle === "grip" ? "50px" : "disabled",
-          }}
-          size={progressStyle === "grip" ? 20 : 30}
-        />
-      )
-    }
 
-    return icons
-  }
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -650,81 +618,105 @@ export const ProgressBar = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Progress Bar")} />}
+      {hover && <Controller nameOfComponent={t("Link")} />}
       <div
         className="relative w-full"
         style={{
-          width: "100%",
           background: `${containerBackground}`,
-          display: "flex",
+          display: "inline-flex",
           justifyContent: "center",
+          boxSizing: "border-box",
           minWidth: "100%",
+          // maxWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative w-full"
-          style={{
-            background: `${containerBackground}`,
-            display: "flex",
-            justifyContent: "center",
-            boxSizing: "border-box",
-            width: "100%",
-            paddingTop: `${props.marginTop}px`,
-            paddingBottom: `${props.marginBottom}px`,
-            paddingLeft: `${props.marginLeft}px`,
-            paddingRight: `${props.marginRight}px`,
-          }}
+        <StyledCustomButton
+          fontFamily={fontFamily.value}
+          color={color.value}
+          background={background.value}
+          backgroundHover={backgroundHover.value}
+          colorHover={colorHover.value}
+          radius={radius.value}
+          flexDirection={flexDirection}
+          justifyContent={justifyContent}
+          borderColor={borderColor.value}
+          borderHoverColor={borderHoverColor.value}
+          border={border}
+          marginLeft={marginLeft}
+          mobileScreen={mobileScreen || false}
+          width={width}
+          height={height}
+          marginRight={marginRight}
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          paddingLeft={paddingLeft}
+          paddingTop={paddingTop}
+          paddingRight={paddingRight}
+          paddingBottom={paddingBottom}
+          alignItems={alignItems}
+          gap={gap}
+          size={size}
+          buttonSize={buttonSize}
+          {...props}
+          // onClick={() => handleNavigateToScreen()}
         >
-          {progressStyle === "minus" ? (
-            <StyledCustomButton
-              fontFamily={fontFamily?.value}
-              color={color.value}
-              background={containerBackground}
-              backgroundHover={containerBackground}
-              borderHoverColor={containerBackground}
-              colorHover={containerBackground}
-              radius={radius?.value}
-              flexDirection={flexDirection}
-              justifyContent={justifyContent}
-              marginLeft={marginLeft}
-              width={width}
-              size={size}
-              buttonSize={buttonSize}
-              height={height}
-              marginRight={marginRight}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              paddingLeft={paddingLeft}
-              paddingTop={paddingTop}
-              paddingRight={paddingRight}
-              paddingBottom={paddingBottom}
-              alignItems={alignItems}
-              gap={gap}
-              mobileScreen={false}
-              {...props}
-              className="text-[1rem]"
-            >
-              <Progress
-                value={
-                  progressvalue === 1 && maxValue === 5
-                    ? ((selectedScreen + 1) / screensLength) * 100
-                    : (progressvalue / maxValue) * 100
-                }
-                // style={{ maxWidth: `${maxWidth}px` }}
-                className={`h-1 ${fullWidth ? "w-full" : ""}`}
-                indicatorColor={primaryColor || color}
+          <div className="flex min-h-[16px] min-w-[32px]  flex-col overflow-x-clip">
+            <span className="flex items-center">
+              {iconType !== PictureTypes.NULL && enableIcon && (
+                <div
+                  className="flex items-center justify-center"
+                  style={{
+                    padding:
+                      iconType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
+                  }}
+                >
+                  {iconType === PictureTypes.ICON ? (
+                    <SvgRenderer iconName={icon} width="1em" height="1em" />
+                  ) : iconType === PictureTypes.EMOJI ? (
+                    <span className="text-[1em] leading-[1em]">{icon}</span>
+                  ) : (
+                    <picture key={(icon as ImagePictureTypes).desktop}>
+                      <source
+                        media="(min-width:560px)"
+                        srcSet={(icon as ImagePictureTypes).mobile}
+                      />
+                      <img
+                        src={(icon as ImagePictureTypes).desktop}
+                        className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                        style={{ height: "1em", width: "auto" }}
+                        loading="lazy"
+                      />
+                    </picture>
+                  )}
+                </div>
+              )}
+              <ContentEditable
+                html={text}
+                innerRef={ref}
+                disabled={disabled}
+                style={{
+                  maxWidth: "100%",
+                  transitionProperty: "all",
+                  overflowX: "clip",
+                  textOverflow: "ellipsis",
+                }}
+                className="min-w-8 border-dotted border-transparent leading-relaxed hover:border-blue-500"
+                onChange={(e) => {
+                  handleTextChange(e)
+                }}
+                tagName="div"
               />
-            </StyledCustomButton>
-          ) : (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {renderIcons()}
-            </div>
-          )}
-        </div>
+            </span>
+          </div>
+          {/* 
+          {enableIcon && (
+            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+          )} */}
+        </StyledCustomButton>
       </div>
     </div>
   )
@@ -773,19 +765,17 @@ export type IconButtonProps = {
   buttonSize: string
   tracking: boolean
   trackingEvent: string
-  buttonAction: "next-screen" | "custom-action" | "none"
+  buttonAction: "next-screen" | "custom-action" | "none" | "redirect"
   nextScreen: {
     screenId: string
     screenName: string
   }
-  maxWidth: number | string
-  progressvalue: number
-  maxValue: number
-  progressStyle: string
-  forHeader: boolean
+  href?: string
+  windowTarget?: boolean
+  iconType: PictureTypes
 }
 
-export const ProgressBarDefaultProps: IconButtonProps = {
+export const IconButtonDefaultProps: IconButtonProps = {
   fontFamily: {
     value: "inherit",
     globalStyled: true,
@@ -835,9 +825,9 @@ export const ProgressBarDefaultProps: IconButtonProps = {
   size: IconButtonSizes.medium,
   buttonSize: "medium",
   text: "Get quote",
-  marginLeft: 0,
+  marginLeft: 20,
   marginTop: 20,
-  marginRight: 0,
+  marginRight: 20,
   marginBottom: 20,
   icon: "arrowright",
   paddingLeft: "16",
@@ -858,16 +848,14 @@ export const ProgressBarDefaultProps: IconButtonProps = {
     screenName: "",
   },
   buttonAction: "next-screen",
-  progressvalue: 1,
-  maxValue: 5,
-  maxWidth: "366",
-  progressStyle: "minus",
-  forHeader: false,
+  windowTarget: true,
+  href: "",
+  iconType: PictureTypes.NULL,
 }
 
-ProgressBar.craft = {
-  props: ProgressBarDefaultProps,
+LinkButton.craft = {
+  props: IconButtonDefaultProps,
   related: {
-    settings: ProgressBarSettings,
+    settings: LinkButtonSettings,
   },
 }

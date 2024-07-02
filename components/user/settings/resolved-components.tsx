@@ -1,6 +1,9 @@
 "use client"
 import React, { Suspense, useEffect, useState } from "react"
-import { UserContainer, UserContainerGen } from "@/components/user/container/user-container.component"
+import {
+  UserContainer,
+  UserContainerGen,
+} from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
@@ -15,7 +18,10 @@ import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.compo
 import { PictureChoiceGen } from "../picture-choice/user-picture-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
-import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import globalThemeSlice, {
+  setPartialStyles,
+  themeSlice,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { SelectGen } from "../select/user-select.component"
@@ -23,6 +29,9 @@ import { ChecklistGen } from "../checklist/user-checklist.component"
 import { ListGen } from "../list/user-list.component"
 import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
 import { StepsGen } from "../steps/user-steps.component"
+import { IconLineSeperator } from "../lineSeperator/line-seperator-component"
+import { BackButtonGen } from "../backButton/back-component"
+import { LinkButtonGen } from "../link/link-component"
 
 const CraftJsUserComponents = {
   // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
@@ -34,6 +43,9 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
+  [CRAFT_ELEMENTS.LINESELECTOR]: IconLineSeperator,
+  [CRAFT_ELEMENTS.BACKBUTTON]: BackButtonGen,
+  [CRAFT_ELEMENTS.LINKBUTTON]: LinkButtonGen,
   [CRAFT_ELEMENTS.SELECT]: SelectGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
   [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
@@ -50,7 +62,9 @@ interface Props {
   compressedCraftState: string
 }
 
-const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null => {
+const ResolvedComponentsFromCraftState = ({
+  screen,
+}): React.ReactElement | null => {
   const [toRender, setToRender] = useState<React.ReactElement | null>(null)
   const globalTheme = useAppSelector((state: RootState) => state?.theme)
   // useEffect(() => {
@@ -63,9 +77,8 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
   useEffect(() => {
     try {
       // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');
-      const craftState = JSON.parse(screen);
+      const craftState = JSON.parse(screen)
       const resolveComponents = () => {
-
         const parsedNodes = {}
 
         const parse = (nodeId: string, parentNodeId?: string) => {
@@ -76,21 +89,37 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
 
           const { type, props, nodes = [], linkedNodes = {} } = nodeData
           const resolvedName = type?.resolvedName
-          const ReactComponent = resolvedName ? CraftJsUserComponents[resolvedName] : null
+          const ReactComponent = resolvedName
+            ? CraftJsUserComponents[resolvedName]
+            : null
 
-          const childNodes = nodes.map((childNodeId: string) => parse(childNodeId, nodeId))
-          const linkedNodesElements = nodes.concat(Object.values(linkedNodes)).map((linkedNodeData: any) => {
-            const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
-            return parse(linkedNodeId, nodeId)
-          })
+          const childNodes = nodes.map((childNodeId: string) =>
+            parse(childNodeId, nodeId)
+          )
+          const linkedNodesElements = nodes
+            .concat(Object.values(linkedNodes))
+            .map((linkedNodeData: any) => {
+              const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
+              return parse(linkedNodeId, nodeId)
+            })
 
           const parsedNode = ReactComponent ? (
-            <ReactComponent {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
+            <ReactComponent
+              {...props}
+              parentNodeId={parentNodeId}
+              nodeId={nodeId}
+              key={nodeId}
+            >
               {/* {childNodes} */}
               {linkedNodesElements}
             </ReactComponent>
           ) : (
-            <div {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
+            <div
+              {...props}
+              parentNodeId={parentNodeId}
+              nodeId={nodeId}
+              key={nodeId}
+            >
               {/* {childNodes} */}
               {linkedNodesElements}
             </div>
@@ -108,7 +137,7 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
       console.error("Error parsing craft state: ", error)
       setToRender(<div>Error loading components.</div>)
     }
-  }, [screen,globalTheme])
+  }, [screen, globalTheme])
   return <Suspense fallback={<h2>Loading...</h2>}>{toRender}</Suspense>
 }
 
