@@ -284,7 +284,7 @@ export function CreateFlowComponent() {
                    id="editor-header"
                    style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'absolute' ? width+'px' : '100%',
+                    width: mobileScreen ? '384px' : (headerPosition === 'absolute' && !mobileScreen) ? width+'px' : '100%',
                     top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
                     // top: headerPosition === 'absolute' ? '66px' : '0',
                     // width: width,

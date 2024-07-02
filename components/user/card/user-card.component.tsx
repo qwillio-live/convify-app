@@ -1,4 +1,4 @@
-import { Element, useNode } from '@/lib/craftjs';
+import { Element, useEditor, useNode } from '@/lib/craftjs';
 import { useAppSelector } from '@/lib/state/flows-state/hooks';
 import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,7 @@ import { CardContainerSettings } from './user-card-settings';
 
 interface CardOuterStyles {
   fullWidth: boolean;
+  parentHovered: boolean;
   width: string;
   height: string;
   backgroundColor: string;
@@ -68,8 +69,8 @@ const CardContentOuter=styled.div<CardOuterStyles>`
   overflow-x: ${(props) => props.overflowX};
   gap: ${(props) => props.gap}px;
   /* border: ${(props) => props.selected ? '1px dotted' : '0'} solid ${(props) => props.borderColor}; */
-  border-color: ${(props) => props.selected ? '#60A5FA' : props.backgroundColor};
-  border-style: ${(props) => props.selected ? 'dotted' : 'solid'};
+  border-color: ${(props) => (props.selected || props.parentHovered) ? '#60A5FA' : props.backgroundColor};
+  border-style: ${(props) => (props.selected || props.parentHovered) ? 'dotted' : 'solid'};
   border-width: 1px;
   &:hover {
     border-color: ${(props) => props.isHovered && '#60A5FA'};
@@ -121,6 +122,7 @@ const CardContentInner=styled.div<CardInnerStyles>`
 export const CardContentGen = ({ children, ...props }) => {
   return(
     <CardContentOuter
+    parentHovered={props.parentHovered}
     fullWidth={props.fullWidth}
     width={props.width}
     height={props.height}
@@ -169,17 +171,29 @@ export const CardContentGen = ({ children, ...props }) => {
   )
 }
 export const CardContent = ({ children, ...props }) => {
+  const {query} = useEditor();
   const {
     actions: { setProp },
     connectors: { connect, drag },
     selected,
     isHovered,
     id,
+    parent,
   } = useNode((state) => ({
     id: state.id,
     selected: state.events.selected,
     isHovered: state.events.hovered,
+    parent: state.data.parent
   }))
+  const {
+    parentHovered,
+  } = useNode((node) => ({
+    parentHovered: query.node(parent || "").isHovered(),
+  }))
+  if(parentHovered){
+    console.log("PARENT HOVERED", parentHovered)
+  }
+  // const [hoverState,setHoverState]=React.useState(isHovered || parentHovered)
   const t = useTranslations("Components")
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
   const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent);
@@ -201,6 +215,7 @@ export const CardContent = ({ children, ...props }) => {
           marginRight={props.marginRight}
           marginBottom={props.marginBottom}
           isHovered={isHovered}
+          parentHovered={parentHovered}
           selected={id === selectedComponent}
           mobileFlexDirection={props.mobileFlexDirection}
           size={props.size}
@@ -244,6 +259,7 @@ const CardSizeValues={
 
 export type CardContentDefaultPropsTypes= {
   fullWidth: boolean
+  parentHovered: boolean
   width: string
   height: string
   backgroundColor: string
@@ -276,6 +292,7 @@ export type CardContentDefaultPropsTypes= {
 }
 export const CardContentDefaultProps:CardContentDefaultPropsTypes= {
     fullWidth: true,
+    parentHovered: false,
     width: "400",
     height: "200",
     backgroundColor: "transparent",
