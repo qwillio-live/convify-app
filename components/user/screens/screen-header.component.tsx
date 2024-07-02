@@ -24,6 +24,13 @@ export const ScreenHeader = ({ scale = 1 }) => {
       {...ContainerDefaultProps}
       is={Card}
       id="user_card_header"
-    ></Element>
+    >
+      <Element
+        className="w-full"
+        {...LogoDefaultProps}
+        is={Logo}
+        id="user_logo_header"
+      />
+    </Element>
   )
 }
