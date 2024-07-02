@@ -15,7 +15,7 @@ import { throttle,debounce } from 'lodash';
 
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setEditorLoad, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setCurrentScreenName, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -116,8 +116,10 @@ export function CreateFlowComponent() {
 
   const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen);
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
+  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
   const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
+  const startScreenName = useAppSelector((state) => state?.screen?.screens[0].screenName || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
@@ -127,7 +129,7 @@ export function CreateFlowComponent() {
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
   const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
   const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
-
+  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName ) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -139,6 +141,15 @@ export function CreateFlowComponent() {
     },1200),
     [dispatch]
   )
+
+  React.useEffect(() => {
+    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
+    dispatch(setFirstScreenName(startScreenName))
+    dispatch(setCurrentScreenName(startScreenName))
+
+
+
+  }, [])
   React.useEffect(() => {
     if(headerMode){
       const height = document?.getElementById("editor-content")?.offsetHeight || 0;
@@ -237,7 +248,7 @@ export function CreateFlowComponent() {
           <ScrollArea
           ref={containerRef}
           id="scroll-container"
-          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 ">
+          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6">
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -265,6 +276,7 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
+
                   {
                   !headerMode && !footerMode &&
                    <div
@@ -272,7 +284,7 @@ export function CreateFlowComponent() {
                    id="editor-header"
                    style={{
                     position: headerPosition as Position,
-                    width: headerPosition === 'absolute' ? width+'px' : '100%',
+                    width: mobileScreen ? '384px' : (headerPosition === 'absolute' && !mobileScreen) ? width+'px' : '100%',
                     top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
                     // top: headerPosition === 'absolute' ? '66px' : '0',
                     // width: width,
@@ -285,7 +297,9 @@ export function CreateFlowComponent() {
                   <div
                   id="editor-content"
                   style={{
-          marginTop: !headerMode && headerPosition === 'absolute' ? `${height+8}px` : 0,
+                    backgroundColor: backgroundColor,
+                    paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
+          // marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "0",
         }}>
                   <Frame data={editorLoad}></Frame>
                   </div>
@@ -293,7 +307,6 @@ export function CreateFlowComponent() {
                     !headerMode && !footerMode &&
                   <ResolvedComponentsFromCraftState screen={screensFooter} />
                   }
-
 
                 </TabsContent>
                 <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">

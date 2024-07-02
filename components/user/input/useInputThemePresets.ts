@@ -15,7 +15,9 @@ const useInputThemePresets = () => {
   )
 
   const outlinedPreset: UserInputProps = {
+    compId: "",
     inputValue: "",
+    parentScreenId: "",
     fontSize: 16,
     fieldType: "data",
     required: false,
@@ -92,6 +94,8 @@ const useInputThemePresets = () => {
   }
 
   const underlinedPreset: UserInputProps = {
+    compId: "",
+    parentScreenId: "",
     inputValue: "",
     fontSize: 16,
     fieldType: "data",

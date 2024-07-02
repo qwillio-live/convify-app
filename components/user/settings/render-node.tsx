@@ -59,12 +59,15 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   const { id } = useNode()
   const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
+  const currentScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId);
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
   }))
 
   const {
     isHover,
+    actions: { setProp },
     isSelected,
     dom,
     borderColor,
@@ -122,9 +125,10 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
         fieldId: id,
         fieldName: name,
         fieldValue: null,
-        fieldRequired: true,
+        fieldRequired: false,
         toggleError: false,
       }));
+      setProp((props) => {props.parentScreenId = currentScreenId});
     }
   },[])
 

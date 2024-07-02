@@ -14,7 +14,7 @@
         "flexDirection": "column",
         "justifyContent": "end"
       },
-			"className": "min-h-[400px] flex flex-col items-center py-5"
+			"className": "flex flex-col items-center py-5"
 		},
 		"displayName": "Screen Footer",
 		"custom": {

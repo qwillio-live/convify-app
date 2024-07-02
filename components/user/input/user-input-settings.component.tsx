@@ -52,6 +52,7 @@ export const UserInputSettings = () => {
   const {
     actions: { setProp },
     compId,
+    parentScreenId,
     marginLeft,
     marginRight,
     marginTop,
@@ -64,6 +65,7 @@ export const UserInputSettings = () => {
     parent: node.data.parent,
     compId: node.id,
     props: node.data.props,
+    parentScreenId: node.data.props.parentScreenId,
     marginLeft: node.data.props.marginLeft,
     marginRight: node.data.props.marginRight,
     marginTop: node.data.props.marginTop,
@@ -133,7 +135,7 @@ export const UserInputSettings = () => {
             checked={props.inputRequired}
             onCheckedChange={(e) => {
               setProp((props) => (props.inputRequired = e),200)
-              dispatch(setFieldProp({fieldId: compId, fieldName: 'fieldRequired', fieldValue: e}))
+              dispatch(setFieldProp({screenId: parentScreenId,fieldId: compId, fieldName: 'fieldRequired', fieldValue: e}))
               // setProp((props) => (props.error = !props.error),200)
             }}
             id="required" />

@@ -18,6 +18,11 @@ export default function CreateFlowsPage() {
   const [link, setLink] = useState(
     "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
   )
+
+  const dispatch = useAppDispatch();
+  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || "";
+
+
   const [tab, setTab] = useState("create")
 
   const t = useTranslations("CreateFlow")
