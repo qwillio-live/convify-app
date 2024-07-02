@@ -11,14 +11,24 @@ import {
   ContainerDefaultProps,
   UserContainerSettings,
 } from "../container/user-container.component"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
+import { IconButton } from "../icon-button/user-icon-button.component"
 import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
-import { UserInputMail } from "../input-email/user-input-mail.component"
+import useInputMailThemePresets from "../input-email/useInputMailThemePresets"
+import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
+import {
+  UserInputMail,
+  UserInputMailGen,
+} from "../input-email/user-input-mail.component"
+import formPresetPhone from "../input-phone/useInputPhoneThemePresets"
+import { UserInputPhone } from "../input-phone/user-input-phone.component"
+import formPreset from "../input/useInputThemePresets"
 import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
-import { CardContainerSettings } from "./user-card-settings"
+import { FormSettings } from "./user-form-settings"
 
-interface CardOuterStyles {
+interface FormOuterStyles {
   fullWidth: boolean
   width: string
   height: string
@@ -45,7 +55,7 @@ interface CardOuterStyles {
   borderColor: string
 }
 
-const CardContentOuter = styled.div<CardOuterStyles>`
+const FormContentOuter = styled.div<FormOuterStyles>`
   width: "100%";
   flex-shrink: 0;
   flex-basis: 100%;
@@ -71,7 +81,7 @@ const CardContentOuter = styled.div<CardOuterStyles>`
   border-color: ${(props) => props.borderColor};
 `
 
-interface CardInnerStyles {
+interface FormInnerStyles {
   width: string
   direction: string
   size: string
@@ -87,7 +97,7 @@ interface CardInnerStyles {
   mobileJustifyContent: string
 }
 
-const CardContentInner = styled.div<CardInnerStyles>`
+const FormContentInner = styled.form<FormInnerStyles>`
   max-width: ${(props) => CardSizeValues[props.size || "medium"]};
   width: 100%;
   display: flex;
@@ -110,9 +120,12 @@ const CardContentInner = styled.div<CardInnerStyles>`
   }
 `
 
-export const CardContentGen = ({ children, ...props }) => {
+
+
+
+export const FormContentGen = ({ children, ...props }) => {
   return (
-    <CardContentOuter
+    <FormContentOuter
       fullWidth={props.fullWidth}
       width={props.width}
       height={props.height}
@@ -138,7 +151,7 @@ export const CardContentGen = ({ children, ...props }) => {
       border={props.border}
       borderColor={props.borderColor}
     >
-      <CardContentInner
+      <FormContentInner
         size={props.size}
         width={props.width}
         gap={props.gap}
@@ -154,11 +167,11 @@ export const CardContentGen = ({ children, ...props }) => {
         mobileFlexDirection={props.mobileFlexDirection}
       >
         {children}
-      </CardContentInner>
-    </CardContentOuter>
+      </FormContentInner>
+    </FormContentOuter>
   )
 }
-export const CardContent = ({ children, ...props }) => {
+export const FormContent = ({ children, ...props }) => {
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -168,7 +181,14 @@ export const CardContent = ({ children, ...props }) => {
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const { outlinedPresetMail, underlinedPresetMail } =
+    useInputMailThemePresets()
+  const { outLinePreset, filledPreset} = useButtonThemePresets()   
+
+    const t = useTranslations("Components")
+
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -177,7 +197,7 @@ export const CardContent = ({ children, ...props }) => {
         isHovered ? "border border-blue-500 border-dotted" : ""
       } border border-transparent relative`}
     >
-      <CardContentGen
+      <FormContentGen
         fullWidth={props.fullWidth}
         width={props.width}
         height={props.height}
@@ -211,8 +231,85 @@ export const CardContent = ({ children, ...props }) => {
         mobileAlignItems={props.mobileAlignItems}
         mobileJustifyContent={props.mobileJustifyContent}
       >
+        {" "}
+        <div className="flex w-full">
+          <Element
+            canvas
+            id="user-input-name"
+            is={UserInput}
+            {...formPreset}
+            label={t("FirstName")}
+            placeholder="Enter your first name"
+            floatingLabel={true}
+            backgroundColor={"transparent"}
+            marginBottom={0}
+            marginTop={0}
+            size={"100%"}
+          />
+          <Element
+            canvas
+            id="user-input-lastname"
+            is={UserInput}
+            floatingLabel={true}
+            {...formPreset}
+            label={t("LastName")}
+            placeholder="Enter your last name"
+            backgroundColor={"transparent"}
+            marginBottom={0}
+            marginleft={10}
+            marginTop={0}
+            size={"100%"}
+
+          />
+        </div>
+        <Element
+          canvas
+          id="user-input-mail"
+          is={UserInputMail}
+          {...outlinedPresetMail}
+          floatingLabel={true}
+          marginTop={0}
+          marginBottom={0}
+          label= {t("EmailLabel")}
+          fieldName= {t("EmailFieldName")}
+
+        />
+        <Element
+          canvas
+          id="user-input-phone"
+          is={UserInputPhone}
+          {...formPresetPhone}
+          floatingLabel={true}
+          backgroundColor={"transparent"}
+          icon={"phone-telephone-android-phone-mobile-device-smartphone-iphone"}
+          marginTop={0}
+          marginBottom={0}
+          label= {t("PhoneLabel")}
+          fieldName= {t("PhoneFieldName")}
+
+        />
+        <Element
+          canvas
+          id="user-input-checkbox"
+          is={UserInputCheckbox}
+          marginTop={0}
+          marginBottom={0}
+          label= {t("CheckboxPlaceholder")}
+          fieldName= {t("CheckboxFieldName")}
+      
+        />
+        <Element
+          canvas
+          id="user-input-submit-button"
+          is={IconButton}
+          {...filledPreset}
+          marginTop={0}
+          marginBottom={0}
+          text={t("Submit")}
+          gap={220}
+        />
         {children}
-      </CardContentGen>
+      </FormContentGen>
     </div>
   )
 }
@@ -229,7 +326,7 @@ const CardSizeValues = {
   full: "100%",
 }
 
-export type CardContentDefaultPropsTypes = {
+export type FormContentDefaultPropsTypes = {
   fullWidth: boolean
   width: string
   height: string
@@ -260,7 +357,7 @@ export type CardContentDefaultPropsTypes = {
   mobileFlexDirection: string
   settingsTab: string
 }
-export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
+export const FormContentDefaultProps: FormContentDefaultPropsTypes = {
   fullWidth: true,
   width: "400",
   height: "200",
@@ -285,16 +382,16 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   flexWrap: "nowrap",
   overflowY: "hidden",
   overflowX: "hidden",
-  gap: 20,
+  gap: 5,
   border: 0,
   borderColor: "inherit",
   size: CardSizes.medium,
   settingsTab: "layout",
 }
 
-CardContent.craft = {
-  props: CardContentDefaultProps,
-  displayName: "Card Content",
+FormContent.craft = {
+  props: FormContentDefaultProps,
+  displayName: "Form Content",
   rules: {
     canDrag: () => true,
     canDrop: () => true,
@@ -303,22 +400,22 @@ CardContent.craft = {
     isDeleteAble: () => true,
   },
   related: {
-    settings: CardContainerSettings,
+    settings: FormSettings,
   },
 }
 
-const CardContainer = styled.div<{
+const FormContainer = styled.form<{
   background: string
 }>`
   background: ${({ background }) => background};
   max-width: fit-content;
   width: 100%;
 `
-export const CardGen = ({ children, ...props }) => {
+export const FormGen = ({ children, ...props }) => {
   return <div style={{ width: "100%", height: "100%" }}>{children}</div>
 }
 
-export const Card = ({ children, ...props }) => {
+export const Form = ({ children, ...props }) => {
   const [hover, setHover] = React.useState(false)
   const {
     actions: { setProp },
@@ -331,7 +428,7 @@ export const Card = ({ children, ...props }) => {
   }))
   const t = useTranslations("Components")
   return (
-    <CardContainer
+    <FormContainer
       background={props.background}
       className="card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col"
       ref={(ref: any) => connect(drag(ref))}
@@ -339,23 +436,23 @@ export const Card = ({ children, ...props }) => {
       onMouseLeave={() => setHover(false)}
       style={{ minWidth: "100%", height: "100%" }}
     >
-      {hover && <Controller nameOfComponent={t("Container")} />}
+      {hover && <Controller nameOfComponent={t("Form")} />}
       <Element
         canvas
-        id="usercard"
-        is={CardContent}
-        data-cy="card-content"
+        id="formcard"
+        is={FormContent}
+        data-cy="form-content"
         className=""
       >
         {children}
       </Element>
-    </CardContainer>
+    </FormContainer>
   )
 }
 
-Card.craft = {
-  props: CardContentDefaultProps,
-  displayName: "Card",
+Form.craft = {
+  props: FormContentDefaultProps,
+  displayName: "Form",
   rules: {
     canDrag: () => true,
     canDrop: () => true,

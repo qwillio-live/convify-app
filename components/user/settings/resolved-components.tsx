@@ -10,6 +10,7 @@ import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { UserInputGen } from "../input/user-input.component"
 import { LogoBarGen } from "../logo-bar/logo-bar.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
+import { FormContentGen, FormGen } from "../form/user-form.component"
 import jsonData from "./parse.json"
 import { PictureChoiceGen } from "../picture-choice/picture-choice.component"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
@@ -44,6 +45,8 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.INPUTMAIL]: UserInputMailGen,
   [CRAFT_ELEMENTS.INPUTPHONE]: UserInputPhoneGen,
   [CRAFT_ELEMENTS.INPUTTEXTAREA]: UserInputTextareaGen,
+  [CRAFT_ELEMENTS.FORM]: FormGen,
+  [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
 }
 
 interface Props {

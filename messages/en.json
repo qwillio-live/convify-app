@@ -135,7 +135,11 @@
     "Right-Click": "Right Click",
     "Click on a screen to edit it": "Click on a screen to edit it",
     "Rows": "Rows",
-    "TextArea": "Text Area"
+    "TextArea": "Text Area",
+    "Submit": "Submit",
+    "FirstName": "First Name",
+    "LastName": "Last Name",
+    "Form": "Form"
   },
   "CreateFlow": {
     "Create": "Create",

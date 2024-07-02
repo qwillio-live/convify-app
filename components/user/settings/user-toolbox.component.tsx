@@ -71,6 +71,7 @@ import {
 } from "@/components/user/text/user-text.component"
 
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
+import { Form, FormContentDefaultProps } from "../form/user-form.component"
 import {
   HeadlineText,
   HeadlineTextDefaultProps,
@@ -123,7 +124,7 @@ import useTextThemePresets from "../text/useTextThemePresets"
 
 const SquareCheckIcon = Icons.SquareCheck
 const SqarePen = Icons.SquarePen
-
+const NotebookPen = Icons.NotebookPen
 
 const MultipleChoiceOptions = [
   {
@@ -147,7 +148,6 @@ const MultipleChoiceOptions = [
     icon: <Globe className="size-6" />,
   },
 ]
-
 
 const ListOptions = [
   {
@@ -380,7 +380,8 @@ export const UserToolbox = () => {
   const t = useTranslations("Components")
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
-  const { outlinedPreset, underlinedPreset } = useInputThemePresets()
+  const { outlinedPreset, underlinedPreset, formPreset } =
+    useInputThemePresets()
   const { outlinedPresetChecbox, underlinedPresetChecbox } =
     useInputCheckboxThemePresets()
   const { outlinedPresetMail, underlinedPresetMail } =
@@ -471,6 +472,85 @@ export const UserToolbox = () => {
                   {t("Input")}
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      //@ts-ignore
+                      connectors.create(
+                        ref,
+                        //@ts-ignore
+                        <Form {...FormContentDefaultProps} />
+                      )
+                    }
+                    data-cy="toolbox-layout-form"
+                  >
+                    <HoverCardComponent
+                      title="Form"
+                      icon={<NotebookPen className="mr-2 size-3" />}
+                    >
+                      <div>
+                        <div className="flex gap-1">
+                          <UserInputGen
+                            {...formPreset}
+                            label={t("FirstName")}
+                            placeholder={t("FirstName")}
+                            floatingLabel={true}
+                            marginBottom={0}
+                            marginLeft={5}
+                            marginTop={40}
+                            width={"100%"}
+                          />
+                          <UserInputGen
+                            {...formPreset}
+                            label={t("LastName")}
+                            placeholder={t("LasttName")}
+                            floatingLabel={true}
+                            marginBottom={0}
+                            marginRight={5}
+                            marginTop={40}
+                            width={"100%"}
+                          />
+                        </div>
+                        <UserInputMailGen
+                          {...outlinedPresetMail}
+                          label={t("EmailLabel")}
+                          placeholder={t("MailPlaceholder")}
+                          className="w-1/2"
+                          floatingLabel={true}
+                          marginTop={5}
+                          marginBottom={0}
+                        />
+                        <UserInputPhoneGen
+                          {...outlinedPresetPhone}
+                          label={t("PhoneLabel")}
+                          className="w-1/2"
+                          placeholder={t("PhonePlaceholder")}
+                          floatingLabel={true}
+                          marginTop={5}
+                          marginBottom={0}
+                        />
+
+                        <UserInputCheckboxGen
+                          {...outlinedPresetChecbox}
+                          label={t("CheckboxPlaceholder")}
+                          placeholder={t("CheckboxPlaceholder")}
+                          marginTop={5}
+                          marginBottom={0}
+                          marginLeft={10}
+                        />
+                        <IconButtonGen
+                          {...filledPreset}
+                          size="small"
+                          marginTop={5}
+                          marginBottom={0}
+                          text={t("Submit")}
+                          width={"100%"}
+                        />
+                      </div>
+                    </HoverCardComponent>
+                  </div>
+
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line

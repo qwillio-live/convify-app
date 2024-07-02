@@ -135,9 +135,11 @@
     "Rows": "Linhas",
     "TextArea": "Área de Texto",
     "CheckboxPlaceholder": "Concordo com os termos e condições e também estou feliz em assinar seu boletim informativo.",
-    "CheckboxFieldName": "Caixa de seleção"
-
-
+    "CheckboxFieldName": "Caixa de seleção",
+    "Submit": "Enviar",
+    "FirstName": "Primero Nome",
+    "LastName": "Sobrenome",
+    "Form": "Formulário"
   },
   "CreateFlow": {
     "Create": "Criar",

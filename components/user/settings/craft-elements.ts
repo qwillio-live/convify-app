@@ -20,4 +20,7 @@ export const CRAFT_ELEMENTS = {
   INPUTMAIL: "InputMail",
   INPUTPHONE: "InputPhone",
   INPUTTEXTAREA: "InputTextarea",
+  FORM: "Form",
+  FORMCONTENT: "FormContent",
+
 }

@@ -38,6 +38,7 @@ import { UserInputTextarea } from "../user/input-textarea/user-input-textarea.co
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { Img } from "../user/image/user-image-component"
+import { Form, FormContent } from "../user/form/user-form.component"
 import { UserInputCheckbox } from "../user/input-checkbox/user-input-checkbox.component"
 import { UserInputMail } from "../user/input-email/user-input-mail.component"
 import { UserInputPhone } from "../user/input-phone/user-input-phone.component"
@@ -150,6 +151,8 @@ export function CreateFlowComponent() {
           Controller,
           Logo,
           HeadlineText,
+          Form,
+          FormContent,
           UserText,
           UserButton,
           UserInputCheckbox,
@@ -273,6 +276,8 @@ export function CreateFlowComponent() {
           HeadlineText,
           UserText,
           UserButton,
+          Form,
+          FormContent,
           ProgressBar,
           Element,
           Progress,

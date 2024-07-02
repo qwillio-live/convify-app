@@ -50,6 +50,7 @@ const IconsList = {
 }
 
 export enum UserInputSizes {
+  form= "form",
   small = "small",
   medium = "medium",
   large = "large",
@@ -57,6 +58,7 @@ export enum UserInputSizes {
 }
 
 const UserInputSizeValues = {
+  form: "184px",
   small: "260px",
   medium: "376px",
   large: "576px",
