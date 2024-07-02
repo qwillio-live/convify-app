@@ -362,7 +362,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r py-6 bg-[#f4f4f5]">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
