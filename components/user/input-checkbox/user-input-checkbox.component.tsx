@@ -1,3 +1,4 @@
+import { get } from "http"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { set } from "date-fns"
 import {
@@ -11,7 +12,7 @@ import {
   X,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { rgba } from "polished"
+import { darken, rgba } from "polished";
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
@@ -363,6 +364,10 @@ export const UserInputCheckbox = ({ ...props }) => {
     (state) => state?.theme?.general?.primaryColor
   )
 
+  const backgroundThemeColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
@@ -427,39 +432,12 @@ export const UserInputCheckbox = ({ ...props }) => {
     }
   }
 
-  function LightenDarkenColor(col, amt) {
+  const getHoverBackgroundForPreset= (color) => {
+
+    return rgba(color, 0.1);
   
-    var usePound = false;
-  
-    if (col[0] == "#") {
-        col = col.slice(1);
-        usePound = true;
     }
- 
-    var num = parseInt(col,16);
- 
-    var r = (num >> 16) + amt;
- 
-    if (r > 255) r = 255;
-    else if  (r < 0) r = 0;
- 
-    var b = ((num >> 8) & 0x00FF) + amt;
- 
-    if (b > 255) b = 255;
-    else if  (b < 0) b = 0;
- 
-    var g = (num & 0x0000FF) + amt;
- 
-    if (g > 255) g = 255;
-    else if (g < 0) g = 0;
- 
-    return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
-  
-}
-
-const darkenedBackgroundColor = LightenDarkenColor(`${props.backgroundColor}`, -60);
-console.log(props.backgroundColor, darkenedBackgroundColor)
-
+    const darkenedBg = getHoverBackgroundForPreset(primaryColor)
 
   return (
     <div
@@ -481,8 +459,8 @@ console.log(props.backgroundColor, darkenedBackgroundColor)
         )}
         style={{
           display: "flex",
-          justifyContent: "center",
           backgroundColor: `${props.backgroundColor}`,
+          justifyContent: "center",
           backgroundImage: `${props.backgroundImage}`,
           minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
@@ -534,7 +512,9 @@ console.log(props.backgroundColor, darkenedBackgroundColor)
                 duration-200
                 ease-in-out
                 max-h-fit
-                focus-visible:ring-transparent focus-visible:ring-offset-0`
+                focus-visible:ring-transparent 
+                focus-visible:ring-offset-0 
+                `
               )}
               onBlur={() => setProp((props) => (props.isActive = false))}
               autoFocus={props.isFocused}
@@ -548,8 +528,8 @@ console.log(props.backgroundColor, darkenedBackgroundColor)
               }}
               style={{
                 width: UserInputSizeValues[props.size],
-                backdropFilter: containerHover ? "brightness(0.94)" : "brightness(1)",
                 zIndex: 1,
+                backgroundColor: containerHover ? darkenedBg : props.backgroundColor,
               }}
             >
               <ContentEditable
