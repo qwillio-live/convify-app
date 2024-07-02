@@ -18,7 +18,7 @@ const useLinkThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce",
     0.1
   )
-  const filledPreset: IconButtonProps = {
+  const linkFilledPreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -27,7 +27,7 @@ const useLinkThemePresets = () => {
     containerBackground: "rgba(255,255,255,0)",
     background: {
       value: getBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
+        theme?.general?.primaryColor || "#ffffff",
         "filled"
       ),
       globalStyled: true,
@@ -57,7 +57,7 @@ const useLinkThemePresets = () => {
       isCustomized: false,
     },
     borderColor: {
-      value: theme?.general?.primaryColor || "#4050ff",
+      value: theme?.general?.primaryColor || "#8097cd",
       globalStyled: true,
       isCustomized: false,
     },
@@ -78,9 +78,9 @@ const useLinkThemePresets = () => {
     marginRight: 20,
     marginBottom: 20,
     icon: "",
-    paddingLeft: "16",
+    paddingLeft: "0",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "0",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -100,7 +100,7 @@ const useLinkThemePresets = () => {
     iconType: PictureTypes.NULL,
   }
 
-  const outLinePreset: IconButtonProps = {
+  const linkOutLinePreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -109,20 +109,20 @@ const useLinkThemePresets = () => {
     containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
+        theme?.general?.primaryColor || "#eff1f9",
         "outline"
       ),
       globalStyled: true,
       isCustomized: false,
     },
     color: {
-      value: theme?.general?.primaryColor || "#3182ce",
+      value: theme?.general?.primaryColor || "#eff1f9",
       globalStyled: true,
       isCustomized: false,
     },
     backgroundHover: {
       value: getHoverBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
+        theme?.general?.primaryColor || "#eff1f9",
         "outline"
       ),
       globalStyled: true,
@@ -139,12 +139,12 @@ const useLinkThemePresets = () => {
       isCustomized: false,
     },
     borderColor: {
-      value: theme?.general?.primaryColor || "#3182ce",
+      value: theme?.general?.primaryColor || "#eff1f9",
       globalStyled: true,
       isCustomized: false,
     },
     borderHoverColor: {
-      value: darkenedPrimaryColor || "#3182ce",
+      value: darkenedPrimaryColor || "#eff1f9",
       globalStyled: true,
       isCustomized: false,
     },
@@ -160,9 +160,9 @@ const useLinkThemePresets = () => {
     marginRight: 20,
     marginBottom: 20,
     icon: "",
-    paddingLeft: "16",
+    paddingLeft: "0",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "0",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -182,7 +182,7 @@ const useLinkThemePresets = () => {
     iconType: PictureTypes.NULL,
   }
 
-  return { filledPreset, outLinePreset }
+  return { linkFilledPreset, linkOutLinePreset }
 }
 
 export const getBackgroundForPreset = (color, preset) => {

@@ -569,10 +569,7 @@ export const IconButtonSettings = () => {
               >
                 <BackButtonGen
                   {...backFilledPreset}
-                  size="small"
-                  icon={
-                    "interface-arrows-bend-left-1-arrow-bend-curve-change-direction-up-to-left-back"
-                  }
+                  size="large"
                   paddingBottom={14}
                   paddingTop={14}
                   width={"266px"}
@@ -594,10 +591,7 @@ export const IconButtonSettings = () => {
               >
                 <BackButtonGen
                   {...backOutLinePreset}
-                  size="small"
-                  icon={
-                    "interface-arrows-bend-left-1-arrow-bend-curve-change-direction-up-to-left-back"
-                  }
+                  size="large"
                   paddingBottom={14}
                   paddingTop={14}
                   width={"266px"}

@@ -35,7 +35,7 @@ const useBackThemePresets = () => {
       isCustomized: false,
     },
     color: {
-      value: "#6B7280", // Lighter text color for filled preset
+      value: "#505051", // Lighter text color for filled preset
       globalStyled: false,
       isCustomized: true,
     },
@@ -48,7 +48,7 @@ const useBackThemePresets = () => {
       isCustomized: false,
     },
     colorHover: {
-      value: "#6B7280", // Lighter text color for filled preset hover
+      value: "#505051", // Lighter text color for filled preset hover
       globalStyled: false,
       isCustomized: true,
     },
@@ -78,10 +78,10 @@ const useBackThemePresets = () => {
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    icon: "interface-arrows-bend-left-1-arrow-bend-curve-change-direction-up-to-left-back",
-    paddingLeft: "16",
+    icon: "interface-arrows-left-arrow-keyboard-left",
+    paddingLeft: "0",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "0",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -98,7 +98,7 @@ const useBackThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-    iconType: PictureTypes.ICON
+    iconType: PictureTypes.ICON,
   }
 
   const backOutLinePreset: IconButtonProps = {
@@ -117,7 +117,7 @@ const useBackThemePresets = () => {
       isCustomized: false,
     },
     color: {
-      value: "#6B7280", // Lighter text color for filled preset
+      value: "#505051", // Lighter text color for filled preset
       globalStyled: false,
       isCustomized: true,
     },
@@ -130,7 +130,7 @@ const useBackThemePresets = () => {
       isCustomized: false,
     },
     colorHover: {
-      value: "#6B7280", // Lighter text color for filled preset hover
+      value: "#505051", // Lighter text color for filled preset hover
       globalStyled: false,
       isCustomized: true,
     },
@@ -161,10 +161,10 @@ const useBackThemePresets = () => {
     marginTop: 20,
     marginRight: 20,
     marginBottom: 20,
-    icon: "interface-arrows-bend-left-1-arrow-bend-curve-change-direction-up-to-left-back",
-    paddingLeft: "16",
+    icon: "interface-arrows-left-arrow-keyboard-left",
+    paddingLeft: "0",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "0",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",

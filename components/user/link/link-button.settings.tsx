@@ -62,6 +62,7 @@ import {
 } from "@/lib/state/flows-state/features/screenHooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
+import useLinkThemePresets from "./link-theme"
 
 export const LinkButtonSettings = () => {
   const t = useTranslations("Components")
@@ -136,7 +137,7 @@ export const LinkButtonSettings = () => {
     filled = "filled",
     outLine = "outLine",
   }
-  const { filledPreset, outLinePreset } = useButtonThemePresets()
+  const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
   const [selectedPreset, setSelectedPresets] = React.useState(
     PRESETNAMES.filled
   )
@@ -218,7 +219,7 @@ export const LinkButtonSettings = () => {
         className="mb-10 w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
+          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">{t("Content")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
@@ -227,7 +228,6 @@ export const LinkButtonSettings = () => {
                 className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={enableIcon}
                 onCheckedChange={(e) => {
-                  // setProp((props) => (props.enableIcon = e), 1000)
                   handlePropChange("enableIcon", e)
                 }}
                 id="enableIcon"
@@ -239,15 +239,14 @@ export const LinkButtonSettings = () => {
                 {t("Enable Icon")}
               </label>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+            <div className="style-control col-span-2 flex w-full grow-0 flex-row items-center gap-2">
               {enableIcon && (
                 <>
                   <p className="text-md text-muted-foreground flex-1">
                     {t("Icon")}
                   </p>
-
                   <PicturePicker
-                    className="w-[100%] transition-all duration-100 ease-in-out"
+                    className="w-full transition-all duration-100 ease-in-out"
                     maxWidthMobile={400}
                     maxWidthDesktop={400}
                     pictureType={PictureTypes.ICON}
@@ -258,7 +257,7 @@ export const LinkButtonSettings = () => {
               )}
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+            <div className="style-control col-span-2 flex w-full grow-0 flex-row items-center gap-2">
               <label
                 htmlFor="text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -266,6 +265,7 @@ export const LinkButtonSettings = () => {
                 Navigation
               </label>
               <Select
+                // className="w-full"
                 value={buttonAction}
                 onValueChange={(e) => {
                   if (e === "next-screen") {
@@ -311,20 +311,19 @@ export const LinkButtonSettings = () => {
                     <SelectItem value={"next-screen"}>Next Screen</SelectItem>
                     <SelectItem value={"redirect"}>Redirect</SelectItem>
                     <SelectItem value={"none"}>Do Nothing</SelectItem>
-                    {screenNames?.map((screen, index) => {
-                      return (
-                        <SelectItem value={screen.screenId}>
-                          {index + 1} : {screen.screenName}
-                        </SelectItem>
-                      )
-                    })}
+                    {screenNames?.map((screen, index) => (
+                      <SelectItem key={index} value={screen.screenId}>
+                        {index + 1} : {screen.screenName}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
+
             {buttonAction === "redirect" && (
-              <div className="mt-4">
-                <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+              <div className="col-span-2 mt-4 w-full">
+                <div className="style-control col-span-2 mb-3 flex w-full grow-0 flex-row items-center gap-2">
                   <label
                     htmlFor="label-text"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -332,7 +331,7 @@ export const LinkButtonSettings = () => {
                     {t("URL")}
                   </label>
                   <Input
-                    className="w-[100vw]"
+                    className="w-full"
                     type={"text"}
                     value={href}
                     onChange={(e) =>
@@ -342,7 +341,7 @@ export const LinkButtonSettings = () => {
                   />
                 </div>
 
-                <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
+                <div className="style-control col-span-2 flex w-full grow-0 flex-row items-center gap-2">
                   <label
                     htmlFor="label-text"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -350,6 +349,7 @@ export const LinkButtonSettings = () => {
                     {t("Open in")}
                   </label>
                   <Select
+                    className="w-full"
                     defaultValue={"new-window"}
                     value={windowTarget ? "new-window" : "same-window"}
                     onValueChange={(e) =>
@@ -360,7 +360,7 @@ export const LinkButtonSettings = () => {
                       )
                     }
                   >
-                    <SelectTrigger className="my-2 w-full">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select screen" />
                     </SelectTrigger>
                     <SelectContent>
@@ -574,7 +574,7 @@ export const LinkButtonSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
               <Card
                 onClick={() => {
-                  addPresetStyles(filledPreset)
+                  addPresetStyles(linkFilledPreset)
                   setSelectedPresets(PRESETNAMES.filled)
                 }}
                 className={cn(
@@ -583,8 +583,7 @@ export const LinkButtonSettings = () => {
                 )}
               >
                 <LinkButtonGen
-                  {...filledPreset}
-                  size="full"
+                  {...linkFilledPreset}
                   text={"Link"}
                   paddingBottom={14}
                   paddingTop={14}
@@ -600,7 +599,7 @@ export const LinkButtonSettings = () => {
               </Card>
               <Card
                 onClick={() => {
-                  addPresetStyles(outLinePreset)
+                  addPresetStyles(linkOutLinePreset)
                   setSelectedPresets(PRESETNAMES.outLine)
                 }}
                 className={cn(
@@ -609,8 +608,7 @@ export const LinkButtonSettings = () => {
                 )}
               >
                 <LinkButtonGen
-                  {...outLinePreset}
-                  size="full"
+                  {...linkOutLinePreset}
                   paddingBottom={14}
                   paddingTop={14}
                   width={"266px"}

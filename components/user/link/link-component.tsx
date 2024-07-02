@@ -89,7 +89,7 @@ const IconButtonSizeValues = {
 
 const ButtonSizeValues = {
   small: ".8rem",
-  medium: "1rem",
+  medium: "1.1rem",
   large: "1.2rem",
 }
 const IconSizeValues = {
@@ -221,51 +221,29 @@ export const LinkButtonGen = ({
               textOverflow: "ellipsis",
             }}
           ></div>
-          {/* {buttonAction === "redirect" ? (
-          <a
-            className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
-            href={`https://${props.href}`}
-            target={`${props.windowTarget ? "_blank" : ""}`}
-          >
-            {text}
-          </a>
-        ) : (
-      
-        {/* )} */}
-          <span className="flex items-center">
-            {iconType !== PictureTypes.NULL && enableIcon && (
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  padding:
-                    iconType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
-                }}
-              >
-                {iconType === PictureTypes.ICON ? (
-                  <SvgRenderer iconName={icon} width="1em" height="1em" />
-                ) : iconType === PictureTypes.EMOJI ? (
-                  <span className="text-[1em] leading-[1em]">{icon}</span>
-                ) : (
-                  <picture key={(icon as ImagePictureTypes).desktop}>
-                    <source
-                      media="(min-width:560px)"
-                      srcSet={(icon as ImagePictureTypes).mobile}
-                    />
-                    <img
-                      src={(icon as ImagePictureTypes).desktop}
-                      className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
-                      style={{ height: "1em", width: "auto" }}
-                      loading="lazy"
-                    />
-                  </picture>
-                )}
-              </div>
-            )}
-            <span className="ml-2">{text}</span>
-          </span>
-          {/* {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
-          )} */}
+          <span className="text-md">{text}</span>
+          {iconType !== PictureTypes.NULL && enableIcon && (
+            <div className="flex items-center justify-center">
+              {iconType === PictureTypes.ICON ? (
+                <SvgRenderer iconName={icon} width="1em" height="1em" />
+              ) : iconType === PictureTypes.EMOJI ? (
+                <span className="text-[1em] leading-[1em]">{icon}</span>
+              ) : (
+                <picture key={(icon as ImagePictureTypes).desktop}>
+                  <source
+                    media="(min-width:560px)"
+                    srcSet={(icon as ImagePictureTypes).mobile}
+                  />
+                  <img
+                    src={(icon as ImagePictureTypes).desktop}
+                    className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                    style={{ height: "1em", width: "auto" }}
+                    loading="lazy"
+                  />
+                </picture>
+              )}
+            </div>
+          )}
         </StyledCustomButton>
       </Link>
     </div>
@@ -618,7 +596,7 @@ export const LinkButton = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Link")} />}
+      {hover && <Controller nameOfComponent={t("Button")} />}
       <div
         className="relative w-full"
         style={{
@@ -627,11 +605,11 @@ export const LinkButton = ({
           justifyContent: "center",
           boxSizing: "border-box",
           minWidth: "100%",
-          // maxWidth: "100%",
-          paddingTop: `${props.marginTop}px`,
-          paddingBottom: `${props.marginBottom}px`,
-          paddingLeft: `${props.marginLeft}px`,
-          paddingRight: `${props.marginRight}px`,
+          maxWidth: "100%",
+          paddingTop: `${props.paddingTop}px`,
+          paddingBottom: `${props.paddingBottom}px`,
+          paddingLeft: `${props.paddingLeft}px`,
+          paddingRight: `${props.paddingRight}px`,
         }}
       >
         <StyledCustomButton
@@ -662,60 +640,55 @@ export const LinkButton = ({
           size={size}
           buttonSize={buttonSize}
           {...props}
-          // onClick={() => handleNavigateToScreen()}
+          onClick={() => handleNavigateToScreen()}
         >
-          <div className="flex min-h-[16px] min-w-[32px]  flex-col overflow-x-clip">
-            <span className="flex items-center">
-              {iconType !== PictureTypes.NULL && enableIcon && (
-                <div
-                  className="flex items-center justify-center"
-                  style={{
-                    padding:
-                      iconType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
-                  }}
-                >
-                  {iconType === PictureTypes.ICON ? (
-                    <SvgRenderer iconName={icon} width="1em" height="1em" />
-                  ) : iconType === PictureTypes.EMOJI ? (
-                    <span className="text-[1em] leading-[1em]">{icon}</span>
-                  ) : (
-                    <picture key={(icon as ImagePictureTypes).desktop}>
-                      <source
-                        media="(min-width:560px)"
-                        srcSet={(icon as ImagePictureTypes).mobile}
-                      />
-                      <img
-                        src={(icon as ImagePictureTypes).desktop}
-                        className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
-                        style={{ height: "1em", width: "auto" }}
-                        loading="lazy"
-                      />
-                    </picture>
-                  )}
-                </div>
+          <div
+            className={`relative  flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip ${
+              enableIcon ? "ml-2" : ""
+            }`}
+          >
+            <ContentEditable
+              html={text.substring(0, maxLength)} // innerHTML of the editable div
+              innerRef={ref}
+              disabled={disabled}
+              style={{
+                maxWidth: "100%",
+                position: "relative",
+                border: text?.length <= 0 && "1px dotted white",
+                transitionProperty: "all",
+                overflowX: "clip",
+                textOverflow: "ellipsis",
+              }}
+              className="border-dotted border-transparent leading-relaxed hover:border-blue-500"
+              onChange={(e) => {
+                handleTextChange(e)
+                // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
+              }}
+              tagName="div"
+            />
+          </div>{" "}
+          {iconType !== PictureTypes.NULL && enableIcon && (
+            <div className=" mr-2 flex items-center justify-center">
+              {iconType === PictureTypes.ICON ? (
+                <SvgRenderer iconName={icon} width="1em" height="1em" />
+              ) : iconType === PictureTypes.EMOJI ? (
+                <span className="text-[1em] leading-[1em]">{icon}</span>
+              ) : (
+                <picture key={(icon as ImagePictureTypes).desktop}>
+                  <source
+                    media="(min-width:560px)"
+                    srcSet={(icon as ImagePictureTypes).mobile}
+                  />
+                  <img
+                    src={(icon as ImagePictureTypes).desktop}
+                    className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                    style={{ height: "1em", width: "auto" }}
+                    loading="lazy"
+                  />
+                </picture>
               )}
-              <ContentEditable
-                html={text}
-                innerRef={ref}
-                disabled={disabled}
-                style={{
-                  maxWidth: "100%",
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-                className="min-w-8 border-dotted border-transparent leading-relaxed hover:border-blue-500"
-                onChange={(e) => {
-                  handleTextChange(e)
-                }}
-                tagName="div"
-              />
-            </span>
-          </div>
-          {/* 
-          {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
-          )} */}
+            </div>
+          )}
         </StyledCustomButton>
       </div>
     </div>
@@ -783,7 +756,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   containerBackground: "rgba(255, 255, 255, 0.886)",
   background: {
-    value: "#4050ff",
+    value: "#eff1f9",
     globalStyled: false,
     isCustomized: false,
   },
@@ -830,10 +803,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   marginRight: 20,
   marginBottom: 20,
   icon: "arrowright",
-  paddingLeft: "16",
-  paddingTop: "26",
-  paddingRight: "16",
-  paddingBottom: "26",
+  paddingLeft: "0",
+  paddingTop: "14",
+  paddingRight: "0",
+  paddingBottom: "14",
   flexDirection: "row",
   alignItems: "center",
   gap: 4,

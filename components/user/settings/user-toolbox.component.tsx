@@ -123,6 +123,7 @@ import {
 import useBackThemePresets from "../backButton/back-theme"
 import { BackButton, BackButtonGen } from "../backButton/back-component"
 import { LinkButton, LinkButtonGen } from "../link/link-component"
+import useLinkThemePresets from "../link/link-theme"
 
 function HelperInformation() {
   return (
@@ -201,6 +202,7 @@ export const UserToolbox = () => {
   const t = useTranslations("Components")
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
+  const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
   const { backFilledPreset, backOutLinePreset } = useBackThemePresets()
   const { selectPreset } = useSelectThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
@@ -469,18 +471,17 @@ export const UserToolbox = () => {
                       ref,
                       <BackButton
                         // {...IconButtonDefaultProps}
-                        {...backFilledPreset}
-                        icon={
-                          "interface-arrows-bend-left-1-arrow-bend-curve-change-direction-up-to-left-back"
-                        }
+                        {...backOutLinePreset}
                         disabled={false}
                         text={t("Back")}
                         justifyContent={"center"}
-                        size={"small"}
+                        size={"large"}
                         marginTop={20}
                         marginBottom={20}
                         marginLeft={20}
                         marginRight={20}
+                        paddingLeft={0}
+                        paddingRight={0}
                       />
                     )
                   }
@@ -492,14 +493,16 @@ export const UserToolbox = () => {
                   >
                     <BackButtonGen
                       className="w-full"
-                      {...backFilledPreset}
-                      size="small"
+                      {...backOutLinePreset}
+                      size="large"
                       marginTop={20}
                       marginBottom={20}
                       marginLeft={20}
                       marginRight={20}
                       text={t("Back")}
                       justifyContent={"center"}
+                      paddingLeft={0}
+                      paddingRight={0}
                     />
                   </HoverCardComponent>
                 </div>
@@ -513,13 +516,15 @@ export const UserToolbox = () => {
                       <LinkButton
                         // {...IconButtonDefaultProps}
                         // {...filledPreset}
-                        {...filledPreset}
+                        {...linkOutLinePreset}
                         // {...outLinePreset}
                         disabled={false}
                         marginTop={20}
                         marginBottom={20}
-                        marginLeft={20}
-                        marginRight={20}
+                        paddingTop={14}
+                        paddingBottom={14}
+                        // marginLeft={20}
+                        // marginRight={20}
                         justifyContent={"center"}
                         enableIcon={false}
                         text={t("Link")}
@@ -536,7 +541,7 @@ export const UserToolbox = () => {
                     <LinkButtonGen
                       className="w-full"
                       // alignItems={"center"}
-                      {...filledPreset}
+                      {...linkOutLinePreset}
                       size="small"
                       text={t("Link")}
                       enableIcon={false}

@@ -92,7 +92,7 @@ const IconButtonSizeValues = {
 
 const ButtonSizeValues = {
   small: ".8rem",
-  medium: "1rem",
+  medium: "1.1rem",
   large: "1.2rem",
 }
 const IconSizeValues = {
@@ -207,37 +207,29 @@ export const BackButtonGen = ({
           className="text-[1rem]"
           onClick={() => console.log("Button clicked", text)}
         >
-          <span className="flex items-center">
-            {iconType !== PictureTypes.NULL && enableIcon && (
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  padding:
-                    iconType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
-                }}
-              >
-                {iconType === PictureTypes.ICON ? (
-                  <SvgRenderer iconName={icon} width="1em" height="1em" />
-                ) : iconType === PictureTypes.EMOJI ? (
-                  <span className="text-[1em] leading-[1em]">{icon}</span>
-                ) : (
-                  <picture key={(icon as ImagePictureTypes).desktop}>
-                    <source
-                      media="(min-width:560px)"
-                      srcSet={(icon as ImagePictureTypes).mobile}
-                    />
-                    <img
-                      src={(icon as ImagePictureTypes).desktop}
-                      className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
-                      style={{ height: "1em", width: "auto" }}
-                      loading="lazy"
-                    />
-                  </picture>
-                )}
-              </div>
-            )}
-            <span className="ml-2">{text}</span>
-          </span>
+          {iconType !== PictureTypes.NULL && enableIcon && (
+            <div className="flex items-center justify-center">
+              {iconType === PictureTypes.ICON ? (
+                <SvgRenderer iconName={icon} width="1em" height="1em" />
+              ) : iconType === PictureTypes.EMOJI ? (
+                <span className="text-[1em] leading-[1em]">{icon}</span>
+              ) : (
+                <picture key={(icon as ImagePictureTypes).desktop}>
+                  <source
+                    media="(min-width:560px)"
+                    srcSet={(icon as ImagePictureTypes).mobile}
+                  />
+                  <img
+                    src={(icon as ImagePictureTypes).desktop}
+                    className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                    style={{ height: "1em", width: "auto" }}
+                    loading="lazy"
+                  />
+                </picture>
+              )}
+            </div>
+          )}
+          <span className="text-md">{text}</span>
         </StyledCustomButton>
       </Link>
     </div>
@@ -593,54 +585,53 @@ export const BackButton = ({
           {...props}
           onClick={() => handleNavigateToScreen()}
         >
-          <span className="flex items-center">
-            {iconType !== PictureTypes.NULL && enableIcon && (
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  padding:
-                    iconType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
-                }}
-              >
-                {iconType === PictureTypes.ICON ? (
-                  <SvgRenderer iconName={icon} width="1em" height="1em" />
-                ) : iconType === PictureTypes.EMOJI ? (
-                  <span className="text-[1em] leading-[1em]">{icon}</span>
-                ) : (
-                  <picture key={(icon as ImagePictureTypes).desktop}>
-                    <source
-                      media="(min-width:560px)"
-                      srcSet={(icon as ImagePictureTypes).mobile}
-                    />
-                    <img
-                      src={(icon as ImagePictureTypes).desktop}
-                      className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
-                      style={{ height: "1em", width: "auto" }}
-                      loading="lazy"
-                    />
-                  </picture>
-                )}
-              </div>
-            )}
-            <div className="flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-x-clip">
-              <ContentEditable
-                html={text}
-                innerRef={ref}
-                disabled={disabled}
-                style={{
-                  maxWidth: "100%",
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-                className="ml-2 min-w-8 border-dotted border-transparent leading-relaxed hover:border-blue-500"
-                onChange={(e) => {
-                  handleTextChange(e)
-                }}
-                tagName="div"
-              />
+          {iconType !== PictureTypes.NULL && enableIcon && (
+            <div className="ml-2 flex items-center justify-center">
+              {iconType === PictureTypes.ICON ? (
+                <SvgRenderer iconName={icon} width="1.5em" height="1.2em" />
+              ) : iconType === PictureTypes.EMOJI ? (
+                <span className="text-[1em] leading-[1em]">{icon}</span>
+              ) : (
+                <picture key={(icon as ImagePictureTypes).desktop}>
+                  <source
+                    media="(min-width:560px)"
+                    srcSet={(icon as ImagePictureTypes).mobile}
+                  />
+                  <img
+                    src={(icon as ImagePictureTypes).desktop}
+                    className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                    style={{ height: "1em", width: "auto" }}
+                    loading="lazy"
+                  />
+                </picture>
+              )}
             </div>
-          </span>
+          )}
+          <div
+            className={`relative  flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip ${
+              enableIcon ? "mr-1" : ""
+            }`}
+          >
+            <ContentEditable
+              html={text.substring(0, maxLength)} // innerHTML of the editable div
+              innerRef={ref}
+              disabled={disabled}
+              style={{
+                maxWidth: "100%",
+                position: "relative",
+                border: text?.length <= 0 && "1px dotted white",
+                transitionProperty: "all",
+                overflowX: "clip",
+                textOverflow: "ellipsis",
+              }}
+              className=" border-dotted border-transparent leading-relaxed hover:border-blue-500"
+              onChange={(e) => {
+                handleTextChange(e)
+                // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
+              }}
+              tagName="div"
+            />
+          </div>
         </StyledCustomButton>
       </div>
     </div>
