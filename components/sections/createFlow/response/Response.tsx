@@ -183,10 +183,11 @@ const ResponseFlowComponents = () => {
       const match = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
-      } else if (match && match[1] === "flows") {
-        // remove this logic on production, which is different for every user
-        setFlowId("clwqfhfvh0001sja3q8nlhuat")
       }
+      // else if (match && match[1] === "flows") {
+      //   // remove this logic on production, which is different for every user
+      //   setFlowId("clwqfhfvh0001sja3q8nlhuat")
+      // }
     };
     extractFlowIdFromUrl();
   }, []);
@@ -258,7 +259,7 @@ const ResponseFlowComponents = () => {
       {loading ? (
         <LoadingEl />
       ) : responses.length > 0 ? (
-        <Card className="overflow-y-auto max-h-[70vh]">
+        <Card className="overflow-x-auto">
           <Table className="text-xs">
             <TableHeader>
               <TableRow>

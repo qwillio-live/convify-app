@@ -209,38 +209,58 @@ const fakeDropOff = [
 
 const InsightsFlowComponents = () => {
   const currentPath = usePathname();
-  const [fontSizeTable, setFontSizeTable] = useState<string>("inherit")
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
 
-  // Function to update window width on resize
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  // Effect to add and remove resize event listener
   useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
     window.addEventListener('resize', handleResize);
-    if (windowWidth < 600 && currentPath?.includes("pt")) {
-      setFontSizeTable("10px")
-    }
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
+
   // Determine height based on window width
   const getHeight = () => {
-    return windowWidth < 600 ? 'fit-content' : 350;
+    return windowSize < 600 ? 'fit-content' : 350;
   };
 
-  const [days, setDays] = useState(7)
+  useEffect(() => {
+    if (windowSize <= 390) {
+      setPaddingScreen("0.3rem")
+    } else if (windowSize <= 450) {
+      setPaddingScreen("0.4rem")
+    } else {
+      getHeight()
+      setPaddingScreen("inherit")
+    }
+  }, [windowSize])
+
+
+  const [days, setDays] = useState(() => {
+    const savedDays = sessionStorage.getItem('days');
+    return savedDays ? parseInt(savedDays, 10) : 7;
+  })
   const [date, setDate] = useState({
     startDate: subDays(new Date(), 7),
     endDate: new Date(),
   })
-  const [status, setStatus] = useState(false)
+  const [status, setStatus] = useState(() => {
+    const savedStatus = sessionStorage.getItem('status');
+    return savedStatus ? JSON.parse(savedStatus) : false;
+  })
+  useEffect(() => {
+    sessionStorage.setItem('status', JSON.stringify(status));
+  }, [status]);
   // will be replaced dynamic flow id
   const [flowId, setFlowId] = useState<string | null>(null);
+  useEffect(() => {
+    sessionStorage.setItem('days', days.toString());
+  }, [days]);
 
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
@@ -248,19 +268,20 @@ const InsightsFlowComponents = () => {
       const match = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
-      } else if (match && match[1] === "flows") {
-        // remove this logic on production, which is different for every user
-        setFlowId("clwqfhfvh0001sja3q8nlhuat")
       }
     };
     extractFlowIdFromUrl();
   }, []);
 
-  const [dataKey, setDataKey] = useState("visits")
-  const [data, setData] = useState<SubmitData[]>(visitsData)
-  let [dropoff, setDropoff] = useState<Dropoff[]>([])
+  const [dataKey, setDataKey] = useState(sessionStorage.getItem('dataKey') ?? '');
 
-  const t = useTranslations("CreateFlow.ResultsPage")
+  useEffect(() => {
+    sessionStorage.setItem('dataKey', dataKey);
+  }, [dataKey]);
+  const [data, setData] = useState<SubmitData[]>(visitsData);
+  let [dropoff, setDropoff] = useState<Dropoff[]>([]);
+
+  const t = useTranslations("CreateFlow.ResultsPage");
   const locale = useLocale() // Get the locale from the query parameters
   const datePickerLocale = locale === 'pt' ? pt : undefined
 
@@ -280,6 +301,7 @@ const InsightsFlowComponents = () => {
       endDate: new Date(),
     })
   }
+
   useEffect(() => {
     const getDropoff = async () => {
       const response = await fetch(`/api/analytics/dropoff/?flowId=${flowId}&startDate=${formatDate(date.startDate)}&endDate=${formatDate(date.endDate)}`)
@@ -289,7 +311,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getDropoff()
     }
-  }, [status, days, flowId, dataKey])
+  }, [status])
 
   useEffect(() => {
     const getAnalytics = async () => {
@@ -306,7 +328,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getAnalytics()
     }
-  }, [status, days, flowId, dataKey])
+  }, [status])
 
   const repeatedJSX = (
     <>
@@ -397,7 +419,7 @@ const InsightsFlowComponents = () => {
                 </p>
               </div>
               <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : analytics.desktopDevicePercentage ? analytics.desktopDevicePercentage.split('.')[0] : '0'} `}%
+                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : Number(analytics.desktopDevicePercentage).toFixed(1)} `}%
               </span>
             </div>
             <div className="">
@@ -431,7 +453,7 @@ const InsightsFlowComponents = () => {
                 </p>
               </div>
               <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.mobileDevicePercentage) === '0.00' || String(analytics.mobileDevicePercentage) === '0' ? 0 : analytics.mobileDevicePercentage ? analytics.mobileDevicePercentage.split('.')[0] : '0'} `}%
+                {`${String(analytics.mobileDevicePercentage) === '0.00' || String(analytics.mobileDevicePercentage) === '0' ? 0 : Number(analytics.mobileDevicePercentage).toFixed(1)}`}%
               </span>
             </div>
           </div>
@@ -500,39 +522,35 @@ const InsightsFlowComponents = () => {
         </Card>
         <Card className="w-full h-full min-h-[350px]">
           <div className="overflow-x-hidden sm:overflow-x-auto w-full h-full">
-            <Table className="w-full h-full"
-              style={{
-                fontSize: currentPath && currentPath?.includes("pt") ? "10px" : "inherit",
-              }}
-            >
+            <Table className="w-full h-full">
               <TableHeader>
-                <TableRow className="p-[0.70rem]">
-                  <TableHead className="whitespace-nowrap p-[0.70rem] pr-0">#</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Step")}</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Views")}</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Exits")}</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.70rem]">{t("Drop-off rate")}</TableHead>
+                <TableRow className="p-[0.60rem]">
+                  <TableHead className="whitespace-nowrap p-[0.60rem] pr-0">#</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Step")}</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Views")}</TableHead>
+                  <TableHead className="whitespace-nowrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Exits")}</TableHead>
+                  <TableHead className="whitespace-wrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Drop-off rate")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="h-full">
                 {dropoff.length > 0 ? (
                   dropoff.map((item, index) => (
-                    <TableRow key={index} className="p-[0.70rem]"> {/* Reduced padding here */}
-                      <TableCell className="p-[0.70rem] pr-0">{index + 1}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.stepName}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.visits}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.exits}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.dropOffRate.split('.')[0]}%</TableCell>
+                    <TableRow key={index} className="p-[0.60rem]"> {/* Reduced padding here */}
+                      <TableCell className="p-[0.60rem] pr-0">{index + 1}</TableCell>
+                      <TableCell className="p-[0.60rem] whitespace-wrap" style={{ padding: paddingScreen }}>{item.stepName}</TableCell>
+                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.visits}</TableCell>
+                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.exits}</TableCell>
+                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.dropOffRate.split('.')[0]}%</TableCell>
                     </TableRow>
                   ))
                 ) : (
                   fakeDropOff.map((item, index) => (
-                    <TableRow key={index} className="p-[0.70rem]"> {/* Reduced padding here */}
-                      <TableCell className="p-[0.70rem]">{index + 1}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.stepName}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.visits}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.exits}</TableCell>
-                      <TableCell className="p-[0.70rem]">{item.dropOffRate}</TableCell>
+                    <TableRow key={index} className="p-[0.60rem]"> {/* Reduced padding here */}
+                      <TableCell className="p-[0.60rem]">{index + 1}</TableCell>
+                      <TableCell className="p-[0.60rem] whitespace-wrap" style={{ padding: paddingScreen }}>{item.stepName}</TableCell>
+                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.visits}</TableCell>
+                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.exits}</TableCell>
+                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.dropOffRate}</TableCell>
                     </TableRow>
                   ))
                 )}
