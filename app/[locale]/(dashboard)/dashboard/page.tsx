@@ -342,13 +342,14 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
+                  className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
+                  style={{ width: '40px', height: '40px' }} // Adjust the size as needed
                 >
                   {userData ? (
                     userData?.name ? (
                       userData?.name?.charAt(0).toUpperCase()
                     ) : (
-                      userData?.email?.charAt(0)
+                      userData?.email?.charAt(0).toUpperCase()
                     )
                   ) : (
                     <svg
@@ -364,12 +365,13 @@ export default function DashboardPage() {
                       className="lucide lucide-circle-user"
                     >
                       <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="10" r="3" />
+                      <circle cx="12" cy="12" r="10" />
                       <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                     </svg>
                   )}
                   <span className="sr-only">Toggle user menu</span>
                 </Button>
+
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
