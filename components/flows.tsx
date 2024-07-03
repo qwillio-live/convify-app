@@ -113,7 +113,7 @@ export function FlowsList({ flows, setStatus, status }) {
     if (windowSize <= 360) {
       setPaddingScreen("0.3rem")
     }
-    else if (windowSize <= 375) {
+    else if (windowSize <= 390) {
       if (currentPath?.includes("pt")) {
         setPaddingScreen("0.3rem")
       } else {
