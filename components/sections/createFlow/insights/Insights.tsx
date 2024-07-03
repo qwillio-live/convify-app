@@ -207,6 +207,21 @@ const fakeDropOff = [
   },
 ]
 
+const getInitialDate = () => {
+  const storedDate = localStorage.getItem('date');
+  if (storedDate) {
+    const parsedDate = JSON.parse(storedDate);
+    return {
+      startDate: new Date(parsedDate.startDate),
+      endDate: new Date(parsedDate.endDate),
+    };
+  } else {
+    return {
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
+    };
+  }
+};
 const InsightsFlowComponents = () => {
   const currentPath = usePathname();
   const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
@@ -242,25 +257,13 @@ const InsightsFlowComponents = () => {
 
 
   const [days, setDays] = useState(() => {
-    const savedDays = sessionStorage.getItem('days');
-    return savedDays ? parseInt(savedDays, 10) : 7;
+    const days = JSON.parse(localStorage.getItem('days') || '7');
+    return days;
   })
-  const [date, setDate] = useState({
-    startDate: subDays(new Date(), 7),
-    endDate: new Date(),
-  })
-  const [status, setStatus] = useState(() => {
-    const savedStatus = sessionStorage.getItem('status');
-    return savedStatus ? JSON.parse(savedStatus) : false;
-  })
-  useEffect(() => {
-    sessionStorage.setItem('status', JSON.stringify(status));
-  }, [status]);
+  const [date, setDate] = useState(getInitialDate)
+  const [status, setStatus] = useState(false)
   // will be replaced dynamic flow id
   const [flowId, setFlowId] = useState<string | null>(null);
-  useEffect(() => {
-    sessionStorage.setItem('days', days.toString());
-  }, [days]);
 
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
@@ -279,7 +282,15 @@ const InsightsFlowComponents = () => {
     sessionStorage.setItem('dataKey', dataKey);
   }, [dataKey]);
   const [data, setData] = useState<SubmitData[]>(visitsData);
-  let [dropoff, setDropoff] = useState<Dropoff[]>([]);
+  let [dropoff, setDropoff] = useState<Dropoff[]>(() => {
+    const dataRes = localStorage.getItem('Dropoff');
+    if (dataRes) {
+      const parsedData = JSON.parse(dataRes); // Parse the dataRes string into an object
+      return parsedData
+    } else {
+      []
+    }
+  });
 
   const t = useTranslations("CreateFlow.ResultsPage");
   const locale = useLocale() // Get the locale from the query parameters
@@ -294,6 +305,18 @@ const InsightsFlowComponents = () => {
     submitsArray: [],
     uniqueVisitsArray: [],
   })
+  useEffect(() => {
+    // Parse analytics from local storage when component mounts or updates
+    const dataRes = localStorage.getItem('analyticsData');
+    if (dataRes) {
+      const parsedData = JSON.parse(dataRes); // Parse the dataRes string into an object
+      setAnalytics(parsedData);
+      if (dataKey === "submits" && parsedData.submitsArray?.length > 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate))
+      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length > 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate))
+      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate))
+      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length <= 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate))
+    }
+  }, []);
 
   function setDateBasedOnDays(day: number) {
     setDate({
@@ -307,6 +330,7 @@ const InsightsFlowComponents = () => {
       const response = await fetch(`/api/analytics/dropoff/?flowId=${flowId}&startDate=${formatDate(date.startDate)}&endDate=${formatDate(date.endDate)}`)
       const dataRes = await response.json()
       setDropoff(dataRes)
+      localStorage.setItem('Dropoff', JSON.stringify(dataRes));
     }
     if (flowId) {
       getDropoff()
@@ -320,6 +344,8 @@ const InsightsFlowComponents = () => {
       )
       const dataRes = await response.json()
       setAnalytics(dataRes)
+      localStorage.setItem('analyticsData', JSON.stringify(dataRes));
+      localStorage.setItem('days', JSON.stringify(days));
       if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
       else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate))
       else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
@@ -533,7 +559,7 @@ const InsightsFlowComponents = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="h-full">
-                {dropoff.length > 0 ? (
+                {dropoff && dropoff.length > 0 ? (
                   dropoff.map((item, index) => (
                     <TableRow key={index} className="p-[0.60rem]"> {/* Reduced padding here */}
                       <TableCell className="p-[0.60rem] pr-0">{index + 1}</TableCell>
@@ -561,18 +587,21 @@ const InsightsFlowComponents = () => {
       </div >
     </>
   )
-
   return (
-    <Tabs defaultValue="custom" className="">
+    <Tabs defaultValue={days === 28 && "28days" || days && "calendar" || days === 14 && "14days" || days === 7 && "custom" || "7days"} className="">
       <header className="mt-4 flex items-center gap-4 px-0 lg:px-6">
         <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-[0.70rem] overflow-x-hidden">
           <TabsList className="flex h-full bg-inherit py-0 overflow-x-auto" >
             <TabsTrigger
               className="[&>div>button]:data-[state=active]:border-input [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=inactive]:bg-transparent [&>div>button]:data-[state=active]:bg-muted [&>div>button]:font-medium"
               value="calendar"
-              onClick={() => { setDays(days); setDateBasedOnDays(days); }}
+              onClick={() => {
+                // setDays(getDaysDifference(date.startDate, date.endDate));
+                setDays(days);
+                setDateBasedOnDays(days);
+              }}
             >
-              <DatePickerWithRange className="" days={days} locale={datePickerLocale} status={status} setStatus={setStatus} setDater={(v: any) => setDate({ startDate: v.startDate, endDate: v.endDate })} />
+              <DatePickerWithRange className="" days={days} setDays={setDays} locale={datePickerLocale} status={status} setStatus={setStatus} setDater={(v: any) => setDate({ startDate: v.startDate, endDate: v.endDate })} />
             </TabsTrigger>
             <TabsTrigger
               className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"

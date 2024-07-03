@@ -184,10 +184,6 @@ const ResponseFlowComponents = () => {
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
       }
-      // else if (match && match[1] === "flows") {
-      //   // remove this logic on production, which is different for every user
-      //   setFlowId("clwqfhfvh0001sja3q8nlhuat")
-      // }
     };
     extractFlowIdFromUrl();
   }, []);
@@ -199,18 +195,29 @@ const ResponseFlowComponents = () => {
 
   useEffect(() => {
     const getResponses = async () => {
-      setLoading(true);
-      if (flowId) {
+      const storedResponses = localStorage.getItem("responses");
+      const flowIdStorage = JSON.parse(localStorage.getItem('flowId') || "{}");
+      if (storedResponses && flowIdStorage === `${flowId}`) {
+        setResponses(JSON.parse(storedResponses));
+      } else if (flowId) {
+        setLoading(true);
         const response = await fetch(`/api/flows/${flowId}/responses/`);
         const dataRes = await response.json();
-        // console.log("Responses", dataRes)
         setResponses(dataRes);
+        localStorage.setItem("responses", JSON.stringify(dataRes));
+        localStorage.setItem("flowId", JSON.stringify(flowId));
+        setLoading(false);
       }
-      setLoading(false);
     };
     getResponses();
   }, [flowId]);
-
+  useEffect(() => {
+    // Parse analytics from local storage when component mounts or updates
+    const dataRes = localStorage.getItem('responses');
+    if (dataRes) {
+      setResponses(JSON.parse(dataRes));
+    }
+  }, [])
   useEffect(() => {
     const uniqueLabels = new Set<string>();
     responses.length > 0 && responses.forEach(item => {
@@ -255,12 +262,13 @@ const ResponseFlowComponents = () => {
   };
 
   return (
-    <div className="min-w-screen-md flex-1 items-center justify-center overflow-y-hidden mx-auto py-4 px-0 lg:px-8 lg:py-4">
+    <div className="min-h-screen flex-1 items-center justify-center mx-auto py-4 px-0 lg:px-8 lg:py-4">
       {loading ? (
         <LoadingEl />
       ) : responses.length > 0 ? (
-        <Card className="overflow-x-auto">
-          <Table className="text-xs">
+        <Card className="overflow-x-auto h-full"
+        >
+          <Table className="text-xs h-full">
             <TableHeader>
               <TableRow>
                 <TableHead
@@ -281,7 +289,7 @@ const ResponseFlowComponents = () => {
                   ))}
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="h-full">
               {rows.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell>

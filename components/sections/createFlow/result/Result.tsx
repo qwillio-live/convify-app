@@ -38,9 +38,8 @@ const ResultFlowComponents = () => {
               <InsightsFlowComponents />
             </TabsContent>
             <TabsContent
-              className="mt-0 w-full"
+              className="mt-0 w-full h-full"
               value="responses"
-              style={{ height: "87.3vh" }}
             >
               <ResponseFlowComponents />
             </TabsContent>

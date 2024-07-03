@@ -13,32 +13,52 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-
+const getInitialDate = () => {
+  const storedDate = localStorage.getItem('date');
+  if (storedDate) {
+    const parsedDate = JSON.parse(storedDate);
+    return {
+      from: new Date(parsedDate.startDate),
+      to: new Date(parsedDate.endDate),
+    };
+  } else {
+    return {
+      from: subDays(new Date(), 7),
+      to: new Date(),
+    };
+  }
+};
 export function DatePickerWithRange({
   className,
   locale = enUS, // Default locale
   setDater,
   setStatus,
   status,
-  days
-}: React.HTMLAttributes<HTMLDivElement> & { status, days: number, setStatus, locale?: Locale; setDater: (v: { startDate: Date; endDate: Date }) => void }) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: subDays(new Date(), 7),
-    to: new Date(),
-  })
+  days,
+  setDays
+}: React.HTMLAttributes<HTMLDivElement> & { status, days: number, setDays, setStatus, locale?: Locale; setDater: (v: { startDate: Date; endDate: Date }) => void }) {
+  const [date, setDate] = React.useState<DateRange | undefined>(getInitialDate)
+
   React.useEffect(() => {
     setDater({
-      startDate: date?.from || subDays(new Date(), 7),
+      startDate: date?.from || subDays(new Date(), days),
       endDate: date?.to || new Date(),
     })
+    localStorage.setItem('date', JSON.stringify({
+      startDate: date?.from || subDays(new Date(), days),
+      endDate: date?.to || new Date(),
+    }));
     setStatus(!status)
   }, [date])
 
   React.useEffect(() => {
-    setDate({
-      from: subDays(new Date(), days),
-      to: new Date(),
-    })
+    const localdays = JSON.parse(localStorage.getItem('days') || 'null');
+    if (localdays != days) {
+      setDate({
+        from: subDays(new Date(), days),
+        to: new Date(),
+      })
+    }
   }, [days])
 
   return (
