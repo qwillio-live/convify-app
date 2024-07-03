@@ -483,6 +483,7 @@ export const UserToolbox = () => {
                         marginRight={20}
                         paddingLeft={0}
                         paddingRight={0}
+                        iconType={PictureTypes.ICON}
                       />
                     )
                   }
@@ -504,6 +505,7 @@ export const UserToolbox = () => {
                       justifyContent={"center"}
                       paddingLeft={0}
                       paddingRight={0}
+                      iconType={PictureTypes.ICON}
                     />
                   </HoverCardComponent>
                 </div>
