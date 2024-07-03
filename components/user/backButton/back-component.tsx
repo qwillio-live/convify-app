@@ -234,7 +234,7 @@ export const BackButtonGen = ({
               )}
             </div>
           )}
-          <span className="text-md">{text}</span>
+          <span className="text-md ml-2">{text}</span>
         </StyledCustomButton>
       </Link>
     </div>
