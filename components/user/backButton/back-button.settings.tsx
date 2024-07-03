@@ -344,22 +344,6 @@ export const IconButtonSettings = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-row items-center ">
-              <label
-                htmlFor="text"
-                className=" text-sm font-medium  peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Button Text")}
-              </label>
-              <Input
-                value={text}
-                onChange={(e) =>
-                  handlePropChangeDebounced("text", e.target.value)
-                }
-                className="mx-3 w-[10vw]"
-                type={"text"}
-              />
-            </div>
           </AccordionContent>
         </AccordionItem>
 

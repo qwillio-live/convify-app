@@ -266,7 +266,7 @@ export const LinkButtonSettings = () => {
               </label>
               <Select
                 // className="w-full"
-                value={buttonAction}
+                // value={buttonAction}
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))
@@ -290,6 +290,7 @@ export const LinkButtonSettings = () => {
                         })
                     )
                   } else {
+                    console.log("entered", e)
                     setProp((props) => (props.buttonAction = "custom-action"))
                     setProp(
                       (props) =>
