@@ -97,7 +97,7 @@ const useLinkThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-    iconType: PictureTypes.NULL,
+    // iconType: PictureTypes.ICON,
   }
 
   const linkOutLinePreset: IconButtonProps = {
@@ -179,7 +179,7 @@ const useLinkThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-    iconType: PictureTypes.NULL,
+    // iconType: PictureTypes.ICON,
   }
 
   return { linkFilledPreset, linkOutLinePreset }

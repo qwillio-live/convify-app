@@ -90,7 +90,12 @@ const IconButtonSizeValues = {
 const ButtonSizeValues = {
   small: ".8rem",
   medium: "1.1rem",
-  large: "1.2rem",
+  large: "1.3rem",
+}
+const paddingValues = {
+  small: "11.9px 13.6px",
+  medium: "14.875px 17px",
+  large: "18.59px 21.25px",
 }
 const IconSizeValues = {
   small: 18,
@@ -313,7 +318,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  padding: 14.875px 17px;
+  padding: ${(props) => paddingValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
@@ -577,7 +582,6 @@ export const LinkButton = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -590,7 +594,7 @@ export const LinkButton = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Button")} />}
+      {hover && <Controller nameOfComponent={t("Link Button")} />}
       <div
         className="relative w-full"
         style={{
@@ -638,7 +642,7 @@ export const LinkButton = ({
         >
           <div
             className={`relative flex min-h-[16px]  min-w-[32px] max-w-[100%] flex-col items-center justify-center overflow-hidden overflow-x-clip ${
-              enableIcon ? "ml-2" : ""
+              enableIcon && (icon !== "" || null) ? "ml-2" : ""
             }`}
           >
             <ContentEditable
@@ -661,28 +665,30 @@ export const LinkButton = ({
               tagName="div"
             />
           </div>{" "}
-          {iconType !== PictureTypes.NULL && enableIcon && (
-            <div className=" mr-2 flex items-center justify-center">
-              {iconType === PictureTypes.ICON ? (
-                <SvgRenderer iconName={icon} width="1em" height="1em" />
-              ) : iconType === PictureTypes.EMOJI ? (
-                <span className="text-[1em] leading-[1em]">{icon}</span>
-              ) : (
-                <picture key={(icon as ImagePictureTypes).desktop}>
-                  <source
-                    media="(min-width:560px)"
-                    srcSet={(icon as ImagePictureTypes).mobile}
-                  />
-                  <img
-                    src={(icon as ImagePictureTypes).desktop}
-                    className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
-                    style={{ height: "1em", width: "auto" }}
-                    loading="lazy"
-                  />
-                </picture>
-              )}
-            </div>
-          )}
+          {iconType !== PictureTypes.NULL &&
+            enableIcon &&
+            (icon !== "" || null) && (
+              <div className=" mr-2 flex items-center justify-center">
+                {iconType === PictureTypes.ICON ? (
+                  <SvgRenderer iconName={icon} width="1em" height="1em" />
+                ) : iconType === PictureTypes.EMOJI ? (
+                  <span className="text-[1em] leading-[1em]">{icon}</span>
+                ) : (
+                  <picture key={(icon as ImagePictureTypes).desktop}>
+                    <source
+                      media="(min-width:560px)"
+                      srcSet={(icon as ImagePictureTypes).mobile}
+                    />
+                    <img
+                      src={(icon as ImagePictureTypes).desktop}
+                      className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                      style={{ height: "1em", width: "auto" }}
+                      loading="lazy"
+                    />
+                  </picture>
+                )}
+              </div>
+            )}
         </StyledCustomButton>
       </div>
     </div>
@@ -739,7 +745,7 @@ export type IconButtonProps = {
   }
   href?: string
   windowTarget?: boolean
-  iconType: PictureTypes
+  iconType?: PictureTypes
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
