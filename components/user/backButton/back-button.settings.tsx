@@ -577,6 +577,7 @@ export const IconButtonSettings = () => {
                   marginBottom={12}
                   marginLeft={0}
                   marginRight={0}
+                  iconType={icon}
                 />
               </Card>
               <Card
@@ -599,6 +600,7 @@ export const IconButtonSettings = () => {
                   marginBottom={12}
                   marginLeft={0}
                   marginRight={0}
+                  iconType={icon}
                 />
               </Card>
             </div>

@@ -98,7 +98,6 @@ const useBackThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-    iconType: PictureTypes.ICON,
   }
 
   const backOutLinePreset: IconButtonProps = {
@@ -181,7 +180,7 @@ const useBackThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-    iconType: PictureTypes.ICON,
+    // iconType: PictureTypes.ICON,
   }
 
   return { backFilledPreset, backOutLinePreset }

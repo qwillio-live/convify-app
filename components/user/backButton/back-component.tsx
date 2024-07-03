@@ -687,7 +687,7 @@ export type IconButtonProps = {
     screenId: string
     screenName: string
   }
-  iconType: PictureTypes
+  iconType?: PictureTypes
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -763,7 +763,6 @@ export const IconButtonDefaultProps: IconButtonProps = {
     screenName: "",
   },
   buttonAction: "next-screen",
-  iconType: PictureTypes.ICON,
 }
 
 BackButton.craft = {
