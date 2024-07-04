@@ -1,58 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
-import ConvifyLogo from "@/assets/convify_logo_black.png"
-import { Reorder, useDragControls, useMotionValue } from "framer-motion"
-import {
-  Circle,
-  GripVertical,
-  Image,
-  Minus,
-  PlusCircle,
-  Trash2,
-  UploadCloud,
-} from "lucide-react"
-import ContentEditable from "react-contenteditable"
-
-import { useNode } from "@/lib/craftjs"
-import { cn } from "@/lib/utils"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button, Button as CustomButton } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
+import React, { useCallback, useEffect } from "react"
 import {
   Activity,
   Anchor,
@@ -67,36 +13,88 @@ import {
   AlignHorizontalJustifyCenter,
   AlignHorizontalSpaceBetween,
   CornerRightDown,
+  Minus,
+  RectangleHorizontal,
+  GripHorizontal,
 } from "lucide-react"
-import { Tabs, TabsContent } from "@/components/custom-tabs"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
 
 import { throttle, debounce } from "lodash"
+import ContentEditable from "react-contenteditable"
+import styled from "styled-components"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
+import { useNode } from "@/lib/craftjs"
 import {
-  IconButtonDefaultProps,
-  IconButtonGen,
-} from "../icon-button/user-icon-button.component"
-import useButtonThemePresets from "../icon-button/useButtonThemePresets"
-import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
-import { RectangleHorizontal } from "lucide-react"
-import { GripHorizontal } from "lucide-react"
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Button as CustomButton } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/custom-checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/custom-select"
+import { Slider } from "@/components/custom-slider"
 
-enum SWITCH {
-  SINGLE = "single",
-  MULTIPLE = "multiple",
-}
+import { Controller } from "../settings/controller.component"
+import {
+  ProgressBarDefaultProps,
+  ProgressBarGen,
+} from "./user-progress.component"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+import {
+  useScreenNames,
+  useScreensLength,
+} from "@/lib/state/flows-state/features/screenHooks"
+import { RootState } from "@/lib/state/flows-state/store"
+
 export const ProgressBarSettings = () => {
+  const t = useTranslations("Components")
+  const screenNames = useScreenNames()
+  console.log("SCREEN NAMES: ", screenNames)
+  const screensLength = useScreensLength()
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || ""
+
+  const nextScreenId =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+        ]?.screenId
+    ) || ""
+
   const {
     actions: { setProp },
     props: {
-      forHeader,
-      progressStyle,
-      color,
-      maxWidth,
-      fullWidth,
-      progressvalue,
-      maxValue,
       enableIcon,
       props,
       size,
@@ -105,6 +103,7 @@ export const ProgressBarSettings = () => {
       background,
       backgroundHover,
       colorHover,
+      color,
       text,
       custom,
       icon,
@@ -130,39 +129,15 @@ export const ProgressBarSettings = () => {
       tracking,
       trackingEvent,
       nextScreen,
+      buttonAction,
+      progressStyle,
+      progressvalue,
+      maxValue,
     },
   } = useNode((node) => ({
     props: node.data.props,
   }))
-  // const screensLength = useScreensLength()
-  // const selectedScreen = useAppSelector(
-  //   (state: RootState) => state.screen?.selectedScreen ?? 0
-  // )
-  const t = useTranslations("Components")
-  const screenNames = useScreenNames()
-  console.log("SCREEN NAMES: ", screenNames)
-  const screensLength = useScreensLength()
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
-  const nextScreenName =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
-        ]?.screenName
-    ) || ""
 
-  const nextScreenId =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
-        ]?.screenId
-    ) || ""
-  const isHeaderFooterMode = useAppSelector(
-    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
-  )
   enum PRESETNAMES {
     filled = "filled",
     outLine = "outLine",
@@ -195,6 +170,9 @@ export const ProgressBarSettings = () => {
       "marginTop",
       "marginRight",
       "marginBottom",
+      "progressStyle",
+      "progressvalue",
+      "maxValue",
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
@@ -215,7 +193,9 @@ export const ProgressBarSettings = () => {
   const handlePropChange = (property, value) => {
     throttledSetProp(property, value)
   }
-
+  const isHeaderFooterMode = useAppSelector(
+    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+  )
   const debouncedSetProp = useCallback(
     debounce((property, value) => {
       setProp((prop) => {
@@ -233,7 +213,6 @@ export const ProgressBarSettings = () => {
     (state) => state?.theme?.general?.backgroundColor
   )
 
-  console.log("progressValue", progressvalue, maxValue)
   return (
     <>
       {isHeaderFooterMode ? (
@@ -245,7 +224,15 @@ export const ProgressBarSettings = () => {
           consideration.
         </span>
       ) : (
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion
+          value={settingsTab || "content"}
+          onValueChange={(value) => {
+            setProp((props) => (props.settingsTab = value), 200)
+          }}
+          type="multiple"
+          defaultValue={["content"]}
+          className="mb-10 w-full"
+        >
           <AccordionItem value="design">
             <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
               <span className="text-sm font-medium">{t("Design")} </span>
@@ -413,15 +400,14 @@ export const ProgressBarSettings = () => {
                   </span>
                 </div>
                 <Slider
-                  className=""
                   defaultValue={[marginRight]}
                   value={[marginRight]}
                   max={100}
                   min={0}
                   step={1}
                   onValueChange={(e) =>
-                    // setProp((props) => (props.marginTop = e),200)
-                    // handlePropChange("marginTop",e)
+                    // setProp((props) => (props.marginRight = e),200)
+                    // handlePropChange("marginRight",e)
                     handlePropChangeDebounced("marginRight", e)
                   }
                 />
