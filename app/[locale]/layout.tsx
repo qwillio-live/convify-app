@@ -112,6 +112,7 @@ import {
   varela_round,
   work_sans,
   zilla_slab,
+  sans3,
 } from "./fonts"
 
 interface RootLayoutProps {
@@ -229,7 +230,8 @@ export default function RootLayout({
           anton.variable,
           zilla_slab.variable,
           nunito_sans.variable,
-          roboto_slab.variable
+          roboto_slab.variable,
+          sans3.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
