@@ -479,8 +479,6 @@ export const UserToolbox = () => {
                         size={"large"}
                         marginTop={20}
                         marginBottom={20}
-                        marginLeft={20}
-                        marginRight={20}
                         paddingLeft={0}
                         paddingRight={0}
                         iconType={PictureTypes.ICON}
@@ -499,8 +497,6 @@ export const UserToolbox = () => {
                       size="large"
                       marginTop={20}
                       marginBottom={20}
-                      marginLeft={20}
-                      marginRight={20}
                       text={t("Back")}
                       justifyContent={"center"}
                       paddingLeft={0}

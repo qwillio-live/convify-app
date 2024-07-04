@@ -160,10 +160,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
 
   &:hover {
-    border-style: solid;
     border-color: ${(props) =>
       props.borderHoverColor}; /* Change to your desired hover border color */
     background: ${(props) => props.backgroundHover};
@@ -198,6 +196,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
+  cursor: default;
   border: none;
   @media (max-width: 760px) {
     width: 100%; /* Make the button take the full width on smaller screens */
@@ -280,11 +279,19 @@ export const ProgressBarGen = ({
   const bgColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+  console.log(
+    "containerBackgrund",
+    containerBackground,
+    bgColor,
+    containerBackground[0] === "#" ? true : false
+  )
   return (
     <div
       className="relative w-full"
       style={{
-        background: `${bgColor}`,
+        background: `${
+          containerBackground[0] === "#" ? containerBackground : bgColor
+        }`,
         display: "flex",
         justifyContent: "center",
         boxSizing: "border-box",
@@ -297,11 +304,19 @@ export const ProgressBarGen = ({
     >
       <StyledCustomButton
         fontFamily={fontFamily?.value}
-        color={color.value}
-        background={bgColor}
-        backgroundHover={bgColor}
-        borderHoverColor={bgColor}
-        colorHover={bgColor}
+        color={containerBackground[0] === "#" ? containerBackground : bgColor}
+        background={
+          containerBackground[0] === "#" ? containerBackground : bgColor
+        }
+        backgroundHover={
+          containerBackground[0] === "#" ? containerBackground : bgColor
+        }
+        borderHoverColor={
+          containerBackground[0] === "#" ? containerBackground : bgColor
+        }
+        colorHover={
+          containerBackground[0] === "#" ? containerBackground : bgColor
+        }
         radius={radius?.value}
         flexDirection={flexDirection}
         justifyContent={justifyContent}
@@ -322,6 +337,8 @@ export const ProgressBarGen = ({
         mobileScreen={false}
         {...props}
         className="text-[1rem]"
+        onClick={disabled}
+        disabled={true}
       >
         <Progress
           value={
@@ -628,7 +645,9 @@ export const ProgressBar = ({
               i < progressvalue && progressStyle === "grip"
                 ? primaryColor
                 : progressStyle === "rectangle"
-                ? containerBackground
+                ? containerBackground[0] === "#"
+                  ? containerBackground
+                  : bgColor
                 : "#eaeaeb",
             borderRadius: progressStyle === "grip" ? "50px" : "disabled",
           }}
@@ -664,7 +683,9 @@ export const ProgressBar = ({
       <div
         className="relative w-full"
         style={{
-          background: `${containerBackground}`,
+          background: `${
+            containerBackground[0] === "#" ? containerBackground : bgColor
+          }`,
           display: "flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -677,11 +698,19 @@ export const ProgressBar = ({
       >
         <StyledCustomButton
           fontFamily={fontFamily?.value}
-          color={color.value}
-          background={containerBackground}
-          backgroundHover={containerBackground}
-          borderHoverColor={containerBackground}
-          colorHover={containerBackground}
+          color={containerBackground[0] === "#" ? containerBackground : bgColor}
+          background={
+            containerBackground[0] === "#" ? containerBackground : bgColor
+          }
+          backgroundHover={
+            containerBackground[0] === "#" ? containerBackground : bgColor
+          }
+          borderHoverColor={
+            containerBackground[0] === "#" ? containerBackground : bgColor
+          }
+          colorHover={
+            containerBackground[0] === "#" ? containerBackground : bgColor
+          }
           radius={radius?.value}
           flexDirection={flexDirection}
           justifyContent={justifyContent}
@@ -715,7 +744,7 @@ export const ProgressBar = ({
               indicatorColor={primaryColor || color}
             />
           ) : (
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div className="" style={{ display: "flex", alignItems: "center" }}>
               {renderIcons()}
             </div>
           )}

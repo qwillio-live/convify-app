@@ -93,9 +93,9 @@ const ButtonSizeValues = {
   large: "1.3rem",
 }
 const paddingValues = {
-  small: "11.9px 13.6px",
-  medium: "14.875px 17px",
-  large: "18.59px 21.25px",
+  small: "9.1px 9.5px",
+  medium: "10.575px 16.5px",
+  large: "13.69px 22.25px",
 }
 const IconSizeValues = {
   small: 18,
