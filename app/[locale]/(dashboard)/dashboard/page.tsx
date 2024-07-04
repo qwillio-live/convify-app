@@ -84,9 +84,9 @@ export default function DashboardPage() {
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="fixed flex h-full max-h-screen flex-col gap-2 md:w-[220px] lg:w-[280px]">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
+            <div className="flex items-center gap-2 font-semibold">
               <svg
-                className="size-7"
+                className="w-6 h-6 md:w-7 md:h-7"
                 viewBox="0 0 720 524"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,8 +143,9 @@ export default function DashboardPage() {
                   />
                 </g>
               </svg>
-              <span className="">Convify</span>
-            </Link>
+              <span className="text-base md:text-lg">Convify</span>
+            </div>
+
             <Button variant="outline" size="icon" className="ml-auto size-8">
               <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
@@ -438,6 +439,6 @@ export default function DashboardPage() {
           }
         </main>
       </div>
-    </div>
+    </div >
   )
 }

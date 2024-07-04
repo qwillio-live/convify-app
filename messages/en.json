@@ -43,8 +43,8 @@
     "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
   },
   "Dashboard": {
-    "draft": "draft",
-    "active": "active",
+    "draft": "Draft",
+    "active": "Active",
     "Cancel": "Cancel",
     "Dashboard": "Dashboard",
     "There's not a flow in sight": "There's not a flow in sight",

@@ -44,8 +44,8 @@
     "Your password is incorrect or this email address is not registered with Convify": "Sua senha está incorreta ou este endereço de email não está registrado no Convify"
   },
   "Dashboard": {
-    "draft": "rascunho",
-    "active": "ativo",
+    "draft": "Rascunho",
+    "active": "Ativo",
     "Cancel": "Cancelar",
     "Dashboard": "Painel",
     "There's not a flow in sight": "Não há um fluxo à vista",

@@ -238,19 +238,33 @@ export function FlowsList({ flows, setStatus, status }) {
                 <Table className="min-w-full">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="hidden w-[144px] sm:table-cell">
+                      <TableHead className="hidden w-[144px] sm:table-cell" style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
                         <span className="sr-only">Image</span>
                       </TableHead>
-                      <TableHead>{t("Name")}</TableHead>
-                      <TableHead>{t("Status")}</TableHead>
-                      <TableHead>{t("Steps")}</TableHead>
-                      <TableHead className="hidden lg:table-cell">
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>{t("Name")}</TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>{t("Status")}</TableHead>
+                      <TableHead className="hidden lg:table-cell" style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>{t("Steps")}</TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
                         {t("Responses")}
                       </TableHead>
-                      <TableHead className="hidden lg:table-cell">
+                      <TableHead className="hidden lg:table-cell" style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
                         {t("Created at")}
                       </TableHead>
-                      <TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
                         <span className="sr-only">{t("Actions")}</span>
                       </TableHead>
                     </TableRow>
@@ -285,11 +299,11 @@ export function FlowsList({ flows, setStatus, status }) {
                               }}>
                               <Badge variant="outline">{t(flow.status)}</Badge>
                             </TableCell>
-                            <TableCell
+                            <TableCell className="hidden lg:table-cell"
                               style={{
                                 padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>{flow.numberOfSteps ? flow.numberOfSteps : 0}</TableCell>
-                            <TableCell className="hidden lg:table-cell"
+                            <TableCell
                               style={{
                                 padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
                               }}>{flow.numberOfResponses ? flow.numberOfResponses : 0}</TableCell>
@@ -314,7 +328,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                  <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
+                                  {/* <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel> */}
                                   <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
                                   <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
                                   {/* <DropdownMenuItem> */}
