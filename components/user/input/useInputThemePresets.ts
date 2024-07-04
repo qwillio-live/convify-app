@@ -165,7 +165,7 @@ const useInputThemePresets = () => {
     inputValue: "",
     fontSize: 16,
     textColor: "#000",
-    width: 130,
+    width: 366,
     fontWeight: "normal",
     marginLeft: 0,
     marginRight: 0,

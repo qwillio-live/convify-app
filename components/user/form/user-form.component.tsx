@@ -4,6 +4,7 @@ import styled from "styled-components"
 
 import { Element, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
 
 import { Button } from "../button/user-button.component"
 import {
@@ -27,6 +28,7 @@ import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { FormSettings } from "./user-form-settings"
+import { transform } from "next/dist/build/swc"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -97,7 +99,7 @@ interface FormInnerStyles {
   justifyContent: string
   mobileAlignItems: string
   mobileJustifyContent: string
-  overflow:string
+  overflow: string
 }
 
 const FormContentInner = styled.form<FormInnerStyles>`
@@ -193,9 +195,10 @@ export const FormContent = ({ children, ...props }) => {
     <div
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
-      className={`${
+      className={cn(
+        `border border-transparent relative`,
         isHovered ? "border border-blue-500 border-dotted" : ""
-      } border border-transparent relative`}
+      )}
     >
       <FormContentGen
         fullWidth={props.fullWidth}
@@ -355,6 +358,8 @@ export const Form = ({ children, ...props }) => {
   const { outlinedPresetMail, underlinedPresetMail } =
     useInputMailThemePresets()
   const { outLinePreset, filledPreset } = useButtonThemePresets()
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+
 
   return (
     <FormContainer
@@ -369,7 +374,7 @@ export const Form = ({ children, ...props }) => {
         e.stopPropagation()
         setHover(false)
       }}
-      style={{ minWidth: "100%", height: "100%" }}
+      style={{ minWidth: "100%", height: "100%"  }}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
       <Element
@@ -379,13 +384,12 @@ export const Form = ({ children, ...props }) => {
         data-cy="form-content"
         gap="5"
         ref={(ref: any) => connect(drag(ref))}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%"}}
         className={`${
           isHovered ? "border border-blue-500 border-dotted" : ""
         } border border-transparent relative`}
-  
       >
-         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
+        {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element
           canvas
           id="text-input-container"
@@ -396,20 +400,11 @@ export const Form = ({ children, ...props }) => {
           paddingRight={"0"}
           data-cy-="form-content-input-container"
           flexDirection="row"
-          marginRight={"-2"}
-          marginLeft={"-2"}
+          marginRight={mobileScreen ? "-30" : "-2" }
+          marginLeft={mobileScreen ? "-30" : "-2" }
           marginBottom={"-10"}
-          style={{ overflow: "visible" }}
-          onMouseEnter={(e) => {
-            e.stopPropagation()
-            setInnerHover(true)
-          }}
-          onMouseLeave={(e) => {
-            e.stopPropagation()
-            setInnerHover(false)
-          }}
+          style={{ overflow: "visible", width: ` ${ mobileScreen ? "102%" : "100"}`}}
         >
-         
           <Element
             canvas
             id="user-input-name"
@@ -423,9 +418,8 @@ export const Form = ({ children, ...props }) => {
             marginleft={0}
             marginRight={0}
             marginTop={0}
-            size={"100%"}
-            style={{ overflow: "visible" }} 
-
+            size={"full"}
+            style={{ overflow: "visible" }}
           />
           <Element
             canvas
@@ -440,9 +434,8 @@ export const Form = ({ children, ...props }) => {
             marginleft={0}
             marginRight={0}
             marginTop={0}
-            size={"100%"}
-            style={{ overflow: "visible" }} 
-
+            size={"full"}
+            style={{ overflow: "visible" }}
           />
         </Element>
         <Element
@@ -489,6 +482,7 @@ export const Form = ({ children, ...props }) => {
           marginBottom={0}
           text={t("Submit")}
           gap={220}
+          size={"full"}
         />
 
         {children}

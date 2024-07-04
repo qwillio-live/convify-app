@@ -286,7 +286,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               width={props.width}
               size={props.size}
               className={cn(
-                `font-normal px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light
+                `font-normal px-3 py-2 text-base placeholder:text-gray-400 placeholder:font-light
                 ring-0
                 outline-none
                 focus-visible:outline-none
