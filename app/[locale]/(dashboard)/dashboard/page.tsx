@@ -214,69 +214,70 @@ export default function DashboardPage() {
         <div className="sticky top-0 z-20">
           <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
             <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="link"
-                  size="icon"
-                  className="shrink-0 md:hidden w-auto px-2"
+              {/* <SheetTrigger asChild> */}
+              <Button
+                variant="link"
+                size="icon"
+                className="shrink-0 md:hidden w-auto px-2"
+              >
+                <svg
+                  width="25"
+                  viewBox="0 0 22 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-7"
                 >
-                  <svg
-                    width="25"
-                    viewBox="0 0 22 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-7"
+                  <mask
+                    id="mask0_2486_36154"
+                    style={{ maskType: "alpha" }}
+                    maskUnits="userSpaceOnUse"
+                    x="0"
+                    y="0"
+                    width="22"
+                    height="12"
                   >
-                    <mask
-                      id="mask0_2486_36154"
-                      style={{ maskType: "alpha" }}
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="22"
-                      height="12"
-                    >
-                      <rect width="22" height="12" fill="#D9D9D9" />
-                    </mask>
-                    <g mask="url(#mask0_2486_36154)">
-                      <path
-                        d="M2 14L7 6L2 -2"
-                        stroke="white"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M2 14L7 6L2 -2"
-                        stroke="black"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M8 14L13 6L8 -2"
-                        stroke="white"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M8 14L13 6L8 -2"
-                        stroke="black"
-                        stroke-opacity="0.6"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M14 14L19 6L14 -2"
-                        stroke="white"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M14 14L19 6L14 -2"
-                        stroke="black"
-                        stroke-opacity="0.2"
-                        stroke-width="4"
-                      />
-                    </g>
-                  </svg>
-                  <span className="sr-only">Toggle navigation menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="flex flex-col">
+                    <rect width="22" height="12" fill="#D9D9D9" />
+                  </mask>
+                  <g mask="url(#mask0_2486_36154)">
+                    <path
+                      d="M2 14L7 6L2 -2"
+                      stroke="white"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M2 14L7 6L2 -2"
+                      stroke="black"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M8 14L13 6L8 -2"
+                      stroke="white"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M8 14L13 6L8 -2"
+                      stroke="black"
+                      stroke-opacity="0.6"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M14 14L19 6L14 -2"
+                      stroke="white"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M14 14L19 6L14 -2"
+                      stroke="black"
+                      stroke-opacity="0.2"
+                      stroke-width="4"
+                    />
+                  </g>
+                </svg>
+                <span className="text-base pl-1 md:text-lg font-semibold ">Convify</span>
+                {/* <span className="sr-only">Toggle navigation menu</span> */}
+              </Button>
+              {/* </SheetTrigger> */}
+              {/* <SheetContent className="flex flex-col">
                 <nav className="grid gap-2 text-lg font-medium">
                   <Link
                     href="#"
@@ -324,7 +325,7 @@ export default function DashboardPage() {
                     {t("Analytics")}
                   </Link>
                 </nav>
-              </SheetContent>
+              </SheetContent> */}
             </Sheet>
             <div className="w-full flex-1">
               {/* <form>
