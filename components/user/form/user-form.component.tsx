@@ -246,6 +246,7 @@ export enum CardSizes {
   large = "large",
   full = "full",
 }
+
 const CardSizeValues = {
   small: "300px",
   medium: "376px",
@@ -284,6 +285,7 @@ export type FormContentDefaultPropsTypes = {
   mobileFlexDirection: string
   settingsTab: string
 }
+
 export const FormContentDefaultProps: FormContentDefaultPropsTypes = {
   fullWidth: true,
   width: "400",
@@ -364,7 +366,7 @@ export const Form = ({ children, ...props }) => {
   return (
     <FormContainer
       background={props.background}
-      className="card-container relative shrink-0 overflow-visible basis-full min-w-full flex justify-center items-center flex-col"
+      className="card-container relative shrink-0 overflow-visible basis-full min-w-full flex justify-center items-center flex-col w-[800px]"
       ref={(ref: any) => connect(drag(ref))}
       onMouseEnter={(e) => {
         e.stopPropagation()
@@ -374,7 +376,7 @@ export const Form = ({ children, ...props }) => {
         e.stopPropagation()
         setHover(false)
       }}
-      style={{ minWidth: "100%", height: "100%"  }}
+      style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)"}}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
       <Element
@@ -403,7 +405,7 @@ export const Form = ({ children, ...props }) => {
           marginRight={mobileScreen ? "-30" : "-2" }
           marginLeft={mobileScreen ? "-30" : "-2" }
           marginBottom={"-10"}
-          style={{ overflow: "visible", width: ` ${ mobileScreen ? "102%" : "100"}`}}
+          style={{ overflow: "visible", width: ` ${ mobileScreen ? "100%" : "100"}`}}
         >
           <Element
             canvas
