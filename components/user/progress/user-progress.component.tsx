@@ -90,6 +90,7 @@ const IconButtonSizeValues = {
   medium: "376px",
   large: "576px",
   full: "100%",
+  auto: "auto",
 }
 
 const ButtonSizeValues = {
@@ -108,6 +109,7 @@ const IconButtonMobileSizeValues = {
   medium: "330px",
   large: "360px",
   full: "100%",
+  auto: "auto",
 }
 
 const ButtonTextLimit = {
@@ -626,7 +628,7 @@ export const ProgressBar = ({
               i < progressvalue && progressStyle === "grip"
                 ? primaryColor
                 : progressStyle === "rectangle"
-                ? bgColor
+                ? containerBackground
                 : "#eaeaeb",
             borderRadius: progressStyle === "grip" ? "50px" : "disabled",
           }}
@@ -662,7 +664,7 @@ export const ProgressBar = ({
       <div
         className="relative w-full"
         style={{
-          background: `${bgColor}`,
+          background: `${containerBackground}`,
           display: "flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -673,35 +675,35 @@ export const ProgressBar = ({
           paddingRight: `${props.paddingRight}px`,
         }}
       >
-        {progressStyle === "minus" ? (
-          <StyledCustomButton
-            fontFamily={fontFamily?.value}
-            color={color.value}
-            background={bgColor}
-            backgroundHover={bgColor}
-            borderHoverColor={bgColor}
-            colorHover={bgColor}
-            radius={radius?.value}
-            flexDirection={flexDirection}
-            justifyContent={justifyContent}
-            marginLeft={marginLeft}
-            width={width}
-            size={size}
-            buttonSize={buttonSize}
-            height={height}
-            marginRight={marginRight}
-            marginTop={marginTop}
-            marginBottom={marginBottom}
-            paddingLeft={paddingLeft}
-            paddingTop={paddingTop}
-            paddingRight={paddingRight}
-            paddingBottom={paddingBottom}
-            alignItems={alignItems}
-            gap={gap}
-            mobileScreen={false}
-            {...props}
-            className="text-[1rem]"
-          >
+        <StyledCustomButton
+          fontFamily={fontFamily?.value}
+          color={color.value}
+          background={containerBackground}
+          backgroundHover={containerBackground}
+          borderHoverColor={containerBackground}
+          colorHover={containerBackground}
+          radius={radius?.value}
+          flexDirection={flexDirection}
+          justifyContent={justifyContent}
+          marginLeft={marginLeft}
+          width={width}
+          size={progressStyle === "minus" ? size : "auto"}
+          buttonSize={buttonSize}
+          height={height}
+          marginRight={marginRight}
+          marginTop={marginTop}
+          marginBottom={marginBottom}
+          paddingLeft={paddingLeft}
+          paddingTop={paddingTop}
+          paddingRight={paddingRight}
+          paddingBottom={paddingBottom}
+          alignItems={alignItems}
+          gap={gap}
+          mobileScreen={false}
+          {...props}
+          className="text-[1rem]"
+        >
+          {progressStyle === "minus" ? (
             <Progress
               value={
                 progressvalue === 1 && maxValue === 5
@@ -712,12 +714,12 @@ export const ProgressBar = ({
               className={`h-1 ${fullWidth ? "w-full" : ""}`}
               indicatorColor={primaryColor || color}
             />
-          </StyledCustomButton>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            {renderIcons()}
-          </div>
-        )}
+          ) : (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {renderIcons()}
+            </div>
+          )}
+        </StyledCustomButton>
       </div>
     </div>
   )
