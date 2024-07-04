@@ -62,6 +62,7 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import { Progress } from "@/components/ui/progress-custom"
 import { Minus, Circle } from "lucide-react"
+import { string } from "prop-types"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -279,18 +280,16 @@ export const ProgressBarGen = ({
   const bgColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
-  console.log(
-    "containerBackgrund",
-    containerBackground,
-    bgColor,
-    containerBackground[0] === "#" ? true : false
-  )
+
   return (
     <div
       className="relative w-full"
       style={{
         background: `${
-          containerBackground[0] === "#" ? containerBackground : bgColor
+          typeof containerBackground === "string" &&
+          containerBackground[0] === "#"
+            ? containerBackground
+            : bgColor
         }`,
         display: "flex",
         justifyContent: "center",
@@ -304,18 +303,35 @@ export const ProgressBarGen = ({
     >
       <StyledCustomButton
         fontFamily={fontFamily?.value}
-        color={containerBackground[0] === "#" ? containerBackground : bgColor}
+        color={
+          typeof containerBackground === "string" &&
+          containerBackground[0] === "#"
+            ? containerBackground
+            : bgColor
+        }
         background={
-          containerBackground[0] === "#" ? containerBackground : bgColor
+          typeof containerBackground === "string" &&
+          containerBackground[0] === "#"
+            ? containerBackground
+            : bgColor
         }
         backgroundHover={
-          containerBackground[0] === "#" ? containerBackground : bgColor
+          typeof containerBackground === "string" &&
+          containerBackground[0] === "#"
+            ? containerBackground
+            : bgColor
         }
         borderHoverColor={
-          containerBackground[0] === "#" ? containerBackground : bgColor
+          typeof containerBackground === "string" &&
+          containerBackground[0] === "#"
+            ? containerBackground
+            : bgColor
         }
         colorHover={
-          containerBackground[0] === "#" ? containerBackground : bgColor
+          typeof containerBackground === "string" &&
+          containerBackground[0] === "#"
+            ? containerBackground
+            : bgColor
         }
         radius={radius?.value}
         flexDirection={flexDirection}
@@ -684,7 +700,10 @@ export const ProgressBar = ({
         className="relative w-full"
         style={{
           background: `${
-            containerBackground[0] === "#" ? containerBackground : bgColor
+            typeof containerBackground === "string" &&
+            containerBackground[0] === "#"
+              ? containerBackground
+              : bgColor
           }`,
           display: "flex",
           justifyContent: "center",
@@ -698,18 +717,35 @@ export const ProgressBar = ({
       >
         <StyledCustomButton
           fontFamily={fontFamily?.value}
-          color={containerBackground[0] === "#" ? containerBackground : bgColor}
+          color={
+            typeof containerBackground === "string" &&
+            containerBackground[0] === "#"
+              ? containerBackground
+              : bgColor
+          }
           background={
-            containerBackground[0] === "#" ? containerBackground : bgColor
+            typeof containerBackground === "string" &&
+            containerBackground[0] === "#"
+              ? containerBackground
+              : bgColor
           }
           backgroundHover={
-            containerBackground[0] === "#" ? containerBackground : bgColor
+            typeof containerBackground === "string" &&
+            containerBackground[0] === "#"
+              ? containerBackground
+              : bgColor
           }
           borderHoverColor={
-            containerBackground[0] === "#" ? containerBackground : bgColor
+            typeof containerBackground === "string" &&
+            containerBackground[0] === "#"
+              ? containerBackground
+              : bgColor
           }
           colorHover={
-            containerBackground[0] === "#" ? containerBackground : bgColor
+            typeof containerBackground === "string" &&
+            containerBackground[0] === "#"
+              ? containerBackground
+              : bgColor
           }
           radius={radius?.value}
           flexDirection={flexDirection}
