@@ -12,11 +12,12 @@ import { usePathname } from "next/navigation"
 import "./ConnectFlowComponents.css";
 
 const ConnectFlowComponents = () => {
-  const currentPath = usePathname();
+  const [flowData, setFlowData] = useState<TIntegrationCardData | (() => TIntegrationCardData)>({} as TIntegrationCardData)
   const [search, setSearch] = useState("")
   const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
-  const [integrations, setIntegrations] = useState("")
+  const currentPath = usePathname()
   const [flowId, setFlowId] = useState<string | null>(null);
+
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
       const url = currentPath; // Get the current URL
@@ -28,17 +29,62 @@ const ConnectFlowComponents = () => {
     extractFlowIdFromUrl();
   }, []);
 
+  /* 
+  // POST request for creating integrations
+  useEffect(() => {
+    fetch("/api/flows/cly5ykibm000113jys2uywqmi/integrations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        credentials: "include",
+      },
+      body: JSON.stringify({
+        "googleAnalyticsId": "GOOGLE_ANALYTICS_IDDDDDDDEEEDDD"
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log("POST request", data))
+      .catch((error) => console.log("Error fetching user data:", error))
+  }, [])
+  */
+
   useEffect(() => {
     if (flowId) {
-      fetch(`/dashboard/${flowId}/connect`)
+      fetch(`/api/flows/${flowId}/integrations`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
-          setIntegrations(data)
-          console.log("data", data)
+          console.log("GET request", data)
+          setFlowData(data)
         })
         .catch((error) => console.error("Error fetching user data:", error))
     }
   }, [flowId])
+
+  useEffect(() => {
+    if (flowId) {
+      fetch(`/api/flows/${flowId}/integrations/cly7aycol0003ldftt9so8tod`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "googleAnalyticsId": "UA-123456789-1",
+          "email": "someone@gmail.com",
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("PUT request", data))
+        .catch((error) => console.error("Error fetching user data:", error))
+    }
+  }, [flowId])
+
+
   // Define the update function
   const updateStatus = (id, newStatus) => {
     // Find the index of the object in the array
