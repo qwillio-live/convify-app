@@ -525,7 +525,7 @@ export const UserInputCheckbox = ({ ...props }) => {
               onMouseLeave={(e) => {
                 e.stopPropagation()
                 setContainerHover(false)
-                setHover(false)
+                // setHover(false)
               }}
               style={{
                 width: UserInputSizeValues[props.size],

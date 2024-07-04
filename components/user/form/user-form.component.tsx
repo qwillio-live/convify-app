@@ -13,9 +13,9 @@ import {
 } from "../container/user-container.component"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import { IconButton } from "../icon-button/user-icon-button.component"
+import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
 import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
 import useInputMailThemePresets from "../input-email/useInputMailThemePresets"
-import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
 import {
   UserInputMail,
   UserInputMailGen,
@@ -53,6 +53,7 @@ interface FormOuterStyles {
   gap: number
   border: number
   borderColor: string
+  overflow: string
 }
 
 const FormContentOuter = styled.div<FormOuterStyles>`
@@ -79,6 +80,7 @@ const FormContentOuter = styled.div<FormOuterStyles>`
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid;
   border-color: ${(props) => props.borderColor};
+  overflow: visible;
 `
 
 interface FormInnerStyles {
@@ -95,6 +97,7 @@ interface FormInnerStyles {
   justifyContent: string
   mobileAlignItems: string
   mobileJustifyContent: string
+  overflow:string
 }
 
 const FormContentInner = styled.form<FormInnerStyles>`
@@ -118,10 +121,8 @@ const FormContentInner = styled.form<FormInnerStyles>`
     align-items: ${(props) => props.mobileAlignItems};
     justify-content: ${(props) => props.mobileJustifyContent};
   }
+  overflow: visible;
 `
-
-
-
 
 export const FormContentGen = ({ children, ...props }) => {
   return (
@@ -150,6 +151,7 @@ export const FormContentGen = ({ children, ...props }) => {
       gap={props.gap}
       border={props.border}
       borderColor={props.borderColor}
+      overflow="visible"
     >
       <FormContentInner
         size={props.size}
@@ -165,6 +167,7 @@ export const FormContentGen = ({ children, ...props }) => {
         marginLeft={props.marginLeft}
         marginRight={props.marginRight}
         mobileFlexDirection={props.mobileFlexDirection}
+        overflow="visible"
       >
         {children}
       </FormContentInner>
@@ -181,11 +184,8 @@ export const FormContent = ({ children, ...props }) => {
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const { outlinedPresetMail, underlinedPresetMail } =
-    useInputMailThemePresets()
-  const { outLinePreset, filledPreset} = useButtonThemePresets()   
 
-    const t = useTranslations("Components")
+  const t = useTranslations("Components")
 
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
@@ -230,84 +230,8 @@ export const FormContent = ({ children, ...props }) => {
         borderColor={props.borderColor}
         mobileAlignItems={props.mobileAlignItems}
         mobileJustifyContent={props.mobileJustifyContent}
+        overflow="visible"
       >
-        {" "}
-        <div className="flex w-full">
-          <Element
-            canvas
-            id="user-input-name"
-            is={UserInput}
-            {...formPreset}
-            label={t("FirstName")}
-            placeholder="Enter your first name"
-            floatingLabel={true}
-            backgroundColor={"transparent"}
-            marginBottom={0}
-            marginTop={0}
-            size={"100%"}
-          />
-          <Element
-            canvas
-            id="user-input-lastname"
-            is={UserInput}
-            floatingLabel={true}
-            {...formPreset}
-            label={t("LastName")}
-            placeholder="Enter your last name"
-            backgroundColor={"transparent"}
-            marginBottom={0}
-            marginleft={10}
-            marginTop={0}
-            size={"100%"}
-
-          />
-        </div>
-        <Element
-          canvas
-          id="user-input-mail"
-          is={UserInputMail}
-          {...outlinedPresetMail}
-          floatingLabel={true}
-          marginTop={0}
-          marginBottom={0}
-          label= {t("EmailLabel")}
-          fieldName= {t("EmailFieldName")}
-
-        />
-        <Element
-          canvas
-          id="user-input-phone"
-          is={UserInputPhone}
-          {...formPresetPhone}
-          floatingLabel={true}
-          backgroundColor={"transparent"}
-          icon={"phone-telephone-android-phone-mobile-device-smartphone-iphone"}
-          marginTop={0}
-          marginBottom={0}
-          label= {t("PhoneLabel")}
-          fieldName= {t("PhoneFieldName")}
-
-        />
-        <Element
-          canvas
-          id="user-input-checkbox"
-          is={UserInputCheckbox}
-          marginTop={0}
-          marginBottom={0}
-          label= {t("CheckboxPlaceholder")}
-          fieldName= {t("CheckboxFieldName")}
-      
-        />
-        <Element
-          canvas
-          id="user-input-submit-button"
-          is={IconButton}
-          {...filledPreset}
-          marginTop={0}
-          marginBottom={0}
-          text={t("Submit")}
-          gap={220}
-        />
         {children}
       </FormContentGen>
     </div>
@@ -417,6 +341,7 @@ export const FormGen = ({ children, ...props }) => {
 
 export const Form = ({ children, ...props }) => {
   const [hover, setHover] = React.useState(false)
+  const [innerHover, setInnerHover] = React.useState(false)
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -427,13 +352,23 @@ export const Form = ({ children, ...props }) => {
     isHovered: state.events.hovered,
   }))
   const t = useTranslations("Components")
+  const { outlinedPresetMail, underlinedPresetMail } =
+    useInputMailThemePresets()
+  const { outLinePreset, filledPreset } = useButtonThemePresets()
+
   return (
     <FormContainer
       background={props.background}
-      className="card-container relative shrink-0 basis-full min-w-full flex justify-center items-center flex-col"
+      className="card-container relative shrink-0 overflow-visible basis-full min-w-full flex justify-center items-center flex-col"
       ref={(ref: any) => connect(drag(ref))}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseEnter={(e) => {
+        e.stopPropagation()
+        setHover(true)
+      }}
+      onMouseLeave={(e) => {
+        e.stopPropagation()
+        setHover(false)
+      }}
       style={{ minWidth: "100%", height: "100%" }}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
@@ -442,8 +377,120 @@ export const Form = ({ children, ...props }) => {
         id="formcard"
         is={FormContent}
         data-cy="form-content"
-        className=""
+        gap="5"
+        ref={(ref: any) => connect(drag(ref))}
+        style={{ width: "100%", height: "100%" }}
+        className={`${
+          isHovered ? "border border-blue-500 border-dotted" : ""
+        } border border-transparent relative`}
+  
       >
+         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
+        <Element
+          canvas
+          id="text-input-container"
+          is={FormContent}
+          paddingTop={"0"}
+          paddingBottom={"0"}
+          paddingLeft={"0"}
+          paddingRight={"0"}
+          data-cy-="form-content-input-container"
+          flexDirection="row"
+          marginRight={"-2"}
+          marginLeft={"-2"}
+          marginBottom={"-10"}
+          style={{ overflow: "visible" }}
+          onMouseEnter={(e) => {
+            e.stopPropagation()
+            setInnerHover(true)
+          }}
+          onMouseLeave={(e) => {
+            e.stopPropagation()
+            setInnerHover(false)
+          }}
+        >
+         
+          <Element
+            canvas
+            id="user-input-name"
+            is={UserInput}
+            {...formPreset}
+            label={t("FirstName")}
+            placeholder="Enter your first name"
+            floatingLabel={true}
+            backgroundColor={"transparent"}
+            marginBottom={0}
+            marginleft={0}
+            marginRight={0}
+            marginTop={0}
+            size={"100%"}
+            style={{ overflow: "visible" }} 
+
+          />
+          <Element
+            canvas
+            id="user-input-lastname"
+            is={UserInput}
+            floatingLabel={true}
+            {...formPreset}
+            label={t("LastName")}
+            placeholder="Enter your last name"
+            backgroundColor={"transparent"}
+            marginBottom={0}
+            marginleft={0}
+            marginRight={0}
+            marginTop={0}
+            size={"100%"}
+            style={{ overflow: "visible" }} 
+
+          />
+        </Element>
+        <Element
+          canvas
+          id="user-input-mail"
+          is={UserInputMail}
+          {...outlinedPresetMail}
+          floatingLabel={true}
+          marginTop={0}
+          marginBottom={0}
+          paddingRight={"4px"}
+          label={t("EmailLabel")}
+          fieldName={t("EmailFieldName")}
+        />
+        <Element
+          canvas
+          id="user-input-phone"
+          is={UserInputPhone}
+          {...formPresetPhone}
+          floatingLabel={true}
+          backgroundColor={"transparent"}
+          icon={"phone-telephone-android-phone-mobile-device-smartphone-iphone"}
+          marginTop={0}
+          marginBottom={0}
+          label={t("PhoneLabel")}
+          fieldName={t("PhoneFieldName")}
+        />
+        <Element
+          canvas
+          id="user-input-checkbox"
+          is={UserInputCheckbox}
+          marginTop={0}
+          marginBottom={0}
+          label={t("CheckboxPlaceholder")}
+          fieldName={t("CheckboxFieldName")}
+          inputRequired={false}
+        />
+        <Element
+          canvas
+          id="user-input-submit-button"
+          is={IconButton}
+          {...filledPreset}
+          marginTop={0}
+          marginBottom={0}
+          text={t("Submit")}
+          gap={220}
+        />
+
         {children}
       </Element>
     </FormContainer>

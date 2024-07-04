@@ -489,15 +489,15 @@ export const UserToolbox = () => {
                       title="Form"
                       icon={<NotebookPen className="mr-2 size-3" />}
                     >
-                      <div>
-                        <div className="flex gap-1">
+                      <div className="max-w-[350px] flex flex-col items-center justify-start ">
+                        <div className="flex gap-1 max-w-[376px]">
                           <UserInputGen
                             {...formPreset}
                             label={t("FirstName")}
                             placeholder={t("FirstName")}
                             floatingLabel={true}
                             marginBottom={0}
-                            marginLeft={5}
+                            marginLeft={0}
                             marginTop={40}
                             width={"100%"}
                           />
@@ -507,7 +507,7 @@ export const UserToolbox = () => {
                             placeholder={t("LasttName")}
                             floatingLabel={true}
                             marginBottom={0}
-                            marginRight={5}
+                            marginRight={0}
                             marginTop={40}
                             width={"100%"}
                           />
@@ -516,7 +516,6 @@ export const UserToolbox = () => {
                           {...outlinedPresetMail}
                           label={t("EmailLabel")}
                           placeholder={t("MailPlaceholder")}
-                          className="w-1/2"
                           floatingLabel={true}
                           marginTop={5}
                           marginBottom={0}
@@ -524,9 +523,9 @@ export const UserToolbox = () => {
                         <UserInputPhoneGen
                           {...outlinedPresetPhone}
                           label={t("PhoneLabel")}
-                          className="w-1/2"
                           placeholder={t("PhonePlaceholder")}
                           floatingLabel={true}
+
                           marginTop={5}
                           marginBottom={0}
                         />
@@ -537,15 +536,16 @@ export const UserToolbox = () => {
                           placeholder={t("CheckboxPlaceholder")}
                           marginTop={5}
                           marginBottom={0}
-                          marginLeft={10}
                         />
                         <IconButtonGen
                           {...filledPreset}
-                          size="small"
                           marginTop={5}
+                          marginRight={0}
+                          marginLeft={0}
                           marginBottom={0}
                           text={t("Submit")}
-                          width={"100%"}
+                          gap={0}
+                          // paddingLeft={185}
                         />
                       </div>
                     </HoverCardComponent>
