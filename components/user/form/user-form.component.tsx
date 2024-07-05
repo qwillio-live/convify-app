@@ -401,9 +401,10 @@ export const Form = ({ children, ...props }) => {
           paddingLeft={"0"}
           paddingRight={"0"}
           data-cy-="form-content-input-container"
-          flexDirection="row"
-          marginRight={mobileScreen ? "-30" : "-2" }
-          marginLeft={mobileScreen ? "-30" : "-2" }
+          flexDirection={"row"}
+          mobileFlexDirection={"row"}
+          marginRight={mobileScreen ? "-2" : "-2" }
+          marginLeft={mobileScreen ? "-2" : "-2" }
           marginBottom={"-10"}
           style={{ overflow: "visible", width: ` ${ mobileScreen ? "100%" : "100"}`}}
         >

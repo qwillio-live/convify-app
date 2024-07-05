@@ -498,7 +498,7 @@ export const UserToolbox = () => {
                             floatingLabel={true}
                             marginBottom={0}
                             marginLeft={0}
-                            marginTop={40}
+                            marginTop={0}
                             width={"100%"}
                           />
                           <UserInputGen
@@ -508,7 +508,7 @@ export const UserToolbox = () => {
                             floatingLabel={true}
                             marginBottom={0}
                             marginRight={0}
-                            marginTop={40}
+                            marginTop={0}
                             width={"100%"}
                           />
                         </div>
