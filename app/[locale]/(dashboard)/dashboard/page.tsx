@@ -218,7 +218,7 @@ export default function DashboardPage() {
               <Button
                 variant="link"
                 size="icon"
-                className="shrink-0 md:hidden w-auto px-2"
+                className="shrink-0 md:hidden w-auto px-2 hover:no-underline"
               >
                 <svg
                   width="25"
