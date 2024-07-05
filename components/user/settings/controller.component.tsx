@@ -2,7 +2,7 @@ import { useEditor } from "@/lib/craftjs"
 import { GripHorizontal, GripVertical, Trash2 } from "lucide-react"
 import React from "react"
 import { Move } from "lucide-react"
-import { removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { removeAvatarComponentId, removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 
 export const Controller = ({ nameOfComponent }) => {
@@ -51,6 +51,9 @@ export const Controller = ({ nameOfComponent }) => {
       {/* {isHovered?.isDeletable && ( */}
         <button
           onClick={() => {
+            if (selected.name === "AvatarComponent") {
+              dispatch(removeAvatarComponentId(selected.id));
+            }
             actions.delete(selected.id),
             dispatch(setSelectedComponent("ROOT"));
             if(selected.fieldType === 'data') {
