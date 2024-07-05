@@ -197,7 +197,8 @@
     "Header Scroll" : "Rolagem do Cabeçalho",
     "Fixed" : "Fixo",
     "Scroll" : "Rolar",
-    "Add blocks here" : "Adicione blocos aqui"
+    "Add blocks here" : "Adicione blocos aqui",
+    "Progress_bar_description":"O valor da barra de progresso se adapta automaticamente com base no número da tela atual e no número total de telas. Por exemplo, quando há 10 telas no total e você está na tela 2, mostra 20% de progresso"
   },
   "CreateFlow": {
     "Create": "Criar",

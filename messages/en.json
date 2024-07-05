@@ -197,7 +197,8 @@
     "Header Scroll" : "Header Scroll",
     "Fixed" : "Fixed",
     "Scroll" : "Scroll",
-    "Add blocks here" : "Add blocks here"
+    "Add blocks here" : "Add blocks here",
+    "Progress_bar_description": "The value of the progress bar adapts automatically based on the current screen number and total screen numbers. For example, when there are 10 screens in total and you're on screen 2, it shows 20% progress"
   },
   "CreateFlow": {
     "Create": "Create",

@@ -753,7 +753,6 @@ export const UserToolbox = () => {
                                 paddingRight: 0,
                                 paddingBottom: 0,
                                 paddingTop: 0,
-                                maxValue: screensLength,
                               }
                             : {
                                 ...ProgressBarDefaultProps,
@@ -794,7 +793,6 @@ export const UserToolbox = () => {
                                 paddingRight: 0,
                                 paddingBottom: 0,
                                 paddingTop: 0,
-                                maxValue: screensLength,
                               }
                             : {
                                 ...ProgressBarDefaultProps,

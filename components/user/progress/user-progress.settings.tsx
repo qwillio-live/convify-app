@@ -16,6 +16,7 @@ import {
   Minus,
   RectangleHorizontal,
   GripHorizontal,
+  Ellipsis,
 } from "lucide-react"
 import {
   Tabs,
@@ -67,7 +68,7 @@ import {
 import { RootState } from "@/lib/state/flows-state/store"
 import Image from "next/image"
 
-import dash_icon from "@/assets/images/dash_icon.png"
+import dash_icon from "@/assets/images/dash_icon_new.svg"
 
 export const ProgressBarSettings = () => {
   const t = useTranslations("Components")
@@ -227,10 +228,7 @@ export const ProgressBarSettings = () => {
           <div className="flex flex-row items-start gap-1 text-left">
             <div>
               <p className="text-justify text-sm font-light">
-                The value of the progress bar adapts automatically based on the
-                current screen number and total screen numbers. For example,
-                when there are 10 screens in total and you&apos;re on screen 2,
-                it shows 20% progress.
+                {t("Progress_bar_description")}
               </p>
             </div>
           </div>
@@ -282,15 +280,15 @@ export const ProgressBarSettings = () => {
                       <Minus />
                     </TabsTrigger>
                     <TabsTrigger value="rectangle">
-                      <RectangleHorizontal />
-                    </TabsTrigger>
-                    <TabsTrigger value="grip">
                       <Image
                         src={dash_icon}
                         alt={"rectangle grip"}
-                        height={25}
-                        width={25}
+                        height={28}
+                        width={28}
                       />
+                    </TabsTrigger>
+                    <TabsTrigger value="grip">
+                      <Ellipsis />
                     </TabsTrigger>
                   </TabsList>
                 </Tabs>
@@ -330,12 +328,11 @@ export const ProgressBarSettings = () => {
                   max={screensLength}
                   min={0}
                   step={1}
-                  onValueChange={(e) => {
-                    console.log("onvaluechange called")
+                  onValueChange={(e) =>
                     // setProp((props) => (props.marginTop = e),200)
                     // handlePropChange("marginTop",e)
                     handlePropChangeDebounced("maxValue", e)
-                  }}
+                  }
                 />
               </div>
             </AccordionContent>
