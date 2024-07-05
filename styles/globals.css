@@ -128,7 +128,7 @@ html {
 .react-colorful__last-control {
   margin-top: 12px;
   max-height: 16px;
-  border-radius: 5px !important;
+  border-radius: 3px !important;
 }
 /* .react-colorful__pointer-fill {
   background-color: white !important;

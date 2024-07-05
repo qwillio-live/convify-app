@@ -41,11 +41,13 @@ export default function SelectColor() {
               </BreadcrumbList>
             </Breadcrumb>
             <div className="mt-12">
-              <label className="text-md my-4 font-bold">{t("name")}</label>
-              <Input
-                className="my-3 py-7 placeholder:text-base placeholder:font-normal"
-                placeholder="Enter a title for your new convify"
-              />
+              <label className="my-4 text-xl font-bold">{t("name")}</label>
+              <div className="my-3">
+                <Input
+                  className=" w-[640px] py-[27px] placeholder:text-base placeholder:font-normal"
+                  placeholder="Enter a title for your new convify"
+                />
+              </div>
             </div>
           </div>
 
@@ -60,9 +62,9 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
+        <div className="fixed bottom-8 left-4 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-color"}>
-            <Button variant="outline" size="icon">
+            <Button variant="secondary" size="icon">
               <ChevronLeft className="h-4 w-4" />
             </Button>
           </Link>

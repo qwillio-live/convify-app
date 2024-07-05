@@ -50,7 +50,7 @@ const ColorPicker = ({ color, onChange }) => {
           margin-top: 10px;
           background: white;
           border: 1px solid #ccc;
-          border-radius: 4px;
+          border-radius: 3px;
           padding: 4px;
           display: flex;
           width: 100%;
@@ -71,11 +71,11 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
   const generateSuggestions = (baseColor) => {
     const colorObj = tinycolor(baseColor)
     return [
-      colorObj.lighten(10).toHexString(),
-      colorObj.lighten(20).toHexString(),
       colorObj.darken(10).toHexString(),
-      colorObj.darken(20).toHexString(),
       colorObj.desaturate(10).toHexString(),
+      colorObj.lighten(5).toHexString(),
+      colorObj.lighten(20).toHexString(),
+      colorObj.lighten(10).toHexString(),
     ]
   }
 
@@ -103,7 +103,6 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
           border-radius: 8px;
           padding: 9px;
           background-color: #fff;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .suggestions {
           display: flex;
@@ -192,10 +191,10 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
+        <div className="fixed bottom-8 left-4 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-template"}>
-            <Button variant="outline" size="icon">
-              <ChevronLeft className="h-4 w-4" />
+            <Button variant="secondary" size="icon">
+              <ChevronLeft className="z-10 h-4 w-4" />
             </Button>
           </Link>
 

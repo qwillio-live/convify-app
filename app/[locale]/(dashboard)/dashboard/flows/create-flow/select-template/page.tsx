@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { Separator } from "@/components/ui/separator"
 import {
   Breadcrumb,
@@ -28,6 +28,9 @@ const cardData = [
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState("all")
+  const [isScrolling, setIsScrolling] = useState(false)
+  const scrollTimeout = useRef(null)
+  const cardContainerRef = useRef(null)
   const t = useTranslations("Components")
 
   const handleCardClick = (index) => {
@@ -45,6 +48,24 @@ export default function SelectTemplate() {
   const filteredCards = cardData.filter(
     (card) => selectedCategory === "all" || card.category === selectedCategory
   )
+
+  const handleScroll = () => {
+    setIsScrolling(true)
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current)
+    }
+    scrollTimeout.current = setTimeout(() => {
+      setIsScrolling(false)
+    }, 1000) // Hide scrollbar 1 second after scrolling stops
+  }
+
+  useEffect(() => {
+    const cardContainer = cardContainerRef.current
+    cardContainer.addEventListener("scroll", handleScroll)
+    return () => {
+      cardContainer.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
@@ -71,33 +92,57 @@ export default function SelectTemplate() {
             </Breadcrumb>
             <div className="mb-8 mt-12 flex flex-wrap gap-2">
               <Button
-                className="font-semibold"
+                className={`${
+                  selectedCategory === "Recruiting"
+                    ? "font-semibold"
+                    : "font-normal"
+                }`}
                 size="filterIcon"
-                variant="secondary"
+                variant={`${
+                  selectedCategory === "Recruiting" ? "secondary" : "outline"
+                }`}
                 onClick={() => handleFilterClick("Recruiting")}
               >
                 {t("Recruiting")}
               </Button>
               <Button
-                variant="outline"
+                variant={`${
+                  selectedCategory === "b2cLeadGen" ? "secondary" : "outline"
+                }`}
                 size="filterIcon"
-                className="w-auto font-normal"
+                className={`w-auto ${
+                  selectedCategory === "b2cLeadGen"
+                    ? "font-semibold"
+                    : "font-normal"
+                }`}
                 onClick={() => handleFilterClick("b2cLeadGen")}
               >
                 {t("b2cLeadGen")}
               </Button>
               <Button
-                variant="outline"
+                variant={`${
+                  selectedCategory === "customerFeedback"
+                    ? "secondary"
+                    : "outline"
+                }`}
                 size="filterIcon"
-                className="font-normal"
+                className={`${
+                  selectedCategory === "customerFeedback"
+                    ? "font-semibold"
+                    : "font-normal"
+                }`}
                 onClick={() => handleFilterClick("customerFeedback")}
               >
                 {t("customerFeedback")}
               </Button>
               <Button
-                variant="outline"
+                variant={`${
+                  selectedCategory === "other" ? "secondary" : "outline"
+                }`}
                 size="filterIcon"
-                className="font-normal"
+                className={`${
+                  selectedCategory === "other" ? "font-semibold" : "font-normal"
+                }`}
                 onClick={() => handleFilterClick("other")}
               >
                 {t("other")}
@@ -113,8 +158,11 @@ export default function SelectTemplate() {
             </div>
 
             <div
-              className="grid grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2"
+              className={`custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto md:grid-cols-2 ${
+                isScrolling ? "scrolling" : ""
+              }`}
               style={{ maxHeight: "calc(100vh - 350px)" }}
+              ref={cardContainerRef}
             >
               {filteredCards.map((card, index) => (
                 <div key={card.id} className="pr-2">
@@ -123,13 +171,14 @@ export default function SelectTemplate() {
                     onClick={() => handleCardClick(index)}
                   >
                     {loadingCardIndex === index && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
-                        <div className="loader row flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="loader row flex items-center justify-center text-white">
                           <Loader2 className="loader-icon mr-2" />
                           {t("loading")}
                         </div>
                       </div>
                     )}
+
                     <span data-state="closed">
                       <div className="h-full w-full rounded-md">
                         <img
@@ -171,8 +220,8 @@ export default function SelectTemplate() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
-          <Button variant="outline" size="icon">
+        <div className="fixed bottom-8 left-4 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
+          <Button variant="secondary" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <div className="flex">
@@ -197,6 +246,35 @@ export default function SelectTemplate() {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+          transition: opacity 0.2s;
+          opacity: 0;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: rgba(0, 0, 0, 0.2);
+          border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .custom-scrollbar.scrolling::-webkit-scrollbar {
+          opacity: 1;
+        }
+      `}</style>
     </div>
   )
 }
