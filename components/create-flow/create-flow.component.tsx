@@ -152,6 +152,7 @@ export function CreateFlowComponent() {
   )
 
   React.useEffect(() => {
+    dispatch(setMobileScreen(false))
     dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
     dispatch(setFirstScreenName(startScreenName))
     dispatch(setCurrentScreenName(startScreenName))
@@ -324,7 +325,7 @@ export function CreateFlowComponent() {
                       style={{
                         position: headerPosition as Position,
                         width: mobileScreen ? '384px' : (headerPosition === 'absolute' && !mobileScreen) ? width+'px' : '100%',
-                        top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
+                        top: (mobileScreen && headerPosition === 'absolute' && !headerMode) ? '34px' : (!mobileScreen && headerPosition === 'absolute' && !headerMode) ? '32px' : '0',
                         // top: headerPosition === 'absolute' ? '66px' : '0',
                         // width: width,
                         zIndex: 20,
