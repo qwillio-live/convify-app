@@ -41,22 +41,7 @@ export const EmailContent: React.FC<ContentProps> = ({
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
   const t = useTranslations("CreateFlow.ConnectPage")
-  const currentPath = usePathname()
-  const [flowId, setFlowId] = useState<string | null>(null);
-  const [req, setReq] = useState<boolean>(false)
-  useEffect(() => {
-    const extractFlowIdFromUrl = async () => {
-      const url = currentPath; // Get the current URL
-      const match = url && url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
-      if (match && match[1] && match[1] !== "flows") {
-        setFlowId(match[1]);
-        setReq(!req)
-      } else if (match && match[1] === "flows") {
-        setFlowId(null)
-      }
-    };
-    extractFlowIdFromUrl();
-  }, []);
+  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
 
   useEffect(() => {
     if (flowId) {
@@ -74,24 +59,24 @@ export const EmailContent: React.FC<ContentProps> = ({
         .catch((error) => console.error("Error fetching user data:", error))
         .finally(() => setIsLoading(false))
     }
-  }, [req])
+  }, [])
 
-  const putRequest = (email: string) => {
-    if (flowId) {
-      fetch(`/api/flows/${flowId}/integrations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "email": `${email}`,
-        }),
+  const putRequest = (email: string, flowId: string) => {
+    fetch(`/api/flows/${flowId}/integrations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "email": `${email}`,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setEmail(data.email)
       })
-        .then((res) => res.json())
-        .then((data) => setReq(!req))
-        .catch((error) => console.error("Error fetching user data:", error))
-        .finally(() => setIsLoading(false))
-    }
+      .catch((error) => console.error("Error fetching user data:", error))
+      .finally(() => setIsLoading(false))
   }
 
   // Check if the URL contains "pt" for Portuguese
@@ -134,7 +119,6 @@ export const EmailContent: React.FC<ContentProps> = ({
       handleStatusUpdate("inactive")
     } else {
       handleStatusUpdate("active")
-      setReq(!req)
     }
   }
 
@@ -164,7 +148,10 @@ export const EmailContent: React.FC<ContentProps> = ({
         </AccordionPrimitive.Trigger>
         <div>
           {status !== "active" ? (
-            <Button disabled={!email.trim()} onClick={handleClick} style={buttonStyle}>
+            <Button disabled={!email.trim()} onClick={() => {
+              putRequest(email, flowId ?? "")
+              handleClick()
+            }} style={buttonStyle}>
               {t("Connect")}
             </Button>
           ) : (
@@ -172,12 +159,15 @@ export const EmailContent: React.FC<ContentProps> = ({
               <Button
                 variant="ghost"
                 className="text-red-500 hover:bg-red-100 hover:text-red-500"
-                onClick={handleClick}
+                onClick={() => {
+                  handleClick()
+                  putRequest("", flowId ?? "")
+                }}
                 style={buttonStyle}
               >
                 {t("Disconnect")}
               </Button>
-              <Button style={buttonStyle} onClick={() => { putRequest(email) }}>{t("Save changes")}</Button>
+              <Button style={buttonStyle} onClick={() => { putRequest(email, flowId ?? "") }}>{t("Save changes")}</Button>
             </div>
           )}
         </div>
@@ -263,7 +253,6 @@ export const GAnalytics: React.FC<ContentProps> = ({
       handleStatusUpdate("inactive")
     } else {
       handleStatusUpdate("active")
-      putRequest("", flowId ?? "")
     }
   }
   if (isLoading) {
@@ -322,7 +311,10 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 <Button
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
-                  onClick={handleClick}
+                  onClick={() => {
+                    handleClick()
+                    putRequest("", flowId ?? "")
+                  }}
                   style={buttonStyle}
                 >
                   {t("Disconnect")}
@@ -416,7 +408,6 @@ export const GTagManager: React.FC<ContentProps> = ({
       handleStatusUpdate("inactive")
     } else {
       handleStatusUpdate("active")
-      putRequest("", flowId ?? "")
     }
   }
   if (isLoading) {
@@ -476,7 +467,10 @@ export const GTagManager: React.FC<ContentProps> = ({
                 <Button
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
-                  onClick={handleClick}
+                  onClick={() => {
+                    handleClick()
+                    putRequest("", flowId ?? "")
+                  }}
                   style={buttonStyle}
                 >
                   {t("Disconnect")}
@@ -566,7 +560,6 @@ export const MetaPixel: React.FC<ContentProps> = ({
       handleStatusUpdate("inactive")
     } else {
       handleStatusUpdate("active")
-      putRequest("", "", flowId ?? "")
     }
   }
 
@@ -641,7 +634,10 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 <Button
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
-                  onClick={handleClick}
+                  onClick={() => {
+                    handleClick()
+                    putRequest("", "", flowId ?? "")
+                  }}
                   style={buttonStyle}
                 >
                   {t("Disconnect")}
