@@ -9,9 +9,17 @@ import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
+import { usePathname } from "next/navigation"
 
 type HandleStatusUpdateFunction = (newStatus: string) => void
-
+const extractFlowIdFromUrl = () => {
+  const url = window.location.pathname; // Get the current URL path
+  const match = url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
+  if (match && match[1] && match[1] !== "flows") {
+    return match[1];
+  }
+  return null;
+};
 interface ContentProps {
   handleStatusUpdate: HandleStatusUpdateFunction
   status: string
@@ -28,29 +36,82 @@ export const EmailContent: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [userData, setUserData] = useState<User>()
   const [email, setEmail] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
   const t = useTranslations("CreateFlow.ConnectPage")
+  const currentPath = usePathname()
+  const [flowId, setFlowId] = useState<string | null>(null);
+  const [req, setReq] = useState<boolean>(false)
+  useEffect(() => {
+    const extractFlowIdFromUrl = async () => {
+      const url = currentPath; // Get the current URL
+      const match = url && url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
+      if (match && match[1] && match[1] !== "flows") {
+        setFlowId(match[1]);
+        setReq(!req)
+      } else if (match && match[1] === "flows") {
+        setFlowId(null)
+      }
+    };
+    extractFlowIdFromUrl();
+  }, []);
 
   useEffect(() => {
-    // Check if the URL contains "pt" for Portuguese
+    if (flowId) {
+      fetch(`/api/flows/${flowId}/integrations`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setEmail(data.email)
+        })
+        .catch((error) => console.error("Error fetching user data:", error))
+        .finally(() => setIsLoading(false))
+    }
+  }, [req])
+
+  const putRequest = (email: string) => {
+    if (flowId) {
+      fetch(`/api/flows/${flowId}/integrations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "email": `${email}`,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => setReq(!req))
+        .catch((error) => console.error("Error fetching user data:", error))
+        .finally(() => setIsLoading(false))
+    }
+  }
+
+  // Check if the URL contains "pt" for Portuguese
+  useEffect(() => {
     setIsPortuguese(window.location.href.includes('/pt'))
 
     // Set initial window size
     setIsSmallScreen(window.innerWidth < 400)
 
-    // Fetch user data
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => {
-        setUserData(data)
-        setEmail(data.email)
-      })
-      .catch((error) => console.error("Error fetching user data:", error))
-      .finally(() => setIsLoading(false))
+    if (flowId === "flows") {
+      // Fetch user data
+      fetch("/api/users")
+        .then((res) => res.json())
+        .then((data) => {
+          setEmail(data.email)
+        })
+        .catch((error) => console.error("Error fetching user data:", error))
+        .finally(() => setIsLoading(false))
+    }
+
 
     // Handle window resize
     const handleResize = () => {
@@ -71,9 +132,9 @@ export const EmailContent: React.FC<ContentProps> = ({
   const handleClick = () => {
     if (status === "active") {
       handleStatusUpdate("inactive")
-      setEmail("")
     } else {
       handleStatusUpdate("active")
+      setReq(!req)
     }
   }
 
@@ -82,6 +143,7 @@ export const EmailContent: React.FC<ContentProps> = ({
   }
 
   const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+
 
   return (
     <div className="border-t border-solid border-gray-200 p-5">
@@ -115,7 +177,7 @@ export const EmailContent: React.FC<ContentProps> = ({
               >
                 {t("Disconnect")}
               </Button>
-              <Button style={buttonStyle}>{t("Save changes")}</Button>
+              <Button style={buttonStyle} onClick={() => { putRequest(email) }}>{t("Save changes")}</Button>
             </div>
           )}
         </div>
@@ -128,12 +190,54 @@ export const GAnalytics: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [measurementId, setMeasurementId] = useState<string>("")
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
+  // const currentPath = usePathname()
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState<string>("")
+  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+
+  useEffect(() => {
+    if (flowId) {
+      fetch(`/api/flows/${flowId}/integrations`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setGoogleAnalyticsId(data.googleAnalyticsId)
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error)
+          setIsLoading(false)
+        })
+    }
+  }, [])
+
+  const putRequest = (googleAnalyticsId: string, flowId: string) => {
+    fetch(`/api/flows/${flowId}/integrations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "googleAnalyticsId": `${googleAnalyticsId?.trim()}`,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setGoogleAnalyticsId(data.googleAnalyticsId)
+      })
+      .catch((error) => console.error("Error fetching user data:", error))
+      .finally(() => setIsLoading(false))
+  }
 
   useEffect(() => {
     setIsPortuguese(window.location.href.includes('/pt'))
@@ -151,20 +255,21 @@ export const GAnalytics: React.FC<ContentProps> = ({
   }, [])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMeasurementId(event.target.value)
+    setGoogleAnalyticsId(event.target.value)
   }
 
   const handleClick = () => {
     if (status === "active") {
       handleStatusUpdate("inactive")
-      setMeasurementId("")
     } else {
       handleStatusUpdate("active")
+      putRequest("", flowId ?? "")
     }
   }
-
+  if (isLoading) {
+    return null  // Render nothing while loading
+  }
   const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
-
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
@@ -183,7 +288,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 placeholder="G-XXXXXXXXXX"
                 id="measurement-id"
                 onChange={handleInputChange}
-                value={measurementId}
+                value={googleAnalyticsId}
               />
             </div>
             <p className="mt-0.5 text-xs text-gray-600 text-justify">
@@ -198,11 +303,16 @@ export const GAnalytics: React.FC<ContentProps> = ({
           <div>
             {status !== "active" ? (
               <Button
-                disabled={!measurementId.trim() || isLoading}
-                onClick={handleClick}
+                disabled={!googleAnalyticsId?.trim() || isLoader}
+                onClick={
+                  () => {
+                    putRequest(googleAnalyticsId, flowId ?? "")
+                    handleClick()
+                    setIsLoader(true) // Show loader
+                  }}
                 style={buttonStyle}
               >
-                {isLoading && (
+                {isLoader && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
                 {t("Connect")}
@@ -217,7 +327,9 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button style={buttonStyle}>{t("Save changes")}</Button>
+                <Button style={buttonStyle} onClick={() => {
+                  putRequest(googleAnalyticsId, flowId ?? "")
+                }}>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -231,13 +343,55 @@ export const GTagManager: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [containerId, setContainerId] = useState<string>("")
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
+  const [googleTagManagerId, setGoogleTagManagerId] = useState<string>("")
 
+  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+
+  useEffect(() => {
+    if (flowId) {
+      fetch(`/api/flows/${flowId}/integrations`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setGoogleTagManagerId(data.googleTagManagerId)
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error)
+          setIsLoading(false)
+        })
+    }
+  }, [])
+
+  const putRequest = (googleTagManagerId: string, flowId: string) => {
+    fetch(`/api/flows/${flowId}/integrations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "googleTagManagerId": `${googleTagManagerId?.trim()}`,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setGoogleTagManagerId(data.googleTagManagerId)
+
+      })
+      .catch((error) => console.error("Error fetching user data:", error))
+      .finally(() => setIsLoading(false))
+  }
   useEffect(() => {
     setIsPortuguese(window.location.href.includes('/pt'))
     setIsSmallScreen(window.innerWidth < 400)
@@ -254,18 +408,20 @@ export const GTagManager: React.FC<ContentProps> = ({
   }, [])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContainerId(event.target.value)
+    setGoogleTagManagerId(event.target.value)
   }
 
   const handleClick = () => {
     if (status === "active") {
       handleStatusUpdate("inactive")
-      setContainerId("")
     } else {
       handleStatusUpdate("active")
+      putRequest("", flowId ?? "")
     }
   }
-
+  if (isLoading) {
+    return null  // Render nothing while loading
+  }
   const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
 
   return (
@@ -286,7 +442,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 placeholder="GTM-XXXXXX"
                 id="container-id"
                 onChange={handleInputChange}
-                value={containerId}
+                value={googleTagManagerId}
               />
             </div>
             <p className="mt-0.5 text-xs text-gray-600 text-justify">
@@ -301,11 +457,16 @@ export const GTagManager: React.FC<ContentProps> = ({
           <div>
             {status !== "active" ? (
               <Button
-                disabled={!containerId.trim() || isLoading}
-                onClick={handleClick}
+                disabled={!googleTagManagerId?.trim() || isLoader}
+                onClick={
+                  () => {
+                    putRequest(googleTagManagerId, flowId ?? "")
+                    handleClick()
+                    setIsLoader(true) // Show loader
+                  }}
                 style={buttonStyle}
               >
-                {isLoading && (
+                {isLoader && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
                 {t("Connect")}
@@ -320,7 +481,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button style={buttonStyle}>{t("Save changes")}</Button>
+                <Button style={buttonStyle} onClick={() => putRequest(googleTagManagerId, flowId ?? "")}>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -334,14 +495,57 @@ export const MetaPixel: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [pixelId, setPixelId] = useState<string>("")
-  const [eventName, setEventName] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
 
+  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+  const [metaPixelAccessToken, setMetaPixelAccessToken] = useState<string>("")
+  const [metaPixelId, setMetaPixelId] = useState<string>("")
+
+  useEffect(() => {
+    if (flowId) {
+      fetch(`/api/flows/${flowId}/integrations`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          credentials: "include",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setMetaPixelAccessToken(data.metaPixelAccessToken)
+          setMetaPixelId(data.metaPixelId)
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error)
+          setIsLoading(false)
+        })
+    }
+  }, [])
+
+  const putRequest = (metaPixelAccessToken: string, metaPixelId: string, flowId: string) => {
+    fetch(`/api/flows/${flowId}/integrations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "metaPixelAccessToken": `${metaPixelAccessToken}`,
+        "metaPixelId": `${metaPixelId}`,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMetaPixelAccessToken(data.metaPixelAccessToken)
+        setMetaPixelId(data.metaPixelId)
+      })
+      .catch((error) => console.error("Error fetching user data:", error))
+      .finally(() => setIsLoading(false))
+  }
   useEffect(() => {
     setIsPortuguese(window.location.href.includes('/pt'))
     setIsSmallScreen(window.innerWidth < 400)
@@ -357,24 +561,18 @@ export const MetaPixel: React.FC<ContentProps> = ({
     }
   }, [])
 
-  const handlePixelId = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPixelId(event.target.value)
-  }
-
-  const handleEventName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEventName(event.target.value)
-  }
-
   const handleClick = () => {
     if (status === "active") {
       handleStatusUpdate("inactive")
-      setPixelId("")
-      setEventName("")
     } else {
       handleStatusUpdate("active")
+      putRequest("", "", flowId ?? "")
     }
   }
 
+  if (isLoading) {
+    return null  // Render nothing while loading
+  }
   const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
 
   return (
@@ -394,8 +592,10 @@ export const MetaPixel: React.FC<ContentProps> = ({
               <Input
                 placeholder="124970192730929"
                 id="pixel-id"
-                onChange={handlePixelId}
-                value={pixelId}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setMetaPixelId(event.target.value)
+                }}
+                value={metaPixelId}
               />
             </div>
             <div className="">
@@ -405,8 +605,10 @@ export const MetaPixel: React.FC<ContentProps> = ({
               <Input
                 placeholder="CompleteRegistration"
                 id="event"
-                onChange={handleEventName}
-                value={eventName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setMetaPixelAccessToken(event.target.value)
+                }}
+                value={metaPixelAccessToken}
               />
             </div>
             <p className="mt-0.5 text-xs text-gray-600 text-justify">
@@ -421,11 +623,15 @@ export const MetaPixel: React.FC<ContentProps> = ({
           <div>
             {status !== "active" ? (
               <Button
-                disabled={!pixelId.trim() || isLoading}
-                onClick={handleClick}
+                disabled={!metaPixelId?.trim() || isLoader}
+                onClick={() => {
+                  putRequest(metaPixelAccessToken, metaPixelId, flowId ?? "")
+                  handleClick()
+                  setIsLoader(true) // Show loader
+                }}
                 style={buttonStyle}
               >
-                {isLoading && (
+                {isLoader && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
                 {t("Connect")}
@@ -440,7 +646,9 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button style={buttonStyle}>{t("Save changes")}</Button>
+                <Button style={buttonStyle} onClick={() => {
+                  putRequest(metaPixelAccessToken, metaPixelId, flowId ?? "")
+                }}>{t("Save changes")}</Button>
               </div>
             )}
           </div>

@@ -59,7 +59,6 @@ const ConnectFlowComponents = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("GET request", data)
           setFlowData(data)
         })
         .catch((error) => console.error("Error fetching user data:", error))
@@ -79,11 +78,10 @@ const ConnectFlowComponents = () => {
         }),
       })
         .then((res) => res.json())
-        .then((data) => console.log("PUT request", data))
+        // .then((data) => console.log("PUT request", data))
         .catch((error) => console.error("Error fetching user data:", error))
     }
   }, [flowId])
-
 
   // Define the update function
   const updateStatus = (id, newStatus) => {
