@@ -336,9 +336,9 @@ export function CreateFlowComponent() {
                   <div
                     id="editor-content"
                     style={{
-                      marginTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
+                      paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
                       backgroundColor: headerMode ? avatarBackgroundColor : '',
-                      paddingTop: !headerMode ? '25px' : '',
+                      // paddingTop: !headerMode ? '25px' : '',
                     }}>
                     <Frame data={editorLoad}></Frame>
                   </div>
