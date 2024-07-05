@@ -330,7 +330,7 @@ export const TextImageComponentGen = ({
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <div style={{
                             display: 'flex',
-                            flexDirection: mobileScreen ? 'column' : 'row',
+                            flexDirection: 'row',
                             width: '100%',
                             gap: !mobileScreen ? `${adjustedHorizontalGap}px` : `${verticalGap}px`,
                             marginLeft: `${Left}px`,
@@ -340,7 +340,7 @@ export const TextImageComponentGen = ({
                             boxSizing: 'border-box',
                             overflow: 'hidden',
                         }}>
-                            {!mobileScreen ? (
+                            {
                                 position === 'left' ? (
                                     <>
                                         <div style={{
@@ -472,67 +472,7 @@ export const TextImageComponentGen = ({
                                         </div>
                                     </>
                                 )
-                            ) : (
-                                <>
-                                    <div style={{ ...mobileVerticalGapStyle }}>
-                                        <img
-                                            alt={alt}
-                                            src={src}
-                                            style={{
-                                                width: width === 'medium' ? '85%' : width,
-                                                height: height,
-                                                borderRadius: `${cornerRadius}px`,
-                                                backgroundColor: background,
-                                                marginLeft: `${Left}px`,
-                                                marginRight: `${Right}px`,
-                                                marginTop: `${Top}px`,
-                                                marginBottom: `${Bottom}px`,
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="text-start items-start self-center w-[85%] m-auto">
-                                        <ContentEditable
-                                            html={title}
-                                            innerRef={titleRef}
-                                            disabled={true}
-                                            style={{
-                                                maxWidth: '100%',
-                                                fontSize: `${titleFontSize}px`,
-                                                color: primaryTextColor,
-                                                fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                                                fontFamily: `var(${fontFamily.value})`,
-                                                transitionProperty: 'all',
-                                                overflowX: 'clip',
-                                                textOverflow: 'ellipsis',
-                                            }}
-                                            onChange={(e) => {
-                                                handleTitleChange(e);
-                                            }}
-                                            tagName="h1"
-                                        />
-                                        <ContentEditable
-                                            html={Text}
-                                            innerRef={ref}
-                                            disabled={true}
-                                            style={{
-                                                maxWidth: '100%',
-                                                fontSize: `${textFontSize}px`,
-                                                color: secondaryTextColor,
-                                                fontWeight: fontWeightMap[textFontWeight],
-                                                fontFamily: `var(${secondaryFontFamily.value})`,
-                                                transitionProperty: 'all',
-                                                overflowX: 'clip',
-                                                textOverflow: 'ellipsis',
-                                            }}
-                                            className={`min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500`}
-                                            onChange={(e) => {
-                                                handleTextChange(e);
-                                            }}
-                                            tagName="div"
-                                        />
-                                    </div>
-                                </>
-                            )}
+                            }
                         </div>
                     }
                 </div>

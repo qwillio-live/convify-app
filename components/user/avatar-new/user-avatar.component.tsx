@@ -15,52 +15,6 @@ import AvatarPlaceholder from '@/assets/images/default-avatar.webp'
 import classNames from 'classnames';
 import './styles.css';
 
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-};
-
-const IconGenerator = ({ icon, size, className = '', ...rest }) => {
-  const IconComponent = IconsList[icon];
-
-  if (!IconComponent) {
-    return null; // or some default icon or error handling
-  }
-
-  return <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />;
-};
-
-
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1rem",
-  large: "1.2rem",
-}
-const IconSizeValues = {
-  small: 18,
-  medium: 22,
-  large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
-
 const ButtonTextLimit = {
   small: 100,
   // small: 22,
@@ -149,10 +103,6 @@ export const AvatarComponentGen = ({
           <div
             ref={avatarRef}
             id="avatar-component"
-            // style={{
-            //   position: 'absolute',
-            //   transition: 'transform 0.3s ease-in-out',
-            // }}
             className={classNames(
               avatarClass,
               hasComponentBeforeAvatar ? 'absolute transition-transform translate-y-[-50%] ease-in-out duration-300' : ''
@@ -174,86 +124,6 @@ export const AvatarComponentGen = ({
     </div>
   );
 };
-interface StyledCustomButtonProps {
-  fontFamily?: string
-  color?: string
-  background?: string
-  backgroundHover?: string
-  colorHover?: string
-  size?: string
-  buttonSize?: string
-  marginLeft?: string | number
-  width?: string | number
-  height?: string | number
-  marginRight?: string | number
-  marginTop?: string | number
-  marginBottom?: string | number
-  paddingLeft?: string | number
-  paddingTop?: string | number
-  paddingRight?: string | number
-  paddingBottom?: string | number
-  radius?: number
-  flexDirection?: string
-  alignItems?: string
-  justifyContent?: string
-  gap?: number
-  border?: number
-  borderColor?: string
-  borderHoverColor?: string
-  mobileScreen: boolean
-}
-const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-
-  background: ${(props) => props.background};
-  color: ${(props) => props.color};
-  overflow: hidden;
-  max-width: ${(props) => props.mobileScreen ? IconButtonMobileSizeValues[props.size || "medium"] : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
-  }
-`;
 
 export const UserLogo = ({
   alt,

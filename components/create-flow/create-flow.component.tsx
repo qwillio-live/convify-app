@@ -10,7 +10,7 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from 'lodash';
 
 
@@ -114,6 +114,7 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const [topMargin, setTopMargin] = React.useState<number>(0);
   const dispatch = useAppDispatch()
+  
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -182,6 +183,8 @@ export function CreateFlowComponent() {
     dispatch(setScrollY(scrollTop));
   };
 
+ 
+
   React.useEffect(() => {
     if (headerMode) {
       const height = document?.getElementById("editor-content")?.offsetHeight || 0;
@@ -209,7 +212,7 @@ export function CreateFlowComponent() {
 
     // Cleanup event listener on component unmount
     return () => window.removeEventListener('resize', updateWidth);
-  }, [headerMode, height]);
+  }, [headerMode, height]); 
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
