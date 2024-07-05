@@ -298,12 +298,10 @@ export const TextImageComponentGen = ({
     const adjustedHorizontalGap = Math.min(horizontalGap, 100);
     const totalGap = adjustedHorizontalGap * (mobileScreen ? 0 : 1);
 
-
     return (
         <div
-            className=""
             style={{
-                width: "100%",
+                width: size == 'small' ? '600px' : (size == 'medium' ? '800px' : (size == 'large' ? '1200px' : (size == 'full' ? '1400px' : '100%'))),
                 display: "flex",
                 justifyContent: "center",
             }}
@@ -347,6 +345,8 @@ export const TextImageComponentGen = ({
                                             flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                                             maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                                             alignSelf: `${bothAlign}`,
+                                            display: 'flex',
+                                            justifyContent: 'center'
                                         }}>
                                             <img
                                                 alt={alt}
@@ -458,6 +458,8 @@ export const TextImageComponentGen = ({
                                             flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                                             maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                                             alignSelf: `${bothAlign}`,
+                                            display: 'flex',
+                                            justifyContent: 'center'
                                         }}>
                                             <img
                                                 alt={alt}
@@ -480,84 +482,6 @@ export const TextImageComponentGen = ({
         </div>
     )
 }
-interface StyledCustomButtonProps {
-    fontFamily?: string
-    color?: string
-    background?: string
-    backgroundHover?: string
-    colorHover?: string
-    size?: string
-    buttonSize?: string
-    marginLeft?: string | number
-    width?: string | number
-    height?: string | number
-    marginRight?: string | number
-    marginTop?: string | number
-    marginBottom?: string | number
-    paddingLeft?: string | number
-    paddingTop?: string | number
-    paddingRight?: string | number
-    paddingBottom?: string | number
-    radius?: number
-    flexDirection?: string
-    alignItems?: string
-    justifyContent?: string
-    gap?: number
-    border?: number
-    borderColor?: string
-    borderHoverColor?: string
-    mobileScreen: boolean
-}
-const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-  color: ${(props) => props.color};
-  overflow: hidden;
-  max-width: ${(props) => props.mobileScreen ? IconButtonMobileSizeValues[props.size || "medium"] : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
-  }
-`;
 
 export const UserLogo = ({
     alt,
@@ -706,6 +630,8 @@ export const UserLogo = ({
                             flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             alignSelf: `${bothAlign}`,
+                            display: 'flex',
+                            justifyContent: 'center'
                         }}>
                             <img
                                 alt={alt}
@@ -812,6 +738,8 @@ export const UserLogo = ({
                             flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             alignSelf: `${bothAlign}`,
+                            display: 'flex',
+                            justifyContent: 'center'
                         }}>
                             <img
                                 alt={alt}
