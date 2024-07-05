@@ -73,7 +73,8 @@ const ButtonTextLimit = {
     large: 100,
     full: 100,
 }
-export const TextImageComponentGen = ({
+
+export const TextImageComponentPreview = ({
     disabled,
     fontFamily,
     enableLink,
@@ -161,6 +162,380 @@ export const TextImageComponentGen = ({
                     overflowX: 'clip',
                     textOverflow: 'ellipsis',
                 }}>{t("This is the Text")}</p>
+            </div>
+        </div>
+    )
+}
+
+export const TextImageComponentGen = ({
+    disabled,
+    fontFamily,
+    enableLink,
+    size,
+    buttonSize,
+    color,
+    text,
+    marginLeft,
+    width: width,
+    height: height,
+    marginRight,
+    marginTop,
+    containerBackground,
+    marginBottom,
+    background,
+    backgroundHover,
+    colorHover,
+    icon,
+    paddingLeft,
+    paddingTop,
+    paddingRight,
+    paddingBottom,
+    radius,
+    flexDirection,
+    alignItems,
+    justifyContent,
+    gap,
+    border,
+    borderColor,
+    borderHoverColor,
+    nextScreen,
+    secondaryFontFamily,
+    titleFontWeight,
+    textFontWeight,
+    titleFontSize,
+    textFontSize,
+    title,
+    align,
+    verticalGap,
+    horizontalGap,
+    bothAlign,
+    Top,
+    Bottom,
+    Left,
+    Right,
+    cornerRadius,
+    split,
+    position,
+    src,
+    alt,
+    setProp,
+    Text,
+    ...props
+}) => {
+
+    const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
+    const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
+    const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
+    const ref = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
+
+    const handleTextChange = useCallback(
+        (e) => {
+            const value = e.target.value
+            if (typeof value === "string" && value.length) {
+                setProp((props) => {
+                    props.Text = value
+                    return { ...props }
+                })
+            }
+        },
+        [setProp]
+    )
+    const handleTitleChange = useCallback(
+        (e) => {
+            const value = e.target.value
+            if (typeof value === "string" && value.length) {
+                setProp((props) => {
+                    props.title = value
+                    return { ...props }
+                })
+            }
+        },
+        [setProp]
+    )
+
+    useEffect(() => {
+        const currentRef = ref.current
+        if (currentRef) {
+            currentRef.addEventListener("input", handleTextChange)
+        }
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener("input", handleTextChange)
+            }
+        }
+    }, [handleTextChange])
+
+    useEffect(() => {
+        const currentRef = titleRef.current
+        if (currentRef) {
+            currentRef.addEventListener("input", handleTitleChange)
+        }
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener("input", handleTitleChange)
+            }
+        }
+    }, [handleTitleChange])
+
+
+    const adjustedSplit = Math.max(1, Math.min(split, 11));
+    const textSplit = 12 - adjustedSplit;
+
+    const fontWeightMap = {
+        thin: 100,
+        normal: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+        extrabold: 800,
+    };
+
+    const mobileVerticalGapStyle = {
+        marginBottom: mobileScreen ? `${verticalGap}px` : "0",
+    };
+
+    const adjustedHorizontalGap = Math.min(horizontalGap, 100);
+    const totalGap = adjustedHorizontalGap * (mobileScreen ? 0 : 1);
+
+
+    return (
+        <div
+            className=""
+            style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+            }}
+        >
+            <div className="relative w-full"
+                style={{
+                    background: `${containerBackground}`,
+                    display: "inline-flex",
+                    justifyContent: "center",
+                    boxSizing: 'border-box',
+                    minWidth: '100%',
+                    maxWidth: '100%',
+                    paddingTop: `${props.marginTop}px`,
+                    paddingBottom: `${props.marginBottom}px`,
+                    paddingLeft: `${props.marginLeft}px`,
+                    paddingRight: `${props.marginRight}px`,
+                }}>
+                <div
+                    className={cn(
+                        `relative flex flex-row justify-${align} w-full border border-transparent`
+                    )}
+                >
+                    {
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: mobileScreen ? 'column' : 'row',
+                            width: '100%',
+                            gap: !mobileScreen ? `${adjustedHorizontalGap}px` : `${verticalGap}px`,
+                            marginLeft: `${Left}px`,
+                            marginRight: `${Right}px`,
+                            marginTop: `${Top}px`,
+                            marginBottom: `${Bottom}px`,
+                            boxSizing: 'border-box',
+                            overflow: 'hidden',
+                        }}>
+                            {!mobileScreen ? (
+                                position === 'left' ? (
+                                    <>
+                                        <div style={{
+                                            flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            alignSelf: `${bothAlign}`,
+                                        }}>
+                                            <img
+                                                alt={alt}
+                                                src={src}
+                                                style={{
+                                                    width: width === 'medium' ? '90%' : width,
+                                                    height: height,
+                                                    borderRadius: `${cornerRadius}px`,
+                                                    backgroundColor: background,
+                                                }}
+                                            />
+                                        </div>
+                                        <div className={`text-start items-center`} style={{
+                                            flex: `0 0 calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            marginTop: bothAlign == 'start' ? '20px' : '',
+                                            alignSelf: `${bothAlign}`,
+                                        }}>
+                                            <ContentEditable
+                                                html={title}
+                                                innerRef={titleRef}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                                                    fontFamily: `var(${fontFamily.value})`,
+                                                    color: primaryTextColor,
+                                                    fontSize: `${titleFontSize}px`,
+                                                    transitionProperty: 'all',
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTitleChange(e);
+                                                }}
+                                                tagName="h1"
+                                            />
+                                            <ContentEditable
+                                                html={Text}
+                                                innerRef={ref}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    fontWeight: fontWeightMap[textFontWeight],
+                                                    color: secondaryTextColor,
+                                                    marginTop: '15px',
+                                                    fontFamily: `var(${secondaryFontFamily.value})`,
+                                                    fontSize: `${textFontSize}px`,
+                                                    transitionProperty: 'all',
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTextChange(e);
+                                                }}
+                                                tagName="div"
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className={`text-start items-start self-center`} style={{
+                                            flex: `0 0 calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            marginTop: bothAlign == 'start' ? '20px' : '',
+                                            alignSelf: `${bothAlign}`,
+                                        }}>
+                                            <ContentEditable
+                                                html={title}
+                                                innerRef={titleRef}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                                                    fontFamily: `var(${fontFamily.value})`,
+                                                    color: primaryTextColor,
+                                                    fontSize: `${titleFontSize}px`,
+                                                    transitionProperty: 'all',
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTitleChange(e);
+                                                }}
+                                                tagName="h1"
+                                            />
+                                            <ContentEditable
+                                                html={Text}
+                                                innerRef={ref}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    transitionProperty: 'all',
+                                                    marginTop: '15px',
+                                                    fontSize: `${textFontSize}px`,
+                                                    color: secondaryTextColor,
+                                                    fontWeight: fontWeightMap[textFontWeight],
+                                                    fontFamily: `var(${secondaryFontFamily.value})`,
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTextChange(e);
+                                                }}
+                                                tagName="div"
+                                            />
+                                        </div>
+                                        <div style={{
+                                            flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            alignSelf: `${bothAlign}`,
+                                        }}>
+                                            <img
+                                                alt={alt}
+                                                src={src}
+                                                style={{
+                                                    width: width === 'medium' ? '90%' : width,
+                                                    height: height,
+                                                    borderRadius: `${cornerRadius}px`,
+                                                    backgroundColor: background,
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                )
+                            ) : (
+                                <>
+                                    <div style={{ ...mobileVerticalGapStyle }}>
+                                        <img
+                                            alt={alt}
+                                            src={src}
+                                            style={{
+                                                width: width === 'medium' ? '85%' : width,
+                                                height: height,
+                                                borderRadius: `${cornerRadius}px`,
+                                                backgroundColor: background,
+                                                marginLeft: `${Left}px`,
+                                                marginRight: `${Right}px`,
+                                                marginTop: `${Top}px`,
+                                                marginBottom: `${Bottom}px`,
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="text-start items-start self-center w-[85%] m-auto">
+                                        <ContentEditable
+                                            html={title}
+                                            innerRef={titleRef}
+                                            disabled={true}
+                                            style={{
+                                                maxWidth: '100%',
+                                                fontSize: `${titleFontSize}px`,
+                                                color: primaryTextColor,
+                                                fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                                                fontFamily: `var(${fontFamily.value})`,
+                                                transitionProperty: 'all',
+                                                overflowX: 'clip',
+                                                textOverflow: 'ellipsis',
+                                            }}
+                                            onChange={(e) => {
+                                                handleTitleChange(e);
+                                            }}
+                                            tagName="h1"
+                                        />
+                                        <ContentEditable
+                                            html={Text}
+                                            innerRef={ref}
+                                            disabled={true}
+                                            style={{
+                                                maxWidth: '100%',
+                                                fontSize: `${textFontSize}px`,
+                                                color: secondaryTextColor,
+                                                fontWeight: fontWeightMap[textFontWeight],
+                                                fontFamily: `var(${secondaryFontFamily.value})`,
+                                                transitionProperty: 'all',
+                                                overflowX: 'clip',
+                                                textOverflow: 'ellipsis',
+                                            }}
+                                            className={`min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500`}
+                                            onChange={(e) => {
+                                                handleTextChange(e);
+                                            }}
+                                            tagName="div"
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     )
