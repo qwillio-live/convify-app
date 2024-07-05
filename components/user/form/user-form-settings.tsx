@@ -107,7 +107,7 @@ export const FormSettings = () => {
             <span className="text-sm font-medium">{t("Layout")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
+            {/* <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
               <Label className="text-md text-muted-foreground col-span-1">
                 {t("Layout Desktop")}
               </Label>
@@ -179,7 +179,7 @@ export const FormSettings = () => {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-            </div>
+            </div> */}
 {
   ((mobileScreen && mobileFlexDirection === "row") || (!mobileScreen && flexDirection === "row")) && (
     <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">

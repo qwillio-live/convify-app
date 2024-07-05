@@ -292,10 +292,10 @@ export const FormContentDefaultProps: FormContentDefaultPropsTypes = {
   height: "200",
   background: "transparent",
   color: "#000000",
-  marginLeft: "2",
-  marginTop: "2",
-  marginRight: "2",
-  marginBottom: "2",
+  marginLeft: "0",
+  marginTop: "20",
+  marginRight: "0",
+  marginBottom: "20",
   paddingLeft: "12",
   paddingTop: "40",
   paddingRight: "12",
@@ -363,6 +363,8 @@ export const Form = ({ children, ...props }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
 
+  const adjustWidth = props.size
+
   return (
     <FormContainer
       background={props.background}
@@ -397,16 +399,19 @@ export const Form = ({ children, ...props }) => {
           id="text-input-container"
           is={FormContent}
           paddingTop={"0"}
+          fillSpace={"0"}
           paddingBottom={"0"}
           paddingLeft={"0"}
           paddingRight={"0"}
+          size={"full"}
           data-cy-="form-content-input-container"
           flexDirection={"row"}
           mobileFlexDirection={"row"}
-          marginRight={mobileScreen ? "-2" : "-2" }
-          marginLeft={mobileScreen ? "-2" : "-2" }
-          marginBottom={"-10"}
-          style={{ overflow: "visible", width: ` ${ mobileScreen ? "100%" : "100"}`}}
+          marginRight={"0"}
+          marginLeft={"-2"}
+          marginBottom={"0"}
+          marginTop={"0"}
+          style={{ overflow: "visible"}}
         >
           <Element
             canvas
@@ -435,10 +440,12 @@ export const Form = ({ children, ...props }) => {
             backgroundColor={"transparent"}
             marginBottom={0}
             marginleft={0}
+            paddingRight={0}
             marginRight={0}
             marginTop={0}
             size={"full"}
-            style={{ overflow: "visible" }}
+            style={{ overflow: "visible"}}
+            
           />
         </Element>
         <Element
@@ -452,6 +459,8 @@ export const Form = ({ children, ...props }) => {
           paddingRight={"4px"}
           label={t("EmailLabel")}
           fieldName={t("EmailFieldName")}
+          size={"full"}
+
         />
         <Element
           canvas
@@ -465,6 +474,8 @@ export const Form = ({ children, ...props }) => {
           marginBottom={0}
           label={t("PhoneLabel")}
           fieldName={t("PhoneFieldName")}
+          size={"full"}
+
         />
         <Element
           canvas
@@ -475,6 +486,8 @@ export const Form = ({ children, ...props }) => {
           label={t("CheckboxPlaceholder")}
           fieldName={t("CheckboxFieldName")}
           inputRequired={false}
+          size={"full"}
+
         />
         <Element
           canvas
@@ -484,7 +497,6 @@ export const Form = ({ children, ...props }) => {
           marginTop={0}
           marginBottom={0}
           text={t("Submit")}
-          gap={220}
           size={"full"}
         />
 
