@@ -37,9 +37,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button as CustomButton } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/custom-checkbox"
+import { Card as UiCard } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -67,12 +65,15 @@ import {
   useScreensLength,
 } from "@/lib/state/flows-state/features/screenHooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import Image from "next/image"
+
+import dash_icon from "@/assets/images/dash_icon.png"
 
 export const ProgressBarSettings = () => {
   const t = useTranslations("Components")
   const screenNames = useScreenNames()
   console.log("SCREEN NAMES: ", screenNames)
-  const screensLength = useScreensLength()
+  const screensLength: number = useScreensLength() ?? 0
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
@@ -212,17 +213,28 @@ export const ProgressBarSettings = () => {
   const themeBackgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
-
+  useEffect(() => {
+    debouncedSetProp("maxValue", screensLength)
+  }, [screensLength])
   return (
     <>
       {isHeaderFooterMode ? (
-        <span>
-          The value of the progress bar adapts automatically based on the
-          current screen number and total screen numbers. For example, when
-          there are 10 screens in total and you&apos;re on screen 2, it shows
-          20% progress. The progress bar does not take conditional logic into
-          consideration.
-        </span>
+        <UiCard
+          className={cn(
+            "flex flex-col items-center justify-center border border-gray-500 px-4 py-3"
+          )}
+        >
+          <div className="flex flex-row items-start gap-1 text-left">
+            <div>
+              <p className="text-justify text-sm font-light">
+                The value of the progress bar adapts automatically based on the
+                current screen number and total screen numbers. For example,
+                when there are 10 screens in total and you&apos;re on screen 2,
+                it shows 20% progress.
+              </p>
+            </div>
+          </div>
+        </UiCard>
       ) : (
         <Accordion
           value={settingsTab || "content"}
@@ -273,7 +285,12 @@ export const ProgressBarSettings = () => {
                       <RectangleHorizontal />
                     </TabsTrigger>
                     <TabsTrigger value="grip">
-                      <GripHorizontal />
+                      <Image
+                        src={dash_icon}
+                        alt={"rectangle grip"}
+                        height={25}
+                        width={25}
+                      />
                     </TabsTrigger>
                   </TabsList>
                 </Tabs>
@@ -308,16 +325,17 @@ export const ProgressBarSettings = () => {
                 </div>
                 <Slider
                   className=""
-                  defaultValue={[maxValue]}
+                  // defaultValue={[maxValue]}
                   value={[maxValue]}
-                  max={25}
+                  max={screensLength}
                   min={0}
                   step={1}
-                  onValueChange={(e) =>
+                  onValueChange={(e) => {
+                    console.log("onvaluechange called")
                     // setProp((props) => (props.marginTop = e),200)
                     // handlePropChange("marginTop",e)
                     handlePropChangeDebounced("maxValue", e)
-                  }
+                  }}
                 />
               </div>
             </AccordionContent>

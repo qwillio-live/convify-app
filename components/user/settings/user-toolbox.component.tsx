@@ -125,6 +125,7 @@ import useBackThemePresets from "../backButton/back-theme"
 import { BackButton, BackButtonGen } from "../backButton/back-component"
 import { LinkButton, LinkButtonGen } from "../link/link-component"
 import useLinkThemePresets from "../link/link-theme"
+import { useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
 
 function HelperInformation() {
   return (
@@ -239,6 +240,8 @@ export const UserToolbox = () => {
   const isHeaderFooterMode = useAppSelector(
     (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
   )
+
+  const screensLength: number = useScreensLength() ?? 0
 
   return (
     <div className="p-y" draggable={false}>
@@ -750,6 +753,7 @@ export const UserToolbox = () => {
                                 paddingRight: 0,
                                 paddingBottom: 0,
                                 paddingTop: 0,
+                                maxValue: screensLength,
                               }
                             : {
                                 ...ProgressBarDefaultProps,
@@ -763,6 +767,7 @@ export const UserToolbox = () => {
                                 marginRight: 0,
                                 marginTop: 20,
                                 marginBottom: 20,
+                                maxValue: screensLength,
                               })}
                         />
                       )
@@ -789,6 +794,7 @@ export const UserToolbox = () => {
                                 paddingRight: 0,
                                 paddingBottom: 0,
                                 paddingTop: 0,
+                                maxValue: screensLength,
                               }
                             : {
                                 ...ProgressBarDefaultProps,
@@ -804,6 +810,7 @@ export const UserToolbox = () => {
                                 marginTop: 0,
                                 marginBottom: 0,
                                 radius: 0,
+                                maxValue: screensLength,
                               })}
                           // Uncomment the following line if you need to set a value for the progress bar
                           // value={50}

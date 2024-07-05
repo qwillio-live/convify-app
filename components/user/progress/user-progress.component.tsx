@@ -353,8 +353,7 @@ export const ProgressBarGen = ({
         mobileScreen={false}
         {...props}
         className="text-[1rem]"
-        onClick={disabled}
-        disabled={true}
+        // onClick={disabled}
       >
         <Progress
           value={
@@ -369,7 +368,7 @@ export const ProgressBarGen = ({
             marginRight: `${props.marginRight}px`,
           }}
           // style={{ maxWidth: `${maxWidth}px` }}
-          className={`h-1 ${fullWidth ? "w-full" : ""}`}
+          className={`h-1 ${fullWidth ? "w-full" : ""} `}
           indicatorColor={primaryColor || color}
         />
       </StyledCustomButton>
@@ -776,7 +775,9 @@ export const ProgressBar = ({
                   : (progressvalue / maxValue) * 100
               }
               // style={{ maxWidth: `${maxWidth}px` }}
-              className={`h-1 ${fullWidth ? "w-full" : ""}`}
+              className={`h-1 ${fullWidth ? "w-full" : ""} ${
+                size === "full" ? "" : "rounded-full"
+              }`}
               indicatorColor={primaryColor || color}
             />
           ) : (
