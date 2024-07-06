@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback,useState } from "react"
 import ContentEditable from "react-contenteditable"
-import {throttle} from "lodash"
+import {throttle,debounce} from "lodash"
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
   Accordion,
@@ -38,7 +38,8 @@ import {
   AlignHorizontalJustifyStart,
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyCenter,
-  AlignHorizontalSpaceBetween
+  AlignHorizontalSpaceBetween,
+  Image
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import useInputThemePresets from "./useInputThemePresets"
@@ -46,6 +47,7 @@ import { UserInput, UserInputGen } from "./user-input.component"
 import { useTranslations } from "next-intl"
 import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 import { setFieldProp } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 
 export const UserInputSettings = () => {
   const t = useTranslations("Components")
@@ -61,6 +63,7 @@ export const UserInputSettings = () => {
     width,
     props,
     parent,
+    props:{ enableIcon, icon}
   } = useNode((node) => ({
     parent: node.data.parent,
     compId: node.id,
@@ -110,6 +113,22 @@ export const UserInputSettings = () => {
     }, 200), // Throttle to 50ms to 200ms
     [setProp]
   );
+
+  const debouncedSetProp = useCallback(
+    debounce((property,value) => {
+      setProp((prop) => {prop[property] = value},0);
+    }),[setProp])
+
+  const handlePropChangeDebounced = (property,value) => {
+    debouncedSetProp(property,value);
+  }
+  const handlePictureChange = (picture, pictureType) => {
+    // setChoice({ ...choice, picture, pictureType })
+    handlePropChangeDebounced("icon", {
+      picture,
+      pictureType,
+    })
+  }
 
   const handlePropChange = (property,value) => {
     throttledSetProp(property,value);
@@ -243,44 +262,25 @@ export const UserInputSettings = () => {
             </div>
 
           <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
-          {props.enableIcon && (
+          {enableIcon && (
                 <>
                   <p className="text-md flex-1 text-muted-foreground">{t("Icon")}</p>
-                  <Select
-                    defaultValue={props.icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="arrowright">
-                          <ArrowRight />
-                        </SelectItem>
-                        <SelectItem value="aperture">
-                          <Aperture />
-                        </SelectItem>
-                        <SelectItem value="activity">
-                          <Activity />
-                        </SelectItem>
-                        <SelectItem value="dollarsign">
-                          <DollarSign />
-                        </SelectItem>
-                        <SelectItem value="anchor">
-                          <Anchor />
-                        </SelectItem>
-                        <SelectItem value="disc">
-                          <Disc />
-                        </SelectItem>
-                        <SelectItem value="mountain">
-                          <Mountain />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex w-full items-center gap-2">
+        <PicturePicker
+          className="transition-all duration-100 ease-in-out"
+          picture={
+            icon.pictureType === PictureTypes.NULL ? (
+              <Image className="text-muted-foreground size-4" />
+            ) : (
+              icon.picture
+            )
+          }
+          pictureType={icon.pictureType}
+          maxWidthMobile={400}
+          maxWidthDesktop={400}
+          onChange={handlePictureChange}
+        />
+      </div>
                 </>
               )}
             </div>

@@ -3,6 +3,7 @@ import { darken, rgba } from "polished"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import { UserInputProps, UserInputSizes } from "./user-input.component"
+import { PictureTypes } from "@/components/PicturePicker"
 
 const useInputThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
@@ -76,7 +77,10 @@ const useInputThemePresets = () => {
     fieldName: "Field name",
     floatingLabel: false,
     enableIcon: false,
-    icon: "arrowright",
+    icon: {
+      picture: "interface-arrows-right-arrow-right-keyboard",
+      pictureType: PictureTypes.ICON,
+    },
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -151,7 +155,10 @@ const useInputThemePresets = () => {
     fieldName: "Field name",
     floatingLabel: false,
     enableIcon: false,
-    icon: "arrowright",
+    icon: {
+      picture: "interface-arrows-right-arrow-right-keyboard",
+      pictureType: PictureTypes.ICON,
+    },
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",

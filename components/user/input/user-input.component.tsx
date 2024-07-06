@@ -37,6 +37,7 @@ import { UserInputSettings } from "./user-input-settings.component"
 import { setFieldProp, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useForm, useFormContext } from "react-hook-form"
 import { RootState } from "@/lib/state/flows-state/store"
+import { ImagePictureTypes, PictureTypes, SvgRenderer } from "@/components/PicturePicker"
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
 
@@ -66,6 +67,7 @@ const UserInputSizeValues = {
 }
 
 export const UserInputGen = ({ ...props }) => {
+  const icon = props.icon;
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
   useEffect(() => {
@@ -176,7 +178,7 @@ export const UserInputGen = ({ ...props }) => {
               }}
               className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
-                (inputValue.length > 0 && props.floatingLabel)
+                (inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 text-sm pl-3 pt-1 text-gray-400"
                   : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
               } ${
@@ -217,7 +219,29 @@ export const UserInputGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                {
+                  icon.pictureType === PictureTypes.ICON ? (
+                    <SvgRenderer
+                      iconName={icon.picture}
+                    />
+                  ) : icon.pictureType === PictureTypes.EMOJI ? (
+                    <span className={cn("flex items-center justify-center text-[28px]")}>
+                      {icon.picture}
+                    </span>
+                  ) : (
+                    <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+                      <source
+                        media="(max-width:250px)"
+                        srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+                      />
+                      <img
+                        src={(icon.picture as ImagePictureTypes)?.desktop}
+                        className={cn("h-auto overflow-hidden object-cover w-7")}
+                        loading="lazy"
+                      />
+                    </picture>
+                  )
+                }
               </div>
             )}
             <UserInputStyled
@@ -351,8 +375,10 @@ export const UserInput = ({ ...props }) => {
     selected,
     isHovered,
     actions: { setProp },
+    props: {icon}
   } = useNode((state) => ({
     compId: state.id,
+    props: state.data.props,
     parent: state.data.parent,
     selected: state.events.selected,
     dragged: state.events.dragged,
@@ -556,7 +582,31 @@ export const UserInput = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                {
+                  icon.pictureType === PictureTypes.ICON ? (
+                    <SvgRenderer
+                      iconName={icon.picture}
+                      // width={IconSizeValues[buttonSize]}
+                      // height={IconSizeValues[buttonSize]}
+                    />
+                  ) : icon.pictureType === PictureTypes.EMOJI ? (
+                    <span className={cn("flex items-center justify-center text-[28px]")}>
+                      {icon.picture}
+                    </span>
+                  ) : (
+                    <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+                      <source
+                        media="(max-width:250px)"
+                        srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+                      />
+                      <img
+                        src={(icon.picture as ImagePictureTypes)?.desktop}
+                        className={cn("h-auto overflow-hidden object-cover w-7")}
+                        loading="lazy"
+                      />
+                    </picture>
+                  )
+                }
               </div>
             )}
             <UserInputStyled
@@ -694,7 +744,10 @@ export type UserInputProps = {
   fieldName: string
   floatingLabel: boolean
   enableIcon: boolean
-  icon: string
+  icon: {
+    picture: ImagePictureTypes | string | null
+    pictureType: PictureTypes
+  }
   preset: string
   error: boolean
   errorText: string
@@ -768,7 +821,10 @@ export const UserInputDefaultProps: UserInputProps = {
   fieldName: "Field name",
   floatingLabel: false,
   enableIcon: false,
-  icon: "arrowright",
+  icon: {
+    picture: null,
+    pictureType: PictureTypes.NULL,
+  },
   preset: "outlined",
   error: false,
   errorText: "Please specify an answer",
