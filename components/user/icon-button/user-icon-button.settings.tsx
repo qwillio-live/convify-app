@@ -12,7 +12,8 @@ import {
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyCenter,
   AlignHorizontalSpaceBetween,
-  CornerRightDown
+  CornerRightDown,
+  Image
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl";
@@ -59,6 +60,7 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils";
 import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks";
 import { RootState } from "@/lib/state/flows-state/store";
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker";
 
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
@@ -144,6 +146,14 @@ export const IconButtonSettings = () => {
     }, 1000)
   }
 
+  const handlePictureChange = (picture, pictureType) => {
+    // setChoice({ ...choice, picture, pictureType })
+    handlePropChangeDebounced("icon", {
+      picture,
+      pictureType,
+    })
+  }
+
   const throttledSetProp = useCallback(
     throttle((property,value) => {
       setProp((prop) => {prop[property] = value},0);
@@ -202,41 +212,22 @@ export const IconButtonSettings = () => {
               {enableIcon && (
                 <>
                   <p className="text-md flex-1 text-muted-foreground">{t("Icon")}</p>
-                  <Select
-                    defaultValue={icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="arrowright">
-                          <ArrowRight />
-                        </SelectItem>
-                        <SelectItem value="aperture">
-                          <Aperture />
-                        </SelectItem>
-                        <SelectItem value="activity">
-                          <Activity />
-                        </SelectItem>
-                        <SelectItem value="dollarsign">
-                          <DollarSign />
-                        </SelectItem>
-                        <SelectItem value="anchor">
-                          <Anchor />
-                        </SelectItem>
-                        <SelectItem value="disc">
-                          <Disc />
-                        </SelectItem>
-                        <SelectItem value="mountain">
-                          <Mountain />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex w-full items-center gap-2">
+        <PicturePicker
+          className="transition-all duration-100 ease-in-out"
+          picture={
+            icon.pictureType === PictureTypes.NULL ? (
+              <Image className="text-muted-foreground size-4" />
+            ) : (
+              icon.picture
+            )
+          }
+          pictureType={icon.pictureType}
+          maxWidthMobile={400}
+          maxWidthDesktop={400}
+          onChange={handlePictureChange}
+        />
+      </div>
                 </>
               )}
             </div>

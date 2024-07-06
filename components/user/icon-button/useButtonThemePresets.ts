@@ -5,6 +5,7 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken, rgba } from "polished";
 import { useTranslations } from "next-intl";
 import hexoid from "hexoid";
+import { PictureTypes } from "@/components/PicturePicker";
 
 const useButtonThemePresets = () => {
   const t = useTranslations("Components")
@@ -64,7 +65,10 @@ const useButtonThemePresets = () => {
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    icon: "arrowright",
+    icon: {
+      picture: "interface-arrows-right-arrow-right-keyboard",
+      pictureType: PictureTypes.ICON,
+    },
     paddingLeft: "16",
     paddingTop: "14",
     paddingRight: "16",
@@ -139,7 +143,10 @@ const useButtonThemePresets = () => {
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    icon: "arrowright",
+    icon: {
+      picture: "interface-arrows-right-arrow-right-keyboard",
+      pictureType: PictureTypes.ICON,
+    },
     paddingLeft: "16",
     paddingTop: "14",
     paddingRight: "16",

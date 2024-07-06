@@ -48,6 +48,8 @@ import { navigateToScreen, setCurrentScreenName, validateScreen } from "@/lib/st
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks";
+import { ImagePictureTypes, PictureTypes, SvgRenderer } from "@/components/PicturePicker";
+import { cn } from "@/lib/utils";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -210,7 +212,52 @@ export const IconButtonGen = ({
       overflowX: 'clip',
       textOverflow: 'ellipsis',
     }}>{text}</div>
-      {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
+ {
+  enableIcon &&
+  icon.pictureType !== PictureTypes.NULL && (
+    <div
+      className=""
+      // style={{
+      //   padding:
+      //     icon.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
+      // }}
+    >
+      {icon.pictureType === PictureTypes.ICON ? (
+        <SvgRenderer
+          iconName={icon.picture}
+          width={IconSizeValues[buttonSize]}
+          height={IconSizeValues[buttonSize]}
+        />
+      ) : icon.pictureType === PictureTypes.EMOJI ? (
+        <span className={cn("flex items-center justify-center text-[38px]",{
+          "text-[48px] leading-[50px]": buttonSize === "large",
+          "text-[32px] leading-[34px]": buttonSize === "medium",
+          "text-[24px] leading-[26px]": buttonSize === "small",
+        })}>
+          {icon.picture}
+        </span>
+      ) : (
+        <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+          <source
+            media="(max-width:250px)"
+            srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+          />
+          <img
+            src={(icon.picture as ImagePictureTypes)?.desktop}
+            className={cn("h-auto overflow-hidden object-cover",{
+              "w-[92px]": buttonSize === "large",
+              "w-[74px]": buttonSize === "medium",
+              "w-[56px]": buttonSize === "small",
+
+            })}
+            loading="lazy"
+          />
+        </picture>
+      )}
+    </div>
+  )
+}
+
     </StyledCustomButton>
     {/* </Link> */}
     </div>
@@ -606,7 +653,51 @@ const placeCaretAtEnd = (element) => {
     tagName="div"
 />
 </div>
-        {enableIcon && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
+{
+  enableIcon &&
+  icon.pictureType !== PictureTypes.NULL && (
+    <div
+      className=""
+      // style={{
+      //   padding:
+      //     icon.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
+      // }}
+    >
+      {icon.pictureType === PictureTypes.ICON ? (
+        <SvgRenderer
+          iconName={icon.picture}
+          width={IconSizeValues[buttonSize]}
+          height={IconSizeValues[buttonSize]}
+        />
+      ) : icon.pictureType === PictureTypes.EMOJI ? (
+        <span className={cn("flex items-center justify-center text-[38px]",{
+          "text-[48px] leading-[50px]": buttonSize === "large",
+          "text-[32px] leading-[34px]": buttonSize === "medium",
+          "text-[24px] leading-[26px]": buttonSize === "small",
+        })}>
+          {icon.picture}
+        </span>
+      ) : (
+        <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+          <source
+            media="(max-width:250px)"
+            srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+          />
+          <img
+            src={(icon.picture as ImagePictureTypes)?.desktop}
+            className={cn("h-auto w-full overflow-hidden object-cover",{
+              "w-[92px]": buttonSize === "large",
+              "w-[74px]": buttonSize === "medium",
+              "w-[56px]": buttonSize === "small",
+
+            })}
+            loading="lazy"
+          />
+        </picture>
+      )}
+    </div>
+  )
+}
       </StyledCustomButton>
       </div>
     </div>
@@ -634,7 +725,10 @@ export type IconButtonProps = {
   color: StyleProperty
   colorHover: StyleProperty
   text: string
-  icon: string
+  icon: {
+    picture: ImagePictureTypes | string | null
+    pictureType: PictureTypes
+  }
   paddingLeft: string | number
   paddingTop: string | number
   paddingRight: string | number
@@ -721,7 +815,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  icon: "arrowright",
+  icon: {
+    picture: null,
+    pictureType: PictureTypes.NULL,
+  },
   paddingLeft: "16",
   paddingTop: "26",
   paddingRight: "16",
