@@ -57,6 +57,8 @@ export const EmailContent: React.FC<ContentProps> = ({
           setEmail(data.email)
           if (data.email === "" || data.email === null || data.email === undefined) {
             handleStatusUpdate("inactive")
+          } else {
+            handleStatusUpdate("active")
           }
         })
         .catch((error) => console.error("Error fetching user data:", error))
@@ -77,6 +79,11 @@ export const EmailContent: React.FC<ContentProps> = ({
       .then((res) => res.json())
       .then((data) => {
         setEmail(data.email)
+        if (data.email === "" || data.email === null || data.email === undefined) {
+          handleStatusUpdate("inactive")
+        } else {
+          handleStatusUpdate("active")
+        }
       })
       .catch((error) => console.error("Error fetching user data:", error))
       .finally(() => setIsLoading(false))
@@ -206,6 +213,11 @@ export const GAnalytics: React.FC<ContentProps> = ({
         .then((data) => {
           setGoogleAnalyticsId(data.googleAnalyticsId)
           setIsLoading(false);
+          if (data.googleAnalyticsId === "" || data.googleAnalyticsId === null || data.googleAnalyticsId === undefined) {
+            handleStatusUpdate("inactive")
+          } else {
+            handleStatusUpdate("active")
+          }
         })
         .catch((error) => {
           console.error("Error fetching user data:", error)
@@ -227,6 +239,11 @@ export const GAnalytics: React.FC<ContentProps> = ({
       .then((res) => res.json())
       .then((data) => {
         setGoogleAnalyticsId(data.googleAnalyticsId)
+        if (data.googleAnalyticsId === "" || data.googleAnalyticsId === null || data.googleAnalyticsId === undefined) {
+          handleStatusUpdate("inactive")
+        } else {
+          handleStatusUpdate("active")
+        }
       })
       .catch((error) => console.error("Error fetching user data:", error))
       .finally(() => setIsLoading(false))
@@ -360,6 +377,11 @@ export const GTagManager: React.FC<ContentProps> = ({
         .then((res) => res.json())
         .then((data) => {
           setGoogleTagManagerId(data.googleTagManagerId)
+          if (data.googleTagManagerId === "" || data.googleTagManagerId === null || data.googleTagManagerId === undefined) {
+            handleStatusUpdate("inactive")
+          } else {
+            handleStatusUpdate("active")
+          }
           setIsLoading(false)
         })
         .catch((error) => {
@@ -382,6 +404,11 @@ export const GTagManager: React.FC<ContentProps> = ({
       .then((res) => res.json())
       .then((data) => {
         setGoogleTagManagerId(data.googleTagManagerId)
+        if (data.googleTagManagerId === "" || data.googleTagManagerId === null || data.googleTagManagerId === undefined) {
+          handleStatusUpdate("inactive")
+        } else {
+          handleStatusUpdate("active")
+        }
 
       })
       .catch((error) => console.error("Error fetching user data:", error))
@@ -492,7 +519,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
@@ -516,6 +543,12 @@ export const MetaPixel: React.FC<ContentProps> = ({
         .then((data) => {
           setMetaPixelAccessToken(data.metaPixelAccessToken)
           setMetaPixelId(data.metaPixelId)
+          if (data.metaPixelAccessToken === "" || data.metaPixelAccessToken === null || data.metaPixelAccessToken === undefined) {
+            handleStatusUpdate("inactive")
+          } else {
+            handleStatusUpdate("active")
+          }
+          setIsLoading(false)
         })
         .catch((error) => {
           console.error("Error fetching user data:", error)
@@ -525,8 +558,8 @@ export const MetaPixel: React.FC<ContentProps> = ({
   }, [])
 
   const putRequest = (metaPixelAccessToken: string, metaPixelId: string, flowId: string) => {
-    fetch(`/api/flows/${flowId}/integrations/cly8imaj00037azs90wy290u1`, {
-      method: "PUT",
+    fetch(`/api/flows/${flowId}/integrations`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -539,6 +572,11 @@ export const MetaPixel: React.FC<ContentProps> = ({
       .then((data) => {
         setMetaPixelAccessToken(data.metaPixelAccessToken)
         setMetaPixelId(data.metaPixelId)
+        if (data.metaPixelAccessToken === "" || data.metaPixelAccessToken === null || data.metaPixelAccessToken === undefined) {
+          handleStatusUpdate("inactive")
+        } else {
+          handleStatusUpdate("active")
+        }
       })
       .catch((error) => console.error("Error fetching user data:", error))
       .finally(() => setIsLoading(false))

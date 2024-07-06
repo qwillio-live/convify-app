@@ -29,7 +29,7 @@ import { DatePickerWithRange } from "@/components/DatePickerWithRange"
 import { pt } from 'date-fns/locale';
 import { subDays } from "date-fns"
 
-const visitsData: SubmitData[] = [
+const visitsAndSubmitsData: SubmitData[] = [
   {
     time: convertDate(subDays(new Date(), 5).toISOString()),
     visits: 0,
@@ -281,7 +281,7 @@ const InsightsFlowComponents = () => {
   useEffect(() => {
     sessionStorage.setItem('dataKey', dataKey);
   }, [dataKey]);
-  const [data, setData] = useState<SubmitData[]>(visitsData);
+  const [data, setData] = useState<SubmitData[]>(visitsAndSubmitsData);
   let [dropoff, setDropoff] = useState<Dropoff[]>(() => {
     const dataRes = localStorage.getItem('Dropoff');
     if (dataRes) {
@@ -313,8 +313,8 @@ const InsightsFlowComponents = () => {
       setAnalytics(parsedData);
       if (dataKey === "submits" && parsedData.submitsArray?.length > 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate))
       else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length > 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate))
-      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate))
-      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length <= 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate))
+      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0) setData(submitConverter(visitsAndSubmitsData, date.startDate, date.endDate))
+      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length <= 0) setData(visitConverter(visitsAndSubmitsData, date.startDate, date.endDate))
     }
   }, []);
 

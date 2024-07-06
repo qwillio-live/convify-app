@@ -10,9 +10,19 @@ import { DummyIntregationCardData } from "./collapsibleContents"
 import { usePathname } from "next/navigation"
 
 import "./ConnectFlowComponents.css";
-
+interface Flow {
+  email: string
+  googleAnalyticsId: string
+  googleTagManagerId: string
+  metaPixelAccessToken: string
+}
 const ConnectFlowComponents = () => {
-  const [flowData, setFlowData] = useState<TIntegrationCardData | (() => TIntegrationCardData)>({} as TIntegrationCardData)
+  const [flowData, setFlowData] = useState<Flow>({
+    email: "",
+    googleAnalyticsId: "",
+    googleTagManagerId: "",
+    metaPixelAccessToken: ""
+  })
   const [search, setSearch] = useState("")
   const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
   const currentPath = usePathname()
@@ -28,25 +38,6 @@ const ConnectFlowComponents = () => {
     };
     extractFlowIdFromUrl();
   }, []);
-
-  /* 
-  // POST request for creating integrations
-  useEffect(() => {
-    fetch("/api/flows/cly5ykibm000113jys2uywqmi/integrations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        credentials: "include",
-      },
-      body: JSON.stringify({
-        "googleAnalyticsId": "GOOGLE_ANALYTICS_IDDDDDDDEEEDDD"
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log("POST request", data))
-      .catch((error) => console.log("Error fetching user data:", error))
-  }, [])
-  */
 
   useEffect(() => {
     if (flowId) {
@@ -65,23 +56,6 @@ const ConnectFlowComponents = () => {
     }
   }, [flowId])
 
-  useEffect(() => {
-    if (flowId) {
-      fetch(`/api/flows/${flowId}/integrations/cly7aycol0003ldftt9so8tod`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "googleAnalyticsId": "UA-123456789-1",
-          "email": "someone@gmail.com",
-        }),
-      })
-        .then((res) => res.json())
-        // .then((data) => console.log("PUT request", data))
-        .catch((error) => console.error("Error fetching user data:", error))
-    }
-  }, [flowId])
 
   // Define the update function
   const updateStatus = (id, newStatus) => {
@@ -97,7 +71,6 @@ const ConnectFlowComponents = () => {
       setFilteredDatas(updatedData)
     }
   }
-
   useEffect(() => {
     if (search === "") {
       setFilteredDatas(DummyIntregationCardData)
@@ -105,10 +78,48 @@ const ConnectFlowComponents = () => {
       let filteredData = DummyIntregationCardData.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       )
-
       setFilteredDatas(filteredData)
     }
   }, [search])
+
+  useEffect(() => {
+    let filteredData = DummyIntregationCardData.map((item) => {
+      if (item.title === "Email") {
+        if (!flowData?.email || flowData.email.trim() === "" || flowData.email === null || flowData.email === undefined) {
+          return { ...item, status: 'inactive' };
+        } else {
+          return { ...item, status: 'active' };
+        }
+      }
+
+      if (item.title === "Google Analytics 4") {
+        if (!flowData?.googleAnalyticsId || flowData.googleAnalyticsId.trim() === "" || flowData.googleAnalyticsId === null || flowData.googleAnalyticsId === undefined) {
+          return { ...item, status: 'inactive' };
+        } else {
+          return { ...item, status: 'active' };
+        }
+      }
+
+      if (item.title === 'Google Tag Manager') {
+        if (!flowData?.googleTagManagerId || flowData.googleTagManagerId.trim() === "" || flowData.googleTagManagerId === null || flowData.googleTagManagerId === undefined) {
+          return { ...item, status: 'inactive' };
+        } else {
+          return { ...item, status: 'active' };
+        }
+      }
+
+      if (item.title === 'Meta Pixel') {
+        if (!flowData?.metaPixelAccessToken || flowData.metaPixelAccessToken === null || flowData.metaPixelAccessToken === undefined || flowData.metaPixelAccessToken.trim() === "") {
+          return { ...item, status: 'inactive' };
+        } else {
+          return { ...item, status: 'active' };
+        }
+      }
+      return item;
+    });
+
+    setFilteredDatas(filteredData);
+  }, [flowData])
 
   return (
     <div className="min-h-screen w-full overflow-auto pb-[80px] connect-flow-content" style={{ height: '100vh' }}>
