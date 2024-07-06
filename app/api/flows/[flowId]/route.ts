@@ -66,11 +66,11 @@ export async function GET(
     const flowSteps = await prisma.flowStep.findMany({
       where: {
         flowId: String(flowId),
-        // isDeleted: false,
+        isDeleted: false,
       },
     });
 
-    flow.steps = flowSteps;
+    flow.steps = flowSteps.sort((a, b) => a.order - b.order);
 
     return NextResponse.json(flow)
   } catch (error) {

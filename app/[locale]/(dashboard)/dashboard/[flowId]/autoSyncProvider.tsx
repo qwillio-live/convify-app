@@ -57,6 +57,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   }, [])
 
   useEffect(() => {
+    if (!isFlowLoaded) return
     if (loaclFlowData?.screens.length === 0) return
 
     const steps = loaclFlowData?.screens.map((step, index) => ({
@@ -79,7 +80,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     }
 
     setUpdatedFlowData(data)
-  }, [loaclFlowData, localFlowSettings])
+  }, [isFlowLoaded, loaclFlowData, localFlowSettings])
 
   if (!isFlowLoaded) return <Loading />
 
