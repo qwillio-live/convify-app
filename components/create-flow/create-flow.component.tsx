@@ -342,7 +342,7 @@ export function CreateFlowComponent() {
                     style={{
                       marginTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
                       backgroundColor: headerMode ? avatarBackgroundColor : '',
-                      paddingTop: !headerMode ? '25px' : '',
+                      paddingTop: !headerMode ? '15px' : '',
                     }}>
                     <Frame data={editorLoad}></Frame>
                   </div>

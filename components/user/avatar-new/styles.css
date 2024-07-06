@@ -15,7 +15,7 @@
  }
 
  .avatar-none {
-     transform: translateY(15%);
+     transform: translateY(10%);
      transition: transform 0.3s ease-in-out;
  }
 

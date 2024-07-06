@@ -71,9 +71,17 @@ export const AvatarComponentGen = ({
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY);
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY || 0); 
   const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
   const avatarRef = useRef(null);
+  const baseSize = 90; // Initial base size of the avatar
+  const minimumSize = 48; // Minimum size of the avatar
+  const sizeReductionFactor = 0.5; // Control the rate of size reduction
+  const mobileBaseSize = 60
+
+  let mobileDynamicSize =  Math.max(mobileBaseSize - (scrollY * sizeReductionFactor), minimumSize);
+  // Calculate dynamic size
+  let dynamicSize = Math.max(baseSize - (scrollY * sizeReductionFactor), minimumSize);
   const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (scrollY && scrollY > 50 ? 'avatar-none-scrolled' : 'avatar-none')}`;
 
   return (
@@ -112,8 +120,8 @@ export const AvatarComponentGen = ({
               alt={alt}
               src={src}
               style={{
-                width: mobileScreen ? '60px' : (hasComponentBeforeAvatar && (scrollY && scrollY > 50) ? '80px' : (scrollY && scrollY > 50 ? '48px' : '90px')),
-                height: mobileScreen ? '60px' : (hasComponentBeforeAvatar && (scrollY && scrollY > 50) ? '80px' : (scrollY && scrollY > 50 ? '48px' : '90px')),
+                width: mobileScreen ? `${mobileDynamicSize}px` : `${dynamicSize}px`,
+                height: mobileScreen ? `${mobileDynamicSize}px` : `${dynamicSize}px`,
                 borderRadius: `${cornRad}px`,
                 backgroundColor: background,
               }}
