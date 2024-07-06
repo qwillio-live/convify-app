@@ -1,10 +1,8 @@
-import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
-
+import ImagePlaceholder from "@/assets/images/default-image.webp"
 import "cropperjs/dist/cropper.css"
 import React from "react"
 import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
-
 import { useNode } from "@/lib/craftjs"
 import { cn } from "@/lib/utils"
 import {
@@ -182,9 +180,9 @@ export const ImgSettings = () => {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
       setProp(
         (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
+        (props.src = cropperRef.current?.cropper
+          .getCroppedCanvas()
+          .toDataURL()),
         1000
       )
       setProp((props) => (props.width = "100%"), 1000)
@@ -193,9 +191,9 @@ export const ImgSettings = () => {
       setActiveAspectRatioBtn("source")
       setProp(
         (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
+        (props.src = cropperRef.current?.cropper
+          .getCroppedCanvas()
+          .toDataURL()),
         1000
       )
     }
@@ -205,7 +203,7 @@ export const ImgSettings = () => {
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
       cropperRef.current?.cropper.getImageData().width /
-        cropperRef.current?.cropper.getImageData().height
+      cropperRef.current?.cropper.getImageData().height
     )
     setActiveAspectRatioBtn("source")
   }
@@ -468,66 +466,60 @@ export const ImgSettings = () => {
             <div className="p-1 flex gap-0 bg-secondary rounded-lg">
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "source"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "source"
+                  ? "bg-white border-input shadow font-medium hover:bg-white"
+                  : "bg-transparent border-transparent hover:bg-transparent"
+                  }`}
                 onClick={aspectRatioSource}
               >
                 {t("Source")}
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "square"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "square"
+                  ? "bg-white border-input shadow font-medium hover:bg-white"
+                  : "bg-transparent border-transparent hover:bg-transparent"
+                  }`}
                 onClick={aspectRatioSquare}
               >
                 1:1
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "portrait"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portrait"
+                  ? "bg-white border-input shadow font-medium hover:bg-white"
+                  : "bg-transparent border-transparent hover:bg-transparent"
+                  }`}
                 onClick={aspectRatioPortrait}
               >
                 4:3
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "landscape"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscape"
+                  ? "bg-white border-input shadow font-medium hover:bg-white"
+                  : "bg-transparent border-transparent hover:bg-transparent"
+                  }`}
                 onClick={aspectRatioLandscape}
               >
                 16:9
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "portraito"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portraito"
+                  ? "bg-white border-input shadow font-medium hover:bg-white"
+                  : "bg-transparent border-transparent hover:bg-transparent"
+                  }`}
                 onClick={aspectRatioPortraitO}
               >
                 3:4
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
-                  activeAspectRatioBtn === "landscapeo"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
-                }`}
+                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscapeo"
+                  ? "bg-white border-input shadow font-medium hover:bg-white"
+                  : "bg-transparent border-transparent hover:bg-transparent"
+                  }`}
                 onClick={aspectRatioLandscape0}
               >
                 9:16
@@ -571,8 +563,8 @@ export const ImgDefaultProps = {
   background: "inherit",
   radius: "none",
   align: "center",
-  width: 320,
-  height: 180,
+  width: '85%',
+  height: 'auto',
   src: ImagePlaceholder.src,
 }
 

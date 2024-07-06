@@ -1,31 +1,28 @@
-"use client"
 import React, { Suspense, useEffect, useState } from "react"
-import { UserContainer, UserContainerGen } from "@/components/user/container/user-container.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
+import { UserContainerGen } from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
+import { ImageComponentGen } from "../image-new/user-image.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
-// import lz from "lzutf8";
-import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import { UserTextGen } from "@/components/user/text/user-text.component"
-
 import { UserInputGen } from "../input/user-input.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
-import jsonData from "./parse.json"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { PictureChoiceGen } from "../picture-choice/user-picture-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
-import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
 import { SelectGen } from "../select/user-select.component"
 import { ChecklistGen } from "../checklist/user-checklist.component"
 import { ListGen } from "../list/user-list.component"
 import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
 import { StepsGen } from "../steps/user-steps.component"
+import { AvatarComponentGen } from "../avatar-new/user-avatar.component"
+import { LogoComponentGen } from "../logo-new/user-logo.component"
 
 const CraftJsUserComponents = {
-  // [CRAFT_ELEMENTS.USERCONTAINER]: "div",
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
   [CRAFT_ELEMENTS.LOGO]: UserLogo,
   [CRAFT_ELEMENTS.CARD]: CardGen,
@@ -34,6 +31,9 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
+  [CRAFT_ELEMENTS.LOGOCOMPONENT]: LogoComponentGen,
+  [CRAFT_ELEMENTS.IMAGECOMPONENT]: ImageComponentGen,
+  [CRAFT_ELEMENTS.AVATARCOMPONENT]: AvatarComponentGen,
   [CRAFT_ELEMENTS.SELECT]: SelectGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
   [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
@@ -50,22 +50,15 @@ interface Props {
   compressedCraftState: string
 }
 
-const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null => {
+const ResolvedComponentsFromCraftState = ({ screen }): React.ReactElement | null => {
   const [toRender, setToRender] = useState<React.ReactElement | null>(null)
   const globalTheme = useAppSelector((state: RootState) => state?.theme)
-  // useEffect(() => {
 
-  // }, [screen])
 
-  // useEffect(() => {
-  //   console.log("Screen rerendered from global theme change")
-  // },[globalTheme])
   useEffect(() => {
     try {
-      // const craftState = JSON.parse(lz.decompress(lz.decodeBase64(compressedCraftState)) || '{}');
-      const craftState = JSON.parse(screen);
+      const craftState = JSON.parse(screen)
       const resolveComponents = () => {
-
         const parsedNodes = {}
 
         const parse = (nodeId: string, parentNodeId?: string) => {
@@ -78,20 +71,32 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
           const resolvedName = type?.resolvedName
           const ReactComponent = resolvedName ? CraftJsUserComponents[resolvedName] : null
 
-          const childNodes = nodes.map((childNodeId: string) => parse(childNodeId, nodeId))
-          const linkedNodesElements = nodes.concat(Object.values(linkedNodes)).map((linkedNodeData: any) => {
-            const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
-            return parse(linkedNodeId, nodeId)
-          })
+          let filteredNodes = nodes;
+          if (resolvedName !== "AvatarComponent") {
+            const avatarComponents = nodes.filter(
+              (childNodeId) => craftState[childNodeId].type.resolvedName === "AvatarComponent"
+            );
+            filteredNodes = nodes.filter(
+              (childNodeId) => craftState[childNodeId].type.resolvedName !== "AvatarComponent"
+            );
+            if (avatarComponents.length > 0) {
+              filteredNodes.push(avatarComponents[avatarComponents.length - 1]);
+            }
+          }
+
+          const childNodes = filteredNodes.map((childNodeId: string) => parse(childNodeId, nodeId));
+          const linkedNodesElements = filteredNodes.concat(Object.values(linkedNodes)).map((linkedNodeData: any) => {
+            const linkedNodeId = linkedNodeData.nodeId || linkedNodeData;
+            return parse(linkedNodeId, nodeId);
+          });
+
 
           const parsedNode = ReactComponent ? (
-            <ReactComponent {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
-              {/* {childNodes} */}
+            <ReactComponent {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId} scrollY={scrollY}>
               {linkedNodesElements}
             </ReactComponent>
           ) : (
             <div {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
-              {/* {childNodes} */}
               {linkedNodesElements}
             </div>
           )
@@ -108,7 +113,7 @@ const ResolvedComponentsFromCraftState = ({screen}): React.ReactElement | null =
       console.error("Error parsing craft state: ", error)
       setToRender(<div>Error loading components.</div>)
     }
-  }, [screen,globalTheme])
+  }, [screen, globalTheme])
 
   return <Suspense fallback={<h2>Loading...</h2>}>{toRender}</Suspense>
 }

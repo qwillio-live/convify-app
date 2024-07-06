@@ -18,7 +18,7 @@ const extractFlowIdFromUrl = () => {
   if (match && match[1] && match[1] !== "flows") {
     return match[1];
   }
-  return null;
+  return "flows";
 };
 interface ContentProps {
   handleStatusUpdate: HandleStatusUpdateFunction
@@ -55,6 +55,9 @@ export const EmailContent: React.FC<ContentProps> = ({
         .then((res) => res.json())
         .then((data) => {
           setEmail(data.email)
+          if (data.email === "" || data.email === null || data.email === undefined) {
+            handleStatusUpdate("inactive")
+          }
         })
         .catch((error) => console.error("Error fetching user data:", error))
         .finally(() => setIsLoading(false))
@@ -522,8 +525,8 @@ export const MetaPixel: React.FC<ContentProps> = ({
   }, [])
 
   const putRequest = (metaPixelAccessToken: string, metaPixelId: string, flowId: string) => {
-    fetch(`/api/flows/${flowId}/integrations`, {
-      method: "POST",
+    fetch(`/api/flows/${flowId}/integrations/cly8imaj00037azs90wy290u1`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },

@@ -59,6 +59,7 @@ const ScreensList = () => {
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -203,11 +204,11 @@ const ScreensList = () => {
             )}
             onClick={() => handleHeaderScreenClick()}
           >
-                        <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
+            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
 
-<ResolvedComponentsFromCraftState screen={screensHeader} />
+              <ResolvedComponentsFromCraftState screen={screensHeader} />
 
-</div>
+            </div>
             <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
           </Card>
           <Separator className="my-4" />
@@ -271,9 +272,9 @@ const ScreensList = () => {
                 value={screen}
                 onClick={() => {
                   dispatch(setSelectedComponent("ROOT")),
-                  dispatch(setHeaderFooterMode(false))
+                    dispatch(setHeaderFooterMode(false))
                 }}
-                // className="relative"
+              // className="relative"
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
@@ -303,10 +304,14 @@ const ScreensList = () => {
                     >
                       <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <ResolvedComponentsFromCraftState screen={screensHeader} />
-                        <ResolvedComponentsFromCraftState
-                          screen={screen.screenData ? screen.screenData : {}}
-                        />
+                        <div style={{ background: avatarBackgroundColor }}>
+                          <ResolvedComponentsFromCraftState screen={screensHeader} />
+                        </div>
+                        <div style={{ paddingTop: '50px' }}>
+                          <ResolvedComponentsFromCraftState
+                            screen={screen.screenData ? screen.screenData : {}}
+                          />
+                        </div>
                         <ResolvedComponentsFromCraftState screen={screensFooter} />
                       </div>
                     </Card>

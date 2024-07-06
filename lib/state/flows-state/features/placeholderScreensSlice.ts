@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import hexoid  from 'hexoid';
+import hexoid from 'hexoid';
 import buttonChoiceData from "@/components/user/screens/button-choice-screen.json";
 import oneChoiceData from "@/components/user/screens/one-choice-screen.json";
 import oneInputData from "@/components/user/screens/one-input-screen.json";
 import footerScreenData from "@/components/user/screens/screen-footer.json";
 import headerScreenData from "@/components/user/screens/screen-header.json";
 import emptyScreenData from "@/components/user/screens/empty-screen.json";
-
-
 
 export type ScreenFieldType = {
   fieldId: string;
@@ -23,7 +21,7 @@ export type ScreenFieldsObject = {
 
 export type ScreenFieldsListType = {
   [key: string]: {
-    [key: string] : ScreenFieldType;
+    [key: string]: ScreenFieldType;
   }
 
 }
@@ -47,14 +45,20 @@ export interface ScreensState {
   } | {};
   headerId: string;
   headerMode: boolean;
+  avatarComponentId: string | null;
   footerMode: boolean;
   renamingScreen: boolean;
+  previousAvatarComponentId: string | null,
+  avatarComponentIds: string[];
   screensHeader: any;
   screensFooter: any;
   screens: ScreenType[];
   screensFieldsList: ScreenFieldsListType | {};
   screenRoller: any;
   editorLoad: any;
+  scrollY: number;
+  hasComponentBeforeAvatar: boolean;
+  avatarBackgroundColor: string | undefined
 }
 
 const initialState: ScreensState = {
@@ -64,8 +68,13 @@ const initialState: ScreensState = {
   screenNameToId: {},
   headerId: "",
   selectedScreen: 0,
+  avatarComponentIds: [],
+  avatarComponentId: null,
+  previousAvatarComponentId: null,
   screensHeader: JSON.stringify(headerScreenData),
   headerMode: false,
+  hasComponentBeforeAvatar: false,
+  avatarBackgroundColor: 'rgba(255,255,255,.1)',
   screensFieldsList: {
     "1": {},
     "2": {},
@@ -104,6 +113,7 @@ const initialState: ScreensState = {
   screensFooter: JSON.stringify(footerScreenData),
   editorLoad: buttonChoiceData,
   screenRoller: '',
+  scrollY: 0,
 };
 
 export const screensSlice = createSlice({
@@ -130,7 +140,7 @@ export const screensSlice = createSlice({
       state.screens[selectedScreen].screenFields = screenFields;
       state.screensFieldsList[selectedId] = screenFields;
     },
-    removeField: (state,action: PayloadAction<string>) => {
+    removeField: (state, action: PayloadAction<string>) => {
       const selectedScreen = state.selectedScreen;
       const selectedScreenId = state.screens[selectedScreen].screenId;
       const fieldId = action.payload;
@@ -140,7 +150,7 @@ export const screensSlice = createSlice({
       state.screens[selectedScreen].screenFields = screenFields;
       const screenFieldsList = state.screensFieldsList;
       const screenListItem = screenFieldsList[selectedScreenId];
-      if(screenListItem) {
+      if (screenListItem) {
         delete screenListItem[fieldId];
         screenFieldsList[selectedScreenId] = screenListItem;
       }
@@ -161,9 +171,9 @@ export const screensSlice = createSlice({
       const screenFieldsList = state.screensFieldsList;
       console.log("SCREEN FIELDS LIST IS: ", screenFieldsList)
       const screenListItem = screenFieldsList[selectedScreenId];
-      if(screenListItem) {
+      if (screenListItem) {
         const field = screenListItem[fieldId];
-        if(field) {
+        if (field) {
           field[fieldName] = fieldValue;
           screenListItem[fieldId] = field;
           screenFieldsList[selectedScreenId] = screenListItem;
@@ -239,11 +249,14 @@ export const screensSlice = createSlice({
       } else if (state.footerMode === true) {
         state.screensFooter = action.payload;
       } else {
-        state.screens[state.selectedScreen].screenData = action.payload ;
+        state.screens[state.selectedScreen].screenData = action.payload;
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
       state.screensHeader = JSON.stringify(action.payload);
+    },
+    setScrollY: (state, action: PayloadAction<number>) => {
+      state.scrollY = action.payload
     },
     setScreenFooter: (state, action: PayloadAction<any>) => {
       state.screensFooter = JSON.stringify(action.payload);
@@ -252,19 +265,19 @@ export const screensSlice = createSlice({
       state.headerId = action.payload;
     },
     setHeaderMode: (state, action: PayloadAction<boolean>) => {
-      state.selectedComponent="ROOT";
+      state.selectedComponent = "ROOT";
       state.footerMode = false;
       state.headerMode = action.payload;
       state.editorLoad = state.screensHeader; // Ensure new reference
     },
     setFooterMode: (state, action: PayloadAction<boolean>) => {
-      state.selectedComponent="ROOT";
+      state.selectedComponent = "ROOT";
       state.headerMode = false;
       state.footerMode = action.payload;
       state.editorLoad = state.screensFooter; // Ensure new reference
     },
     setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
-      state.selectedComponent="ROOT";
+      state.selectedComponent = "ROOT";
       state.headerMode = action.payload;
       state.footerMode = action.payload;
     },
@@ -277,6 +290,21 @@ export const screensSlice = createSlice({
       state.footerMode = false;
       state.selectedScreen = action.payload;
       state.editorLoad = state.screens[action.payload].screenData; // Ensure new reference
+    },
+    addAvatarComponentId(state, action) {
+      if (!state.avatarComponentIds) {
+        state.avatarComponentIds = [];
+      }
+      state.avatarComponentIds.push(action.payload);
+      state.previousAvatarComponentId = state.avatarComponentId;
+      state.avatarComponentId = action.payload;
+    },
+    removeAvatarComponentId(state, action) {
+      if (state.avatarComponentIds) {
+        state.avatarComponentIds = state.avatarComponentIds.filter(id => id !== action.payload);
+        state.previousAvatarComponentId = state.avatarComponentId;
+        state.avatarComponentId = state.avatarComponentIds[state.avatarComponentIds.length - 1] || null;
+      }
     },
     reorderScreens: (
       state,
@@ -293,7 +321,7 @@ export const screensSlice = createSlice({
     addScreen: (state, action: PayloadAction<number>) => {
       const newId = hexoid(8)();
       const newScreens = [...state.screens]; // Create new array
-      const screenName = "screen-"+newId;
+      const screenName = "screen-" + newId;
       state.screensFieldsList[newId] = {};
       newScreens.splice(action.payload + 1, 0,
         {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData),screenFields:{},screenValidated:false,screenToggleError:false});
@@ -323,7 +351,7 @@ export const screensSlice = createSlice({
       }
       state.screensFieldsList[newId] = state.screensFieldsList[previousId]
       newScreen.screenData = state.screens[action.payload].screenData; // Create new object
-      newScreen.screenName = "screen-"+newScreen.screenId;
+      newScreen.screenName = "screen-" + newScreen.screenId;
       newScreens.splice(action.payload + 1, 0, newScreen);
       state.screens = newScreens;
       state.selectedScreen = action.payload + 1;
@@ -332,7 +360,7 @@ export const screensSlice = createSlice({
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
 
-      if(state.screens.length === 1) return;
+      if (state.screens.length === 1) return;
       const screenToDelete = action.payload;
       const screenIdToDelete = state.screens[screenToDelete].screenId;
       delete state.screensFieldsList[screenIdToDelete];
@@ -355,9 +383,9 @@ export const screensSlice = createSlice({
       const { screenId, screenName } = action.payload;
       const screen = state.screens.find(screen => screen.screenId === screenId);
       const duplicateName = state.screens.find(screen => screen.screenName === screenName);
-      if(duplicateName) {
+      if (duplicateName) {
         return;
-      }else if(screen) {
+      } else if (screen) {
         screen.screenName = screenName;
       }
       state.firstScreenName = state.screens[0].screenName;
@@ -368,16 +396,22 @@ export const screensSlice = createSlice({
     },
     navigateToScreen: (state, action: PayloadAction<string>) => {
       const screen = state.screens.find(screen => screen.screenName === action.payload);
-      if(screen) {
+      if (screen) {
         state.selectedScreen = state.screens.indexOf(screen);
         state.editorLoad = screen.screenData;
       }
     },
-    rollScreens: (state, action:PayloadAction<string>) => {
+    rollScreens: (state, action: PayloadAction<string>) => {
 
-          state.screenRoller = action.payload;
+      state.screenRoller = action.payload;
 
-
+    },
+    setComponentBeforeAvatar: (state, action: PayloadAction<boolean>) => {
+      // Action payload is the container component ID
+      state.hasComponentBeforeAvatar = action.payload
+    },
+    setAvatarBackgroundColor: (state, action: PayloadAction<string>) => {
+      state.avatarBackgroundColor = action.payload;
     },
   },
 });
@@ -394,6 +428,7 @@ export const {
   validateScreen,
   setFieldProp,
   rollScreens,
+  addAvatarComponentId,
   navigateToScreen,
   setHeaderMode,
   resetScreensState,
@@ -401,10 +436,14 @@ export const {
   setScreenFooter,
   setFooterMode,
   setHeaderFooterMode,
+  setScrollY,
   setSelectedScreen,
   reorderScreens,
+  removeAvatarComponentId,
   addScreen,
   setEditorLoad,
+  setComponentBeforeAvatar,
+  setAvatarBackgroundColor,
   duplicateScreen,
   setScreens,
   deleteScreen,

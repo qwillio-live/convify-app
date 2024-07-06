@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Controller } from "./controller.component"
 import styled from "styled-components"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { addField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { addAvatarComponentId, addField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useRouter } from "next/navigation"
 
 
@@ -94,6 +94,9 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     parent: node.data.parent,
     props: node.data.props,
   }));
+  const avatarComponentId = useAppSelector((state)=>state?.screen?.avatarComponentId)
+  const previousAvatarComponentId = useAppSelector((state)=>state?.screen?.previousAvatarComponentId) 
+  const avatarComponentIds = useAppSelector((state)=>state?.screen?.avatarComponentIds) 
   useEffect(() => {
     if (dom && id !== "ROOT") {
       if (isHover && !isSelected) {
@@ -120,6 +123,13 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   }, [mobileScreen])
 
   useEffect(() => {
+    if (name === "AvatarComponent" && !avatarComponentIds?.includes(id)) {
+      dispatch(addAvatarComponentId(id));
+    }
+  }, [name, id, avatarComponentIds, dispatch]);
+
+
+  useEffect(() => {
     if(fieldType === 'data'){
       dispatch(addField({
         fieldId: id,
@@ -131,6 +141,10 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       setProp((props) => {props.parentScreenId = currentScreenId});
     }
   },[])
+
+  if (name === "AvatarComponent" && id !== avatarComponentId) {
+    return null;
+  }
 
   return (
 
