@@ -151,7 +151,7 @@ export const EmailContent: React.FC<ContentProps> = ({
         </AccordionPrimitive.Trigger>
         <div>
           {status !== "active" ? (
-            <Button disabled={!email.trim()} onClick={() => {
+            <Button disabled={!email?.trim()} onClick={() => {
               putRequest(email, flowId ?? "")
               handleClick()
             }} style={buttonStyle}>
