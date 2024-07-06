@@ -25,39 +25,44 @@ export type ScreenFieldsListType = {
   [key: string]: {
     [key: string] : ScreenFieldType;
   }
-
 }
 
 export type ScreenType = {
-  screenId: string;
-  screenName: string;
-  screenData: any;
-  screenFields: ScreenFieldsObject | {};
-  screenValidated: boolean | null | undefined;
+  screenId: string
+  screenName: string
+  screenData: any
+  screenLink: string
+  screenTemplateId: string
+  screenFields: ScreenFieldsObject | {}
+  screenValidated: boolean | null | undefined
   screenToggleError: boolean
 };
 
 export interface ScreensState {
-  selectedComponent: string;
-  selectedScreen: number;
-  firstScreenName: string;
-  currentScreenName: string;
-  screenNameToId: {
-    [screenName: string]: string;
-  } | {};
-  headerId: string;
-  headerMode: boolean;
-  footerMode: boolean;
-  renamingScreen: boolean;
-  screensHeader: any;
-  screensFooter: any;
-  screens: ScreenType[];
-  screensFieldsList: ScreenFieldsListType | {};
-  screenRoller: any;
-  editorLoad: any;
+  flowName: string
+  selectedComponent: string
+  selectedScreen: number
+  firstScreenName: string
+  currentScreenName: string
+  screenNameToId:
+    | {
+        [screenName: string]: string
+      }
+    | {}
+  headerId: string
+  headerMode: boolean
+  footerMode: boolean
+  renamingScreen: boolean
+  screensHeader: any
+  screensFooter: any
+  screens: ScreenType[]
+  screensFieldsList: ScreenFieldsListType | {}
+  screenRoller: any
+  editorLoad: any
 }
 
 const initialState: ScreensState = {
+  flowName: "",
   selectedComponent: "ROOT",
   firstScreenName: "",
   currentScreenName: "",
@@ -80,25 +85,30 @@ const initialState: ScreensState = {
       screenName: "button-choice",
       screenData: JSON.stringify(buttonChoiceData),
       screenFields: {},
+      screenLink: "",
+      screenTemplateId: "",
       screenValidated: false,
-      screenToggleError: false
+      screenToggleError: false,
     },
     {
       screenId: "2",
       screenName: "one-choice",
       screenData: JSON.stringify(oneChoiceData),
       screenFields: {},
+      screenLink: "",
+      screenTemplateId: "",
       screenValidated: false,
-      screenToggleError: false
+      screenToggleError: false,
     },
     {
       screenId: "3",
       screenName: "one-input",
       screenData: JSON.stringify(oneInputData),
       screenFields: {},
+      screenLink: "",
+      screenTemplateId: "",
       screenValidated: false,
-      screenToggleError: false
-
+      screenToggleError: false,
     },
   ],
   screensFooter: JSON.stringify(footerScreenData),
@@ -110,6 +120,32 @@ export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
+    setScreensData: (state, action: PayloadAction<any>) => {
+      state.flowName = action.payload.name
+      state.firstScreenName = action.payload.steps[0].name
+      state.currentScreenName = action.payload.steps[0].name
+
+      const screensFieldsList = {}
+
+      action.payload.steps.forEach((screen: any) => {
+        screensFieldsList[screen.id] = {}
+      })
+
+      state.screensFieldsList = screensFieldsList
+
+      state.selectedScreen = 0
+      state.screens = action.payload.steps.map((screen: any) => ({
+        screenId: screen.id,
+        screenName: screen.name,
+        screenData: JSON.stringify(screen.content),
+        screenLink: screen.link,
+        screenFields: {},
+        screenValidated: false,
+        screenToggleError: false,
+      }))
+
+      state.editorLoad = state.screens[state.selectedScreen].screenData
+    },
     setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload;
     },
@@ -291,14 +327,22 @@ export const screensSlice = createSlice({
 
     },
     addScreen: (state, action: PayloadAction<number>) => {
-      const newId = hexoid(8)();
-      const newScreens = [...state.screens]; // Create new array
-      const screenName = "screen-"+newId;
-      state.screensFieldsList[newId] = {};
-      newScreens.splice(action.payload + 1, 0,
-        {screenId: newId,screenName:screenName,screenData:JSON.stringify(emptyScreenData),screenFields:{},screenValidated:false,screenToggleError:false});
-      state.screens = newScreens;
-      state.selectedScreen = action.payload + 1;
+      const newId = hexoid(8)()
+      const newScreens = [...state.screens] // Create new array
+      const screenName = "screen-" + newId
+      state.screensFieldsList[newId] = {}
+      newScreens.splice(action.payload + 1, 0, {
+        screenId: newId,
+        screenName: screenName,
+        screenData: JSON.stringify(emptyScreenData),
+        screenLink: "",
+        screenTemplateId: "",
+        screenFields: {},
+        screenValidated: false,
+        screenToggleError: false,
+      })
+      state.screens = newScreens
+      state.selectedScreen = action.payload + 1
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
       state.firstScreenName = state.screens[0].screenName;
 
@@ -317,6 +361,8 @@ export const screensSlice = createSlice({
         screenId: newId,
         screenName: "",
         screenData: "",
+        screenLink: "",
+        screenTemplateId: "",
         screenFields: {},
         screenValidated: false,
         screenToggleError: false
@@ -384,6 +430,7 @@ export const screensSlice = createSlice({
 
 
 export const {
+  setScreensData,
   setSelectedComponent,
   setCurrentScreenName,
   setFirstScreenName,
@@ -411,6 +458,6 @@ export const {
   setHeaderId,
   setScreenName,
   setRenamingScreen,
-} = screensSlice.actions;
+} = screensSlice.actions
 
-export default screensSlice.reducer;
+export default screensSlice.reducer
