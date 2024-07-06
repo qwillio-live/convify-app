@@ -74,6 +74,14 @@ export default function DashboardPage() {
 
 
   const handleLogout = async () => {
+
+    localStorage.removeItem('date');
+    localStorage.removeItem('days');
+    localStorage.removeItem('Dropoff');
+    localStorage.removeItem('flowId');
+    localStorage.removeItem('analyticsData');
+    localStorage.removeItem('responses');
+    localStorage.removeItem('dataKey');
     await signOut({ redirect: false })
     // document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     router.push("/login")

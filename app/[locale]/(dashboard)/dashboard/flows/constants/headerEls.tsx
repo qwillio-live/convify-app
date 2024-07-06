@@ -23,6 +23,13 @@ const Header = () => {
     const currentPath = usePathname();
 
     const handleLogout = async () => {
+        localStorage.removeItem('date');
+        localStorage.removeItem('days');
+        localStorage.removeItem('Dropoff');
+        localStorage.removeItem('flowId');
+        localStorage.removeItem('analyticsData');
+        localStorage.removeItem('responses');
+        localStorage.removeItem('dataKey');
         await signOut({ redirect: false });
         router.push("/login");
     };
