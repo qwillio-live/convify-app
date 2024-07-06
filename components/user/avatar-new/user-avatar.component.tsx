@@ -71,7 +71,7 @@ export const AvatarComponentGen = ({
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY || 0); 
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY || 0);
   const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
   const avatarRef = useRef(null);
   const baseSize = 90; // Initial base size of the avatar
@@ -79,7 +79,7 @@ export const AvatarComponentGen = ({
   const sizeReductionFactor = 0.5; // Control the rate of size reduction
   const mobileBaseSize = 60
 
-  let mobileDynamicSize =  Math.max(mobileBaseSize - (scrollY * sizeReductionFactor), minimumSize);
+  let mobileDynamicSize = Math.max(mobileBaseSize - (scrollY * sizeReductionFactor), minimumSize);
   // Calculate dynamic size
   let dynamicSize = Math.max(baseSize - (scrollY * sizeReductionFactor), minimumSize);
   const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (scrollY && scrollY > 50 ? 'avatar-none-scrolled' : 'avatar-none')}`;
@@ -91,7 +91,7 @@ export const AvatarComponentGen = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        height: '50px',
+        height: hasComponentBeforeAvatar ? '' : '50px',
       }}
     >
       <div
@@ -264,6 +264,7 @@ export const AvatarComponent = ({
   const screensLength = useAppSelector((state: RootState) => state?.screen?.screens?.length ?? 0);
   const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
 
+  const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
   const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
 
   useEffect(() => {
@@ -359,7 +360,7 @@ export const AvatarComponent = ({
       style={{
         width: "100%",
         display: "flex",
-        height: '50px',
+        height: hasComponentBeforeAvatar ? '' : '50px',
         justifyContent: "center",
       }}
       onMouseOver={() => setDisplayController(true)}
