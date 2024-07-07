@@ -541,9 +541,12 @@ export const MetaPixel: React.FC<ContentProps> = ({
       })
         .then((res) => res.json())
         .then((data) => {
-          setMetaPixelAccessToken(data.metaPixelAccessToken)
+          if (data.metaPixelAccessToken !== null) {
+            setMetaPixelAccessToken(data.metaPixelAccessToken)
+          }
+
           setMetaPixelId(data.metaPixelId)
-          if (data.metaPixelAccessToken === "" || data.metaPixelAccessToken === null || data.metaPixelAccessToken === undefined) {
+          if (data.metaPixelId === "" || data.metaPixelId === null || data.metaPixelId === undefined) {
             handleStatusUpdate("inactive")
           } else {
             handleStatusUpdate("active")
@@ -572,7 +575,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
       .then((data) => {
         setMetaPixelAccessToken(data.metaPixelAccessToken)
         setMetaPixelId(data.metaPixelId)
-        if (data.metaPixelAccessToken === "" || data.metaPixelAccessToken === null || data.metaPixelAccessToken === undefined) {
+        if (data.metaPixelId === "" || data.metaPixelId === null || data.metaPixelId === undefined) {
           handleStatusUpdate("inactive")
         } else {
           handleStatusUpdate("active")

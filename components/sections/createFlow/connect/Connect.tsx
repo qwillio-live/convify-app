@@ -7,26 +7,31 @@ import IntegrationCard from "@/components/IntegrationCard"
 import SearchBar from "@/components/SearchBar"
 
 import { DummyIntregationCardData } from "./collapsibleContents"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import "./ConnectFlowComponents.css";
+import Custom404 from "../share/404"
 interface Flow {
   email: string
   googleAnalyticsId: string
   googleTagManagerId: string
   metaPixelAccessToken: string
+  metaPixelId: string
 }
 const ConnectFlowComponents = () => {
   const [flowData, setFlowData] = useState<Flow>({
     email: "",
     googleAnalyticsId: "",
     googleTagManagerId: "",
-    metaPixelAccessToken: ""
+    metaPixelAccessToken: "",
+    metaPixelId: ""
   })
   const [search, setSearch] = useState("")
   const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
   const currentPath = usePathname()
   const [flowId, setFlowId] = useState<string | null>(null);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
@@ -50,12 +55,18 @@ const ConnectFlowComponents = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data, "data")
+          if (data.error) {
+            console.error(data.error);
+            setError(true);
+            return;
+          }
           setFlowData(data)
         })
-        .catch((error) => console.error("Error fetching user data:", error))
+        .catch((error) => setError(true))
+        .finally(() => setLoading(false))
     }
   }, [flowId])
-
 
   // Define the update function
   const updateStatus = (id, newStatus) => {
@@ -109,7 +120,7 @@ const ConnectFlowComponents = () => {
       }
 
       if (item.title === 'Meta Pixel') {
-        if (!flowData?.metaPixelAccessToken || flowData.metaPixelAccessToken === null || flowData.metaPixelAccessToken === undefined || flowData.metaPixelAccessToken.trim() === "") {
+        if (!flowData?.metaPixelId || flowData.metaPixelId === null || flowData.metaPixelId === undefined || flowData.metaPixelId.trim() === "") {
           return { ...item, status: 'inactive' };
         } else {
           return { ...item, status: 'active' };
@@ -121,34 +132,46 @@ const ConnectFlowComponents = () => {
     setFilteredDatas(filteredData);
   }, [flowData])
 
+  const router = useRouter();
+  if (error) {
+    router.push('404');
+    return
+  }
+
   return (
-    <div className="min-h-screen w-full overflow-auto pb-[80px] connect-flow-content" style={{ height: '100vh' }}>
-      <div
-        className="mx-auto mt-8  flex lg:w-7/12 px-4 flex-col items-center justify-center"
-      >
-        <SearchBar search={search} setSearch={setSearch} />
-        <div className="mt-10 flex w-full flex-col">
-          {filteredDatas?.length > 0 ? (
-            <Accordion type="multiple">
-              {filteredDatas?.map((Integrationitem: TIntegrationCardData) => (
-                <IntegrationCard
-                  key={Integrationitem.id}
-                  Integrationitem={Integrationitem}
-                  updateStatus={updateStatus}
-                />
-              ))}
-            </Accordion>
-          ) : (
-            <div className="flex h-96 w-full items-center justify-center">
-              <p className="text-lg font-normal text-gray-500">
-                No Integration found
-              </p>
-            </div>
-          )}
+    loading ? (
+      <div className="flex justify-center items-center h-full" >
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div>
-      </div>
-    </div>
-  )
+      </div >
+    ) : (
+      < div className="min-h-screen w-full overflow-auto pb-[20px] connect-flow-content" >
+        <div
+          className="mx-auto mt-8  flex lg:w-7/12 px-4 flex-col items-center justify-center"
+        >
+          <SearchBar search={search} setSearch={setSearch} />
+          <div className="mt-10 flex w-full flex-col">
+            {filteredDatas?.length > 0 ? (
+              <Accordion type="multiple">
+                {filteredDatas?.map((Integrationitem: TIntegrationCardData) => (
+                  <IntegrationCard
+                    key={Integrationitem.id}
+                    Integrationitem={Integrationitem}
+                    updateStatus={updateStatus}
+                  />
+                ))}
+              </Accordion>
+            ) : (
+              <div className="flex h-96 w-full items-center justify-center">
+                <p className="text-lg font-normal text-gray-500">
+                  No Integration found
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div >))
 }
 
 
