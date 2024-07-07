@@ -101,7 +101,7 @@ export default function FlowPreview() {
               backgroundColor: backgroundColor,
               paddingTop: headerPosition === 'absolute' ? headerHeight+'px' : '0'
              }}
-            className="my-14
+            className="mt-14
           shrink-0
           basis-full
           min-w-full"
@@ -113,7 +113,13 @@ export default function FlowPreview() {
           </div>
         )
       })}
+      <div
+      style={{
+        width: '100%',
+        backgroundColor: backgroundColor,
+        }}>
       <ResolvedComponentsFromCraftState screen={screenFooter} />
+      </div>
     </>
   )
 }

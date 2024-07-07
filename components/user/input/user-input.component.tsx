@@ -205,7 +205,7 @@ export const UserInputGen = ({ ...props }) => {
                   "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "#fff",
+                  backgroundColor: "transparent",
                   borderColor: fieldError
                     ? "#cc0000"
                     : isActive
@@ -283,7 +283,6 @@ export const UserInputGen = ({ ...props }) => {
           peer-focus-visible:outline-none
           focus-visible:ring-0
           ring-opacity-0
-          bg-white
           transition-all
           duration-200
           ease-in-out
@@ -350,7 +349,7 @@ const UserInputStyled = styled(Input)<{
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 50px;
-  background-color: "#fff";
+  background-color: "transparent";
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
@@ -566,7 +565,7 @@ export const UserInput = ({ ...props }) => {
                   "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "#fff",
+                  backgroundColor: "transparent",
                   borderColor: props.error
                     ? "#cc0000"
                     : props.isActive
@@ -648,7 +647,6 @@ export const UserInput = ({ ...props }) => {
           peer-focus-visible:outline-none
           focus-visible:ring-0
           ring-opacity-0
-          bg-white
           transition-all
           duration-200
           ease-in-out
