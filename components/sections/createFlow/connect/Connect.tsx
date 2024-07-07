@@ -39,13 +39,15 @@ const ConnectFlowComponents = () => {
       const match = url && url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
+      } else if (match && match[1] === "flows") {
+        setFlowId(match[1]);
       }
     };
     extractFlowIdFromUrl();
   }, []);
 
   useEffect(() => {
-    if (flowId) {
+    if (flowId !== "flows" && flowId !== null) {
       fetch(`/api/flows/${flowId}/integrations`, {
         method: "GET",
         headers: {
@@ -55,7 +57,6 @@ const ConnectFlowComponents = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data, "data")
           if (data.error) {
             console.error(data.error);
             setError(true);
@@ -65,6 +66,9 @@ const ConnectFlowComponents = () => {
         })
         .catch((error) => setError(true))
         .finally(() => setLoading(false))
+    } else {
+      setLoading(false)
+      setError(false)
     }
   }, [flowId])
 

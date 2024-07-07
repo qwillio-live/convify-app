@@ -19,13 +19,15 @@ export default function CreateFlowsPage() {
       const match = url && url.match(/dashboard\/([^\/]+)\/share/); // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
+      } else if (match && match[1] === "flows") {
+        setFlowId(match[1]);
       }
     };
     extractFlowIdFromUrl();
   }, []);
 
   useEffect(() => {
-    if (flowId) {
+    if (flowId !== "flows" && flowId !== null) {
       fetch(`/api/flows/${flowId}`, {
         method: "GET",
         headers: {
@@ -48,6 +50,9 @@ export default function CreateFlowsPage() {
           console.error(err);
           setError(true);
         });
+    } else {
+      setIsPublished(false);
+      setIsPublishedLoading(false);
     }
   }, [flowId]);
 
