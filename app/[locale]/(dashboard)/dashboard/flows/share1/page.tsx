@@ -10,7 +10,7 @@ export default function CreateFlowsPage() {
           <Header />
         </div>
         <main className="content border-t relative overflow-hidden bg-[#FAFAFA] flex-1 h-full">
-          <ShareFlowComponents isPublished={false} />
+          <ShareFlowComponents isPublished={false} data={null} />
         </main>
       </div>
       {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">

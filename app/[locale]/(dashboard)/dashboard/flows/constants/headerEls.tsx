@@ -72,7 +72,7 @@ const Header = () => {
                     </Link>
                     <Link
                         className={linkClasses("/dashboard/flows/share1")}
-                        href="/dashboard/flows/share1"
+                        href="/dashboard/flows/share"
                     >
                         {t("Share")}
                     </Link>

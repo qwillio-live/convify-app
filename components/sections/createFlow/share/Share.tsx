@@ -23,11 +23,13 @@ import './Share.css'
 import { ShareDrawerDesktop } from "./drawerDesktopShare"
 
 const ShareFlowComponents = ({
-  isPublished }) => {
+  isPublished, data }) => {
   const [view, setView] = useState("desktop")
   const [innerview, setInnerView] = useState("desktop")
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
-  const [link, setLink] = useState("https://convify.app/your-link-here")
+  const [link, setLink] = useState(() => {
+    return data && data.link ? data.link : "https://convify.app/your-link-here"
+  })
   const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
   const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
 
@@ -50,12 +52,16 @@ const ShareFlowComponents = ({
     window.addEventListener('resize', updateView);
     return () => window.removeEventListener('resize', updateView);
   }, []);
-
+  useEffect(() => {
+    if (data) {
+      setLink(data.link)
+    }
+  })
   return (
     <div>
       {
         innerview === "desktop" && (
-          <div className="flex h-[calc(-52px+99vh)] flex-row items-start justify-between">
+          <div className="flex h-[calc(-52px+98vh)] flex-row items-start justify-between">
             <div className="relative flex h-full  w-64  flex-col overflow-hidden border-r border-[rgba(0,0,0,0.07)] bg-white">
               <nav className="grid items-start  text-sm font-medium ">
                 <Link
@@ -112,21 +118,30 @@ const ShareFlowComponents = ({
                             <input
                               type="text"
                               aria-label="copy link input"
-                              className="m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none"
+                              className={`m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none`}
                               value={link}
+                              disabled={!isPublished}
+                              style={{
+                                backgroundColor: !isPublished ? '#aba9a9' : 'initial'
+                              }}
                             />
                           </div>
                         </div>
                       </div>
                       <button
                         type="button"
+                        disabled={!isPublished}
                         onClick={() => {
                           navigator.clipboard.writeText(link)
                           toast({
                             title: "Link copied to clipboard",
                           })
                         }}
-                        className="flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)] "
+                        className={`flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]`}
+                        style={{
+                          backgroundColor: !isPublished ? 'black' : '',
+                          cursor: !isPublished ? 'not-allowed' : 'pointer'
+                        }}
                       >
                         {t("Copy link")}
                       </button>
@@ -324,7 +339,7 @@ const ShareFlowComponents = ({
                   >
                     {isPublished ? (
                       <iframe
-                        src="https://convify.io/survey"
+                        src={link ? link : "https://convify.io/survey"}
                         frameBorder="0"
                         className="size-full"
                       ></iframe>
@@ -398,70 +413,73 @@ const ShareFlowComponents = ({
                 </div>
               </div>
             </div >
-          </div >)}
-      {isCustomLinkOpen && (
-        <div className="fixed inset-0 z-[99] flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
-          <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
-            <div className="z-[1] flex w-[512px] flex-col items-center p-8">
-              <div className="min-h-0 min-w-0 shrink-0 pb-2">
-                <span className="block text-center text-4xl font-light">
-                  {t("Create a custom link")}
-                </span>
-              </div>
-              <div className="min-h-0 min-w-0 shrink-0">
-                <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                  {t(
-                    "Edit the link and let people know what your flow is about"
-                  )}
-                </span>
-              </div>
-              <div className="mb-10"></div>
-              <div className="min-h-0 min-w-0 shrink-0 pb-6">
-                <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
-                  {t("Available on these plans: Plus, Business, Enterprise")}
-                </span>
-              </div>
-              <div className="flex size-full items-center justify-center">
-                <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
-                  <div className="flex">
-                    <span className="block flex-[0_0_auto]">
-                      {t("Upgrade my plan")}
-                    </span>
-                  </div>
-                </button>
+          </div >)
+      }
+      {
+        isCustomLinkOpen && (
+          <div className="fixed inset-0 z-[99] flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
+            <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
+              <div className="z-[1] flex w-[512px] flex-col items-center p-8">
+                <div className="min-h-0 min-w-0 shrink-0 pb-2">
+                  <span className="block text-center text-4xl font-light">
+                    {t("Create a custom link")}
+                  </span>
+                </div>
+                <div className="min-h-0 min-w-0 shrink-0">
+                  <span className="block text-center text-xl text-[rgb(115,115,115)]">
+                    {t(
+                      "Edit the link and let people know what your flow is about"
+                    )}
+                  </span>
+                </div>
+                <div className="mb-10"></div>
+                <div className="min-h-0 min-w-0 shrink-0 pb-6">
+                  <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
+                    {t("Available on these plans: Plus, Business, Enterprise")}
+                  </span>
+                </div>
+                <div className="flex size-full items-center justify-center">
+                  <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
+                    <div className="flex">
+                      <span className="block flex-[0_0_auto]">
+                        {t("Upgrade my plan")}
+                      </span>
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <button
-            aria-label="Close dialog"
-            color="#737373"
-            data-qa="upgrade-nag-screen-close-button"
-            className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
-          >
-            <div className="flex size-auto items-center justify-center ">
-              <span
-                onClick={() => setIsCustomLinkOpen(false)}
-                className="cursor-pointer"
-              >
-                {" "}
-                <svg
-                  width="28px"
-                  height="28px"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#000000"
+            <button
+              aria-label="Close dialog"
+              color="#737373"
+              data-qa="upgrade-nag-screen-close-button"
+              className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+            >
+              <div className="flex size-auto items-center justify-center ">
+                <span
+                  onClick={() => setIsCustomLinkOpen(false)}
+                  className="cursor-pointer"
                 >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
-                  />
-                </svg>
-              </span>
-            </div>
-          </button>
-        </div>
-      )}
+                  {" "}
+                  <svg
+                    width="28px"
+                    height="28px"
+                    viewBox="0 0 16 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#000000"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </button>
+          </div>
+        )
+      }
       <Drawer open={shareDrawerOpen} onOpenChange={setShareDrawerOpen}>
         <DrawerContent className="outline-none disable-after"
           style={{ marginBottom: "3px", borderRadius: "10px" }}
@@ -773,7 +791,7 @@ const ShareFlowComponents = ({
         </DrawerContent>
       </Drawer>
       <ShareDrawerDesktop desktopDrawerOpen={desktopDrawerOpen} setDesktopDrawerOpen={setDesktopDrawerOpen} />
-    </div>
+    </div >
   )
 }
 

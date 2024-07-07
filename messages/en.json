@@ -178,7 +178,7 @@
     "Decorator": "Decorator",
     "Input": "Input",
     "Text": "Text",
-    "Text Here" : "Text Here",
+    "Text Here": "Text Here",
     "Primary Font": "Primary Font",
     "Secondary Font": "Secondary Font",
     "Primary Text Color": "Primary Text Color",
@@ -299,6 +299,8 @@
       "Email address to which the response is sent": "Email address to which the response is sent"
     },
     "SharePage": {
+      "Page Not Found": "Page Not Found",
+      "Sorry, we couldn't find the page you're looking for": "Sorry, we couldn't find the page you're looking for.",
       "Share the link": "Share the link",
       "Embed in an email": "Embed in an email",
       "Embed in a webpage": "Embed in a webpage",

@@ -1,18 +1,21 @@
 "use client"
 import ShareFlowComponents from "@/components/sections/createFlow/share/Share"
 import Header from "../constants/headerEls"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
+import Custom404 from "@/components/sections/createFlow/share/404";
 
 export default function CreateFlowsPage() {
   const currentPath = usePathname();
   const [flowId, setFlowId] = useState<string | null>(null);
   const [isPublished, setIsPublished] = useState<boolean>(false);
-
+  const [isPublishedLoading, setIsPublishedLoading] = useState<boolean>(true);
+  const [data, setData] = useState<any>({});
+  const [error, setError] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
       const url = currentPath; // Get the current URL
-      console.log("url", url);
       const match = url && url.match(/dashboard\/([^\/]+)\/share/); // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
@@ -32,10 +35,29 @@ export default function CreateFlowsPage() {
       })
         .then((res) => res.json())
         .then((data) => {
+          if (data.error) {
+            console.error(data.error);
+            setError(true);
+            return;
+          }
+          setData(data);
           setIsPublished(data.isPublished);
+          setIsPublishedLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(true);
         });
     }
   }, [flowId]);
+
+  if (error) {
+    return (
+      <Custom404 />
+    )
+  }
+
+
   return (
     <div className="min-h-screen w-full">
       <div className="min-h-screen flex flex-col">
@@ -43,7 +65,15 @@ export default function CreateFlowsPage() {
           <Header />
         </div>
         <main className="content border-t relative overflow-hidden bg-[#FAFAFA] flex-1 h-full">
-          <ShareFlowComponents isPublished={isPublished} />
+          {
+            isPublishedLoading ? (
+              <div className="flex justify-center items-center h-full">
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+                </div>
+              </div>
+            ) : <ShareFlowComponents isPublished={isPublished} data={data} />
+          }
         </main>
       </div>
       {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">

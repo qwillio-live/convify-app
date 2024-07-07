@@ -16,11 +16,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { BreadCrumbs } from "@/components/breadcrumbs"
+import { useEffect, useState } from "react"
 
 const Header = () => {
     const t = useTranslations("CreateFlow"); // Initialize your translation hook
     const router = useRouter();
     const currentPath = usePathname();
+    const [flowId, setFlowId] = useState<string | null>(null);
 
     const handleLogout = async () => {
         localStorage.removeItem('date');
@@ -33,11 +35,20 @@ const Header = () => {
         await signOut({ redirect: false });
         router.push("/login");
     };
+    useEffect(() => {
+        const extractFlowIdFromUrl = async () => {
+            const url = currentPath; // Get the current URL
+            const match = url && url.match(/dashboard\/([^\/]+)\/share/); // Use regex to match the flowId
+            if (match && match[1] && match[1] !== "flows") {
+                setFlowId(match[1]);
+            }
+        };
+        extractFlowIdFromUrl();
+    }, [flowId]);
 
     const linkClasses = (path) => (
-        `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm px-3 ${currentPath === path || currentPath === "/pt" + path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
+        `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm px-3 ${currentPath?.split("/").at(-1) === path.split("/").at(-1) || currentPath === "/pt" + path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
     );
-
     return (
         <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
@@ -59,25 +70,25 @@ const Header = () => {
                 <div className="flex bg-inherit lg:justify-center py-0 size-full lg:w-auto">
                     <Link
                         className={linkClasses("/dashboard/flows/create-flow")}
-                        href="/dashboard/flows/create-flow"
+                        href={`/dashboard/${flowId}/create-flow`}
                     >
                         {t("Create")}
                     </Link>
                     <Link
                         className={linkClasses("/dashboard/flows/connect")}
-                        href="/dashboard/flows/connect"
+                        href={`/dashboard/${flowId}/connect`}
                     >
                         {t("Connect")}
                     </Link>
                     <Link
-                        className={linkClasses("/dashboard/flows/share1")}
-                        href="/dashboard/flows/share1"
+                        className={linkClasses("/dashboard/flows/share")}
+                        href={`/dashboard/${flowId}/share`}
                     >
                         {t("Share")}
                     </Link>
                     <Link
                         className={linkClasses("/dashboard/flows/results")}
-                        href="/dashboard/flows/results"
+                        href={`/dashboard/${flowId}/results`}
                     >
                         {t("Results")}
                     </Link>
@@ -139,7 +150,7 @@ const Header = () => {
                     </DropdownMenu>
                 </div>
             </div>
-        </header>
+        </header >
     );
 };
 

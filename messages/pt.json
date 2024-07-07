@@ -301,6 +301,8 @@
       "Email address to which the response is sent": "Endereço de email para o qual a resposta é enviada"
     },
     "SharePage": {
+      "Page Not Found": "Página não encontrada",
+      "Sorry, we couldn't find the page you're looking for": "Desculpe, não conseguimos encontrar a página que você está procurando",
       "Share the link": "Compartilhar o link",
       "Embed in an email": "Incorporar em um email",
       "Embed in a webpage": "Incorporar em uma página web",
