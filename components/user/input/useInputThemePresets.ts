@@ -1,9 +1,9 @@
 import { darken, rgba } from "polished"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { PictureTypes } from "@/components/PicturePicker"
 
 import { UserInputProps, UserInputSizes } from "./user-input.component"
-import { PictureTypes } from "@/components/PicturePicker"
 
 const useInputThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
