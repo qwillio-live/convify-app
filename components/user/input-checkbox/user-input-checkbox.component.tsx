@@ -39,7 +39,7 @@ const UserInputSizeValues = {
   small: "260px",
   medium: "376px",
   large: "576px",
-  full: "760px",
+  full: "100%",
 }
 
 export type UserInputCheckboxProps = {

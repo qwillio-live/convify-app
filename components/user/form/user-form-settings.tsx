@@ -5,14 +5,16 @@ import {
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyStart,
   AlignVerticalJustifyCenter,
-  AlignVerticalJustifyStart,
   AlignVerticalJustifyEnd,
+  AlignVerticalJustifyStart,
   MoveHorizontal,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
 
 import { Element, Node, NodeHelpers, useNode } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import {
   Accordion,
   AccordionContent,
@@ -37,8 +39,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
 
 export const FormSettings = () => {
   const {
@@ -91,17 +91,20 @@ export const FormSettings = () => {
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-  const mobileScreen = useAppSelector((state:RootState) => state.theme?.mobileScreen);
+  const mobileScreen = useAppSelector(
+    (state: RootState) => state.theme?.mobileScreen
+  )
   return (
     <>
       <Accordion
-            value={settingsTab || "layout"}
-            onValueChange={(value) => {
-              setProp((props) => (props.settingsTab = value), 200)
-            }}
-            type="multiple"
-            defaultValue={['layout']}
-        className="w-full">
+        value={settingsTab || "layout"}
+        onValueChange={(value) => {
+          setProp((props) => (props.settingsTab = value), 200)
+        }}
+        type="multiple"
+        defaultValue={["layout"]}
+        className="w-full"
+      >
         <AccordionItem value="layout">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Layout")} </span>
@@ -151,18 +154,45 @@ export const FormSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
+            */}
             <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
               <Label className="text-md text-muted-foreground">
                 {t("Align Horizontal")}
               </Label>
               <Tabs
-                value={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent : flexDirection === "column" ? alignItems: justifyContent}
-                defaultValue={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent: flexDirection === "column" ? alignItems: justifyContent}
+                value={
+                  mobileScreen
+                    ? mobileFlexDirection === "column"
+                      ? mobileAlignItems
+                      : mobileJustifyContent
+                    : flexDirection === "column"
+                    ? alignItems
+                    : justifyContent
+                }
+                defaultValue={
+                  mobileScreen
+                    ? mobileFlexDirection === "column"
+                      ? mobileAlignItems
+                      : mobileJustifyContent
+                    : flexDirection === "column"
+                    ? alignItems
+                    : justifyContent
+                }
                 onValueChange={(value) => {
-                  if(mobileScreen){
-                    mobileFlexDirection === "column" ? setProp((props) => (props.mobileAlignItems = value), 200) : setProp((props) => (props.mobileJustifyContent = value), 200)
-                  }else{
-                    flexDirection === "column" ? setProp((props) => (props.alignItems = value), 200) : setProp((props) => (props.justifyContent = value), 200)
+                  if (mobileScreen) {
+                    mobileFlexDirection === "column"
+                      ? setProp(
+                          (props) => (props.mobileAlignItems = value),
+                          200
+                        )
+                      : setProp(
+                          (props) => (props.mobileJustifyContent = value),
+                          200
+                        )
+                  } else {
+                    flexDirection === "column"
+                      ? setProp((props) => (props.alignItems = value), 200)
+                      : setProp((props) => (props.justifyContent = value), 200)
                   }
                 }}
                 className="flex-initial flex flex-col shrink-0"
@@ -171,7 +201,7 @@ export const FormSettings = () => {
                   <TabsTrigger value="flex-start">
                     <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="center" >
+                  <TabsTrigger value="center">
                     <AlignHorizontalJustifyCenter size={16} />
                   </TabsTrigger>
                   <TabsTrigger value="flex-end">
@@ -179,40 +209,39 @@ export const FormSettings = () => {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-            </div> */}
-{
-  ((mobileScreen && mobileFlexDirection === "row") || (!mobileScreen && flexDirection === "row")) && (
-    <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
-    <Label className="text-md text-muted-foreground">
-      {t("Align Vertical")}
-    </Label>
-    <Tabs
-      value={mobileScreen ? mobileAlignItems: alignItems}
-      defaultValue={mobileScreen ? mobileAlignItems: alignItems}
-      onValueChange={(value) => {
-        if(mobileScreen){
-          setProp((props) => (props.mobileAlignItems = value), 200)
-        }else{
-          setProp((props) => (props.alignItems = value), 200)
-        }
-      }}
-      className="flex-initial flex flex-col shrink-0"
-    >
-      <TabsList className="w-full flex flex-row">
-        <TabsTrigger value="flex-start">
-          <AlignVerticalJustifyStart  size={16} />
-        </TabsTrigger>
-        <TabsTrigger value="center" >
-          <AlignVerticalJustifyCenter size={16} />
-        </TabsTrigger>
-        <TabsTrigger value="flex-end">
-          <AlignVerticalJustifyEnd size={16} />
-        </TabsTrigger>
-      </TabsList>
-    </Tabs>
-  </div>
-  )
-}
+            </div>
+            {((mobileScreen && mobileFlexDirection === "row") ||
+              (!mobileScreen && flexDirection === "row")) && (
+              <div className="col-span-2 flex flex-row items-center space-x-2 justify-between">
+                <Label className="text-md text-muted-foreground">
+                  {t("Align Vertical")}
+                </Label>
+                <Tabs
+                  value={mobileScreen ? mobileAlignItems : alignItems}
+                  defaultValue={mobileScreen ? mobileAlignItems : alignItems}
+                  onValueChange={(value) => {
+                    if (mobileScreen) {
+                      setProp((props) => (props.mobileAlignItems = value), 200)
+                    } else {
+                      setProp((props) => (props.alignItems = value), 200)
+                    }
+                  }}
+                  className="flex-initial flex flex-col shrink-0"
+                >
+                  <TabsList className="w-full flex flex-row">
+                    <TabsTrigger value="flex-start">
+                      <AlignVerticalJustifyStart size={16} />
+                    </TabsTrigger>
+                    <TabsTrigger value="center">
+                      <AlignVerticalJustifyCenter size={16} />
+                    </TabsTrigger>
+                    <TabsTrigger value="flex-end">
+                      <AlignVerticalJustifyEnd size={16} />
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            )}
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
                 <Label htmlFor="marginTop">{t("Gap")}</Label>
