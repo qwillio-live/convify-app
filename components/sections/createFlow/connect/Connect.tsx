@@ -18,12 +18,13 @@ interface Flow {
   metaPixelAccessToken: string
   metaPixelId: string
 }
-const ConnectFlowComponents = () => {
+const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
   const [flowData, setFlowData] = useState<Flow>({
     email: "",
     googleAnalyticsId: "",
     googleTagManagerId: "",
     metaPixelAccessToken: "",
+
     metaPixelId: ""
   })
   const [search, setSearch] = useState("")
