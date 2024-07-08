@@ -280,7 +280,6 @@ const ResponseFlowComponents = () => {
                     isAscending ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
                   }
                 </TableHead>
-                <TableHead className="whitespace-nowrap">{t("Label")}</TableHead>
                 {uniqueLabelsArray.length > 0 &&
                   uniqueLabelsArray.map((label: string) => (
                     <TableHead className="whitespace-nowrap" key={label as React.Key}>
@@ -295,7 +294,6 @@ const ResponseFlowComponents = () => {
                   <TableCell>
                     {convertTimestamp(row["Submission time"])} <span className="text-gray-500"></span>
                   </TableCell>
-                  <TableCell></TableCell>
                   {uniqueLabelsArray.map((label: string) => (
                     <TableCell key={label as React.Key}>
                       {label !== "Submission time" && label !== "label" && row[label]}

@@ -65,38 +65,14 @@ function convertDate(dateStr: string): string {
   return `${day}.${month}`;
 }
 
-
-function convertAndCheck(dateString: Date): string {
-  const incomingDate = dateString;
-  const hours = incomingDate.getHours();
-  const minutes = incomingDate.getMinutes();
-  const exactTime = `${hours}:${minutes}`
-  // Get the ISO string representation of the incoming date
-  const incomingISOString = incomingDate.toISOString();
-
-  if (exactTime === "0:0") {
-    // Clone the incoming date and add 1 day to it
-    const nextDay = new Date(incomingDate);
-    nextDay.setDate(nextDay.getDate() + 1);
-    return nextDay.toISOString();
-  }
-  // Return the ISO string of the incoming date as it is
-  return incomingISOString;
-}
-
-
 const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { time: string; visits: number }[] => {
   // Create an array of dates from startDate to endDate
-  const startDateConverted = convertAndCheck(startDate)
-  const endDateConverted = convertAndCheck(endDate)
   const dateArray: string[] = [];
-  let currentDate = new Date(startDateConverted);
-
-  while (currentDate <= new Date(endDateConverted)) {
-    dateArray.push(convertDate(currentDate.toISOString().slice(0, 10)));
+  let currentDate = new Date(startDate);
+  while (currentDate <= new Date(endDate)) {
+    dateArray.push(convertDate(currentDate.toDateString()));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-
   // Map through the dateArray and replace if there's a match with convertDate(d.date)
   return dateArray.map((date: string) => {
     const matchingData = data.find((d: SubmitData) => convertDate(d.date ?? "0") === date);
@@ -110,16 +86,12 @@ const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { t
 
 const submitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { time: string; submits: number }[] => {
   // Create an array of dates from startDate to endDate
-  const startDateConverted = convertAndCheck(startDate)
-  const endDateConverted = convertAndCheck(endDate)
   const dateArray: string[] = [];
-  let currentDate = new Date(startDateConverted);
-
-  while (currentDate <= new Date(endDateConverted)) {
-    dateArray.push(convertDate(currentDate.toISOString().slice(0, 10)));
+  let currentDate = new Date(startDate);
+  while (currentDate <= new Date(endDate)) {
+    dateArray.push(convertDate(currentDate.toDateString()));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-
   // Map through the dateArray and replace if there's a match with convertDate(d.date)
   return dateArray.map((date: string) => {
     const matchingData = data.find((d: SubmitData) => convertDate(d.date ?? "0") === date);
@@ -138,10 +110,11 @@ interface SubmitData {
   count?: number
 }
 const formatDate = (dateString) => {
+  if (!dateString) return "0";
   const date = new Date(dateString);
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
@@ -151,8 +124,8 @@ interface Analytics {
   conversionRate: string
   desktopDevicePercentage: string
   mobileDevicePercentage: string
-  submitsArray: []
-  uniqueVisitsArray: []
+  submitsArray: Array<SubmitData>
+  uniqueVisitsArray: Array<SubmitData>
 }
 
 interface Dropoff {
@@ -271,12 +244,14 @@ const InsightsFlowComponents = () => {
       const match = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
         setFlowId(match[1]);
+        setDays(7)
+        localStorage.setItem('days', JSON.stringify(7));
       }
     };
     extractFlowIdFromUrl();
   }, []);
 
-  const [dataKey, setDataKey] = useState(sessionStorage.getItem('dataKey') ?? '');
+  const [dataKey, setDataKey] = useState(sessionStorage.getItem('dataKey') ?? 'visits');
 
   useEffect(() => {
     sessionStorage.setItem('dataKey', dataKey);
@@ -302,8 +277,8 @@ const InsightsFlowComponents = () => {
     conversionRate: '0',
     desktopDevicePercentage: '0',
     mobileDevicePercentage: '0',
-    submitsArray: [],
-    uniqueVisitsArray: [],
+    submitsArray: visitsAndSubmitsData,
+    uniqueVisitsArray: visitsAndSubmitsData,
   })
   useEffect(() => {
     // Parse analytics from local storage when component mounts or updates
@@ -339,13 +314,14 @@ const InsightsFlowComponents = () => {
 
   useEffect(() => {
     const getAnalytics = async () => {
+      console.log("date endDate", formatDate(date.endDate))
       const response = await fetch(
         `/api/analytics/?flowId=${flowId}&startDate=${formatDate(date.startDate)}&endDate=${formatDate(date.endDate)}`
       )
       const dataRes = await response.json()
       setAnalytics(dataRes)
       localStorage.setItem('analyticsData', JSON.stringify(dataRes));
-      localStorage.setItem('days', JSON.stringify(days));
+
       if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
       else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate))
       else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
@@ -354,7 +330,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getAnalytics()
     }
-  }, [status])
+  }, [status, flowId])
 
   const repeatedJSX = (
     <>

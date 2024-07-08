@@ -1,6 +1,6 @@
 "use client"
 
-import { format, subDays } from "date-fns"
+import { format, subDays, differenceInCalendarDays, addHours } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import * as React from "react"
 import { DateRange } from "react-day-picker"
@@ -28,6 +28,7 @@ const getInitialDate = () => {
     };
   }
 };
+
 export function DatePickerWithRange({
   className,
   locale = enUS, // Default locale
@@ -40,25 +41,33 @@ export function DatePickerWithRange({
   const [date, setDate] = React.useState<DateRange | undefined>(getInitialDate)
 
   React.useEffect(() => {
-    setDater({
-      startDate: date?.from || subDays(new Date(), days),
-      endDate: date?.to || new Date(),
-    })
-    localStorage.setItem('date', JSON.stringify({
-      startDate: date?.from || subDays(new Date(), days),
-      endDate: date?.to || new Date(),
-    }));
-    setStatus(!status)
-  }, [date])
+    const startDate = date?.from || subDays(new Date(), days);
+    let endDate = date?.to || new Date();
+
+    const isToday = (new Date().toDateString() === new Date(endDate).toDateString());
+    const difference = differenceInCalendarDays(new Date(endDate), new Date(startDate));
+
+    setDater({ startDate, endDate });
+    localStorage.setItem('date', JSON.stringify({ startDate, endDate }));
+
+    if (isToday && difference === days) {
+    } else {
+      setStatus(!status);
+    }
+  }, [date]);
 
   React.useEffect(() => {
-    const localdays = JSON.parse(localStorage.getItem('days') || 'null');
-    if (localdays != days) {
-      setDate({
-        from: subDays(new Date(), days),
-        to: new Date(),
-      })
-    }
+    setDate({
+      from: subDays(new Date(), days),
+      to: new Date(),
+    })
+    // const localdays = JSON.parse(localStorage.getItem('days') || 'null');
+    // if (localdays != days) {
+    //   setDate({
+    //     from: subDays(new Date(), days),
+    //     to: new Date(),
+    //   })
+    // }
   }, [days])
 
   return (
