@@ -77,12 +77,17 @@ export const AvatarComponentGen = ({
   const baseSize = 90; // Initial base size of the avatar
   const minimumSize = 48; // Minimum size of the avatar
   const sizeReductionFactor = 0.5; // Control the rate of size reduction
-  const mobileBaseSize = 60
+  const mobileBaseSize = 70
 
   let mobileDynamicSize = Math.max(mobileBaseSize - (scrollY * sizeReductionFactor), minimumSize);
   // Calculate dynamic size
   let dynamicSize = Math.max(baseSize - (scrollY * sizeReductionFactor), minimumSize);
-  const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (scrollY && scrollY > 50 ? 'avatar-none-scrolled' : 'avatar-none')}`;
+  const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (scrollY && scrollY > 50 ? 'avatar-none-scrolled' : mobileScreen ? 'avatar-none-mobile' : 'avatar-none')}`;
+  const initialTranslateYMobile = 35;
+  const maxTranslateY = 0;
+  const translateY = mobileScreen
+    ? `calc(${initialTranslateYMobile}% - ${scrollY}px)`
+    : `${Math.max(maxTranslateY, -scrollY)}px`;
 
   return (
     <div
@@ -115,6 +120,9 @@ export const AvatarComponentGen = ({
               avatarClass,
               hasComponentBeforeAvatar ? 'absolute transition-transform translate-y-[-50%] ease-in-out duration-300' : ''
             )}
+            style={{
+              transform: `translateY(${translateY}px)`,
+            }}
           >
             <img
               alt={alt}
@@ -160,7 +168,7 @@ export const UserLogo = ({
 
   const avatarRef = useRef(null);
 
-  const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : 'avatar-none'}`;
+  const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (scrollY && scrollY > 50 ? 'avatar-none-scrolled' : mobileScreen ? 'avatar-none-mobile' : 'avatar-none')}`;
   return (
     <div
       id="avatar-component"

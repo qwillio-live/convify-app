@@ -213,6 +213,7 @@ export function CreateFlowComponent() {
     // Cleanup event listener on component unmount
     return () => window.removeEventListener('resize', updateWidth);
   }, [headerMode, height]); 
+  console.log('header position: ',headerPosition)
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -342,7 +343,9 @@ export function CreateFlowComponent() {
                     style={{
                       marginTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
                       backgroundColor: headerMode ? avatarBackgroundColor : '',
-                      paddingTop: !headerMode ? '15px' : '',
+                      paddingTop: !headerMode && !mobileScreen
+                      ? headerPosition === 'relative' ? '7px' : '15px'
+                      : '',
                     }}>
                     <Frame data={editorLoad}></Frame>
                   </div>
