@@ -26,14 +26,14 @@ const cardData = [
 ]
 
 export default function SelectTemplate() {
-  const [loadingCardIndex, setLoadingCardIndex] = useState(null)
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [isScrolling, setIsScrolling] = useState(false)
-  const scrollTimeout = useRef(null)
-  const cardContainerRef = useRef(null)
+  const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [isScrolling, setIsScrolling] = useState<boolean>(false)
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
+  const cardContainerRef = useRef<HTMLDivElement | null>(null)
   const t = useTranslations("Components")
 
-  const handleCardClick = (index) => {
+  const handleCardClick = (index: number) => {
     setLoadingCardIndex(index)
     setTimeout(() => {
       setLoadingCardIndex(null)
@@ -41,7 +41,7 @@ export default function SelectTemplate() {
     }, 3000) // Simulate loading for 3 seconds
   }
 
-  const handleFilterClick = (category) => {
+  const handleFilterClick = (category: string) => {
     setSelectedCategory(category)
   }
 
@@ -61,9 +61,10 @@ export default function SelectTemplate() {
 
   useEffect(() => {
     const cardContainer = cardContainerRef.current
-    cardContainer.addEventListener("scroll", handleScroll)
+    if (cardContainer) cardContainer.addEventListener("scroll", handleScroll)
     return () => {
-      cardContainer.removeEventListener("scroll", handleScroll)
+      if (cardContainer)
+        cardContainer.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
@@ -92,11 +93,7 @@ export default function SelectTemplate() {
             </Breadcrumb>
             <div className="mb-8 mt-12 flex flex-wrap gap-2">
               <Button
-                className={`${
-                  selectedCategory === "Recruiting"
-                    ? "font-semibold"
-                    : "font-normal"
-                }`}
+                className="font-semibold"
                 size="filterIcon"
                 variant={`${
                   selectedCategory === "Recruiting" ? "secondary" : "outline"
@@ -110,11 +107,7 @@ export default function SelectTemplate() {
                   selectedCategory === "b2cLeadGen" ? "secondary" : "outline"
                 }`}
                 size="filterIcon"
-                className={`w-auto ${
-                  selectedCategory === "b2cLeadGen"
-                    ? "font-semibold"
-                    : "font-normal"
-                }`}
+                className="w-auto font-normal"
                 onClick={() => handleFilterClick("b2cLeadGen")}
               >
                 {t("b2cLeadGen")}
@@ -126,11 +119,7 @@ export default function SelectTemplate() {
                     : "outline"
                 }`}
                 size="filterIcon"
-                className={`${
-                  selectedCategory === "customerFeedback"
-                    ? "font-semibold"
-                    : "font-normal"
-                }`}
+                className="font-normal"
                 onClick={() => handleFilterClick("customerFeedback")}
               >
                 {t("customerFeedback")}
@@ -140,9 +129,7 @@ export default function SelectTemplate() {
                   selectedCategory === "other" ? "secondary" : "outline"
                 }`}
                 size="filterIcon"
-                className={`${
-                  selectedCategory === "other" ? "font-semibold" : "font-normal"
-                }`}
+                className="font-normal"
                 onClick={() => handleFilterClick("other")}
               >
                 {t("other")}
