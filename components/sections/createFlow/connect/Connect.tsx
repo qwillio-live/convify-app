@@ -139,7 +139,7 @@ const ConnectFlowComponents = () => {
   const router = useRouter();
   if (error) {
     router.push('404');
-    return
+    return null
   }
 
   return (
