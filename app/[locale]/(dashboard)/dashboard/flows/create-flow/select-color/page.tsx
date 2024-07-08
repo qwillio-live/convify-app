@@ -49,7 +49,7 @@ const ColorPicker = ({ color, onChange }) => {
         .color-text-container {
           margin-top: 10px;
           background: white;
-          border: 1px solid #ccc;
+          border: 1px solid #e9e9e9;
           border-radius: 3px;
           padding: 4px;
           display: flex;
@@ -99,7 +99,7 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
           display: flex;
           flex-direction: column;
           align-items: center;
-          border: 1px solid #ccc;
+          border: 1px solid #e9e9e9;
           border-radius: 8px;
           padding: 9px;
           background-color: #fff;
@@ -112,7 +112,7 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
         .suggestion {
           width: 45px;
           height: 40px;
-          border: 1px solid #ccc;
+          border: 1px solid #e9e9e9;
           border-radius: 4px;
           cursor: pointer;
         }
@@ -191,7 +191,7 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-8 left-4 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
+        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-template"}>
             <Button variant="secondary" size="icon">
               <ChevronLeft className="z-10 h-4 w-4" />

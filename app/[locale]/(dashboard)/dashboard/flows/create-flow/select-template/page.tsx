@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const cardData = [
   { id: 1, category: "Recruiting", title: "Recruiting Campaign" },
@@ -93,7 +94,9 @@ export default function SelectTemplate() {
             </Breadcrumb>
             <div className="mb-8 mt-12 flex flex-wrap gap-2">
               <Button
-                className="font-semibold"
+                className={`font-normal ${
+                  selectedCategory === "Recruiting" ? "font-semibold" : ""
+                }`}
                 size="filterIcon"
                 variant={`${
                   selectedCategory === "Recruiting" ? "secondary" : "outline"
@@ -107,7 +110,9 @@ export default function SelectTemplate() {
                   selectedCategory === "b2cLeadGen" ? "secondary" : "outline"
                 }`}
                 size="filterIcon"
-                className="w-auto font-normal"
+                className={`w-auto font-normal ${
+                  selectedCategory === "b2cLeadGen" ? "font-semibold" : ""
+                }`}
                 onClick={() => handleFilterClick("b2cLeadGen")}
               >
                 {t("b2cLeadGen")}
@@ -119,7 +124,9 @@ export default function SelectTemplate() {
                     : "outline"
                 }`}
                 size="filterIcon"
-                className="font-normal"
+                className={`font-normal ${
+                  selectedCategory === "customerFeedback" ? "font-semibold" : ""
+                }`}
                 onClick={() => handleFilterClick("customerFeedback")}
               >
                 {t("customerFeedback")}
@@ -129,7 +136,9 @@ export default function SelectTemplate() {
                   selectedCategory === "other" ? "secondary" : "outline"
                 }`}
                 size="filterIcon"
-                className="font-normal"
+                className={`font-normal ${
+                  selectedCategory === "other" ? "font-semibold" : ""
+                }`}
                 onClick={() => handleFilterClick("other")}
               >
                 {t("other")}
@@ -143,8 +152,57 @@ export default function SelectTemplate() {
                 {t("startFromScratch")}
               </Button>
             </div>
+            <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] ">
+              <div className="grid grid-cols-1  gap-6 md:grid-cols-2">
+                {filteredCards.map((card, index) => (
+                  <div key={card.id} className="pr-2">
+                    <div
+                      className="relative h-56 cursor-pointer space-y-3 overflow-hidden rounded-md"
+                      onClick={() => handleCardClick(index)}
+                    >
+                      {loadingCardIndex === index && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                          <div className="loader row flex items-center justify-center text-white">
+                            <Loader2 className="loader-icon mr-2" />
+                            {t("loading")}
+                          </div>
+                        </div>
+                      )}
 
-            <div
+                      <span data-state="closed">
+                        <div className="h-full w-full rounded-md">
+                          <img
+                            alt="Thinking Components"
+                            loading="lazy"
+                            decoding="async"
+                            data-nimg="1"
+                            className={`h-full w-full rounded-md object-cover transition-all ${
+                              loadingCardIndex !== index
+                                ? "hover:scale-105"
+                                : ""
+                            }`}
+                            src={cardDemo.src}
+                          />
+                        </div>
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-md my-2 font-semibold leading-none">
+                        {card.title}
+                      </h3>
+                      <Badge
+                        variant="default"
+                        className="font-sans3 rounded-md bg-black px-2 py-1 font-semibold"
+                      >
+                        {t("popular")}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+
+            {/* <div
               className={`custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto md:grid-cols-2 ${
                 isScrolling ? "scrolling" : ""
               }`}
@@ -194,7 +252,7 @@ export default function SelectTemplate() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
           <Separator orientation="vertical" className="mx-4 h-full" />
           <div className="w-full py-6 md:w-5/12">
@@ -207,7 +265,7 @@ export default function SelectTemplate() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-8 left-4 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
+        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
           <Button variant="secondary" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>

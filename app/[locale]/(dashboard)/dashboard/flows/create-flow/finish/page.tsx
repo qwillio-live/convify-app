@@ -62,7 +62,7 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-8 left-4 flex w-full items-center justify-between bg-white px-6 py-3 md:w-6/12">
+        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-color"}>
             <Button variant="secondary" size="icon">
               <ChevronLeft className="h-4 w-4" />
