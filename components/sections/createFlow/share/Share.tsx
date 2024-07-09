@@ -120,7 +120,7 @@ const ShareFlowComponents = ({
                               type="text"
                               aria-label="copy link input"
                               className={`m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none`}
-                              value={link}
+                              value={isPublished ? link : "https://convify.app/your-link-here"}
                             />
                           </div>
                         </div>
