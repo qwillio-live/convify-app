@@ -20,18 +20,6 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
@@ -253,8 +241,6 @@ export const UserInputMailGen = ({ ...props }) => {
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
-
-  console.log(props.backgroundImage)
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -738,7 +724,7 @@ export const UserInputMail = ({ ...props }) => {
 }
 
 UserInputMail.craft = {
-  displayName: "User Input",
+  displayName: "User Input Mail",
   props: UserInputMailDefaultProps,
   related: {
     settings: UserInputMailSettings,

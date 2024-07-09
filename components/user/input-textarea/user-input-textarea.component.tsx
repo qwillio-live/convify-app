@@ -190,14 +190,6 @@ export const UserInputTextareaGen = ({ ...props }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const [error, setError] = useState(props.error)
 
-  console.log(props.backgroundImage)
-
-  const focusInput = () => {
-    if (textAreaRef.current) {
-      textAreaRef.current.focus()
-    }
-  }
-
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
@@ -343,7 +335,7 @@ const UserInputTextareaStyled = styled(TextArea)<{
   primaryFont: string
   size: UserInputSizes
   error: boolean
-  height: number // Add height prop here
+  height: number
 }>`
   color: ${(props) => props.textColor};
   max-width: 100%;
@@ -402,14 +394,14 @@ export const UserInputTextarea = ({ ...props }) => {
   )
 
 
-  useEffect(() => {
-    if (
-      parentContainer.id !== "ROOT" &&
-      parentContainer.data.name === "CardContent"
-    ) {
-      setProp((props) => (props.size = "full"))
-    }
-  }, [parentContainer, props.size, setProp])
+  // useEffect(() => {
+  //   if (
+  //     parentContainer.id !== "ROOT" &&
+  //     parentContainer.data.name === "CardContent"
+  //   ) {
+  //     setProp((props) => (props.size = "full"))
+  //   }
+  // }, [parentContainer, props.size, setProp])
 
   useEffect(() => {
     if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
@@ -599,7 +591,7 @@ export const UserInputTextarea = ({ ...props }) => {
 }
 
 UserInputTextarea.craft = {
-  displayName: "User Input TextArea",
+  displayName: "Textarea",
   props: UserInputTextareaDefaultProps,
   related: {
     settings: UserInputTextareaSettings,

@@ -1,27 +1,13 @@
-import { get } from "http"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { set } from "date-fns"
-import {
-  Activity,
-  Anchor,
-  Aperture,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  Mountain,
-  X,
-} from "lucide-react"
 import { useTranslations } from "next-intl"
-import { darken, rgba } from "polished";
+import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Checkbox as DefoCheckbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
@@ -346,7 +332,7 @@ export const UserInputCheckbox = ({ ...props }) => {
   const {
     query: { node },
   } = useEditor()
-
+  const dispatch = useAppDispatch()
   const parentContainer = node(parent || "").get()
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
@@ -432,12 +418,10 @@ export const UserInputCheckbox = ({ ...props }) => {
     }
   }
 
-  const getHoverBackgroundForPreset= (color) => {
-
-    return rgba(color, 0.1);
-  
-    }
-    const darkenedBg = getHoverBackgroundForPreset(primaryColor)
+  const getHoverBackgroundForPreset = (color) => {
+    return rgba(color, 0.1)
+  }
+  const darkenedBg = getHoverBackgroundForPreset(primaryColor)
 
   return (
     <div
@@ -525,12 +509,19 @@ export const UserInputCheckbox = ({ ...props }) => {
               onMouseLeave={(e) => {
                 e.stopPropagation()
                 setContainerHover(false)
-                // setHover(false)
+                if (
+                  parentContainer.id !== "ROOT" &&
+                  parentContainer.data.name === "FormContent"
+                ) {
+                  setHover(false)
+                }
               }}
               style={{
                 width: UserInputSizeValues[props.size],
                 zIndex: 1,
-                backgroundColor: containerHover ? darkenedBg : props.backgroundColor,
+                backgroundColor: containerHover
+                  ? darkenedBg
+                  : props.backgroundColor,
               }}
             >
               <ContentEditable
