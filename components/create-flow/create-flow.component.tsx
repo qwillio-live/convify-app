@@ -333,7 +333,7 @@ export function CreateFlowComponent() {
                         // top: headerPosition === 'absolute' ? '66px' : '0',
                         // width: width,
                         zIndex: 20,
-                        backgroundColor: avatarBackgroundColor
+                        backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor
                       }}>
                       <ResolvedComponentsFromCraftState screen={screensHeader} />
                     </div>
@@ -341,11 +341,9 @@ export function CreateFlowComponent() {
                   <div
                     id="editor-content"
                     style={{
-                      marginTop: !headerMode && !mobileScreen ? headerPosition === 'absolute' ? `${height+40}px` : "40px" : !headerMode && headerPosition === 'absolute' ? `${height+29}px` : "29px",
-                      backgroundColor: headerMode ? avatarBackgroundColor : '',
-                      paddingTop: !headerMode && !mobileScreen
-                      ? headerPosition === 'relative' ? '7px' : '15px'
-                      : '',
+                      paddingTop: !headerMode && !mobileScreen ? headerPosition === 'absolute' ? `${height+48}px` : "40px" : !headerMode && headerPosition === 'absolute' ? `${height+29}px` : "",
+                      backgroundColor: headerMode && avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+                      marginTop: headerMode ? '38px' : '0px'
                     }}>
                     <Frame data={editorLoad}></Frame>
                   </div>

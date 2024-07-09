@@ -105,7 +105,7 @@ export default function FlowPreview() {
           width: '100%',
           top: '0',
           zIndex: 20,
-          backgroundColor: avatarBackgroundColor,
+          backgroundColor: backgroundColor,
         }}>
         <ResolvedComponentsFromCraftState screen={screenHeader} />
       </div>

@@ -85,6 +85,8 @@ export const AvatarComponentGen = ({
   let translateYPercent = Math.max(0, 35 - (scrollY));
   const translateY = mobileScreen ? `calc(${translateYPercent}%)` : '0px';
   const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (!mobileScreen && (scrollY && scrollY > 50) ? 'avatar-none-scrolled' : mobileScreen && scrollY ? `transition-transform ease-in-out duration-300` : mobileScreen ? 'avatar-none-mobile' : 'avatar-none')}`;
+  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
 
   return (
     <div
@@ -99,7 +101,7 @@ export const AvatarComponentGen = ({
       <div
         className="relative w-full"
         style={{
-          background: `${containerBackground}`,
+          background: `${avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: 'border-box',
@@ -118,7 +120,7 @@ export const AvatarComponentGen = ({
               hasComponentBeforeAvatar ? 'absolute transition-transform translate-y-[-50%] ease-in-out duration-300' : ''
             )}
             style={{
-              transform: `translateY(${translateY})`,
+              transform: mobileScreen ? `translateY(${translateY})` : '',
             }}
           >
             <img
@@ -270,6 +272,8 @@ export const AvatarComponent = ({
   const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
 
   const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
+  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
+  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
 
   useEffect(() => {
@@ -374,7 +378,7 @@ export const AvatarComponent = ({
       {displayController && <Controller nameOfComponent={t("Avatar")} />}
       <div className="relative w-full"
         style={{
-          // background: `${containerBackground}`,
+          background: `${avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: 'border-box',

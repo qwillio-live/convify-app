@@ -190,7 +190,7 @@ const ScreensList = () => {
 
           <Card
             style={{
-              backgroundColor: avatarBackgroundColor,
+              backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
               backgroundImage: backgroundImage,
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
@@ -301,7 +301,7 @@ const ScreensList = () => {
                     >
                       <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <div style={{ background: avatarBackgroundColor }}>
+                        <div style={{ background: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor }}>
                           <ResolvedComponentsFromCraftState screen={screensHeader} />
                         </div>
                         <div style={{ paddingTop: '50px' }}>
