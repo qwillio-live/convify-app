@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma"
 
 export async function GET(req: NextRequest) {
   const data = await getServerSession(authOptions)
+  const url = new URL(req.url);
 
   if (!data) {
     const statusCode = 401
@@ -16,11 +17,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
   const userId = data.user.id
+  let lang = url.searchParams.get('lang');
+  lang = lang? lang : 'en';
 
   try {
     const templates = await prisma.template.findMany({
       where: {
         isActive: true,
+        language: lang,
       },
     })
     return NextResponse.json(templates)

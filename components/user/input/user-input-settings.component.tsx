@@ -44,11 +44,15 @@ import { cn } from "@/lib/utils"
 import useInputThemePresets from "./useInputThemePresets"
 import { UserInput, UserInputGen } from "./user-input.component"
 import { useTranslations } from "next-intl"
+import { useAppDispatch } from "@/lib/state/flows-state/hooks"
+import { setFieldProp } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const UserInputSettings = () => {
   const t = useTranslations("Components")
   const {
     actions: { setProp },
+    compId,
+    parentScreenId,
     marginLeft,
     marginRight,
     marginTop,
@@ -59,7 +63,9 @@ export const UserInputSettings = () => {
     parent,
   } = useNode((node) => ({
     parent: node.data.parent,
+    compId: node.id,
     props: node.data.props,
+    parentScreenId: node.data.props.parentScreenId,
     marginLeft: node.data.props.marginLeft,
     marginRight: node.data.props.marginRight,
     marginTop: node.data.props.marginTop,
@@ -72,7 +78,7 @@ export const UserInputSettings = () => {
     // query,
     query: { node },
   } = useEditor()
-
+  const dispatch= useAppDispatch();
   const parentContainer = node(parent || "").get();
   const [disableSize,setDisableSize] = useState(false);
   useEffect(() => {
@@ -129,6 +135,7 @@ export const UserInputSettings = () => {
             checked={props.inputRequired}
             onCheckedChange={(e) => {
               setProp((props) => (props.inputRequired = e),200)
+              dispatch(setFieldProp({screenId: parentScreenId,fieldId: compId, fieldName: 'fieldRequired', fieldValue: e}))
               // setProp((props) => (props.error = !props.error),200)
             }}
             id="required" />

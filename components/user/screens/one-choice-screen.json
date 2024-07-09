@@ -1,286 +1,363 @@
 {
-	"ROOT": {
-		"type": "UserContainer",
-		"isCanvas": true,
-		"props": {
-			"padding": 5,
-			"background": "#ad2121",
-			"expanded": "true",
-			"className": "min-w-full flex flex-col items-center py-5"
-		},
-		"displayName": "One Choice Screen",
-		"custom": {
-
-		},
-		"hidden": false,
-		"nodes": [
-			"mdsAe2aBSM",
-			"HsVEwi1W0N",
-			"WyPGuBF4RD",
-			"mVILya3SGO"
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"mdsAe2aBSM": {
-		"type": {
-			"resolvedName": "ProgressBar"
-		},
-		"isCanvas": false,
-		"props": {
-			"color": "#4050ff",
-			"maxWidth": "366",
-			"fullWidth": false,
-			"progressvalue": "20"
-		},
-		"displayName": "ProgressBar",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"HsVEwi1W0N": {
-		"type": {
-			"resolvedName": "HeadlineText"
-		},
-		"isCanvas": false,
-		"props": {
-			"text": "Which marketing channels do you use?",
-			"fontSize": {
-				"value": 42,
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"fontFamily": {
-				"value": "--font-heading",
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"textColor": {
-				"value": "#0e0e0e",
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"fontWeight": {
-				"value": "700",
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"textAlign": {
-				"value": "center",
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"marginLeft": {
-				"value": 58,
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"marginRight": {
-				"value": 58,
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"marginTop": {
-				"value": 40,
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"marginBottom": {
-				"value": 40,
-				"isCustomized": false,
-				"globalStyled": false
-			},
-			"tagType": "h1"
-		},
-		"displayName": "HeadlineText",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"WyPGuBF4RD": {
-		"type": {
-			"resolvedName": "MultipleChoice"
-		},
-		"isCanvas": false,
-		"props": {
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"background": "#ffffff",
-			"radius": 0,
-			"width": 360,
-			"lastSelectedChoice": 0,
-			"singleChoice": false,
-			"viewWithIcon": true,
-			"choicesMade": [
-
-			],
-			"multipleChoiceStyles": {
-				"fontSize": 18,
-				"background": "#ffffff",
-				"hoverBackground": "#4050ff",
-				"radius": 8,
-				"fontWeight": "700",
-				"border": 2,
-				"borderColor": "#eaeaeb",
-				"hoverBorderColor": "#4050ff",
-				"textColor": "#000000",
-				"hoverTextColor": "#ffffff",
-				"paddingTop": 16,
-				"paddingBottom": 16,
-				"paddingLeft": 16,
-				"paddingRight": 16,
-				"gap": 8
-			},
-			"multipleChoices": [
-				{
-					"id": "1",
-					"optionLogo": null,
-					"optionLabel": "Google",
-					"optionValue": "option1",
-					"optionSelected": false
-				},
-				{
-					"id": "2",
-					"optionLogo": null,
-					"optionLabel": "Facebook",
-					"optionValue": "option2",
-					"optionSelected": false
-				},
-				{
-					"id": "3",
-					"optionLogo": null,
-					"optionLabel": "Linkedin",
-					"optionValue": "option3",
-					"optionSelected": false
-				},
-				{
-					"id": "4",
-					"optionLogo": null,
-					"optionLabel": "Other",
-					"optionValue": "option4",
-					"optionSelected": false
-				}
-			]
-		},
-		"displayName": "MultipleChoice",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	},
-	"mVILya3SGO": {
-		"type": {
-			"resolvedName": "IconButton"
-		},
-		"isCanvas": false,
-		"props": {
-			"fontFamily": {
-				"value": "--font-heading",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"containerBackground": "#ffffff",
-			"background": {
-				"value": "#4050ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"color": {
-				"value": "#ffffff",
-				"globalStyled": false,
-				"isCustomized": true
-			},
-			"backgroundHover": {
-				"value": "#3142ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"colorHover": {
-				"value": "#ffffff",
-				"globalStyled": false,
-				"isCustomized": true
-			},
-			"radius": {
-				"value": "8",
-				"globalStyled": false,
-				"isCustomized": false
-			},
-			"justifyContent": "space-between",
-			"borderColor": {
-				"value": "#4050ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"borderHoverColor": {
-				"value": "#4050ff",
-				"globalStyled": true,
-				"isCustomized": false
-			},
-			"disabled": false,
-			"enableIcon": true,
-			"width": "medium",
-			"height": "auto",
-			"size": "medium",
-			"text": "Continue",
-			"marginLeft": 20,
-			"marginTop": [
-				40
-			],
-			"marginRight": 20,
-			"marginBottom": [
-				40
-			],
-			"icon": "arrowright",
-			"paddingLeft": "16",
-			"paddingTop": "14",
-			"paddingRight": "16",
-			"paddingBottom": "14",
-			"flexDirection": "row",
-			"alignItems": "center",
-			"gap": 4,
-			"border": 2,
-			"fullWidth": true,
-			"preset": "filled",
+  "ROOT": {
+    "type": "UserContainer",
+    "isCanvas": true,
+    "props": {
+      "padding": 5,
+      "background": "#ad2121",
+      "expanded": "true",
+      "className": "min-w-full flex flex-col items-center py-5"
+    },
+    "displayName": "One Choice Screen",
+    "custom": {},
+    "hidden": false,
+    "nodes": ["mdsAe2aBSM", "HsVEwi1W0N", "WyPGuBF4RD", "mVILya3SGO"],
+    "linkedNodes": {}
+  },
+  "mdsAe2aBSM": {
+    "type": {
+      "resolvedName": "ProgressBar"
+    },
+    "isCanvas": false,
+    "props": {
+      "color": "#4050ff",
+      "maxWidth": "366",
+      "fullWidth": false,
+      "progressvalue": "20"
+    },
+    "displayName": "ProgressBar",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  },
+  "HsVEwi1W0N": {
+    "type": {
+      "resolvedName": "HeadlineText"
+    },
+    "isCanvas": false,
+    "props": {
+      "text": "Which marketing channels do you use?",
+      "fontSize": {
+        "value": 42,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "fontFamily": {
+        "value": "--font-heading",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "textColor": {
+        "value": "#0e0e0e",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "fontWeight": {
+        "value": "700",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "textAlign": {
+        "value": "center",
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginLeft": {
+        "value": 58,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginRight": {
+        "value": 58,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginTop": {
+        "value": 40,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "marginBottom": {
+        "value": 40,
+        "isCustomized": false,
+        "globalStyled": false
+      },
+      "tagType": "h1"
+    },
+    "displayName": "HeadlineText",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  },
+  "WyPGuBF4RD": {
+    "type": {
+      "resolvedName": "MultipleChoice"
+    },
+    "isCanvas": false,
+    "props": {
+      "fontFamily": {
+        "value": "inherit",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "size": "medium",
+      "required": false,
+      "fieldName": "",
+      "layout": "collapsed",
+      "containerBackground": "transparent",
+      "paddingLeft": "16",
+      "paddingTop": "20",
+      "paddingRight": "16",
+      "paddingBottom": "20",
+      "marginLeft": 0,
+      "marginTop": 20,
+      "marginRight": 0,
+      "marginBottom": 20,
+      "fullWidth": true,
+      "settingTabs": ["content"],
+      "multiSelect": false,
+      "checkboxVisible": false,
+      "contentReversed": false,
+      "preset": "filled",
+      "defaultStyles": {
+        "checkBoxIconColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "checkboxBorderColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "checkBoxBackgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "iconColor": {
+          "value": "#000000",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "textColor": {
+          "value": "#000000",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "borderColor": {
+          "value": "#eaeaeb",
+          "globalStyled": false,
+          "isCustomized": false
+        },
+        "backgroundColor": {
+          "value": "transparent",
+          "globalStyled": false,
+          "isCustomized": false
+        }
+      },
+      "hoverStyles": {
+        "checkBoxIconColor": {
+          "value": "#ffffff",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "checkboxBorderColor": {
+          "value": "transparent",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "checkBoxBackgroundColor": {
+          "value": "transparent",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "iconColor": {
+          "value": "#ffffff",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "textColor": {
+          "value": "#ffffff",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "borderColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "backgroundColor": {
+          "value": "transparent",
+          "globalStyled": true,
+          "isCustomized": false
+        }
+      },
+      "selectedStyles": {
+        "checkBoxIconColor": {
+          "value": "#ffffff",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "checkboxBorderColor": {
+          "value": "transparent",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "checkBoxBackgroundColor": {
+          "value": "transparent",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "iconColor": {
+          "value": "#ffffff",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "textColor": {
+          "value": "#ffffff",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "borderColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        },
+        "backgroundColor": {
+          "value": "#3182ce",
+          "globalStyled": true,
+          "isCustomized": false
+        }
+      },
+      "selections": [],
+      "choices": [
+        {
+          "id": "input-1",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Option 1",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        },
+        {
+          "id": "input-2",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Option 2",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        },
+        {
+          "id": "input-3",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Option 3",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        },
+        {
+          "id": "input-4",
+          "picture": null,
+          "pictureType": "null",
+          "value": "Option 4",
+          "buttonAction": null,
+          "nextScreen": null,
+          "trackingEvent": null
+        }
+      ]
+    },
+    "displayName": "MultipleChoice",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  },
+  "mVILya3SGO": {
+    "type": {
+      "resolvedName": "IconButton"
+    },
+    "isCanvas": false,
+    "props": {
+      "fontFamily": {
+        "value": "--font-heading",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "containerBackground": "#ffffff",
+      "background": {
+        "value": "#4050ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "color": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": true
+      },
+      "backgroundHover": {
+        "value": "#3142ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "colorHover": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": true
+      },
+      "radius": {
+        "value": "8",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "justifyContent": "space-between",
+      "borderColor": {
+        "value": "#4050ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "borderHoverColor": {
+        "value": "#4050ff",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "disabled": false,
+      "enableIcon": true,
+      "width": "medium",
+      "height": "auto",
+      "size": "medium",
+      "text": "Continue",
+      "marginLeft": 20,
+      "marginTop": [40],
+      "marginRight": 20,
+      "marginBottom": [40],
+      "icon": "arrowright",
+      "paddingLeft": "16",
+      "paddingTop": "14",
+      "paddingRight": "16",
+      "paddingBottom": "14",
+      "flexDirection": "row",
+      "alignItems": "center",
+      "gap": 4,
+      "border": 2,
+      "fullWidth": true,
+      "preset": "filled",
       "settingsTab": "content",
       "buttonSize": "medium"
-		},
-		"displayName": "IconButton",
-		"custom": {
-
-		},
-		"parent": "ROOT",
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	}
+    },
+    "displayName": "IconButton",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  }
 }

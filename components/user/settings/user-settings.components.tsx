@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Layers } from "@craftjs/layers/"
 
 import { useEditor } from "@/lib/craftjs"
@@ -16,17 +16,23 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {GlobalThemeSettings} from "./global-theme-settings"
 import { useTranslations } from "next-intl"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const SettingsPanel = () => {
   const t= useTranslations("Components")
-  const { actions, selected, isEnabled } = useEditor((state, query) => {
-    const currentNodeId = query.getEvent("selected").last()
+  const dispatch = useAppDispatch()
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
+  const { actions, selected, isEnabled,query } = useEditor((state, query) => {
+    const currentNodeId = selectedComponent ? selectedComponent : query.getEvent("selected").last()
     let selected
 
-    if (currentNodeId) {
+    if (currentNodeId && state.nodes[currentNodeId]) {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
+        fieldType: state.nodes[currentNodeId]?.data?.props.fieldType || 'design',
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
@@ -39,6 +45,12 @@ export const SettingsPanel = () => {
       isEnabled: state.options.enabled,
     }
   })
+
+  useEffect(() => {
+    if (selected || selectedComponent) {
+      actions.selectNode(selectedComponent || "ROOT");
+    }
+  }, [mobileScreen, selectedComponent]);
   return (
     <Tabs defaultValue="element" className="mb-10">
       <TabsList>
@@ -70,7 +82,11 @@ export const SettingsPanel = () => {
                 {selected.isDeletable ? (
                   <Button
                     onClick={() => {
-                      actions.delete(selected.id)
+                      actions.delete(selected.id),
+                      dispatch(setSelectedComponent("ROOT"));
+                      if(selected.fieldType === 'data'){
+                        dispatch(removeField(selected.id))
+                      }
                     }}
                     variant="destructive"
                     className="mb-4"

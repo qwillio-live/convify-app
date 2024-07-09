@@ -22,6 +22,8 @@ import { CreateFlowComponent } from "@/components/create-flow/create-flow.compon
 import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { setCurrentScreenName } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
@@ -29,6 +31,11 @@ export default function CreateFlowsPage() {
   const [link, setLink] = useState(
     "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
   )
+
+  const dispatch = useAppDispatch();
+  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || "";
+
+
   const [tab, setTab] = useState("create")
 
   const t = useTranslations("CreateFlow")
@@ -56,7 +63,7 @@ export default function CreateFlowsPage() {
         onValueChange={onTabChange}
         className="min-h-screen flex flex-col"
       >
-        <div className="sticky top-0 z-[60]">
+        <div className="fixed w-full top-0 z-[60]">
           <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
             <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
               <div className="flex h-14 items-center lg:h-[60px]">
@@ -102,7 +109,12 @@ export default function CreateFlowsPage() {
               </TabsList>
             </div>
             <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
-              <Link href="/dashboard/flows/preview-flow" target="_blank">
+              <Link
+              onClick={() => {
+                router.refresh(),
+                dispatch(setCurrentScreenName(firstScreenName))
+              }}
+              href={`/dashboard/flows/preview-flow?screen=${firstScreenName}`} target="_blank">
                 <Button
                   variant="outline"
                   size="sm"
@@ -160,8 +172,8 @@ export default function CreateFlowsPage() {
           </header>
         </div>
         <main
-          className={`content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full${
-            tab === "results" ? "" : tab === "share" ? "" : "px-4 lg:px-6"
+          className={`mt-[60px] content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 ${
+            tab === "results" ? "" : tab === "share" ? "" : ""
           }`}
         >
           <div className="tabs-content">

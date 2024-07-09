@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Reorder } from "framer-motion"
 import {
   ClipboardCopy,
@@ -21,6 +21,7 @@ import {
   setHeaderMode,
   setScreenName,
   setScreens,
+  setSelectedComponent,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -58,6 +59,7 @@ const ScreensList = () => {
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -75,6 +77,7 @@ const ScreensList = () => {
   )
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
+    actions: state.events.selected,
   }))
 
   const themeSettings = useAppSelector((state: RootState) => state.theme)
@@ -96,6 +99,7 @@ const ScreensList = () => {
   // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
   // }
   // }, []);
+
 
   const handleReorder = (data) => {
     dispatch(setScreens(data))
@@ -165,10 +169,10 @@ const ScreensList = () => {
     actions.deserialize(screensFooter)
   }
 
-  const handleHeaderScreenClick = () => {
+  const handleHeaderScreenClick = async () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true))
-    actions.deserialize(screensHeader)
+    await actions.deserialize(screensHeader)
   }
 
   return (
@@ -185,6 +189,13 @@ const ScreensList = () => {
           <div className="mt-4">{t("Header")}</div>
 
           <Card
+            style={{
+              backgroundColor: avatarBackgroundColor,
+              backgroundImage: backgroundImage,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
             className={cn(
               "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
@@ -193,17 +204,24 @@ const ScreensList = () => {
             )}
             onClick={() => handleHeaderScreenClick()}
           >
-            <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
-            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
+            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
 
               <ResolvedComponentsFromCraftState screen={screensHeader} />
 
             </div>
+            <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
           </Card>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
 
           <Card
+            style={{
+              backgroundColor: backgroundColor,
+              backgroundImage: backgroundImage,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
             className={cn(
               "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
@@ -213,9 +231,8 @@ const ScreensList = () => {
             onClick={() => handleFooterScreenClick()}
           >
             <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs w-full h-full text-muted-foreground scale-[.35] relative">
+            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
-
             </div>
           </Card>
         </AccordionContent>
@@ -244,16 +261,20 @@ const ScreensList = () => {
             axis="y"
             onReorder={handleReorder}
             values={screens || []}
-            // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
-            // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
-            // layoutScroll
+          // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
+          // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
+          // layoutScroll
           >
             {screens?.map((screen: any, index) => (
               <Reorder.Item
                 key={screen.screenName + screen.screenId}
                 id={screen.screenName + screen.screenId}
                 value={screen}
-                // className="relative"
+                onClick={() => {
+                  dispatch(setSelectedComponent("ROOT")),
+                    dispatch(setHeaderFooterMode(false))
+                }}
+              // className="relative"
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
@@ -273,17 +294,21 @@ const ScreensList = () => {
                       className={cn(
                         "h-60 w-[13.5vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": selectedScreenIndex === index,
+                          "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
-                        <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
+                      <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <ResolvedComponentsFromCraftState screen={screensHeader} />
-                        <ResolvedComponentsFromCraftState
-                          screen={screen.screenData ? screen.screenData : {}}
-                        />
+                        <div style={{ background: avatarBackgroundColor }}>
+                          <ResolvedComponentsFromCraftState screen={screensHeader} />
+                        </div>
+                        <div style={{ paddingTop: '50px' }}>
+                          <ResolvedComponentsFromCraftState
+                            screen={screen.screenData ? screen.screenData : {}}
+                          />
+                        </div>
                         <ResolvedComponentsFromCraftState screen={screensFooter} />
                       </div>
                     </Card>

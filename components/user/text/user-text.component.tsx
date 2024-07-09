@@ -5,7 +5,6 @@ import { track } from "@vercel/analytics/react"
 import { set } from "date-fns"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
-import { darken, rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
@@ -304,7 +303,7 @@ export const UserTextInputGen = ({
         flexDirection={flexDirection}
         justifyContent={justifyContent}
         borderColor={borderColor?.value}
-        border={2}
+        border={0}
         marginLeft={marginLeft}
         width={width}
         size={size}
@@ -321,7 +320,6 @@ export const UserTextInputGen = ({
         mobileScreen={false}
         {...props}
         className="text-[1rem]"
-        onClick={() => console.log("Button clicked", text)}
       >
         <div
           style={{
@@ -530,9 +528,6 @@ export const UserText = ({
     [handlePropChangeDebounced]
   )
 
-  // useEffect(() => {
-  //   setLocalText(text) // Keep localText in sync with the prop text
-  // }, [text])
 
   return (
     <div

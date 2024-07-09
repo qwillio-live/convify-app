@@ -23,6 +23,7 @@ export async function POST(
   }
 
   const userId = data.user.id
+  const userEmail = data.user.email
 
   try {
     const flow = await prisma.flow.findUnique({
@@ -35,33 +36,45 @@ export async function POST(
         { status: 404 }
       );
     }
-    
+
+    const flowSteps = await prisma.flowStep.findMany({
+      where: { flowId: String(flowId) }
+    });
+    flow.numberOfSteps = flowSteps? flowSteps.length: flow.numberOfSteps;
+
     const newFlowData = {
       userId,
       templateId: flow.templateId,
       name: `${flow.name} - Copy`,
       flowSettings: flow.flowSettings || {},
+      numberOfSteps: flow.numberOfSteps || 0,
+      previewImage:  flow.previewImage || null,
       status: "draft",
-      isDeleted: false,
-      content:flow.content || {},
-      templateSettings: flow.templateSettings || {},
-      steps: flow.steps || {}
+      isDeleted: false
     };
 
     const newFlow = await prisma.flow.create({
       data: newFlowData,
     });
-    flow.steps = flow.steps? flow.steps : {};
-      const newFlowSteps = flow.steps.map((step) => ({
+
+    await prisma.integration.create({
+      data: {
+        flowId: newFlow.id,
+        email: userEmail
+      },
+    });
+
+    if(flowSteps) {
+      const newFlowSteps = flowSteps.map(({ id, ...step }) => ({
         ...step,
         flowId: newFlow.id,
       }));
-   
-
-    await prisma.flowStep.createMany({
-      data: newFlowSteps,
-    });
-
+  
+      await prisma.flowStep.createMany({
+        data: newFlowSteps,
+      });
+    }
+    
     return NextResponse.json(newFlow);
   } catch (error) {
     console.error(error);

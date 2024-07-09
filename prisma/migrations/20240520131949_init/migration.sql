@@ -50,7 +50,6 @@ CREATE TABLE `responses` (
     `flowId` VARCHAR(191) NOT NULL,
     `ip` VARCHAR(191) NOT NULL,
     `userAgent` VARCHAR(191) NOT NULL,
-    `isFinished` BOOLEAN NOT NULL DEFAULT false,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

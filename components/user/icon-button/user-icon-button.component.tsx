@@ -246,6 +246,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   display: flex;
   flex-direction: row;
   position: relative;
+  overflow: hidden;
+  max-width: 100%;
   gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
@@ -381,6 +383,9 @@ export const IconButton = ({
         ]?.screenName
     ) || ""
 
+
+  //editor load needs to be refreshed so that screenName value is re-populated but
+  // it is working now because it refers screenId rather then screenName
   useEffect(() => {
     if (buttonAction === "next-screen") {
       setProp((props) => (props.nextScreen = nextScreenName), 1000)
@@ -501,6 +506,7 @@ export const IconButton = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -630,7 +636,10 @@ export type IconButtonProps = {
   tracking: boolean
   trackingEvent: string
   buttonAction: "next-screen" | "custom-action" | "none"
-  nextScreen: string
+  nextScreen: {
+    screenId: string
+    screenName: string
+  }
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -639,7 +648,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
     globalStyled: true,
     isCustomized: false,
   },
-  containerBackground: "#ffffff",
+  containerBackground: "rgba(255, 255, 255, 0.886)",
   background: {
     value: "#4050ff",
     globalStyled: false,

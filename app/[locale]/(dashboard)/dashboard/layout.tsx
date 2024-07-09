@@ -26,7 +26,7 @@ export default async function DashboardLayout({
 
   return (
     <StoreProvider>
-    <div className="flex min-h-screen flex-col space-y-6">
+    <div className="flex min-h-screen flex-col space-y-6 max-h-screen">
       <main>{children}</main>
       <Toaster />
       {/* <SiteFooter className="border-t" /> */}

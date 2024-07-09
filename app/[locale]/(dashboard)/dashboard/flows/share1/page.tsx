@@ -78,7 +78,8 @@ export default function CreateFlowsPage() {
               </div>
             </div>
             <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
-              <Link href="/dashboard/flows/preview-flow" target="_blank">
+              <Link
+              href="/dashboard/flows/preview-flow" target="_blank">
                 <Button
                   variant="outline"
                   size="sm"

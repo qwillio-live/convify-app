@@ -4,9 +4,17 @@
 		"isCanvas": true,
 		"props": {
 			"padding": 5,
+      "fullWidth": true,
 			"background": "#ad2121",
 			"expanded": "true",
-			"className": "min-h-auto min-w-full flex flex-col items-center"
+      "style" : {
+        "minHeight": "200px",
+        "minWidth": "200px",
+        "width" : "100%",
+        "flexDirection": "column",
+        "justifyContent": "end"
+      },
+			"className": "flex flex-col items-center py-5"
 		},
 		"displayName": "Screen Footer",
 		"custom": {

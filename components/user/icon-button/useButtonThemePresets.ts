@@ -17,7 +17,7 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "transparent",
+    containerBackground: "rgba(255,255,255,0)",
     background: {
       value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
       globalStyled: true,
@@ -79,7 +79,10 @@ const useButtonThemePresets = () => {
     buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-"+hexoid(6)().toLowerCase(),
-    nextScreen: '',
+    nextScreen: {
+      screenId: "",
+      screenName: "",
+    },
     buttonAction: "next-screen",
   };
 
@@ -151,7 +154,10 @@ const useButtonThemePresets = () => {
     buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-"+hexoid(6)().toLowerCase(),
-    nextScreen: '',
+    nextScreen: {
+      screenId: "",
+      screenName: "",
+    },
     buttonAction: "next-screen",
   };
 

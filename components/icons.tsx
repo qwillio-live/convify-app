@@ -1,5 +1,4 @@
 import {
-  AlertCircle,
   AlertTriangle,
   ArrowRight,
   Check,
@@ -24,7 +23,8 @@ import {
   Twitter,
   User,
   X,
-  type Icon as LucideIcon,
+  AlertCircle,
+  LucideIcon,
 } from "lucide-react"
 
 export type Icon = LucideIcon

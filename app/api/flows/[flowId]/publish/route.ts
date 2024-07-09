@@ -35,7 +35,7 @@ export async function PUT(
 
     const updatedFlow = await prisma.flow.update({
       where: { id: String(flowId) },
-      data: { status: "active" },
+      data: { isPublished: true },
     });
 
     // Perform any additional actions needed for publishing

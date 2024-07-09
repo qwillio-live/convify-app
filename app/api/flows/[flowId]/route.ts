@@ -6,6 +6,14 @@ import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 
+const StepSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  link: z.string(),
+  order: z.number(),
+  templateId: z.string().optional(),
+});
+
 const FlowUpdateRequestSchema = z
   .object({
     name: z.string().optional(),
@@ -14,6 +22,7 @@ const FlowUpdateRequestSchema = z
     status: z.string().optional(),
     numberOfSteps: z.number().optional(),
     flowSettings: z.record(z.unknown()).optional(),
+    steps: z.array(StepSchema).optional(),
   })
   .strict()
 
@@ -41,9 +50,9 @@ export async function GET(
         userId,
         isDeleted: false,
       },
-      include: {
-        flowSteps: true,
-      },
+      // include: {
+      //   flowSteps: true,
+      // },
     })
 
     if (!flow) {
@@ -113,6 +122,72 @@ export async function PUT(
         { error: "Request body is empty or invalid" },
         { status: 400 }
       )
+    }
+
+    if (data.steps) {
+      const existingSteps = await prisma.FlowStep.findMany({
+        where: {
+          flowId: String(flowId),
+          isDeleted: false
+        },
+      });
+      const newStepIds = new Set(data.steps.map(step => step.id));
+
+      // Mark missing steps as isDeleted: true
+      for (const step of existingSteps) {
+        if (!newStepIds.has(step.id)) {
+          await prisma.FlowStep.update({
+            where: {
+              id: step.id
+            },
+            data: {
+              isDeleted: true
+            },
+          });
+        }
+      }
+
+      // Upsert steps (Insert ignore on duplicate key update)
+      for (const step of data.steps) {
+        const existingStep = await prisma.FlowStep.findUnique({
+          where: { 
+            id: step.id,
+            flowId: String(flowId),
+           },
+        });
+      
+        if (existingStep) {
+          await prisma.FlowStep.update({
+            where: { 
+              id: step.id,
+              flowId: String(flowId),
+             },
+            data: {
+              link: step.link,
+              content: step.content,
+              order: step.order,
+              name: step.name || '',
+              templateId: step.templateId || '',
+            },
+          });
+        } else {
+          await prisma.FlowStep.create({
+            data: {
+              name: step.name || '',
+              flowId: String(flowId),
+              link: step.link,
+              content: step.content,
+              order: step.order,
+              templateId: step.templateId || '',
+              isDeleted: false,
+            },
+          });
+        }
+      }
+      
+        // Update numberOfSteps in Flows table
+        const numberOfSteps = data.steps.length;
+        data.numberOfSteps = numberOfSteps;
     }
 
     const updatedFlow = await prisma.flow.update({

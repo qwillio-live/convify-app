@@ -6,6 +6,17 @@
 			"padding": 5,
 			"background": "#ad2121",
 			"expanded": "true",
+      "containerType" : "header",
+      "style" : {
+        "minHeight": "40px",
+        "minWidth": "100%",
+        "flexDirection": "column",
+        "width" : "100%",
+        "zIndex" : 20,
+        "top" : 0,
+        "position" : "relative",
+        "justifyContent": "start"
+      },
 			"className": "min-h-auto min-w-full flex flex-col items-center"
 		},
 		"displayName": "Header Screen",
