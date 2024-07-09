@@ -686,6 +686,9 @@ export const ProgressBar = ({
   // }, [])
   useEffect(() => {
     debouncedSetProp("maxValue", screensLength)
+    if (progressvalue > maxValue) {
+      debouncedSetProp("progressvalue", screensLength)
+    }
   }, [screensLength])
 
   return (

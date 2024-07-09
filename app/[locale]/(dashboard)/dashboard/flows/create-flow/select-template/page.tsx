@@ -44,7 +44,9 @@ export default function SelectTemplate() {
   }
 
   const handleFilterClick = (category: string) => {
-    setSelectedCategory(category)
+    if (category == selectedCategory) {
+      setSelectedCategory("all")
+    } else setSelectedCategory(category)
   }
 
   const filteredCards = cardData.filter(
@@ -61,15 +63,6 @@ export default function SelectTemplate() {
     }, 1000) // Hide scrollbar 1 second after scrolling stops
   }
 
-  useEffect(() => {
-    const cardContainer = cardContainerRef.current
-    if (cardContainer) cardContainer.addEventListener("scroll", handleScroll)
-    return () => {
-      if (cardContainer)
-        cardContainer.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
-
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
       <div className="flex h-full w-full px-6">
@@ -78,18 +71,26 @@ export default function SelectTemplate() {
             <h2 className="mb-5 text-4xl font-semibold">
               {t("selectTemplateHeader")}
             </h2>
-            <Breadcrumb className="mb-6 mt-4 text-base font-normal">
+            <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
               <BreadcrumbList>
                 <BreadcrumbItem className="mr-2 text-base">
                   <BreadcrumbPage>{t("templateBreadcrumb")}</BreadcrumbPage>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbLink>{t("colorsBreadcrumb")}</BreadcrumbLink>
+                  <BreadcrumbLink>
+                    <Link href={"/dashboard/flows/create-flow/select-color"}>
+                      {t("colorsBreadcrumb")}
+                    </Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbLink>{t("finishBreadcrumb")}</BreadcrumbLink>
+                  <BreadcrumbLink>
+                    <Link href={"/dashboard/flows/create-flow/finish"}>
+                      {t("finishBreadcrumb")}
+                    </Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -153,7 +154,7 @@ export default function SelectTemplate() {
                 {t("startFromScratch")}
               </Button>
             </div>
-            <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] ">
+            <ScrollArea className=" bottom-30  h-[30vh] md:h-[48vh] lg:h-[62vh] ">
               <div className="grid grid-cols-1  gap-6 md:grid-cols-2">
                 {filteredCards.map((card, index) => (
                   <div key={card.id} className="pr-2">
@@ -202,58 +203,6 @@ export default function SelectTemplate() {
                 ))}
               </div>
             </ScrollArea>
-
-            {/* <div
-              className={`custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto md:grid-cols-2 ${
-                isScrolling ? "scrolling" : ""
-              }`}
-              style={{ maxHeight: "calc(100vh - 350px)" }}
-              ref={cardContainerRef}
-            >
-              {filteredCards.map((card, index) => (
-                <div key={card.id} className="pr-2">
-                  <div
-                    className="relative h-56 cursor-pointer space-y-3 overflow-hidden rounded-md"
-                    onClick={() => handleCardClick(index)}
-                  >
-                    {loadingCardIndex === index && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="loader row flex items-center justify-center text-white">
-                          <Loader2 className="loader-icon mr-2" />
-                          {t("loading")}
-                        </div>
-                      </div>
-                    )}
-
-                    <span data-state="closed">
-                      <div className="h-full w-full rounded-md">
-                        <img
-                          alt="Thinking Components"
-                          loading="lazy"
-                          decoding="async"
-                          data-nimg="1"
-                          className={`h-full w-full rounded-md object-cover transition-all ${
-                            loadingCardIndex !== index ? "hover:scale-105" : ""
-                          }`}
-                          src={cardDemo.src}
-                        />
-                      </div>
-                    </span>
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-md my-2 font-semibold leading-none">
-                      {card.title}
-                    </h3>
-                    <Badge
-                      variant="default"
-                      className="font-sans3 rounded-md bg-black px-2 py-1 font-semibold"
-                    >
-                      {t("popular")}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div> */}
           </div>
           <Separator orientation="vertical" className="mx-4 h-full" />
           <div className="w-full py-6 md:w-5/12">
@@ -270,7 +219,7 @@ export default function SelectTemplate() {
           <Button variant="secondary" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <div className="flex">
+          <div className="flex hover:cursor-pointer">
             <Link href={"/dashboard"}>
               <Button
                 className="mr-2 w-32 font-bold"
@@ -282,7 +231,7 @@ export default function SelectTemplate() {
             </Link>
             <Link href={"/dashboard/flows/create-flow/select-color"}>
               <Button
-                className="w-32 font-bold text-white"
+                className="w-32 font-bold text-white hover:cursor-pointer"
                 size="lg"
                 variant="default"
               >

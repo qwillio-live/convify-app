@@ -25,14 +25,22 @@ export default function SelectColor() {
             <h2 className="mb-5 text-4xl font-semibold">
               {t("createConvify")}
             </h2>
-            <Breadcrumb className="mb-6 mt-4 text-base font-normal">
+            <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
               <BreadcrumbList>
                 <BreadcrumbItem className="mr-2 text-base">
-                  <BreadcrumbLink>{t("templateBreadcrumb")}</BreadcrumbLink>
+                  <BreadcrumbLink>
+                    <Link href={"/dashboard/flows/create-flow/select-template"}>
+                      {t("templateBreadcrumb")}
+                    </Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbLink>{t("colorsBreadcrumb")}</BreadcrumbLink>
+                  <BreadcrumbLink>
+                    <Link href={"/dashboard/flows/create-flow/select-color"}>
+                      {t("colorsBreadcrumb")}
+                    </Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem className="mx-2 text-base">
@@ -64,7 +72,11 @@ export default function SelectColor() {
         </div>
         <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-color"}>
-            <Button variant="secondary" size="icon">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="hover:cursor-pointer"
+            >
               <ChevronLeft className="h-4 w-4" />
             </Button>
           </Link>
@@ -72,7 +84,7 @@ export default function SelectColor() {
           <div className="flex">
             <Link href={"/dashboard"}>
               <Button
-                className="mr-2 w-32 font-bold"
+                className="mr-2 w-32 font-bold hover:cursor-pointer"
                 size="lg"
                 variant="outline"
               >
@@ -81,7 +93,7 @@ export default function SelectColor() {
             </Link>
             <Link href={"/dashboard"}>
               <Button
-                className="w-32 font-bold text-white"
+                className="w-32 font-bold text-white hover:cursor-pointer"
                 size="lg"
                 variant="default"
               >

@@ -217,6 +217,9 @@ export const ProgressBarSettings = () => {
   )
   useEffect(() => {
     debouncedSetProp("maxValue", screensLength)
+    if (progressvalue > maxValue) {
+      debouncedSetProp("progressvalue", screensLength)
+    }
   }, [screensLength])
 
   return (
@@ -277,9 +280,9 @@ export const ProgressBarSettings = () => {
                   }}
                   className="flex-1"
                 >
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid  grid-cols-3 items-center py-0">
                     <TabsTrigger value="minus">
-                      <Minus />
+                      <Minus height={20} width={20} />
                     </TabsTrigger>
                     <TabsTrigger value="rectangle">
                       <Image
@@ -289,12 +292,12 @@ export const ProgressBarSettings = () => {
                             : dash_icon
                         }
                         alt={"rectangle grip"}
-                        height={23}
-                        // width={28}
+                        height={22}
+                        width={22}
                       />
                     </TabsTrigger>
                     <TabsTrigger value="grip">
-                      <Ellipsis />
+                      <Ellipsis height={20} width={20} />
                     </TabsTrigger>
                   </TabsList>
                 </Tabs>
