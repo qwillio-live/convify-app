@@ -55,6 +55,7 @@ import {
 import { Controller } from "../settings/controller.component"
 import useInputThemePresets from "./useInputThemePresets"
 import { UserInput, UserInputGen } from "./user-input.component"
+import { InputSettingsIconPicker } from "./user-input-icon-picker"
 
 export const UserInputSettings = () => {
   const t = useTranslations("Components")
@@ -310,20 +311,13 @@ export const UserInputSettings = () => {
                     {t("Icon")}
                   </p>
                   <div className="flex w-full items-center gap-2">
-                    <PicturePicker
-                      className="transition-all duration-100 ease-in-out"
-                      picture={
-                        icon.pictureType === PictureTypes.NULL ? (
-                          <Image className="text-muted-foreground size-4" />
-                        ) : (
-                          icon.picture
-                        )
-                      }
-                      pictureType={icon.pictureType}
-                      maxWidthMobile={25}
-                      maxWidthDesktop={25}
-                      onChange={handlePictureChange}
-                    />
+                  <InputSettingsIconPicker
+                className="basis-1/3"
+                icon={icon}
+                onChange={(icon) => {
+                  debouncedSetProp("icon", icon)
+                }}
+              />
                   </div>
                 </>
               )}

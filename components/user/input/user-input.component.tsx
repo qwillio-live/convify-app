@@ -45,6 +45,7 @@ import { Input } from "@/components/input-custom"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputSettings } from "./user-input-settings.component"
+import { InputIconRenderer } from "./user-input-icon-picker"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -284,29 +285,14 @@ export const UserInputGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {icon.pictureType === PictureTypes.ICON ? (
-                  <SvgRenderer iconName={icon.picture} />
-                ) : icon.pictureType === PictureTypes.EMOJI ? (
-                  <span
-                    className={cn(
-                      "flex items-center justify-center text-[28px]"
-                    )}
-                  >
-                    {icon.picture}
-                  </span>
-                ) : (
-                  <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
-                    <source
-                      media="(max-width:250px)"
-                      srcSet={(icon.picture as ImagePictureTypes)?.mobile}
-                    />
-                    <img
-                      src={(icon.picture as ImagePictureTypes)?.desktop}
-                      className={cn("h-auto overflow-hidden object-cover w-7")}
-                      loading="lazy"
-                    />
-                  </picture>
-                )}
+                <InputIconRenderer
+                  iconName={icon}
+                  style={{
+                    width: `${22}px`,
+                    height: `${22}px`,
+                    color: "#9cafa3",
+                  }}
+                />
               </div>
             )}
             <UserInputStyled
@@ -696,33 +682,14 @@ export const UserInput = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {icon.pictureType === PictureTypes.ICON ? (
-                  <SvgRenderer
-                    iconName={icon.picture}
-                    // width={IconSizeValues[buttonSize]}
-                    // height={IconSizeValues[buttonSize]}
-                  />
-                ) : icon.pictureType === PictureTypes.EMOJI ? (
-                  <span
-                    className={cn(
-                      "flex items-center justify-center text-[28px]"
-                    )}
-                  >
-                    {icon.picture}
-                  </span>
-                ) : (
-                  <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
-                    <source
-                      media="(max-width:250px)"
-                      srcSet={(icon.picture as ImagePictureTypes)?.mobile}
-                    />
-                    <img
-                      src={(icon.picture as ImagePictureTypes)?.desktop}
-                      className={cn("h-auto overflow-hidden object-cover w-7")}
-                      loading="lazy"
-                    />
-                  </picture>
-                )}
+                <InputIconRenderer
+              iconName={icon}
+              style={{
+                width: `${22}px`,
+                height: `${22}px`,
+                color: '#9cafa3',
+              }}
+            />
               </div>
             )}
             <UserInputStyled
@@ -865,10 +832,7 @@ export type UserInputProps = {
   fieldName: string
   floatingLabel: boolean
   enableIcon: boolean
-  icon: {
-    picture: ImagePictureTypes | string | null
-    pictureType: PictureTypes
-  }
+  icon: string
   preset: string
   error: boolean
   errorText: string
@@ -942,10 +906,7 @@ export const UserInputDefaultProps: UserInputProps = {
   fieldName: "Field name",
   floatingLabel: false,
   enableIcon: false,
-  icon: {
-    picture: null,
-    pictureType: PictureTypes.NULL,
-  },
+  icon: "interface-arrows-right-arrow-right-keyboard",
   preset: "outlined",
   error: false,
   errorText: "Please specify an answer",

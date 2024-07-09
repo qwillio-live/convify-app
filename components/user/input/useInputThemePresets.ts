@@ -77,10 +77,7 @@ const useInputThemePresets = () => {
     fieldName: "Field name",
     floatingLabel: false,
     enableIcon: false,
-    icon: {
-      picture: "interface-arrows-right-arrow-right-keyboard",
-      pictureType: PictureTypes.ICON,
-    },
+    icon: "interface-arrows-right-arrow-right-keyboard",
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -155,10 +152,7 @@ const useInputThemePresets = () => {
     fieldName: "Field name",
     floatingLabel: false,
     enableIcon: false,
-    icon: {
-      picture: "interface-arrows-right-arrow-right-keyboard",
-      pictureType: PictureTypes.ICON,
-    },
+    icon: "interface-arrows-right-arrow-right-keyboard",
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",
