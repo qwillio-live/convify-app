@@ -303,8 +303,6 @@ export default function SelectTemplate() {
           vaul-drawer-direction="bottom"
           vaul-drawer-visible="true"
           className="bg-background fixed inset-x-0 bottom-0 z-50 mt-24 h-auto flex-col rounded-t-[10px] border lg:hidden "
-          tabindex="-1"
-          // style={{ "pointer-events": "auto;" }}
         >
           <div className="bg-muted mx-auto mt-4 h-2 w-[100px] rounded-full"></div>
           <div className="mx-auto w-full max-w-sm">
