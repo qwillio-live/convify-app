@@ -29,6 +29,7 @@ const cardData = [
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [showDrawer, setShowDrawer] = useState<boolean>(true)
   const [isScrolling, setIsScrolling] = useState<boolean>(false)
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
   const cardContainerRef = useRef<HTMLDivElement | null>(null)
@@ -291,6 +292,59 @@ export default function SelectTemplate() {
           </div>
         </div>
       </div>
+      {showDrawer && (
+        <div
+          role="dialog"
+          id="radix-:r8:"
+          aria-describedby="radix-:ra:"
+          aria-labelledby="radix-:r9:"
+          data-state="open"
+          vaul-drawer=""
+          vaul-drawer-direction="bottom"
+          vaul-drawer-visible="true"
+          className="bg-background fixed inset-x-0 bottom-0 z-50 mt-24 h-auto flex-col rounded-t-[10px] border lg:hidden "
+          tabindex="-1"
+          // style={{ "pointer-events": "auto;" }}
+        >
+          <div className="bg-muted mx-auto mt-4 h-2 w-[100px] rounded-full"></div>
+          <div className="mx-auto w-full max-w-sm">
+            <div className="grid gap-1.5 p-4 sm:text-left">
+              <h2
+                id="radix-:r9:"
+                className="vaul-scrollable text-lg font-semibold leading-none tracking-tight"
+              >
+                {t("Continue on desktop")}
+              </h2>
+              <p id="radix-:ra:" className="text-muted-foreground text-sm">
+                {t("continue on desktop desc")}
+              </p>
+            </div>
+            <div className="mt-auto flex flex-col gap-2 p-4">
+              <button className="ring-offset-background focus-visible:ring-ring mb-2 inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-[rgb(38,38,39)] px-4 py-2 text-base font-medium text-white transition-colors hover:bg-[rgb(71,71,71)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+                <svg
+                  className="mr-2.5"
+                  width="16"
+                  height="12"
+                  viewBox="0 0 16 12"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M9.898 7.182C9.391 7.689 8.717 7.968 8 7.968C7.2825 7.968 6.6085 7.6885 6.102 7.1815L0 1.08V10C0 11.1045 0.8955 12 2 12H14C15.1045 12 16 11.1045 16 10V1.08L9.898 7.182Z"></path>
+                  <path d="M8 6.505C8.3165 6.505 8.633 6.3875 8.8685 6.1525L15.0205 0H0.9795L7.1315 6.1525C7.367 6.3875 7.6835 6.505 8 6.505Z"></path>
+                </svg>
+                {t("Email me a direct link")}
+              </button>
+              <button
+                className="ring-offset-background focus-visible:ring-ring border-input hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md border bg-[rgb(227,227,227)] px-4 py-2 text-base font-medium transition-colors hover:bg-[rgb(227,227,227)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                type="button"
+                onClick={() => setShowDrawer(!showDrawer)}
+              >
+                {t("Dismiss")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;

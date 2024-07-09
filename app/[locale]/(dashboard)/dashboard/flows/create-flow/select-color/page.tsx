@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ColorPicker = ({ color, onChange }) => {
   return (
@@ -150,35 +151,37 @@ export default function SelectColor() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-            <div className="mb-8 mt-12 flex flex-wrap gap-7">
-              <div className="flex flex-col">
-                <label className="my-3 block text-base font-semibold ">
-                  {t("primaryColor")}
-                </label>
-                <ColorPickerWithSuggestions
-                  color={primaryColor}
-                  onChange={setPrimaryColor}
-                />
+            <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] ">
+              <div className="mb-8 mt-12 flex flex-wrap gap-7 ">
+                <div className="flex flex-col">
+                  <label className="my-3 block text-base font-semibold ">
+                    {t("primaryColor")}
+                  </label>
+                  <ColorPickerWithSuggestions
+                    color={primaryColor}
+                    onChange={setPrimaryColor}
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label className="my-3 block text-base font-semibold ">
+                    {t("textColor")}
+                  </label>
+                  <ColorPickerWithSuggestions
+                    color={textColor}
+                    onChange={setTextColor}
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label className="my-3 block text-base font-semibold ">
+                    {t("backgroundColor")}
+                  </label>
+                  <ColorPickerWithSuggestions
+                    color={backgroundColor}
+                    onChange={setBackgroundColor}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col">
-                <label className="my-3 block text-base font-semibold ">
-                  {t("textColor")}
-                </label>
-                <ColorPickerWithSuggestions
-                  color={textColor}
-                  onChange={setTextColor}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="my-3 block text-base font-semibold ">
-                  {t("backgroundColor")}
-                </label>
-                <ColorPickerWithSuggestions
-                  color={backgroundColor}
-                  onChange={setBackgroundColor}
-                />
-              </div>
-            </div>
+            </ScrollArea>
           </div>
           <Separator orientation="vertical" className="mx-4 h-full" />
           <div className="w-full py-6 md:w-5/12">

@@ -198,7 +198,11 @@
     "Fixed" : "Fixed",
     "Scroll" : "Scroll",
     "Add blocks here" : "Add blocks here",
-    "Progress_bar_description": "The value of the progress bar adapts automatically based on the current screen number and total screen numbers. For example, when there are 10 screens in total and you're on screen 2, it shows 20% progress"
+    "Progress_bar_description": "The value of the progress bar adapts automatically based on the current screen number and total screen numbers. For example, when there are 10 screens in total and you're on screen 2, it shows 20% progress",
+    "Continue on desktop": "Continue on desktop",
+    "Email me a direct link": "Email me a direct link",
+    "Dismiss": "Dismiss",
+    "continue on desktop desc": "Create flows with our most powerful features, such as logic or advanced design options, on desktop devices. We’ll email you a direct link."
   },
   "CreateFlow": {
     "Create": "Create",

@@ -69,6 +69,7 @@ import { RootState } from "@/lib/state/flows-state/store"
 import Image from "next/image"
 
 import dash_icon from "@/assets/images/dash_icon_new.svg"
+import dash_icon_selected from "@/assets/images/dash_icon_selected.svg"
 
 export const ProgressBarSettings = () => {
   const t = useTranslations("Components")
@@ -282,10 +283,14 @@ export const ProgressBarSettings = () => {
                     </TabsTrigger>
                     <TabsTrigger value="rectangle">
                       <Image
-                        src={dash_icon}
+                        src={
+                          progressStyle === "rectangle"
+                            ? dash_icon_selected
+                            : dash_icon
+                        }
                         alt={"rectangle grip"}
-                        height={28}
-                        width={28}
+                        height={23}
+                        // width={28}
                       />
                     </TabsTrigger>
                     <TabsTrigger value="grip">
