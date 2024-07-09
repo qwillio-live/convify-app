@@ -710,9 +710,14 @@ export const IconButtonDefaultProps: IconButtonProps = {
   settingsTab: "content",
   tracking: false,
   trackingEvent: "button_clicked",
-  nextScreen: "",
+  nextScreen: {
+    screenId: "",
+    screenName: "",
+  },
   buttonAction: "next-screen",
 }
+
+
 
 IconButton.craft = {
   props: IconButtonDefaultProps,
