@@ -169,7 +169,7 @@ export const UserInputSettings = () => {
   return (
     <>
       <Accordion
-        value={props.settingsTab || "content"}
+        value={props.settingsTab}
         onValueChange={(value) => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
