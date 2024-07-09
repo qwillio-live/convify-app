@@ -52,15 +52,15 @@ export const SettingsPanel = () => {
 
   return (
     <Tabs defaultValue="element" className="mb-10 w-full">
-      <TabsList className="w-full rounded-none border-b border-[#c0c0c1] pb-0">
+      <TabsList className="w-full rounded-none border-b border-[#c0c0c1] pb-0 bg-[#fafafa]">
         <TabsTrigger
-          className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+          className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit font-bold"
           value="element"
         >
           {t("Element")}
         </TabsTrigger>
         <TabsTrigger
-          className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit"
+          className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit font-bold"
           value="theme"
         >
           {t("Theme")}

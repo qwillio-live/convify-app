@@ -265,7 +265,7 @@ export function CreateFlowComponent() {
         }}
         onRender={RenderNode}
       >
-        <div className="flex h-[calc(-60px+99vh)] max-h-[calc(-60px+99vh)] flex-row justify-between gap-0">
+        <div className="flex h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-body">
               <ScreensList />
@@ -274,7 +274,7 @@ export function CreateFlowComponent() {
           <ScrollArea
           ref={containerRef}
           id="scroll-container"
-          className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r">
+          className="max-h-[calc(-52px+99vh)] basis-[55%] overflow-y-auto border-r">
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -335,7 +335,7 @@ export function CreateFlowComponent() {
                   }
 
                 </TabsContent>
-                <TabsList className="absolute bottom-2 z-20  w-100 ">
+                <TabsList className="absolute bottom-0 z-20  w-100 ">
                   <Button
                       variant="outline"
                       size="sm"
@@ -362,7 +362,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r py-6 bg-[#f4f4f5]">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r py-6 bg-[#fafafa]">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
