@@ -12,7 +12,7 @@ import {
   Columns,
   Copy,
   Dice2,
-  // Ellipsis,
+  Ellipsis,
   Facebook,
   Globe,
   GripVertical,
@@ -20,17 +20,16 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   ImagePlus,
-  // Images,
+  Images,
   LayoutList,
   Linkedin,
   ListChecks,
   ListOrdered,
   Loader as LoaderIcon,
-  // SquarePen,
-  // NotebookPen,
-  // SquareCheckIcon,
-  // SqarePen,
-  // LucidePaintbrush,
+  SquarePen,
+  NotebookPen,
+  SquareCheckIcon,
+  LucidePaintbrush,
   Mail,
   Navigation,
   Paintbrush,
@@ -39,8 +38,8 @@ import {
   Phone,
   Rocket,
   Square,
-  // SquareMousePointer,
-  // SwatchBook,
+  SquareMousePointer,
+  SwatchBook,
   Target,
   TextCursorInput,
   Trophy,
@@ -314,7 +313,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Headline")}
-                    icon={<Type className="mr-2 size-3" />}
+                    icon={<Type size={12} className="mr-2 size-3" />}
                     data-cy="toolbox-text"
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
@@ -338,7 +337,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Text")}
-                    icon={<Pencil className="mr-2 size-3" />}
+                    icon={<Pencil size={12} className="mr-2 size-3" />}
                     data-cy="toolbox-text"
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
@@ -374,7 +373,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title="Form"
-                      icon={<GripVertical className="mr-2 size-3" />}
+                      icon={<NotebookPen size={12} className="mr-2 size-3" />}
                     >
                       <div className="max-w-[350px] flex flex-col items-center justify-start ">
                         <div className="flex gap-1 max-w-[376px]">
@@ -448,7 +447,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Input Field")}
-                      icon={<TextCursorInput className="mr-2 size-3" />}
+                      icon={<TextCursorInput size={12} className="mr-2 size-3" />}
                     >
                       <UserInputGen
                         {...outlinedPreset}
@@ -472,7 +471,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Checkbox")}
-                      icon={<GripVertical className="mr-2 size-3" />}
+                      icon={<SquareCheckIcon size={12} className="mr-2 size-3" />}
                     >
                       <UserInputCheckboxGen
                         {...outlinedPresetChecbox}
@@ -496,7 +495,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("InputMail")}
-                      icon={<Mail className="mr-2 size-3" />}
+                      icon={<Mail size={12} className="mr-2 size-3" />}
                     >
                       <UserInputMailGen
                         {...outlinedPresetMail}
@@ -522,7 +521,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("InputPhone")}
-                      icon={<Phone className="mr-2 size-3" />}
+                      icon={<Phone size={12} className="mr-2 size-3" />}
                     >
                       <UserInputPhoneGen
                         {...outlinedPresetPhone}
@@ -548,7 +547,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("TextArea")}
-                      icon={<GripVertical className="mr-2 size-3" />}
+                      icon={<SquarePen size={12} className="mr-2 size-3" />}
                     >
                       <UserInputTextareaGen
                         {...outlinedPresetTextarea}
@@ -574,7 +573,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Picture Choice")}
-                      icon={<GripVertical className="mr-2 size-3" />}
+                      icon={<Images size={12} className="mr-2 size-3" />}
                     >
                       <PictureChoiceGen
                         {...{
@@ -620,7 +619,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Continue Button")}
-                    icon={<Navigation className="mr-2 size-3" />}
+                    icon={<Navigation size={12} className="mr-2 size-3" />}
                   >
                     <IconButtonGen
                       className="w-full"
@@ -664,7 +663,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Avatar")}
-                      icon={<User className="mr-2 size-3" />}
+                      icon={<User size={12} className="mr-2 size-3" />}
                     >
                       <div className="items-center m-auto">
                         <Image
@@ -697,7 +696,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo")}
-                      icon={<Columns className="mr-2 size-3" />}
+                      icon={<Columns size={12} className="mr-2 size-3" />}
                     >
                       <div className="flex w-[160px] flex-row items-center justify-between p-4">
                         <Image
@@ -734,7 +733,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title="Container"
-                      icon={<Box className="mr-2 size-3" />}
+                      icon={<Box size={12} className="mr-2 size-3" />}
                     >
                       <Box width={120} height={42} />
                     </HoverCardComponent>
@@ -874,7 +873,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Image")}
-                      icon={<ImageIcon className="mr-2 size-3" />}
+                      icon={<ImageIcon size={12} className="mr-2 size-3" />}
                     >
                       <div className="flex w-[360px] flex-row items-center justify-between border p-4">
                         <Image
@@ -907,7 +906,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Loader")}
-                      icon={<LoaderIcon className="mr-2 size-3" />}
+                      icon={<LoaderIcon size={12} className="mr-2 size-3" />}
                     >
                       <LoaderComponentGen
                         enableRedirect={true}
@@ -940,7 +939,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo")}
-                      icon={<Columns className="mr-2 size-3" />}
+                      icon={<Columns size={12} className="mr-2 size-3" />}
                     >
                       <div className="flex w-[160px] flex-row items-center justify-between p-4">
                         <Image
@@ -975,7 +974,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Text & Image")}
-                      icon={<LayoutList className="mr-2 size-3" />}
+                      icon={<LayoutList size={12} className="mr-2 size-3" />}
                     >
                       <TextImageComponentGen
                         {...TextImageDefaultProps}
@@ -1000,7 +999,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Steps")}
-                      icon={<GripVertical className="mr-2 size-3" />}
+                      icon={<Ellipsis size={12} className="mr-2 size-3" />}
                     >
                       <StepsGen {...stepsDefaultPreset} />
                     </HoverCardComponent>
@@ -1021,7 +1020,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("List")}
-                      icon={<ListOrdered className="mr-2 size-3" />}
+                      icon={<ListOrdered size={12} className="mr-2 size-3" />}
                     >
                       <ListGen
                         {...{
@@ -1048,7 +1047,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Checklist")}
-                      icon={<ListChecks className="mr-2 size-3" />}
+                      icon={<ListChecks size={12} className="mr-2 size-3" />}
                     >
                       <ChecklistGen {...checklistNormalPreset} />
                     </HoverCardComponent>
@@ -1069,7 +1068,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo Bar")}
-                      icon={<GripVertical className="mr-2 size-3" />}
+                      icon={<SwatchBook size={12} className="mr-2 size-3" />}
                     >
                       <LogoBarGen {...logoBarDefaultPreset} />
                     </HoverCardComponent>
