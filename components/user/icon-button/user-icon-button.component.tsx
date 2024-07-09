@@ -246,11 +246,11 @@ export const IconButtonGen = ({
         </div>
         {enableIcon && icon.pictureType !== PictureTypes.NULL && (
           <div
-            className=""
-            // style={{
-            //   padding:
-            //     icon.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
-            // }}
+          className={cn("ml-[10px]",{
+            'mt-[4px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "large",
+            'mt-[2px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "medium",
+            'mt-0': icon.pictureType === PictureTypes.EMOJI && buttonSize === "small",
+          })}
           >
             {icon.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
@@ -260,10 +260,10 @@ export const IconButtonGen = ({
               />
             ) : icon.pictureType === PictureTypes.EMOJI ? (
               <span
-                className={cn("flex items-center justify-center text-[38px]", {
-                  "text-[48px] leading-[50px]": buttonSize === "large",
-                  "text-[32px] leading-[34px]": buttonSize === "medium",
-                  "text-[24px] leading-[26px]": buttonSize === "small",
+                className={cn("flex items-center justify-center", {
+                  "text-[26px] leading-[26px]": buttonSize === "large",
+                      "text-[22px] leading-[22px]": buttonSize === "medium",
+                      "text-[18px] leading-[18px]": buttonSize === "small",
                 })}
               >
                 {icon.picture}
@@ -276,10 +276,10 @@ export const IconButtonGen = ({
                 />
                 <img
                   src={(icon.picture as ImagePictureTypes)?.desktop}
-                  className={cn("h-auto overflow-hidden object-cover", {
-                    "w-[92px]": buttonSize === "large",
-                    "w-[74px]": buttonSize === "medium",
-                    "w-[56px]": buttonSize === "small",
+                  className={cn("h-auto overflow-hidden object-cover aspect-auto", {
+                    "w-[26px]": buttonSize === "large",
+                    "w-[22px]": buttonSize === "medium",
+                    "w-[18px]": buttonSize === "small",
                   })}
                   loading="lazy"
                 />
@@ -736,11 +736,11 @@ export const IconButton = ({
           </div>
           {enableIcon && icon.pictureType !== PictureTypes.NULL && (
             <div
-              className=""
-              // style={{
-              //   padding:
-              //     icon.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
-              // }}
+              className={cn("ml-[10px]",{
+                'mt-[4px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "large",
+                'mt-[2px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "medium",
+                'mt-0': icon.pictureType === PictureTypes.EMOJI && buttonSize === "small",
+              })}
             >
               {icon.pictureType === PictureTypes.ICON ? (
                 <SvgRenderer
@@ -751,11 +751,11 @@ export const IconButton = ({
               ) : icon.pictureType === PictureTypes.EMOJI ? (
                 <span
                   className={cn(
-                    "flex items-center justify-center text-[38px]",
+                    "flex items-center justify-center",
                     {
-                      "text-[48px] leading-[50px]": buttonSize === "large",
-                      "text-[32px] leading-[34px]": buttonSize === "medium",
-                      "text-[24px] leading-[26px]": buttonSize === "small",
+                      "text-[26px] leading-[26px]": buttonSize === "large",
+                      "text-[22px] leading-[22px]": buttonSize === "medium",
+                      "text-[18px] leading-[18px]": buttonSize === "small",
                     }
                   )}
                 >
@@ -770,11 +770,11 @@ export const IconButton = ({
                   <img
                     src={(icon.picture as ImagePictureTypes)?.desktop}
                     className={cn(
-                      "h-auto w-full overflow-hidden object-cover",
+                      "h-auto w-full overflow-hidden object-cover aspect-auto",
                       {
-                        "w-[92px]": buttonSize === "large",
-                        "w-[74px]": buttonSize === "medium",
-                        "w-[56px]": buttonSize === "small",
+                        "w-[26px]": buttonSize === "large",
+                        "w-[22px]": buttonSize === "medium",
+                        "w-[18px]": buttonSize === "small",
                       }
                     )}
                     loading="lazy"
