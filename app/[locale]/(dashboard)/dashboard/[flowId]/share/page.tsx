@@ -27,7 +27,7 @@ export default function CreateFlowsPage() {
   }, []);
 
   useEffect(() => {
-    if (flowId !== "flows" && flowId !== null) {
+    if (flowId) {
       fetch(`/api/flows/${flowId}`, {
         method: "GET",
         headers: {
@@ -50,9 +50,6 @@ export default function CreateFlowsPage() {
           console.error(err);
           setError(true);
         });
-    } else {
-      setIsPublished(false);
-      setIsPublishedLoading(false);
     }
   }, [flowId]);
 
@@ -72,13 +69,14 @@ export default function CreateFlowsPage() {
         <main className="content border-t relative overflow-hidden bg-[#FAFAFA] flex-1 h-full">
           {
             isPublishedLoading ? (
-              <div className="flex justify-center items-center h-full">
+              <div className="flex justify-center items-center h-[70vh]">
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
                 </div>
               </div>
             ) : <ShareFlowComponents isPublished={isPublished} data={data} />
           }
+          {/* <ShareFlowComponents isPublished={isPublished} data={data} /> */}
         </main>
       </div>
       {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">

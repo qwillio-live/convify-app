@@ -17,12 +17,29 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { useEffect, useState } from "react"
-
+const extractFlowIdFromUrl = (currentPath) => {
+    const url = currentPath; // Get the current URL
+    const matchShare = url && url.match(/dashboard\/([^\/]+)\/share/); // Use regex to match the flowId
+    const matchConnect = url && url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
+    const matchResult = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
+    if (matchShare && matchShare[1] && matchShare[1] !== "flows") {
+        return matchShare[1]
+    }
+    else if (matchConnect && matchConnect[1] && matchConnect[1] !== "flows") {
+        return matchConnect[1]
+    }
+    else if (matchResult && matchResult[1] && matchResult[1] !== "flows") {
+        return matchResult[1]
+    }
+    return null
+};
 const Header = () => {
     const t = useTranslations("CreateFlow"); // Initialize your translation hook
     const router = useRouter();
     const currentPath = usePathname();
-    const [flowId, setFlowId] = useState<string | null>(null);
+    console.log("currentPath", currentPath);
+    const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl(currentPath));
+    console.log("flowId", flowId);
 
     const handleLogout = async () => {
         localStorage.removeItem('date');
@@ -35,17 +52,6 @@ const Header = () => {
         await signOut({ redirect: false });
         router.push("/login");
     };
-    useEffect(() => {
-        const extractFlowIdFromUrl = async () => {
-            const url = currentPath; // Get the current URL
-            const match = url && url.match(/dashboard\/([^\/]+)\/share/); // Use regex to match the flowId
-            if (match && match[1] && match[1] !== "flows") {
-                setFlowId(match[1]);
-            }
-        };
-        extractFlowIdFromUrl();
-    }, [flowId]);
-
     const linkClasses = (path) => (
         `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm px-3 ${currentPath?.split("/").at(-1) === path.split("/").at(-1) || currentPath === "/pt" + path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
     );

@@ -56,7 +56,8 @@ const ShareFlowComponents = ({
     if (data) {
       setLink(data.link)
     }
-  })
+  }, [])
+
   return (
     <div>
       {
@@ -120,10 +121,6 @@ const ShareFlowComponents = ({
                               aria-label="copy link input"
                               className={`m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none`}
                               value={link}
-                              disabled={!isPublished}
-                              style={{
-                                backgroundColor: !isPublished ? '#aba9a9' : 'initial'
-                              }}
                             />
                           </div>
                         </div>
@@ -138,10 +135,6 @@ const ShareFlowComponents = ({
                           })
                         }}
                         className={`flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]`}
-                        style={{
-                          backgroundColor: !isPublished ? 'black' : '',
-                          cursor: !isPublished ? 'not-allowed' : 'pointer'
-                        }}
                       >
                         {t("Copy link")}
                       </button>
