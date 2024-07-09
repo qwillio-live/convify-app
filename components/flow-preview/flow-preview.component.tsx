@@ -125,7 +125,7 @@ export default function FlowPreview() {
               paddingTop:
                 headerPosition === "absolute" ? headerHeight + "px" : "0",
             }}
-            className="mt-14
+            className="pt-14
           shrink-0
           basis-full
           min-w-full"
