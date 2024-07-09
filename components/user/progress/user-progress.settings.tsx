@@ -217,6 +217,7 @@ export const ProgressBarSettings = () => {
   useEffect(() => {
     debouncedSetProp("maxValue", screensLength)
   }, [screensLength])
+
   return (
     <>
       {isHeaderFooterMode ? (
@@ -227,7 +228,7 @@ export const ProgressBarSettings = () => {
         >
           <div className="flex flex-row items-start gap-1 text-left">
             <div>
-              <p className="text-justify text-sm font-light">
+              <p className="text-sm font-light">
                 {t("Progress_bar_description")}
               </p>
             </div>
@@ -302,9 +303,9 @@ export const ProgressBarSettings = () => {
                 </div>
                 <Slider
                   className=""
-                  defaultValue={[progressvalue]}
+                  // defaultValue={[progressvalue]}
                   value={[progressvalue]}
-                  max={25}
+                  max={screensLength}
                   min={0}
                   step={1}
                   onValueChange={(e) =>

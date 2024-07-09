@@ -242,7 +242,9 @@ export const UserToolbox = () => {
   )
 
   const screensLength: number = useScreensLength() ?? 0
-
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
   return (
     <div className="p-y" draggable={false}>
       <div className="flex flex-col items-center justify-center space-y-1">
@@ -767,6 +769,8 @@ export const UserToolbox = () => {
                                 marginTop: 20,
                                 marginBottom: 20,
                                 maxValue: screensLength,
+                                progressvalue:
+                                  screensLength > 0 ? selectedScreen + 1 : 1,
                               })}
                         />
                       )
@@ -809,6 +813,8 @@ export const UserToolbox = () => {
                                 marginBottom: 0,
                                 radius: 0,
                                 maxValue: screensLength,
+                                progressvalue:
+                                  screensLength > 0 ? selectedScreen + 1 : 1,
                               })}
                           // Uncomment the following line if you need to set a value for the progress bar
                           // value={50}

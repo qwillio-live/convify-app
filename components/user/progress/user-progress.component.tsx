@@ -687,6 +687,7 @@ export const ProgressBar = ({
   useEffect(() => {
     debouncedSetProp("maxValue", screensLength)
   }, [screensLength])
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
