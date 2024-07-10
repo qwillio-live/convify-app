@@ -12,7 +12,7 @@ import {
 
 import { Button } from "./ui/button"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const extractFlowIdFromUrl = (currentPath) => {
   const url = currentPath; // Get the current URL
@@ -34,7 +34,21 @@ export function BreadCrumbs() {
   const t = useTranslations("CreateFlow")
   const currentPath = usePathname();
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl(currentPath));
-
+  const [flowName, setFlowName] = useState<string | null>(null);
+  useEffect(() => {
+    if (flowId) {
+      fetch(`/api/flows/${flowId}`).then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      }).then((data) => {
+        setFlowName(data.name);
+      }).catch((error) => {
+        console.error("There has been a problem with your fetch operation:", error);
+      });
+    }
+  }, [flowId]);
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -55,7 +69,7 @@ export function BreadCrumbs() {
         </BreadcrumbSeparator>
         <BreadcrumbItem className="max-lg:ml-3.5">
           <BreadcrumbPage>{
-            flowId ? flowId : t("My new form")
+            flowName ? flowName : t("My new form")
           }</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
