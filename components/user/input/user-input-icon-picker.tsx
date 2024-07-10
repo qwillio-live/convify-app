@@ -8,6 +8,7 @@ import {
   X as IconX,
   StretchHorizontal,
   StretchVertical,
+  CloudUpload,
 } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
@@ -102,10 +103,13 @@ export const InputSettingsIconPicker = ({ className = "", icon, onChange }) => {
   }
 
   return (
-    <div className={`w-full text-center ${className}`}>
+    <div className={`text-center ${className}`}>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline" className="w-full">
+          <Button
+           className={`border-input min-w-[22px] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
+          variant="ghost">
+            <CloudUpload className="hidden size-4" />
             <InputIconRenderer iconName={icon} className="size-6" />
           </Button>
         </DialogTrigger>

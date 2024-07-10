@@ -304,7 +304,7 @@ export const UserInputSettings = () => {
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
                   <p className="text-md flex-1 text-muted-foreground">
@@ -312,7 +312,7 @@ export const UserInputSettings = () => {
                   </p>
                   <div className="flex w-full items-center gap-2">
                   <InputSettingsIconPicker
-                className="basis-1/3"
+                className="w-auto"
                 icon={icon}
                 onChange={(icon) => {
                   debouncedSetProp("icon", icon)
