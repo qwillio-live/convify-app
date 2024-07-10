@@ -168,7 +168,6 @@ const useInputThemePresets = () => {
     settingsTab: "content",
   }
 
-
   const formPreset: UserInputProps = {
     inputValue: "",
     fontSize: 16,
@@ -220,6 +219,7 @@ const useInputThemePresets = () => {
     bottomLeftRadius: 8,
     bottomRightRadius: 8,
     isActive: false,
+    required: false,
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.full,
@@ -242,9 +242,10 @@ const useInputThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
+    compId: "",
+    parentScreenId: "",
+    fieldType: "data",
   }
-
-
 
   return { outlinedPreset, underlinedPreset, formPreset }
 }
