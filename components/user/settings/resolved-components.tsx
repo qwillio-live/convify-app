@@ -21,6 +21,8 @@ import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
 import { StepsGen } from "../steps/user-steps.component"
 import { AvatarComponentGen } from "../avatar-new/user-avatar.component"
 import { LogoComponentGen } from "../logo-new/user-logo.component"
+import { LoaderComponentGen } from "../loader-new/user-loader.component"
+import { TextImageComponentGen } from "../textImage/user-textImage.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -32,8 +34,10 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
   [CRAFT_ELEMENTS.LOGOCOMPONENT]: LogoComponentGen,
+  [CRAFT_ELEMENTS.LOADERCOMPONENT]: LoaderComponentGen,
   [CRAFT_ELEMENTS.IMAGECOMPONENT]: ImageComponentGen,
   [CRAFT_ELEMENTS.AVATARCOMPONENT]: AvatarComponentGen,
+  [CRAFT_ELEMENTS.TEXTIMAGECOMPONENT]: TextImageComponentGen,
   [CRAFT_ELEMENTS.SELECT]: SelectGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
   [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,

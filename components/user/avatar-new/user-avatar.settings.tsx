@@ -336,6 +336,7 @@ export const AvatarSettings = () => {
 
   const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const avatarBackgroundColor = useAppSelector((state)=> state?.screen?.avatarBackgroundColor)
+  console.log('avatar background color is: ',avatarBackgroundColor)
 
   return (
     <>

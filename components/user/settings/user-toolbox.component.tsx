@@ -104,7 +104,7 @@ import { LoaderComponent, LoaderComponentGen } from "../loader-new/user-loader.c
 import { LoaderDefaultProps } from "../loader-new/user-loader.component"
 import { LogoComponent, LogoDefaultProps } from "../logo-new/user-logo.component"
 import { AvatarComponent, AvatarDefaultProps } from "../avatar-new/user-avatar.component"
-import { TextImageComponent, TextImageComponentGen, TextImageDefaultProps } from "../textImage/user-textImage.component"
+import { TextImageComponent, TextImageComponentGen, TextImageComponentPreview, TextImageDefaultProps } from "../textImage/user-textImage.component"
 import { Select, SelectGen } from "../select/user-select.component"
 import useSelectThemePresets from "../select/useSelectThemePresets"
 import { Checklist, ChecklistGen } from "../checklist/user-checklist.component"
@@ -204,6 +204,7 @@ export const UserToolbox = () => {
     previewSelections: multipleChoicePreviewSelections,
   } = useMultipleChoiceThemePresets()
 
+  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
   const {
     outlinedPreset: pictureChoiceOutlinedPreset,
     defaultChoices: pictureChoiceDefaultChoices,
@@ -682,15 +683,13 @@ export const UserToolbox = () => {
                         title={t('Image')}
                         icon={<ImageIcon className="mr-2 size-3" />}
                       >
-                        <div className="flex w-[360px] flex-row items-center justify-between border p-4">
-                          <Image
-                            src={ImagePlaceholder.src}
-                            alt="Image component"
-                            width={360}
-                            height={203}
-                            className="size-full"
-                          />
-                        </div>
+                        <Image
+                          src={ImagePlaceholder.src}
+                          alt="Image component"
+                          width={360}
+                          height={203}
+                          className="size-full"
+                        />
                       </HoverCardComponent>
                     </div>
                     <div
@@ -712,13 +711,12 @@ export const UserToolbox = () => {
                         title={t('Loader')}
                         icon={<LoaderIcon className="mr-2 size-3" />}
                       >
-                        <LoaderComponentGen
-                          enableRedirect={true} className="w-full"
-                          {...filledPreset}
-                          size="small"
-                          marginTop={0}
-                          marginBottom={0}
-                          text={t("Continue")} />
+                        <div className="flex w-[260px] flex-row items-center justify-center">
+                          <div className="relative">
+                            <div className="w-24 h-24 border-2 border-gray-300 rounded-full"></div>
+                            <div className="loader absolute top-0 left-0 inline-block w-24 h-24 border-2 border-t-2 border-transparent rounded-full animate-spin" style={{ borderTopColor: primaryColor }} />
+                          </div>
+                        </div>
 
                       </HoverCardComponent>
                     </div>
@@ -773,7 +771,7 @@ export const UserToolbox = () => {
                         title={t('Text & Image')}
                         icon={<LayoutList className="mr-2 size-3" />}
                       >
-                        <TextImageComponentGen {...TextImageDefaultProps} title={t("Title")} Text={("Text here")} />
+                        <TextImageComponentPreview {...TextImageDefaultProps} title={t("Title")} Text={("Text here")} />
                       </HoverCardComponent>
                     </div>
 

@@ -10,7 +10,7 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from 'lodash';
 
 
@@ -114,6 +114,7 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const [topMargin, setTopMargin] = React.useState<number>(0);
   const dispatch = useAppDispatch()
+  
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -182,6 +183,8 @@ export function CreateFlowComponent() {
     dispatch(setScrollY(scrollTop));
   };
 
+ 
+
   React.useEffect(() => {
     if (headerMode) {
       const height = document?.getElementById("editor-content")?.offsetHeight || 0;
@@ -209,7 +212,8 @@ export function CreateFlowComponent() {
 
     // Cleanup event listener on component unmount
     return () => window.removeEventListener('resize', updateWidth);
-  }, [headerMode, height]);
+  }, [headerMode, height]); 
+  console.log('header position: ',headerPosition)
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -329,7 +333,7 @@ export function CreateFlowComponent() {
                         // top: headerPosition === 'absolute' ? '66px' : '0',
                         // width: width,
                         zIndex: 20,
-                        backgroundColor: avatarBackgroundColor
+                        backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor
                       }}>
                       <ResolvedComponentsFromCraftState screen={screensHeader} />
                     </div>
@@ -337,9 +341,9 @@ export function CreateFlowComponent() {
                   <div
                     id="editor-content"
                     style={{
-                      paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
-                      backgroundColor: headerMode ? avatarBackgroundColor : '',
-                      // paddingTop: !headerMode ? '25px' : '',
+                      paddingTop: !headerMode && !mobileScreen ? headerPosition === 'absolute' ? `${height+48}px` : "40px" : !headerMode && headerPosition === 'absolute' ? `${height+29}px` : "",
+                      backgroundColor: headerMode && avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+                      marginTop: headerMode ? '38px' : '0px'
                     }}>
                     <Frame data={editorLoad}></Frame>
                   </div>
