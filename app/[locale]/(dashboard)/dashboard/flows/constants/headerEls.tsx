@@ -16,6 +16,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { BreadCrumbs } from "@/components/breadcrumbs"
+const clearFlowNamesFromLocalStorage = () => {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('flowName_')) {
+            localStorage.removeItem(key);
+        }
+    }
+};
 
 const Header = () => {
     const t = useTranslations("CreateFlow"); // Initialize your translation hook
@@ -24,8 +32,10 @@ const Header = () => {
 
     const handleLogout = async () => {
         localStorage.removeItem('flowData');
+        localStorage.removeItem('flowName');
         localStorage.removeItem('flowId');
         localStorage.removeItem('responses');
+        clearFlowNamesFromLocalStorage()
         await signOut({ redirect: false });
         router.push("/login");
     };

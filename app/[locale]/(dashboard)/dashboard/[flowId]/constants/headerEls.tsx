@@ -17,6 +17,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { useEffect, useState } from "react"
+const clearFlowNamesFromLocalStorage = () => {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('flowName_')) {
+            localStorage.removeItem(key);
+        }
+    }
+};
+
 const extractFlowIdFromUrl = (currentPath) => {
     const url = currentPath; // Get the current URL
     const matchShare = url && url.match(/dashboard\/([^\/]+)\/share/); // Use regex to match the flowId
@@ -44,6 +53,8 @@ const Header = () => {
         localStorage.removeItem('flowData');
         localStorage.removeItem('flowId');
         localStorage.removeItem('responses');
+        localStorage.removeItem('flowName');
+        clearFlowNamesFromLocalStorage();
         await signOut({ redirect: false });
         router.push("/login");
     };

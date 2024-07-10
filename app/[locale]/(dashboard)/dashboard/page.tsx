@@ -42,6 +42,15 @@ interface User {
   id: string
 }
 
+const clearFlowNamesFromLocalStorage = () => {
+  for (let i = localStorage.length - 1; i >= 0; i--) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('flowName_')) {
+      localStorage.removeItem(key);
+    }
+  }
+};
+
 export default function DashboardPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(false)
   const [userData, setUserData] = useState<User>()
@@ -77,6 +86,8 @@ export default function DashboardPage() {
     localStorage.removeItem('flowData');
     localStorage.removeItem('flowId');
     localStorage.removeItem('responses');
+    localStorage.removeItem('flowName');
+    clearFlowNamesFromLocalStorage()
     await signOut({ redirect: false })
     // document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     router.push("/login")
