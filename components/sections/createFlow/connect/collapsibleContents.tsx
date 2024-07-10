@@ -42,6 +42,7 @@ export const EmailContent: React.FC<ContentProps> = ({
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
   const t = useTranslations("CreateFlow.ConnectPage")
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+  const [integrationId, setIntegrationId] = useState<string>("")
 
   useEffect(() => {
     if (flowId) {
@@ -55,6 +56,7 @@ export const EmailContent: React.FC<ContentProps> = ({
         .then((res) => res.json())
         .then((data) => {
           setEmail(data.email)
+          setIntegrationId(data.id)
           if (data.email === "" || data.email === null || data.email === undefined) {
             handleStatusUpdate("inactive")
           } else {
@@ -66,27 +68,29 @@ export const EmailContent: React.FC<ContentProps> = ({
     }
   }, [])
 
-  const putRequest = (email: string, flowId: string) => {
-    fetch(`/api/flows/${flowId}/integrations`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "email": `${email}`,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setEmail(data.email)
-        if (data.email === "" || data.email === null || data.email === undefined) {
-          handleStatusUpdate("inactive")
-        } else {
-          handleStatusUpdate("active")
-        }
+  const putRequest = (email: string, flowId: string, integrationId: string) => {
+    if (integrationId !== "") {
+      fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "email": `${email}`,
+        }),
       })
-      .catch((error) => console.error("Error fetching user data:", error))
-      .finally(() => setIsLoading(false))
+        .then((res) => res.json())
+        .then((data) => {
+          setEmail(data.email)
+          if (data.email === "" || data.email === null || data.email === undefined) {
+            handleStatusUpdate("inactive")
+          } else {
+            handleStatusUpdate("active")
+          }
+        })
+        .catch((error) => console.error("Error fetching user data:", error))
+        .finally(() => setIsLoading(false))
+    }
   }
 
   // Check if the URL contains "pt" for Portuguese
@@ -159,7 +163,7 @@ export const EmailContent: React.FC<ContentProps> = ({
         <div>
           {status !== "active" ? (
             <Button disabled={!email?.trim()} onClick={() => {
-              putRequest(email, flowId ?? "")
+              putRequest(email, flowId ?? "", integrationId ?? "")
               handleClick()
             }} style={buttonStyle}>
               {t("Connect")}
@@ -171,13 +175,13 @@ export const EmailContent: React.FC<ContentProps> = ({
                 className="text-red-500 hover:bg-red-100 hover:text-red-500"
                 onClick={() => {
                   handleClick()
-                  putRequest("", flowId ?? "")
+                  putRequest("", flowId ?? "", integrationId ?? "")
                 }}
                 style={buttonStyle}
               >
                 {t("Disconnect")}
               </Button>
-              <Button style={buttonStyle} onClick={() => { putRequest(email, flowId ?? "") }}>{t("Save changes")}</Button>
+              <Button style={buttonStyle} onClick={() => { putRequest(email, flowId ?? "", integrationId ?? "") }}>{t("Save changes")}</Button>
             </div>
           )}
         </div>
@@ -199,6 +203,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
   // const currentPath = usePathname()
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState<string>("")
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+  const [integrationId, setIntegrationId] = useState<string>("")
 
   useEffect(() => {
     if (flowId) {
@@ -212,6 +217,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
         .then((res) => res.json())
         .then((data) => {
           setGoogleAnalyticsId(data.googleAnalyticsId)
+          setIntegrationId(data.id)
           setIsLoading(false);
           if (data.googleAnalyticsId === "" || data.googleAnalyticsId === null || data.googleAnalyticsId === undefined) {
             handleStatusUpdate("inactive")
@@ -226,9 +232,9 @@ export const GAnalytics: React.FC<ContentProps> = ({
     }
   }, [])
 
-  const putRequest = (googleAnalyticsId: string, flowId: string) => {
-    fetch(`/api/flows/${flowId}/integrations`, {
-      method: "POST",
+  const putRequest = (googleAnalyticsId: string, flowId: string, integrationId: string) => {
+    fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -315,7 +321,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 disabled={!googleAnalyticsId?.trim() || isLoader}
                 onClick={
                   () => {
-                    putRequest(googleAnalyticsId, flowId ?? "")
+                    putRequest(googleAnalyticsId, flowId ?? "", integrationId ?? "")
                     handleClick()
                     setIsLoader(true) // Show loader
                   }}
@@ -333,14 +339,14 @@ export const GAnalytics: React.FC<ContentProps> = ({
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={() => {
                     handleClick()
-                    putRequest("", flowId ?? "")
+                    putRequest("", flowId ?? "", integrationId ?? "")
                   }}
                   style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
                 <Button style={buttonStyle} onClick={() => {
-                  putRequest(googleAnalyticsId, flowId ?? "")
+                  putRequest(googleAnalyticsId, flowId ?? "", integrationId ?? "")
                 }}>{t("Save changes")}</Button>
               </div>
             )}
@@ -364,6 +370,7 @@ export const GTagManager: React.FC<ContentProps> = ({
   const [googleTagManagerId, setGoogleTagManagerId] = useState<string>("")
 
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+  const [integrationId, setIntegrationId] = useState<string>("")
 
   useEffect(() => {
     if (flowId) {
@@ -377,6 +384,7 @@ export const GTagManager: React.FC<ContentProps> = ({
         .then((res) => res.json())
         .then((data) => {
           setGoogleTagManagerId(data.googleTagManagerId)
+          setIntegrationId(data.id)
           if (data.googleTagManagerId === "" || data.googleTagManagerId === null || data.googleTagManagerId === undefined) {
             handleStatusUpdate("inactive")
           } else {
@@ -391,9 +399,9 @@ export const GTagManager: React.FC<ContentProps> = ({
     }
   }, [])
 
-  const putRequest = (googleTagManagerId: string, flowId: string) => {
-    fetch(`/api/flows/${flowId}/integrations`, {
-      method: "POST",
+  const putRequest = (googleTagManagerId: string, flowId: string, integrationId: string) => {
+    fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -481,7 +489,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 disabled={!googleTagManagerId?.trim() || isLoader}
                 onClick={
                   () => {
-                    putRequest(googleTagManagerId, flowId ?? "")
+                    putRequest(googleTagManagerId, flowId ?? "", integrationId ?? "")
                     handleClick()
                     setIsLoader(true) // Show loader
                   }}
@@ -499,13 +507,13 @@ export const GTagManager: React.FC<ContentProps> = ({
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={() => {
                     handleClick()
-                    putRequest("", flowId ?? "")
+                    putRequest("", flowId ?? "", integrationId ?? "")
                   }}
                   style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
-                <Button style={buttonStyle} onClick={() => putRequest(googleTagManagerId, flowId ?? "")}>{t("Save changes")}</Button>
+                <Button style={buttonStyle} onClick={() => putRequest(googleTagManagerId, flowId ?? "", integrationId ?? "")}>{t("Save changes")}</Button>
               </div>
             )}
           </div>
@@ -527,6 +535,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
   const t = useTranslations("CreateFlow.ConnectPage")
 
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+  const [integrationId, setIntegrationId] = useState<string>("")
   const [metaPixelAccessToken, setMetaPixelAccessToken] = useState<string>("")
   const [metaPixelId, setMetaPixelId] = useState<string>("")
 
@@ -546,6 +555,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
           }
 
           setMetaPixelId(data.metaPixelId)
+          setIntegrationId(data.id)
           if (data.metaPixelId === "" || data.metaPixelId === null || data.metaPixelId === undefined) {
             handleStatusUpdate("inactive")
           } else {
@@ -560,9 +570,9 @@ export const MetaPixel: React.FC<ContentProps> = ({
     }
   }, [])
 
-  const putRequest = (metaPixelAccessToken: string, metaPixelId: string, flowId: string) => {
-    fetch(`/api/flows/${flowId}/integrations`, {
-      method: "POST",
+  const putRequest = (metaPixelAccessToken: string, metaPixelId: string, flowId: string, integrationId: string) => {
+    fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -662,7 +672,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
               <Button
                 disabled={!metaPixelId?.trim() || isLoader}
                 onClick={() => {
-                  putRequest(metaPixelAccessToken, metaPixelId, flowId ?? "")
+                  putRequest(metaPixelAccessToken, metaPixelId, flowId ?? "", integrationId ?? "")
                   handleClick()
                   setIsLoader(true) // Show loader
                 }}
@@ -680,14 +690,14 @@ export const MetaPixel: React.FC<ContentProps> = ({
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
                   onClick={() => {
                     handleClick()
-                    putRequest("", "", flowId ?? "")
+                    putRequest("", "", flowId ?? "", integrationId ?? "")
                   }}
                   style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
                 <Button style={buttonStyle} onClick={() => {
-                  putRequest(metaPixelAccessToken, metaPixelId, flowId ?? "")
+                  putRequest(metaPixelAccessToken, metaPixelId, flowId ?? "", integrationId ?? "")
                 }}>{t("Save changes")}</Button>
               </div>
             )}
