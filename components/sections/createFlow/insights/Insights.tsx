@@ -222,8 +222,9 @@ const navbarHighlighter = () => {
     const endDate = storedDate.endDate;
     const isToday = (new Date().toDateString() === new Date(endDate).toDateString());
     const difference = differenceInCalendarDays(new Date(endDate), new Date(startDate));
-
-    if (isToday && difference === 7) {
+    // add one day to enddate and compare it today
+    const oneDayToday = differenceInCalendarDays(new Date(endDate), new Date()) === 1;
+    if (isToday && difference === 7 || oneDayToday && difference === 8) {
       return "custom"
     }
     else if (isToday && difference === 14) {
@@ -296,7 +297,6 @@ const InsightsFlowComponents = () => {
         const storedFlowId = getItems("flowId")
         if (storedFlowId && match[1]) {
           if (storedFlowId !== match[1]) {
-            setDays(7);
             setDate({
               startDate: subDays(new Date(), 7),
               endDate: new Date(),
@@ -310,6 +310,7 @@ const InsightsFlowComponents = () => {
               },
             };
             setFirstRender(true);
+            setDays(7);
             localStorage.setItem('flowData', JSON.stringify(flowData));
           }
         }
