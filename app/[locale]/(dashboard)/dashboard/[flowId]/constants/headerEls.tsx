@@ -39,7 +39,6 @@ const Header = () => {
     const currentPath = usePathname();
     console.log("currentPath", currentPath);
     const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl(currentPath));
-    console.log("flowId", flowId);
 
     const handleLogout = async () => {
         localStorage.removeItem('flowData');
