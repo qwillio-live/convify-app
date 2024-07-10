@@ -13,13 +13,31 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+
+const setItems = (key: string, value: any) => {
+  const storedFlowData: Record<string, any> = JSON.parse(localStorage.getItem('flowData') ?? "null");
+  if (storedFlowData) {
+    const updatedFlowData = {
+      ...storedFlowData,
+      [key]: value,
+    };
+    // Store the updated flowData object back in localStorage
+    localStorage.setItem('flowData', JSON.stringify(updatedFlowData));
+  }
+}
+
+const getItems = (key: string) => {
+  const storedFlowData = JSON.parse(localStorage.getItem('flowData') ?? "null");
+  if (storedFlowData) {
+    return storedFlowData[key];
+  }
+}
 const getInitialDate = () => {
-  const storedDate = localStorage.getItem('date');
+  const storedDate = getItems('date');
   if (storedDate) {
-    const parsedDate = JSON.parse(storedDate);
     return {
-      from: new Date(parsedDate.startDate),
-      to: new Date(parsedDate.endDate),
+      from: new Date(storedDate.startDate),
+      to: new Date(storedDate.endDate),
     };
   } else {
     return {
@@ -28,7 +46,6 @@ const getInitialDate = () => {
     };
   }
 };
-
 export function DatePickerWithRange({
   className,
   locale = enUS, // Default locale
@@ -36,8 +53,9 @@ export function DatePickerWithRange({
   setStatus,
   status,
   days,
+  firstRender,
   setDays
-}: React.HTMLAttributes<HTMLDivElement> & { status, days: number, setDays, setStatus, locale?: Locale; setDater: (v: { startDate: Date; endDate: Date }) => void }) {
+}: React.HTMLAttributes<HTMLDivElement> & { firstRender, status, days: number, setDays, setStatus, locale?: Locale; setDater: (v: { startDate: Date; endDate: Date }) => void }) {
   const [date, setDate] = React.useState<DateRange | undefined>(getInitialDate)
 
   React.useEffect(() => {
@@ -48,7 +66,7 @@ export function DatePickerWithRange({
     const difference = differenceInCalendarDays(new Date(endDate), new Date(startDate));
 
     setDater({ startDate, endDate });
-    localStorage.setItem('date', JSON.stringify({ startDate, endDate }));
+    setItems('date', { startDate, endDate });
 
     if (isToday && difference === days) {
     } else {
@@ -57,18 +75,24 @@ export function DatePickerWithRange({
   }, [date]);
 
   React.useEffect(() => {
-    setDate({
-      from: subDays(new Date(), days),
-      to: new Date(),
-    })
-    // const localdays = JSON.parse(localStorage.getItem('days') || 'null');
-    // if (localdays != days) {
-    //   setDate({
-    //     from: subDays(new Date(), days),
-    //     to: new Date(),
-    //   })
-    // }
+    const localdays = getItems('days');
+    if (localdays !== days) {
+      setItems('days', days);
+      setDate({
+        from: subDays(new Date(), days),
+        to: new Date(),
+      })
+    }
   }, [days])
+
+  React.useEffect(() => {
+    if (firstRender) {
+      setDate({
+        from: subDays(new Date(), 7),
+        to: new Date(),
+      })
+    }
+  }, [firstRender])
 
   return (
     <div className={cn("grid gap-2", className)}>

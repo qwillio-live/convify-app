@@ -42,13 +42,9 @@ const Header = () => {
     console.log("flowId", flowId);
 
     const handleLogout = async () => {
-        localStorage.removeItem('date');
-        localStorage.removeItem('days');
-        localStorage.removeItem('Dropoff');
+        localStorage.removeItem('flowData');
         localStorage.removeItem('flowId');
-        localStorage.removeItem('analyticsData');
         localStorage.removeItem('responses');
-        localStorage.removeItem('dataKey');
         await signOut({ redirect: false });
         router.push("/login");
     };
