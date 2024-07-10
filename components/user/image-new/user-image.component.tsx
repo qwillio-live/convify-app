@@ -14,8 +14,6 @@ import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButton
 import { useTranslations } from "next-intl";
 import { RootState } from "@/lib/state/flows-state/store";
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -106,149 +104,72 @@ export const ImageComponentGen = ({
   borderColor,
   borderHoverColor,
   nextScreen,
+  align,
+  alt,
+  maxWidth,
+  Top,
+  Bottom,
+  Left,
+  Right,
+  radiusCorner,
+  src,
   ...props
 }) => {
-  const router = useRouter();
-  const pathName = usePathname();
-  const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
-  };
   return (
-    <div className="w-full relative" style={{
-      width: "100%",
-      background: `${containerBackground}`,
-      display: "flex",
-      justifyContent: "center",
-      minWidth: '100%',
-      paddingTop: `${props.marginTop}px`,
-      paddingBottom: `${props.marginBottom}px`,
-      paddingLeft: `${props.marginLeft}px`,
-      paddingRight: `${props.marginRight}px`,
-    }}>
-      <Link href={`${pathName}#${nextScreen}`} className="contents">
-        <StyledCustomButton
-          fontFamily={fontFamily?.value}
-          color={color.value}
-          background={background.value}
-          backgroundHover={backgroundHover.value}
-          borderHoverColor={borderHoverColor?.value}
-          colorHover={colorHover.value}
-          radius={radius.value}
-          flexDirection={flexDirection}
-          justifyContent={justifyContent}
-          borderColor={borderColor.value}
-          border={border}
-          marginLeft={marginLeft}
-          width={width}
-          size={size}
-          buttonSize={buttonSize}
-          height={height}
-          marginRight={marginRight}
-          marginTop={marginTop}
-          marginBottom={marginBottom}
-          paddingLeft={paddingLeft}
-          paddingTop={paddingTop}
-          paddingRight={paddingRight}
-          paddingBottom={paddingBottom}
-          alignItems={alignItems}
-          gap={gap}
-          mobileScreen={false}
-          {...props}
-          className="text-[1rem]"
-          onClick={() => console.log("Button clicked", text)}
+    <div
+      className=""
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div className="relative w-full"
+        style={{
+          background: `${containerBackground}`,
+          display: "inline-flex",
+          justifyContent: "center",
+          boxSizing: 'border-box',
+          minWidth: '100%',
+          maxWidth: '100%',
+          paddingTop: `${props.marginTop}px`,
+          paddingBottom: `${props.marginBottom}px`,
+          paddingLeft: `${props.marginLeft}px`,
+          paddingRight: `${props.marginRight}px`,
+        }}>
+        <div
+          className={cn(
+            `relative flex flex-row justify-${align} w-full border border-transparent`
+          )}
         >
-          <div style={{
-            maxWidth: '100%',
-            transitionProperty: 'all',
-            overflowX: 'clip',
-            textOverflow: 'ellipsis',
-          }}>{text}</div>
-          {enableLink && <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />}
-        </StyledCustomButton>
-      </Link>
+          {
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <UserLogo
+              alt={alt}
+              marginTop={marginTop}
+              maxWidth={maxWidth}
+              marginBottom={marginBottom}
+              marginLeft={marginLeft}
+              marginRight={marginRight}
+              Top={Top}
+              Bottom={Bottom}
+              Left={Left}
+              Right={Right}
+              background={background}
+              radius={radius}
+              radiusCorner={radiusCorner}
+              align={align}
+              width={width}
+              height={height}
+              src={src}
+              {...props}
+            />
+          }
+        </div>
+      </div>
     </div>
   )
 }
-interface StyledCustomButtonProps {
-  fontFamily?: string
-  color?: string
-  background?: string
-  backgroundHover?: string
-  colorHover?: string
-  size?: string
-  buttonSize?: string
-  marginLeft?: string | number
-  width?: string | number
-  height?: string | number
-  marginRight?: string | number
-  marginTop?: string | number
-  marginBottom?: string | number
-  paddingLeft?: string | number
-  paddingTop?: string | number
-  paddingRight?: string | number
-  paddingBottom?: string | number
-  radius?: number
-  flexDirection?: string
-  alignItems?: string
-  justifyContent?: string
-  gap?: number
-  border?: number
-  borderColor?: string
-  borderHoverColor?: string
-  mobileScreen: boolean
-}
-const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-
-  background: ${(props) => props.background};
-  color: ${(props) => props.color};
-  overflow: hidden;
-  max-width: ${(props) => props.mobileScreen ? IconButtonMobileSizeValues[props.size || "medium"] : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
-  }
-`;
 
 export const UserLogo = ({
   alt,
@@ -357,20 +278,13 @@ export const ImageComponent = ({
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [displayController, setDisplayController] = React.useState(false);
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
-  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
   const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
-  const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
   const screens = useAppSelector((state: RootState) => state?.screen?.screens);
   const screensLength = useAppSelector((state: RootState) => state?.screen?.screens?.length ?? 0);
   const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
-
-  console.log('the value of size is: ', size)
   const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -490,29 +404,6 @@ export const ImageComponent = ({
     }, 200), // Throttle to 50ms to 200ms
     [setProp]
   );
-
-  const handlePropChangeThrottled = (property, value) => {
-    throttledSetProp(property, value);
-  };
-  const handleNavigateToScreen = async () => {
-    dispatch(navigateToScreen(nextScreen));
-    if (screens) {
-      const screen = screens.find(screen => screen.screenName === nextScreen);
-      if (screen) {
-        const screenData = screen.screenData;
-        actions.deserialize(screenData);
-      }
-    }
-  }
-
-  const debouncedSetProp = useCallback(
-    debounce((property, value) => {
-      setProp((prop) => { prop[property] = value }, 0);
-    }), [setProp])
-
-  const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value);
-  }
 
   return (
     <div

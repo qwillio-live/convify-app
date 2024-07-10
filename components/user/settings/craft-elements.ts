@@ -12,6 +12,8 @@ export const CRAFT_ELEMENTS = {
   IMAGECOMPONENT: "ImageComponent",
   AVATARCOMPONENT: "AvatarComponent",
   LOGOCOMPONENT: 'LogoComponent',
+  LOADERCOMPONENT: 'LoaderComponent',
+  TEXTIMAGECOMPONENT: 'TextImageComponent',
   SELECT: "Select",
   USERINPUT: "UserInput",
   INPUTCHECKBOX: "InputCheckbox",

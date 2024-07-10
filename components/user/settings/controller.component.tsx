@@ -2,7 +2,7 @@ import { useEditor } from "@/lib/craftjs"
 import { GripHorizontal, GripVertical, Trash2 } from "lucide-react"
 import React from "react"
 import { Move } from "lucide-react"
-import { removeAvatarComponentId, removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { removeAvatarComponentId, removeField, setAvatarBackgroundColor, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 
 export const Controller = ({ nameOfComponent }) => {
@@ -49,21 +49,23 @@ export const Controller = ({ nameOfComponent }) => {
         <Move />
       </span>
       {/* {isHovered?.isDeletable && ( */}
-        <button
-          onClick={() => {
-            if (selected.name === "AvatarComponent") {
-              dispatch(removeAvatarComponentId(selected.id));
-            }
-            actions.delete(selected.id),
+      <button
+        onClick={() => {
+          if (selected.name === "AvatarComponent") {
+            dispatch(removeAvatarComponentId(selected.id));
+            dispatch(setAvatarBackgroundColor('rgba(255,255,255,.1)'))
+          }
+          actions.delete(selected.id),
             dispatch(setSelectedComponent("ROOT"));
-            if(selected.fieldType === 'data') {
-              dispatch(removeField(selected.id))
-            }
-          }}
-          className="hover:cursor-pointer"
-        >
-          <Trash2 />
-        </button>
+          if (selected.fieldType === 'data') {
+            dispatch(removeField(selected.id))
+          }
+
+        }}
+        className="hover:cursor-pointer"
+      >
+        <Trash2 />
+      </button>
       {/* )} */}
     </div>
   )
