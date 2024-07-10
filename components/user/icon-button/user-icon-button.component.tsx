@@ -271,7 +271,7 @@ export const IconButtonGen = ({
             ) : (
               <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
                 <source
-                  media="(max-width:250px)"
+                  media="(max-width:100px)"
                   srcSet={(icon.picture as ImagePictureTypes)?.mobile}
                 />
                 <img
@@ -764,7 +764,7 @@ export const IconButton = ({
               ) : (
                 <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
                   <source
-                    media="(max-width:250px)"
+                    media="(max-width:100px)"
                     srcSet={(icon.picture as ImagePictureTypes)?.mobile}
                   />
                   <img

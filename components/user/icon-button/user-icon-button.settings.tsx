@@ -261,8 +261,8 @@ export const IconButtonSettings = () => {
                         )
                       }
                       pictureType={icon.pictureType}
-                      maxWidthMobile={400}
-                      maxWidthDesktop={400}
+                      maxWidthMobile={50}
+                      maxWidthDesktop={80}
                       onChange={handlePictureChange}
                     />
                   </div>

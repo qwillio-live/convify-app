@@ -288,8 +288,8 @@ export const UserInputGen = ({ ...props }) => {
                 <InputIconRenderer
                   iconName={icon}
                   style={{
-                    width: `${22}px`,
-                    height: `${22}px`,
+                    width: `${21}px`,
+                    height: `${21}px`,
                     color: "#9cafa3",
                   }}
                 />
@@ -685,8 +685,8 @@ export const UserInput = ({ ...props }) => {
                 <InputIconRenderer
               iconName={icon}
               style={{
-                width: `${22}px`,
-                height: `${22}px`,
+                width: `${21}px`,
+                height: `${21}px`,
                 color: '#9cafa3',
               }}
             />
