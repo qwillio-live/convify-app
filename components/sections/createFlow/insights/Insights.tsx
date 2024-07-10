@@ -135,50 +135,7 @@ interface Dropoff {
   dropOffRate: string
 }
 
-const fakeDropOff = [
-  {
-    stepName: "Step 1",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-  {
-    stepName: "Step 2",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-  {
-    stepName: "Step 3",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-  {
-    stepName: "Step 4",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-  {
-    stepName: "Step 5",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-  {
-    stepName: "Step 6",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-  {
-    stepName: "Step 7",
-    visits: 0,
-    exits: 0,
-    dropOffRate: "0",
-  },
-]
+const fakeDropOff = []
 
 
 const setItems = (key: string, value: any) => {
@@ -308,6 +265,7 @@ const InsightsFlowComponents = () => {
                 startDate: subDays(new Date(), 7),
                 endDate: new Date(),
               },
+              Dropoff: [],
             };
             setFirstRender(true);
             setDays(7);
@@ -329,11 +287,13 @@ const InsightsFlowComponents = () => {
   const [data, setData] = useState<SubmitData[]>(visitsAndSubmitsData);
   let [dropoff, setDropoff] = useState<Dropoff[]>(() => {
     const dataRes = getItems('Dropoff');
-    if (dataRes) {
-      const parsedData = dataRes // Parse the dataRes string into an object
-      return parsedData
+    const url = currentPath; // Get the current URL
+    const match = url && url.match(/dashboard\/([^\/]+)\/results/);
+    const storedFlowId = getItems("flowId")
+    if (dataRes && match && storedFlowId === match[1]) { // Added null check for 'match'
+      return dataRes
     } else {
-      []
+      return []
     }
   });
 
@@ -350,6 +310,7 @@ const InsightsFlowComponents = () => {
     submitsArray: visitsAndSubmitsData,
     uniqueVisitsArray: visitsAndSubmitsData,
   })
+
   useEffect(() => {
     // Parse analytics from local storage when component mounts or updates
     const dataRes = getItems('analyticsData');
@@ -383,7 +344,7 @@ const InsightsFlowComponents = () => {
     if (flowId) {
       getDropoff()
     }
-  }, [status])
+  }, [status, flowId])
 
   useEffect(() => {
     const getAnalytics = async () => {
@@ -607,7 +568,7 @@ const InsightsFlowComponents = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="h-full">
-                {dropoff && dropoff.length > 0 ? (
+                {dropoff && dropoff.length >= 0 ? (
                   dropoff.map((item, index) => (
                     <TableRow key={index} className="p-[0.60rem]"> {/* Reduced padding here */}
                       <TableCell className="p-[0.60rem] pr-0">{index + 1}</TableCell>
@@ -619,12 +580,12 @@ const InsightsFlowComponents = () => {
                   ))
                 ) : (
                   fakeDropOff.map((item, index) => (
-                    <TableRow key={index} className="p-[0.60rem]"> {/* Reduced padding here */}
-                      <TableCell className="p-[0.60rem]">{index + 1}</TableCell>
-                      <TableCell className="p-[0.60rem] whitespace-wrap" style={{ padding: paddingScreen }}>{item.stepName}</TableCell>
-                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.visits}</TableCell>
-                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.exits}</TableCell>
-                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.dropOffRate}</TableCell>
+                    <TableRow key={index} className="p-[1rem]"> {/* Reduced padding here */}
+                      <TableCell className="p-[1rem]"></TableCell>
+                      <TableCell className="p-[1rem] whitespace-wrap" style={{ padding: paddingScreen }}></TableCell>
+                      <TableCell className="p-[1rem]" style={{ padding: paddingScreen }}></TableCell>
+                      <TableCell className="p-[1rem]" style={{ padding: paddingScreen }}></TableCell>
+                      <TableCell className="p-[1rem]" style={{ padding: paddingScreen }}></TableCell>
                     </TableRow>
                   ))
                 )}
