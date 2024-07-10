@@ -22,22 +22,21 @@ import {
   ImagePlus,
   Images,
   LayoutList,
+  SquareCheckIcon,
+  Phone,
+  SquarePen,
+  Mail,
   Linkedin,
   ListChecks,
   ListOrdered,
   Loader as LoaderIcon,
-  SquarePen,
-  NotebookPen,
-  SquareCheckIcon,
   LucidePaintbrush,
-  Mail,
   Navigation,
+  NotebookPen,
   Paintbrush,
   Paintbrush2,
   Pencil,
-  Phone,
   Rocket,
-  Square,
   SquareMousePointer,
   SwatchBook,
   Target,
@@ -46,8 +45,6 @@ import {
   Type,
   User,
 } from "lucide-react"
-// import { SquareCheck } from "lucide-react/dist/esm/lucide-react";
-
 import { useTranslations } from "next-intl"
 
 import { useEditor } from "@/lib/craftjs"
@@ -153,14 +150,6 @@ import {
   ProgressBar,
   ProgressBarDefaultProps,
 } from "../progress/user-progress.component"
-import { RootState } from "@/lib/state/flows-state/store"
-import { is } from "date-fns/locale"
-import { LoaderComponent, LoaderComponentGen } from "../loader-new/user-loader.component"
-import { LoaderDefaultProps } from "../loader-new/user-loader.component"
-import { LogoComponent, LogoDefaultProps } from "../logo-new/user-logo.component"
-import { AvatarComponent, AvatarDefaultProps } from "../avatar-new/user-avatar.component"
-import { TextImageComponent, TextImageComponentGen, TextImageComponentPreview, TextImageDefaultProps } from "../textImage/user-textImage.component"
-import { Select, SelectGen } from "../select/user-select.component"
 import useSelectThemePresets from "../select/useSelectThemePresets"
 import { Select, SelectGen } from "../select/user-select.component"
 import useStepsThemePresets from "../steps/useStepsThemePresets"
@@ -169,6 +158,7 @@ import useTextThemePresets from "../text/useTextThemePresets"
 import {
   TextImageComponent,
   TextImageComponentGen,
+  TextImageComponentPreview,
   TextImageDefaultProps,
 } from "../textImage/user-textImage.component"
 
@@ -250,18 +240,7 @@ export const UserToolbox = () => {
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { selectPreset } = useSelectThemePresets()
-  const { outlinedPreset, underlinedPreset, formPreset } =
-    useInputThemePresets()
-  const { outlinedPresetChecbox, underlinedPresetChecbox } =
-    useInputCheckboxThemePresets()
-  const { outlinedPresetMail, underlinedPresetMail } =
-    useInputMailThemePresets()
-  const { outlinedPresetPhone, underlinedPresetPhone } =
-    useInputPhoneThemePresets()
-  const { outlinedPresetTextarea, underlinedPresetTextarea } =
-    useInputTextareaThemePrests()
-  const { h2Preset } = useHeadlineThemePresets()
-  const { parapgraphPreset, spanPreset } = useTextThemePresets()
+  const { outlinedPreset, underlinedPreset } = useInputThemePresets()
   const { normalPreset: checklistNormalPreset } = useChecklistThemePresets()
   const {
     filledPreset: multipleChoiceFilledPreset,
@@ -269,7 +248,9 @@ export const UserToolbox = () => {
     previewSelections: multipleChoicePreviewSelections,
   } = useMultipleChoiceThemePresets()
 
-  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
   const {
     outlinedPreset: pictureChoiceOutlinedPreset,
     defaultChoices: pictureChoiceDefaultChoices,
@@ -284,7 +265,17 @@ export const UserToolbox = () => {
   } = useListThemePresets()
 
   const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
-
+  const { outlinedPresetChecbox, underlinedPresetChecbox } =
+    useInputCheckboxThemePresets()
+  const { outlinedPresetMail, underlinedPresetMail } =
+    useInputMailThemePresets()
+  const { outlinedPresetPhone, underlinedPresetPhone } =
+    useInputPhoneThemePresets()
+  const { outlinedPresetTextarea, underlinedPresetTextarea } =
+    useInputTextareaThemePrests()
+  const { h2Preset } = useHeadlineThemePresets()
+  const { parapgraphPreset, spanPreset } = useTextThemePresets()
+  const { formPreset } = useInputThemePresets()
   {
     /**
      * isHeaderFooterMode: flag is used to determine if the header or footer mode is active
@@ -308,7 +299,7 @@ export const UserToolbox = () => {
           >
             <AccordionItem value="item-1">
               <AccordionTrigger className="uppercase hover:no-underline">
-                {t("Text")}
+                Text
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
@@ -456,7 +447,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Input Field")}
-                      icon={<TextCursorInput size={12} className="mr-2 size-3" />}
+                      icon={<TextCursorInput className="mr-2 size-3" />}
                     >
                       <UserInputGen
                         {...outlinedPreset}
@@ -480,7 +471,9 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Checkbox")}
-                      icon={<SquareCheckIcon size={12} className="mr-2 size-3" />}
+                      icon={
+                        <SquareCheckIcon size={12} className="mr-2 size-3" />
+                      }
                     >
                       <UserInputCheckboxGen
                         {...outlinedPresetChecbox}
@@ -568,6 +561,65 @@ export const UserToolbox = () => {
                       />
                     </HoverCardComponent>
                   </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <Select {...selectPreset} disabled={false} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Select")}
+                      icon={<SquareMousePointer className="mr-2 size-3" />}
+                    >
+                      <SelectGen
+                        className="w-full"
+                        {...selectPreset}
+                        size="small"
+                        marginTop={0}
+                        marginBottom={0}
+                        fieldName={t("Select")}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <MultipleChoice {...multipleChoiceFilledPreset} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Multiple Choice")}
+                      icon={<LayoutList className="mr-2 size-3" />}
+                    >
+                      <MultipleChoiceGen
+                        {...{
+                          ...multipleChoiceFilledPreset,
+                          disabled: true,
+                          marginTop: 8,
+                          marginBottom: 8,
+                          marginLeft: 8,
+                          marginRight: 8,
+                          selections: multipleChoicePreviewSelections,
+                          choices: multipleChoicePreviewChoices,
+                        }}
+                      />
+                    </HoverCardComponent>
+                  </div>
+
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
@@ -582,7 +634,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Picture Choice")}
-                      icon={<Images size={12} className="mr-2 size-3" />}
+                      icon={<Images className="mr-2 size-3" />}
                     >
                       <PictureChoiceGen
                         {...{
@@ -628,7 +680,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Continue Button")}
-                    icon={<Navigation size={12} className="mr-2 size-3" />}
+                    icon={<Navigation className="mr-2 size-3" />}
                   >
                     <IconButtonGen
                       className="w-full"
@@ -672,7 +724,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Avatar")}
-                      icon={<User size={12} className="mr-2 size-3" />}
+                      icon={<User className="mr-2 size-3" />}
                     >
                       <div className="items-center m-auto">
                         <Image
@@ -705,7 +757,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo")}
-                      icon={<Columns size={12} className="mr-2 size-3" />}
+                      icon={<Columns className="mr-2 size-3" />}
                     >
                       <div className="flex w-[160px] flex-row items-center justify-between p-4">
                         <Image
@@ -742,7 +794,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title="Container"
-                      icon={<Box size={12} className="mr-2 size-3" />}
+                      icon={<Box className="mr-2 size-3" />}
                     >
                       <Box width={120} height={42} />
                     </HoverCardComponent>
@@ -862,161 +914,19 @@ export const UserToolbox = () => {
                       </div>
                   </HoverCardComponent>
                 </div> */}
-                    <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
-                      ref={(ref: any) =>
-                        ref &&
-                        connectors.create(
-                          ref,
-                          <ImageComponent
-                            {...ImageDefaultProps}
-                            // {...filledPreset}
-                            {...filledPreset}
-                            // {...outLinePreset}
-                            disabled={false} />)}
-                      data-cy="toolbox-text"
-                    >
-                      <HoverCardComponent
-                        title={t('Image')}
-                        icon={<ImageIcon className="mr-2 size-3" />}
-                      >
-                        <Image
-                          src={ImagePlaceholder.src}
-                          alt="Image component"
-                          width={360}
-                          height={203}
-                          className="size-full"
-                        />
-                      </HoverCardComponent>
-                    </div>
-                    <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
-                      ref={(ref: any) =>
-                        ref &&
-                        connectors.create(
-                          ref,
-                          <LoaderComponent
-                            {...LoaderDefaultProps}
-                            // {...filledPreset}
-                            {...filledPreset}
-                            // {...outLinePreset}
-                            disabled={false} />)}
-                      data-cy="toolbox-text"
-                    >
-                      <HoverCardComponent
-                        title={t('Loader')}
-                        icon={<LoaderIcon className="mr-2 size-3" />}
-                      >
-                        <div className="flex w-[260px] flex-row items-center justify-center">
-                          <div className="relative">
-                            <div className="w-24 h-24 border-2 border-gray-300 rounded-full"></div>
-                            <div className="loader absolute top-0 left-0 inline-block w-24 h-24 border-2 border-t-2 border-transparent rounded-full animate-spin" style={{ borderTopColor: primaryColor }} />
-                          </div>
-                        </div>
-
-                      </HoverCardComponent>
-                    </div>
-                    <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
-                      ref={(ref: any) =>
-                        ref &&
-                        connectors.create(
-                          ref,
-                          <LogoComponent
-                            {...LogoDefaultProps}
-                            // {...filledPreset}
-                            {...filledPreset}
-                            // {...outLinePreset}
-                            disabled={false} />)}
-                      data-cy="toolbox-text"
-                    >
-                      <HoverCardComponent
-                        title={t('Logo')}
-                        icon={<Columns className="mr-2 size-3" />}
-                      >
-                        <div className="flex w-[160px] flex-row items-center justify-between p-4">
-                          <Image
-                            src={ConvifyLogo.src}
-                            alt="Image component"
-                            width={300}
-                            height={200}
-                            className="size-full"
-                          />
-                        </div>
-                      </HoverCardComponent>
-                    </div>
-                    <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
-                      ref={(ref: any) =>
-                        ref &&
-                        connectors.create(
-                          ref,
-                          <TextImageComponent
-                            {...TextImageDefaultProps}
-                            title={t("Title")}
-                            Text={t("Text Here")}
-                            // {...filledPreset}
-                            {...filledPreset}
-                            // {...outLinePreset}
-                            disabled={false} />)}
-                      data-cy="toolbox-text"
-                    >
-                      <HoverCardComponent
-                        title={t('Text & Image')}
-                        icon={<LayoutList className="mr-2 size-3" />}
-                      >
-                        <TextImageComponentPreview {...TextImageDefaultProps} title={t("Title")} Text={("Text here")} />
-                      </HoverCardComponent>
-                    </div>
-
-                    <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
-                      ref={(ref: any) =>
-                        //@ts-ignore
-                        connectors.create(
-                          ref,
-                          //@ts-ignore
-                          <Steps {...stepsDefaultPreset} />
-                        )
-                      }
-                      data-cy="toolbox-layout-container"
-                    >
-                      <HoverCardComponent
-                        title={t("Steps")}
-                        icon={<Ellipsis className="mr-2 size-3" />}
-                      >
-                        <StepsGen {...stepsDefaultPreset} />
-                      </HoverCardComponent>
-                    </div>
-
-                    <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
-                      ref={(ref: any) =>
-                        //@ts-ignore
-                        connectors.create(
-                          ref,
-                          //@ts-ignore
-                          <List {...listHorizontalPreset} />
-                        )
-                      }
-                      data-cy="toolbox-layout-container"
-                    >
-                      <HoverCardComponent
-                        title={t("List")}
-                        icon={<ListOrdered className="mr-2 size-3" />}
-                      >
-                        <ListGen
-                          {...{
-                            ...listHorizontalPreset,
-                            columnsDesktop: 1,
-                            columnsMobile: 1,
-                          }}
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <ImageComponent
+                          {...ImageDefaultProps}
+                          // {...filledPreset}
+                          {...filledPreset}
+                          // {...outLinePreset}
+                          disabled={false}
                         />
                       )
                     }
@@ -1024,17 +934,15 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Image")}
-                      icon={<ImageIcon size={12} className="mr-2 size-3" />}
+                      icon={<ImageIcon className="mr-2 size-3" />}
                     >
-                      <div className="flex w-[360px] flex-row items-center justify-between border p-4">
-                        <Image
-                          src={ImagePlaceholder.src}
-                          alt="Image component"
-                          width={360}
-                          height={203}
-                          className="size-full"
-                        />
-                      </div>
+                      <Image
+                        src={ImagePlaceholder.src}
+                        alt="Image component"
+                        width={360}
+                        height={203}
+                        className="size-full"
+                      />
                     </HoverCardComponent>
                   </div>
                   <div
@@ -1057,17 +965,17 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Loader")}
-                      icon={<LoaderIcon size={12} className="mr-2 size-3" />}
+                      icon={<LoaderIcon className="mr-2 size-3" />}
                     >
-                      <LoaderComponentGen
-                        enableRedirect={true}
-                        className="w-full"
-                        {...filledPreset}
-                        size="small"
-                        marginTop={0}
-                        marginBottom={0}
-                        text={t("Continue")}
-                      />
+                      <div className="flex w-[260px] flex-row items-center justify-center">
+                        <div className="relative">
+                          <div className="w-24 h-24 border-2 border-gray-300 rounded-full"></div>
+                          <div
+                            className="loader absolute top-0 left-0 inline-block w-24 h-24 border-t-2 border-transparent rounded-full animate-spin"
+                            style={{ borderTopColor: primaryColor }}
+                          />
+                        </div>
+                      </div>
                     </HoverCardComponent>
                   </div>
                   <div
@@ -1090,7 +998,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo")}
-                      icon={<Columns size={12} className="mr-2 size-3" />}
+                      icon={<Columns className="mr-2 size-3" />}
                     >
                       <div className="flex w-[160px] flex-row items-center justify-between p-4">
                         <Image
@@ -1125,9 +1033,9 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Text & Image")}
-                      icon={<LayoutList size={12} className="mr-2 size-3" />}
+                      icon={<LayoutList className="mr-2 size-3" />}
                     >
-                      <TextImageComponentGen
+                      <TextImageComponentPreview
                         {...TextImageDefaultProps}
                         title={t("Title")}
                         Text={"Text here"}
@@ -1150,7 +1058,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Steps")}
-                      icon={<Ellipsis size={12} className="mr-2 size-3" />}
+                      icon={<Ellipsis className="mr-2 size-3" />}
                     >
                       <StepsGen {...stepsDefaultPreset} />
                     </HoverCardComponent>
@@ -1171,7 +1079,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("List")}
-                      icon={<ListOrdered size={12} className="mr-2 size-3" />}
+                      icon={<ListOrdered className="mr-2 size-3" />}
                     >
                       <ListGen
                         {...{
@@ -1198,7 +1106,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Checklist")}
-                      icon={<ListChecks size={12} className="mr-2 size-3" />}
+                      icon={<ListChecks className="mr-2 size-3" />}
                     >
                       <ChecklistGen {...checklistNormalPreset} />
                     </HoverCardComponent>
@@ -1219,7 +1127,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo Bar")}
-                      icon={<SwatchBook size={12} className="mr-2 size-3" />}
+                      icon={<SwatchBook className="mr-2 size-3" />}
                     >
                       <LogoBarGen {...logoBarDefaultPreset} />
                     </HoverCardComponent>

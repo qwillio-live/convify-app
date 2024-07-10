@@ -19,7 +19,7 @@ import {
   PictureChoiceDefaultProps,
 } from "../picture-choice/user-picture-choice.component"
 import {
-  IconButtonGen,
+  IconButton,
   IconButtonDefaultProps,
 } from "../icon-button/user-icon-button.component"
 import {

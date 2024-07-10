@@ -716,6 +716,7 @@ export type UserInputProps = {
   }
   settingsTab: string
 }
+
 export const UserInputDefaultProps: UserInputProps = {
   compId: "",
   inputValue: "",
