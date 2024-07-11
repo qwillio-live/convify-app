@@ -290,7 +290,7 @@ export const UserInputGen = ({ ...props }) => {
                   style={{
                     width: `${21}px`,
                     height: `${21}px`,
-                    color: "#9cafa3",
+                    color: "#505051",
                   }}
                 />
               </div>
@@ -687,7 +687,7 @@ export const UserInput = ({ ...props }) => {
               style={{
                 width: `${21}px`,
                 height: `${21}px`,
-                color: '#9cafa3',
+                color: '#505051',
               }}
             />
               </div>

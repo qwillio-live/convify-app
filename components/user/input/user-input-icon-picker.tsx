@@ -110,7 +110,9 @@ export const InputSettingsIconPicker = ({ className = "", icon, onChange }) => {
            className={`border-input min-w-[22px] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
           variant="ghost">
             <CloudUpload className="hidden size-4" />
-            <InputIconRenderer iconName={icon} className="size-6" />
+            <InputIconRenderer iconName={icon} className="size-6" style={{
+              color: '#505051'
+             }} />
           </Button>
         </DialogTrigger>
         <DialogContent className="h-[70%] overflow-y-auto p-0 sm:max-h-[70%] sm:max-w-[80%]">
