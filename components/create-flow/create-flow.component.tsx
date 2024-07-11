@@ -10,13 +10,18 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from "lodash"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
+  setCurrentScreenName,
+  setScrollY,
+  setComponentBeforeAvatar,
   setEditorLoad,
+  setFirstScreenName,
   setSelectedComponent,
+  setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -40,6 +45,7 @@ import {
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { ImageComponent } from "../user/image-new/user-image.component"
 import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
@@ -58,11 +64,15 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
+import { LoaderComponent } from "../user/loader-new/user-loader.component"
 import { Checklist } from "../user/checklist/user-checklist.component"
 import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
+import { LogoComponent } from "../user/logo-new/user-logo.component"
+import { AvatarComponent } from "../user/avatar-new/user-avatar.component"
+import { TextImageComponent } from "../user/textImage/user-textImage.component"
 import { RootState } from "@/lib/state/flows-state/store"
 import { clear } from "console"
 import { LineSelector } from "../user/lineSeperator/line-seperator-component"
@@ -125,16 +135,30 @@ export function CreateFlowComponent() {
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
-  const selectedScreen = useAppSelector(
-    (state) => state?.screen?.selectedScreen
+  const selectedScreen =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+  const selectedScreenId = useAppSelector(
+    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
   )
   const startScreen = useAppSelector(
     (state) => state?.screen?.screens[0].screenData || ""
   )
+  const startScreenName = useAppSelector(
+    (state) => state?.screen?.screens[0].screenName || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
+  const avatarComponentId = useAppSelector(
+    (state) => state.screen?.avatarComponentId
+  )
+  const previousAvatarComponentId = useAppSelector(
+    (state) => state.screen?.previousAvatarComponentId
+  )
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
@@ -144,7 +168,8 @@ export function CreateFlowComponent() {
   const headerPosition =
     useAppSelector((state) => state?.theme?.header?.headerPosition) ||
     "relative"
-
+  const firstScreenName =
+    useAppSelector((state) => state?.screen?.firstScreenName) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -156,6 +181,42 @@ export function CreateFlowComponent() {
     }, 1200),
     [dispatch]
   )
+
+  React.useEffect(() => {
+    dispatch(setMobileScreen(false))
+    dispatch(
+      setValidateScreen({
+        screenId: selectedScreenId,
+        screenValidated: false,
+        screenToggleError: false,
+      })
+    )
+    dispatch(setFirstScreenName(startScreenName))
+    dispatch(setCurrentScreenName(startScreenName))
+  }, [])
+
+  useEffect(() => {
+    const checkComponentBeforeAvatar = () => {
+      const parsedEditor = JSON.parse(screensHeader)
+      const container = parsedEditor["ROOT"]
+      if (!container) {
+        return false
+      }
+      const avatarIndex = container.nodes.findIndex(
+        (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+      )
+      return avatarIndex > 0
+    }
+
+    const hasComponentBeforeAvatar = checkComponentBeforeAvatar()
+    dispatch(setComponentBeforeAvatar(hasComponentBeforeAvatar))
+  }, [editorLoad, dispatch])
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const scrollTop = event.currentTarget.scrollTop
+    dispatch(setScrollY(scrollTop))
+  }
+
   React.useEffect(() => {
     if (headerMode) {
       const height =
@@ -185,6 +246,8 @@ export function CreateFlowComponent() {
     // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", updateWidth)
   }, [headerMode, height])
+  console.log("header position: ", headerPosition)
+
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -236,6 +299,11 @@ export function CreateFlowComponent() {
           Select,
           DragDrop,
           UserToolbox,
+          ImageComponent,
+          LoaderComponent,
+          LogoComponent,
+          AvatarComponent,
+          TextImageComponent,
           Image,
           PictureChoice,
           MultipleChoice,
@@ -256,6 +324,7 @@ export function CreateFlowComponent() {
             </div>
           </ScrollArea>
           <ScrollArea
+            onScroll={handleScroll}
             ref={containerRef}
             id="scroll-container"
             className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 "
@@ -293,16 +362,28 @@ export function CreateFlowComponent() {
                       id="editor-header"
                       style={{
                         position: headerPosition as Position,
-                        width:
-                          headerPosition === "absolute" ? width + "px" : "100%",
+                        width: mobileScreen
+                          ? "384px"
+                          : headerPosition === "absolute" && !mobileScreen
+                          ? width + "px"
+                          : "100%",
                         top:
-                          headerPosition === "absolute" && !headerMode
+                          mobileScreen &&
+                          headerPosition === "absolute" &&
+                          !headerMode
+                            ? "34px"
+                            : !mobileScreen &&
+                              headerPosition === "absolute" &&
+                              !headerMode
                             ? "32px"
                             : "0",
                         // top: headerPosition === 'absolute' ? '66px' : '0',
                         // width: width,
                         zIndex: 20,
-                        backgroundColor: backgroundColor,
+                        backgroundColor:
+                          avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                            ? avatarBackgroundColor
+                            : backgroundColor,
                       }}
                     >
                       <ResolvedComponentsFromCraftState
@@ -313,10 +394,20 @@ export function CreateFlowComponent() {
                   <div
                     id="editor-content"
                     style={{
-                      marginTop:
-                        !headerMode && headerPosition === "absolute"
-                          ? `${height + 8}px`
-                          : 0,
+                      paddingTop:
+                        !headerMode && !mobileScreen
+                          ? headerPosition === "absolute"
+                            ? `${height + 48}px`
+                            : "40px"
+                          : !headerMode && headerPosition === "absolute"
+                          ? `${height + 29}px`
+                          : "",
+                      backgroundColor:
+                        headerMode &&
+                        avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                          ? avatarBackgroundColor
+                          : backgroundColor,
+                      marginTop: headerMode ? "38px" : "0px",
                     }}
                   >
                     <Frame data={editorLoad}></Frame>

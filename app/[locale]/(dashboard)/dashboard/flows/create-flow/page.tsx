@@ -22,6 +22,8 @@ import { CreateFlowComponent } from "@/components/create-flow/create-flow.compon
 import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { setCurrentScreenName } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export default function CreateFlowsPage() {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
@@ -29,6 +31,11 @@ export default function CreateFlowsPage() {
   const [link, setLink] = useState(
     "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
   )
+
+  const dispatch = useAppDispatch();
+  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || "";
+
+
   const [tab, setTab] = useState("create")
 
   const t = useTranslations("CreateFlow")
@@ -102,7 +109,12 @@ export default function CreateFlowsPage() {
               </TabsList>
             </div>
             <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
-              <Link href="/dashboard/flows/preview-flow" target="_blank">
+              <Link
+              onClick={() => {
+                router.refresh(),
+                dispatch(setCurrentScreenName(firstScreenName))
+              }}
+              href={`/dashboard/flows/preview-flow?screen=${firstScreenName}`} target="_blank">
                 <Button
                   variant="outline"
                   size="sm"

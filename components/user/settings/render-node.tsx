@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Controller } from "./controller.component"
 import styled from "styled-components"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { addField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { addAvatarComponentId, addField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useRouter } from "next/navigation"
 
 
@@ -59,12 +59,15 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   const { id } = useNode()
   const selectedComponent = useAppSelector((state) => state.screen?.selectedComponent);
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
+  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
+  const currentScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId);
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
   }))
 
   const {
     isHover,
+    actions: { setProp },
     isSelected,
     dom,
     borderColor,
@@ -91,6 +94,9 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     parent: node.data.parent,
     props: node.data.props,
   }));
+  const avatarComponentId = useAppSelector((state)=>state?.screen?.avatarComponentId)
+  const previousAvatarComponentId = useAppSelector((state)=>state?.screen?.previousAvatarComponentId) 
+  const avatarComponentIds = useAppSelector((state)=>state?.screen?.avatarComponentIds) 
   useEffect(() => {
     if (dom && id !== "ROOT") {
       if (isHover && !isSelected) {
@@ -117,16 +123,28 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   }, [mobileScreen])
 
   useEffect(() => {
+    if (name === "AvatarComponent" && !avatarComponentIds?.includes(id)) {
+      dispatch(addAvatarComponentId(id));
+    }
+  }, [name, id, avatarComponentIds, dispatch]);
+
+
+  useEffect(() => {
     if(fieldType === 'data'){
       dispatch(addField({
         fieldId: id,
         fieldName: name,
         fieldValue: null,
-        fieldRequired: true,
+        fieldRequired: false,
         toggleError: false,
       }));
+      setProp((props) => {props.parentScreenId = currentScreenId});
     }
   },[])
+
+  if (name === "AvatarComponent" && id !== avatarComponentId) {
+    return null;
+  }
 
   return (
 

@@ -1,11 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import Image from "next/image"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
-import FirstLogo from "@/assets/images/first-logo.png"
-import FourthLogo from "@/assets/images/fourth-logo.png"
-import ImagePlaceholder from "@/assets/images/image-component-placeholder.webp"
-import SecondLogo from "@/assets/images/second-logo.png"
-import ThirdLogo from "@/assets/images/third-logo.png"
+import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
+import ImagePlaceholder from "@/assets/images/default-image.webp"
 import cn from "classnames"
 import {
   Box,
@@ -23,7 +20,6 @@ import {
   Image as ImageIcon,
   ImagePlus,
   Images,
-  LayoutList,
   Link,
   Linkedin,
   ListChecks,
@@ -35,6 +31,7 @@ import {
   Paintbrush2,
   Pencil,
   RectangleEllipsis,
+  User,
   Rocket,
   SeparatorHorizontal,
   SkipBack,
@@ -44,9 +41,9 @@ import {
   TextCursorInput,
   Trophy,
   Type,
+  LayoutList,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-
 import { useEditor } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
@@ -66,10 +63,7 @@ import CustomLoader from "@/components/ui/loader"
 import { Progress as CustomProgressBar } from "@/components/ui/progress-custom"
 import { ScrollArea } from "@/components/ui/scroll-area"
 // import { Toggle, ToggleItem } from "@/components/ui/toggle-group"
-import {
-  Loader,
-  LoaderDefaultProps,
-} from "@/components/user/loader/user-loader.component"
+import { Loader } from "@/components/user/loader/user-loader.component"
 import {
   TextDefaultProps,
   UserText,
@@ -85,11 +79,13 @@ import {
   IconButton,
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
+import { ImageComponent } from "../image-new/user-image.component"
 import { Img, ImgDefaultProps } from "../image/user-image-component"
+import { ImageDefaultProps } from "../image-new/user-image.component"
 import useInputThemePresets from "../input/useInputThemePresets"
 import { UserInput, UserInputGen } from "../input/user-input.component"
 import { LogoBarGen, LogoBar } from "../logo-bar/user-logo-bar.component"
-import { Logo, LogoDefaultProps } from "../logo/user-logo.component"
+import { Logo } from "../logo/user-logo.component"
 import {
   MultipleChoice,
   MultipleChoiceGen,
@@ -105,6 +101,25 @@ import {
 } from "../progress/user-progress.component"
 import { RootState } from "@/lib/state/flows-state/store"
 import { is } from "date-fns/locale"
+import {
+  LoaderComponent,
+  LoaderComponentGen,
+} from "../loader-new/user-loader.component"
+import { LoaderDefaultProps } from "../loader-new/user-loader.component"
+import {
+  LogoComponent,
+  LogoDefaultProps,
+} from "../logo-new/user-logo.component"
+import {
+  AvatarComponent,
+  AvatarDefaultProps,
+} from "../avatar-new/user-avatar.component"
+import {
+  TextImageComponent,
+  TextImageComponentGen,
+  TextImageComponentPreview,
+  TextImageDefaultProps,
+} from "../textImage/user-textImage.component"
 import { Select, SelectGen } from "../select/user-select.component"
 import useSelectThemePresets from "../select/useSelectThemePresets"
 import { Checklist, ChecklistGen } from "../checklist/user-checklist.component"
@@ -215,6 +230,9 @@ export const UserToolbox = () => {
     previewSelections: multipleChoicePreviewSelections,
   } = useMultipleChoiceThemePresets()
 
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
   const {
     outlinedPreset: pictureChoiceOutlinedPreset,
     defaultChoices: pictureChoiceDefaultChoices,
@@ -554,185 +572,78 @@ export const UserToolbox = () => {
                 </div>
               </AccordionContent>
             </AccordionItem>
-
-            <AccordionItem value="item-4">
-              <AccordionTrigger className="uppercase hover:no-underline">
-                Display
-              </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
-                <>
-                  {!isHeaderFooterMode && (
-                    <>
-                      <div
-                        className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          //@ts-ignore
-                          connectors.create(
-                            ref,
-                            //@ts-ignore
-                            <Card {...CardContentDefaultProps} />
-                          )
-                        }
-                        data-cy="toolbox-layout-container"
-                      >
-                        <HoverCardComponent
-                          title="Container"
-                          icon={<Box className="mr-2 size-3" />}
-                        >
-                          <Box width={120} height={42} />
-                        </HoverCardComponent>
+            {isHeaderFooterMode && (
+              <AccordionItem value="item-4">
+                <AccordionTrigger className="uppercase hover:no-underline">
+                  Display
+                </AccordionTrigger>
+                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <AvatarComponent
+                          {...AvatarDefaultProps}
+                          // {...filledPreset}
+                          {...filledPreset}
+                          // {...outLinePreset}
+                          disabled={false}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Avatar")}
+                      icon={<User className="mr-2 size-3" />}
+                    >
+                      <div className="m-auto items-center">
+                        <Image
+                          src={AvatarPlaceholder.src}
+                          alt="Avatar component"
+                          width={100}
+                          height={100}
+                          className="rounded-full"
+                        />
                       </div>
-                      <div
-                        className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          ref &&
-                          connectors.create(
-                            ref,
-                            <LineSelector
-                              // {...IconButtonDefaultProps}
-                              // {...filledPreset}
-                              {...filledPreset}
-                              // {...outLinePreset}
-                              disabled={false}
-                              enableLine={true}
-                            />
-                          )
-                        }
-                        data-cy="toolbox-text"
-                      >
-                        <HoverCardComponent
-                          title={t("Separator")}
-                          icon={<SeparatorHorizontal className="mr-2 size-3" />}
-                        >
-                          <IconLineSeperator
-                            className="w-full"
-                            {...filledPreset}
-                            size="small"
-                            marginTop={0}
-                            marginBottom={0}
-                            enableLine={true}
-                          />
-                        </HoverCardComponent>
+                    </HoverCardComponent>
+                  </div>
+                  <div
+                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <LogoComponent
+                          {...LogoDefaultProps}
+                          // {...filledPreset}
+                          {...filledPreset}
+                          // {...outLinePreset}
+                          disabled={false}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Logo")}
+                      icon={<Columns className="mr-2 size-3" />}
+                    >
+                      <div className="flex w-[160px] flex-row items-center justify-between p-4">
+                        <Image
+                          src={ConvifyLogo.src}
+                          alt="Image component"
+                          width={300}
+                          height={200}
+                          className="size-full"
+                        />
                       </div>
-
-                      <div
-                        className="min-w-full  rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          ref &&
-                          connectors.create(ref, <Img {...ImgDefaultProps} />)
-                        }
-                        data-cy="toolbox-text"
-                      >
-                        <HoverCardComponent
-                          title={t("Image")}
-                          icon={<ImageIcon className="mr-2 size-3" />}
-                        >
-                          <div className="flex w-[360px] flex-row items-center justify-between">
-                            <Image
-                              src={ImagePlaceholder.src}
-                              alt="Image component"
-                              width={360}
-                              height={203}
-                              className="size-full"
-                            />
-                          </div>
-                        </HoverCardComponent>
-                      </div>
-
-                      <div
-                        className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          //@ts-ignore
-                          connectors.create(
-                            ref,
-                            //@ts-ignore
-                            <Steps {...stepsDefaultPreset} />
-                          )
-                        }
-                        data-cy="toolbox-layout-container"
-                      >
-                        <HoverCardComponent
-                          title={t("Steps")}
-                          icon={<Ellipsis className="mr-2 size-3" />}
-                        >
-                          <StepsGen {...stepsDefaultPreset} />
-                        </HoverCardComponent>
-                      </div>
-
-                      <div
-                        className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          //@ts-ignore
-                          connectors.create(
-                            ref,
-                            //@ts-ignore
-                            <List {...listHorizontalPreset} />
-                          )
-                        }
-                        data-cy="toolbox-layout-container"
-                      >
-                        <HoverCardComponent
-                          title={t("List")}
-                          icon={<ListOrdered className="mr-2 size-3" />}
-                        >
-                          <ListGen
-                            {...{
-                              ...listHorizontalPreset,
-                              columnsDesktop: 1,
-                              columnsMobile: 1,
-                            }}
-                          />
-                        </HoverCardComponent>
-                      </div>
-
-                      <div
-                        className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          //@ts-ignore
-                          connectors.create(
-                            ref,
-                            //@ts-ignore
-                            <Checklist {...checklistNormalPreset} />
-                          )
-                        }
-                        data-cy="toolbox-layout-container"
-                      >
-                        <HoverCardComponent
-                          title={t("Checklist")}
-                          icon={<ListChecks className="mr-2 size-3" />}
-                        >
-                          <ChecklistGen {...checklistNormalPreset} />
-                        </HoverCardComponent>
-                      </div>
-
-                      <div
-                        className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
-                        //eslint-disable-next-line
-                        ref={(ref: any) =>
-                          //@ts-ignore
-                          connectors.create(
-                            ref,
-                            //@ts-ignore
-                            <LogoBar {...logoBarDefaultPreset} />
-                          )
-                        }
-                        data-cy="toolbox-layout-container"
-                      >
-                        <HoverCardComponent
-                          title={t("Logo Bar")}
-                          icon={<SwatchBook className="mr-2 size-3" />}
-                        >
-                          <LogoBarGen {...logoBarDefaultPreset} />
-                        </HoverCardComponent>
-                      </div>
-                    </>
-                  )}
+                    </HoverCardComponent>
+                  </div>
                   <div
                     className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
@@ -822,10 +733,382 @@ export const UserToolbox = () => {
                       </div>
                     </HoverCardComponent>
                   </div>
-                </>
-              </AccordionContent>
-            </AccordionItem>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+            {!isHeaderFooterMode && (
+              <AccordionItem value="item-4">
+                <AccordionTrigger className="uppercase hover:no-underline">
+                  Display
+                </AccordionTrigger>
 
+                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                  <>
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        //@ts-ignore
+                        connectors.create(
+                          ref,
+                          //@ts-ignore
+                          <Card {...CardContentDefaultProps} />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title="Container"
+                        icon={<Box className="mr-2 size-3" />}
+                      >
+                        <Box width={120} height={42} />
+                      </HoverCardComponent>
+                    </div>
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <LineSelector
+                            // {...IconButtonDefaultProps}
+                            // {...filledPreset}
+                            {...filledPreset}
+                            // {...outLinePreset}
+                            disabled={false}
+                            enableLine={true}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Separator")}
+                        icon={<SeparatorHorizontal className="mr-2 size-3" />}
+                      >
+                        <IconLineSeperator
+                          className="w-full"
+                          {...filledPreset}
+                          size="small"
+                          marginTop={0}
+                          marginBottom={0}
+                          enableLine={true}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <ImageComponent
+                            {...ImageDefaultProps}
+                            // {...filledPreset}
+                            {...filledPreset}
+                            // {...outLinePreset}
+                            disabled={false}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Image")}
+                        icon={<ImageIcon className="mr-2 size-3" />}
+                      >
+                        <Image
+                          src={ImagePlaceholder.src}
+                          alt="Image component"
+                          width={360}
+                          height={203}
+                          className="size-full"
+                        />
+                      </HoverCardComponent>
+                    </div>
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <LoaderComponent
+                            {...LoaderDefaultProps}
+                            // {...filledPreset}
+                            {...filledPreset}
+                            // {...outLinePreset}
+                            disabled={false}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Loader")}
+                        icon={<LoaderIcon className="mr-2 size-3" />}
+                      >
+                        <div className="flex w-[260px] flex-row items-center justify-center">
+                          <div className="relative">
+                            <div className="h-24 w-24 rounded-full border-2 border-gray-300"></div>
+                            <div
+                              className="loader absolute left-0 top-0 inline-block h-24 w-24 animate-spin rounded-full border-2 border-t-2 border-transparent"
+                              style={{ borderTopColor: primaryColor }}
+                            />
+                          </div>
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <LogoComponent
+                            {...LogoDefaultProps}
+                            // {...filledPreset}
+                            {...filledPreset}
+                            // {...outLinePreset}
+                            disabled={false}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Logo")}
+                        icon={<Columns className="mr-2 size-3" />}
+                      >
+                        <div className="flex w-[160px] flex-row items-center justify-between p-4">
+                          <Image
+                            src={ConvifyLogo.src}
+                            alt="Image component"
+                            width={300}
+                            height={200}
+                            className="size-full"
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <TextImageComponent
+                            {...TextImageDefaultProps}
+                            title={t("Title")}
+                            Text={t("Text Here")}
+                            // {...filledPreset}
+                            {...filledPreset}
+                            // {...outLinePreset}
+                            disabled={false}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Text & Image")}
+                        icon={<LayoutList className="mr-2 size-3" />}
+                      >
+                        <TextImageComponentPreview
+                          {...TextImageDefaultProps}
+                          title={t("Title")}
+                          Text={"Text here"}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        //@ts-ignore
+                        connectors.create(
+                          ref,
+                          //@ts-ignore
+                          <Steps {...stepsDefaultPreset} />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("Steps")}
+                        icon={<Ellipsis className="mr-2 size-3" />}
+                      >
+                        <StepsGen {...stepsDefaultPreset} />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        //@ts-ignore
+                        connectors.create(
+                          ref,
+                          //@ts-ignore
+                          <List {...listHorizontalPreset} />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("List")}
+                        icon={<ListOrdered className="mr-2 size-3" />}
+                      >
+                        <ListGen
+                          {...{
+                            ...listHorizontalPreset,
+                            columnsDesktop: 1,
+                            columnsMobile: 1,
+                          }}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        //@ts-ignore
+                        connectors.create(
+                          ref,
+                          //@ts-ignore
+                          <Checklist {...checklistNormalPreset} />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("Checklist")}
+                        icon={<ListChecks className="mr-2 size-3" />}
+                      >
+                        <ChecklistGen {...checklistNormalPreset} />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        //@ts-ignore
+                        connectors.create(
+                          ref,
+                          //@ts-ignore
+                          <LogoBar {...logoBarDefaultPreset} />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("Logo Bar")}
+                        icon={<SwatchBook className="mr-2 size-3" />}
+                      >
+                        <LogoBarGen {...logoBarDefaultPreset} />
+                      </HoverCardComponent>
+                    </div>
+                    <div
+                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <ProgressBar
+                            {...(isHeaderFooterMode
+                              ? {
+                                  ...ProgressBarDefaultProps,
+                                  size: "full",
+                                  forHeader: true,
+                                  type: "header",
+                                  marginTop: 0,
+                                  marginBottom: 0,
+                                  marginLeft: 0,
+                                  marginRight: 0,
+                                  paddingLeft: 0,
+                                  paddingRight: 0,
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                }
+                              : {
+                                  ...ProgressBarDefaultProps,
+                                  forHeader: false,
+                                  type: "body",
+                                  paddingLeft: 0,
+                                  paddingRight: 0,
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                  marginLeft: 0,
+                                  marginRight: 0,
+                                  marginTop: 20,
+                                  marginBottom: 20,
+                                  maxValue: screensLength,
+                                  progressvalue:
+                                    screensLength > 0 ? selectedScreen + 1 : 1,
+                                })}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Progress Bar")}
+                        icon={<RectangleEllipsis className="mr-2 size-3" />}
+                      >
+                        <div className="flex w-[360px] flex-row items-center justify-between  p-4">
+                          <ProgressBarGen
+                            {...(isHeaderFooterMode
+                              ? {
+                                  ...ProgressBarDefaultProps,
+                                  size: "full",
+                                  forHeader: true,
+                                  type: "header",
+                                  marginTop: 0,
+                                  marginBottom: 0,
+                                  marginLeft: 0,
+                                  marginRight: 0,
+                                  paddingLeft: 0,
+                                  paddingRight: 0,
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                }
+                              : {
+                                  ...ProgressBarDefaultProps,
+                                  size: "full",
+                                  forHeader: false,
+                                  type: "body",
+                                  paddingLeft: 0,
+                                  paddingRight: 0,
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                  marginLeft: 0,
+                                  marginRight: 0,
+                                  marginTop: 0,
+                                  marginBottom: 0,
+                                  radius: 0,
+                                  maxValue: screensLength,
+                                  progressvalue:
+                                    screensLength > 0 ? selectedScreen + 1 : 1,
+                                })}
+                            // Uncomment the following line if you need to set a value for the progress bar
+                            // value={50}
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+                  </>
+                </AccordionContent>
+              </AccordionItem>
+            )}
             {/* <AccordionItem value="item-5">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Navigation
