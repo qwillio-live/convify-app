@@ -252,6 +252,7 @@ const InsightsFlowComponents = () => {
         setDays(days);
 
         const storedFlowId = getItems("flowId")
+        const storedFlowData = localStorage.getItem('flowData');
         if (storedFlowId && match[1]) {
           if (storedFlowId !== match[1]) {
             setDate({
@@ -271,6 +272,18 @@ const InsightsFlowComponents = () => {
             setDays(7);
             localStorage.setItem('flowData', JSON.stringify(flowData));
           }
+        }
+        if (!storedFlowData) {
+          const flowData = {
+            flowId: match[1],
+            days: 7,
+            date: {
+              startDate: subDays(new Date(), 7),
+              endDate: new Date(),
+            },
+            Dropoff: [],
+          };
+          localStorage.setItem('flowData', JSON.stringify(flowData));
         }
 
       }
