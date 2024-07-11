@@ -677,7 +677,7 @@ export const ProgressBar = ({
   useEffect(() => {
     if (progressvalue !== 1 && maxValue !== 5) {
       debouncedSetProp("maxValue", screensLength)
-      if (progressvalue > maxValue) {
+      if (progressvalue > screensLength) {
         debouncedSetProp("progressvalue", screensLength)
       }
     }
