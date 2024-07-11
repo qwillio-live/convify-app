@@ -221,7 +221,10 @@ const InsightsFlowComponents = () => {
   };
 
   useEffect(() => {
-    if (windowSize <= 390) {
+    if (windowSize <= 370) {
+      setPaddingScreen("0.2rem")
+    }
+    else if (windowSize <= 390) {
       setPaddingScreen("0.3rem")
     } else if (windowSize <= 450) {
       setPaddingScreen("0.4rem")
