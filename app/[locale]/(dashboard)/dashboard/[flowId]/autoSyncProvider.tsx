@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import Loading from "../loading"
 
 export const FlowsAutoSaveProvider = ({ children, flowId }) => {
+  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 5000
   const [isFlowLoaded, setIsFlowLoaded] = useState(false)
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
 
@@ -50,7 +51,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
           }
           return updatedFlowData
         })
-      }, 5000)
+      }, autoSaveTime)
     })
 
     return () => clearInterval(interval)
