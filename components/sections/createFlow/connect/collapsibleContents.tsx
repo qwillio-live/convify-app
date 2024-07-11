@@ -140,7 +140,7 @@ export const EmailContent: React.FC<ContentProps> = ({
     return null  // Render nothing while loading
   }
 
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
 
 
   return (
@@ -284,7 +284,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
   if (isLoading) {
     return null  // Render nothing while loading
   }
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
@@ -451,7 +451,7 @@ export const GTagManager: React.FC<ContentProps> = ({
   if (isLoading) {
     return null  // Render nothing while loading
   }
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
 
   return (
     <div className="border-t border-solid border-gray-200 p-5">
@@ -620,7 +620,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
   if (isLoading) {
     return null  // Render nothing while loading
   }
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
 
   return (
     <div className="border-t border-solid border-gray-200 p-5">
