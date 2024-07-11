@@ -371,7 +371,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                     __html: convertToSvg(icons[props.icon]?.body),
                   }}
                   style={{
-                    color: `#9CA3AF`,
+                    color: `#505051`,
                     // fontSize: "1.5rem",
                   }}
                 />
@@ -690,7 +690,7 @@ export const UserInputPhone = ({ ...props }) => {
                       __html: convertToSvg(icons[props.icon]?.body),
                     }}
                     style={{
-                      color: `#9CA3AF`,
+                      color: `#505051`,
                     }}
 
                     // className={cn(

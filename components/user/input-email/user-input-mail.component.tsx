@@ -351,7 +351,7 @@ export const UserInputMailGen = ({ ...props }) => {
                     __html: convertToSvg(icons[props.icon]?.body),
                   }}
                   style={{
-                    color: `#9CA3AF`,
+                    color: `#505051`,
                   }}
                 />
               </div>
@@ -636,7 +636,7 @@ export const UserInputMail = ({ ...props }) => {
                     __html: convertToSvg(icons[props.icon]?.body),
                   }}
                   style={{
-                    color: `#9CA3AF`,
+                    color: `#505051`,
                   }}
                 />
               </div>
