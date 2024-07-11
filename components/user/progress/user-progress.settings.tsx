@@ -216,9 +216,11 @@ export const ProgressBarSettings = () => {
     (state) => state?.theme?.general?.backgroundColor
   )
   useEffect(() => {
-    debouncedSetProp("maxValue", screensLength)
-    if (progressvalue > maxValue) {
-      debouncedSetProp("progressvalue", screensLength)
+    if (progressvalue !== 1 && maxValue !== 5) {
+      debouncedSetProp("maxValue", screensLength)
+      if (progressvalue > maxValue) {
+        debouncedSetProp("progressvalue", screensLength)
+      }
     }
   }, [screensLength])
 

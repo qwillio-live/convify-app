@@ -673,21 +673,13 @@ export const ProgressBar = ({
 
     return icons
   }
-  console.log(
-    "paddins tblr",
-    paddingTop,
-    paddingBottom,
-    paddingLeft,
-    paddingRight,
-    bgColor
-  )
-  // useEffect(() => {
-  //   debouncedSetProp("maxValue", screensLength)
-  // }, [])
+
   useEffect(() => {
-    debouncedSetProp("maxValue", screensLength)
-    if (progressvalue > maxValue) {
-      debouncedSetProp("progressvalue", screensLength)
+    if (progressvalue !== 1 && maxValue !== 5) {
+      debouncedSetProp("maxValue", screensLength)
+      if (progressvalue > maxValue) {
+        debouncedSetProp("progressvalue", screensLength)
+      }
     }
   }, [screensLength])
 

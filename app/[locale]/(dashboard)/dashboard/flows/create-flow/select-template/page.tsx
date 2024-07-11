@@ -154,7 +154,7 @@ export default function SelectTemplate() {
                 {t("startFromScratch")}
               </Button>
             </div>
-            <ScrollArea className=" bottom-30  h-[30vh] md:h-[48vh] lg:h-[62vh] ">
+            <ScrollArea className=" bottom-30  h-[20vh] md:h-[45vh] lg:h-[58vh] ">
               <div className="grid grid-cols-1  gap-6 md:grid-cols-2">
                 {filteredCards.map((card, index) => (
                   <div key={card.id} className="pr-2">
