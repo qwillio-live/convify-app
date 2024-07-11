@@ -131,7 +131,7 @@ const ShareFlowComponents = ({
                         onClick={() => {
                           navigator.clipboard.writeText(link)
                           toast({
-                            title: "Link copied to clipboard",
+                            title: t("Link copied to clipboard"),
                           })
                         }}
                         className={`flex h-8 w-auto flex-[0_0_auto] cursor-pointer items-center gap-[6px] whitespace-nowrap rounded-[4px] rounded-l-none border border-solid border-transparent bg-[rgb(38,38,38)] px-3 text-sm font-medium text-white outline-none transition-all duration-200 hover:bg-[rgb(76,76,76)]`}
