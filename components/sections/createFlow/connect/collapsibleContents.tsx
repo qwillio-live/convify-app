@@ -140,7 +140,7 @@ export const EmailContent: React.FC<ContentProps> = ({
     return null  // Render nothing while loading
   }
 
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
 
 
   return (
@@ -169,7 +169,7 @@ export const EmailContent: React.FC<ContentProps> = ({
               {t("Connect")}
             </Button>
           ) : (
-            <div className="flex gap-1.5">
+            <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`}>
               <Button
                 variant="ghost"
                 className="text-red-500 hover:bg-red-100 hover:text-red-500"
@@ -284,7 +284,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
   if (isLoading) {
     return null  // Render nothing while loading
   }
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
@@ -333,7 +333,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 {t("Connect")}
               </Button>
             ) : (
-              <div className="flex gap-1.5">
+              <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`} >
                 <Button
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
@@ -353,7 +353,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -451,7 +451,7 @@ export const GTagManager: React.FC<ContentProps> = ({
   if (isLoading) {
     return null  // Render nothing while loading
   }
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
 
   return (
     <div className="border-t border-solid border-gray-200 p-5">
@@ -501,7 +501,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 {t("Connect")}
               </Button>
             ) : (
-              <div className="flex gap-1.5">
+              <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`}>
                 <Button
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"
@@ -620,7 +620,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
   if (isLoading) {
     return null  // Render nothing while loading
   }
-  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '12px' } : {}
+  const buttonStyle = isPortuguese && isSmallScreen ? { fontSize: '11px' } : {}
 
   return (
     <div className="border-t border-solid border-gray-200 p-5">
@@ -684,7 +684,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 {t("Connect")}
               </Button>
             ) : (
-              <div className="flex gap-1.5">
+              <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`}>
                 <Button
                   variant="ghost"
                   className="text-red-500 hover:bg-red-100 hover:text-red-500"

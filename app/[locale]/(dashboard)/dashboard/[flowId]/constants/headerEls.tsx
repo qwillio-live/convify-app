@@ -46,8 +46,21 @@ const Header = () => {
     const t = useTranslations("CreateFlow"); // Initialize your translation hook
     const router = useRouter();
     const currentPath = usePathname();
-    console.log("currentPath", currentPath);
     const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl(currentPath));
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 370);
+        };
+
+        handleResize(); // Check screen size on component mount
+        window.addEventListener('resize', handleResize); // Add resize event listener
+
+        return () => {
+            window.removeEventListener('resize', handleResize); // Clean up event listener on component unmount
+        };
+    }, []);
 
     const handleLogout = async () => {
         localStorage.removeItem('flowData');
@@ -59,7 +72,7 @@ const Header = () => {
         router.push("/login");
     };
     const linkClasses = (path) => (
-        `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm px-3 ${currentPath?.split("/").at(-1) === path.split("/").at(-1) || currentPath === "/pt" + path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
+        `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm ${isSmallScreen ? 'px-2.5' : 'px-3'} ${currentPath?.split("/").at(-1) === path.split("/").at(-1) || currentPath === "/pt" + path ? 'text-foreground border-current' : 'text-muted-foreground border-transparent'}`
     );
     return (
         <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
@@ -83,6 +96,9 @@ const Header = () => {
                     <Link
                         className={linkClasses("/dashboard/flows/create-flow")}
                         href={`/dashboard/${flowId}/create-flow`}
+                        style={{
+                            paddingLeft: isSmallScreen ? "0.625rem" : "1rem",
+                        }}
                     >
                         {t("Create")}
                     </Link>

@@ -51,10 +51,12 @@ export function BreadCrumbs() {
     return null;
   });
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(window.innerWidth < 768);
+  const [isVerySmallScreen, setIsVerySmallScreen] = useState(window.innerWidth <= 370);
 
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 768);
+      setIsVerySmallScreen(window.innerWidth <= 370);
     };
 
     window.addEventListener('resize', handleResize);
@@ -100,6 +102,11 @@ export function BreadCrumbs() {
     maxWidth: '150px', // Adjust the width as needed
   };
 
+  const verySmallScreenStyle = {
+    fontSize: '13px',
+    ...smallScreenTruncateStyle,
+  };
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -118,9 +125,9 @@ export function BreadCrumbs() {
         <BreadcrumbSeparator className="hidden lg:inline-block">/</BreadcrumbSeparator>
         <BreadcrumbItem className="max-lg:ml-3.5">
           <BreadcrumbPage
-            style={isSmallScreen ? smallScreenTruncateStyle : truncateStyle}
+            style={isVerySmallScreen ? verySmallScreenStyle : isSmallScreen ? smallScreenTruncateStyle : truncateStyle}
           >
-            {loading ? "..." : flowName ? isSmallScreen ? truncateText(flowName, 12) : truncateText(flowName, 50) : t("My new form")}
+            {loading ? "..." : flowName ? isVerySmallScreen ? truncateText(flowName, 8) : isSmallScreen ? truncateText(flowName, 12) : truncateText(flowName, 50) : t("My new form")}
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
