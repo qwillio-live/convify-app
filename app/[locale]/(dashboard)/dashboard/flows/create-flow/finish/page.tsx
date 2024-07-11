@@ -53,7 +53,7 @@ export default function SelectColor() {
               <div className="my-3">
                 <Input
                   className=" w-[640px] py-[27px] placeholder:text-base placeholder:font-normal"
-                  placeholder="Enter a title for your new convify"
+                  placeholder={t("Enter a title for your new convify")}
                 />
               </div>
             </div>

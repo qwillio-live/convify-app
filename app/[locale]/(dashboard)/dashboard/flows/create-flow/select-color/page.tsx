@@ -18,6 +18,7 @@ import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ColorPicker = ({ color, onChange }) => {
+  const t = useTranslations("Components")
   return (
     <div className="color-picker">
       <HexColorPicker color={color} onChange={onChange} />
@@ -31,7 +32,7 @@ const ColorPicker = ({ color, onChange }) => {
       </div>
       <Separator className="mt-3" />
       <span className="font-sans3 mt-2 flex w-full justify-start text-xs font-normal tracking-wide text-[#919191]">
-        Suggestions
+        {t("suggestions")}
       </span>
       <style jsx>{`
         .color-picker {

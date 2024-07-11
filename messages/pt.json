@@ -227,7 +227,8 @@
     "Continue on desktop": "Continuar no desktop",
     "Email me a direct link": "Me envie um link direto por email",
     "Dismiss": "Dispensar",
-    "continue on desktop desc": "Crie fluxos com nossos recursos mais poderosos, como lógica ou opções de design avançadas, em dispositivos desktop. Enviaremos um link direto por email."
+    "continue on desktop desc": "Crie fluxos com nossos recursos mais poderosos, como lógica ou opções de design avançadas, em dispositivos desktop. Enviaremos um link direto por email.",
+    "suggestions":"Sugestões"
   },
   "CreateFlow": {
     "Create": "Criar",
