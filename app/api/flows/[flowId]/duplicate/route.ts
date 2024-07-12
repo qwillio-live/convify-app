@@ -48,6 +48,7 @@ export async function POST(
       name: `${flow.name} - Copy`,
       flowSettings: flow.flowSettings || {},
       numberOfSteps: flow.numberOfSteps || 0,
+      numberOfResponses:  0,
       previewImage:  flow.previewImage || null,
       status: "draft",
       isDeleted: false

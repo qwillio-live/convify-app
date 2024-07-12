@@ -47,10 +47,10 @@ export const SettingsPanel = () => {
   })
 
   useEffect(() => {
-    if(selected || selectedComponent)
-    actions.selectNode(selectedComponent || "ROOT")
-  }, [mobileScreen,selectedComponent])
-
+    if (selected || selectedComponent) {
+      actions.selectNode(selectedComponent || "ROOT");
+    }
+  }, [mobileScreen, selectedComponent]);
   return (
     <Tabs defaultValue="element" className="mb-10">
       <TabsList>
