@@ -31,7 +31,8 @@ export async function GET(req: NextRequest) {
 
   try {
     const startDateObj = new Date(startDate as string)
-    const endDateObj = new Date(endDate as string)
+    let endDateObj = new Date(new Date(endDate).setHours(23, 59, 59, 999));
+    // const endDateObj = new Date(endDate as string)
 
     const flow = await prisma.flow.findUnique({
       where: { id: String(flowId), isDeleted: false },
