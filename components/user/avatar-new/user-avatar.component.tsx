@@ -391,7 +391,6 @@ export const AvatarComponent = ({
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
         >
-          {isHovered && <Controller nameOfComponent={t("Avatar")} />}
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <UserLogo

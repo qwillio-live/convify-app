@@ -335,7 +335,6 @@ export const LogoComponent = ({
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
         >
-          {isHovered && <Controller nameOfComponent={t("Logo")} />}
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <UserLogo
