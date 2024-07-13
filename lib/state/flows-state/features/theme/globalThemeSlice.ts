@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { FONTS, PrimaryFontType, SecondaryFontType } from "./fonts"
 
 export interface GlobalThemeState {
-  mobileScreen: boolean;
-  primaryFonts?: PrimaryFontType;
-  secondaryFonts?: SecondaryFontType;
-  defaultHeader? : {
+  mobileScreen: boolean
+  primaryFonts?: PrimaryFontType
+  secondaryFonts?: SecondaryFontType
+  defaultHeader?: {
     headerPosition: string
-  },
+  }
   header: {
     headerPosition: string | undefined
   }
@@ -42,10 +42,10 @@ const initialState: GlobalThemeState = {
   primaryFonts: FONTS.primaryFonts,
   secondaryFonts: FONTS.secondaryFonts,
   defaultHeader: {
-    headerPosition: "absolute"
+    headerPosition: "absolute",
   },
   header: {
-    headerPosition: "absolute"
+    headerPosition: "absolute",
   },
   defaultGeneral: {
     primaryColor: "#4050ff",
@@ -77,7 +77,18 @@ export const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
+    setFlowSettings: (state, action: PayloadAction<GlobalThemeState>) => {
+      state.mobileScreen = action.payload.mobileScreen
+      state.header = { ...initialState.defaultHeader, ...action.payload.header }
+      state.general = {
+        ...initialState.defaultGeneral,
+        ...action.payload.general,
+      }
+      state.text = { ...initialState.defaultText, ...action.payload.text }
+    },
     setThemeStyles: (state, action: PayloadAction<GlobalThemeState>) => {
+      console.log("setThemeStyles", action.payload)
+
       state.general = { ...action.payload.general }
       state.text = { ...action.payload.text }
     },
@@ -97,19 +108,18 @@ export const themeSlice = createSlice({
       }
     },
     setMobileScreen: (state, action: PayloadAction<boolean>) => {
-      state.mobileScreen = action.payload;
-
+      state.mobileScreen = action.payload
     },
   },
 })
 
-
 export const {
+  setFlowSettings,
   setThemeStyles,
   setHeaderPosition,
   setPartialStyles,
   setBackgroundColor,
   setMobileScreen,
-} = themeSlice.actions;
+} = themeSlice.actions
 
 export default themeSlice.reducer
