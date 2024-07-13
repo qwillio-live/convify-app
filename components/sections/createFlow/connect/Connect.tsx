@@ -11,6 +11,17 @@ import { usePathname, useRouter } from "next/navigation"
 
 import "./ConnectFlowComponents.css";
 import Custom404 from "../share/404"
+
+const extractFlowIdFromUrl = (currentPath) => {
+  const url = currentPath; // Get the current URL
+  const match = url && url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
+  if (match && match[1] && match[1] !== "flows") {
+    return match[1]
+  } else if (match && match[1] === "flows") {
+    return match[1]
+  }
+  return null
+};
 interface Flow {
   email: string
   googleAnalyticsId: string
@@ -24,28 +35,16 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
     googleAnalyticsId: "",
     googleTagManagerId: "",
     metaPixelAccessToken: "",
-
     metaPixelId: ""
   })
   const [search, setSearch] = useState("")
   const [filteredDatas, setFilteredDatas] = useState<TIntegrationCardData[]>([])
   const currentPath = usePathname()
-  const [flowId, setFlowId] = useState<string | null>(null);
+  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl(currentPath));
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [effectCall, setEffectCall] = useState("");
 
-  useEffect(() => {
-    const extractFlowIdFromUrl = async () => {
-      const url = currentPath; // Get the current URL
-      const match = url && url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
-      if (match && match[1] && match[1] !== "flows") {
-        setFlowId(match[1]);
-      } else if (match && match[1] === "flows") {
-        setFlowId(match[1]);
-      }
-    };
-    extractFlowIdFromUrl();
-  }, []);
 
   useEffect(() => {
     if (flowId !== "flows" && flowId !== null) {
@@ -71,7 +70,7 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
       setLoading(false)
       setError(false)
     }
-  }, [flowId])
+  }, [flowId, effectCall])
 
   // Define the update function
   const updateStatus = (id, newStatus) => {
@@ -164,6 +163,8 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
                     key={Integrationitem.id}
                     Integrationitem={Integrationitem}
                     updateStatus={updateStatus}
+                    flowData={flowData}
+                    setEffectCall={setEffectCall}
                   />
                 ))}
               </Accordion>

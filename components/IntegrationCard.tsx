@@ -16,11 +16,15 @@ type UpdateStatusFunction = (id: number, newStatus: string) => void
 interface IntegrationCardProps {
   Integrationitem: TIntegrationCardData
   updateStatus: UpdateStatusFunction
+  flowData: any
+  setEffectCall: any
 }
 
 const IntegrationCard = ({
   Integrationitem,
   updateStatus,
+  flowData,
+  setEffectCall,
 }: IntegrationCardProps) => {
   const { title, description, image, status, alt, id, Content } =
     Integrationitem
@@ -61,7 +65,7 @@ const IntegrationCard = ({
         </div>
       </AccordionTrigger>
       <AccordionContent className="p-0">
-        <Content handleStatusUpdate={handleStatusUpdate} status={status} />
+        <Content handleStatusUpdate={handleStatusUpdate} status={status} flowData={flowData} setEffectCall={setEffectCall} />
       </AccordionContent>
     </AccordionItem>
   )

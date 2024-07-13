@@ -12,6 +12,7 @@ import { Icons } from "@/components/icons"
 import { usePathname } from "next/navigation"
 
 type HandleStatusUpdateFunction = (newStatus: string) => void
+
 const extractFlowIdFromUrl = () => {
   const url = window.location.pathname; // Get the current URL path
   const match = url.match(/dashboard\/([^\/]+)\/connect/); // Use regex to match the flowId
@@ -24,6 +25,8 @@ interface ContentProps {
   handleStatusUpdate: HandleStatusUpdateFunction
   status: string
   userEmail: string
+  flowData: any
+  setEffectCall: any
 }
 interface User {
   name: string
@@ -35,38 +38,16 @@ interface User {
 export const EmailContent: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
+  flowData,
+  setEffectCall
 }) => {
-  const [email, setEmail] = useState<string>("")
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [email, setEmail] = useState<string>(flowData.email ? flowData.email : "")
+  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
+  const [integrationId, setIntegrationId] = useState<string>(flowData.id ? flowData.id : "")
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
   const t = useTranslations("CreateFlow.ConnectPage")
-  const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
-  const [integrationId, setIntegrationId] = useState<string>("")
-
-  useEffect(() => {
-    if (flowId) {
-      fetch(`/api/flows/${flowId}/integrations`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          credentials: "include",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setEmail(data.email)
-          setIntegrationId(data.id)
-          if (data.email === "" || data.email === null || data.email === undefined) {
-            handleStatusUpdate("inactive")
-          } else {
-            handleStatusUpdate("active")
-          }
-        })
-        .catch((error) => console.error("Error fetching user data:", error))
-        .finally(() => setIsLoading(false))
-    }
-  }, [])
+  const [isLoader, setIsLoader] = useState<boolean>(false)
 
   const putRequest = (email: string, flowId: string, integrationId: string) => {
     if (integrationId !== "") {
@@ -82,6 +63,7 @@ export const EmailContent: React.FC<ContentProps> = ({
         .then((res) => res.json())
         .then((data) => {
           setEmail(data.email)
+          setEffectCall("email")
           if (data.email === "" || data.email === null || data.email === undefined) {
             handleStatusUpdate("inactive")
           } else {
@@ -89,7 +71,7 @@ export const EmailContent: React.FC<ContentProps> = ({
           }
         })
         .catch((error) => console.error("Error fetching user data:", error))
-        .finally(() => setIsLoading(false))
+        .finally(() => setIsLoader(false))
     }
   }
 
@@ -108,7 +90,6 @@ export const EmailContent: React.FC<ContentProps> = ({
           setEmail(data.email)
         })
         .catch((error) => console.error("Error fetching user data:", error))
-        .finally(() => setIsLoading(false))
     }
 
 
@@ -136,10 +117,6 @@ export const EmailContent: React.FC<ContentProps> = ({
     }
   }
 
-  if (isLoading) {
-    return null  // Render nothing while loading
-  }
-
   const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
 
 
@@ -165,7 +142,11 @@ export const EmailContent: React.FC<ContentProps> = ({
             <Button disabled={!email?.trim()} onClick={() => {
               putRequest(email, flowId ?? "", integrationId ?? "")
               handleClick()
+              setIsLoader(true) // Show loader
             }} style={buttonStyle}>
+              {isLoader && (
+                <Icons.spinner className="mr-2 size-4 animate-spin" />
+              )}
               {t("Connect")}
             </Button>
           ) : (
@@ -193,44 +174,18 @@ export const EmailContent: React.FC<ContentProps> = ({
 export const GAnalytics: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
+  flowData,
+  setEffectCall,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
   // const currentPath = usePathname()
-  const [googleAnalyticsId, setGoogleAnalyticsId] = useState<string>("")
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState<string>(flowData.googleAnalyticsId ? flowData.googleAnalyticsId : "")
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
-  const [integrationId, setIntegrationId] = useState<string>("")
-
-  useEffect(() => {
-    if (flowId) {
-      fetch(`/api/flows/${flowId}/integrations`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          credentials: "include",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setGoogleAnalyticsId(data.googleAnalyticsId)
-          setIntegrationId(data.id)
-          setIsLoading(false);
-          if (data.googleAnalyticsId === "" || data.googleAnalyticsId === null || data.googleAnalyticsId === undefined) {
-            handleStatusUpdate("inactive")
-          } else {
-            handleStatusUpdate("active")
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error)
-          setIsLoading(false)
-        })
-    }
-  }, [])
+  const [integrationId, setIntegrationId] = useState<string>(flowData.id ? flowData.id : "")
 
   const putRequest = (googleAnalyticsId: string, flowId: string, integrationId: string) => {
     fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
@@ -245,6 +200,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
       .then((res) => res.json())
       .then((data) => {
         setGoogleAnalyticsId(data.googleAnalyticsId)
+        setEffectCall("googleAnalytics")
         if (data.googleAnalyticsId === "" || data.googleAnalyticsId === null || data.googleAnalyticsId === undefined) {
           handleStatusUpdate("inactive")
         } else {
@@ -252,7 +208,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
         }
       })
       .catch((error) => console.error("Error fetching user data:", error))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoader(false))
   }
 
   useEffect(() => {
@@ -281,9 +237,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
       handleStatusUpdate("active")
     }
   }
-  if (isLoading) {
-    return null  // Render nothing while loading
-  }
+
   const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
   return (
     <div className="border-t border-solid border-gray-200 p-5">
@@ -347,7 +301,9 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 </Button>
                 <Button style={buttonStyle} onClick={() => {
                   putRequest(googleAnalyticsId, flowId ?? "", integrationId ?? "")
-                }}>{t("Save changes")}</Button>
+                }}>
+                  {t("Save changes")}
+                </Button>
               </div>
             )}
           </div>
@@ -360,44 +316,18 @@ export const GAnalytics: React.FC<ContentProps> = ({
 export const GTagManager: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
+  flowData,
+  setEffectCall,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
 
   const t = useTranslations("CreateFlow.ConnectPage")
-  const [googleTagManagerId, setGoogleTagManagerId] = useState<string>("")
+  const [googleTagManagerId, setGoogleTagManagerId] = useState<string>(flowData.googleTagManagerId ? flowData.googleTagManagerId : "")
 
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
-  const [integrationId, setIntegrationId] = useState<string>("")
-
-  useEffect(() => {
-    if (flowId) {
-      fetch(`/api/flows/${flowId}/integrations`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          credentials: "include",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setGoogleTagManagerId(data.googleTagManagerId)
-          setIntegrationId(data.id)
-          if (data.googleTagManagerId === "" || data.googleTagManagerId === null || data.googleTagManagerId === undefined) {
-            handleStatusUpdate("inactive")
-          } else {
-            handleStatusUpdate("active")
-          }
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error)
-          setIsLoading(false)
-        })
-    }
-  }, [])
+  const [integrationId, setIntegrationId] = useState<string>(flowData.id ? flowData.id : "")
 
   const putRequest = (googleTagManagerId: string, flowId: string, integrationId: string) => {
     fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
@@ -412,6 +342,7 @@ export const GTagManager: React.FC<ContentProps> = ({
       .then((res) => res.json())
       .then((data) => {
         setGoogleTagManagerId(data.googleTagManagerId)
+        setEffectCall("googleTagManager")
         if (data.googleTagManagerId === "" || data.googleTagManagerId === null || data.googleTagManagerId === undefined) {
           handleStatusUpdate("inactive")
         } else {
@@ -420,7 +351,7 @@ export const GTagManager: React.FC<ContentProps> = ({
 
       })
       .catch((error) => console.error("Error fetching user data:", error))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoader(false))
   }
   useEffect(() => {
     setIsPortuguese(window.location.href.includes('/pt'))
@@ -447,9 +378,6 @@ export const GTagManager: React.FC<ContentProps> = ({
     } else {
       handleStatusUpdate("active")
     }
-  }
-  if (isLoading) {
-    return null  // Render nothing while loading
   }
   const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
 
@@ -526,8 +454,9 @@ export const GTagManager: React.FC<ContentProps> = ({
 export const MetaPixel: React.FC<ContentProps> = ({
   handleStatusUpdate,
   status,
+  flowData,
+  setEffectCall,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isLoader, setIsLoader] = useState<boolean>(false)
   const [isPortuguese, setIsPortuguese] = useState<boolean>(false)
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
@@ -535,40 +464,9 @@ export const MetaPixel: React.FC<ContentProps> = ({
   const t = useTranslations("CreateFlow.ConnectPage")
 
   const [flowId, setFlowId] = useState<string | null>(extractFlowIdFromUrl());
-  const [integrationId, setIntegrationId] = useState<string>("")
-  const [metaPixelAccessToken, setMetaPixelAccessToken] = useState<string>("")
-  const [metaPixelId, setMetaPixelId] = useState<string>("")
-
-  useEffect(() => {
-    if (flowId) {
-      fetch(`/api/flows/${flowId}/integrations`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          credentials: "include",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.metaPixelAccessToken !== null) {
-            setMetaPixelAccessToken(data.metaPixelAccessToken)
-          }
-
-          setMetaPixelId(data.metaPixelId)
-          setIntegrationId(data.id)
-          if (data.metaPixelId === "" || data.metaPixelId === null || data.metaPixelId === undefined) {
-            handleStatusUpdate("inactive")
-          } else {
-            handleStatusUpdate("active")
-          }
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error)
-          setIsLoading(false)
-        })
-    }
-  }, [])
+  const [integrationId, setIntegrationId] = useState<string>(flowData.id ? flowData.id : "")
+  const [metaPixelAccessToken, setMetaPixelAccessToken] = useState<string>(flowData.metaPixelAccessToken ? flowData.metaPixelAccessToken : "")
+  const [metaPixelId, setMetaPixelId] = useState<string>(flowData.metaPixelId ? flowData.metaPixelId : "")
 
   const putRequest = (metaPixelAccessToken: string, metaPixelId: string, flowId: string, integrationId: string) => {
     fetch(`/api/flows/${flowId}/integrations/${integrationId}`, {
@@ -585,6 +483,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
       .then((data) => {
         setMetaPixelAccessToken(data.metaPixelAccessToken)
         setMetaPixelId(data.metaPixelId)
+        setEffectCall("metaPixel")
         if (data.metaPixelId === "" || data.metaPixelId === null || data.metaPixelId === undefined) {
           handleStatusUpdate("inactive")
         } else {
@@ -592,7 +491,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
         }
       })
       .catch((error) => console.error("Error fetching user data:", error))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoader(false))
   }
   useEffect(() => {
     setIsPortuguese(window.location.href.includes('/pt'))
@@ -615,10 +514,6 @@ export const MetaPixel: React.FC<ContentProps> = ({
     } else {
       handleStatusUpdate("active")
     }
-  }
-
-  if (isLoading) {
-    return null  // Render nothing while loading
   }
   const buttonStyle = isPortuguese && isSmallScreen || window.innerWidth < 370 ? { fontSize: '11px' } : {}
 
