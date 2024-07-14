@@ -242,7 +242,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800 text-justify">
+        <p className="mb-4 text-sm text-gray-800 text-left">
           {t(
             "Changes to the Google Analytics 4 integration will only become active after re-publishing"
           )}
@@ -260,7 +260,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 value={googleAnalyticsId}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600 text-justify">
+            <p className="mt-0.5 text-xs text-gray-600 text-left">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -384,7 +384,7 @@ export const GTagManager: React.FC<ContentProps> = ({
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800 text-justify">
+        <p className="mb-4 text-sm text-gray-800 text-left">
           {t(
             "Changes to the Google Tag Manager integration will only become active after re-publishing"
           )}
@@ -402,7 +402,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 value={googleTagManagerId}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600 text-justify">
+            <p className="mt-0.5 text-xs text-gray-600 text-left">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -520,7 +520,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800 text-justify">
+        <p className="mb-4 text-sm text-gray-800 text-left">
           {t(
             "Changes to the Meta Pixel integration will only become active after re-publishing"
           )}
@@ -553,7 +553,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 value={metaPixelAccessToken}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600 text-justify">
+            <p className="mt-0.5 text-xs text-gray-600 text-left">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>

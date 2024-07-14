@@ -3,7 +3,14 @@ import { useTranslations } from "next-intl"
 const Custom404 = () => {
     const t = useTranslations("CreateFlow.SharePage")
     return (
-        <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <div style={{
+            textAlign: 'center', marginTop: '50px',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
             <h1>404 - {t("Page Not Found")}</h1>
             <p>{t("Sorry, we couldn't find the page you're looking for")}</p>
         </div>

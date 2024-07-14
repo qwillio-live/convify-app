@@ -58,7 +58,7 @@ const IntegrationCard = ({
                 </small>
               )}
             </div>
-            <p className="text-justify w-full text-sm text-black dark:text-white">
+            <p className="text-left w-full text-sm text-black dark:text-white">
               {t(description)}
             </p>
           </div>
