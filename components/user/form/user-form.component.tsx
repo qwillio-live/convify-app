@@ -164,6 +164,10 @@ export const FormContentGen = ({ children, ...props }) => {
         marginRight={props.marginRight}
         mobileFlexDirection={props.mobileFlexDirection}
         overflow="visible"
+        onSubmit={(e) => {
+          e.preventDefault()
+          console.log("submitted")
+        }}
       >
         {children}
       </FormContentInner>
@@ -327,7 +331,7 @@ FormContent.craft = {
   },
 }
 
-const FormContainer = styled.form<{
+const FormContainer = styled.div<{
   background: string
 }>`
   background: ${({ background }) => background};
@@ -353,7 +357,7 @@ export const Form = ({ children, ...props }) => {
   const t = useTranslations("Components")
   const { outlinedPresetMail, underlinedPresetMail } =
     useInputMailThemePresets()
-  const { outLinePreset, filledPreset } = useButtonThemePresets()
+  const { outLinePreset, filledPreset, formPreset } = useButtonThemePresets()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   const adjustWidth = props.size
@@ -374,124 +378,128 @@ export const Form = ({ children, ...props }) => {
       style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)" }}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
-      <Element
-        canvas
-        id="formcard"
-        is={FormContent}
-        data-cy="form-content"
-        gap="5"
-        ref={(ref: any) => connect(drag(ref))}
-        style={{ width: "100%", height: "100%" }}
-        className={`${
-          isHovered ? "border border-blue-500 border-dotted" : ""
-        } border border-transparent relative`}
-      >
-        {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element
           canvas
-          id="text-input-container"
+          id="form-card"
           is={FormContent}
-          paddingTop={"0"}
-          fillSpace={"0"}
-          paddingBottom={"0"}
-          paddingLeft={"0"}
-          paddingRight={"0"}
-          size={"full"}
-          data-cy-="form-content-input-container"
-          flexDirection={"row"}
-          mobileFlexDirection={"row"}
-          marginRight={"0"}
-          marginLeft={"-2"}
-          marginBottom={"0"}
-          marginTop={"0"}
-          style={{ overflow: "visible" }}
+          data-cy="form-content"
+          gap="5"
+          ref={(ref: any) => connect(drag(ref))}
+          style={{ width: "100%", height: "100%" }}
+          className={`${
+            isHovered ? "border border-blue-500 border-dotted" : ""
+          } border border-transparent relative`}
         >
+          {innerHover && <Controller nameOfComponent={t("Input Container")} />}
           <Element
             canvas
-            id="user-input-name"
-            is={UserInput}
-            {...formPreset}
-            label={t("FirstName")}
-            placeholder="Enter your first name"
-            floatingLabel={true}
-            backgroundColor={"transparent"}
-            marginBottom={0}
-            marginleft={0}
-            marginRight={0}
-            marginTop={0}
+            id="text-input-container"
+            is={FormContent}
+            paddingTop={"0"}
+            fillSpace={"0"}
+            paddingBottom={"0"}
+            paddingLeft={"0"}
+            paddingRight={"0"}
             size={"full"}
+            data-cy-="form-content-input-container"
+            flexDirection={"row"}
+            mobileFlexDirection={"row"}
+            marginRight={"0"}
+            marginLeft={"-2"}
+            marginBottom={"0"}
+            marginTop={"0"}
             style={{ overflow: "visible" }}
+          >
+            <Element
+              canvas
+              id="user-input-name"
+              is={UserInput}
+              {...formPreset}
+              label={t("FirstName")}
+              placeholder="Enter your first name"
+              floatingLabel={true}
+              backgroundColor={"transparent"}
+              marginBottom={0}
+              marginleft={0}
+              marginRight={0}
+              marginTop={0}
+              size={"full"}
+              style={{ overflow: "visible" }}
+            />
+            <Element
+              canvas
+              id="user-input-lastname"
+              is={UserInput}
+              floatingLabel={true}
+              {...formPreset}
+              label={t("LastName")}
+              placeholder="Enter your last name"
+              backgroundColor={"transparent"}
+              marginBottom={0}
+              marginleft={0}
+              paddingRight={0}
+              marginRight={0}
+              marginTop={0}
+              size={"full"}
+              style={{ overflow: "visible" }}
+            />
+          </Element>
+          <Element
+            canvas
+            id="user-input-mail"
+            is={UserInputMail}
+            {...outlinedPresetMail}
+            floatingLabel={true}
+            marginTop={0}
+            marginBottom={0}
+            paddingRight={"4px"}
+            label={t("EmailLabel")}
+            fieldName={t("EmailFieldName")}
+            size={"full"}
           />
           <Element
             canvas
-            id="user-input-lastname"
-            is={UserInput}
+            id="user-input-phone"
+            is={UserInputPhone}
+            {...formPresetPhone}
             floatingLabel={true}
-            {...formPreset}
-            label={t("LastName")}
-            placeholder="Enter your last name"
             backgroundColor={"transparent"}
-            marginBottom={0}
-            marginleft={0}
-            paddingRight={0}
-            marginRight={0}
+            icon={
+              "phone-telephone-android-phone-mobile-device-smartphone-iphone"
+            }
             marginTop={0}
+            marginBottom={0}
+            label={t("PhoneLabel")}
+            fieldName={t("PhoneFieldName")}
             size={"full"}
-            style={{ overflow: "visible" }}
           />
-        </Element>
-        <Element
-          canvas
-          id="user-input-mail"
-          is={UserInputMail}
-          {...outlinedPresetMail}
-          floatingLabel={true}
-          marginTop={0}
-          marginBottom={0}
-          paddingRight={"4px"}
-          label={t("EmailLabel")}
-          fieldName={t("EmailFieldName")}
-          size={"full"}
-        />
-        <Element
-          canvas
-          id="user-input-phone"
-          is={UserInputPhone}
-          {...formPresetPhone}
-          floatingLabel={true}
-          backgroundColor={"transparent"}
-          icon={"phone-telephone-android-phone-mobile-device-smartphone-iphone"}
-          marginTop={0}
-          marginBottom={0}
-          label={t("PhoneLabel")}
-          fieldName={t("PhoneFieldName")}
-          size={"full"}
-        />
-        <Element
-          canvas
-          id="user-input-checkbox"
-          is={UserInputCheckbox}
-          marginTop={0}
-          marginBottom={0}
-          label={t("CheckboxPlaceholder")}
-          fieldName={t("CheckboxFieldName")}
-          inputRequired={false}
-          size={"full"}
-        />
-        <Element
-          canvas
-          id="user-input-submit-button"
-          is={IconButton}
-          {...filledPreset}
-          marginTop={0}
-          marginBottom={0}
-          text={t("Submit")}
-          size={"full"}
-          className="pointer-events-none"
-        />
+          <Element
+            canvas
+            id="user-input-checkbox"
+            is={UserInputCheckbox}
+            marginTop={0}
+            marginBottom={0}
+            label={t("CheckboxPlaceholder")}
+            fieldName={t("CheckboxFieldName")}
+            inputRequired={false}
+            size={"full"}
+          />
+          <Element
+            canvas
+            id="user-input-submit-button"
+            is={IconButton}
+            {...formPreset}
+            marginTop={0}
+            marginBottom={0}
+            size={"full"}
+            onClick={(e) => {
+              e.preventDefault()
+              console.log("clicked")
+            }}
+          />
 
-        {children}
-      </Element>
+          {children}
+        </Element>
     </FormContainer>
   )
 }
