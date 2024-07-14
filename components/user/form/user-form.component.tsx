@@ -419,6 +419,7 @@ export const Form = ({ children, ...props }) => {
               placeholder="Enter your first name"
               floatingLabel={true}
               backgroundColor={"transparent"}
+              borderColor= "transparent"
               marginBottom={0}
               marginleft={0}
               marginRight={0}
@@ -435,6 +436,7 @@ export const Form = ({ children, ...props }) => {
               label={t("LastName")}
               placeholder="Enter your last name"
               backgroundColor={"transparent"}
+              borderColor= "transparent"
               marginBottom={0}
               marginleft={0}
               paddingRight={0}
