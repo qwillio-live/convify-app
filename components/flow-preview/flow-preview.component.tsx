@@ -18,6 +18,7 @@ export default function FlowPreview() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
   const search = searchParams?.get("screen") || ""
   useEffect(() => {
     const screens = document.querySelectorAll(".new-screens")
@@ -41,7 +42,7 @@ export default function FlowPreview() {
   const currentScreenName = useAppSelector(
     (state) => state?.screen?.currentScreenName
   )
-  const selectedScreen = useAppSelector(
+   const selectedScreen = useAppSelector(
     (state) =>
       state?.screen?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
@@ -81,7 +82,9 @@ export default function FlowPreview() {
   useEffect(() => {
     if (!selectedScreenError) {
       // console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+
       router.push(`${pathname}?screen=${currentScreenName}`, { scroll: false })
+
       router.refresh()
       // router.replace(`${pathName}#${currentScreenName}`);
     }
@@ -97,6 +100,7 @@ export default function FlowPreview() {
       setHeaderHeight(height)
     }
   }, [headerMode, headerHeight, headerPosition])
+
   return (
     <>
       <div

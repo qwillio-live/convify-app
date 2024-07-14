@@ -63,6 +63,15 @@ export async function GET(
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
 
+    const flowSteps = await prisma.flowStep.findMany({
+      where: {
+        flowId: String(flowId),
+        isDeleted: false,
+      },
+    });
+
+    flow.steps = flowSteps.sort((a, b) => a.order - b.order);
+
     return NextResponse.json(flow)
   } catch (error) {
     const statusCode = 500
@@ -192,7 +201,7 @@ export async function PUT(
 
     const updatedFlow = await prisma.flow.update({
       where: { id: String(flowId) },
-      data,
+      data: { ...data, steps: undefined },
     })
 
     return NextResponse.json(updatedFlow)

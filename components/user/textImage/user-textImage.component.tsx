@@ -73,7 +73,8 @@ const ButtonTextLimit = {
     large: 100,
     full: 100,
 }
-export const TextImageComponentGen = ({
+
+export const TextImageComponentPreview = ({
     disabled,
     fontFamily,
     enableLink,
@@ -165,84 +166,322 @@ export const TextImageComponentGen = ({
         </div>
     )
 }
-interface StyledCustomButtonProps {
-    fontFamily?: string
-    color?: string
-    background?: string
-    backgroundHover?: string
-    colorHover?: string
-    size?: string
-    buttonSize?: string
-    marginLeft?: string | number
-    width?: string | number
-    height?: string | number
-    marginRight?: string | number
-    marginTop?: string | number
-    marginBottom?: string | number
-    paddingLeft?: string | number
-    paddingTop?: string | number
-    paddingRight?: string | number
-    paddingBottom?: string | number
-    radius?: number
-    flexDirection?: string
-    alignItems?: string
-    justifyContent?: string
-    gap?: number
-    border?: number
-    borderColor?: string
-    borderHoverColor?: string
-    mobileScreen: boolean
+
+export const TextImageComponentGen = ({
+    disabled,
+    fontFamily,
+    enableLink,
+    size,
+    buttonSize,
+    color,
+    text,
+    marginLeft,
+    width: width,
+    height: height,
+    marginRight,
+    marginTop,
+    containerBackground,
+    marginBottom,
+    background,
+    backgroundHover,
+    colorHover,
+    icon,
+    paddingLeft,
+    paddingTop,
+    paddingRight,
+    paddingBottom,
+    radius,
+    flexDirection,
+    alignItems,
+    justifyContent,
+    gap,
+    border,
+    borderColor,
+    borderHoverColor,
+    nextScreen,
+    secondaryFontFamily,
+    titleFontWeight,
+    textFontWeight,
+    titleFontSize,
+    textFontSize,
+    title,
+    align,
+    verticalGap,
+    horizontalGap,
+    bothAlign,
+    Top,
+    Bottom,
+    Left,
+    Right,
+    cornerRadius,
+    split,
+    position,
+    src,
+    alt,
+    setProp,
+    Text,
+    ...props
+}) => {
+
+    const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
+    const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
+    const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor);
+    const ref = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
+
+    const handleTextChange = useCallback(
+        (e) => {
+            const value = e.target.value
+            if (typeof value === "string" && value.length) {
+                setProp((props) => {
+                    props.Text = value
+                    return { ...props }
+                })
+            }
+        },
+        [setProp]
+    )
+    const handleTitleChange = useCallback(
+        (e) => {
+            const value = e.target.value
+            if (typeof value === "string" && value.length) {
+                setProp((props) => {
+                    props.title = value
+                    return { ...props }
+                })
+            }
+        },
+        [setProp]
+    )
+
+    useEffect(() => {
+        const currentRef = ref.current
+        if (currentRef) {
+            currentRef.addEventListener("input", handleTextChange)
+        }
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener("input", handleTextChange)
+            }
+        }
+    }, [handleTextChange])
+
+    useEffect(() => {
+        const currentRef = titleRef.current
+        if (currentRef) {
+            currentRef.addEventListener("input", handleTitleChange)
+        }
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener("input", handleTitleChange)
+            }
+        }
+    }, [handleTitleChange])
+
+
+    const adjustedSplit = Math.max(1, Math.min(split, 11));
+    const textSplit = 12 - adjustedSplit;
+
+    const fontWeightMap = {
+        thin: 100,
+        normal: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+        extrabold: 800,
+    };
+
+    const mobileVerticalGapStyle = {
+        marginBottom: mobileScreen ? `${verticalGap}px` : "0",
+    };
+
+    const adjustedHorizontalGap = Math.min(horizontalGap, 100);
+    const totalGap = adjustedHorizontalGap * (mobileScreen ? 0 : 1);
+
+    return (
+        <div
+            style={{
+                width: size == 'small' ? '600px' : (size == 'medium' ? '800px' : (size == 'large' ? '1200px' : (size == 'full' ? '1400px' : '100%'))),
+                display: "flex",
+                justifyContent: "center",
+            }}
+        >
+            <div className="relative w-full"
+                style={{
+                    background: `${containerBackground}`,
+                    display: "inline-flex",
+                    justifyContent: "center",
+                    boxSizing: 'border-box',
+                    minWidth: '100%',
+                    maxWidth: '100%',
+                    paddingTop: `${props.marginTop}px`,
+                    paddingBottom: `${props.marginBottom}px`,
+                    paddingLeft: `${props.marginLeft}px`,
+                    paddingRight: `${props.marginRight}px`,
+                }}>
+                <div
+                    className={cn(
+                        `relative flex flex-row justify-${align} w-full border border-transparent`
+                    )}
+                >
+                    {
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            gap: !mobileScreen ? `${adjustedHorizontalGap}px` : `${verticalGap}px`,
+                            marginLeft: `${Left}px`,
+                            marginRight: `${Right}px`,
+                            marginTop: `${Top}px`,
+                            marginBottom: `${Bottom}px`,
+                            boxSizing: 'border-box',
+                            overflow: 'hidden',
+                        }}>
+                            {
+                                position === 'left' ? (
+                                    <>
+                                        <div style={{
+                                            flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            alignSelf: `${bothAlign}`,
+                                            display: 'flex',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <img
+                                                alt={alt}
+                                                src={src}
+                                                style={{
+                                                    width: width === 'medium' ? '90%' : width,
+                                                    height: height,
+                                                    borderRadius: `${cornerRadius}px`,
+                                                    backgroundColor: background,
+                                                }}
+                                            />
+                                        </div>
+                                        <div className={`text-start items-center`} style={{
+                                            flex: `0 0 calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            marginTop: bothAlign == 'start' ? '20px' : '',
+                                            alignSelf: `${bothAlign}`,
+                                        }}>
+                                            <ContentEditable
+                                                html={title}
+                                                innerRef={titleRef}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                                                    fontFamily: `var(${fontFamily.value})`,
+                                                    color: primaryTextColor,
+                                                    fontSize: `${titleFontSize}px`,
+                                                    transitionProperty: 'all',
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTitleChange(e);
+                                                }}
+                                                tagName="h1"
+                                            />
+                                            <ContentEditable
+                                                html={Text}
+                                                innerRef={ref}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    fontWeight: fontWeightMap[textFontWeight],
+                                                    color: secondaryTextColor,
+                                                    marginTop: '15px',
+                                                    fontFamily: `var(${secondaryFontFamily.value})`,
+                                                    fontSize: `${textFontSize}px`,
+                                                    transitionProperty: 'all',
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTextChange(e);
+                                                }}
+                                                tagName="div"
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className={`text-start items-start self-center`} style={{
+                                            flex: `0 0 calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${textSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            marginTop: bothAlign == 'start' ? '20px' : '',
+                                            alignSelf: `${bothAlign}`,
+                                        }}>
+                                            <ContentEditable
+                                                html={title}
+                                                innerRef={titleRef}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                                                    fontFamily: `var(${fontFamily.value})`,
+                                                    color: primaryTextColor,
+                                                    fontSize: `${titleFontSize}px`,
+                                                    transitionProperty: 'all',
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTitleChange(e);
+                                                }}
+                                                tagName="h1"
+                                            />
+                                            <ContentEditable
+                                                html={Text}
+                                                innerRef={ref}
+                                                disabled={true}
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    transitionProperty: 'all',
+                                                    marginTop: '15px',
+                                                    fontSize: `${textFontSize}px`,
+                                                    color: secondaryTextColor,
+                                                    fontWeight: fontWeightMap[textFontWeight],
+                                                    fontFamily: `var(${secondaryFontFamily.value})`,
+                                                    overflowX: 'clip',
+                                                    textOverflow: 'ellipsis',
+                                                }}
+                                                onChange={(e) => {
+                                                    handleTextChange(e);
+                                                }}
+                                                tagName="div"
+                                            />
+                                        </div>
+                                        <div style={{
+                                            flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
+                                            alignSelf: `${bothAlign}`,
+                                            display: 'flex',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <img
+                                                alt={alt}
+                                                src={src}
+                                                style={{
+                                                    width: width === 'medium' ? '90%' : width,
+                                                    height: height,
+                                                    borderRadius: `${cornerRadius}px`,
+                                                    backgroundColor: background,
+                                                }}
+                                            />
+                                        </div>
+                                    </>
+                                )
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    )
 }
-const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-  color: ${(props) => props.color};
-  overflow: hidden;
-  max-width: ${(props) => props.mobileScreen ? IconButtonMobileSizeValues[props.size || "medium"] : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
-  }
-`;
 
 export const UserLogo = ({
     alt,
@@ -391,6 +630,8 @@ export const UserLogo = ({
                             flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             alignSelf: `${bothAlign}`,
+                            display: 'flex',
+                            justifyContent: 'center'
                         }}>
                             <img
                                 alt={alt}
@@ -497,6 +738,8 @@ export const UserLogo = ({
                             flex: `0 0 calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             maxWidth: `calc(${adjustedSplit / 12 * 100}% - ${totalGap / 2}px)`,
                             alignSelf: `${bothAlign}`,
+                            display: 'flex',
+                            justifyContent: 'center'
                         }}>
                             <img
                                 alt={alt}
@@ -820,7 +1063,6 @@ export const TextImageComponent = ({
                         `relative flex flex-row justify-${align} w-full border border-transparent`
                     )}
                 >
-                    {isHovered && <Controller nameOfComponent={t("Text & Image")} />}
                     {
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <UserLogo

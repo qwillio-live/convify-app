@@ -1,68 +1,14 @@
-import React, { useCallback, useEffect, useRef } from "react"
-import ImagePlaceholder from "@/assets/images/default-image.webp"
-import { Activity, Anchor, Aperture, ArrowRight, Disc, DollarSign, Mountain } from "lucide-react"
+import React, { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import styled from "styled-components"
-import { throttle, debounce } from 'lodash';
-import { useEditor, useNode } from "@/lib/craftjs"
-import { Button as CustomButton } from "@/components/ui/button"
+import {  useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { LogoSettings } from "./user-logo.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useLogoThemePresets"
 import { useTranslations } from "next-intl";
 import { RootState } from "@/lib/state/flows-state/store";
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import ConvifyLogo from "@/assets/convify_logo_black.png"
-
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-};
-
-const IconGenerator = ({ icon, size, className = '', ...rest }) => {
-  const IconComponent = IconsList[icon];
-
-  if (!IconComponent) {
-    return null; // or some default icon or error handling
-  }
-
-  return <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />;
-};
-
-
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1rem",
-  large: "1.2rem",
-}
-const IconSizeValues = {
-  small: 18,
-  medium: 22,
-  large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
 
 const ButtonTextLimit = {
   small: 100,
@@ -118,11 +64,6 @@ export const LogoComponentGen = ({
   nextScreen,
   ...props
 }) => {
-  const router = useRouter();
-  const pathName = usePathname();
-  const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
-  };
   return (
     <div
       className=""
@@ -179,86 +120,6 @@ export const LogoComponentGen = ({
     </div>
   )
 }
-interface StyledCustomButtonProps {
-  fontFamily?: string
-  color?: string
-  background?: string
-  backgroundHover?: string
-  colorHover?: string
-  size?: string
-  buttonSize?: string
-  marginLeft?: string | number
-  width?: string | number
-  height?: string | number
-  marginRight?: string | number
-  marginTop?: string | number
-  marginBottom?: string | number
-  paddingLeft?: string | number
-  paddingTop?: string | number
-  paddingRight?: string | number
-  paddingBottom?: string | number
-  radius?: number
-  flexDirection?: string
-  alignItems?: string
-  justifyContent?: string
-  gap?: number
-  border?: number
-  borderColor?: string
-  borderHoverColor?: string
-  mobileScreen: boolean
-}
-const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) => props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-
-  background: ${(props) => props.background};
-  color: ${(props) => props.color};
-  overflow: hidden;
-  max-width: ${(props) => props.mobileScreen ? IconButtonMobileSizeValues[props.size || "medium"] : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
-  }
-`;
 
 export const UserLogo = ({
   alt,
@@ -288,11 +149,11 @@ export const UserLogo = ({
         src={src}
         style={{
           width: w,
-          height: `calc(${80}px - ${top}px - ${bottom}px)`, // Adjust height based on top and bottom
+          height: `calc(${80}px - ${top}px - ${bottom}px)`,
           borderRadius: `${borderRad}px`,
           backgroundColor: background,
           objectFit: 'cover',
-          transform: `translateY(${top}px)`, // Move image down by top value
+          transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
         }}
@@ -350,30 +211,18 @@ export const LogoComponent = ({
   const {
     actions: { setProp },
     connectors: { connect, drag },
-    selected,
     isHovered,
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const { actions } = useEditor((state, query) => ({
-    enabled: state.options.enabled,
-  }))
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [displayController, setDisplayController] = React.useState(false);
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
-  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
   const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
-  const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens);
   const screensLength = useAppSelector((state: RootState) => state?.screen?.screens?.length ?? 0);
   const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
-
   const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
 
   useEffect(() => {
@@ -486,7 +335,6 @@ export const LogoComponent = ({
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
         >
-          {isHovered && <Controller nameOfComponent={t("Logo")} />}
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <UserLogo

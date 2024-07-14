@@ -10,7 +10,7 @@ import {
   Image,
   Linkedin,
 } from "lucide-react"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from 'lodash';
 
 
@@ -114,6 +114,7 @@ export function CreateFlowComponent() {
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const [topMargin, setTopMargin] = React.useState<number>(0);
   const dispatch = useAppDispatch()
+  
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -182,6 +183,8 @@ export function CreateFlowComponent() {
     dispatch(setScrollY(scrollTop));
   };
 
+ 
+
   React.useEffect(() => {
     if (headerMode) {
       const height = document?.getElementById("editor-content")?.offsetHeight || 0;
@@ -213,8 +216,6 @@ export function CreateFlowComponent() {
     return () => window.removeEventListener('resize', updateWidth);
 
     }
-
-    // Cleanup event listener on component unmount
   }, [headerMode, height,mobileScreen, width]);
 
   return (
@@ -333,7 +334,7 @@ export function CreateFlowComponent() {
                         width: mobileScreen ? '384px' : (headerPosition === 'absolute') ? width+'px' : '100%',
                         top: '0',
                         zIndex: 20,
-                        backgroundColor: avatarBackgroundColor
+                        backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor
                       }}>
                       <ResolvedComponentsFromCraftState screen={screensHeader} />
                     </div>
