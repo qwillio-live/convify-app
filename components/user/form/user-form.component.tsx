@@ -1,4 +1,5 @@
 import React from "react"
+import { transform } from "next/dist/build/swc"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
 
@@ -6,12 +7,6 @@ import { Element, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 
-import { Button } from "../button/user-button.component"
-import {
-  Container,
-  ContainerDefaultProps,
-  UserContainerSettings,
-} from "../container/user-container.component"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import { IconButton } from "../icon-button/user-icon-button.component"
 import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
@@ -28,7 +23,6 @@ import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { FormSettings } from "./user-form-settings"
-import { transform } from "next/dist/build/swc"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -297,9 +291,9 @@ export const FormContentDefaultProps: FormContentDefaultPropsTypes = {
   marginRight: "0",
   marginBottom: "20",
   paddingLeft: "12",
-  paddingTop: "40",
+  paddingTop: "0",
   paddingRight: "12",
-  paddingBottom: "40",
+  paddingBottom: "0",
   radius: "none",
   flexDirection: "column",
   mobileFlexDirection: "column",
@@ -362,7 +356,6 @@ export const Form = ({ children, ...props }) => {
   const { outLinePreset, filledPreset } = useButtonThemePresets()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
-
   const adjustWidth = props.size
 
   return (
@@ -378,7 +371,7 @@ export const Form = ({ children, ...props }) => {
         e.stopPropagation()
         setHover(false)
       }}
-      style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)"}}
+      style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)" }}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
       <Element
@@ -388,7 +381,7 @@ export const Form = ({ children, ...props }) => {
         data-cy="form-content"
         gap="5"
         ref={(ref: any) => connect(drag(ref))}
-        style={{ width: "100%", height: "100%"}}
+        style={{ width: "100%", height: "100%" }}
         className={`${
           isHovered ? "border border-blue-500 border-dotted" : ""
         } border border-transparent relative`}
@@ -411,7 +404,7 @@ export const Form = ({ children, ...props }) => {
           marginLeft={"-2"}
           marginBottom={"0"}
           marginTop={"0"}
-          style={{ overflow: "visible"}}
+          style={{ overflow: "visible" }}
         >
           <Element
             canvas
@@ -444,8 +437,7 @@ export const Form = ({ children, ...props }) => {
             marginRight={0}
             marginTop={0}
             size={"full"}
-            style={{ overflow: "visible"}}
-            
+            style={{ overflow: "visible" }}
           />
         </Element>
         <Element
@@ -460,7 +452,6 @@ export const Form = ({ children, ...props }) => {
           label={t("EmailLabel")}
           fieldName={t("EmailFieldName")}
           size={"full"}
-
         />
         <Element
           canvas
@@ -475,7 +466,6 @@ export const Form = ({ children, ...props }) => {
           label={t("PhoneLabel")}
           fieldName={t("PhoneFieldName")}
           size={"full"}
-
         />
         <Element
           canvas
@@ -487,7 +477,6 @@ export const Form = ({ children, ...props }) => {
           fieldName={t("CheckboxFieldName")}
           inputRequired={false}
           size={"full"}
-
         />
         <Element
           canvas
@@ -498,6 +487,7 @@ export const Form = ({ children, ...props }) => {
           marginBottom={0}
           text={t("Submit")}
           size={"full"}
+          className="pointer-events-none"
         />
 
         {children}
