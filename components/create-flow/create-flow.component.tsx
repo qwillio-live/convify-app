@@ -198,22 +198,25 @@ export function CreateFlowComponent() {
 
   }, [headerMode, height]);
   React.useEffect(() => {
-    const updateWidth = () => {
-      const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
-      setWidth(newWidth);
-    };
+    if(!headerMode){
+      const updateWidth = () => {
+        const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
+        console.log("NEW WIDTH IS: ", newWidth)
+        setWidth(newWidth);
+      };
 
-    // Initial width setting
-    updateWidth();
+      // Initial width setting
+      if(!mobileScreen){
+        updateWidth();
+      }
 
-    // Event listener for window resize
-    window.addEventListener('resize', updateWidth);
-    window.addEventListener('', updateWidth);
-
-    // Cleanup event listener on component unmount
+      // Event listener for window resize
+      window.addEventListener('resize', updateWidth);
+      window.addEventListener('', updateWidth);
     return () => window.removeEventListener('resize', updateWidth);
-  }, [headerMode, height]); 
-  console.log('header position: ',headerPosition)
+
+    }
+  }, [headerMode, height,mobileScreen, width]);
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -291,7 +294,7 @@ export function CreateFlowComponent() {
             onScroll={handleScroll}
             ref={containerRef}
             id="scroll-container"
-            className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 ">
+            className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 pt-0 ">
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -312,7 +315,7 @@ export function CreateFlowComponent() {
                     backgroundPosition: "center"
                   }}
                   className={cn(
-                    "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
+                    "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased py-0 mt-0",
                     footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
@@ -328,10 +331,8 @@ export function CreateFlowComponent() {
                       id="editor-header"
                       style={{
                         position: headerPosition as Position,
-                        width: mobileScreen ? '384px' : (headerPosition === 'absolute' && !mobileScreen) ? width+'px' : '100%',
-                        top: (mobileScreen && headerPosition === 'absolute' && !headerMode) ? '34px' : (!mobileScreen && headerPosition === 'absolute' && !headerMode) ? '32px' : '0',
-                        // top: headerPosition === 'absolute' ? '66px' : '0',
-                        // width: width,
+                        width: mobileScreen ? '384px' : (headerPosition === 'absolute') ? width+'px' : '100%',
+                        top: '0',
                         zIndex: 20,
                         backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor
                       }}>
@@ -341,9 +342,8 @@ export function CreateFlowComponent() {
                   <div
                     id="editor-content"
                     style={{
-                      paddingTop: !headerMode && !mobileScreen ? headerPosition === 'absolute' ? `${height+48}px` : "40px" : !headerMode && headerPosition === 'absolute' ? `${height+29}px` : "",
-                      backgroundColor: headerMode && avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
-                      marginTop: headerMode ? '38px' : '0px'
+                      paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
+                      backgroundColor: headerMode ? avatarBackgroundColor : '',
                     }}>
                     <Frame data={editorLoad}></Frame>
                   </div>

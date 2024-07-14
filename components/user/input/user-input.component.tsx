@@ -1,17 +1,4 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useEditor, useNode } from "@/lib/craftjs"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import {
   Activity,
   Anchor,
@@ -25,18 +12,41 @@ import {
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
+import { useForm, useFormContext } from "react-hook-form"
 import styled from "styled-components"
 
+import { useEditor, useNode } from "@/lib/craftjs"
+import {
+  setFieldProp,
+  setValidateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputSettings } from "./user-input-settings.component"
-import { setFieldProp, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useForm, useFormContext } from "react-hook-form"
-import { RootState } from "@/lib/state/flows-state/store"
+import { InputIconRenderer } from "./user-input-icon-picker"
+
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
 
@@ -66,29 +76,81 @@ const UserInputSizeValues = {
 }
 
 export const UserInputGen = ({ ...props }) => {
+  const icon = props.icon
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
   useEffect(() => {
     setInputValue(fieldValue)
-    dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.compId, fieldName: 'fieldValue', fieldValue: null}))
-    dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.compId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
-  },[])
+    dispatch(
+      setFieldProp({
+        screenId: props.parentScreenId,
+        fieldId: props.compId,
+        fieldName: "fieldValue",
+        fieldValue: null,
+      })
+    )
+    dispatch(
+      setFieldProp({
+        screenId: props.parentScreenId,
+        fieldId: props.compId,
+        fieldName: "fieldRequired",
+        fieldValue: props.inputRequired,
+      })
+    )
+  }, [])
   // const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
-  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
   const selectedScreen = useAppSelector(
-    (state) => state?.screen?.screens.findIndex((screen) => screen.screenName === currentScreenName)
-   || 0)
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
   //  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
-  const screenValidated = useAppSelector((state:RootState) => state.screen?.screens[selectedScreen]?.screenValidated) || false;
-  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
+  const screenValidated =
+    useAppSelector(
+      (state: RootState) =>
+        state.screen?.screens[selectedScreen]?.screenValidated
+    ) || false
+  const selectedScreenId =
+    useAppSelector(
+      (state) => state?.screen?.screens[selectedScreen]?.screenId
+    ) || ""
   // const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
   // const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]);
-  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]?.fieldValue)
-  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]?.fieldRequired) || false
-  const fieldInScreen = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId])
-  const toggleError = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]?.toggleError) || false
-  const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated && fieldInScreen && toggleError || false;
+  const selectedField = useAppSelector(
+    (state) =>
+      state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+  )
+  const fieldValue = useAppSelector(
+    (state) =>
+      state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+        ?.fieldValue
+  )
+  const fieldRequired =
+    useAppSelector(
+      (state) =>
+        state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+          ?.fieldRequired
+    ) || false
+  const fieldInScreen = useAppSelector(
+    (state) =>
+      state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+  )
+  const toggleError =
+    useAppSelector(
+      (state) =>
+        state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+          ?.toggleError
+    ) || false
+  const fieldError =
+    (props.inputRequired &&
+      (!fieldValue || fieldValue == null) &&
+      screenValidated &&
+      fieldInScreen &&
+      toggleError) ||
+    false
 
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -118,10 +180,11 @@ export const UserInputGen = ({ ...props }) => {
 
   // },[inputField])
 
-
   return (
     <div
-      className={cn("relative focus-visible:ring-0 focus-visible:ring-transparent")}
+      className={cn(
+        "relative focus-visible:ring-0 focus-visible:ring-transparent"
+      )}
       style={{
         width: "100%",
         display: "flex",
@@ -144,9 +207,12 @@ export const UserInputGen = ({ ...props }) => {
         }}
       >
         <div
-          className={cn("relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",{
-            "animate-shake": (fieldError)
-          })}
+          className={cn(
+            "relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
+            {
+              "animate-shake": fieldError,
+            }
+          )}
           style={{
             width: `${UserInputSizeValues[props.size]}`,
           }}
@@ -176,7 +242,7 @@ export const UserInputGen = ({ ...props }) => {
               }}
               className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
-                (inputValue.length > 0 && props.floatingLabel)
+                (inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 text-sm pl-3 pt-1 text-gray-400"
                   : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
               } ${
@@ -203,13 +269,15 @@ export const UserInputGen = ({ ...props }) => {
                   "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "#fff",
+                  backgroundColor: "transparent",
                   borderColor: fieldError
                     ? "#cc0000"
                     : isActive
                     ? props.activeBorderColor.value
                     : props.borderColor.value,
-                  borderBottomLeftRadius: fieldError ? 0 : props.bottomLeftRadius,
+                  borderBottomLeftRadius: fieldError
+                    ? 0
+                    : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
                   borderTopWidth: props.borderTopWidth,
                   borderBottomWidth: props.borderBottomWidth,
@@ -217,7 +285,14 @@ export const UserInputGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                <InputIconRenderer
+                  iconName={icon}
+                  style={{
+                    width: `${21}px`,
+                    height: `${21}px`,
+                    color: "#505051",
+                  }}
+                />
               </div>
             )}
             <UserInputStyled
@@ -259,7 +334,6 @@ export const UserInputGen = ({ ...props }) => {
           peer-focus-visible:outline-none
           focus-visible:ring-0
           ring-opacity-0
-          bg-white
           transition-all
           duration-200
           ease-in-out
@@ -267,7 +341,14 @@ export const UserInputGen = ({ ...props }) => {
               )}
               onChange={(e) => {
                 setInputValue(e.target.value),
-                dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: props.nodeId, fieldName: 'fieldValue', fieldValue: e.target.value}))
+                  dispatch(
+                    setFieldProp({
+                      screenId: props.parentScreenId,
+                      fieldId: props.nodeId,
+                      fieldName: "fieldValue",
+                      fieldValue: e.target.value,
+                    })
+                  )
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -326,7 +407,7 @@ const UserInputStyled = styled(Input)<{
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 50px;
-  background-color: "#fff";
+  background-color: "transparent";
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
@@ -351,8 +432,10 @@ export const UserInput = ({ ...props }) => {
     selected,
     isHovered,
     actions: { setProp },
+    props: { icon },
   } = useNode((state) => ({
     compId: state.id,
+    props: state.data.props,
     parent: state.data.parent,
     selected: state.events.selected,
     dragged: state.events.dragged,
@@ -366,21 +449,39 @@ export const UserInput = ({ ...props }) => {
 
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
-  const parentContainer = node(parent || "").get();
+  const parentContainer = node(parent || "").get()
   const [hover, setHover] = useState(false)
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen || 0)
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.selectedScreen || 0
+  )
   // const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
-  const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
-  const selectedField = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]);
-  const fieldValue = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]?.fieldValue)
+  const screenValidated = useAppSelector(
+    (state) => state.screen?.screens[selectedScreen]?.screenValidated || false
+  )
+  const selectedField = useAppSelector(
+    (state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+  )
+  const fieldValue = useAppSelector(
+    (state) =>
+      state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+        ?.fieldValue
+  )
   // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
-  const fieldRequired = useAppSelector((state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]?.fieldRequired) || false
+  const fieldRequired =
+    useAppSelector(
+      (state) =>
+        state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+          ?.fieldRequired
+    ) || false
   // const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
-  const fieldError = props.inputRequired && (!fieldValue || fieldValue  == null) && screenValidated
+  const fieldError =
+    props.inputRequired &&
+    (!fieldValue || fieldValue == null) &&
+    screenValidated
 
   const secondaryFont = useAppSelector(
     (state) => state?.theme?.text?.secondaryFont
@@ -389,14 +490,33 @@ export const UserInput = ({ ...props }) => {
     (state) => state?.theme?.general?.primaryColor
   )
 
-
   useEffect(() => {
     // dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'toggleError', fieldValue: false}))
-    dispatch(setFieldProp({screenId:props.parentScreenId,fieldId: selectedField?.fieldId, fieldName: 'fieldValue', fieldValue: null}))
-    dispatch(setFieldProp({screenId: props.parentScreenId,fieldId: selectedField?.fieldId, fieldName: 'fieldRequired', fieldValue: props.inputRequired}))
-    dispatch(setValidateScreen({screenId: props.parentScreenId, screenValidated: false,screenToggleError: false }))
-    setProp((props) => props.compId = compId)
-  },[])
+    dispatch(
+      setFieldProp({
+        screenId: props.parentScreenId,
+        fieldId: selectedField?.fieldId,
+        fieldName: "fieldValue",
+        fieldValue: null,
+      })
+    )
+    dispatch(
+      setFieldProp({
+        screenId: props.parentScreenId,
+        fieldId: selectedField?.fieldId,
+        fieldName: "fieldRequired",
+        fieldValue: props.inputRequired,
+      })
+    )
+    dispatch(
+      setValidateScreen({
+        screenId: props.parentScreenId,
+        screenValidated: false,
+        screenToggleError: false,
+      })
+    )
+    setProp((props) => (props.compId = compId))
+  }, [])
   // useEffect(() => {
   //   console.log("FIELD ERROR", JSON.stringify({
   //     compId,
@@ -408,14 +528,17 @@ export const UserInput = ({ ...props }) => {
   //   }))
   // } ,[selectedField,fieldError,screenValidated])
   useEffect(() => {
-    if(parentContainer.id !== "ROOT" && parentContainer.data.name === "CardContent"){
-      setProp((props) => props.size = "full");
+    if (
+      parentContainer.id !== "ROOT" &&
+      parentContainer.data.name === "CardContent"
+    ) {
+      setProp((props) => (props.size = "full"))
     }
-  },[parentContainer])
+  }, [parentContainer])
 
   useEffect(() => {
-    if(props.primaryFont.globalStyled && !props.primaryFont.isCustomized){
-      setProp((props) => props.primaryFont.value = primaryFont, 200);
+    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+      setProp((props) => (props.primaryFont.value = primaryFont), 200)
     }
   }, [primaryFont])
 
@@ -441,9 +564,12 @@ export const UserInput = ({ ...props }) => {
   }
   return (
     <div
-    className={cn("relative focus-visible:ring-0 focus-visible:ring-transparent", {
-      "animate-shake": (fieldError)
-    })}
+      className={cn(
+        "relative focus-visible:ring-0 focus-visible:ring-transparent",
+        {
+          "animate-shake": fieldError,
+        }
+      )}
       ref={(ref: any) => ref && connect(drag(ref))}
       style={{
         width: "100%",
@@ -456,7 +582,7 @@ export const UserInput = ({ ...props }) => {
       {hover && <Controller nameOfComponent={t("Input Field")} />}
       <div
         className={cn(
-          "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent",
+          "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
           // { "animate-shake": props.inputRequired }
         )}
         style={{
@@ -540,7 +666,7 @@ export const UserInput = ({ ...props }) => {
                   "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "#fff",
+                  backgroundColor: "transparent",
                   borderColor: props.error
                     ? "#cc0000"
                     : props.isActive
@@ -556,7 +682,14 @@ export const UserInput = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                {IconsList[props.icon]}
+                <InputIconRenderer
+              iconName={icon}
+              style={{
+                width: `${21}px`,
+                height: `${21}px`,
+                color: '#505051',
+              }}
+            />
               </div>
             )}
             <UserInputStyled
@@ -598,7 +731,6 @@ export const UserInput = ({ ...props }) => {
           peer-focus-visible:outline-none
           focus-visible:ring-0
           ring-opacity-0
-          bg-white
           transition-all
           duration-200
           ease-in-out
@@ -607,8 +739,14 @@ export const UserInput = ({ ...props }) => {
               onChange={
                 (e) => {
                   setProp((props) => (props.inputValue = e.target.value)),
-                  dispatch(setFieldProp({screenId:props.parentScreenId,fieldId: compId, fieldName: 'fieldValue', fieldValue: e.target.value}))
-
+                    dispatch(
+                      setFieldProp({
+                        screenId: props.parentScreenId,
+                        fieldId: compId,
+                        fieldName: "fieldValue",
+                        fieldValue: e.target.value,
+                      })
+                    )
                 }
                 // not to set input prop when editing
                 // console.log("Input field value is: ", e.target.value)
@@ -768,7 +906,7 @@ export const UserInputDefaultProps: UserInputProps = {
   fieldName: "Field name",
   floatingLabel: false,
   enableIcon: false,
-  icon: "arrowright",
+  icon: "interface-arrows-right-arrow-right-keyboard",
   preset: "outlined",
   error: false,
   errorText: "Please specify an answer",
