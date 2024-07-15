@@ -228,7 +228,8 @@
     "Email me a direct link": "Email me a direct link",
     "Dismiss": "Dismiss",
     "continue on desktop desc": "Create flows with our most powerful features, such as logic or advanced design options, on desktop devices. We’ll email you a direct link.",
-    "suggestions":"Suggestions"
+    "suggestions":"Suggestions",
+    "All": "All"
   },
   "CreateFlow": {
     "Create": "Create",

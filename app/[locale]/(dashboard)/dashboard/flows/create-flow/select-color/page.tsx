@@ -131,37 +131,42 @@ export default function SelectColor() {
 
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
-      <div className="flex h-full w-full px-8">
+      <div className="flex h-full w-full px-12">
         <div className="flex w-full">
           <div className="w-full  py-9 md:w-6/12">
-            <h2 className="mb-5 text-4xl font-semibold">
-              {t("customiseColor")}
-            </h2>
-            <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
-              <BreadcrumbList>
-                <BreadcrumbItem className="mr-2 text-base">
-                  <BreadcrumbLink>
-                    <Link href={"/dashboard/flows/create-flow/select-template"}>
-                      {t("templateBreadcrumb")}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbPage>{t("colorsBreadcrumb")}</BreadcrumbPage>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbLink>
-                    <Link href={"/dashboard/flows/create-flow/finish"}>
-                      {t("finishBreadcrumb")}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] ">
-              <div className="mb-8 mt-12 flex flex-wrap gap-7 ">
+            <ScrollArea className=" bottom-50 xl-h-[86rem] h-[80vh] pr-6 md:h-[75vh] lg:h-[86vh] ">
+              <h2 className="mb-5 text-4xl font-semibold">
+                {t("customiseColor")}
+              </h2>
+              <Breadcrumb className=" mt-4 text-base font-normal hover:cursor-pointer">
+                <BreadcrumbList>
+                  <BreadcrumbItem className="mr-2 text-base">
+                    <BreadcrumbLink>
+                      <Link
+                        href={"/dashboard/flows/create-flow/select-template"}
+                      >
+                        {t("templateBreadcrumb")}
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="mx-2 text-base">
+                    <BreadcrumbPage className="font-semibold">
+                      {t("colorsBreadcrumb")}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="mx-2 text-base">
+                    <BreadcrumbLink>
+                      <Link href={"/dashboard/flows/create-flow/finish"}>
+                        {t("finishBreadcrumb")}
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              {/* <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] "> */}
+              <div className="mb-8 mt-10 flex flex-wrap gap-3 ">
                 <div className="flex flex-col">
                   <label className="my-3 block text-base font-semibold ">
                     {t("primaryColor")}
@@ -192,8 +197,9 @@ export default function SelectColor() {
               </div>
             </ScrollArea>
           </div>
-          <Separator orientation="vertical" className="mx-4 h-full" />
-          <div className="w-full py-6 md:w-5/12">
+
+          <Separator orientation="vertical" className="z-20 h-full" />
+          <div className="mx-auto  w-full py-6 md:w-5/12">
             <iframe
               src="https://convify.io/survey"
               name="page"
@@ -203,7 +209,7 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
+        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-template"}>
             <Button
               variant="secondary"

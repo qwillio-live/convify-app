@@ -67,94 +67,111 @@ export default function SelectTemplate() {
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
       <div className="flex h-full w-full px-6">
         <div className="flex w-full">
-          <div className="w-full px-6 py-9 md:w-6/12">
-            <h2 className="mb-5 text-4xl font-semibold">
-              {t("selectTemplateHeader")}
-            </h2>
-            <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
-              <BreadcrumbList>
-                <BreadcrumbItem className="mr-2 text-base">
-                  <BreadcrumbPage>{t("templateBreadcrumb")}</BreadcrumbPage>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbLink>
-                    <Link href={"/dashboard/flows/create-flow/select-color"}>
-                      {t("colorsBreadcrumb")}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbLink>
-                    <Link href={"/dashboard/flows/create-flow/finish"}>
-                      {t("finishBreadcrumb")}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            <div className="mb-8 mt-12 flex flex-wrap gap-2">
-              <Button
-                className={`font-normal ${
-                  selectedCategory === "Recruiting" ? "font-semibold" : ""
-                }`}
-                size="filterIcon"
-                variant={`${
-                  selectedCategory === "Recruiting" ? "secondary" : "outline"
-                }`}
-                onClick={() => handleFilterClick("Recruiting")}
-              >
-                {t("Recruiting")}
-              </Button>
-              <Button
-                variant={`${
-                  selectedCategory === "b2cLeadGen" ? "secondary" : "outline"
-                }`}
-                size="filterIcon"
-                className={`w-auto font-normal ${
-                  selectedCategory === "b2cLeadGen" ? "font-semibold" : ""
-                }`}
-                onClick={() => handleFilterClick("b2cLeadGen")}
-              >
-                {t("b2cLeadGen")}
-              </Button>
-              <Button
-                variant={`${
-                  selectedCategory === "customerFeedback"
-                    ? "secondary"
-                    : "outline"
-                }`}
-                size="filterIcon"
-                className={`font-normal ${
-                  selectedCategory === "customerFeedback" ? "font-semibold" : ""
-                }`}
-                onClick={() => handleFilterClick("customerFeedback")}
-              >
-                {t("customerFeedback")}
-              </Button>
-              <Button
-                variant={`${
-                  selectedCategory === "other" ? "secondary" : "outline"
-                }`}
-                size="filterIcon"
-                className={`font-normal ${
-                  selectedCategory === "other" ? "font-semibold" : ""
-                }`}
-                onClick={() => handleFilterClick("other")}
-              >
-                {t("other")}
-              </Button>
-              <Button
-                className="ml-3 border-0 bg-white font-semibold"
-                variant="secondary"
-                size="filterIcon"
-                onClick={() => handleFilterClick("all")}
-              >
-                {t("startFromScratch")}
-              </Button>
-            </div>
-            <ScrollArea className=" bottom-30  h-[20vh] md:h-[45vh] lg:h-[58vh] ">
+          <div className="w-full py-9 pl-6 md:w-6/12">
+            <ScrollArea className=" bottom-50 xl-h-[86rem] h-[80vh] pr-6 md:h-[75vh] lg:h-[86vh] ">
+              <h2 className="mb-5 text-4xl font-semibold">
+                {t("selectTemplateHeader")}
+              </h2>
+              <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
+                <BreadcrumbList>
+                  <BreadcrumbItem className="mr-2 text-base">
+                    <BreadcrumbPage className="font-semibold">
+                      {t("templateBreadcrumb")}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="mx-2 text-base">
+                    <BreadcrumbLink>
+                      <Link href={"/dashboard/flows/create-flow/select-color"}>
+                        {t("colorsBreadcrumb")}
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="mx-2 text-base">
+                    <BreadcrumbLink>
+                      <Link href={"/dashboard/flows/create-flow/finish"}>
+                        {t("finishBreadcrumb")}
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              <div className="mb-8 mt-12 flex flex-wrap gap-3">
+                <Button
+                  className={`font-normal ${
+                    selectedCategory === "all" ? "font-semibold" : ""
+                  }`}
+                  size="filterIcon"
+                  variant={`${
+                    selectedCategory === "all" ? "secondary" : "outline"
+                  }`}
+                  onClick={() => handleFilterClick("all")}
+                >
+                  {t("All")}
+                </Button>
+                <Button
+                  className={`font-normal ${
+                    selectedCategory === "Recruiting" ? "font-semibold" : ""
+                  }`}
+                  size="filterIcon"
+                  variant={`${
+                    selectedCategory === "Recruiting" ? "secondary" : "outline"
+                  }`}
+                  onClick={() => handleFilterClick("Recruiting")}
+                >
+                  {t("Recruiting")}
+                </Button>
+                <Button
+                  variant={`${
+                    selectedCategory === "b2cLeadGen" ? "secondary" : "outline"
+                  }`}
+                  size="filterIcon"
+                  className={`w-auto font-normal ${
+                    selectedCategory === "b2cLeadGen" ? "font-semibold" : ""
+                  }`}
+                  onClick={() => handleFilterClick("b2cLeadGen")}
+                >
+                  {t("b2cLeadGen")}
+                </Button>
+                <Button
+                  variant={`${
+                    selectedCategory === "customerFeedback"
+                      ? "secondary"
+                      : "outline"
+                  }`}
+                  size="filterIcon"
+                  className={`font-normal ${
+                    selectedCategory === "customerFeedback"
+                      ? "font-semibold"
+                      : ""
+                  }`}
+                  onClick={() => handleFilterClick("customerFeedback")}
+                >
+                  {t("customerFeedback")}
+                </Button>
+                <Button
+                  variant={`${
+                    selectedCategory === "other" ? "secondary" : "outline"
+                  }`}
+                  size="filterIcon"
+                  className={`font-normal ${
+                    selectedCategory === "other" ? "font-semibold" : ""
+                  }`}
+                  onClick={() => handleFilterClick("other")}
+                >
+                  {t("other")}
+                </Button>
+                <Button
+                  className="ml-3 border-0 bg-white font-semibold"
+                  variant="secondary"
+                  size="filterIcon"
+                  onClick={() => handleFilterClick("all")}
+                >
+                  {t("startFromScratch")}
+                </Button>
+              </div>
+
               <div className="grid grid-cols-1  gap-6 md:grid-cols-2">
                 {filteredCards.map((card, index) => (
                   <div key={card.id} className="pr-2">
@@ -204,8 +221,8 @@ export default function SelectTemplate() {
               </div>
             </ScrollArea>
           </div>
-          <Separator orientation="vertical" className="mx-4 h-full" />
-          <div className="w-full py-6 md:w-5/12">
+          <Separator orientation="vertical" className="z-20" />
+          <div className=" mx-auto w-full py-6 md:w-5/12">
             <iframe
               src="https://convify.io/survey"
               name="page"
@@ -215,7 +232,7 @@ export default function SelectTemplate() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
+        <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
           <Button variant="secondary" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>

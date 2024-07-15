@@ -44,7 +44,9 @@ export default function SelectColor() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem className="mx-2 text-base">
-                  <BreadcrumbPage>{t("finishBreadcrumb")}</BreadcrumbPage>
+                  <BreadcrumbPage className="font-semibold">
+                    {t("finishBreadcrumb")}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -59,8 +61,8 @@ export default function SelectColor() {
             </div>
           </div>
 
-          <Separator orientation="vertical" className="mx-4 h-full" />
-          <div className="w-full py-6 md:w-5/12">
+          <Separator orientation="vertical" className="z-20  h-full" />
+          <div className="mx-auto  w-full py-6 md:w-5/12">
             <iframe
               src="https://convify.io/survey"
               name="page"
@@ -70,7 +72,7 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pb-8 md:w-6/12">
+        <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-color"}>
             <Button
               variant="secondary"
