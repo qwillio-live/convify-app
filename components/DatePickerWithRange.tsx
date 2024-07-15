@@ -61,18 +61,21 @@ export function DatePickerWithRange({
   const t = useTranslations("CreateFlow.ResultsPage");
 
   React.useEffect(() => {
-    const startDate = date?.from || subDays(new Date(), days);
-    let endDate = date?.to || new Date();
+    if (date?.from && date?.to) {
+      const startDate = date?.from || subDays(new Date(), days);
+      let endDate = date?.to || new Date();
 
-    const isToday = (new Date().toDateString() === new Date(endDate).toDateString());
-    const difference = differenceInCalendarDays(new Date(endDate), new Date(startDate));
+      const isToday = (new Date().toDateString() === new Date(endDate).toDateString());
+      const difference = differenceInCalendarDays(new Date(endDate), new Date(startDate));
 
-    setDater({ startDate, endDate });
-    setItems('date', { startDate, endDate });
+      setDater({ startDate, endDate });
+      setItems('date', { startDate, endDate });
 
-    if (isToday && difference === days) {
-    } else {
-      setStatus(!status);
+      if (isToday && difference === days) {
+      }
+      else {
+        setStatus(!status);
+      }
     }
   }, [date]);
 
@@ -95,7 +98,7 @@ export function DatePickerWithRange({
       })
     }
   }, [firstRender])
-
+  console.log("date", date)
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
