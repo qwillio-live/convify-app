@@ -243,6 +243,7 @@
     "Logout": "Logout",
     "My workspace": "My workspace",
     "ResultsPage": {
+      "Pick a date": "Pick a date",
       "This flow doesnt have any responses yet": "This flow doesn’t have any responses.",
       "insights": "insights",
       "Loading": "Loading",

@@ -65,7 +65,7 @@ function convertDate(dateStr: string): string {
   return `${day}.${month}`;
 }
 
-const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { time: string; visits: number }[] => {
+const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date, loc: string): { time: string; visits?: number; visitas?: number }[] => {
   // Create an array of dates from startDate to endDate
   const dateArray: string[] = [];
   let currentDate = new Date(startDate);
@@ -76,15 +76,18 @@ const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { t
   // Map through the dateArray and replace if there's a match with convertDate(d.date)
   return dateArray.map((date: string) => {
     const matchingData = data.find((d: SubmitData) => convertDate(d.date ?? "0") === date);
+
+    const count = matchingData ? matchingData.count ?? 0 : 0;
     return {
       time: date,
-      visits: matchingData ? matchingData.count ?? 0 : 0,
+      visits: loc === "pt" ? undefined : count,
+      visitas: loc === "pt" ? count : undefined,
     };
   });
 };
 
 
-const submitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { time: string; submits: number }[] => {
+const submitConverter = (data: SubmitData[], startDate: Date, endDate: Date, loc: string): { time: string; submits?: number; envios?: number }[] => {
   // Create an array of dates from startDate to endDate
   const dateArray: string[] = [];
   let currentDate = new Date(startDate);
@@ -95,12 +98,14 @@ const submitConverter = (data: SubmitData[], startDate: Date, endDate: Date): { 
   // Map through the dateArray and replace if there's a match with convertDate(d.date)
   return dateArray.map((date: string) => {
     const matchingData = data.find((d: SubmitData) => convertDate(d.date ?? "0") === date);
+    const count = matchingData ? matchingData.count ?? 0 : 0;
     return {
       time: date,
-      submits: matchingData ? matchingData.count ?? 0 : 0,
+      submits: loc === "pt" ? undefined : count,
+      envios: loc === "pt" ? count : undefined,
     };
   });
-}
+};
 
 interface SubmitData {
   time?: string
@@ -333,10 +338,10 @@ const InsightsFlowComponents = () => {
     if (dataRes) {
       const parsedData = dataRes; // Parse the dataRes string into an object
       setAnalytics(parsedData);
-      if (dataKey === "submits" && parsedData.submitsArray?.length > 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate))
-      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length > 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate))
-      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0) setData(submitConverter(visitsAndSubmitsData, date.startDate, date.endDate))
-      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length <= 0) setData(visitConverter(visitsAndSubmitsData, date.startDate, date.endDate))
+      if (dataKey === "submits" && parsedData.submitsArray?.length > 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate, locale))
+      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length > 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate, locale))
+      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0) setData(submitConverter(visitsAndSubmitsData, date.startDate, date.endDate, locale))
+      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length <= 0) setData(visitConverter(visitsAndSubmitsData, date.startDate, date.endDate, locale))
     }
   }, []);
   function setDateBasedOnDays(day: number) {
@@ -371,10 +376,10 @@ const InsightsFlowComponents = () => {
       const dataRes = await response.json()
       setAnalytics(dataRes)
       setItems('analyticsData', dataRes)
-      if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
-      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate))
-      else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate))
-      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate))
+      if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate, locale))
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate, locale))
+      else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate, locale))
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate, locale))
     }
     if (flowId) {
       getAnalytics()
@@ -522,7 +527,7 @@ const InsightsFlowComponents = () => {
                   }`}
                 onClick={() => {
                   setDataKey("visits")
-                  setData(visitConverter(analytics.uniqueVisitsArray, date.startDate, date.endDate))
+                  setData(visitConverter(analytics.uniqueVisitsArray, date.startDate, date.endDate, locale))
                 }}
                 size="sm"
               >
@@ -536,7 +541,7 @@ const InsightsFlowComponents = () => {
                   }`}
                 onClick={() => {
                   setDataKey("submits")
-                  setData(submitConverter(analytics.submitsArray, date.startDate, date.endDate))
+                  setData(submitConverter(analytics.submitsArray, date.startDate, date.endDate, locale))
                 }}
                 size="sm"
               >
@@ -558,11 +563,11 @@ const InsightsFlowComponents = () => {
               >
                 {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="time" fontSize={14} />
-                <YAxis dataKey={dataKey} fontSize={14} />
+                <YAxis dataKey={dataKey === "visits" ? locale === "pt" ? "visitas" : "visits" : locale === "pt" ? "envios" : "submits"} fontSize={14} />
                 <Tooltip cursor={false} />
                 {/* <Legend /> */}
                 <Bar
-                  dataKey={dataKey}
+                  dataKey={dataKey === "visits" ? locale === "pt" ? "visitas" : "visits" : locale === "pt" ? "envios" : "submits"}
                   fill="#000"
                   activeBar={<Rectangle fill="#000" />}
                   radius={[4, 4, 0, 0]}

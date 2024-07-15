@@ -129,7 +129,6 @@
     "Align": "Alinhar",
     "Both Align": "Alinhamento de Ambos",
     "Horizontal Gap": "Espaçamento Horizontal",
-    "Vertical Gap": "Espaçamento Vertical",
     "Title Font Size": "Tamanho da Fonte do Título",
     "Title Font Weight": "Peso da Fonte do Título",
     "Text Font Size": "Tamanho da Fonte do Texto",
@@ -244,6 +243,7 @@
     "Logout": "Sair",
     "My workspace": "Meu espaço de trabalho",
     "ResultsPage": {
+      "Pick a date": "Escolha uma data",
       "This flow doesnt have any responses yet": "Este typeform ainda não tem respostas.",
       "insights": "percepções",
       "Loading": "Carregando",

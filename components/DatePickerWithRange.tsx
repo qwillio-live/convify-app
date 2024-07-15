@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 const setItems = (key: string, value: any) => {
   const storedFlowData: Record<string, any> = JSON.parse(localStorage.getItem('flowData') ?? "null");
@@ -57,6 +58,7 @@ export function DatePickerWithRange({
   setDays
 }: React.HTMLAttributes<HTMLDivElement> & { firstRender, status, days: number, setDays, setStatus, locale?: Locale; setDater: (v: { startDate: Date; endDate: Date }) => void }) {
   const [date, setDate] = React.useState<DateRange | undefined>(getInitialDate)
+  const t = useTranslations("CreateFlow.ResultsPage");
 
   React.useEffect(() => {
     const startDate = date?.from || subDays(new Date(), days);
@@ -107,7 +109,7 @@ export function DatePickerWithRange({
             )}
           >
             <CalendarIcon className="mr-2 size-4" />
-            {date?.from ? (
+            {/* {date?.from ? (
               date.to ? (
                 <>
                   {format(date.from, "LLL dd, y", { locale })} -{" "}
@@ -117,7 +119,14 @@ export function DatePickerWithRange({
                 format(date.from, "LLL dd, y", { locale })
               )
             ) : (
-              <span>Pick a date</span>
+              <span>{t("Pick a date")}</span>
+            )} */}
+            {date?.from && date?.to ? (
+              <>
+                {format(date.from, "LLL dd, y", { locale })} - {format(date.to, "LLL dd, y", { locale })}
+              </>
+            ) : (
+              <span>{t("Pick a date")}</span>
             )}
           </Button>
         </PopoverTrigger>
