@@ -4,15 +4,19 @@ import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalTh
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import React, { useCallback, useEffect, useState } from "react"
 import Loading from "../loading"
+import { useRouter } from "next/navigation"
+import NotFound from "./not-found"
 
 export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 5000
-  const [isFlowLoaded, setIsFlowLoaded] = useState(false)
+  const [isFlowLoaded, setIsFlowLoaded] = useState<null | Boolean>(null)
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
+
+  const router = useRouter()
 
   const dispatch = useAppDispatch()
 
-  const loaclFlowData = useAppSelector((state) => state?.screen)
+  const localFlowData = useAppSelector((state) => state?.screen)
   const localFlowSettings = useAppSelector((state) => state?.theme)
 
   const getFlowData = async () => {
@@ -24,7 +28,9 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       dispatch(setFlowSettings(flowData.flowSettings ?? {}))
 
       setIsFlowLoaded(true)
-    } catch (error) {}
+    } catch (error) {
+      setIsFlowLoaded(false)
+    }
   }
 
   const updateFlowData = async (updatedFlowData) => {
@@ -59,9 +65,9 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
 
   useEffect(() => {
     if (!isFlowLoaded) return
-    if (loaclFlowData?.screens.length === 0) return
+    if (localFlowData?.screens.length === 0) return
 
-    const steps = loaclFlowData?.screens.map((step, index) => ({
+    const steps = localFlowData?.screens.map((step, index) => ({
       id: step.screenId,
       name: step.screenName,
       content: JSON.parse(step.screenData),
@@ -81,9 +87,10 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     }
 
     setUpdatedFlowData(data)
-  }, [isFlowLoaded, loaclFlowData, localFlowSettings])
+  }, [isFlowLoaded, localFlowData, localFlowSettings])
 
-  if (!isFlowLoaded) return <Loading />
+  if (isFlowLoaded === null) return <Loading />
+  if (isFlowLoaded === false) return <NotFound/>
 
   return children
 }
