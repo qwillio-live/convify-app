@@ -124,7 +124,7 @@ export const EmailContent: React.FC<ContentProps> = ({
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
         <Input
-          placeholder="Enter your email"
+          placeholder={t("Enter your email")}
           id="email"
           onChange={handleInputChange}
           value={email}
@@ -545,7 +545,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 {t("Submit Event")}
               </label>
               <Input
-                placeholder="CompleteRegistration"
+                placeholder={t("CompleteRegistration")}
                 id="event"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setMetaPixelAccessToken(event.target.value)

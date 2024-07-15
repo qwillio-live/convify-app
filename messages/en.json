@@ -276,11 +276,13 @@
       "User aggrement": "User aggrement"
     },
     "ConnectPage": {
+      "Enter your email": "Enter your email",
+      "CompleteRegistration": "Complete Registration",
       "Email": "Email",
       "email des": "Recive an email every time a user submit their answer",
       "active": "active",
       "Google Analytics 4": "Google Analytics 4",
-      "google analytics des": "Discover how respondents find and interact with your heyflow. Get the data you need to measure ad campaigns, improve your conversion rate, and more",
+      "google analytics des": "Discover how respondents find and interact with your flow. Get the data you need to measure ad campaigns, improve your conversion rate, and more",
       "inactive": "inactive",
       "Google Tag Manager": "Google Tag Manager",
       "google tag manager des": "Get even more analytics features for most ambitious data mining demands.",
