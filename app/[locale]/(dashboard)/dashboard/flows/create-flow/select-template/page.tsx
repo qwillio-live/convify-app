@@ -222,7 +222,7 @@ export default function SelectTemplate() {
             </ScrollArea>
           </div>
           <Separator orientation="vertical" className="z-20" />
-          <div className=" mx-auto w-full py-6 md:w-5/12">
+          <div className=" mx-auto w-full py-6 md:w-6/12">
             <iframe
               src="https://convify.io/survey"
               name="page"
@@ -232,7 +232,7 @@ export default function SelectTemplate() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-2 pr-11  md:w-6/12">
+        <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
           <Button variant="secondary" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>

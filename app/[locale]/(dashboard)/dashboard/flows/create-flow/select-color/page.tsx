@@ -199,7 +199,7 @@ export default function SelectColor() {
           </div>
 
           <Separator orientation="vertical" className="z-20 h-full" />
-          <div className="mx-auto  w-full py-6 md:w-5/12">
+          <div className="mx-auto  w-full py-6 md:w-6/12">
             <iframe
               src="https://convify.io/survey"
               name="page"

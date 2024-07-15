@@ -54,7 +54,7 @@ export default function SelectColor() {
               <label className="my-4 text-xl font-bold">{t("name")}</label>
               <div className="my-3">
                 <Input
-                  className=" w-[640px] py-[27px] placeholder:text-base placeholder:font-normal"
+                  className=" w-full py-[27px] placeholder:text-base placeholder:font-normal"
                   placeholder={t("Enter a title for your new convify")}
                 />
               </div>
@@ -62,7 +62,7 @@ export default function SelectColor() {
           </div>
 
           <Separator orientation="vertical" className="z-20  h-full" />
-          <div className="mx-auto  w-full py-6 md:w-5/12">
+          <div className="mx-auto  w-full py-6 md:w-6/12">
             <iframe
               src="https://convify.io/survey"
               name="page"
