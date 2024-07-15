@@ -95,6 +95,7 @@ export function FlowsList({ flows, setStatus, status }) {
   const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
   const [windowSize, setWindowSize] = useState(window.innerWidth);
   const currentPath = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -153,25 +154,11 @@ export function FlowsList({ flows, setStatus, status }) {
     }
   }, [windowSize]);
   const editFlow = async (flow) => {
-    try {
-      const filteredFlow = filterAllowedFields(flow)
-      const res = await fetch(`/api/flows/${flow.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(filteredFlow)
-      })
+    const flowId = flow.id;
+    const url = `/dashboard/${flowId}/create-flow`;
 
-      const result = await res.json()
-      if (res.ok) {
-        console.log("Flow edited successfully:", result)
-        setStatus(!status)
-      }
-    } catch (error) {
-      console.error("Error creating flow:", error)
-    }
-    return null
+    // Redirect the user to the constructed URL
+    router.push(url);
   }
 
   const duplicateFlow = async (flow_id) => {
