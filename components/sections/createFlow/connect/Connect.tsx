@@ -144,11 +144,36 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
 
   return (
     loading ? (
-      <div className="flex justify-center items-center h-full" >
-        <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      <div className="min-h-screen w-full overflow-auto pb-[20px] connect-flow-content">
+        <div className="mx-auto mt-8 flex lg:w-7/12 px-4 flex-col items-center justify-center">
+          <div className="w-full mb-4 h-10 bg-gray-300 rounded animate-pulse"></div>
+          <div className="mt-10 flex w-full flex-col">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="mb-2.5 rounded-md border bg-white shadow dark:bg-[#070e1f] animate-pulse">
+                <div className="flex flex-col md:flex-row items-start md:items-center px-4 py-6 min-h-32">
+                  <div className="ml-0 md:mx-1 lg:mr-2.5 lg:ml-3.5">
+                    <div className="w-16 h-16 bg-gray-300 rounded-full"></div>
+                  </div>
+                  <div className="mt-2 md:mt-0 ml-0 md:ml-1 lg:ml-5 flex w-full items-center justify-between">
+                    <div className="w-full flex-col justify-start text-base font-normal text-black">
+                      <div className="mb-1 flex items-center">
+                        <div className="h-6 w-1/2 bg-gray-300 rounded"></div>
+                        <div className="ml-3 flex items-center rounded-2xl bg-gray-300 px-2 py-0.5 h-4"></div>
+                      </div>
+                      <div className="text-left w-full text-sm text-black dark:text-white">
+                        <div className="h-4 w-full bg-gray-300 rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="h-24 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div >
+      </div>
     ) : (
       < div className="min-h-screen w-full overflow-auto pb-[20px] connect-flow-content" >
         <div

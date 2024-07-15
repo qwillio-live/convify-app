@@ -41,13 +41,13 @@ const IntegrationCard = ({
       className="mb-2.5 rounded-md border bg-white shadow dark:bg-[#070e1f]"
     >
       <AccordionTrigger
-        className="flex flex-col md:flex-row items-start md:items-center px-4 py-6 hover:no-underline min-h-32"
+        className="flex flex-col md:flex-row items-start md:items-center pl-5 md:pl-0 lg:mx-0 pr-5 py-6 hover:no-underline min-h-32"
         noIcon={true}
       >
-        <div>
+        <div className=" mx-0 md:mx-2 lg:mx-5">
           <Image src={image} width={60} height={60} alt={alt} />
         </div>
-        <div className="mt-2 md:mt-0 ml-0 md:ml-4 lg:ml-10 flex w-full items-center justify-between">
+        <div className="mt-2 md:mt-0 ml-0 flex w-full items-center justify-between">
           <div className="w-full flex-col justify-start text-base font-normal text-black">
             <div className="mb-1 flex items-center ">
               <h1 className="text-black dark:text-white">{t(title)}</h1>
