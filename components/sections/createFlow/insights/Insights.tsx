@@ -369,7 +369,6 @@ const InsightsFlowComponents = () => {
 
   useEffect(() => {
     const getAnalytics = async () => {
-      console.log("date endDate", formatDate(date.endDate))
       const response = await fetch(
         `/api/analytics/?flowId=${flowId}&startDate=${formatDate(date.startDate)}&endDate=${formatDate(date.endDate)}`
       )
@@ -619,7 +618,13 @@ const InsightsFlowComponents = () => {
   )
   return (
     <Tabs defaultValue={navbarHighlighter()}
-      className="">
+      className=""
+      style={{
+        overflow: "auto",
+        height: "100vh",
+        paddingBottom: '100px'
+      }}
+    >
       <header className="mt-4 flex items-center gap-4 px-0 lg:px-6">
         <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-[0.70rem] overflow-x-hidden">
           <TabsList className="flex h-full bg-inherit py-0 overflow-x-auto" >
@@ -660,25 +665,29 @@ const InsightsFlowComponents = () => {
       <main className="content relative z-50 flex items-start bg-transparent px-0 mb-4 lg:px-6 mt-2">
         <div className="tabs-content flex w-full items-center justify-start">
           <TabsContent
-            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            // className="mt-0 w-full h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            className="mt-0 w-full h-full"
             value="custom"
           >
             {repeatedJSX}
           </TabsContent>
           <TabsContent
-            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            className="mt-0 w-full h-full"
             value="14days"
           >
             {repeatedJSX}
           </TabsContent>
           <TabsContent
-            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            className="mt-0 w-full h-full"
             value="28days"
           >
             {repeatedJSX}
           </TabsContent>
           <TabsContent
-            className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
+            className="mt-0 w-full h-full"
             value="calendar"
           >
             {repeatedJSX}
