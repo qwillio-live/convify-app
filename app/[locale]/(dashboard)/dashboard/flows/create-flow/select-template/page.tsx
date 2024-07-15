@@ -97,7 +97,7 @@ export default function SelectTemplate() {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              <div className="mb-8 mt-12 flex flex-wrap gap-3">
+              <div className="mb-6 mt-12 flex flex-wrap gap-3">
                 <Button
                   className={`font-normal ${
                     selectedCategory === "all" ? "font-semibold" : ""
@@ -172,11 +172,11 @@ export default function SelectTemplate() {
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1  gap-6 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {filteredCards.map((card, index) => (
                   <div key={card.id} className="pr-2">
                     <div
-                      className="relative h-56 cursor-pointer space-y-3 overflow-hidden rounded-md"
+                      className="rounded-m relative h-[10rem] cursor-pointer space-y-3 overflow-hidden" // Adjusted height here
                       onClick={() => handleCardClick(index)}
                     >
                       {loadingCardIndex === index && (
@@ -232,7 +232,7 @@ export default function SelectTemplate() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
+        <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-2 pr-11  md:w-6/12">
           <Button variant="secondary" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>
