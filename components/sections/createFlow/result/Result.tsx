@@ -12,7 +12,7 @@ const ResultFlowComponents = () => {
     <div className="w-full">
       <Tabs defaultValue="insights">
         <header className="flex h-14 items-center justify-center gap-4 border-b bg-muted/20 px-4 lg:h-[60px] bg-white">
-          <div className="tabs-list-container flex h-full w-3/5 items-center justify-start">
+          <div className="tabs-list-container flex h-full w-full sm:w-3/5 items-center justify-center sm:justify-start">
             <TabsList className="flex h-full bg-inherit py-0">
               <TabsTrigger
                 className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
