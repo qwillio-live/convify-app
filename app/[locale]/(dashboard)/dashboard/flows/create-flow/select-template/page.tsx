@@ -100,11 +100,11 @@ export default function SelectTemplate() {
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
-                <div className="row mb-6 mt-12 flex flex-wrap  gap-3">
+                <div className=" mb-6 mt-12 flex w-auto flex-wrap gap-3  pr-2">
                   <Button
-                    className={`font-normal ${
+                    className={`grow !px-[0.3rem] font-normal ${
                       selectedCategory === "all" ? "font-semibold" : ""
-                    } !px-[1.8rem]`}
+                    } `}
                     size={"filterIcon"}
                     variant={`${
                       selectedCategory === "all" ? "secondary" : "outline"
@@ -114,7 +114,7 @@ export default function SelectTemplate() {
                     {t("All")}
                   </Button>
                   <Button
-                    className={`font-normal ${
+                    className={`grow font-normal ${
                       selectedCategory === "Recruiting" ? "font-semibold" : ""
                     }`}
                     size="filterIcon"
@@ -134,7 +134,7 @@ export default function SelectTemplate() {
                         : "outline"
                     }`}
                     size="filterIcon"
-                    className={`w-auto font-normal ${
+                    className={`w-auto grow font-normal ${
                       selectedCategory === "b2cLeadGen" ? "font-semibold" : ""
                     }`}
                     onClick={() => handleFilterClick("b2cLeadGen")}
@@ -148,7 +148,7 @@ export default function SelectTemplate() {
                         : "outline"
                     }`}
                     size="filterIcon"
-                    className={`font-normal ${
+                    className={`grow font-normal ${
                       selectedCategory === "customerFeedback"
                         ? "font-semibold"
                         : ""
@@ -162,15 +162,15 @@ export default function SelectTemplate() {
                       selectedCategory === "other" ? "secondary" : "outline"
                     }`}
                     size="filterIcon"
-                    className={`font-normal ${
+                    className={`grow font-normal ${
                       selectedCategory === "other" ? "font-semibold" : ""
-                    }!px-[1.5rem]`}
+                    }`}
                     onClick={() => handleFilterClick("other")}
                   >
                     {t("other")}
                   </Button>
                   <Button
-                    className="ml-3 border-0 bg-white font-semibold"
+                    className="grow border-0 bg-white font-semibold"
                     variant="secondary"
                     size="filterIcon"
                     onClick={() => handleFilterClick("all")}
@@ -179,11 +179,11 @@ export default function SelectTemplate() {
                   </Button>
                 </div>
 
-                <div className="!z-0 grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="!z-0 grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {filteredCards.map((card, index) => (
                     <div key={card.id} className="pr-2">
                       <div
-                        className="relative h-56 cursor-pointer space-y-3 overflow-hidden rounded-md" // Adjusted height and rounded border
+                        className="relative h-44 w-full cursor-pointer space-y-3 overflow-hidden rounded-md xl:h-40 2xl:h-56" // Adjusted height and rounded border
                         onClick={() => handleCardClick(index)}
                       >
                         {loadingCardIndex === index && (
@@ -204,7 +204,7 @@ export default function SelectTemplate() {
                               data-nimg="1"
                               className={`h-full w-full rounded-md object-cover transition-all ${
                                 loadingCardIndex !== index
-                                  ? "hover:scale-125"
+                                  ? "hover:scale-105"
                                   : ""
                               }`}
                               src={cardDemo.src}

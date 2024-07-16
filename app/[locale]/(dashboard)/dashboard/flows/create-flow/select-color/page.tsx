@@ -133,8 +133,8 @@ export default function SelectColor() {
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
       <div className="flex h-full w-full px-12">
         <div className="flex w-full">
-          <div className="w-full  py-9 md:w-6/12">
-            <ScrollArea className=" bottom-50 xl-h-[86rem] h-[80vh] pr-6 md:h-[75vh] lg:h-[86vh] ">
+          <div className="w-full   md:w-6/12">
+            <ScrollArea className="z-20 h-full py-9  ">
               <h2 className="mb-5 text-4xl font-semibold">
                 {t("customiseColor")}
               </h2>
@@ -198,7 +198,7 @@ export default function SelectColor() {
             </ScrollArea>
           </div>
 
-          <Separator orientation="vertical" className="z-20 h-full" />
+          <Separator orientation="vertical" className="z-40 h-full" />
           <div className="mx-auto  w-full py-6 md:w-6/12">
             <iframe
               src="https://convify.io/survey"
@@ -209,7 +209,7 @@ export default function SelectColor() {
             ></iframe>
           </div>
         </div>
-        <div className="fixed bottom-0 left-4 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
+        <div className="fixed bottom-0 left-4 z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
           <Link href={"/dashboard/flows/create-flow/select-template"}>
             <Button
               variant="secondary"
