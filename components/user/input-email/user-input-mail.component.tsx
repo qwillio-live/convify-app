@@ -114,6 +114,7 @@ export type UserInputMailProps = {
     bottomRightRadius: number
   }
   settingsTab: string
+  id: string
 }
 export const UserInputMailDefaultProps: UserInputMailProps = {
   inputValue: "",
@@ -184,6 +185,8 @@ export const UserInputMailDefaultProps: UserInputMailProps = {
     bottomRightRadius: 8,
   },
   settingsTab: "content",
+  id: `input-${hexoid(6)()}`
+
 }
 
 interface StyledUserInputMailProps {
@@ -223,7 +226,6 @@ const UserInputMailStyled = styled(Input)<StyledUserInputMailProps>`
   border-bottom-width: ${(props) => props.borderBottomWidth}px;
   border-left-width: ${(props) => props.borderLeftWidth}px;
   border-right-width: ${(props) => props.borderRightWidth}px;
-
   align-self: center;
 `
 
@@ -646,7 +648,7 @@ export const UserInputMail = ({ ...props }) => {
             <UserInputMailStyled
               data-answer={props.label}
               data-value={props.inputValue}
-              id= {`input-${hexoid(4)()}`}
+              id= {props.id}
               ref={inputRef}
               textColor={`${primaryTextColor}`}
               backgroundColor={props.backgroundColor}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import icons from "@/constant/streamline.json"
+import hexoid from "hexoid"
 import {
   Activity,
   Anchor,
@@ -114,6 +115,7 @@ export type UserInputPhoneProps = {
     bottomRightRadius: number
   }
   settingsTab: string
+  id: string
 }
 export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
   inputValue: "",
@@ -185,6 +187,7 @@ export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
     bottomRightRadius: 8,
   },
   settingsTab: "content",
+  id: `input-${hexoid(6)()}`,
 }
 
 interface StyledUserInputPhoneProps {
@@ -411,16 +414,17 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   "rounded-l-none": props.enableIcon,
                 },
                 `ring-0
-          outline-none
-          focus-visible:outline-none
-          peer-focus-visible:outline-none
-          focus-visible:ring-0
-          ring-opacity-0/0
-          bg-white
-          transition-all
-          duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0`
+                outline-none
+                focus-visible:outline-none
+                peer-focus-visible:outline-none
+                focus-visible:ring-0
+                ring-opacity-0/0
+                bg-white
+                transition-all
+                duration-200
+                ease-in-out
+                focus-visible:ring-transparent focus-visible:ring-offset-0
+                send-response`
               )}
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={() => setIsActive(false)}
@@ -702,6 +706,9 @@ export const UserInputPhone = ({ ...props }) => {
               </div>
             )}
             <UserInputPhoneStyled
+              data-answer={props.label}
+              data-value={props.inputValue}
+              id={props.id}
               ref={inputRef}
               textColor={`${primaryTextColor}`}
               backgroundColor={props.backgroundColor}

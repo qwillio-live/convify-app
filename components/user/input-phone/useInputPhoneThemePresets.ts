@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
-
+import hexoid from "hexoid"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import {
@@ -95,6 +95,8 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
+    id: `input-${hexoid(6)()}`
+
   }
 
   const underlinedPresetPhone: UserInputPhoneProps = {
@@ -167,6 +169,8 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
+    id: `input-${hexoid(6)()}`
+
   }
 
   const formPresetPhone: UserInputPhoneProps = {
@@ -239,6 +243,7 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
+    id: `input-${hexoid(6)()}`
   }
   return { outlinedPresetPhone, underlinedPresetPhone, formPresetPhone }
 }

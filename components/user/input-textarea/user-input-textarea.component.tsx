@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import hexoid from "hexoid"
 import {
   Activity,
   Anchor,
@@ -109,6 +110,7 @@ export type UserInputTextareaProps = {
   }
   settingsTab: string
   height: number
+  id: string
 }
 
 export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
@@ -181,6 +183,7 @@ export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
     bottomRightRadius: 8,
   },
   settingsTab: "content",
+  id: `input-${hexoid(6)()}`,
 }
 
 export const UserInputTextareaGen = ({ ...props }) => {
@@ -193,7 +196,6 @@ export const UserInputTextareaGen = ({ ...props }) => {
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
-
 
   return (
     <div
@@ -232,7 +234,6 @@ export const UserInputTextareaGen = ({ ...props }) => {
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
               color: `${primaryTextColor}`,
-
             }}
           >
             {props.label}
@@ -393,7 +394,6 @@ export const UserInputTextarea = ({ ...props }) => {
     (state) => state?.theme?.text?.primaryColor
   )
 
-
   // useEffect(() => {
   //   if (
   //     parentContainer.id !== "ROOT" &&
@@ -483,7 +483,6 @@ export const UserInputTextarea = ({ ...props }) => {
               minWidth: `${UserInputSizeValues[props.size]}`,
               width: `${UserInputSizeValues[props.size]}`,
               color: `${primaryTextColor}`,
-
             }}
           />
 
@@ -514,6 +513,9 @@ export const UserInputTextarea = ({ ...props }) => {
               </div>
             )} */}
             <UserInputTextareaStyled
+              data-answer={props.label}
+              data-value={props.inputValue}
+              id={props.id}
               ref={textAreaRef}
               textColor={`${primaryTextColor}`}
               backgroundColor={props.backgroundColor}
@@ -541,16 +543,18 @@ export const UserInputTextarea = ({ ...props }) => {
               onFocus={() => setProp((props) => (props.isActive = true))}
               className={cn(
                 `font-semibold px-3 pt-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light ring-0
-          outline-none
-          focus-visible:outline-none
-          peer-focus-visible:outline-none
-          focus-visible:ring-0
-          ring-opacity-0/0
-          bg-white
-          transition-all
-          duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0`
+              outline-none
+              focus-visible:outline-none
+              peer-focus-visible:outline-none
+              focus-visible:ring-0
+              ring-opacity-0/0
+              bg-white
+              transition-all
+              duration-200
+              ease-in-out
+              focus-visible:ring-transparent focus-visible:ring-offset-0
+              send-response
+              `
               )}
               onChange={
                 (e) => setProp((props) => (props.inputValue = e.target.value))
