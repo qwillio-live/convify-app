@@ -92,6 +92,44 @@ const SaveButton = () => {
     </a>
   )
 }
+const AddScreenButton = () => {
+  const dispatch = useAppDispatch()
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const selectedScreenIndex = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  const t = useTranslations("Components");
+
+  const { actions } = useEditor((state, query) => ({
+    enabled: state.options.enabled,
+    actions: state.events.selected,
+  }))
+
+  const handleAddScreen = useCallback(
+    async (index: number) => {
+      if (screens && screens[index]) {
+        console.log(index)
+        dispatch(addScreen(index))
+        await actions.deserialize(JSON.stringify(emptyScreenData))
+      } else {
+        console.error("screens is undefined or index is out of bounds")
+      }
+    },
+    [dispatch, screens]
+  )
+
+  return(
+    <Button
+        variant="outline"
+        size="sm"
+        className="bg-[#f4f4f5]"
+        onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+      >
+        <PlusCircle className="mr-2 size-4" />
+        {t("Add Screen")}
+    </Button>
+  )
+}
 const NodesToSerializedNodes = (nodes) => {
   // getSerializedNodes is present in the useEditor hook
   const {
@@ -142,25 +180,10 @@ export function CreateFlowComponent() {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  // const { actions } = useEditor((state, query) => ({
-  //   enabled: state.options.enabled,
-  //   actions: state.events.selected,
-  // }))
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
-  const handleAddScreen = useCallback(
-    async (index: number) => {
-      if (screens && screens[index]) {
-        console.log(index)
-        dispatch(addScreen(index))
-        //await actions.deserialize(JSON.stringify(emptyScreenData))
-      } else {
-        console.error("screens is undefined or index is out of bounds")
-      }
-    },
-    [dispatch, screens]
-  )
+  
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
@@ -172,9 +195,6 @@ export function CreateFlowComponent() {
     dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
     dispatch(setFirstScreenName(startScreenName))
     dispatch(setCurrentScreenName(startScreenName))
-
-
-
   }, [])
   React.useEffect(() => {
     if(headerMode){
@@ -336,15 +356,7 @@ export function CreateFlowComponent() {
 
                 </TabsContent>
                 <TabsList className="absolute bottom-0 z-20  w-100 ">
-                  <Button
-                      variant="outline"
-                      size="sm"
-                      className="bg-[#f4f4f5]"
-                      onClick={() => handleAddScreen(selectedScreenIndex || 0)}
-                    >
-                      <PlusCircle className="mr-2 size-4" />
-                      {t("Add Screen")}
-                    </Button>
+                  <AddScreenButton/>
                   <TabsTrigger value={VIEWS.MOBILE} className="mx-1"><Smartphone className="size-5"/></TabsTrigger>
                   <TabsTrigger value={VIEWS.DESKTOP}><Laptop className="size-5" /></TabsTrigger>
                 </TabsList>

@@ -291,7 +291,7 @@ const ScreensList = () => {
                         backgroundImage: backgroundImage,
                       }}
                       className={cn(
-                        "h-32 w-[13.5vw] mt-1 flex flex-col items-center justify-start border hover:cursor-pointer relative overflow-hidden",
+                        "h-32 w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                           "hover:border-4": (selectedScreenIndex !== index),
