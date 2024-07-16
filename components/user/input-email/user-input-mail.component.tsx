@@ -12,6 +12,7 @@ import {
   Phone,
   X,
 } from "lucide-react"
+import hexoid from "hexoid"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
@@ -390,16 +391,17 @@ export const UserInputMailGen = ({ ...props }) => {
                   "rounded-l-none": props.enableIcon,
                 },
                 `ring-0
-          outline-none
-          focus-visible:outline-none
-          peer-focus-visible:outline-none
-          focus-visible:ring-0
-          ring-opacity-0/0
-          bg-white
-          transition-all
-          duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0`
+                outline-none
+                focus-visible:outline-none
+                peer-focus-visible:outline-none
+                focus-visible:ring-0
+                ring-opacity-0/0
+                bg-white
+                transition-all
+                duration-200
+                ease-in-out
+                focus-visible:ring-transparent focus-visible:ring-offset-0
+                `
               )}
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={() => setIsActive(false)}
@@ -642,6 +644,9 @@ export const UserInputMail = ({ ...props }) => {
               </div>
             )}
             <UserInputMailStyled
+              data-answer={props.label}
+              data-value={props.inputValue}
+              id= {`input-${hexoid(4)()}`}
               ref={inputRef}
               textColor={`${primaryTextColor}`}
               backgroundColor={props.backgroundColor}
@@ -683,7 +688,9 @@ export const UserInputMail = ({ ...props }) => {
           transition-all
           duration-200
           ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0`
+          focus-visible:ring-transparent focus-visible:ring-offset-0
+          send-response
+          `
               )}
               onChange={
                 (e) => setProp((props) => (props.inputValue = e.target.value))
