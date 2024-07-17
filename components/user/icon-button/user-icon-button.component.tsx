@@ -189,7 +189,7 @@ export const IconButtonGen = ({
   }
   return (
     <div
-      className="w-full relative"
+      className="relative w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -246,11 +246,17 @@ export const IconButtonGen = ({
         </div>
         {enableIcon && icon.pictureType !== PictureTypes.NULL && (
           <div
-          className={cn("ml-[10px]",{
-            'mt-[4px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "large",
-            'mt-[2px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "medium",
-            'mt-0': icon.pictureType === PictureTypes.EMOJI && buttonSize === "small",
-          })}
+            className={cn("ml-[10px]", {
+              "mt-[4px]":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "large",
+              "mt-[2px]":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "medium",
+              "mt-0":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "small",
+            })}
           >
             {icon.pictureType === PictureTypes.ICON ? (
               <SvgRenderer
@@ -262,8 +268,8 @@ export const IconButtonGen = ({
               <span
                 className={cn("flex items-center justify-center", {
                   "text-[26px] leading-[26px]": buttonSize === "large",
-                      "text-[22px] leading-[22px]": buttonSize === "medium",
-                      "text-[18px] leading-[18px]": buttonSize === "small",
+                  "text-[22px] leading-[22px]": buttonSize === "medium",
+                  "text-[18px] leading-[18px]": buttonSize === "small",
                 })}
               >
                 {icon.picture}
@@ -276,11 +282,14 @@ export const IconButtonGen = ({
                 />
                 <img
                   src={(icon.picture as ImagePictureTypes)?.desktop}
-                  className={cn("h-auto overflow-hidden object-cover aspect-auto", {
-                    "w-[26px]": buttonSize === "large",
-                    "w-[22px]": buttonSize === "medium",
-                    "w-[18px]": buttonSize === "small",
-                  })}
+                  className={cn(
+                    "aspect-auto h-auto overflow-hidden object-cover",
+                    {
+                      "w-[26px]": buttonSize === "large",
+                      "w-[22px]": buttonSize === "medium",
+                      "w-[18px]": buttonSize === "small",
+                    }
+                  )}
                   loading="lazy"
                 />
               </picture>
@@ -713,7 +722,7 @@ export const IconButton = ({
           {...props}
           onClick={() => handleNavigateToScreen()}
         >
-          <div className="relative overflow-hidden flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
+          <div className="relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip">
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}
@@ -726,7 +735,7 @@ export const IconButton = ({
                 overflowX: "clip",
                 textOverflow: "ellipsis",
               }}
-              className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+              className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
                 handleTextChange(e)
                 // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
@@ -736,10 +745,16 @@ export const IconButton = ({
           </div>
           {enableIcon && icon.pictureType !== PictureTypes.NULL && (
             <div
-              className={cn("ml-[10px]",{
-                'mt-[4px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "large",
-                'mt-[2px]': icon.pictureType === PictureTypes.EMOJI && buttonSize === "medium",
-                'mt-0': icon.pictureType === PictureTypes.EMOJI && buttonSize === "small",
+              className={cn("ml-[10px]", {
+                "mt-[4px]":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "large",
+                "mt-[2px]":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "medium",
+                "mt-0":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "small",
               })}
             >
               {icon.pictureType === PictureTypes.ICON ? (
@@ -750,14 +765,11 @@ export const IconButton = ({
                 />
               ) : icon.pictureType === PictureTypes.EMOJI ? (
                 <span
-                  className={cn(
-                    "flex items-center justify-center",
-                    {
-                      "text-[26px] leading-[26px]": buttonSize === "large",
-                      "text-[22px] leading-[22px]": buttonSize === "medium",
-                      "text-[18px] leading-[18px]": buttonSize === "small",
-                    }
-                  )}
+                  className={cn("flex items-center justify-center", {
+                    "text-[26px] leading-[26px]": buttonSize === "large",
+                    "text-[22px] leading-[22px]": buttonSize === "medium",
+                    "text-[18px] leading-[18px]": buttonSize === "small",
+                  })}
                 >
                   {icon.picture}
                 </span>
@@ -770,7 +782,7 @@ export const IconButton = ({
                   <img
                     src={(icon.picture as ImagePictureTypes)?.desktop}
                     className={cn(
-                      "h-auto w-full overflow-hidden object-cover aspect-auto",
+                      "aspect-auto h-auto w-full overflow-hidden object-cover",
                       {
                         "w-[26px]": buttonSize === "large",
                         "w-[22px]": buttonSize === "medium",

@@ -11,11 +11,18 @@ import {
   Linkedin,
 } from "lucide-react"
 import React, { useCallback, useEffect, useRef } from "react"
-import { throttle, debounce } from 'lodash';
-
+import { throttle, debounce } from "lodash"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setCurrentScreenName, setScrollY, setComponentBeforeAvatar, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setCurrentScreenName,
+  setScrollY,
+  setComponentBeforeAvatar,
+  setEditorLoad,
+  setFirstScreenName,
+  setSelectedComponent,
+  setValidateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -66,8 +73,11 @@ import { useRouter } from "next/navigation"
 import { LogoComponent } from "../user/logo-new/user-logo.component"
 import { AvatarComponent } from "../user/avatar-new/user-avatar.component"
 import { TextImageComponent } from "../user/textImage/user-textImage.component"
-import { RootState } from "@/lib/state/flows-state/store";
-import { clear } from "console";
+import { RootState } from "@/lib/state/flows-state/store"
+import { clear } from "console"
+import { LineSelector } from "../user/lineSeperator/line-seperator-component"
+import { BackButton } from "../user/backButton/back-component"
+import { LinkButton } from "../user/link/link-component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -104,42 +114,62 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
-type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
+type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
 export function CreateFlowComponent() {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const editorHeaderRef = React.useRef(null);
-  const [height, setHeight] = React.useState(90);
-  const [width, setWidth] = React.useState(0);
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const editorHeaderRef = React.useRef(null)
+  const [height, setHeight] = React.useState(90)
+  const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
-  const [topMargin, setTopMargin] = React.useState<number>(0);
+  const [topMargin, setTopMargin] = React.useState<number>(0)
   const dispatch = useAppDispatch()
-  
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
 
-  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
-  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
-  const startScreenName = useAppSelector((state) => state?.screen?.screens[0].screenName || "")
+  const selectedComponent = useAppSelector(
+    (state) => state?.screen?.selectedComponent
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+  const selectedScreenId = useAppSelector(
+    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
+  )
+  const startScreen = useAppSelector(
+    (state) => state?.screen?.screens[0].screenData || ""
+  )
+  const startScreenName = useAppSelector(
+    (state) => state?.screen?.screens[0].screenName || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
-  const avatarComponentId = useAppSelector((state) => state.screen?.avatarComponentId);
-  const previousAvatarComponentId = useAppSelector((state) => state.screen?.previousAvatarComponentId);
+  const avatarComponentId = useAppSelector(
+    (state) => state.screen?.avatarComponentId
+  )
+  const previousAvatarComponentId = useAppSelector(
+    (state) => state.screen?.previousAvatarComponentId
+  )
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
-  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
-
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
-  const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
-  const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
-  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName ) || ""
+  const headerMode = useAppSelector(
+    (state: RootState) => state.screen?.headerMode
+  )
+  const headerPosition =
+    useAppSelector((state) => state?.theme?.header?.headerPosition) ||
+    "relative"
+  const firstScreenName =
+    useAppSelector((state) => state?.screen?.firstScreenName) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -154,69 +184,71 @@ export function CreateFlowComponent() {
 
   React.useEffect(() => {
     dispatch(setMobileScreen(false))
-    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
+    dispatch(
+      setValidateScreen({
+        screenId: selectedScreenId,
+        screenValidated: false,
+        screenToggleError: false,
+      })
+    )
     dispatch(setFirstScreenName(startScreenName))
     dispatch(setCurrentScreenName(startScreenName))
-
-
-
   }, [])
-
 
   useEffect(() => {
     const checkComponentBeforeAvatar = () => {
       const parsedEditor = JSON.parse(screensHeader)
       const container = parsedEditor["ROOT"]
       if (!container) {
-        return false;
+        return false
       }
-      const avatarIndex = container.nodes.findIndex(nodeId => parsedEditor[nodeId].type.resolvedName === "AvatarComponent");
-      return avatarIndex > 0;
-    };
+      const avatarIndex = container.nodes.findIndex(
+        (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+      )
+      return avatarIndex > 0
+    }
 
-    const hasComponentBeforeAvatar = checkComponentBeforeAvatar();
-    dispatch(setComponentBeforeAvatar(hasComponentBeforeAvatar));
-  }, [editorLoad, dispatch]);
+    const hasComponentBeforeAvatar = checkComponentBeforeAvatar()
+    dispatch(setComponentBeforeAvatar(hasComponentBeforeAvatar))
+  }, [editorLoad, dispatch])
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    const scrollTop = event.currentTarget.scrollTop;
-    dispatch(setScrollY(scrollTop));
-  };
-
- 
+    const scrollTop = event.currentTarget.scrollTop
+    dispatch(setScrollY(scrollTop))
+  }
 
   React.useEffect(() => {
     if (headerMode) {
-      const height = document?.getElementById("editor-content")?.offsetHeight || 0;
+      const height =
+        document?.getElementById("editor-content")?.offsetHeight || 0
       setHeight(height)
     } else {
       if (editorHeaderRef.current && editorHeaderRef) {
         //@ts-ignore
-        setHeight(editorHeaderRef?.current?.offsetHeight);
+        setHeight(editorHeaderRef?.current?.offsetHeight)
       }
     }
-
-  }, [headerMode, height]);
+  }, [headerMode, height])
   React.useEffect(() => {
-    if(!headerMode){
+    if (!headerMode) {
       const updateWidth = () => {
-        const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
+        const newWidth =
+          document.getElementById("editor-content")?.offsetWidth || 0
         console.log("NEW WIDTH IS: ", newWidth)
-        setWidth(newWidth);
-      };
+        setWidth(newWidth)
+      }
 
       // Initial width setting
-      if(!mobileScreen){
-        updateWidth();
+      if (!mobileScreen) {
+        updateWidth()
       }
 
       // Event listener for window resize
-      window.addEventListener('resize', updateWidth);
-      window.addEventListener('', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-
+      window.addEventListener("resize", updateWidth)
+      window.addEventListener("", updateWidth)
+      return () => window.removeEventListener("resize", updateWidth)
     }
-  }, [headerMode, height,mobileScreen, width]);
+  }, [headerMode, height, mobileScreen, width])
 
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
@@ -247,6 +279,9 @@ export function CreateFlowComponent() {
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
+          LineSelector,
+          BackButton,
+          LinkButton,
           // UserProgressBar,
           ScreenOneInput,
           Input,
@@ -294,7 +329,8 @@ export function CreateFlowComponent() {
             onScroll={handleScroll}
             ref={containerRef}
             id="scroll-container"
-            className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 pt-0 ">
+            className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 pt-0 "
+          >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -305,17 +341,16 @@ export function CreateFlowComponent() {
                   dispatch(setMobileScreen(value === VIEWS.MOBILE))
                 }}
               >
-
                 <TabsContent
                   style={{
                     backgroundColor: backgroundColor,
                     backgroundImage: backgroundImage,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundPosition: "center",
                   }}
                   className={cn(
-                    "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased py-0 mt-0",
+                    "page-container z-20 mx-auto mt-0 box-content min-h-[400px] py-0 font-sans antialiased",
                     footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
@@ -323,35 +358,45 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-
-                  {
-                    !headerMode && !footerMode &&
+                  {!headerMode && !footerMode && (
                     <div
                       ref={editorHeaderRef}
                       id="editor-header"
                       style={{
                         position: headerPosition as Position,
-                        width: mobileScreen ? '384px' : (headerPosition === 'absolute') ? width+'px' : '100%',
-                        top: '0',
+                        width: mobileScreen
+                          ? "384px"
+                          : headerPosition === "absolute"
+                          ? width + "px"
+                          : "100%",
+                        top: "0",
                         zIndex: 20,
-                        backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor
-                      }}>
-                      <ResolvedComponentsFromCraftState screen={screensHeader} />
+                        backgroundColor:
+                          avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                            ? avatarBackgroundColor
+                            : backgroundColor,
+                      }}
+                    >
+                      <ResolvedComponentsFromCraftState
+                        screen={screensHeader}
+                      />
                     </div>
-                  }
+                  )}
                   <div
                     id="editor-content"
                     style={{
-                      paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
-                      backgroundColor: headerMode ? avatarBackgroundColor : '',
-                    }}>
+                      paddingTop:
+                        !headerMode && headerPosition === "absolute"
+                          ? `${height + 40}px`
+                          : "40px",
+                      backgroundColor: headerMode ? avatarBackgroundColor : "",
+                    }}
+                  >
                     <Frame data={editorLoad}></Frame>
                   </div>
-                  {
-                    !headerMode && !footerMode &&
+                  {!headerMode && !footerMode && (
                     <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
+                  )}
                 </TabsContent>
                 <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
                   <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
@@ -359,11 +404,10 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -371,7 +415,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>

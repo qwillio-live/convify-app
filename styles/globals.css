@@ -68,11 +68,11 @@
   }
 }
 
-html{
+html {
   /* overflow: hidden; */
 }
 .node-render::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -1px;
   right: -1px;
@@ -87,24 +87,23 @@ html{
 }
 
 .node-render:hover::before {
-  border-color: #60A5FA;
+  border-color: #60a5fa;
 }
 
 .node-selected::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -1px;
   right: -1px;
   bottom: -1px;
   left: -1px;
-  border: 1px dotted #60A5FA;
+  border: 1px dotted #60a5fa;
   transition: border-color 0.3s;
   -webkit-transition: border-color 0.3s;
   -moz-transition: border-color 0.3s;
   -ms-transition: border-color 0.3s;
   -o-transition: border-color 0.3s;
 }
-
 
 @layer base {
   * {
@@ -115,3 +114,39 @@ html{
   }
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader .loader-icon {
+  animation: spin 1s linear infinite;
+}
+
+.react-colorful__last-control {
+  margin-top: 12px;
+  max-height: 16px;
+  border-radius: 3px !important;
+}
+/* .react-colorful__pointer-fill {
+  background-color: white !important;
+} */
+.react-colorful__pointer {
+  height: 15px !important;
+  width: 15px !important;
+}
+
+.react-colorful {
+  width: 220px !important;
+  height: 166px !important;
+}
+.react-colorful__saturation {
+  border-radius: 8px !important;
+}
+.react-colorful__hue .react-colorful__pointer-fill {
+  background-color: white !important;
+}

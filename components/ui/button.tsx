@@ -25,6 +25,7 @@ const buttonVariants = cva(
         md: "h-6 rounded-md px-4",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        filterIcon: "h-[2.13rem] flex grow px-[0.1rem] ",
       },
     },
     defaultVariants: {
