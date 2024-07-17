@@ -11,9 +11,12 @@ import {
 } from "@/components/ui/breadcrumb"
 
 import { Button } from "./ui/button"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export function BreadCrumbs() {
   const t = useTranslations("CreateFlow")
+
+  const flowName = useAppSelector((state) => state?.screen?.flowName)
 
   return (
     <Breadcrumb>
@@ -34,7 +37,7 @@ export function BreadCrumbs() {
           /
         </BreadcrumbSeparator>
         <BreadcrumbItem>
-          <BreadcrumbPage>My new form</BreadcrumbPage>
+          <BreadcrumbPage>{flowName}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

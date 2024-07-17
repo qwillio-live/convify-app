@@ -191,23 +191,24 @@ export const AvatarSettings = () => {
   };
 
   const uploadToS3 = async (imageData, aspectRatio) => {
-    const maxWidthMobile = 500;
-    const maxWidthDesktop = 1000;
+    const maxWidthMobile = 60;
+    const maxWidthDesktop = 90;
     const mobileDimensions = calculateImageDimensions(aspectRatio, maxWidthMobile);
     const desktopDimenstions = calculateImageDimensions(aspectRatio, maxWidthDesktop)
 
     const formData = new FormData();
     formData.append('image', imageData);
     formData.append('file', imageData);
-    formData.append('sizes[0]', `${mobileDimensions.width}x${mobileDimensions.height}`);
-    formData.append('sizes[1]', `${desktopDimenstions.width}x${desktopDimenstions.height}`);
+    formData.append('sizes[0]', `60x60`);
+    formData.append('sizes[1]', `100x100`);
     formData.append('bucket_name', 'convify-images');
 
     try {
       const response = await axios.post('/api/upload', formData);
       return {
         data: response.data,
-        mobileSize: `${mobileDimensions.width}x${mobileDimensions.height}`
+        mobileSize: `60x60`,
+        desktopSize: `100x100`,
       };
     } catch (error) {
       console.error('Error uploading image to S3:', error);
@@ -222,10 +223,10 @@ export const AvatarSettings = () => {
       setIsLoading(true);
       const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile));
       const uploadedImage = await uploadToS3(imageFile, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images.original) {
+      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images.original;
-          props.uploadedImageUrl = uploadedImage.data.data.images.original;
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
+          props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.desktopSize];
         }, 1000);
       }
       if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
@@ -290,10 +291,10 @@ export const AvatarSettings = () => {
       const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
       const aspectRatio = croppedCanvas.width / croppedCanvas.height;
       const uploadedImage = await uploadToS3(file, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images.original) {
+      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images.original;
-          props.uploadedImageUrl = uploadedImage.data.data.images.original;
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
+          props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.desktopSize];
         }, 1000);
       }
       if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
@@ -336,7 +337,6 @@ export const AvatarSettings = () => {
 
   const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const avatarBackgroundColor = useAppSelector((state)=> state?.screen?.avatarBackgroundColor)
-  console.log('avatar background color is: ',avatarBackgroundColor)
 
   return (
     <>

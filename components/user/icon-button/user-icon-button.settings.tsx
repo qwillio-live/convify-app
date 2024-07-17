@@ -1,33 +1,33 @@
 import React, { useCallback, useEffect } from "react"
+import { debounce, throttle } from "lodash"
 import {
   Activity,
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalSpaceBetween,
   Anchor,
   Aperture,
   ArrowRight,
+  CornerRightDown,
   Disc,
   DollarSign,
+  Image,
   Mountain,
   MoveHorizontal,
-  AlignHorizontalJustifyStart,
-  AlignHorizontalJustifyEnd,
-  AlignHorizontalJustifyCenter,
-  AlignHorizontalSpaceBetween,
-  CornerRightDown,
 } from "lucide-react"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
-
-import { throttle, debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 import { useNode } from "@/lib/craftjs"
+import {
+  useScreenNames,
+  useScreensLength,
+} from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -36,10 +36,12 @@ import {
 } from "@/components/ui/accordion"
 import { Button as CustomButton } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
+import { Checkbox } from "@/components/custom-checkbox"
 import {
   Select,
   SelectContent,
@@ -50,20 +52,19 @@ import {
   SelectValue,
 } from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/custom-tabs"
 
 import { Controller } from "../settings/controller.component"
+import useButtonThemePresets from "./useButtonThemePresets"
 import {
   IconButtonDefaultProps,
   IconButtonGen,
 } from "./user-icon-button.component"
-import useButtonThemePresets from "./useButtonThemePresets"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
-import {
-  useScreenNames,
-  useScreensLength,
-} from "@/lib/state/flows-state/features/screenHooks"
-import { RootState } from "@/lib/state/flows-state/store"
 
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
@@ -172,6 +173,14 @@ export const IconButtonSettings = () => {
     }, 1000)
   }
 
+  const handlePictureChange = (picture, pictureType) => {
+    // setChoice({ ...choice, picture, pictureType })
+    handlePropChangeDebounced("icon", {
+      picture,
+      pictureType,
+    })
+  }
+
   const throttledSetProp = useCallback(
     throttle((property, value) => {
       setProp((prop) => {
@@ -241,41 +250,22 @@ export const IconButtonSettings = () => {
                   <p className="text-md text-muted-foreground flex-1">
                     {t("Icon")}
                   </p>
-                  <Select
-                    defaultValue={icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="arrowright">
-                          <ArrowRight />
-                        </SelectItem>
-                        <SelectItem value="aperture">
-                          <Aperture />
-                        </SelectItem>
-                        <SelectItem value="activity">
-                          <Activity />
-                        </SelectItem>
-                        <SelectItem value="dollarsign">
-                          <DollarSign />
-                        </SelectItem>
-                        <SelectItem value="anchor">
-                          <Anchor />
-                        </SelectItem>
-                        <SelectItem value="disc">
-                          <Disc />
-                        </SelectItem>
-                        <SelectItem value="mountain">
-                          <Mountain />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex w-full items-center gap-2">
+                    <PicturePicker
+                      className="transition-all duration-100 ease-in-out"
+                      picture={
+                        icon.pictureType === PictureTypes.NULL ? (
+                          <Image className="text-muted-foreground size-4" />
+                        ) : (
+                          icon.picture
+                        )
+                      }
+                      pictureType={icon.pictureType}
+                      maxWidthMobile={50}
+                      maxWidthDesktop={80}
+                      onChange={handlePictureChange}
+                    />
+                  </div>
                 </>
               )}
             </div>

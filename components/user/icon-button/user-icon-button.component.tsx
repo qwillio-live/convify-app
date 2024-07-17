@@ -1,4 +1,8 @@
 import React, { useCallback, useEffect, useRef } from "react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { track } from "@vercel/analytics/react"
+import { debounce, throttle } from "lodash"
 import {
   Activity,
   Anchor,
@@ -8,12 +12,21 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { darken, rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-import { throttle, debounce } from "lodash"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { darken, rgba } from "polished"
+import {
+  navigateToScreen,
+  setCurrentScreenName,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -35,26 +48,19 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
 import { Controller } from "../settings/controller.component"
-import { IconButtonSettings } from "./user-icon-button.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
-import { useTranslations } from "next-intl"
-import { track } from "@vercel/analytics/react"
-import { RootState } from "@/lib/state/flows-state/store"
-import {
-  navigateToScreen,
-  setCurrentScreenName,
-  validateScreen,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
+import { IconButtonSettings } from "./user-icon-button.settings"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -238,8 +244,57 @@ export const IconButtonGen = ({
         >
           {text}
         </div>
-        {enableIcon && (
-          <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+        {enableIcon && icon.pictureType !== PictureTypes.NULL && (
+          <div
+            className={cn("ml-[10px]", {
+              "mt-[4px]":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "large",
+              "mt-[2px]":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "medium",
+              "mt-0":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "small",
+            })}
+          >
+            {icon.pictureType === PictureTypes.ICON ? (
+              <SvgRenderer
+                iconName={icon.picture}
+                width={IconSizeValues[buttonSize]}
+                height={IconSizeValues[buttonSize]}
+              />
+            ) : icon.pictureType === PictureTypes.EMOJI ? (
+              <span
+                className={cn("flex items-center justify-center", {
+                  "text-[26px] leading-[26px]": buttonSize === "large",
+                  "text-[22px] leading-[22px]": buttonSize === "medium",
+                  "text-[18px] leading-[18px]": buttonSize === "small",
+                })}
+              >
+                {icon.picture}
+              </span>
+            ) : (
+              <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+                <source
+                  media="(max-width:100px)"
+                  srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+                />
+                <img
+                  src={(icon.picture as ImagePictureTypes)?.desktop}
+                  className={cn(
+                    "aspect-auto h-auto overflow-hidden object-cover",
+                    {
+                      "w-[26px]": buttonSize === "large",
+                      "w-[22px]": buttonSize === "medium",
+                      "w-[18px]": buttonSize === "small",
+                    }
+                  )}
+                  loading="lazy"
+                />
+              </picture>
+            )}
+          </div>
         )}
       </StyledCustomButton>
       {/* </Link> */}
@@ -688,8 +743,57 @@ export const IconButton = ({
               tagName="div"
             />
           </div>
-          {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+          {enableIcon && icon.pictureType !== PictureTypes.NULL && (
+            <div
+              className={cn("ml-[10px]", {
+                "mt-[4px]":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "large",
+                "mt-[2px]":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "medium",
+                "mt-0":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "small",
+              })}
+            >
+              {icon.pictureType === PictureTypes.ICON ? (
+                <SvgRenderer
+                  iconName={icon.picture}
+                  width={IconSizeValues[buttonSize]}
+                  height={IconSizeValues[buttonSize]}
+                />
+              ) : icon.pictureType === PictureTypes.EMOJI ? (
+                <span
+                  className={cn("flex items-center justify-center", {
+                    "text-[26px] leading-[26px]": buttonSize === "large",
+                    "text-[22px] leading-[22px]": buttonSize === "medium",
+                    "text-[18px] leading-[18px]": buttonSize === "small",
+                  })}
+                >
+                  {icon.picture}
+                </span>
+              ) : (
+                <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+                  <source
+                    media="(max-width:100px)"
+                    srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+                  />
+                  <img
+                    src={(icon.picture as ImagePictureTypes)?.desktop}
+                    className={cn(
+                      "aspect-auto h-auto w-full overflow-hidden object-cover",
+                      {
+                        "w-[26px]": buttonSize === "large",
+                        "w-[22px]": buttonSize === "medium",
+                        "w-[18px]": buttonSize === "small",
+                      }
+                    )}
+                    loading="lazy"
+                  />
+                </picture>
+              )}
+            </div>
           )}
         </StyledCustomButton>
       </div>
@@ -715,7 +819,10 @@ export type IconButtonProps = {
   color: StyleProperty
   colorHover: StyleProperty
   text: string
-  icon: string
+  icon: {
+    picture: ImagePictureTypes | string | null
+    pictureType: PictureTypes
+  }
   paddingLeft: string | number
   paddingTop: string | number
   paddingRight: string | number
@@ -801,7 +908,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  icon: "arrowright",
+  icon: {
+    picture: null,
+    pictureType: PictureTypes.NULL,
+  },
   paddingLeft: "16",
   paddingTop: "26",
   paddingRight: "16",

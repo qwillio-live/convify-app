@@ -163,10 +163,10 @@ export const LogoSettings = () => {
           }
           const aspectRatio = width / height;
           const uploadedImage = await uploadToS3(file, aspectRatio, width, height);
-          if (uploadedImage && uploadedImage.data.data.images.original) {
+          if (uploadedImage && uploadedImage.data.data.images[uploadedImage.logoSize]) {
             setProp((props) => {
-              props.src = uploadedImage.data.data.images.original;
-              props.uploadedImageUrl = uploadedImage.data.data.images.original;
+              props.src = uploadedImage.data.data.images[uploadedImage.logoSize];
+              props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.logoSize];
             }, 1000);
           }
           if (uploadedImage && uploadedImage.data.data.images[uploadedImage.logoSize]) {

@@ -7,6 +7,10 @@
   "Login": {
     "Welcome back": "Bem-vindo de volta"
   },
+  "Not-Found": {
+    "title": "404",
+    "description": "Esta página não foi encontrada."
+  },
   "Dashboard": {
     "Dashboard": "Painel",
     "There's not a flow in sight": "Não há um fluxo à vista",
@@ -111,12 +115,12 @@
     "Text & Image": "Texto & Imagem",
     "Text Here": "Texto Aqui",
     "Enable Redirect": "Habilitar Redirecionamento",
-    "Enable Link": "Habilitar Link", 
+    "Enable Link": "Habilitar Link",
     "Open in...": "Abrir em...",
     "New Window": "Nova Janela",
     "Same Window": "Mesma Janela",
     "Corner Radius": "Raio de Canto",
-    "Wait Time (seconds)":  "Tempo de Espera (segundos)",
+    "Wait Time (seconds)": "Tempo de Espera (segundos)",
     "Navigation": "Navegação",
     "Custom Visual": "Visual Personalizado",
     "Next Screen": "Próxima Tela",
@@ -184,8 +188,8 @@
     "Click here to upload another image": "Clique aqui para carregar outra imagem",
     "Remove": "Remover",
     "Layout": "Disposição",
-    "Desktop" : "Desktop",
-    "Mobile" :  "Celular",
+    "Desktop": "Desktop",
+    "Mobile": "Celular",
     "Align Horizontal": "Alinhar Horizontalmente",
     "Align Vertical": "Alinhar Verticalmente",
     "Gap": "Espaçamento",

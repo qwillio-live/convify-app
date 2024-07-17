@@ -7,6 +7,10 @@
   "Login": {
     "Welcome back": "Welcome back"
   },
+  "Not-Found": {
+    "title": "404",
+    "description": "This page could not be found."
+  },
   "Dashboard": {
     "Dashboard": "Dashboard",
     "There's not a flow in sight": "There's not a flow in sight",

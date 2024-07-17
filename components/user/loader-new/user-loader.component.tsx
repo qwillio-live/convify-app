@@ -401,7 +401,6 @@ export const LoaderComponent = ({
                         `relative flex flex-row justify-${align} w-full border border-transparent`
                     )}
                 >
-                    {isHovered && <Controller nameOfComponent={t("Loader")} />}
                     {src ? (
                         <UserLogo
                             alt={alt}
