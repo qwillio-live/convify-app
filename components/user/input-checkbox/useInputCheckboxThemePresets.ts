@@ -1,5 +1,7 @@
-import { darken, rgba } from "polished"
+import hexoid from "hexoid"
 import { useTranslations } from "next-intl"
+import { darken, rgba } from "polished"
+
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import {
@@ -92,7 +94,7 @@ const useInputCheckboxThemePresets = () => {
       bottomLeftRadius: 8,
       bottomRightRadius: 8,
     },
-  
+    id: `input-${hexoid(6)()}`,
   }
 
   const underlinedPresetChecbox: UserInputCheckboxProps = {
@@ -145,7 +147,8 @@ const useInputCheckboxThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
+    label:
+      "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
     fieldName: "Agreement",
     floatingLabel: false,
     enableIcon: false,
@@ -164,7 +167,7 @@ const useInputCheckboxThemePresets = () => {
       bottomLeftRadius: 8,
       bottomRightRadius: 8,
     },
-  
+    id: `input-${hexoid(6)()}`,
   }
 
   return { outlinedPresetChecbox, underlinedPresetChecbox }

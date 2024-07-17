@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-
+import hexoid from "hexoid"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -85,6 +85,7 @@ export type UserInputCheckboxProps = {
     bottomRightRadius: number
   }
   settingsTab: string
+  id: string
 }
 export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   inputValue: "",
@@ -156,6 +157,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
     bottomRightRadius: 8,
   },
   settingsTab: "content",
+  id: `input-${hexoid(6)()}`
 }
 
 interface StyledUserInputCheckboxProps {
@@ -282,13 +284,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 transition-all
                 duration-200
                 ease-in-out
-                focus-visible:ring-transparent focus-visible:ring-offset-0`
+                focus-visible:ring-transparent focus-visible:ring-offset-0
+                `
               )}
-              // onChange={
-              //   (e) => setProp((props) => (props.inputValue = e.target.value))
-              //   // not to set input prop when editing
-              //   // console.log("Input field value is: ", e.target.value)
-              // }
             >
               <div
                 className={`mb-1 relative text-[14.5px] text-ellipsis transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
@@ -498,6 +496,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                 max-h-fit
                 focus-visible:ring-transparent 
                 focus-visible:ring-offset-0 
+                send-response
                 `
               )}
               onBlur={() => setProp((props) => (props.isActive = false))}
@@ -560,6 +559,9 @@ export const UserInputCheckbox = ({ ...props }) => {
                   style={{
                     zIndex: 10,
                   }}
+                  data-answer={props.label}
+                  data-value={isChecked}
+                  id={props.id}
                 />
               )}
             </UserInputCheckboxStyled>
