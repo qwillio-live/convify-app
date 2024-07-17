@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
+import hexoid from "hexoid"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-import hexoid from "hexoid"
+
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -157,7 +158,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
     bottomRightRadius: 8,
   },
   settingsTab: "content",
-  id: `input-${hexoid(6)()}`
+  id: `input-${hexoid(6)()}`,
 }
 
 interface StyledUserInputCheckboxProps {

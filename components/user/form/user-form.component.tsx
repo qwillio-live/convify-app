@@ -1,5 +1,6 @@
 import React from "react"
 import { transform } from "next/dist/build/swc"
+import hexoid from "hexoid"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
 
@@ -148,6 +149,7 @@ export const FormContentGen = ({ children, ...props }) => {
       border={props.border}
       borderColor={props.borderColor}
       overflow="visible"
+      id={props.id}
     >
       <FormContentInner
         size={props.size}
@@ -168,6 +170,7 @@ export const FormContentGen = ({ children, ...props }) => {
           e.preventDefault()
           console.log("submitted")
         }}
+        id={props.id}
       >
         {children}
       </FormContentInner>
@@ -232,6 +235,7 @@ export const FormContent = ({ children, ...props }) => {
         mobileAlignItems={props.mobileAlignItems}
         mobileJustifyContent={props.mobileJustifyContent}
         overflow="visible"
+        id={props.id}
       >
         {children}
       </FormContentGen>
@@ -282,6 +286,7 @@ export type FormContentDefaultPropsTypes = {
   size: CardSizes
   mobileFlexDirection: string
   settingsTab: string
+  id: string
 }
 
 export const FormContentDefaultProps: FormContentDefaultPropsTypes = {
@@ -314,11 +319,13 @@ export const FormContentDefaultProps: FormContentDefaultPropsTypes = {
   borderColor: "inherit",
   size: CardSizes.medium,
   settingsTab: "layout",
+  id: `form-${hexoid(6)()}`,
 }
 
 FormContent.craft = {
   props: FormContentDefaultProps,
   displayName: "Form Content",
+  id: `form-${hexoid(6)()}`,
   rules: {
     canDrag: () => true,
     canDrop: () => true,
@@ -376,11 +383,15 @@ export const Form = ({ children, ...props }) => {
         setHover(false)
       }}
       style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)" }}
+      id={props.id}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
       <Element
         canvas
-        id="form-card"
+        data-answer={props.label}
+        data-value={props.inputValue}
+        id={props.id}
+        // id="form-container"
         is={FormContent}
         data-cy="form-content"
         gap="5"
@@ -412,7 +423,6 @@ export const Form = ({ children, ...props }) => {
         >
           <Element
             canvas
-            id="user-input-name"
             is={UserInput}
             {...formPreset}
             label={t("FirstName")}
@@ -430,7 +440,6 @@ export const Form = ({ children, ...props }) => {
           />
           <Element
             canvas
-            id="user-input-lastname"
             is={UserInput}
             floatingLabel={true}
             {...formPreset}
@@ -450,7 +459,6 @@ export const Form = ({ children, ...props }) => {
         </Element>
         <Element
           canvas
-          id="user-input-mail"
           is={UserInputMail}
           {...outlinedPresetMail}
           floatingLabel={true}
@@ -463,7 +471,6 @@ export const Form = ({ children, ...props }) => {
         />
         <Element
           canvas
-          id="user-input-phone"
           is={UserInputPhone}
           {...formPresetPhone}
           floatingLabel={true}
@@ -477,7 +484,6 @@ export const Form = ({ children, ...props }) => {
         />
         <Element
           canvas
-          id="user-input-checkbox"
           is={UserInputCheckbox}
           marginTop={0}
           marginBottom={0}
@@ -488,7 +494,6 @@ export const Form = ({ children, ...props }) => {
         />
         <Element
           canvas
-          id="user-input-submit-button"
           is={IconButton}
           {...formPreset}
           marginTop={0}
@@ -509,6 +514,7 @@ export const Form = ({ children, ...props }) => {
 Form.craft = {
   props: FormContentDefaultProps,
   displayName: "Form",
+  id: `form-${hexoid(6)()}`,
   rules: {
     canDrag: () => true,
     canDrop: () => true,

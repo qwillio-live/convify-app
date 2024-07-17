@@ -750,7 +750,9 @@ export const UserInputPhone = ({ ...props }) => {
                   transition-all
                   duration-200
                   ease-in-out
-                  focus-visible:ring-transparent focus-visible:ring-offset-0`
+                  focus-visible:ring-transparent focus-visible:ring-offset-0
+                  send-response
+                  `
               )}
               onChange={(e) => {
                 if (!props.inputRequired) {
