@@ -463,7 +463,7 @@ const InsightsFlowComponents = () => {
                   stroke-width="1.5"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  className="w-8 h-8"
+                  className="size-8"
                 >
                   <rect width="20" height="14" x="2" y="3" rx="2" />
                   <line x1="8" x2="16" y1="21" y2="21" />
@@ -484,7 +484,7 @@ const InsightsFlowComponents = () => {
                   width="18"
                   height="18"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-8 h-8"
+                  className="size-8"
                 >
                   <g
                     fill="none"
@@ -575,9 +575,9 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </Card>
-        <Card className="w-full h-full min-h-[350px]">
-          <div className="overflow-x-hidden sm:overflow-x-auto w-full h-full">
-            <Table className="w-full h-full">
+        <Card className="size-full min-h-[350px]">
+          <div className="overflow-x-hidden sm:overflow-x-auto size-full">
+            <Table className="size-full">
               <TableHeader>
                 <TableRow className="p-[0.60rem]">
                   <TableHead className="whitespace-nowrap p-[0.60rem] pr-0">#</TableHead>
@@ -600,12 +600,12 @@ const InsightsFlowComponents = () => {
                   ))
                 ) : (
                   fakeDropOff.map((item, index) => (
-                    <TableRow key={index} className="p-[1rem]"> {/* Reduced padding here */}
-                      <TableCell className="p-[1rem]"></TableCell>
-                      <TableCell className="p-[1rem] whitespace-wrap" style={{ padding: paddingScreen }}></TableCell>
-                      <TableCell className="p-[1rem]" style={{ padding: paddingScreen }}></TableCell>
-                      <TableCell className="p-[1rem]" style={{ padding: paddingScreen }}></TableCell>
-                      <TableCell className="p-[1rem]" style={{ padding: paddingScreen }}></TableCell>
+                    <TableRow key={index} className="p-4"> {/* Reduced padding here */}
+                      <TableCell className="p-4"></TableCell>
+                      <TableCell className="p-4 whitespace-wrap" style={{ padding: paddingScreen }}></TableCell>
+                      <TableCell className="p-4" style={{ padding: paddingScreen }}></TableCell>
+                      <TableCell className="p-4" style={{ padding: paddingScreen }}></TableCell>
+                      <TableCell className="p-4" style={{ padding: paddingScreen }}></TableCell>
                     </TableRow>
                   ))
                 )}
@@ -618,12 +618,7 @@ const InsightsFlowComponents = () => {
   )
   return (
     <Tabs defaultValue={navbarHighlighter()}
-      className=""
-      style={{
-        overflow: "auto",
-        height: "100vh",
-        paddingBottom: '100px'
-      }}
+      className="pb-[100px]"
     >
       <header className="mt-4 flex items-center gap-4 px-0 lg:px-6">
         <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-[0.70rem] overflow-x-hidden">
@@ -666,28 +661,28 @@ const InsightsFlowComponents = () => {
         <div className="tabs-content flex w-full items-center justify-start">
           <TabsContent
             // className="mt-0 w-full h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 w-full h-full"
+            className="mt-0 size-full"
             value="custom"
           >
             {repeatedJSX}
           </TabsContent>
           <TabsContent
             // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 w-full h-full"
+            className="mt-0 size-full"
             value="14days"
           >
             {repeatedJSX}
           </TabsContent>
           <TabsContent
             // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 w-full h-full"
+            className="mt-0 size-full"
             value="28days"
           >
             {repeatedJSX}
           </TabsContent>
           <TabsContent
             // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 w-full h-full"
+            className="mt-0 size-full"
             value="calendar"
           >
             {repeatedJSX}
