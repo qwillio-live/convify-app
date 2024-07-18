@@ -38,14 +38,18 @@ export const UserTextGen = ({
   textColor,
   tagType,
   fontFamily,
-  ...props }) => {
-  return(
+  ...props
+}) => {
+  return (
     <>
-    <ContentEditable
+      {/** @ts-ignore */}
+      <ContentEditable
         html={text}
         disabled={true}
         tagName={tagType}
-        onChange={(e) => {console.log(e.target.value)}}
+        onChange={(e) => {
+          console.log(e.target.value)
+        }}
         style={{
           fontFamily: `var(${fontFamily})`,
           fontSize: `${fontSize}px`,
@@ -88,15 +92,19 @@ export const UserText = ({
   }))
   const [editable, setEditable] = useState(false)
   const [hover, setHover] = useState(false)
-  const secondaryFont = useAppSelector((state) => state.theme?.text?.secondaryFont)
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
+  const secondaryFont = useAppSelector(
+    (state) => state.theme?.text?.secondaryFont
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
   useEffect(() => {
     setProp((props) => (props.fontFamily = secondaryFont), 200)
-  },[secondaryFont])
+  }, [secondaryFont])
 
   useEffect(() => {
     setProp((props) => (props.textColor = secondaryTextColor), 200)
-  },[secondaryTextColor])
+  }, [secondaryTextColor])
 
   useEffect(() => {
     if (selected) {
@@ -115,6 +123,7 @@ export const UserText = ({
       onClick={() => selected && setEditable(true)}
     >
       {hover && <Controller nameOfComponent={"TEXT"} />}
+      {/** @ts-ignore */}
       <ContentEditable
         html={text}
         disabled={!editable}

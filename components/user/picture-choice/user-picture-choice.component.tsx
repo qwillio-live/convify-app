@@ -307,6 +307,7 @@ export const PictureChoice = ({
             maxWidth: PictureChoiceSizeValues[size || "medium"],
           }}
         >
+          {/** @ts-ignore */}
           <ContentEditable
             className="px-1"
             html={label}
@@ -516,18 +517,21 @@ const PictureChoiceItem = ({
               {choice.value}
             </span>
           ) : (
-            <ContentEditable
-              className="w-fit max-w-full whitespace-break-spaces p-1"
-              style={{ wordBreak: "break-word" }}
-              html={choiceValue}
-              disabled={onValueChange === null}
-              onChange={(e) => {
-                setChoiceValue(e.target.value)
-                onValueChange(e.target.value)
-              }}
-              onFocus={() => setIsEditing(true)}
-              onBlur={() => setIsEditing(false)}
-            />
+            <>
+              {/** @ts-ignore */}
+              <ContentEditable
+                className="w-fit max-w-full whitespace-break-spaces p-1"
+                style={{ wordBreak: "break-word" }}
+                html={choiceValue}
+                disabled={onValueChange === null}
+                onChange={(e) => {
+                  setChoiceValue(e.target.value)
+                  onValueChange(e.target.value)
+                }}
+                onFocus={() => setIsEditing(true)}
+                onBlur={() => setIsEditing(false)}
+              />
+            </>
           )}
         </div>
       </StyledPictureChoiceItem>

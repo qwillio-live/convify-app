@@ -42,25 +42,28 @@ export const HeadlineTextGen = ({
   ...props
 }) => {
   return (
-    <ContentEditable
-      html={text}
-      disabled={true}
-      onChange={(e) => console.log("Headline Text: ", e.target.value)}
-      tagName={tagType}
-      style={{
-        fontFamily: `var(${fontFamily?.value})`,
-        fontSize: `${fontSize.value}px`,
-        textAlign,
-        fontWeight: `${fontWeight.value}`,
-        marginLeft: `${marginLeft.value}px`,
-        marginRight: `${marginRight.value}px`,
-        marginTop: `${marginTop.value}px`,
-        marginBottom: `${marginBottom.value}px`,
-        color: `${textColor.value}`,
-        lineHeight: `${fontSize.value}px`,
-        minWidth: "max-content",
-      }}
-    />
+    <>
+      {/** @ts-ignore */}
+      <ContentEditable
+        html={text}
+        disabled={true}
+        onChange={(e) => console.log("Headline Text: ", e.target.value)}
+        tagName={tagType}
+        style={{
+          fontFamily: `var(${fontFamily?.value})`,
+          fontSize: `${fontSize.value}px`,
+          textAlign,
+          fontWeight: `${fontWeight.value}`,
+          marginLeft: `${marginLeft.value}px`,
+          marginRight: `${marginRight.value}px`,
+          marginTop: `${marginTop.value}px`,
+          marginBottom: `${marginBottom.value}px`,
+          color: `${textColor.value}`,
+          lineHeight: `${fontSize.value}px`,
+          minWidth: "max-content",
+        }}
+      />
+    </>
   )
 }
 
@@ -91,16 +94,17 @@ export const HeadlineText = ({
   const [hover, setHover] = useState(false)
   const [editable, setEditable] = useState(false)
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
-  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor);
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
 
   useEffect(() => {
-    setProp((props) => props.fontFamily.value = primaryFont, 200);
-   },
-  [primaryFont])
+    setProp((props) => (props.fontFamily.value = primaryFont), 200)
+  }, [primaryFont])
 
   useEffect(() => {
-    setProp((props) => props.textColor.value = primaryTextColor, 200)
-  },[primaryTextColor])
+    setProp((props) => (props.textColor.value = primaryTextColor), 200)
+  }, [primaryTextColor])
 
   useEffect(() => {
     if (selected) {
@@ -119,6 +123,7 @@ export const HeadlineText = ({
       onClick={() => selected && setEditable(true)}
     >
       {hover && <Controller nameOfComponent={"HEADLINE"} />}
+      {/** @ts-ignore */}
       <ContentEditable
         html={text}
         disabled={!editable}
@@ -149,17 +154,17 @@ export const HeadlineText = ({
 }
 
 interface HeadlineTextProps {
-  text: string;
-  fontSize: StyleProperty;
-  fontFamily: StyleProperty;
-  textColor: StyleProperty;
-  fontWeight: StyleProperty;
-  textAlign: StyleProperty;
-  marginLeft: StyleProperty;
-  marginRight: StyleProperty;
-  marginTop: StyleProperty;
-  marginBottom: StyleProperty;
-  tagType: string;
+  text: string
+  fontSize: StyleProperty
+  fontFamily: StyleProperty
+  textColor: StyleProperty
+  fontWeight: StyleProperty
+  textAlign: StyleProperty
+  marginLeft: StyleProperty
+  marginRight: StyleProperty
+  marginTop: StyleProperty
+  marginBottom: StyleProperty
+  tagType: string
 }
 
 export const HeadlineTextDefaultProps: HeadlineTextProps = {
@@ -173,9 +178,8 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   marginRight: { value: 0, isCustomized: false, globalStyled: false },
   marginTop: { value: 0, isCustomized: false, globalStyled: false },
   marginBottom: { value: 0, isCustomized: false, globalStyled: false },
-  tagType: "h1"
-};
-
+  tagType: "h1",
+}
 
 HeadlineText.craft = {
   props: HeadlineTextDefaultProps,

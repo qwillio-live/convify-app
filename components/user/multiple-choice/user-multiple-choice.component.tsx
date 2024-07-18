@@ -317,6 +317,7 @@ export const MultipleChoice = ({
               : MultipleChoiceSizeValues[size || "small"],
           }}
         >
+          {/** @ts-ignore */}
           <ContentEditable
             className="px-1"
             html={label}
@@ -499,18 +500,21 @@ const MultipleChoiceItem = ({
               {choice.value}
             </span>
           ) : (
-            <ContentEditable
-              className="w-fit max-w-full whitespace-break-spaces p-1"
-              style={{ wordBreak: "break-word" }}
-              html={choiceValue}
-              disabled={onValueChange === null}
-              onChange={(e) => {
-                setChoiceValue(e.target.value)
-                onValueChange(e.target.value)
-              }}
-              onFocus={() => setIsEditing(true)}
-              onBlur={(e) => setIsEditing(false)}
-            />
+            <>
+              {/** @ts-ignore */}
+              <ContentEditable
+                className="w-fit max-w-full whitespace-break-spaces p-1"
+                style={{ wordBreak: "break-word" }}
+                html={choiceValue}
+                disabled={onValueChange === null}
+                onChange={(e) => {
+                  setChoiceValue(e.target.value)
+                  onValueChange(e.target.value)
+                }}
+                onFocus={() => setIsEditing(true)}
+                onBlur={(e) => setIsEditing(false)}
+              />
+            </>
           )}
         </div>
       </StyledMultipleChoiceItem>
