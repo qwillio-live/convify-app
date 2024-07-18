@@ -139,7 +139,7 @@ export default function CreateFlowsPage() {
         <main
           className={`content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full`}
         >
-          <ShareFlowComponents isPublished={true} />
+          {/* <ShareFlowComponents isPublished={true} /> */}
         </main>
       </div>
       <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
