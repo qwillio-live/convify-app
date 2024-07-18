@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   theme: themeReducer,
 })
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+// const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const makeStore = () => {
   const store = configureStore({
@@ -27,7 +27,7 @@ export const makeStore = () => {
           ignoredActions: ["persist/PERSIST"],
         },
       }).concat(sagaMiddleware),
-    reducer: persistedReducer,
+    reducer: rootReducer,
   })
   const persistor = persistStore(store)
   sagaMiddleware.run(rootSaga)

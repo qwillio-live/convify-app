@@ -50,6 +50,7 @@ import {
   Zilla_Slab,
   Nunito_Sans,
   Roboto_Slab,
+  Source_Sans_3,
 } from "next/font/google"
 
 export const roboto = Roboto({
@@ -407,4 +408,10 @@ export const fontSans = localFont({
 export const fontHeading = localFont({
   src: "../../assets/fonts/CalSans-SemiBold.woff2",
   variable: "--font-cal-sans",
+})
+export const sans3 = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-sans3",
+  display: "swap",
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 })

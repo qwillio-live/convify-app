@@ -8,10 +8,9 @@ import { cn } from "@/lib/utils"
 
 const ProgressPrimitiveStyled = styled(ProgressPrimitive.Indicator)<{
   indicatorColor: string
-}>
-`
+}>`
   background-color: ${(props) => props.indicatorColor};
-`;
+`
 
 interface CustomProgressProps
   extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
@@ -24,14 +23,14 @@ const Progress = React.forwardRef<
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
+      "relative h-4 w-full overflow-hidden  bg-[#eaeaeb]",
       className
     )}
     {...props}
   >
     <ProgressPrimitiveStyled
       indicatorColor={indicatorColor}
-      className={`h-full w-full flex-1  transition-all`}
+      className={`h-full w-full flex-1 transition-all`}
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>

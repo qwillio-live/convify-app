@@ -180,6 +180,10 @@ export const FONTS: FontTypes = {
       variable: "--font-lora",
     },
     {
+      name: "Source Sans Pro",
+      variable: "--font-sans3",
+    },
+    {
       name: "Titillium Web",
       variable: "--font-titillium-web",
     },
