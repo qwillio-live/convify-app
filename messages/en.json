@@ -242,7 +242,8 @@
     "Hi!":"Hi!",
     "Chat on Telegram":"Chat on Telegram",
     "Telegram Button": "Telegram Button",
-    "Telegram url":"Telegram url"
+    "Telegram url":"Telegram url",
+    "Do nothing": "Do nothing"
   },
   "CreateFlow": {
     "Create": "Create",

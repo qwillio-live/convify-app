@@ -242,7 +242,8 @@
     "Hi!":"Oi!",
     "Chat on Telegram":"Converse no Telegrama",
     "Telegram Button": "Botão Telegrama",
-    "Telegram url":"URL do telegrama"
+    "Telegram url":"URL do telegrama",
+    "Do nothing": "Fazer nada"
   },
   "CreateFlow": {
     "Create": "Criar",
