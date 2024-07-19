@@ -334,6 +334,7 @@ const ListItem = ({
           ))}
       </div>
       <div className="flex flex-1 flex-col justify-center gap-1">
+        {/** @ts-ignore */}
         <ContentEditable
           className="w-fit max-w-full whitespace-break-spaces px-1 font-bold"
           style={{ wordBreak: "break-word" }}
@@ -344,7 +345,7 @@ const ListItem = ({
             onTitleChange(e.target.value)
           }}
         />
-
+        {/** @ts-ignore */}
         <ContentEditable
           className="w-fit max-w-full gap-x-0 whitespace-break-spaces px-1 text-sm"
           style={{ wordBreak: "break-word" }}

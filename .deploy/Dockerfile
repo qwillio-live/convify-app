@@ -7,6 +7,9 @@ WORKDIR /usr/src/convify-app
 # install app dependencies
 # Copy package.json and pnpm-lock.yaml to the working directory
 COPY package.json pnpm-lock.yaml yarn.lock ./
+
+# Copy the prisma schema file
+COPY prisma/schema.prisma prisma/schema.prisma
 # Install pnpm globally
 # RUN npm install -g yarn
 
