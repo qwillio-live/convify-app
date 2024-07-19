@@ -265,36 +265,13 @@ export const UserTextInputGen = ({
   ...props
 }) => {
 
-  const {
-    connectors: { connect, drag },
-    selected,
-    isHovered,
-    actions: { setProp },
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    dragged: state.events.dragged,
-    isHovered: state.events.hovered,
-  }))
-  const [editable, setEditable] = useState(false)
-  const [hover, setHover] = useState(false)
-  const secondaryFont = useAppSelector(
-    (state) => state.theme?.text?.secondaryFont
-  )
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
+
   const primaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
-
-  useEffect(() => {
-    setProp((props) => (props.fontFamily = secondaryFont), 200)
-  }, [secondaryFont])
-
-  useEffect(() => {
-    setProp((props) => (props.textColor = secondaryTextColor), 200)
-  }, [secondaryTextColor])
-
   const sanitizedText = text
     .replace(/<br>/g, "\n")
     .replace(/<\/?div>/g, "\n")

@@ -172,6 +172,7 @@ import {
   TextImageComponentPreview,
   TextImageDefaultProps,
 } from "../textImage/user-textImage.component"
+import { ImageDefaultProps } from "../image-new/user-image.component"
 
 function HelperInformation() {
   return (
