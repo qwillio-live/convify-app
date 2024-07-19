@@ -29,7 +29,9 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
   border-width: ${(props) => {
     if (
       props.id === "ROOT" ||
-      ((props.name === "Card" || props.name === "Card Content") &&
+      ((props.name === "Card" ||
+        props.name === "Card Content" ||
+        props.name === "ProgressBar") &&
         !props.isActive)
     ) {
       return "0"
@@ -42,6 +44,8 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
       return "1px"
     }
   }};
+
+  padding: ${(props) => (props.name === "ProgressBar" ? "1px" : "0px")};
   border-style: ${(props) =>
     props.selected || props.selectedComponent === props.id
       ? "dotted"
@@ -54,10 +58,15 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
     if (props.isActive && props.id !== "ROOT") {
       return "#60A5FA"
     }
-    return "transparent"
+    return props.borderColor
+      ? props.name !== "ProgressBar"
+        ? props.borderColor
+        : "transparent"
+      : "transparent"
   }};
   z-index: 10;
   &:hover {
+    border-width: 1px !important;
     border-style: dotted;
     border-color: #60a5fa;
   }
@@ -177,7 +186,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   if (name === "AvatarComponent" && id !== avatarComponentId) {
     return null
   }
-
+  console.log("name", name)
   return (
     <StyledNodeDiv
       selected={isSelected}
