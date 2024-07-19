@@ -78,7 +78,7 @@ const useShareButtonTheme = () => {
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    icon: "whatsapp-solid",
+    icon: "whatsapp",
     paddingLeft: "0",
     paddingTop: "14",
     paddingRight: "0",
@@ -99,6 +99,7 @@ const useShareButtonTheme = () => {
     },
     buttonAction: "next-screen",
     chatMessage: t("Hi!"),
+    preview: true,
   }
 
   return { SocialFilledPreset }

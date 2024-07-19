@@ -100,6 +100,7 @@ const useTelegramButtonTheme = () => {
     buttonAction: "next-screen",
     chatMessage: t("Hi!"),
     url: "",
+    preview: true,
   }
 
   return { TelegramFilledPreset }

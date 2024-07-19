@@ -528,6 +528,7 @@ export const TelegramShareButtonSettings = () => {
                   icon={icon}
                   chatMessage={chatMessage}
                   url={url}
+                  preview={false}
                 />
               </Card>
             </div>

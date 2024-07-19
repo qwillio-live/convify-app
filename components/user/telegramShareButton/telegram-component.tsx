@@ -159,6 +159,7 @@ export const TelegramShareButtonGen = ({
   iconType,
   chatMessage,
   url,
+  preview,
   ...props
 }) => {
   const router = useRouter()
@@ -182,13 +183,71 @@ export const TelegramShareButtonGen = ({
         paddingRight: `${props.marginRight}px`,
       }}
     >
-      <Link
-        href={`https://telegram.me/share/url?url=${encodeURIComponent(
-          url
-        )}&text=${encodeURIComponent(chatMessage)}`}
-        className="contents"
-        target="_blank"
-      >
+      {preview ? (
+        <Link
+          href={`https://telegram.me/share/url?url=${encodeURIComponent(
+            url
+          )}&text=${encodeURIComponent(chatMessage)}`}
+          className="contents"
+          target="_blank"
+        >
+          <StyledCustomButton
+            fontFamily={fontFamily?.value}
+            color={color.value}
+            background={background.value}
+            backgroundHover={backgroundHover.value}
+            borderHoverColor={borderHoverColor?.value}
+            colorHover={colorHover.value}
+            radius={radius.value}
+            flexDirection={flexDirection}
+            justifyContent={justifyContent}
+            borderColor={borderColor.value}
+            border={border}
+            marginLeft={marginLeft}
+            width={width}
+            size={size}
+            buttonSize={buttonSize}
+            height={height}
+            marginRight={marginRight}
+            marginTop={marginTop}
+            marginBottom={marginBottom}
+            paddingLeft={paddingLeft}
+            paddingTop={paddingTop}
+            paddingRight={paddingRight}
+            paddingBottom={paddingBottom}
+            alignItems={alignItems}
+            gap={gap}
+            mobileScreen={false}
+            {...props}
+            className="transform text-[1rem] transition-transform ease-in-out hover:-translate-y-1"
+            onClick={() => console.log("Button clicked", text)}
+          >
+            {iconType !== PictureTypes.NULL && enableIcon && (
+              <div className="flex items-center justify-center">
+                {iconType === PictureTypes.ICON ? (
+                  <SvgRenderer iconName={icon} width="1em" height="1em" />
+                ) : iconType === PictureTypes.EMOJI ? (
+                  <span className="text-[1em] leading-[1em]">{icon}</span>
+                ) : (
+                  <picture key={(icon as ImagePictureTypes).desktop}>
+                    <source
+                      media="(min-width:560px)"
+                      srcSet={(icon as ImagePictureTypes).mobile}
+                    />
+                    <img
+                      src={(icon as ImagePictureTypes).desktop}
+                      className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                      style={{ height: "1em", width: "auto" }}
+                      loading="lazy"
+                    />
+                  </picture>
+                )}
+              </div>
+            )}
+            <span className="text-md ml-2">{text}</span>
+          </StyledCustomButton>
+        </Link>
+      ) : (
         <StyledCustomButton
           fontFamily={fontFamily?.value}
           color={color.value}
@@ -217,7 +276,7 @@ export const TelegramShareButtonGen = ({
           gap={gap}
           mobileScreen={false}
           {...props}
-          className="transform text-[1rem] transition-transform ease-in-out hover:-translate-y-1"
+          className="text-[1rem]"
           onClick={() => console.log("Button clicked", text)}
         >
           {iconType !== PictureTypes.NULL && enableIcon && (
@@ -242,9 +301,9 @@ export const TelegramShareButtonGen = ({
               )}
             </div>
           )}
-          <span className="text-md ml-2">{text}</span>
+          <span className="text-sm ml-2">{text}</span>
         </StyledCustomButton>
-      </Link>
+      )}
     </div>
   )
 }
@@ -690,6 +749,7 @@ export type IconButtonProps = {
   iconType?: PictureTypes
   url?: string
   chatMessage: string
+  preview: boolean
 }
 
 export const IconButtonDefaultProps: IconButtonProps = {
@@ -765,6 +825,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
     screenName: "",
   },
   buttonAction: "next-screen",
+  preview: true,
   chatMessage: "Hi!",
 }
 

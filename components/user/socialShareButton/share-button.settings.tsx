@@ -289,8 +289,16 @@ export const SocialShareButtonSettings = () => {
                 onChange={(e) => {
                   handlePropChangeDebounced("phoneNumber", e.target.value)
                 }}
-                type={"text"}
-                placeholder={t("Phone number")}
+                type="tel"
+                pattern="[0-9]{10}"
+                onKeyPress={(e) => {
+                  const charCode = e.charCode
+                  // Allow only digits
+                  if (charCode < 48 || charCode > 57) {
+                    e.preventDefault()
+                  }
+                }}
+                placeholder={"xxxxxxxxx"}
               />
             </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
@@ -528,6 +536,7 @@ export const SocialShareButtonSettings = () => {
                   icon={icon}
                   chatMessage={chatMessage}
                   phoneNumber={phoneNumber}
+                  preview={false}
                 />
               </Card>
             </div>
