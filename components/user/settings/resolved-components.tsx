@@ -26,6 +26,8 @@ import { AvatarComponentGen } from "../avatar-new/user-avatar.component"
 import { LogoComponentGen } from "../logo-new/user-logo.component"
 import { LoaderComponentGen } from "../loader-new/user-loader.component"
 import { TextImageComponentGen } from "../textImage/user-textImage.component"
+import { SocialShareButtonGen } from "../socialShareButton/share-component"
+import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -54,6 +56,8 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
+  [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
+  [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
 }
 
 interface Props {

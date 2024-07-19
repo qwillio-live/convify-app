@@ -42,6 +42,8 @@ import {
   Trophy,
   Type,
   LayoutList,
+  MessageCircleMoreIcon,
+  Send,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEditor } from "@/lib/craftjs"
@@ -141,6 +143,16 @@ import { BackButton, BackButtonGen } from "../backButton/back-component"
 import { LinkButton, LinkButtonGen } from "../link/link-component"
 import useLinkThemePresets from "../link/link-theme"
 import { useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
+import {
+  SocialShareButton,
+  SocialShareButtonGen,
+} from "../socialShareButton/share-component"
+import useShareButtonTheme from "../socialShareButton/share-theme"
+import {
+  TelegramShareButton,
+  TelegramShareButtonGen,
+} from "../telegramShareButton/telegram-component"
+import useTelegramButtonTheme from "../telegramShareButton/telegram-theme"
 
 function HelperInformation() {
   return (
@@ -221,6 +233,8 @@ export const UserToolbox = () => {
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
   const { backFilledPreset, backOutLinePreset } = useBackThemePresets()
+  const { SocialFilledPreset } = useShareButtonTheme()
+  const { TelegramFilledPreset } = useTelegramButtonTheme()
   const { selectPreset } = useSelectThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
   const { normalPreset: checklistNormalPreset } = useChecklistThemePresets()
@@ -525,6 +539,102 @@ export const UserToolbox = () => {
                       paddingLeft={0}
                       paddingRight={0}
                       iconType={PictureTypes.ICON}
+                    />
+                  </HoverCardComponent>
+                </div>
+                <div
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
+                      <SocialShareButton
+                        // {...IconButtonDefaultProps}
+                        {...SocialFilledPreset}
+                        disabled={false}
+                        text={t("Chat on WhatsApp")}
+                        justifyContent={"center"}
+                        size={"small"}
+                        marginTop={20}
+                        marginBottom={20}
+                        marginLeft={20}
+                        marginRight={20}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        iconType={PictureTypes.ICON}
+                        phoneNumber={""}
+                      />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title={t("WhatsApp Button")}
+                    icon={<MessageCircleMoreIcon className="mr-2 size-3" />}
+                  >
+                    <SocialShareButtonGen
+                      className="w-full"
+                      {...SocialFilledPreset}
+                      size="lasmallrge"
+                      marginTop={20}
+                      marginBottom={20}
+                      marginLeft={20}
+                      marginRight={20}
+                      text={t("Chat on WhatsApp")}
+                      justifyContent={"center"}
+                      paddingLeft={0}
+                      paddingRight={0}
+                      iconType={PictureTypes.ICON}
+                      phoneNumber={""}
+                    />
+                  </HoverCardComponent>
+                </div>
+                <div
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
+                      <TelegramShareButton
+                        // {...IconButtonDefaultProps}
+                        {...TelegramFilledPreset}
+                        disabled={false}
+                        text={t("Chat on Telegram")}
+                        justifyContent={"center"}
+                        size={"small"}
+                        marginTop={20}
+                        marginBottom={20}
+                        marginLeft={20}
+                        marginRight={20}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        iconType={PictureTypes.ICON}
+                        url={""}
+                      />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title={t("Telegram Button")}
+                    icon={<Send className="mr-2 size-3" />}
+                  >
+                    <TelegramShareButtonGen
+                      className="w-full"
+                      {...TelegramFilledPreset}
+                      size="small"
+                      marginTop={20}
+                      marginBottom={20}
+                      marginLeft={20}
+                      marginRight={20}
+                      text={t("Chat on Telegram")}
+                      justifyContent={"center"}
+                      paddingLeft={0}
+                      paddingRight={0}
+                      iconType={PictureTypes.ICON}
+                      url={""}
                     />
                   </HoverCardComponent>
                 </div>

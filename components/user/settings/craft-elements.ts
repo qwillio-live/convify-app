@@ -11,6 +11,8 @@ export const CRAFT_ELEMENTS = {
   ICONBUTTON: "IconButton",
   LINESELECTOR: "LineSelector",
   BACKBUTTON: "BackButton",
+  SOCIALSHAREBUTTON: "SocialShareButton",
+  TELEGRAMSHAREBUTTON: "TelegramShareButton",
   LINKBUTTON: "LinkButton",
   IMAGECOMPONENT: "ImageComponent",
   AVATARCOMPONENT: "AvatarComponent",

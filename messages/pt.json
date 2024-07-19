@@ -233,7 +233,16 @@
     "Dismiss": "Dispensar",
     "continue on desktop desc": "Crie fluxos com nossos recursos mais poderosos, como lógica ou opções de design avançadas, em dispositivos desktop. Enviaremos um link direto por email.",
     "suggestions":"Sugestões",
-    "All": "Todos"
+    "All": "Todos",
+    "Chat on WhatsApp" : "Converse no WhatsApp",
+    "WhatsApp Button": "Botão WhatsApp",
+    "WhatsApp Number":"Número do WhatsApp",
+    "Phone number": "Número de telefone",
+    "Chat Message":"Mensagem de bate-papo",
+    "Hi!":"Oi!",
+    "Chat on Telegram":"Converse no Telegrama",
+    "Telegram Button": "Botão Telegrama",
+    "Telegram url":"URL do telegrama"
   },
   "CreateFlow": {
     "Create": "Criar",

@@ -78,6 +78,8 @@ import { clear } from "console"
 import { LineSelector } from "../user/lineSeperator/line-seperator-component"
 import { BackButton } from "../user/backButton/back-component"
 import { LinkButton } from "../user/link/link-component"
+import { SocialShareButton } from "../user/socialShareButton/share-component"
+import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -282,6 +284,8 @@ export function CreateFlowComponent() {
           LineSelector,
           BackButton,
           LinkButton,
+          SocialShareButton,
+          TelegramShareButton,
           // UserProgressBar,
           ScreenOneInput,
           Input,

@@ -233,7 +233,16 @@
     "Dismiss": "Dismiss",
     "continue on desktop desc": "Create flows with our most powerful features, such as logic or advanced design options, on desktop devices. We’ll email you a direct link.",
     "suggestions":"Suggestions",
-    "All": "All"
+    "All": "All",
+    "Chat on WhatsApp": "Chat on WhatsApp",
+    "WhatsApp Button": "WhatsApp Button",
+    "WhatsApp Number": "WhatsApp Number",
+    "Phone number":"Phone number",
+    "Chat Message":"Chat Message",
+    "Hi!":"Hi!",
+    "Chat on Telegram":"Chat on Telegram",
+    "Telegram Button": "Telegram Button",
+    "Telegram url":"Telegram url"
   },
   "CreateFlow": {
     "Create": "Create",
