@@ -523,9 +523,6 @@ export const UserInputCheckbox = ({ ...props }) => {
                   ? darkenedBg
                   : props.backgroundColor,
               }}
-              data-answer={props.label}
-              data-value={isChecked}
-              id={props.id}
             >
               <ContentEditable
                 html={props.label}
@@ -563,6 +560,10 @@ export const UserInputCheckbox = ({ ...props }) => {
                   style={{
                     zIndex: 10,
                   }}
+                  data-answer={props.label}
+                  data-value={isChecked}
+                  id={props.id}
+    
                 />
               )}
             </UserInputCheckboxStyled>
