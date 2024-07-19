@@ -1,7 +1,6 @@
 import { darken, rgba } from "polished"
-
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
-
+import hexoid from "hexoid"
 import { UserInputProps, UserInputSizes } from "./user-input.component"
 
 const useInputThemePresets = () => {
@@ -91,6 +90,7 @@ const useInputThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
+    id: `input-${hexoid(6)()}`
   }
 
   const underlinedPreset: UserInputProps = {
@@ -166,6 +166,7 @@ const useInputThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
+    id: `input-${hexoid(6)()}`
   }
 
   const formPreset: UserInputProps = {
@@ -245,6 +246,7 @@ const useInputThemePresets = () => {
     compId: "",
     parentScreenId: "",
     fieldType: "data",
+    id: `input-${hexoid(6)()}`
   }
 
   return { outlinedPreset, underlinedPreset, formPreset }
