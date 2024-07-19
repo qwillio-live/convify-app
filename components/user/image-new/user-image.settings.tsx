@@ -213,7 +213,8 @@ export const ImageSettings = () => {
       const response = await axios.post('/api/upload', formData);
       return {
         data: response.data,
-        mobileSize: `${mobileDimensions.width}x${mobileDimensions.height}`
+        mobileSize: `${mobileDimensions.width}x${mobileDimensions.height}`,
+        desktopSize: `${desktopDimenstions.width}x${desktopDimenstions.height}`
       };
     } catch (error) {
       console.error('Error uploading image to S3:', error);
@@ -228,10 +229,10 @@ export const ImageSettings = () => {
       setIsLoading(true);
       const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile));
       const uploadedImage = await uploadToS3(imageFile, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images.original) {
+      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images.original;
-          props.uploadedImageUrl = uploadedImage.data.data.images.original;
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
+          props.uploadedImageUrl = uploadedImage.data.data[uploadedImage.desktopSize];
         }, 1000);
       }
       if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
@@ -242,6 +243,7 @@ export const ImageSettings = () => {
       setIsLoading(false);
     }
   };
+  console.log('src is: ', src)
 
   const cropperRef = React.useRef<ReactCropperElement>(null)
 
@@ -296,10 +298,10 @@ export const ImageSettings = () => {
       const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
       const aspectRatio = croppedCanvas.width / croppedCanvas.height;
       const uploadedImage = await uploadToS3(file, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images.original) {
+      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images.original;
-          props.uploadedImageUrl = uploadedImage.data.data.images.original;
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
+          props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.desktopSize];
         }, 1000);
       }
       if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
@@ -517,7 +519,7 @@ export const ImageSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-            <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
                 <Label htmlFor="marginTop">{t("Size")}</Label>
                 <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
                   {imageSize}
@@ -536,23 +538,23 @@ export const ImageSettings = () => {
                   const newWidthPx = (newWidthPercentage / 100) * maxWidthPx;
                   const aspectRatio = parseInt(height, 10) / parseInt(width, 10);
                   const newHeightPx = newWidthPx * aspectRatio;
-                
+
                   // Logging to see the calculated values
                   console.log('New width percentage:', newWidthPercentage);
                   console.log('Max width in px:', maxWidthPx);
                   console.log('New width in px:', newWidthPx);
                   console.log('Aspect ratio:', aspectRatio);
                   console.log('New height in px:', newHeightPx);
-                
+
                   handlePropChangeDebounced("imageSize", e);
-                
+
                   setProp((props) => {
                     props.width = `${newWidthPx}px`;
                     // props.height = `${newHeightPx}px`;
                     props.imageSize = `${newWidthPercentage}`;
                   }, 1000);
                 }}
-                
+
               />
             </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">

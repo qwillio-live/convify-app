@@ -28,6 +28,9 @@ import { SelectGen } from "../select/user-select.component"
 import { ChecklistGen } from "../checklist/user-checklist.component"
 import { ListGen } from "../list/user-list.component"
 import { StepsGen } from "../steps/user-steps.component"
+import { IconLineSeperator } from "../lineSeperator/line-seperator-component"
+import { BackButtonGen } from "../backButton/back-component"
+import { LinkButtonGen } from "../link/link-component"
 import { AvatarComponentGen } from "../avatar-new/user-avatar.component"
 import { LogoComponentGen } from "../logo-new/user-logo.component"
 import { LoaderComponentGen } from "../loader-new/user-loader.component"
@@ -42,6 +45,9 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.LOGOBAR]: LogoBarGen,
   [CRAFT_ELEMENTS.PROGRESSBAR]: ProgressBarGen,
   [CRAFT_ELEMENTS.ICONBUTTON]: IconButtonGen,
+  [CRAFT_ELEMENTS.LINESELECTOR]: IconLineSeperator,
+  [CRAFT_ELEMENTS.BACKBUTTON]: BackButtonGen,
+  [CRAFT_ELEMENTS.LINKBUTTON]: LinkButtonGen,
   [CRAFT_ELEMENTS.LOGOCOMPONENT]: LogoComponentGen,
   [CRAFT_ELEMENTS.LOADERCOMPONENT]: LoaderComponentGen,
   [CRAFT_ELEMENTS.IMAGECOMPONENT]: ImageComponentGen,
@@ -69,12 +75,11 @@ interface Props {
   compressedCraftState: string
 }
 
-
-
-const ResolvedComponentsFromCraftState = ({ screen }): React.ReactElement | null => {
+const ResolvedComponentsFromCraftState = ({
+  screen,
+}): React.ReactElement | null => {
   const [toRender, setToRender] = useState<React.ReactElement | null>(null)
   const globalTheme = useAppSelector((state: RootState) => state?.theme)
-
 
   useEffect(() => {
     try {
@@ -93,35 +98,52 @@ const ResolvedComponentsFromCraftState = ({ screen }): React.ReactElement | null
 
           const { type, props, nodes = [], linkedNodes = {} } = nodeData
           const resolvedName = type?.resolvedName
-          const ReactComponent = resolvedName ? CraftJsUserComponents[resolvedName] : null
-          console.log(`Rendering component: ${resolvedName}`, props);
+          const ReactComponent = resolvedName
+            ? CraftJsUserComponents[resolvedName]
+            : null
 
-          let filteredNodes = nodes;
+          let filteredNodes = nodes
           if (resolvedName !== "AvatarComponent") {
             const avatarComponents = nodes.filter(
-              (childNodeId) => craftState[childNodeId].type.resolvedName === "AvatarComponent"
-            );
+              (childNodeId) =>
+                craftState[childNodeId].type.resolvedName === "AvatarComponent"
+            )
             filteredNodes = nodes.filter(
-              (childNodeId) => craftState[childNodeId].type.resolvedName !== "AvatarComponent"
-            );
+              (childNodeId) =>
+                craftState[childNodeId].type.resolvedName !== "AvatarComponent"
+            )
             if (avatarComponents.length > 0) {
-              filteredNodes.push(avatarComponents[avatarComponents.length - 1]);
+              filteredNodes.push(avatarComponents[avatarComponents.length - 1])
             }
           }
-          
-          const childNodes = filteredNodes.map((childNodeId: string) => parse(childNodeId, nodeId));
-          const linkedNodesElements = filteredNodes.concat(Object.values(linkedNodes)).map((linkedNodeData: any) => {
-            const linkedNodeId = linkedNodeData.nodeId || linkedNodeData;
-            return parse(linkedNodeId, nodeId);
-          });
 
+          const childNodes = filteredNodes.map((childNodeId: string) =>
+            parse(childNodeId, nodeId)
+          )
+          const linkedNodesElements = filteredNodes
+            .concat(Object.values(linkedNodes))
+            .map((linkedNodeData: any) => {
+              const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
+              return parse(linkedNodeId, nodeId)
+            })
 
           const parsedNode = ReactComponent ? (
-            <ReactComponent {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId} scrollY={scrollY}>
+            <ReactComponent
+              {...props}
+              parentNodeId={parentNodeId}
+              nodeId={nodeId}
+              key={nodeId}
+              scrollY={scrollY}
+            >
               {linkedNodesElements}
             </ReactComponent>
           ) : (
-            <div {...props} parentNodeId={parentNodeId} nodeId={nodeId} key={nodeId}>
+            <div
+              {...props}
+              parentNodeId={parentNodeId}
+              nodeId={nodeId}
+              key={nodeId}
+            >
               {linkedNodesElements}
             </div>
           )
@@ -139,9 +161,6 @@ const ResolvedComponentsFromCraftState = ({ screen }): React.ReactElement | null
       setToRender(<div>Error loading components.</div>)
     }
   }, [screen, globalTheme])
-
-
-
   return <Suspense fallback={<h2>Loading...</h2>}>{toRender}</Suspense>
 }
 

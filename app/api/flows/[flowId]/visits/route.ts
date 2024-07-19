@@ -23,7 +23,11 @@ export async function POST(
         requestUrl: req.url,
         userId: "unknown",
       })
-      return NextResponse.json({ error: "Flow not found" }, { status: 400 })
+      const response = NextResponse.json({ error: "Flow not found" }, { status: 400 })
+      response.headers.set("Access-Control-Allow-Origin", "*")
+      response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+      return response
     }
 
     let reqBody
@@ -36,10 +40,14 @@ export async function POST(
         requestUrl: req.url,
         userId: "unknown",
       })
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: "Request body is empty" },
         { status: 400 }
       )
+      response.headers.set("Access-Control-Allow-Origin", "*")
+      response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+      return response
     }
 
     if (!reqBody.stepId) {
@@ -49,10 +57,14 @@ export async function POST(
         requestUrl: req.url,
         userId: "unknown",
       })
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: "Step Id is required" },
         { status: 400 }
       )
+      response.headers.set("Access-Control-Allow-Origin", "*")
+      response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+      return response
     }
 
     const userAgent = req.headers.get("user-agent") || "unknown"
@@ -67,7 +79,11 @@ export async function POST(
       },
     })
 
-    return NextResponse.json(visit)
+    const response = NextResponse.json(visit)
+    response.headers.set("Access-Control-Allow-Origin", "*")
+    response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
   } catch (error) {
     await logError({
       statusCode: 500,
@@ -75,9 +91,22 @@ export async function POST(
       requestUrl: req.url,
       userId: "unknown",
     })
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: error.message || "An unexpected error occurred" },
       { status: 500 }
     )
+    response.headers.set("Access-Control-Allow-Origin", "*")
+    response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
   }
 }
+
+export async function OPTIONS() {
+  const response = new NextResponse(null, { status: 204 })
+  response.headers.set("Access-Control-Allow-Origin", "*")
+  response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+  return response
+}
+

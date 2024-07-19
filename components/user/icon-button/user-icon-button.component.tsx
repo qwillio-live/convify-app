@@ -18,9 +18,15 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  navigateToScreen,
+  setCurrentScreenName,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -42,6 +48,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
@@ -144,13 +155,41 @@ export const IconButtonGen = ({
   ...props
 }) => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const pathName = usePathname()
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
+  //  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const screenValidated =
+    useAppSelector(
+      (state: RootState) =>
+        state.screen?.screens[selectedScreen]?.screenValidated
+    ) || false
+
   const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
+    dispatch(
+      validateScreen({
+        current: currentScreenName,
+        next: nextScreen.screenName,
+      })
+    )
+    // if(screenValidated){
+    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+    //   router.push(`${pathName}#${nextScreen?.screenName}`);
+    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+    // }else{
+    //   console.log("SCREEN NOT VALIDATED", screenValidated)
+    // }
   }
   return (
     <div
-      className="w-full relative"
+      className="relative w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -163,53 +202,102 @@ export const IconButtonGen = ({
         paddingRight: `${props.marginRight}px`,
       }}
     >
-      <Link href={`${pathName}#${nextScreen}`} className="contents">
-        <StyledCustomButton
-          fontFamily={fontFamily?.value}
-          color={color.value}
-          background={background.value}
-          backgroundHover={backgroundHover.value}
-          borderHoverColor={borderHoverColor?.value}
-          colorHover={colorHover.value}
-          radius={radius.value}
-          flexDirection={flexDirection}
-          justifyContent={justifyContent}
-          borderColor={borderColor.value}
-          border={border}
-          marginLeft={marginLeft}
-          width={width}
-          size={size}
-          buttonSize={buttonSize}
-          height={height}
-          marginRight={marginRight}
-          marginTop={marginTop}
-          marginBottom={marginBottom}
-          paddingLeft={paddingLeft}
-          paddingTop={paddingTop}
-          paddingRight={paddingRight}
-          paddingBottom={paddingBottom}
-          alignItems={alignItems}
-          gap={gap}
-          mobileScreen={false}
-          {...props}
-          className="text-[1rem]"
-          onClick={() => console.log("Button clicked", text)}
+      {/* <Link href={`${pathName}#${nextScreen}`} className="contents"> */}
+      <StyledCustomButton
+        fontFamily={fontFamily?.value}
+        color={color.value}
+        background={background.value}
+        backgroundHover={backgroundHover.value}
+        borderHoverColor={borderHoverColor?.value}
+        colorHover={colorHover.value}
+        radius={radius.value}
+        flexDirection={flexDirection}
+        justifyContent={justifyContent}
+        borderColor={borderColor.value}
+        border={border}
+        marginLeft={marginLeft}
+        width={width}
+        size={size}
+        buttonSize={buttonSize}
+        height={height}
+        marginRight={marginRight}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        paddingLeft={paddingLeft}
+        paddingTop={paddingTop}
+        paddingRight={paddingRight}
+        paddingBottom={paddingBottom}
+        alignItems={alignItems}
+        gap={gap}
+        mobileScreen={false}
+        {...props}
+        className="text-[1rem]"
+        onClick={() => handleNavigateToContent()}
+      >
+        <div
+          style={{
+            maxWidth: "100%",
+            transitionProperty: "all",
+            overflowX: "clip",
+            textOverflow: "ellipsis",
+          }}
         >
+          {text}
+        </div>
+        {enableIcon && icon.pictureType !== PictureTypes.NULL && (
           <div
-            style={{
-              maxWidth: "100%",
-              transitionProperty: "all",
-              overflowX: "clip",
-              textOverflow: "ellipsis",
-            }}
+            className={cn("ml-[10px]", {
+              "mt-[4px]":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "large",
+              "mt-[2px]":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "medium",
+              "mt-0":
+                icon.pictureType === PictureTypes.EMOJI &&
+                buttonSize === "small",
+            })}
           >
-            {text}
+            {icon.pictureType === PictureTypes.ICON ? (
+              <SvgRenderer
+                iconName={icon.picture}
+                width={IconSizeValues[buttonSize]}
+                height={IconSizeValues[buttonSize]}
+              />
+            ) : icon.pictureType === PictureTypes.EMOJI ? (
+              <span
+                className={cn("flex items-center justify-center", {
+                  "text-[26px] leading-[26px]": buttonSize === "large",
+                  "text-[22px] leading-[22px]": buttonSize === "medium",
+                  "text-[18px] leading-[18px]": buttonSize === "small",
+                })}
+              >
+                {icon.picture}
+              </span>
+            ) : (
+              <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+                <source
+                  media="(max-width:100px)"
+                  srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+                />
+                <img
+                  src={(icon.picture as ImagePictureTypes)?.desktop}
+                  className={cn(
+                    "aspect-auto h-auto overflow-hidden object-cover",
+                    {
+                      "w-[26px]": buttonSize === "large",
+                      "w-[22px]": buttonSize === "medium",
+                      "w-[18px]": buttonSize === "small",
+                    }
+                  )}
+                  loading="lazy"
+                />
+              </picture>
+            )}
           </div>
-          {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
-          )}
-        </StyledCustomButton>
-      </Link>
+        )}
+      </StyledCustomButton>
+      {/* </Link> */}
     </div>
   )
 }
@@ -367,7 +455,7 @@ export const IconButton = ({
     (state) => state.theme?.general?.secondaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state) => state?.screen?.screens)
   const screensLength = useAppSelector(
     (state: RootState) => state?.screen?.screens?.length ?? 0
   )
@@ -382,13 +470,52 @@ export const IconButton = ({
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""
-
+  const nextScreenId =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+        ]?.screenId
+    ) || ""
+  const screenNames = useScreenNames()
 
   //editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
   useEffect(() => {
+    let screenNameChanged = false
     if (buttonAction === "next-screen") {
-      setProp((props) => (props.nextScreen = nextScreenName), 1000)
+      setProp(
+        (props) =>
+          (props.nextScreen = {
+            screenName: nextScreenName,
+            screenId: nextScreenId,
+          }),
+        200
+      )
+    } else if (buttonAction === "custom-action") {
+      screenNames?.map((screen) => {
+        if (screen.screenId === nextScreen.screenId) {
+          setProp(
+            (props) =>
+              (props.nextScreen = {
+                screenName: screen.screenName,
+                screenId: screen.screenId,
+              }),
+            200
+          )
+          screenNameChanged = true
+        }
+      })
+      if (!screenNameChanged) {
+        setProp((props) => (props.buttonAction = "next-screen"), 200)
+        setProp(
+          (props) =>
+            (props.nextScreen = {
+              screenId: nextScreenId,
+              screenName: nextScreenName,
+            })
+        )
+      }
     }
   }, [nextScreenName, buttonAction])
 
@@ -441,21 +568,49 @@ export const IconButton = ({
   }, [primaryColor])
   const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
-    const value = e.target.innerText
-    if (value.length <= maxLength) {
-      setProp((props) => (props.text = value))
-      // handlePropChangeDebounced('text',value);
-      // handlePropChangeThrottled('text',value)
-    } else {
-      if (ref.current) {
-        e.target.innerText = text || "" // Restore the previous text
-        const selection = window.getSelection()
-        const range = document.createRange()
-        range.selectNodeContents(ref.current)
-        range.collapse(false) // Move cursor to the end
-        selection?.removeAllRanges()
-        selection?.addRange(range)
+    if (ref.current) {
+      const currentText = ref.current.innerText
+      if (currentText.length <= maxLength) {
+        // handlePropChangeThrottled('text',currentText);
+        handlePropChangeDebounced("text", currentText)
+      } else {
+        const trimmedText = currentText.substring(0, maxLength)
+        // handlePropChangeThrottled('text',trimmedText);
+        handlePropChangeDebounced("text", trimmedText)
+        ref.current.innerText = trimmedText
+        placeCaretAtEnd(ref.current)
       }
+    }
+
+    // const value = e.target.innerText;
+    // if(value >= maxLength){
+    //   return;
+    // }
+    // if (parseInt(value?.length) <= parseInt(maxLength)) {
+    //   // setProp((props) => props.text = value);
+    //   // handlePropChangeDebounced('text',value);
+    //   handlePropChangeThrottled('text',value.substring(0,maxLength))
+    // } else {
+    //   if(ref.current){
+    //     // e.target.innerText = text || ''; // Restore the previous text
+    //     const selection = window.getSelection();
+    //     const range = document.createRange();
+    //     range.selectNodeContents(ref.current);
+    //     range.collapse(false); // Move cursor to the end
+    //     selection?.removeAllRanges();
+    //     selection?.addRange(range);
+    //   }
+    // }
+  }
+
+  const placeCaretAtEnd = (element) => {
+    const range = document.createRange()
+    const selection = window.getSelection()
+    if (selection) {
+      range.selectNodeContents(element)
+      range.collapse(false)
+      selection.removeAllRanges()
+      selection.addRange(range)
     }
   }
 
@@ -469,7 +624,7 @@ export const IconButton = ({
         currentRef.removeEventListener("input", handleTextChange)
       }
     }
-  }, [text, maxLength, handleTextChange])
+  }, [text, maxLength])
   const throttledSetProp = useCallback(
     throttle((property, value) => {
       setProp((prop) => {
@@ -483,7 +638,9 @@ export const IconButton = ({
     throttledSetProp(property, value)
   }
   const handleNavigateToScreen = async () => {
-    return
+    dispatch(
+      validateScreen({ current: selectedScreen, next: nextScreen.screenName })
+    )
     // dispatch(navigateToScreen(nextScreen));
     // if(screens){
     //   const screen = screens.find(screen => screen.screenName === nextScreen);
@@ -565,26 +722,79 @@ export const IconButton = ({
           {...props}
           onClick={() => handleNavigateToScreen()}
         >
-          <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
+          <div className="relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip">
+            {/** @ts-ignore */}
             <ContentEditable
-              html={text}
+              html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}
               disabled={disabled}
               style={{
                 maxWidth: "100%",
+                position: "relative",
+                border: text?.length <= 0 && "1px dotted white",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
               }}
-              className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+              className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
                 handleTextChange(e)
+                // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
               }}
               tagName="div"
             />
           </div>
-          {enableIcon && (
-            <IconGenerator icon={icon} size={IconSizeValues[buttonSize]} />
+          {enableIcon && icon.pictureType !== PictureTypes.NULL && (
+            <div
+              className={cn("ml-[10px]", {
+                "mt-[4px]":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "large",
+                "mt-[2px]":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "medium",
+                "mt-0":
+                  icon.pictureType === PictureTypes.EMOJI &&
+                  buttonSize === "small",
+              })}
+            >
+              {icon.pictureType === PictureTypes.ICON ? (
+                <SvgRenderer
+                  iconName={icon.picture}
+                  width={IconSizeValues[buttonSize]}
+                  height={IconSizeValues[buttonSize]}
+                />
+              ) : icon.pictureType === PictureTypes.EMOJI ? (
+                <span
+                  className={cn("flex items-center justify-center", {
+                    "text-[26px] leading-[26px]": buttonSize === "large",
+                    "text-[22px] leading-[22px]": buttonSize === "medium",
+                    "text-[18px] leading-[18px]": buttonSize === "small",
+                  })}
+                >
+                  {icon.picture}
+                </span>
+              ) : (
+                <picture key={(icon.picture as ImagePictureTypes)?.desktop}>
+                  <source
+                    media="(max-width:100px)"
+                    srcSet={(icon.picture as ImagePictureTypes)?.mobile}
+                  />
+                  <img
+                    src={(icon.picture as ImagePictureTypes)?.desktop}
+                    className={cn(
+                      "aspect-auto h-auto w-full overflow-hidden object-cover",
+                      {
+                        "w-[26px]": buttonSize === "large",
+                        "w-[22px]": buttonSize === "medium",
+                        "w-[18px]": buttonSize === "small",
+                      }
+                    )}
+                    loading="lazy"
+                  />
+                </picture>
+              )}
+            </div>
           )}
         </StyledCustomButton>
       </div>
@@ -610,7 +820,10 @@ export type IconButtonProps = {
   color: StyleProperty
   colorHover: StyleProperty
   text: string
-  icon: string
+  icon: {
+    picture: ImagePictureTypes | string | null
+    pictureType: PictureTypes
+  }
   paddingLeft: string | number
   paddingTop: string | number
   paddingRight: string | number
@@ -696,7 +909,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  icon: "arrowright",
+  icon: {
+    picture: null,
+    pictureType: PictureTypes.NULL,
+  },
   paddingLeft: "16",
   paddingTop: "26",
   paddingRight: "16",

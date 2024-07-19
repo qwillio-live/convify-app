@@ -1,6 +1,8 @@
 import { darken, rgba } from "polished"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
+import { PictureTypes } from "@/components/PicturePicker"
+
 import { UserInputProps, UserInputSizes } from "./user-input.component"
 
 const useInputThemePresets = () => {
@@ -75,7 +77,7 @@ const useInputThemePresets = () => {
     fieldName: "Field name",
     floatingLabel: false,
     enableIcon: false,
-    icon: "arrowright",
+    icon: "interface-arrows-right-arrow-right-keyboard",
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -151,7 +153,7 @@ const useInputThemePresets = () => {
     fieldName: "Field name",
     floatingLabel: false,
     enableIcon: false,
-    icon: "arrowright",
+    icon: "interface-arrows-right-arrow-right-keyboard",
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",

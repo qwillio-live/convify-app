@@ -66,6 +66,8 @@ export const Button = ({
       {...props}
     >
       {isHovered && <Controller nameOfComponent={"BUTTON"} />}
+
+      {/** @ts-ignore */}
       <ContentEditable
         html={text}
         onChange={(e) =>
@@ -145,7 +147,10 @@ export const ButtonSettings = () => {
                 min={0}
                 className="w-full"
                 onChange={(e) =>
-                  setProp((props) => (props.marginBottom = e.target.value), 1000)
+                  setProp(
+                    (props) => (props.marginBottom = e.target.value),
+                    1000
+                  )
                 }
               />
             </div>
@@ -246,7 +251,6 @@ export const ButtonDefaultProps = {
 Button.craft = {
   rules: {
     canMoveIn: () => true,
-
   },
   props: ButtonDefaultProps,
   related: {
