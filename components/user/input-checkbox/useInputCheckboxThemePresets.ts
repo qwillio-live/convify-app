@@ -1,11 +1,17 @@
-import { darken, rgba } from "polished"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
-import { PictureTypes } from "@/components/PicturePicker"
+import { useTranslations } from "next-intl"
+import { darken, rgba } from "polished"
 
-import { UserInputProps, UserInputSizes } from "./user-input.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
-const useInputThemePresets = () => {
+import {
+  UserInputCheckboxProps,
+  UserInputSizes,
+} from "./user-input-checkbox.component"
+
+const useInputCheckboxThemePresets = () => {
+  const t = useTranslations("Components")
+
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -15,13 +21,9 @@ const useInputThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce"
   )
 
-  const outlinedPreset: UserInputProps = {
-    compId: "",
+  const outlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
-    parentScreenId: "",
     fontSize: 16,
-    fieldType: "data",
-    required: false,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -33,8 +35,8 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
-    backgroundColor: "transparent",
+    placeholder: t("CheckboxPlaceholder"),
+    backgroundColor: "inherit",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -73,12 +75,13 @@ const useInputThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("CheckboxPlaceholder"),
+    fieldName: t("CheckboxFieldName"),
     floatingLabel: false,
     enableIcon: false,
-    icon: "interface-arrows-right-arrow-right-keyboard",
+    icon: "arrowright",
     preset: "outlined",
+    settingsTab: "content",
     error: false,
     errorText: "Please specify an answer",
     errorIcon: "x",
@@ -91,17 +94,12 @@ const useInputThemePresets = () => {
       bottomLeftRadius: 8,
       bottomRightRadius: 8,
     },
-    settingsTab: "content",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
 
-  const underlinedPreset: UserInputProps = {
-    compId: "",
-    parentScreenId: "",
+  const underlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    fieldType: "data",
-    required: false,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -149,89 +147,14 @@ const useInputThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
-    floatingLabel: false,
-    enableIcon: false,
-    icon: "interface-arrows-right-arrow-right-keyboard",
-    preset: "underlined",
-    error: false,
-    errorText: "Please specify an answer",
-    errorIcon: "x",
-    errorStyles: {
-      borderColor: "transparent",
-      textColor: "#cc0000",
-      backgroundColor: "transparent",
-      topLeftRadius: 0,
-      topRightRadius: 0,
-      bottomLeftRadius: 0,
-      bottomRightRadius: 0,
-    },
-    settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-  }
-
-  const formPreset: UserInputProps = {
-    inputValue: "",
-    fontSize: 16,
-    textColor: "#000",
-    width: 366,
-    fontWeight: "normal",
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 20,
-    marginBottom: 20,
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    placeholder: "Placeholder",
-    backgroundColor: "transparent",
-    backgroundImage: theme?.general?.backgroundImage,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    borderColor: {
-      value: "#eaeaeb",
-      globalStyled: false,
-      isCustomized: false,
-    },
-    activeBorderColor: {
-      value: theme?.general?.primaryColor || "#3182ce",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    primaryFont: {
-      value: theme?.text?.primaryFont || "--font-heading",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    secondaryFont: {
-      value: theme?.text?.secondaryFont || "--font-inter",
-      globalStyled: true,
-      isCustomized: false,
-    },
-    borderWidth: 1,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderRadius: 8,
-    topLeftRadius: 8,
-    topRightRadius: 8,
-    bottomLeftRadius: 8,
-    bottomRightRadius: 8,
-    isActive: false,
-    required: false,
-    inputRequired: false,
-    fullWidth: true,
-    size: UserInputSizes.full,
-    label: "Label",
-    fieldName: "Field name",
+    label:
+      "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
+    fieldName: "Agreement",
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
-    preset: "form",
+    preset: "underlined",
+    settingsTab: "content",
     error: false,
     errorText: "Please specify an answer",
     errorIcon: "x",
@@ -244,14 +167,10 @@ const useInputThemePresets = () => {
       bottomLeftRadius: 8,
       bottomRightRadius: 8,
     },
-    settingsTab: "content",
-    compId: "",
-    parentScreenId: "",
-    fieldType: "data",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
 
-  return { outlinedPreset, underlinedPreset, formPreset }
+  return { outlinedPresetChecbox, underlinedPresetChecbox }
 }
 
-export default useInputThemePresets
+export default useInputCheckboxThemePresets

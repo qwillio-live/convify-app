@@ -1,11 +1,14 @@
+import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
-import { PictureTypes } from "@/components/PicturePicker"
 
-import { UserInputProps, UserInputSizes } from "./user-input.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
-const useInputThemePresets = () => {
+import { UserInputMailProps, UserInputSizes } from "./user-input-mail.component"
+
+const useInputMailThemePresets = () => {
+  const t = useTranslations("Components")
+
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -15,13 +18,9 @@ const useInputThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce"
   )
 
-  const outlinedPreset: UserInputProps = {
-    compId: "",
+  const outlinedPresetMail: UserInputMailProps = {
     inputValue: "",
-    parentScreenId: "",
     fontSize: 16,
-    fieldType: "data",
-    required: false,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -33,7 +32,7 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("EmailPlaceholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -73,11 +72,11 @@ const useInputThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("EmailLabel"),
+    fieldName: t("EmailFieldName"),
     floatingLabel: false,
-    enableIcon: false,
-    icon: "interface-arrows-right-arrow-right-keyboard",
+    enableIcon: true,
+    icon: "mail-send-envelope",
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -93,15 +92,12 @@ const useInputThemePresets = () => {
     },
     settingsTab: "content",
     id: `input-${hexoid(6)()}`
+
   }
 
-  const underlinedPreset: UserInputProps = {
-    compId: "",
-    parentScreenId: "",
+  const underlinedPresetMail: UserInputMailProps = {
     inputValue: "",
     fontSize: 16,
-    fieldType: "data",
-    required: false,
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -113,7 +109,7 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("EmailPlaceholder"),
     backgroundColor: "transparent",
     borderColor: {
       value: "#eaeaeb",
@@ -149,11 +145,11 @@ const useInputThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("EmailLabel"),
+    fieldName: t("EmailFieldName"),
     floatingLabel: false,
-    enableIcon: false,
-    icon: "interface-arrows-right-arrow-right-keyboard",
+    enableIcon: true,
+    icon: "mail-send-envelope",
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",
@@ -169,9 +165,10 @@ const useInputThemePresets = () => {
     },
     settingsTab: "content",
     id: `input-${hexoid(6)()}`
+
   }
 
-  const formPreset: UserInputProps = {
+  const formPresetMail: UserInputMailProps = {
     inputValue: "",
     fontSize: 16,
     textColor: "#000",
@@ -185,7 +182,7 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("EmailPlaceholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -222,16 +219,15 @@ const useInputThemePresets = () => {
     bottomLeftRadius: 8,
     bottomRightRadius: 8,
     isActive: false,
-    required: false,
     inputRequired: false,
     fullWidth: true,
-    size: UserInputSizes.full,
-    label: "Label",
-    fieldName: "Field name",
+    size: UserInputSizes.medium,
+    label: t("EmailLabel"),
+    fieldName: t("EmailFieldName"),
     floatingLabel: false,
-    enableIcon: false,
-    icon: "arrowright",
-    preset: "form",
+    enableIcon: true,
+    icon: "mail-send-envelope",
+    preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
     errorIcon: "x",
@@ -245,13 +241,11 @@ const useInputThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    compId: "",
-    parentScreenId: "",
-    fieldType: "data",
     id: `input-${hexoid(6)()}`
   }
 
-  return { outlinedPreset, underlinedPreset, formPreset }
+
+  return { outlinedPresetMail, underlinedPresetMail, formPresetMail }
 }
 
-export default useInputThemePresets
+export default useInputMailThemePresets

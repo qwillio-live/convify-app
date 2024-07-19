@@ -38,16 +38,21 @@ import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import { Card, CardContent } from "../user/card/user-card.component"
+import { CardContent } from "../user/card/user-card.component"
 import {
   Container,
   UserContainer,
 } from "../user/container/user-container.component"
+import { UserInputTextarea } from "../user/input-textarea/user-input-textarea.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { ImageComponent } from "../user/image-new/user-image.component"
 import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
+import { Form, FormContent } from "../user/form/user-form.component"
+import { UserInputCheckbox } from "../user/input-checkbox/user-input-checkbox.component"
+import { UserInputMail } from "../user/input-email/user-input-mail.component"
+import { UserInputPhone } from "../user/input-phone/user-input-phone.component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
 import { Loader } from "../user/loader/user-loader.component"
@@ -268,8 +273,13 @@ export function CreateFlowComponent() {
           Controller,
           Logo,
           HeadlineText,
+          Form,
+          FormContent,
           UserText,
           UserButton,
+          UserInputCheckbox,
+          UserInputMail,
+          UserInputPhone,
           ProgressBar,
           Element,
           Progress,
@@ -294,7 +304,7 @@ export function CreateFlowComponent() {
           Globe,
           Linkedin,
           Container,
-          Card,
+          // Card,
           CardContent,
           UserContainer,
           IconButton,
@@ -315,6 +325,7 @@ export function CreateFlowComponent() {
           LogoBar,
           LayoutContainer,
           Loader,
+          UserInputTextarea,
           Img,
         }}
         onRender={RenderNode}

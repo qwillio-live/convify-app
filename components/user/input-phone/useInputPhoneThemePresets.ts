@@ -1,12 +1,18 @@
+import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
-import { PictureTypes } from "@/components/PicturePicker"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
-import { UserInputProps, UserInputSizes } from "./user-input.component"
+import {
+  UserInputPhoneProps,
+  UserInputSizes,
+} from "./user-input-phone.component"
 
-const useInputThemePresets = () => {
+const useInputPhoneThemePresets = () => {
+  const t = useTranslations("Components")
+
   const theme = useAppSelector((state) => state.theme)
+
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
@@ -15,14 +21,11 @@ const useInputThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce"
   )
 
-  const outlinedPreset: UserInputProps = {
-    compId: "",
+  const outlinedPresetPhone: UserInputPhoneProps = {
     inputValue: "",
-    parentScreenId: "",
     fontSize: 16,
-    fieldType: "data",
-    required: false,
-    textColor: "#000",
+    color: "#000",
+    textColor: "#9CA3AF",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -33,7 +36,7 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("PhonePlaceholder"),
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -73,11 +76,11 @@ const useInputThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("PhoneLabel"),
+    fieldName: t("PhoneFieldName"),
     floatingLabel: false,
-    enableIcon: false,
-    icon: "interface-arrows-right-arrow-right-keyboard",
+    enableIcon: true,
+    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -93,15 +96,13 @@ const useInputThemePresets = () => {
     },
     settingsTab: "content",
     id: `input-${hexoid(6)()}`
+
   }
 
-  const underlinedPreset: UserInputProps = {
-    compId: "",
-    parentScreenId: "",
+  const underlinedPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
-    fieldType: "data",
-    required: false,
+    color: "#000",
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -113,7 +114,7 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
+    placeholder: t("PhonePlaceholder"),
     backgroundColor: "transparent",
     borderColor: {
       value: "#eaeaeb",
@@ -149,11 +150,11 @@ const useInputThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: "Label",
-    fieldName: "Field name",
+    label: t("PhoneLabel"),
+    fieldName: t("PhoneFieldName"),
     floatingLabel: false,
-    enableIcon: false,
-    icon: "interface-arrows-right-arrow-right-keyboard",
+    enableIcon: true,
+    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",
@@ -169,11 +170,13 @@ const useInputThemePresets = () => {
     },
     settingsTab: "content",
     id: `input-${hexoid(6)()}`
+
   }
 
-  const formPreset: UserInputProps = {
+  const formPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
+    color: "#000",
     textColor: "#000",
     width: 366,
     fontWeight: "normal",
@@ -185,12 +188,8 @@ const useInputThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: "Placeholder",
-    backgroundColor: "transparent",
-    backgroundImage: theme?.general?.backgroundImage,
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
+    placeholder: t("PhonePlaceholder"),
+    backgroundColor: "inherit",
     borderColor: {
       value: "#eaeaeb",
       globalStyled: false,
@@ -211,47 +210,42 @@ const useInputThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    borderWidth: 1,
-    borderTopWidth: 1,
+    borderWidth: 0,
+    borderTopWidth: 0,
     borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderRadius: 8,
-    topLeftRadius: 8,
-    topRightRadius: 8,
-    bottomLeftRadius: 8,
-    bottomRightRadius: 8,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderRadius: 0,
+    topLeftRadius: 0,
+    topRightRadius: 0,
+    bottomLeftRadius: 0,
+    bottomRightRadius: 0,
     isActive: false,
-    required: false,
     inputRequired: false,
     fullWidth: true,
-    size: UserInputSizes.full,
-    label: "Label",
-    fieldName: "Field name",
-    floatingLabel: false,
-    enableIcon: false,
-    icon: "arrowright",
+    size: UserInputSizes.medium,
+    label: t("PhoneLabel"),
+    fieldName: t("PhoneFieldName"),
+    floatingLabel: true,
+    enableIcon: true,
+    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
     preset: "form",
     error: false,
     errorText: "Please specify an answer",
     errorIcon: "x",
     errorStyles: {
-      borderColor: "#cc0000",
+      borderColor: "transparent",
       textColor: "#cc0000",
-      backgroundColor: rgba("#cc0000", 0.1),
+      backgroundColor: "transparent",
       topLeftRadius: 0,
       topRightRadius: 0,
-      bottomLeftRadius: 8,
-      bottomRightRadius: 8,
+      bottomLeftRadius: 0,
+      bottomRightRadius: 0,
     },
     settingsTab: "content",
-    compId: "",
-    parentScreenId: "",
-    fieldType: "data",
     id: `input-${hexoid(6)()}`
   }
-
-  return { outlinedPreset, underlinedPreset, formPreset }
+  return { outlinedPresetPhone, underlinedPresetPhone, formPresetPhone }
 }
 
-export default useInputThemePresets
+export default useInputPhoneThemePresets

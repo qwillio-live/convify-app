@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import hexoid from "hexoid"
 import {
   Activity,
   Anchor,
@@ -694,6 +695,9 @@ export const UserInput = ({ ...props }) => {
               </div>
             )}
             <UserInputStyled
+              data-answer={props.label}
+              data-value={props.inputValue}
+              id={props.id}
               ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
@@ -728,14 +732,17 @@ export const UserInput = ({ ...props }) => {
                 },
                 `outline-none
           ring-0
-          ring-opacity-0
+          ring-opacity-0/0
           transition-all
           duration-200
           ease-in-out
-          focus-visible:outline-none
-          focus-visible:ring-0
-          focus-visible:ring-transparent
-          focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+          focus-visible:ring-transparent focus-visible:ring-offset-0
+          send-response
+          `
+          // focus-visible:outline-none
+          // focus-visible:ring-0
+          // focus-visible:ring-transparent
+          // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
               )}
               onChange={
                 (e) => {
@@ -848,6 +855,7 @@ export type UserInputProps = {
     bottomRightRadius: number
   }
   settingsTab: string
+  id: string
 }
 export const UserInputDefaultProps: UserInputProps = {
   compId: "",
@@ -922,6 +930,7 @@ export const UserInputDefaultProps: UserInputProps = {
     bottomRightRadius: 8,
   },
   settingsTab: "content",
+  id: `input-${hexoid(6)()}`,
 }
 
 UserInput.craft = {
