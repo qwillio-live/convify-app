@@ -2,7 +2,10 @@ import { useCallback, useEffect, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 
-import { setHeaderPosition, setPartialStyles } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import {
+  setHeaderPosition,
+  setPartialStyles,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import {
@@ -16,14 +19,17 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { FontSelector } from "./font-selector.component"
-import {   Select,
+import {
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,SelectGroup } from "@/components/custom-select"
+  SelectValue,
+  SelectGroup,
+} from "@/components/custom-select"
 import { applyHeaderPosition } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 import { updateHeaderPosition } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-
+import { X } from "lucide-react"
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
@@ -153,6 +159,7 @@ export const GlobalThemeSettings = (props: Props) => {
   //   })
   // }
 
+  console.log('bg color, default bg"', backgroundColor, defaultBackgroundColor)
   return (
     <>
       <ScrollArea>
@@ -162,7 +169,7 @@ export const GlobalThemeSettings = (props: Props) => {
               <span className="text-sm font-medium">{t("General")} </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+              <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="headerscroll"
                   className="basis-2/3 whitespace-nowrap text-nowrap font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -175,19 +182,15 @@ export const GlobalThemeSettings = (props: Props) => {
                   onValueChange={(e) => {
                     dispatch(setHeaderPosition(e))
                     // dispatch(updateHeaderPosition(e))
-                }}
+                  }}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Header scroll" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                    <SelectItem value={"absolute"}>
-                      {t("Fixed")}
-                    </SelectItem>
-                    <SelectItem value={"relative"}>
-                      {t("Scroll")}
-                    </SelectItem>
+                      <SelectItem value={"absolute"}>{t("Fixed")}</SelectItem>
+                      <SelectItem value={"relative"}>{t("Scroll")}</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -243,7 +246,8 @@ export const GlobalThemeSettings = (props: Props) => {
                   {t("Background Color")}
                 </label>
                 <Input
-                  value={backgroundColor || defaultBackgroundColor}
+                  defaultValue={"white"}
+                  value={backgroundColor}
                   onChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
                     handleStyleChangeDebounced({
@@ -251,10 +255,23 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
-                  className=" basis-1/3"
+                  className={` h-6 w-10 border-none p-0`}
                   type={"color"}
                   id="backgroundcolor"
                 />
+                {backgroundColor !== "#ffffff" && (
+                  <button
+                    onClick={(e) => {
+                      // dispatch(setBackgroundColor(e.target.value))
+                      handleStyleChangeDebounced({
+                        general: { backgroundColor: "#ffffff" },
+                      })
+                      // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
+                    }}
+                  >
+                    <X size={15} />
+                  </button>
+                )}
               </div>
 
               <div className="col-span-2 flex flex-col items-center space-y-2">
@@ -262,7 +279,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   htmlFor="backgroundimage"
                   className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  {t("Background Image")}
+                  {t("Background Image")}ca
                 </label>
                 {/* <Input
                   onChange={handleFileChange}

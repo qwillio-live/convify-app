@@ -50,13 +50,13 @@ const initialState: GlobalThemeState = {
   defaultGeneral: {
     primaryColor: "#4050ff",
     secondaryColor: "#4050ff",
-    backgroundColor: "rgba(255,255,255,.1)",
+    backgroundColor: "white",
     backgroundImage: undefined,
   },
   general: {
     primaryColor: "#4050ff",
     secondaryColor: "#4050ff",
-    backgroundColor: "rgba(255,255,255,.1)",
+    backgroundColor: "white",
     backgroundImage: undefined,
   },
   defaultText: {
