@@ -345,7 +345,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
 
   &:hover {
     border-style: solid;
