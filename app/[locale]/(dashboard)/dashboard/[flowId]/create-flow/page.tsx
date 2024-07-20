@@ -8,6 +8,7 @@ import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
+import WhatsAppSvg from "@/assets/images/png-clipart-call-application-icon-whatsapp-computer-icons-whatsapp-logo-black-and-white.svg"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +25,7 @@ import ConnectFlowComponents from "@/components/sections/createFlow/connect/Conn
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { setCurrentScreenName } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import Image from "next/image"
 
 export default function CreateFlowsPage({ params: { flowId } }) {
   const [openCreateFlow, setOpenCreatedFlow] = useState(true)
@@ -38,7 +40,7 @@ export default function CreateFlowsPage({ params: { flowId } }) {
 
   const [tab, setTab] = useState("create")
 
-  const t = useTranslations("CreateFlow")
+  const t = useTranslations("Components")
 
   // store the current tab value
   const onTabChange = (value: string) => {
@@ -269,11 +271,44 @@ export default function CreateFlowsPage({ params: { flowId } }) {
                       <div className="text-[rgb(38,38,39)]] py-3 text-sm">
                         <div className="flex flex-row items-center justify-between">
                           <div className="flex">
-                            <a
-                              href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dfacebook-button"
-                              target="_blank"
-                              rel="noreferrer"
-                              aria-label="facebook"
+                            <button
+                              onClick={() => setIsCustomLinkOpen(true)}
+                              className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="-1 -1 16 16"
+                                width="1.5em"
+                                height="1.2em"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  fill-rule="evenodd"
+                                  d="M7 .38c3.614-.003 6.627 3.016 6.627 6.623c0 3.61-3.013 6.62-6.627 6.618a6.64 6.64 0 0 1-2.753-.596l-3.28.593a.5.5 0 0 1-.558-.668l.94-2.498a6.643 6.643 0 0 1-.97-3.45C.38 3.395 3.39.382 7 .38m3.325 9.436c-.737.596-1.878 1.198-2.969.498c-1.43-.919-2.696-2.126-3.614-3.557c-.539-.838-.032-2.18.726-2.998c.302-.327.8-.275 1.129.025l.692.632c.21.192.218.526.087.78c-.207.398-.329.933-.073 1.332c.322.5.718.993 1.664 1.28c.286.088.653.05.965-.076c.261-.106.592-.105.785.101l.644.685c.355.378.367.972-.036 1.298"
+                                  clip-rule="evenodd"
+                                ></path>
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => setIsCustomLinkOpen(true)}
+                              className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
+                            >
+                              <svg
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 512 512"
+                              >
+                                <path
+                                  d="M0 0 C1.01790619 0.00215515 2.03581238 0.0043103 3.08456421 0.00653076 C17.69363523 0.05620146 32.02575853 0.30709809 46.375 3.3125 C47.34985352 3.51117676 48.32470703 3.70985352 49.32910156 3.91455078 C93.60576933 13.176436 134.51200788 32.08105439 168.375 62.3125 C169.21804688 63.04597656 170.06109375 63.77945313 170.9296875 64.53515625 C181.66210986 73.98174526 191.58989874 84.02190055 200.375 95.3125 C201.15101563 96.2715625 201.92703125 97.230625 202.7265625 98.21875 C227.59099398 129.47689243 243.7021571 166.73831276 251.6875 205.75 C251.83485596 206.46889404 251.98221191 207.18778809 252.1340332 207.9284668 C255.10789088 223.57475609 255.74800362 239.04818046 255.6875 254.9375 C255.68534485 255.95540619 255.6831897 256.97331238 255.68096924 258.02206421 C255.63129854 272.63113523 255.38040191 286.96325853 252.375 301.3125 C252.07698486 302.77478027 252.07698486 302.77478027 251.77294922 304.26660156 C242.49419055 348.62393325 223.45590652 389.30601236 193.375 423.3125 C192.63894531 424.15941406 191.90289062 425.00632812 191.14453125 425.87890625 C181.69403504 436.60323983 171.66325526 446.52922273 160.375 455.3125 C158.93640625 456.47652344 158.93640625 456.47652344 157.46875 457.6640625 C126.21060757 482.52849398 88.94918724 498.6396571 49.9375 506.625 C49.21860596 506.77235596 48.49971191 506.91971191 47.7590332 507.0715332 C32.11274391 510.04539088 16.63931954 510.68550362 0.75 510.625 C-0.26790619 510.62284485 -1.28581238 510.6206897 -2.33456421 510.61846924 C-16.94363523 510.56879854 -31.27575853 510.31790191 -45.625 507.3125 C-47.08728027 507.01448486 -47.08728027 507.01448486 -48.57910156 506.71044922 C-92.85576933 497.448564 -133.76200788 478.54394561 -167.625 448.3125 C-168.46804687 447.57902344 -169.31109375 446.84554688 -170.1796875 446.08984375 C-180.91210986 436.64325474 -190.83989874 426.60309945 -199.625 415.3125 C-200.40101563 414.3534375 -201.17703125 413.394375 -201.9765625 412.40625 C-244.12046143 359.42534849 -261.1206577 290.60749631 -253.78540039 223.86181641 C-247.655939 173.44108206 -226.46196183 125.21412027 -192.625 87.3125 C-191.52478516 86.04792969 -191.52478516 86.04792969 -190.40234375 84.7578125 C-180.95575474 74.02539014 -170.91559945 64.09760126 -159.625 55.3125 C-158.18640625 54.14847656 -158.18640625 54.14847656 -156.71875 52.9609375 C-125.46060757 28.09650602 -88.19918724 11.9853429 -49.1875 4 C-48.46860596 3.85264404 -47.74971191 3.70528809 -47.0090332 3.5534668 C-31.36274391 0.57960912 -15.88931954 -0.06050362 0 0 Z M101.4140625 157.4765625 C100.53705688 157.81575714 99.66005127 158.15495178 98.75646973 158.50442505 C95.8332892 159.63791554 92.91684109 160.7878048 90 161.9375 C87.90914799 162.75149928 85.81782781 163.56429689 83.72607422 164.37597656 C79.2565959 166.11194566 74.78959738 167.85409927 70.32421875 169.60058594 C63.42168984 172.29787214 56.50923996 174.96895853 49.59375 177.6328125 C48.44244598 178.07634064 47.29114197 178.51986877 46.10494995 178.97683716 C43.75697514 179.88131074 41.40898309 180.7857396 39.06097412 181.69012451 C33.0314764 184.0138524 27.00405315 186.34294702 20.9765625 188.671875 C7.7922325 193.76551322 -5.39350899 198.85548745 -18.57971191 203.9442749 C-23.29619695 205.76449742 -28.01259955 207.58493346 -32.72900391 209.40536499 C-41.20887426 212.67840629 -49.68879776 215.95130977 -58.16894531 219.22363281 C-58.79732457 219.46611629 -59.42570383 219.70859978 -60.07312489 219.95843124 C-63.2397271 221.18037202 -66.40635908 222.40223554 -69.57304382 223.6239624 C-75.70772273 225.99088006 -81.84186777 228.3591667 -87.97485352 230.73046875 C-97.88652431 234.56186294 -107.79936833 238.38820027 -117.73828125 242.1484375 C-119.87074092 242.95907486 -122.00291613 243.77045451 -124.13494873 244.58221436 C-125.96314486 245.27485761 -127.79519393 245.95730611 -129.62744141 246.63916016 C-141.61718062 250.9127244 -141.61718062 250.9127244 -150.5 259.375 C-150.8562802 262.35420736 -150.8562802 262.35420736 -149.375 264.9375 C-140.30993692 272.76641811 -125.07989224 275.42805171 -113.84227371 279.09624863 C-110.52061923 280.18156547 -107.20931634 281.28763735 -103.91210938 282.4453125 C-89.1659533 288.5157294 -89.1659533 288.5157294 -73.96557617 288.22558594 C-70.38809476 286.46232805 -67.55133916 284.01280544 -64.625 281.3125 C-63.17305459 280.35833835 -61.70257811 279.4311315 -60.20703125 278.546875 C-58.94819301 277.72229284 -57.69167101 276.89416371 -56.4375 276.0625 C-54.98756244 275.1136914 -53.53701881 274.16580846 -52.0859375 273.21875 C-51.35213867 272.73921875 -50.61833984 272.2596875 -49.86230469 271.765625 C-46.11602103 269.33242113 -42.34086198 266.94548711 -38.5625 264.5625 C-37.78430908 264.07168945 -37.00611816 263.58087891 -36.2043457 263.07519531 C-28.66204768 258.32569469 -21.10063831 253.60676326 -13.54003906 248.88647461 C-4.98152159 243.54116694 3.55416318 238.16050231 12.08056641 232.76416016 C16.8012761 229.7774247 21.52518752 226.79575268 26.24902344 223.81396484 C30.22194231 221.30574291 34.19294126 218.79457929 38.16015625 216.27734375 C42.09949237 213.77823824 46.04786012 211.29382878 49.99902344 208.81347656 C52.43828627 207.27252014 54.86367519 205.71112254 57.2890625 204.1484375 C58.8798304 203.14002856 60.47096314 202.13219488 62.0625 201.125 C62.78058838 200.65505615 63.49867676 200.1851123 64.23852539 199.70092773 C69.03248934 196.69817682 72.71675707 195.63637249 78.375 195.3125 C76.93936154 200.90506176 72.87237564 203.96165051 68.75 207.6875 C68.06292969 208.32171875 67.37585938 208.9559375 66.66796875 209.609375 C62.59254051 213.35601635 58.44246157 217.01140739 54.26806641 220.64697266 C51.42219856 223.15077849 48.64760641 225.72818604 45.875 228.3125 C41.79030241 232.10238338 37.6710265 235.83425392 33.45703125 239.48046875 C30.24008207 242.31114261 27.0952932 245.22017016 23.94165039 248.12084961 C19.11896118 252.55486939 14.25150331 256.93775909 9.375 261.3125 C7.70807353 262.81221128 6.04140851 264.31221321 4.375 265.8125 C1.89997766 268.04079114 -0.57571754 270.2682884 -3.0546875 272.4921875 C-7.64530657 276.6134781 -12.20944244 280.76126864 -16.75 284.9375 C-20.03064667 287.95391966 -23.32355425 290.95132527 -26.6875 293.875 C-27.26081055 294.39167236 -27.83412109 294.90834473 -28.42480469 295.44067383 C-30.625 297.3125 -30.625 297.3125 -33.34106445 299.21386719 C-38.86598686 303.42448472 -42.06847254 306.51348018 -43.10566711 313.40501404 C-43.4773212 317.26916504 -43.63840323 321.12081641 -43.75 325 C-43.83116514 326.56210424 -43.91707813 328.12396924 -44.0078125 329.68554688 C-44.17894274 332.75311735 -44.32173631 335.81979032 -44.4387207 338.88989258 C-44.64901308 344.25216495 -45.03589429 349.59695342 -45.4309082 354.94873047 C-45.74561283 360.402819 -45.7078779 365.85176756 -45.625 371.3125 C-40.98220515 370.84023863 -38.62482562 369.96034856 -35.25 366.75 C-34.39921875 365.94691406 -33.5484375 365.14382813 -32.671875 364.31640625 C-28.24051436 359.9767393 -23.85658687 355.58659218 -19.51025391 351.16186523 C-14.23523352 345.81506242 -8.89183683 340.49039122 -2.625 336.3125 C9.31673171 344.76716813 21.08828026 353.4453789 32.85253906 362.14453125 C41.00335044 368.1697452 49.15483047 374.19455614 57.375 380.125 C57.94452393 380.53975586 58.51404785 380.95451172 59.10083008 381.38183594 C64.38500781 385.17076781 68.95699988 386.25199561 75.375 385.3125 C82.27289577 380.86718939 84.04644086 371.16681463 85.78683472 363.57444763 C86.22790806 361.50505759 86.66035342 359.43381513 87.08544922 357.36108398 C87.32713239 356.21586619 87.56881556 355.0706484 87.81782246 353.89072704 C88.61270938 350.11489907 89.39618626 346.33679921 90.1796875 342.55859375 C90.74022862 339.88119185 91.30328751 337.20432114 91.86628723 334.5274353 C93.20922287 328.13515837 94.54396524 321.74120023 95.87552613 315.34654522 C97.55421591 307.28605224 99.24137796 299.22733736 100.92895508 291.16870117 C101.38703113 288.98109123 101.84509673 286.7934791 102.30315155 284.6058647 C102.60695988 283.15491708 102.91078288 281.70397253 103.21462065 280.25303108 C104.12011846 275.92845213 105.02456085 271.60365398 105.92821962 267.2786904 C109.14788412 251.8705692 112.39072584 236.46817396 115.7331543 221.08611107 C116.25671215 218.67619336 116.77865427 216.26593162 117.30004883 213.85554504 C119.84590401 202.09256416 119.84590401 202.09256416 120.93328857 197.19406128 C121.72084047 193.63825956 122.49285712 190.07941228 123.26171875 186.51953125 C123.4822139 185.5493808 123.70270905 184.57923035 123.92988586 183.5796814 C126.69916469 170.79761764 126.69916469 170.79761764 123.625 158.625 C120.43642569 155.34785419 118.87379655 154.42786523 114.29833984 154.07568359 C109.51118703 154.36464055 105.83402788 155.71133237 101.4140625 157.4765625 Z "
+                                  fill="#808080"
+                                  transform="translate(255.625,0.6875)"
+                                />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => setIsCustomLinkOpen(true)}
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                             >
                               <svg
@@ -288,13 +323,10 @@ export default function CreateFlowsPage({ params: { flowId } }) {
                                   fill="currentColor"
                                 ></path>
                               </svg>
-                            </a>
-                            <a
-                              href="https://www.linkedin.com/shareArticle?url=https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dlinkedin-button&amp;title=My%20new%20form"
-                              target="_blank"
-                              aria-label="linkedin"
+                            </button>
+                            <button
+                              onClick={() => setIsCustomLinkOpen(true)}
                               className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                              rel="noreferrer"
                             >
                               <svg
                                 width="16"
@@ -310,77 +342,7 @@ export default function CreateFlowsPage({ params: { flowId } }) {
                                   fill="currentColor"
                                 ></path>
                               </svg>
-                            </a>
-                            <a
-                              href="https://twitter.com/intent/tweet?text=Could%20you%20take%20a%20moment%20to%20fill%20in%20this%20typeform%3F%0A%E2%86%92%20https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dtwitter-button%20%0A%0A%20We%20would%20really%20appreciate%20it!"
-                              target="_blank"
-                              aria-label="twitter"
-                              className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                              rel="noreferrer"
-                            >
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16ZM6.536 12.22C10.084 12.22 12.024 9.28 12.024 6.732C12.024 6.64801 12.024 6.56398 12.02 6.484C12.396 6.212 12.724 5.872 12.984 5.484C12.64 5.636 12.268 5.74 11.876 5.788C12.276 5.548 12.58 5.172 12.724 4.72C12.352 4.94 11.94 5.1 11.5 5.188C11.148 4.812 10.648 4.58 10.092 4.58C9.028 4.58 8.164 5.444 8.164 6.508C8.164 6.66 8.18 6.808 8.216 6.948C6.612 6.868 5.192 6.1 4.24 4.932C4.076 5.216 3.98 5.548 3.98 5.9C3.98 6.568 4.32 7.16 4.84 7.504C4.524 7.496 4.228 7.408 3.968 7.264V7.288C3.968 8.224 4.632 9 5.516 9.18C5.356 9.224 5.184 9.248 5.008 9.248C4.884 9.248 4.764 9.236 4.644 9.212C4.888 9.98 5.6 10.536 6.444 10.552C5.784 11.068 4.952 11.376 4.048 11.376C3.892 11.376 3.74 11.368 3.588 11.348C4.432 11.9 5.448 12.22 6.536 12.22Z"
-                                  fill="currentColor"
-                                ></path>
-                              </svg>
-                            </a>
-                            <a
-                              href="https://bufferapp.com/add?text=Could%20you%20take%20a%20moment%20to%20fill%20in%20this%20typeform%3F%0A%E2%86%92%20https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dbuffer-button%20%0A%0A%20We%20would%20really%20appreciate%20it!"
-                              target="_blank"
-                              aria-label="buffer"
-                              className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                              rel="noreferrer"
-                            >
-                              <svg
-                                width="14"
-                                height="16"
-                                viewBox="0 0 14 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M6.96165 0L0.249512 3.47691L6.96165 6.96599L13.7461 3.47691L6.96165 0Z"
-                                  fill="currentColor"
-                                ></path>
-                                <path
-                                  d="M2.38244 6.53061L6.96165 8.78254L11.5891 6.53061L13.7461 7.58152L6.96165 10.8844L0.249512 7.58152L2.38244 6.53061Z"
-                                  fill="currentColor"
-                                ></path>
-                                <path
-                                  d="M6.96165 12.9322L2.38244 10.449L0.249512 11.6019L6.96165 15.2381L13.7461 11.6019L11.5891 10.449L6.96165 12.9322Z"
-                                  fill="currentColor"
-                                ></path>
-                              </svg>
-                            </a>
-                            <a
-                              href="https://linktr.ee/admin?action=create-link&amp;linkType=typeform&amp;utm_channel=typeform&amp;title=My%20new%20form&amp;url=https%3A%2F%2Ffgd01i1rvh5.typeform.com%2Fto%2FjGXtoJYM%3Ftypeform-source%3Dlinktree-button"
-                              target="_blank"
-                              aria-label="linktree"
-                              className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                              rel="noreferrer"
-                            >
-                              <svg
-                                width="12"
-                                height="16"
-                                viewBox="0 0 12 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M7.04054 4.35316L9.42089 1.91823L10.8113 3.32384L8.30856 5.69236H11.8234V7.65137H8.28638L10.8002 10.0863L9.40976 11.4587L5.995 8.03871L2.58028 11.4587L1.20105 10.0863L3.71482 7.65137H0.177734V5.69236H3.69258L1.18992 3.32384L2.56916 1.91823L4.94947 4.35316V0.888916H7.01836V4.35316H7.04054ZM4.97172 10.4626H7.04054V15.1111H4.97172V10.4626Z"
-                                  fill="currentColor"
-                                ></path>
-                              </svg>
-                            </a>
+                            </button>
                           </div>
                           <div className="flex">
                             <a
@@ -524,7 +486,7 @@ export default function CreateFlowsPage({ params: { flowId } }) {
           </div>
         </main>
       </Tabs>
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
+      <div className="fixed bottom-4 right-4 z-20 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
         <button className="relative size-8 cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
           <div className="flex size-auto cursor-pointer items-center justify-center">
             <span className="SVGInline">
@@ -548,9 +510,34 @@ export default function CreateFlowsPage({ params: { flowId } }) {
         </button>
       </div>
       {isCustomLinkOpen && (
-        <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
-          <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
+        <div className="fixed left-0 top-0 z-[70] flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
+          <div className="relative flex size-full items-center justify-center from-white/0 to-white/90">
             <div className="z-[1] flex w-[512px] flex-col items-center p-8">
+              <button
+                aria-label="Close dialog"
+                color="#737373"
+                data-qa="upgrade-nag-screen-close-button"
+                className="absolute right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+                onClick={() => setIsCustomLinkOpen(false)}
+              >
+                <div className="flex size-auto items-center justify-center ">
+                  <span className="cursor-pointer">
+                    <svg
+                      width="28px"
+                      height="28px"
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="#000000"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </button>
               <div className="min-h-0 min-w-0 shrink-0 pb-6">
                 <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
                   {t("CUSTOM LINK")}
@@ -564,7 +551,7 @@ export default function CreateFlowsPage({ params: { flowId } }) {
               <div className="min-h-0 min-w-0 shrink-0">
                 <span className="block text-center text-xl text-[rgb(115,115,115)]">
                   {t(
-                    "Edit the link and let people know what your typeform is about."
+                    "Edit the link and let people know what your typeform is about"
                   )}
                 </span>
               </div>
@@ -585,35 +572,8 @@ export default function CreateFlowsPage({ params: { flowId } }) {
               </div>
             </div>
           </div>
-          <button
-            aria-label="Close dialog"
-            color="#737373"
-            data-qa="upgrade-nag-screen-close-button"
-            className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
-          >
-            <div className="flex size-auto items-center justify-center ">
-              <span
-                onClick={() => setIsCustomLinkOpen(false)}
-                className="cursor-pointer"
-              >
-                {" "}
-                <svg
-                  width="28px"
-                  height="28px"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#000000"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
-                  />
-                </svg>
-              </span>
-            </div>
-          </button>
         </div>
+
         // <Dialog open={isCustomLinkOpen} onOpenChange={setIsCustomLinkOpen}>
         //   <DialogContent className=" sm:max-w-md">
         //     <DialogHeader>

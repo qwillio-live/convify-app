@@ -9,7 +9,7 @@ const ShareFlowComponents = ({ isPublished }) => {
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState("https://convify.app/your-link-here")
 
-  const t = useTranslations("CreateFlow.SharePage")
+  const t = useTranslations("Components")
 
   return (
     <>
@@ -137,67 +137,6 @@ const ShareFlowComponents = ({ isPublished }) => {
                         ></path>
                       </svg>
                     </button>
-                    <button
-                      className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                      onClick={() => setIsCustomLinkOpen(true)}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M8 16C12.42 16 16 12.42 16 8C16 3.58 12.42 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16ZM6.536 12.22C10.084 12.22 12.024 9.28 12.024 6.732C12.024 6.64801 12.024 6.56398 12.02 6.484C12.396 6.212 12.724 5.872 12.984 5.484C12.64 5.636 12.268 5.74 11.876 5.788C12.276 5.548 12.58 5.172 12.724 4.72C12.352 4.94 11.94 5.1 11.5 5.188C11.148 4.812 10.648 4.58 10.092 4.58C9.028 4.58 8.164 5.444 8.164 6.508C8.164 6.66 8.18 6.808 8.216 6.948C6.612 6.868 5.192 6.1 4.24 4.932C4.076 5.216 3.98 5.548 3.98 5.9C3.98 6.568 4.32 7.16 4.84 7.504C4.524 7.496 4.228 7.408 3.968 7.264V7.288C3.968 8.224 4.632 9 5.516 9.18C5.356 9.224 5.184 9.248 5.008 9.248C4.884 9.248 4.764 9.236 4.644 9.212C4.888 9.98 5.6 10.536 6.444 10.552C5.784 11.068 4.952 11.376 4.048 11.376C3.892 11.376 3.74 11.368 3.588 11.348C4.432 11.9 5.448 12.22 6.536 12.22Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </button>
-                    <button
-                      className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                      onClick={() => setIsCustomLinkOpen(true)}
-                    >
-                      <svg
-                        width="14"
-                        height="16"
-                        viewBox="0 0 14 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M6.96165 0L0.249512 3.47691L6.96165 6.96599L13.7461 3.47691L6.96165 0Z"
-                          fill="currentColor"
-                        ></path>
-                        <path
-                          d="M2.38244 6.53061L6.96165 8.78254L11.5891 6.53061L13.7461 7.58152L6.96165 10.8844L0.249512 7.58152L2.38244 6.53061Z"
-                          fill="currentColor"
-                        ></path>
-                        <path
-                          d="M6.96165 12.9322L2.38244 10.449L0.249512 11.6019L6.96165 15.2381L13.7461 11.6019L11.5891 10.449L6.96165 12.9322Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </button>
-                    <button
-                      className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)] hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
-                      onClick={() => setIsCustomLinkOpen(true)}
-                    >
-                      <svg
-                        width="12"
-                        height="16"
-                        viewBox="0 0 12 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M7.04054 4.35316L9.42089 1.91823L10.8113 3.32384L8.30856 5.69236H11.8234V7.65137H8.28638L10.8002 10.0863L9.40976 11.4587L5.995 8.03871L2.58028 11.4587L1.20105 10.0863L3.71482 7.65137H0.177734V5.69236H3.69258L1.18992 3.32384L2.56916 1.91823L4.94947 4.35316V0.888916H7.01836V4.35316H7.04054ZM4.97172 10.4626H7.04054V15.1111H4.97172V10.4626Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </button>
                   </div>
                   <div className="flex">
                     <button
@@ -281,7 +220,7 @@ const ShareFlowComponents = ({ isPublished }) => {
                     className="size-full"
                   ></iframe>
                 ) : (
-                  <div className="flex size-full items-center justify-center text-sm text-[rgb(38,38,39)] mt-5">
+                  <div className="mt-5 flex size-full items-center justify-center text-sm text-[rgb(38,38,39)]">
                     <div className="flex flex-col items-center gap-2">
                       <svg
                         width="64"
