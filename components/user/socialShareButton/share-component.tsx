@@ -598,7 +598,7 @@ export const SocialShareButton = ({
       {hover && <Controller nameOfComponent={t("WhatsApp Button")} />}
 
       <div
-        className="relative w-full"
+        className="relative w-full "
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
@@ -639,7 +639,7 @@ export const SocialShareButton = ({
           gap={gap}
           size={size}
           buttonSize={buttonSize}
-          className=" transform transition-transform ease-in-out hover:-translate-y-1"
+          className="custom-button"
           {...props}
         >
           {iconType !== PictureTypes.NULL &&
@@ -667,7 +667,7 @@ export const SocialShareButton = ({
               </div>
             )}
           <div
-            className={`relative flex min-h-[16px]  min-w-[32px] max-w-[100%] flex-col items-center justify-center overflow-hidden overflow-x-clip ${
+            className={`relative flex min-h-[16px]  min-w-[32px] max-w-[100%]  items-center justify-center overflow-hidden overflow-x-clip ${
               enableIcon && (icon !== "" || null) ? "ml-1" : ""
             }`}
           >

@@ -301,7 +301,7 @@ export const TelegramShareButtonGen = ({
               )}
             </div>
           )}
-          <span className="text-sm ml-2">{text}</span>
+          <span className="ml-2 text-sm">{text}</span>
         </StyledCustomButton>
       )}
     </div>
@@ -640,7 +640,7 @@ export const TelegramShareButton = ({
           gap={gap}
           size={size}
           buttonSize={buttonSize}
-          className=" transform transition-transform ease-in-out hover:-translate-y-1"
+          className="custom-button"
           {...props}
         >
           {iconType !== PictureTypes.NULL &&
