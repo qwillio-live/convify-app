@@ -159,8 +159,8 @@ export const MultipleChoiceSettings = () => {
       (props) =>
         (props.choices = choices.map((choice) => ({
           ...choice,
-          buttonAction: null,
-          nextScreen: null,
+          buttonAction: "custom-action",
+          nextScreen: "none",
         }))),
       200
     )
@@ -234,8 +234,8 @@ export const MultipleChoiceSettings = () => {
                     picture: null,
                     pictureType: PictureTypes.NULL,
                     value: `${t("Option")} ${choices.length + 1}`,
-                    buttonAction: null,
-                    nextScreen: null,
+                    buttonAction: "custom-action",
+                    nextScreen: "none",
                     trackingEvent: null,
                   },
                 ])
@@ -736,7 +736,6 @@ const MultipleChoiceItemNavigationSettings = ({
 
   return (
     <Select
-      defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen}
       value={buttonAction === "next-screen" ? "next-screen" : nextScreen}
       onValueChange={(e) => {
         if (e === "next-screen") {

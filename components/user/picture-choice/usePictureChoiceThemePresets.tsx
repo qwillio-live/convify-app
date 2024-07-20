@@ -21,8 +21,8 @@ const usePictureChoiceThemePresets = () => {
       picture: "ai-generate-music-spark",
       pictureType: PictureTypes.ICON,
       value: t("Music"),
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
     {
@@ -30,8 +30,8 @@ const usePictureChoiceThemePresets = () => {
       picture: "ai-generate-landscape-image-spark",
       pictureType: PictureTypes.ICON,
       value: t("Image"),
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
     {
@@ -39,8 +39,8 @@ const usePictureChoiceThemePresets = () => {
       picture: "camera-video",
       pictureType: PictureTypes.ICON,
       value: t("Video"),
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
     {
@@ -49,8 +49,8 @@ const usePictureChoiceThemePresets = () => {
         "image-photo-four-photos-camera-picture-photography-pictures-four-photo",
       pictureType: PictureTypes.ICON,
       value: t("Gallery"),
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
   ]

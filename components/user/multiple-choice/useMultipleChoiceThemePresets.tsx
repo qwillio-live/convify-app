@@ -60,8 +60,8 @@ const useMultipleChoiceThemePresets = () => {
       picture: null,
       pictureType: PictureTypes.NULL,
       value: `${t("Option")} 1`,
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
     {
@@ -69,8 +69,8 @@ const useMultipleChoiceThemePresets = () => {
       picture: null,
       pictureType: PictureTypes.NULL,
       value: `${t("Option")} 2`,
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
     {
@@ -78,8 +78,8 @@ const useMultipleChoiceThemePresets = () => {
       picture: null,
       pictureType: PictureTypes.NULL,
       value: `${t("Option")} 3`,
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
     {
@@ -87,8 +87,8 @@ const useMultipleChoiceThemePresets = () => {
       picture: null,
       pictureType: PictureTypes.NULL,
       value: `${t("Option")} 4`,
-      buttonAction: null,
-      nextScreen: null,
+      buttonAction: "custom-action",
+      nextScreen: "none",
       trackingEvent: null,
     },
   ]
