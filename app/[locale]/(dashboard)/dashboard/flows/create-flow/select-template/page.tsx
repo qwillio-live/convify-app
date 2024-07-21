@@ -16,6 +16,13 @@ import { ChevronLeft, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { usePathname, useSearchParams } from "next/navigation"
+import { json } from "stream/consumers"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import {
+  setNewFlowSettings,
+  setTemplateId,
+} from "@/lib/state/flows-state/features/theme/globalewTheme"
 
 const cardData = [
   { id: 1, category: "Recruiting", title: "Recruiting Campaign" },
@@ -28,15 +35,23 @@ const cardData = [
 
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
+  const [selectedCard, setSelectedCard] = useState<number>(0)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [templates, setTemplates] = useState<object[]>([])
+  const [categories, setCategories] = useState<string[]>([])
   const [showDrawer, setShowDrawer] = useState<boolean>(true)
   const [isScrolling, setIsScrolling] = useState<boolean>(false)
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
   const cardContainerRef = useRef<HTMLDivElement | null>(null)
   const t = useTranslations("Components")
-
+  const pathname = usePathname()
+  const dispatch = useAppDispatch()
+  const flowData = useAppSelector((state) => state.newTheme)
   const handleCardClick = (index: number) => {
     setLoadingCardIndex(index)
+    setSelectedCard(index)
+    dispatch(setNewFlowSettings(templates[index]?.templateSettings))
+    dispatch(setTemplateId(templates[index]?.id))
     setTimeout(() => {
       setLoadingCardIndex(null)
       // Perform your action here after loading
@@ -49,8 +64,10 @@ export default function SelectTemplate() {
     } else setSelectedCategory(category)
   }
 
-  const filteredCards = cardData.filter(
-    (card) => selectedCategory === "all" || card.category === selectedCategory
+  const filteredCards = templates.filter(
+    (card) =>
+      selectedCategory === "all" ||
+      JSON.parse(card.tags).includes(selectedCategory)
   )
 
   const handleScroll = () => {
@@ -62,7 +79,49 @@ export default function SelectTemplate() {
       setIsScrolling(false)
     }, 1000) // Hide scrollbar 1 second after scrolling stops
   }
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      let url = pathname?.includes("/pt/")
+        ? "/api/templates/pt"
+        : "/api/templates"
+      try {
+        const response = await fetch(url)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const templates = await response.json()
+        return templates
+      } catch (error) {
+        console.error("Failed to fetch templates:", error)
+        return null
+      }
+    }
 
+    const getTemplates = async () => {
+      const templates = await fetchTemplates()
+      const uniqueTags = templates?.reduce((acc, item) => {
+        const tags = JSON.parse(item.tags)
+        tags.forEach((tag) => {
+          if (!acc[tag]) {
+            acc[tag] = true
+          }
+        })
+        return acc
+      }, {})
+
+      setCategories(Object?.keys(uniqueTags) || [])
+      setTemplates(templates)
+    }
+
+    getTemplates()
+  }, [])
+  console.log(
+    "templates | categories",
+    templates,
+    categories,
+    selectedCard,
+    templates[selectedCard]?.templateSettings
+  )
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
       <div className="flex h-full w-full px-6">
@@ -113,62 +172,26 @@ export default function SelectTemplate() {
                   >
                     {t("All")}
                   </Button>
-                  <Button
-                    className={`grow font-normal ${
-                      selectedCategory === "Recruiting" ? "font-semibold" : ""
-                    }`}
-                    size="filterIcon"
-                    variant={`${
-                      selectedCategory === "Recruiting"
-                        ? "secondary"
-                        : "outline"
-                    }`}
-                    onClick={() => handleFilterClick("Recruiting")}
-                  >
-                    {t("Recruiting")}
-                  </Button>
-                  <Button
-                    variant={`${
-                      selectedCategory === "b2cLeadGen"
-                        ? "secondary"
-                        : "outline"
-                    }`}
-                    size="filterIcon"
-                    className={`w-auto grow font-normal ${
-                      selectedCategory === "b2cLeadGen" ? "font-semibold" : ""
-                    }`}
-                    onClick={() => handleFilterClick("b2cLeadGen")}
-                  >
-                    {t("b2cLeadGen")}
-                  </Button>
-                  <Button
-                    variant={`${
-                      selectedCategory === "customerFeedback"
-                        ? "secondary"
-                        : "outline"
-                    }`}
-                    size="filterIcon"
-                    className={`grow font-normal ${
-                      selectedCategory === "customerFeedback"
-                        ? "font-semibold"
-                        : ""
-                    }`}
-                    onClick={() => handleFilterClick("customerFeedback")}
-                  >
-                    {t("customerFeedback")}
-                  </Button>
-                  <Button
-                    variant={`${
-                      selectedCategory === "other" ? "secondary" : "outline"
-                    }`}
-                    size="filterIcon"
-                    className={`grow font-normal ${
-                      selectedCategory === "other" ? "font-semibold" : ""
-                    }`}
-                    onClick={() => handleFilterClick("other")}
-                  >
-                    {t("other")}
-                  </Button>
+                  {categories.map((category, index) => {
+                    return (
+                      <Button
+                        key={index}
+                        className={`grow font-normal ${
+                          selectedCategory === category ? "font-semibold" : ""
+                        }`}
+                        size="filterIcon"
+                        variant={`${
+                          selectedCategory === category
+                            ? "secondary"
+                            : "outline"
+                        }`}
+                        onClick={() => handleFilterClick(category)}
+                      >
+                        {category}
+                      </Button>
+                    )
+                  })}
+
                   <Button
                     className="grow border-0 bg-white font-semibold"
                     variant="secondary"
@@ -181,7 +204,7 @@ export default function SelectTemplate() {
 
                 <div className="!z-0 grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {filteredCards.map((card, index) => (
-                    <div key={card.id} className="pr-2">
+                    <div key={index} className="pr-2">
                       <div
                         className="relative h-44 w-full cursor-pointer space-y-3 overflow-hidden rounded-md xl:h-40 2xl:h-56" // Adjusted height and rounded border
                         onClick={() => handleCardClick(index)}
@@ -207,21 +230,31 @@ export default function SelectTemplate() {
                                   ? "hover:scale-105"
                                   : ""
                               }`}
-                              src={cardDemo.src}
+                              src={card.preview}
                             />
                           </div>
                         </span>
                       </div>
                       <div className="space-y-1">
                         <h3 className="text-md my-2 font-semibold leading-none">
-                          {card.title}
+                          {card?.name}
                         </h3>
-                        <Badge
-                          variant="default"
-                          className="font-sans3 rounded-md bg-black px-2 py-1 font-semibold"
-                        >
-                          {t("popular")}
-                        </Badge>
+                        {card?.isPopular && (
+                          <Badge
+                            variant="default"
+                            className="font-sans3 rounded-md bg-black px-2 py-1 font-semibold"
+                          >
+                            {t("popular")}
+                          </Badge>
+                        )}
+                        {card?.isActive && (
+                          <Badge
+                            variant="default"
+                            className="font-sans3 ml-2 rounded-md bg-black px-2 py-1 font-semibold"
+                          >
+                            {t("active")}
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -232,7 +265,7 @@ export default function SelectTemplate() {
           <Separator orientation="vertical" className="z-40" />
           <div className=" mx-auto w-full py-6 md:w-6/12">
             <iframe
-              src="https://convify.io/survey"
+              src={templates[selectedCard]?.content}
               name="page"
               height={800}
               width="100%"
@@ -254,7 +287,7 @@ export default function SelectTemplate() {
                 {t("exit")}
               </Button>
             </Link>
-            <Link href={"/dashboard/flows/create-flow/select-color"}>
+            <Link href={`/dashboard/flows/create-flow/select-color`}>
               <Button
                 className="w-32 font-bold text-white hover:cursor-pointer"
                 size="lg"

@@ -209,6 +209,8 @@
 "startFromScratch": "Começar do zero",
 "b2bLeadGenMarketing": "Marketing de Geração de Leads B2B",
 "popular": "Popular",
+"active": "Ativo",
+"Name is required":"O nome é obrigatório",
 "exit": "Sair",
 "continue": "Continuar",
 "loading": "Carregando...",

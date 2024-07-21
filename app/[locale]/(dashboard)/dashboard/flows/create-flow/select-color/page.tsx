@@ -16,6 +16,13 @@ import { ChevronLeft } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import {
+  setNewBackgroundColor,
+  setNewFlowSettings,
+  setNewPrimaryColor,
+  setNewTextColor,
+} from "@/lib/state/flows-state/features/theme/globalewTheme"
 
 const ColorPicker = ({ color, onChange }) => {
   const t = useTranslations("Components")
@@ -124,9 +131,30 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
 }
 
 export default function SelectColor() {
-  const [primaryColor, setPrimaryColor] = useState("#40BF80")
-  const [textColor, setTextColor] = useState("#191919")
-  const [backgroundColor, setBackgroundColor] = useState("#F4F4F4")
+  const templateSetting = useAppSelector((state) => state.newTheme)
+  const dispatch = useAppDispatch()
+  console.log("localFlowSettings", templateSetting)
+  const [primaryColor, setPrimaryColor] = useState(
+    templateSetting?.general?.primaryColor
+  )
+  const [textColor, setTextColor] = useState(
+    templateSetting?.text?.primaryColor
+  )
+  const [backgroundColor, setBackgroundColor] = useState(
+    templateSetting?.general?.backgroundColor
+  )
+  const handleBackgroundColor = (e) => {
+    setBackgroundColor(e)
+    dispatch(setNewBackgroundColor(e))
+  }
+  const handlePrimaryColor = (e) => {
+    setPrimaryColor(e)
+    dispatch(setNewPrimaryColor(e))
+  }
+  const handleTextColor = (e) => {
+    setTextColor(e)
+    dispatch(setNewTextColor(e))
+  }
   const t = useTranslations("Components")
 
   return (
@@ -191,7 +219,7 @@ export default function SelectColor() {
                   </label>
                   <ColorPickerWithSuggestions
                     color={backgroundColor}
-                    onChange={setBackgroundColor}
+                    onChange={handleBackgroundColor}
                   />
                 </div>
               </div>
@@ -199,13 +227,14 @@ export default function SelectColor() {
           </div>
 
           <Separator orientation="vertical" className="z-40 h-full" />
-          <div className="mx-auto  w-full py-6 md:w-6/12">
+          <div className={`mx-auto w-full py-6 md:w-6/12`}>
             <iframe
               src="https://convify.io/survey"
               name="page"
               height={800}
               width="100%"
               title="Survey"
+              color="black"
             ></iframe>
           </div>
         </div>

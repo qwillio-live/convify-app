@@ -256,7 +256,7 @@ export const GlobalThemeSettings = (props: Props) => {
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
                   className={` h-6 ${
-                    backgroundColor !== "#ffffff" ? "w-10" : "basis-1/3"
+                    backgroundColor !== "#ffffff" ? "w-10" : "basis-1us/3"
                   } border-none p-0`}
                   type={"color"}
                   id="backgroundcolor"

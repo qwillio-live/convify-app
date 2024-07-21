@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
         isDeleted: false,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     })
     return NextResponse.json(flows)
@@ -73,8 +73,8 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     )
   }
-
-  const { templateId, status, previewImage, link ,name, flowSettings} = reqBody
+  console.log(reqBody)
+  const { templateId, status, previewImage, link, name, flowSettings } = reqBody
 
   if (!templateId) {
     const statusCode = 400
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
         templateId: template.id,
       },
     })
-    
+
     const flow = await prisma.flow.create({
       data: {
         templateId: template.id,
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
     await prisma.integration.create({
       data: {
         flowId: flow.id,
-        email: userEmail
+        email: userEmail,
       },
     })
 
