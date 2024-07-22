@@ -58,7 +58,7 @@ export const HeadlineTextGen = ({
           marginRight: `${marginRight.value}px`,
           marginTop: `${marginTop.value}px`,
           marginBottom: `${marginBottom.value}px`,
-          color: `${textColor.value}`,
+          color: `${textColor?.value}`,
           lineHeight: `${fontSize.value}px`,
           minWidth: "max-content",
         }}
@@ -145,7 +145,7 @@ export const HeadlineText = ({
           marginRight: `${marginRight.value}px`,
           marginTop: `${marginTop.value}px`,
           marginBottom: `${marginBottom.value}px`,
-          color: `${textColor.value}`,
+          color: `${textColor?.value}`,
           // color: `${primaryTextColor}`
         }}
       />

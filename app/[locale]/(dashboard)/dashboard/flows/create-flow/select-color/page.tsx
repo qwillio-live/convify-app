@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import { HexColorPicker } from "react-colorful"
 import tinycolor from "tinycolor2"
+import { debounce, throttle } from "lodash"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,9 +21,23 @@ import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   setNewBackgroundColor,
   setNewFlowSettings,
+  setNewPartialSyles,
   setNewPrimaryColor,
   setNewTextColor,
 } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import FlowPreview from "@/components/flow-preview/flow-preview.component"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
+import { setNewScreensData } from "@/lib/state/flows-state/features/newScreens"
+import NewFlowPreview from "@/components/flow-preview/flow-preview-new.cpmponent"
+import {
+  setBackgroundColors,
+  setPartialStyles,
+  setPrimaryColors,
+  setTextColors,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
+import { GlobalThemeSettings } from "@/components/user/settings/global-theme-settings"
 
 const ColorPicker = ({ color, onChange }) => {
   const t = useTranslations("Components")
@@ -134,6 +149,7 @@ export default function SelectColor() {
   const templateSetting = useAppSelector((state) => state.newTheme)
   const dispatch = useAppDispatch()
   console.log("localFlowSettings", templateSetting)
+
   const [primaryColor, setPrimaryColor] = useState(
     templateSetting?.general?.primaryColor
   )
@@ -155,11 +171,80 @@ export default function SelectColor() {
     setTextColor(e)
     dispatch(setNewTextColor(e))
   }
-  const t = useTranslations("Components")
 
+  const t = useTranslations("Components")
+  const updateIframeStyles = async () => {
+    const response = await fetch(
+      `/api/templates/${templateSetting?.templateId}/templateWithSteps`
+    )
+    const flowData = await response.json()
+    console.log("flowData", flowData)
+    dispatch(setNewScreensData(flowData))
+  }
+  useEffect(() => {
+    // Function to send style updates to the iframe
+
+    updateIframeStyles()
+  }, [])
+
+  /** GENERAL STYLES */
+
+  const defaultPrimaryColor = useAppSelector(
+    (state) => state?.newTheme?.defaultGeneral?.primaryColor
+  )
+  const secondaryColor = useAppSelector(
+    (state) => state?.newTheme?.general?.secondaryColor
+  )
+  const defaultSecondaryColor = useAppSelector(
+    (state) => state?.newTheme?.defaultGeneral?.secondaryColor
+  )
+
+  const backgroundImage = useAppSelector(
+    (state) => state?.newTheme?.general?.backgroundImage
+  )
+  const defaultBackgroundColor = useAppSelector(
+    (state) => state?.newTheme?.defaultGeneral?.backgroundColor
+  )
+
+  const headerPosition = useAppSelector(
+    (state) => state?.newTheme?.header?.headerPosition
+  )
+
+  /** TEXT STYLES */
+  const primaryFonts = useAppSelector((state) => state?.newTheme?.primaryFonts)
+  const secondaryFonts = useAppSelector(
+    (state) => state?.newTheme?.secondaryFonts
+  )
+  const primaryFont = useAppSelector(
+    (state) => state?.newTheme?.text?.primaryFont
+  )
+  const defaultPrimaryFont = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.primaryFont
+  )
+  const secondaryFont = useAppSelector(
+    (state) => state?.newTheme?.text?.secondaryFont
+  )
+  const defaultSecondaryFont = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.secondaryFont
+  )
+  const primaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.text?.primaryColor
+  )
+  const defaultPrimaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.primaryColor
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.text?.secondaryColor
+  )
+  const defaultSecondaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.secondaryColor
+  )
+  const screens = useAppSelector((state) => state?.screen?.screens)
+
+  console.log("templateid", templateSetting?.templateId)
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
-      <div className="flex h-full w-full px-12">
+      <div className="flex h-full w-full pl-12">
         <div className="flex w-full">
           <div className="w-full   md:w-6/12">
             <ScrollArea className="z-20 h-full py-9  ">
@@ -201,7 +286,7 @@ export default function SelectColor() {
                   </label>
                   <ColorPickerWithSuggestions
                     color={primaryColor}
-                    onChange={setPrimaryColor}
+                    onChange={handlePrimaryColor}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -210,8 +295,9 @@ export default function SelectColor() {
                   </label>
                   <ColorPickerWithSuggestions
                     color={textColor}
-                    onChange={setTextColor}
+                    onChange={handleTextColor}
                   />
+                  {/* <NewGlobalThemeSettings /> */}
                 </div>
                 <div className="flex flex-col">
                   <label className="my-3 block text-base font-semibold ">
@@ -227,15 +313,10 @@ export default function SelectColor() {
           </div>
 
           <Separator orientation="vertical" className="z-40 h-full" />
-          <div className={`mx-auto w-full py-6 md:w-6/12`}>
-            <iframe
-              src="https://convify.io/survey"
-              name="page"
-              height={800}
-              width="100%"
-              title="Survey"
-              color="black"
-            ></iframe>
+          <div className={`mx-auto w-full pb-6 md:w-6/12`}>
+            <ScrollArea className="z-20 h-full bg-white pb-10">
+              <NewFlowPreview />
+            </ScrollArea>
           </div>
         </div>
         <div className="fixed bottom-0 left-4 z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">

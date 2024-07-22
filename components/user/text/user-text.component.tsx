@@ -51,6 +51,7 @@ export const UserTextGen = ({
           console.log(e.target.value)
         }}
         style={{
+          backgroundColor: props.backgroundColor,
           fontFamily: `var(${fontFamily})`,
           fontSize: `${fontSize}px`,
           textAlign,

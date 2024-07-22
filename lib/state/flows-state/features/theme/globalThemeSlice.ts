@@ -102,9 +102,19 @@ export const themeSlice = createSlice({
       state.general = { ...state.general, ...action.payload.general }
       state.text = { ...state.text, ...action.payload.text }
     },
-    setBackgroundColor: (state, action: PayloadAction<string>) => {
+    setBackgroundColors: (state, action: PayloadAction<string>) => {
       if (state.general) {
         state.general.backgroundColor = action.payload
+      }
+    },
+    setTextColors: (state, action: PayloadAction<string>) => {
+      if (state.text) {
+        state.text.primaryColor = action.payload
+      }
+    },
+    setPrimaryColors: (state, action: PayloadAction<string>) => {
+      if (state.general) {
+        state.general.primaryColor = action.payload
       }
     },
     setMobileScreen: (state, action: PayloadAction<boolean>) => {
@@ -118,8 +128,10 @@ export const {
   setThemeStyles,
   setHeaderPosition,
   setPartialStyles,
-  setBackgroundColor,
+  setBackgroundColors,
   setMobileScreen,
+  setPrimaryColors,
+  setTextColors,
 } = themeSlice.actions
 
 export default themeSlice.reducer

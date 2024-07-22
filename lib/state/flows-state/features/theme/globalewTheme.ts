@@ -79,26 +79,25 @@ export const themeSlice = createSlice({
   name: "newTheme",
   initialState,
   reducers: {
+    reset: () => initialState,
     setNewFlowSettings: (state, action: PayloadAction<GlobalThemeState>) => {
-      let newState = JSON.parse(action.payload)
+      const newState: GlobalThemeState = action.payload
       state.mobileScreen = newState.mobileScreen
       state.header = { ...initialState.defaultHeader, ...newState.header }
-      state.general = {
-        ...initialState.defaultGeneral,
-        ...newState.general,
-      }
-      state.text = { ...initialState.text, ...action.payload.text }
+      state.general = { ...initialState.defaultGeneral, ...newState.general }
+      state.text = { ...initialState.text, ...newState.text }
     },
+
     setThemeStyles: (state, action: PayloadAction<GlobalThemeState>) => {
       console.log("setThemeStyles", action.payload)
 
       state.general = { ...action.payload.general }
       state.text = { ...action.payload.text }
     },
-    setHeaderPosition: (state, action: PayloadAction<string>) => {
+    setNewHeaderPosition: (state, action: PayloadAction<string>) => {
       state.header.headerPosition = action.payload
     },
-    setPartialStyles: (
+    setNewPartialSyles: (
       state,
       action: PayloadAction<Partial<GlobalThemeState>>
     ) => {
@@ -111,12 +110,14 @@ export const themeSlice = createSlice({
       }
     },
     setNewTextColor: (state, action: PayloadAction<string>) => {
-      if (state.text) {
+      if (state.defaultText && state.text) {
+        state.defaultText.primaryColor = action.payload
         state.text.primaryColor = action.payload
       }
     },
     setNewPrimaryColor: (state, action: PayloadAction<string>) => {
-      if (state.general) {
+      if (state.general && state.defaultGeneral) {
+        state.defaultGeneral.primaryColor = action.payload
         state.general.primaryColor = action.payload
       }
     },
@@ -135,6 +136,9 @@ export const {
   setNewTextColor,
   setNewPrimaryColor,
   setTemplateId,
+  setNewPartialSyles,
+  setNewHeaderPosition,
+  reset,
 } = themeSlice.actions
 
 export default themeSlice.reducer

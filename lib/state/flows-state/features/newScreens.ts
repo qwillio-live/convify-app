@@ -126,11 +126,12 @@ const initialState: ScreensState = {
   scrollY: 0,
 }
 
-export const screensSlice = createSlice({
+export const newScreensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
-    setScreensData: (state, action: PayloadAction<any>) => {
+    resetScreens: () => initialState,
+    setNewScreensData: (state, action: PayloadAction<any>) => {
       state.flowName = action.payload.name
       state.firstScreenName = action.payload.steps[0].name
       state.currentScreenName = action.payload.steps[0].name
@@ -169,7 +170,7 @@ export const screensSlice = createSlice({
     addField: (state, action: PayloadAction<ScreenFieldType>) => {
       // console.log("Add field");
       const selectedScreen = state.selectedScreen
-      const selectedId = state.screens[selectedScreen].screenId
+      const selectedId = state.screens[selectedScreen]?.screenId
       const field = action.payload
       const screenFields = state.screens[selectedScreen]?.screenFields
       screenFields[field.fieldId] = field
@@ -206,7 +207,7 @@ export const screensSlice = createSlice({
       const selectedScreenId = action.payload.screenId
       const { fieldId, fieldName, fieldValue } = action.payload
       const screenFields = state.screens[selectedScreen]?.screenFields
-      const field = screenFields[fieldId]
+      const field = screenFields ? screenFields[fieldId] : null
       if (field) {
         field[fieldName] = fieldValue
         screenFields[fieldId] = field
@@ -252,7 +253,7 @@ export const screensSlice = createSlice({
       const screenFields = state.screensFieldsList[screenId]
 
       let errors = false
-      Object?.values(screenFields).forEach((field: ScreenFieldType) => {
+      Object.values(screenFields).forEach((field: ScreenFieldType) => {
         if (field.fieldRequired && !field.fieldValue) {
           field.toggleError = true
           state.screens[screenIndex].screenValidated = true
@@ -274,7 +275,7 @@ export const screensSlice = createSlice({
       state.screens[screenIndex].screenFields = screenFields
       state.screensFieldsList[screenId] = screenFields
     },
-    setValidateScreen: (
+    setNewValidateScreen: (
       state,
       action: PayloadAction<{
         screenId: string
@@ -399,7 +400,7 @@ export const screensSlice = createSlice({
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
       state.firstScreenName = state.screens[0].screenName
     },
-    setCurrentScreenName: (state, action: PayloadAction<string>) => {
+    setNewCurrentScreenName: (state, action: PayloadAction<string>) => {
       state.currentScreenName = action.payload
     },
     setFirstScreenName: (state, action: PayloadAction<string>) => {
@@ -491,39 +492,10 @@ export const screensSlice = createSlice({
 })
 
 export const {
-  setScreensData,
-  setSelectedComponent,
-  setCurrentScreenName,
-  setFirstScreenName,
-  removeField,
-  setValidateScreen,
-  updateHeaderPosition,
-  addField,
-  validateScreen,
-  setFieldProp,
-  rollScreens,
-  addAvatarComponentId,
-  navigateToScreen,
-  setHeaderMode,
-  resetScreensState,
-  setScreenHeader,
-  setScreenFooter,
-  setFooterMode,
-  setHeaderFooterMode,
-  setScrollY,
-  setSelectedScreen,
-  reorderScreens,
-  removeAvatarComponentId,
-  addScreen,
-  setEditorLoad,
-  setComponentBeforeAvatar,
-  setAvatarBackgroundColor,
-  duplicateScreen,
-  setScreens,
-  deleteScreen,
-  setHeaderId,
-  setScreenName,
-  setRenamingScreen,
-} = screensSlice.actions
+  setNewScreensData,
+  setNewCurrentScreenName,
+  setNewValidateScreen,
+  resetScreens,
+} = newScreensSlice.actions
 
-export default screensSlice.reducer
+export default newScreensSlice.reducer

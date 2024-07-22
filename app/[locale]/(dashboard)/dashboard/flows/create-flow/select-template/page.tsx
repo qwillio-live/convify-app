@@ -37,7 +37,7 @@ export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
   const [selectedCard, setSelectedCard] = useState<number>(0)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  const [templates, setTemplates] = useState<object[]>([])
+  const [templates, setTemplates] = useState<any[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [showDrawer, setShowDrawer] = useState<boolean>(true)
   const [isScrolling, setIsScrolling] = useState<boolean>(false)
@@ -47,10 +47,11 @@ export default function SelectTemplate() {
   const pathname = usePathname()
   const dispatch = useAppDispatch()
   const flowData = useAppSelector((state) => state.newTheme)
+  const state = useAppSelector((state) => state)
   const handleCardClick = (index: number) => {
     setLoadingCardIndex(index)
     setSelectedCard(index)
-    dispatch(setNewFlowSettings(templates[index]?.templateSettings))
+    dispatch(setNewFlowSettings(JSON.parse(templates[index]?.templateSettings)))
     dispatch(setTemplateId(templates[index]?.id))
     setTimeout(() => {
       setLoadingCardIndex(null)
@@ -120,7 +121,8 @@ export default function SelectTemplate() {
     templates,
     categories,
     selectedCard,
-    templates[selectedCard]?.templateSettings
+    templates[selectedCard]?.templateSettings,
+    state
   )
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">

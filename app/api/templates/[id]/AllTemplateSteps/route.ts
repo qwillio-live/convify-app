@@ -4,12 +4,9 @@ import { authOptions } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  let { id } = params
+export async function GET(req: NextRequest, params) {
   const data = await getServerSession(authOptions)
+  const url = new URL(req.url)
 
   if (!data) {
     const statusCode = 401
@@ -19,27 +16,18 @@ export async function GET(
     await logError({ statusCode, errorMessage, userId, requestUrl })
     return NextResponse.json({ error: errorMessage }, { status: statusCode })
   }
-  const userId = data.user.id
 
+  let { id } = params
   try {
-    const templates = await prisma.template.findMany({
+    const templateSteps = await prisma.flowStep.findMany({
       where: {
-        isActive: true,
-        language: id,
+        templateId: id,
       },
     })
-
-    console.log("templates in api", templates)
-    return NextResponse.json(templates)
+    return NextResponse.json(templateSteps)
   } catch (error) {
     console.log(error)
     const statusCode = 500
-    await logError({
-      statusCode: statusCode,
-      errorMessage: error.message || "An unexpected error occurred",
-      userId,
-      requestUrl: req.url,
-    })
 
     return NextResponse.json(
       { error: "Failed to fetch templates" },

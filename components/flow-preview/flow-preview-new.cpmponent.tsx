@@ -5,15 +5,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { FormProvider, useForm, useFormContext } from "react-hook-form"
 
 import {
-  setCurrentScreenName,
-  setValidateScreen,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+  setNewCurrentScreenName,
+  setNewValidateScreen,
+} from "@/lib/state/flows-state/features/newScreens"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
+import ResolvedNewComponentsFromCraftState from "../user/settings/new-resolved-components"
 
 type Position = "static" | "relative" | "absolute" | "sticky" | "fixed"
 
-export default function FlowPreview() {
+export default function NewFlowPreview() {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const pathname = usePathname()
@@ -28,51 +29,58 @@ export default function FlowPreview() {
   }, [])
   useEffect(() => {
     if (search !== currentScreenName) {
-      dispatch(setCurrentScreenName(search))
+      dispatch(setNewCurrentScreenName(search))
     }
   }, [search])
   const previewHeaderRef = React.useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = React.useState(90)
 
   const selectedScreenIdex =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+    useAppSelector((state) => state?.newScreens?.selectedScreen) || 0
   const firstScreenName =
-    useAppSelector((state) => state?.screen?.firstScreenName) || ""
+    useAppSelector((state) => state?.newScreens?.firstScreenName) || ""
 
   const currentScreenName = useAppSelector(
-    (state) => state?.screen?.currentScreenName
+    (state) => state?.newScreens?.currentScreenName
   )
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.newScreens?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
 
   const selectedScreenId = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
+    (state) => state?.newScreens?.screens[selectedScreen]?.screenId || ""
   )
   const selectedScreenError = useAppSelector(
     (state) =>
-      state?.screen?.screens[selectedScreen]?.screenToggleError || false
+      state?.newScreens?.screens[selectedScreen]?.screenToggleError || false
   )
 
-  const screens = useAppSelector((state) => state?.screen?.screens)
+  const screens = useAppSelector((state) => state?.newScreens?.screens)
   const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
+    (state) => state?.newTheme?.general?.backgroundColor
   )
-  const screenHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const primaryColor = useAppSelector(
+    (state) => state?.newTheme?.text?.primaryColor
+  )
+  const screenHeader = useAppSelector(
+    (state) => state?.newScreens?.screensHeader
+  )
   const headerPosition =
-    useAppSelector((state) => state?.theme?.header?.headerPosition) ||
+    useAppSelector((state) => state?.newTheme?.header?.headerPosition) ||
     "relative"
 
-  const screenFooter = useAppSelector((state) => state?.screen?.screensFooter)
+  const screenFooter = useAppSelector(
+    (state) => state?.newScreens?.screensFooter
+  )
   const headerMode =
-    useAppSelector((state) => state?.screen?.headerMode) || false
+    useAppSelector((state) => state?.newScreens?.headerMode) || false
 
   useEffect(() => {
     dispatch(
-      setValidateScreen({
+      setNewValidateScreen({
         screenId: selectedScreenId,
         screenValidated: false,
         screenToggleError: false,
@@ -101,54 +109,27 @@ export default function FlowPreview() {
     }
   }, [headerMode, headerHeight, headerPosition])
 
+  console.log("primary", primaryColor)
   return (
     <>
-      <div
-        ref={previewHeaderRef}
-        id={currentScreenName}
-        style={{
-          position:
-            (headerPosition as Position) === "absolute" ? "fixed" : "relative",
-          width: "100%",
-          top: "0",
-          zIndex: 20,
-          backgroundColor: backgroundColor,
-        }}
-      >
-        <ResolvedComponentsFromCraftState screen={screenHeader} />
-      </div>
-      {screens?.map((screen, index) => {
-        return (
-          <div
+      {screens?.map((screen, index) => (
+        <div
+          key={index}
+          id={screen?.screenName + "-preview"}
+          style={{
+            display:
+              currentScreenName === screen?.screenName ? "block" : "none",
+            backgroundColor,
+            color: primaryColor,
+          }}
+          className={`min-w-full shrink-0 basis-full pt-14 !color-[${primaryColor}]`}
+        >
+          <ResolvedNewComponentsFromCraftState
             key={index}
-            id={screen?.screenName + "-preview"}
-            style={{
-              display:
-                currentScreenName === screen?.screenName ? "block" : "none",
-              // backgroundColor: backgroundColor,
-              paddingTop:
-                headerPosition === "absolute" ? headerHeight + "px" : "0",
-            }}
-            className="min-w-full
-          shrink-0
-          basis-full
-          pt-14"
-          >
-            <ResolvedComponentsFromCraftState
-              key={index}
-              screen={screen.screenData}
-            />
-          </div>
-        )
-      })}
-      <div
-        style={{
-          width: "100%",
-          backgroundColor: backgroundColor,
-        }}
-      >
-        <ResolvedComponentsFromCraftState screen={screenFooter} />
-      </div>
+            screen={screen.screenData}
+          />
+        </div>
+      ))}
     </>
   )
 }

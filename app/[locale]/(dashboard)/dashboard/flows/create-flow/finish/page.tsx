@@ -15,7 +15,9 @@ import { Input } from "@/components/ui/input"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { z } from "zod"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
 
 // Define Zod schema for input validation
 const nameSchema = z
@@ -25,15 +27,11 @@ const nameSchema = z
 
 export default function SelectColor() {
   const t = useTranslations("Components")
-  const backgroundColor = useAppSelector(
-    (state) => state.newTheme?.general?.backgroundColor
-  )
-  const primaryColor = useAppSelector(
-    (state) => state.newTheme?.general?.primaryColor
-  )
-  const secondaryColor = useAppSelector(
-    (state) => state.newTheme?.general?.secondaryColor
-  )
+  const general = useAppSelector((state) => state.newTheme?.general)
+  const dispatch = useAppDispatch()
+  const mobileScreen = useAppSelector((state) => state.newTheme?.mobileScreen)
+  const header = useAppSelector((state) => state.newTheme?.header)
+  const text = useAppSelector((state) => state.newTheme?.text)
   const templateId = useAppSelector((state) => state.newTheme?.templateId)
   const [name, setName] = useState("")
   const [error, setError] = useState("")
@@ -51,21 +49,20 @@ export default function SelectColor() {
       // Validate input against Zod schema
       nameSchema.parse(name)
       // Handle submission logic here (e.g., navigate to next step)
-      console.log("Form submitted with name:", name)
+      console.log("Form submitted with name:", name, general)
       const res = await fetch("/api/flows", {
         method: "POST",
         body: JSON.stringify({
-          flowSettings: {
-            backgroundColor,
-            primaryColor,
-            secondaryColor,
-          },
+          flowSettings: { general, mobileScreen, header, text },
           templateId,
           name,
         }),
       })
+
       const data = await res.json()
-      console.log("result:", data)
+      // // console.log("result:", data)
+      dispatch(reset())
+      dispatch(resetScreens())
     } catch (err) {
       setError(t("Name is required"))
     }
@@ -126,7 +123,6 @@ export default function SelectColor() {
               height={800}
               width="100%"
               title="Survey"
-              className="bg-black"
             ></iframe>
           </div>
         </div>

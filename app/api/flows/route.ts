@@ -111,22 +111,300 @@ export async function POST(req: NextRequest) {
         status: status || "active",
         previewImage: previewImage || template.preview,
         link: link || "",
-        numberOfSteps: templateSteps.length,
+        numberOfSteps: templateSteps.length === 0 ? 1 : templateSteps.length,
         numberOfResponses: 0,
         userId,
       },
     })
 
     const flowId = flow.id
-    const flowSteps = templateSteps.map((step) => ({
-      flowId,
-      name: step.name,
-      link: step.link,
-      content: step.content as any,
-      order: step.order,
-    }))
-    await prisma.flowStep.createMany({ data: flowSteps })
-
+    if (templateSteps.length > 0) {
+      const flowSteps = templateSteps.map((step) => ({
+        flowId,
+        name: step.name,
+        link: step.link,
+        content: step.content as any,
+        order: step.order,
+      }))
+      await prisma.flowStep.createMany({ data: flowSteps })
+    } else {
+      {
+        await prisma.flowStep.create({
+          data: {
+            flowId,
+            name: "one",
+            link: "",
+            content: {
+              ROOT: {
+                type: "UserContainer",
+                nodes: ["fxUOaKZg8l", "rlca7E5r-5", "pJuarHFYBL", "4Wzqo77fQZ"],
+                props: {
+                  padding: 5,
+                  expanded: "true",
+                  className:
+                    "min-h-[400px] min-w-full flex flex-col items-center py-5 new-screens",
+                  background: "transparent",
+                },
+                custom: {},
+                hidden: false,
+                isCanvas: true,
+                displayName: "New Screen",
+                linkedNodes: {},
+              },
+              "4Wzqo77fQZ": {
+                type: {
+                  resolvedName: "Select",
+                },
+                nodes: [],
+                props: {
+                  size: "medium",
+                  label: "Select2",
+                  width: "small",
+                  border: 2,
+                  height: 50,
+                  disabled: false,
+                  required: false,
+                  tracking: false,
+                  fieldName: "select-bbac00",
+                  fullWidth: true,
+                  marginTop: 20,
+                  fontFamily: {
+                    value: "--font-poppins",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  labelColor: "#292929",
+                  marginLeft: 0,
+                  paddingTop: "20",
+                  borderColor: {
+                    value: "#eaeaeb",
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  marginRight: 0,
+                  paddingLeft: "16",
+                  placeholder: "Please select an option",
+                  settingsTab: ["c", "o", "n", "t", "e", "n", "t", "spacing"],
+                  marginBottom: 20,
+                  paddingRight: "16",
+                  paddingBottom: "20",
+                  selectOptions: [
+                    {
+                      id: "select-option-item-2200",
+                      value: "Option 1",
+                    },
+                    {
+                      id: "select-option-item-3800",
+                      value: "Option 2",
+                    },
+                    {
+                      id: "select-option-item-9a00",
+                      value: "Option 3",
+                    },
+                  ],
+                  trackingEvent: "select-6ff500",
+                  borderHoverColor: {
+                    value: "#13aa1d",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  sortAlphabetically: false,
+                  containerBackground: "transparent",
+                  selectedOptionTextColor: "#ffffff",
+                  selectedOptionBackgroundColor: {
+                    value: "#13aa1d",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                },
+                custom: {},
+                hidden: false,
+                parent: "ROOT",
+                isCanvas: false,
+                displayName: "Select",
+                linkedNodes: {},
+              },
+              fxUOaKZg8l: {
+                type: {
+                  resolvedName: "HeadlineText",
+                },
+                nodes: [],
+                props: {
+                  text: "Headlines for your business",
+                  tagType: "h1",
+                  fontSize: {
+                    value: 42,
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  marginTop: {
+                    value: 0,
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  textAlign: {
+                    value: "left",
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  textColor: {
+                    value: "#292929",
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  fontFamily: {
+                    value: "--font-poppins",
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  fontWeight: {
+                    value: "600",
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  marginLeft: {
+                    value: 0,
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  marginRight: {
+                    value: 0,
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  marginBottom: {
+                    value: 0,
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                },
+                custom: {},
+                hidden: false,
+                parent: "ROOT",
+                isCanvas: false,
+                displayName: "HeadlineText",
+                linkedNodes: {},
+              },
+              pJuarHFYBL: {
+                type: {
+                  resolvedName: "IconButton",
+                },
+                nodes: [],
+                props: {
+                  gap: 4,
+                  icon: "aperture",
+                  size: "medium",
+                  text: "Continue",
+                  color: {
+                    value: "#ffffff",
+                    globalStyled: false,
+                    isCustomized: true,
+                  },
+                  width: "medium",
+                  border: 2,
+                  height: "auto",
+                  preset: "filled",
+                  radius: {
+                    value: "8",
+                    globalStyled: false,
+                    isCustomized: false,
+                  },
+                  disabled: false,
+                  tracking: false,
+                  fullWidth: true,
+                  marginTop: 20,
+                  alignItems: "center",
+                  background: {
+                    value: "#13aa1d",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  buttonSize: "medium",
+                  colorHover: {
+                    value: "#ffffff",
+                    globalStyled: false,
+                    isCustomized: true,
+                  },
+                  enableIcon: true,
+                  fontFamily: {
+                    value: "--font-poppins",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  marginLeft: 0,
+                  nextScreen: {
+                    screenId: "clygvxu1f002z13b1xakyonpi",
+                    screenName: "one",
+                  },
+                  paddingTop: "14",
+                  borderColor: {
+                    value: "#13aa1d",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  marginRight: 0,
+                  paddingLeft: "16",
+                  settingsTab: "content",
+                  buttonAction: "next-screen",
+                  marginBottom: 20,
+                  paddingRight: "16",
+                  flexDirection: "row",
+                  paddingBottom: "14",
+                  trackingEvent: "button-ce6d00",
+                  justifyContent: "space-between",
+                  backgroundHover: {
+                    value: "#119c1b",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  borderHoverColor: {
+                    value: "#13aa1d",
+                    globalStyled: true,
+                    isCustomized: false,
+                  },
+                  containerBackground: "rgba(255,255,255,0)",
+                },
+                custom: {},
+                hidden: false,
+                parent: "ROOT",
+                isCanvas: false,
+                displayName: "IconButton",
+                linkedNodes: {},
+              },
+              "rlca7E5r-5": {
+                type: {
+                  resolvedName: "UserText",
+                },
+                nodes: [],
+                props: {
+                  text: "Your text here",
+                  tagType: "p",
+                  fontSize: 24,
+                  fullWidth: true,
+                  marginTop: 0,
+                  textAlign: "center",
+                  textColor: "#504a54",
+                  fontFamily: "--font-roboto",
+                  fontWeight: "400",
+                  marginLeft: 0,
+                  marginRight: 0,
+                  marginBottom: 0,
+                },
+                custom: {},
+                hidden: false,
+                parent: "ROOT",
+                isCanvas: false,
+                displayName: "UserText",
+                linkedNodes: {},
+              },
+            },
+            order: 1,
+            isDeleted: false,
+            templateId: template.id,
+          },
+        })
+      }
+    }
     await prisma.integration.create({
       data: {
         flowId: flow.id,
