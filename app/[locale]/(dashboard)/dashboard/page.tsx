@@ -66,7 +66,7 @@ export default function DashboardPage() {
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-muted/40 md:block">
+      <div className="bg-muted/40 hidden border-r md:block">
         <div className="fixed flex h-full max-h-screen flex-col gap-2 md:w-[220px] lg:w-[280px]">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
@@ -139,16 +139,16 @@ export default function DashboardPage() {
             <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="text-muted-foreground absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
                   <Input
                     type="search"
                     placeholder={t("Find workspace or flow")}
-                    className="w-full appearance-none bg-background pl-8 shadow-none "
+                    className="bg-background w-full appearance-none pl-8 shadow-none "
                   />
                 </div>
               </form>
               <Separator className="my-4" />
-              <div className="flex items-center gap-3 rounded-lg px-3 py-2 uppercase text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-3 rounded-lg px-3 py-2 uppercase">
                 <ChevronDown className="size-4" />
                 {/* <User className="h-4 w-4" /> */}
                 {t("Private")}
@@ -167,7 +167,7 @@ export default function DashboardPage() {
               <div
                 onClick={() => setOpenCreatedFlow(true)}
                 // href="/dashboard/flows"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:cursor-pointer hover:text-primary"
+                className="bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:cursor-pointer"
               >
                 {/* <Package className="size-4" /> */}
                 <FolderOpen className="size-4" />
@@ -202,7 +202,7 @@ export default function DashboardPage() {
                 <Button
                   variant="link"
                   size="icon"
-                  className="shrink-0 md:hidden w-auto px-2"
+                  className="w-auto shrink-0 px-2 md:hidden"
                 >
                   <svg
                     width="25"
@@ -271,14 +271,14 @@ export default function DashboardPage() {
                   </Link>
                   <Link
                     href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
                   >
                     <Home className="size-5" />
                     {t("Dashboard")}
                   </Link>
                   <Link
                     href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+                    className="bg-muted text-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
                   >
                     <ShoppingCart className="size-5" />
                     {t("Orders")}
@@ -288,21 +288,21 @@ export default function DashboardPage() {
                   </Link>
                   <Link
                     href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
                   >
                     <Package className="size-5" />
                     {t("Products")}
                   </Link>
                   <Link
                     href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
                   >
                     <Users className="size-5" />
                     {t("Customers")}
                   </Link>
                   <Link
                     href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
                   >
                     <LineChart className="size-5" />
                     {t("Analytics")}
@@ -327,7 +327,7 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
+                  className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
                 >
                   {userData ? (
                     userData?.name ? (
@@ -394,7 +394,7 @@ export default function DashboardPage() {
                 <h3 className="text-2xl font-bold tracking-tight">
                   {t("There's not a flow in sight")}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {t.rich(
                     "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
                     {

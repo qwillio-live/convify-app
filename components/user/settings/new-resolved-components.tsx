@@ -77,11 +77,14 @@ const ResolvedNewComponentsFromCraftState = ({
   useEffect(() => {
     try {
       const changeBackgroundColor = () => {
-        const elements = document.querySelectorAll(".bLjYAn")
+        const elements = document.querySelectorAll(
+          ".bLjYAn"
+        ) as NodeListOf<HTMLElement>
         console.log("element", elements)
         if (elements) {
           elements?.forEach((element) => {
-            element.style.backgroundColor = globalTheme?.general?.primaryColor
+            element.style.backgroundColor =
+              globalTheme?.general?.primaryColor || ""
           })
         }
       }
@@ -179,7 +182,7 @@ const ResolvedNewComponentsFromCraftState = ({
                     }
                   : {
                       backgroundColor: rgba(
-                        globalTheme?.general?.primaryColor,
+                        globalTheme?.general?.primaryColor || "",
                         0.1
                       ),
                     }),
@@ -244,7 +247,7 @@ const ResolvedNewComponentsFromCraftState = ({
                     }
                   : {
                       backgroundColor: rgba(
-                        globalTheme?.general?.primaryColor,
+                        globalTheme?.general?.primaryColor || "",
                         0.1
                       ),
                     }),

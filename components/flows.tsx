@@ -41,7 +41,7 @@ export function FlowsList() {
         <div className="flex flex-col">
           <Link
             className="flex items-center justify-start self-start"
-            href="/dashboard/flows/create-flow"
+            href="/dashboard/flows/create-flow/select-template"
           >
             <Button size="sm" className="my-4 h-8 gap-1 py-2">
               <Plus className="size-3.5" />
@@ -81,7 +81,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -131,7 +131,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -181,7 +181,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -231,7 +231,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -281,7 +281,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
                         height="64"
                         width="113"
                         src={placeholder.src}
@@ -331,7 +331,7 @@ export function FlowsList() {
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                        className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
                         height="64"
                         width="113"
                         src={placeholder.src}
