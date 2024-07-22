@@ -65,6 +65,9 @@ export const HeadlineTextSettings = () => {
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
+
+  const mobileScreen = useAppSelector((state: RootState) => state.theme?.mobileScreen)
+
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
@@ -91,6 +94,7 @@ export const HeadlineTextSettings = () => {
       tagType,
       textColor,
       textAlign,
+      mobileFontSize,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -125,6 +129,7 @@ export const HeadlineTextSettings = () => {
       "tagType",
       "textColor",
       "textAlign",
+      "mobileFontSize",
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
@@ -225,6 +230,26 @@ export const HeadlineTextSettings = () => {
               />
             </div>
 
+              {mobileScreen ?
+            (<div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
+              <div className="flex justify-between items-center">
+                <p className="text-md text-muted-foreground">{t("FontSize")}</p>
+                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                  {mobileFontSize}
+                </span>
+              </div>
+              <Slider
+                className=""
+                defaultValue={[mobileFontSize]}
+                value={[mobileFontSize]}
+                max={100}
+                min={12}
+                step={1}
+                onValueChange={(e) => handlePropChangeDebounced("mobileFontSize", e)}
+              />
+            </div>)
+              :
+              (
             <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
               <div className="flex justify-between items-center">
                 <p className="text-md text-muted-foreground">{t("FontSize")}</p>
@@ -242,6 +267,8 @@ export const HeadlineTextSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
               />
             </div>
+            )
+            }
 
             <div className="style-control col-span-2 flex flex-col gap-2 pb-4 pt-2">
               <p className="text-md text-muted-foreground">{t("FontWeight")}</p>

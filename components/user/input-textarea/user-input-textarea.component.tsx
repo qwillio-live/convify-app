@@ -52,6 +52,14 @@ const UserInputSizeValues = {
   full: "100%",
 }
 
+
+const UserInputMobileSizeValues = {
+  small: "300px",
+  medium: "354px",
+  large: "376px",
+  full: "100%",
+}
+
 export type UserInputTextareaProps = {
   inputValue: string
   fontSize: number
@@ -393,6 +401,7 @@ export const UserInputTextarea = ({ ...props }) => {
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
   // useEffect(() => {
   //   if (
@@ -463,7 +472,7 @@ export const UserInputTextarea = ({ ...props }) => {
         <div
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
-            width: `${UserInputSizeValues[props.size]}`,
+            width: `${mobileScreen ? UserInputMobileSizeValues[props.size] : UserInputSizeValues[props.size]}`,
           }}
         >
           <ContentEditable
