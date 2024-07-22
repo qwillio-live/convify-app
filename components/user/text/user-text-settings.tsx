@@ -13,7 +13,6 @@ import {
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-
 import { useNode } from "@/lib/craftjs"
 import {
   useScreenNames,

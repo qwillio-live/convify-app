@@ -27,11 +27,10 @@ const ContainerWidthValues = {
   large: "770px",
   full: "100%",
 }
-
 const MobileContainerWidthValues = {
-  small: "120px",
-  medium: "220px",
-  large: "320px",
+  small: "300px",
+  medium: "354px",
+  large: "376px",
   full: "100%",
 }
 
