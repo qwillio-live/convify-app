@@ -73,7 +73,7 @@ const useTelegramButtonTheme = () => {
     width: IconButtonSizes.small,
     height: "auto",
     size: IconButtonSizes.medium,
-    text: t("Chat on Telegram"),
+    text: t("Telegram"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,

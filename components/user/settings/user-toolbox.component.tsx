@@ -553,7 +553,7 @@ export const UserToolbox = () => {
                         // {...IconButtonDefaultProps}
                         {...SocialFilledPreset}
                         disabled={false}
-                        text={t("Chat on WhatsApp")}
+                        text={t("WhatsApp")}
                         justifyContent={"center"}
                         size={"small"}
                         marginTop={20}
@@ -581,7 +581,7 @@ export const UserToolbox = () => {
                       marginBottom={20}
                       marginLeft={20}
                       marginRight={20}
-                      text={t("Chat on WhatsApp")}
+                      text={t("WhatsApp")}
                       justifyContent={"center"}
                       paddingLeft={0}
                       paddingRight={0}
@@ -601,7 +601,7 @@ export const UserToolbox = () => {
                         // {...IconButtonDefaultProps}
                         {...TelegramFilledPreset}
                         disabled={false}
-                        text={t("Chat on Telegram")}
+                        text={t("Telegram")}
                         justifyContent={"center"}
                         size={"small"}
                         marginTop={20}
@@ -629,7 +629,7 @@ export const UserToolbox = () => {
                       marginBottom={20}
                       marginLeft={20}
                       marginRight={20}
-                      text={t("Chat on Telegram")}
+                      text={t("Telegram")}
                       justifyContent={"center"}
                       paddingLeft={0}
                       paddingRight={0}

@@ -73,7 +73,7 @@ const useShareButtonTheme = () => {
     width: IconButtonSizes.small,
     height: "auto",
     size: IconButtonSizes.medium,
-    text: t("Chat on WhatsApp"),
+    text: t("WhatsApp"),
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,

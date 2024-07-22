@@ -527,7 +527,7 @@ export const SocialShareButtonSettings = () => {
                 <SocialShareButtonGen
                   {...SocialFilledPreset}
                   disabled={false}
-                  text={t("Chat on WhatsApp")}
+                  text={t("WhatsApp")}
                   justifyContent={"center"}
                   size={"small"}
                   paddingLeft={0}

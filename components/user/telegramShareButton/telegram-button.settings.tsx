@@ -281,7 +281,7 @@ export const TelegramShareButtonSettings = () => {
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {t("Telegram url")}
+                {t("Telegram username/phone")}
               </label>
               <Input
                 value={url}
@@ -290,7 +290,7 @@ export const TelegramShareButtonSettings = () => {
                   handlePropChangeDebounced("url", e.target.value)
                 }}
                 type={"text"}
-                placeholder={t("Telegram url")}
+                placeholder={t("Telegram username/phone")}
               />
             </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
@@ -519,7 +519,7 @@ export const TelegramShareButtonSettings = () => {
                 <TelegramShareButtonGen
                   {...TelegramFilledPreset}
                   disabled={false}
-                  text={t("Chat on Telegram")}
+                  text={t("Telegram")}
                   justifyContent={"center"}
                   size={"small"}
                   paddingLeft={0}

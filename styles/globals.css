@@ -150,20 +150,3 @@ html {
 .react-colorful__hue .react-colorful__pointer-fill {
   background-color: white !important;
 }
-
-@keyframes hoverTranslateY {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-0.25rem); /* -1 corresponds to 0.25rem */
-  }
-}
-
-.custom-button {
-  transition: transform 0.2s ease-in-out;
-}
-
-.custom-button:hover {
-  transform: translateY(-0.25rem); /* Move up on hover */
-}
