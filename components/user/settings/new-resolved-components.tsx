@@ -113,11 +113,11 @@ const ResolvedNewComponentsFromCraftState = ({
           if (resolvedName !== "AvatarComponent") {
             const avatarComponents = nodes.filter(
               (childNodeId) =>
-                craftState[childNodeId].type.resolvedName === "AvatarComponent"
+                craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
             )
             filteredNodes = nodes.filter(
               (childNodeId) =>
-                craftState[childNodeId].type.resolvedName !== "AvatarComponent"
+                craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
             )
             if (avatarComponents.length > 0) {
               filteredNodes.push(avatarComponents[avatarComponents.length - 1])

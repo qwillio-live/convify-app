@@ -201,30 +201,54 @@ export const screensSlice = createSlice({
         fieldValue: any
       }>
     ) => {
-      // const selectedScreenId= state.screens[state.selectedScreen].screenId;
+      const { screenId, fieldId, fieldName, fieldValue } = action.payload
+
+      // Update screenFields in selected screen
       const selectedScreen = state.selectedScreen
-      const selectedScreenId = action.payload.screenId
-      const { fieldId, fieldName, fieldValue } = action.payload
       const screenFields = state.screens[selectedScreen]?.screenFields
-      const field = screenFields[fieldId]
-      if (field) {
-        field[fieldName] = fieldValue
-        screenFields[fieldId] = field
-        state.screens[selectedScreen].screenFields = screenFields
+
+      if (!screenFields || !screenFields[fieldId]) {
+        console.error(
+          `Field with fieldId ${fieldId} not found in screenFields.`
+        )
+        return
       }
+
+      const updatedField = {
+        ...screenFields[fieldId], // Clone the original field object
+        [fieldName]: fieldValue, // Update the specified field property
+      }
+
+      // Update state with updated screenFields for selected screen
+      state.screens[selectedScreen].screenFields = {
+        ...screenFields,
+        [fieldId]: updatedField,
+      }
+
+      // Update screenFieldsList
       const screenFieldsList = state.screensFieldsList
-      console.log("SCREEN FIELDS LIST IS: ", screenFieldsList)
-      const screenListItem = screenFieldsList[selectedScreenId]
-      if (screenListItem) {
-        const field = screenListItem[fieldId]
-        if (field) {
-          field[fieldName] = fieldValue
-          screenListItem[fieldId] = field
-          screenFieldsList[selectedScreenId] = screenListItem
+      const screenListItem = screenFieldsList[screenId]
+
+      if (screenListItem && screenListItem[fieldId]) {
+        const updatedListItem = {
+          ...screenListItem,
+          [fieldId]: {
+            ...screenListItem[fieldId],
+            [fieldName]: fieldValue,
+          },
         }
+
+        state.screensFieldsList = {
+          ...screenFieldsList,
+          [screenId]: updatedListItem,
+        }
+      } else {
+        console.error(
+          `Field with fieldId ${fieldId} not found in screenFieldsList[${screenId}].`
+        )
       }
-      state.screensFieldsList = screenFieldsList
     },
+
     validateScreen: (
       state,
       action: PayloadAction<{ current: number | string; next: string }>

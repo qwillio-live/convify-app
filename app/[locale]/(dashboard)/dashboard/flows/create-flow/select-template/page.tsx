@@ -16,7 +16,7 @@ import { ChevronLeft, Loader2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { json } from "stream/consumers"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
@@ -35,7 +35,7 @@ const cardData = [
 
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
-  const [selectedCard, setSelectedCard] = useState<number | null>(null)
+  const [selectedCard, setSelectedCard] = useState<number>(1)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [templates, setTemplates] = useState<any[]>([])
   const [categories, setCategories] = useState<string[]>([])
@@ -46,8 +46,8 @@ export default function SelectTemplate() {
   const t = useTranslations("Components")
   const pathname = usePathname()
   const dispatch = useAppDispatch()
-  const flowData = useAppSelector((state) => state.newTheme)
-  const state = useAppSelector((state) => state)
+  const router = useRouter()
+
   const handleCardClick = (index: number) => {
     setLoadingCardIndex(index)
     setSelectedCard(index + 1)
@@ -56,7 +56,7 @@ export default function SelectTemplate() {
     setTimeout(() => {
       setLoadingCardIndex(null)
       // Perform your action here after loading
-    }, 1000) // Simulate loading for 3 seconds
+    }, 300) // Simulate loading for 3 seconds
   }
 
   const handleFilterClick = (category: string) => {
@@ -67,8 +67,9 @@ export default function SelectTemplate() {
 
   const filteredCards = templates.filter(
     (card) =>
-      selectedCategory === "all" ||
-      JSON.parse(card.tags).includes(selectedCategory)
+      card.name !== "Start from Scratch" &&
+      (selectedCategory === "all" ||
+        JSON.parse(card.tags).includes(selectedCategory))
   )
 
   const handleScroll = () => {
@@ -99,7 +100,7 @@ export default function SelectTemplate() {
     }
 
     const getTemplates = async () => {
-      const templates = await fetchTemplates()
+      let templates = await fetchTemplates()
       const uniqueTags = templates?.reduce((acc, item) => {
         const tags = JSON.parse(item.tags)
         tags.forEach((tag) => {
@@ -199,8 +200,14 @@ export default function SelectTemplate() {
                     variant="secondary"
                     size="filterIcon"
                     onClick={() => {
-                      handleFilterClick("all")
-                      setSelectedCard(null)
+                      let scratchTemplate = templates.find(
+                        (template) => template.name === "Start from Scratch"
+                      )
+                      dispatch(
+                        setNewFlowSettings(scratchTemplate?.templateSettings)
+                      )
+                      dispatch(setTemplateId(scratchTemplate?.id))
+                      router.push("./select-color")
                     }}
                   >
                     {t("startFromScratch")}

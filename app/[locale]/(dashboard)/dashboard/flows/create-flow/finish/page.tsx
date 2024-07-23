@@ -75,7 +75,7 @@ export default function SelectColor() {
 
       // Set success message and navigate to dashboard after some time (simulating a delay)
       setTimeout(() => {
-        router.push("/dashboard")
+        router.push(`/dashboard/${data.id}/create-flow`)
       }, 2000) // Navigate after 2 seconds
     } catch (err) {
       setIsLoading(false) // Stop loading
