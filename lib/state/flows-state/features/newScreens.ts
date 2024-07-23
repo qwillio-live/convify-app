@@ -168,13 +168,27 @@ export const newScreensSlice = createSlice({
       return
     },
     addField: (state, action: PayloadAction<ScreenFieldType>) => {
-      // console.log("Add field");
       const selectedScreen = state.selectedScreen
-      const selectedId = state.screens[selectedScreen]?.screenId
+      const selectedScreenObj = state.screens[selectedScreen]
       const field = action.payload
-      const screenFields = state.screens[selectedScreen]?.screenFields
+
+      if (!selectedScreenObj) {
+        // Handle case where selected screen is not found
+        console.error(`Selected screen (${selectedScreen}) not found in state.`)
+        return
+      }
+
+      // Clone the existing screenFields to avoid mutating state directly
+      const screenFields = { ...selectedScreenObj.screenFields }
+
+      // Update the screenFields with the new field
       screenFields[field.fieldId] = field
+
+      // Update state with the modified screenFields
       state.screens[selectedScreen].screenFields = screenFields
+
+      // Update screensFieldsList with the modified screenFields
+      const selectedId = selectedScreenObj.screenId
       state.screensFieldsList[selectedId] = screenFields
     },
     removeField: (state, action: PayloadAction<string>) => {
@@ -304,14 +318,27 @@ export const newScreensSlice = createSlice({
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
       state.editorLoad = action.payload
+
       if (state.headerMode === true) {
         state.screensHeader = action.payload
       } else if (state.footerMode === true) {
         state.screensFooter = action.payload
       } else {
-        state.screens[state.selectedScreen].screenData = action.payload
+        const selectedScreen = state.screens[state.selectedScreen]
+
+        if (!selectedScreen) {
+          // Handle case where selected screen is not found
+          console.error(
+            `Selected screen (${state.selectedScreen}) not found in state.`
+          )
+          return
+        }
+
+        // Update screenData of the selected screen
+        selectedScreen.screenData = action.payload
       }
     },
+
     setScreenHeader: (state, action: PayloadAction<any>) => {
       state.screensHeader = JSON.stringify(action.payload)
     },

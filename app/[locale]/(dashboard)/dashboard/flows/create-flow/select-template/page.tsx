@@ -35,7 +35,7 @@ const cardData = [
 
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
-  const [selectedCard, setSelectedCard] = useState<number>(0)
+  const [selectedCard, setSelectedCard] = useState<number | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [templates, setTemplates] = useState<any[]>([])
   const [categories, setCategories] = useState<string[]>([])
@@ -50,13 +50,13 @@ export default function SelectTemplate() {
   const state = useAppSelector((state) => state)
   const handleCardClick = (index: number) => {
     setLoadingCardIndex(index)
-    setSelectedCard(index)
+    setSelectedCard(index + 1)
     dispatch(setNewFlowSettings(JSON.parse(templates[index]?.templateSettings)))
     dispatch(setTemplateId(templates[index]?.id))
     setTimeout(() => {
       setLoadingCardIndex(null)
       // Perform your action here after loading
-    }, 3000) // Simulate loading for 3 seconds
+    }, 1000) // Simulate loading for 3 seconds
   }
 
   const handleFilterClick = (category: string) => {
@@ -121,8 +121,8 @@ export default function SelectTemplate() {
     templates,
     categories,
     selectedCard,
-    templates[selectedCard]?.templateSettings,
-    state
+    templates[selectedCard]?.content
+    // state
   )
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
@@ -198,7 +198,10 @@ export default function SelectTemplate() {
                     className="grow border-0 bg-white font-semibold"
                     variant="secondary"
                     size="filterIcon"
-                    onClick={() => handleFilterClick("all")}
+                    onClick={() => {
+                      handleFilterClick("all")
+                      setSelectedCard(null)
+                    }}
                   >
                     {t("startFromScratch")}
                   </Button>
@@ -249,14 +252,6 @@ export default function SelectTemplate() {
                             {t("popular")}
                           </Badge>
                         )}
-                        {card?.isActive && (
-                          <Badge
-                            variant="default"
-                            className="font-sans3 ml-2 rounded-md bg-black px-2 py-1 font-semibold"
-                          >
-                            {t("active")}
-                          </Badge>
-                        )}
                       </div>
                     </div>
                   ))}
@@ -266,13 +261,18 @@ export default function SelectTemplate() {
           </div>
           <Separator orientation="vertical" className="z-40" />
           <div className=" mx-auto w-full py-6 md:w-6/12">
-            <iframe
-              src={templates[selectedCard]?.content}
-              name="page"
-              height={800}
-              width="100%"
-              title="Survey"
-            ></iframe>
+            {selectedCard && (
+              <iframe
+                src={templates[selectedCard - 1]?.content}
+                name="page"
+                height={800}
+                width="100%"
+                title="Survey"
+                style={{ minHeight: "800px" }}
+              >
+                Your browser doesn't support iframes
+              </iframe>
+            )}
           </div>
         </div>
         <div className="fixed bottom-0 left-4 right-5  z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">

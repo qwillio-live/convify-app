@@ -18,6 +18,7 @@ import { z } from "zod"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
+import { useRouter } from "next/navigation"
 
 // Define Zod schema for input validation
 const nameSchema = z
@@ -35,6 +36,9 @@ export default function SelectColor() {
   const templateId = useAppSelector((state) => state.newTheme?.templateId)
   const [name, setName] = useState("")
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false) // State for loading state
+  const [successMessage, setSuccessMessage] = useState("") // State for success message
+  const router = useRouter()
 
   const handleInputChange = (event) => {
     setName(event.target.value)
@@ -49,7 +53,7 @@ export default function SelectColor() {
       // Validate input against Zod schema
       nameSchema.parse(name)
       // Handle submission logic here (e.g., navigate to next step)
-      console.log("Form submitted with name:", name, general)
+      setIsLoading(true) // Start loading
       const res = await fetch("/api/flows", {
         method: "POST",
         body: JSON.stringify({
@@ -57,13 +61,24 @@ export default function SelectColor() {
           templateId,
           name,
         }),
+      }).then((res) => {
+        setSuccessMessage(t("Flow created successfully!"))
+        return res
       })
 
       const data = await res.json()
-      // // console.log("result:", data)
+      console.log("result:", data)
+      setIsLoading(false) // Stop loading
+
       dispatch(reset())
       dispatch(resetScreens())
+
+      // Set success message and navigate to dashboard after some time (simulating a delay)
+      setTimeout(() => {
+        router.push("/dashboard")
+      }, 2000) // Navigate after 2 seconds
     } catch (err) {
+      setIsLoading(false) // Stop loading
       setError(t("Name is required"))
     }
   }
@@ -152,12 +167,20 @@ export default function SelectColor() {
               size="lg"
               variant="default"
               onClick={handleSubmit}
+              disabled={isLoading} // Disable button while loading
             >
-              {t("continue")}
+              {isLoading ? t("loading") : t("continue")}
             </Button>
           </div>
         </div>
       </div>
+
+      {/* Success message display */}
+      {successMessage && (
+        <div className="fixed bottom-20 right-4 z-50 rounded-md bg-green-500 p-4 text-white shadow-lg">
+          {successMessage}
+        </div>
+      )}
     </div>
   )
 }
