@@ -24,10 +24,16 @@ const ContainerWidthValues = {
 }
 
 const MobileContainerWidthValues = {
-  small: "120px",
-  medium: "220px",
-  large: "320px",
+  small: "300px",
+  medium: "354px",
+  large: "376px",
   full: "100%",
+}
+
+
+const headlineFontSize = {
+  mobile: 24,
+  desktop: 32,
 }
 
 const maxLength = 850
@@ -262,6 +268,7 @@ export const HeadlineText = ({
   justifyContent,
   border,
   borderColor,
+  mobileFontSize,
   ...props
 }) => {
   const {
@@ -417,6 +424,7 @@ export const HeadlineText = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
+
   return (
     <div
       ref={(el: any) => connect(drag(el))}
@@ -446,7 +454,7 @@ export const HeadlineText = ({
       >
         <StyledCustomHeadlineInput
           fontFamily={primaryFont}
-          fontSize={`${fontSize}px`}
+          fontSize={`${mobileScreen ? mobileFontSize : fontSize}px`}
           color={color.value}
           colorHover={colorHover.value}
           flexDirection={flexDirection}
@@ -477,12 +485,12 @@ export const HeadlineText = ({
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
               style={{
-                maxWidth: "786px",
+                maxWidth: "960px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
                 color: `${primaryTextColor}`,
-                fontSize: `${fontSize}px`,
+                fontSize:`${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
               className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
@@ -530,6 +538,7 @@ export type HeadlineTextProps = {
   tagType: string
   preset: string
   lineHeight: string | number
+  mobileFontSize: number
 }
 export enum TextContainerSize {
   small = "small",
@@ -586,7 +595,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   marginTop: 20,
   marginRight: 0,
   marginBottom: 20,
-  fontSize: 42,
+  fontSize: headlineFontSize.desktop,
   fontWeight: "700",
   paddingLeft: "0",
   paddingTop: "0",
@@ -598,6 +607,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   fullWidth: true,
   tagType: "h1",
   preset: "h2",
+  mobileFontSize: 24,
 }
 
 HeadlineText.craft = {

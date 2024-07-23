@@ -29,6 +29,15 @@ const UserInputSizeValues = {
   full: "100%",
 }
 
+const UserInputMobileSizeValues = {
+  small: "300px",
+  medium: "354px",
+  large: "376px",
+  full: "100%",
+}
+
+
+
 export type UserInputCheckboxProps = {
   inputValue: string
   fontSize: number
@@ -349,6 +358,10 @@ export const UserInputCheckbox = ({ ...props }) => {
     (state) => state?.theme?.general?.primaryColor
   )
 
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
+
+
   const backgroundThemeColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
@@ -386,6 +399,8 @@ export const UserInputCheckbox = ({ ...props }) => {
       setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
     }
   }, [secondaryFont, props.secondaryFont, setProp])
+
+  
 
   useEffect(() => {
     if (
@@ -455,7 +470,7 @@ export const UserInputCheckbox = ({ ...props }) => {
         <div
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
-            width: `${UserInputSizeValues[props.size]}`,
+            width: `${mobileScreen ? UserInputMobileSizeValues[props.size] : UserInputSizeValues[props.size]}`,
           }}
         >
           <div className="field-container flex flex-row gap-0 items-center w-full transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
@@ -523,9 +538,6 @@ export const UserInputCheckbox = ({ ...props }) => {
                   ? darkenedBg
                   : props.backgroundColor,
               }}
-              data-answer={props.label}
-              data-value={isChecked}
-              id={props.id}
             >
               <ContentEditable
                 html={props.label}
@@ -563,6 +575,10 @@ export const UserInputCheckbox = ({ ...props }) => {
                   style={{
                     zIndex: 10,
                   }}
+                  data-answer={props.label}
+                  data-value={isChecked}
+                  id={props.id}
+    
                 />
               )}
             </UserInputCheckboxStyled>

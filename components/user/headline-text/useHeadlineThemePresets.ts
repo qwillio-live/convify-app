@@ -22,7 +22,7 @@ const useHeadlineThemePresets = () => {
 
   const h1Preset: HeadlineTextProps = {
     lineHeight: "1.5",
-    fontSize: 42,
+    fontSize: 32,
     fontWeight: "700",
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -85,11 +85,12 @@ const useHeadlineThemePresets = () => {
     fullWidth: true,
     buttonSize: "medium",
     tagType: "h1",
-    preset: "h1"
+    preset: "h1",
+    mobileFontSize: 24
   }
 
   const h2Preset: HeadlineTextProps = {
-    fontSize: 42,
+    fontSize: 32,
     fontWeight: "700",
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -153,7 +154,8 @@ const useHeadlineThemePresets = () => {
     fullWidth: true,
     buttonSize: "medium",
     tagType: "h2",
-    preset: "h2"
+    preset: "h2",
+    mobileFontSize: 24
   }
 
   return { h1Preset, h2Preset }
