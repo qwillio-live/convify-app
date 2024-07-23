@@ -150,3 +150,11 @@ html {
 .react-colorful__hue .react-colorful__pointer-fill {
   background-color: white !important;
 }
+
+userContainer {
+  border: none; /* Optional: Remove border from userContainer itself */
+}
+
+userContainer > *:hover {
+  border: 1px dotted #60a5fa !important; /* Apply border to all children of userContainer */
+}

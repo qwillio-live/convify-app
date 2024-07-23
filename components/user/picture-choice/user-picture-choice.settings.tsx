@@ -716,7 +716,7 @@ const PictureChoiceItemNavigationSettings = ({
         <SelectValue placeholder={t("Navigate to screen")} />
       </SelectTrigger>
       <SelectContent className="text-left">
-        <SelectItem value={"none"}>{t("Do nothing")}</SelectItem>
+        <SelectItem value={"none"}>{t("Do Nothing")}</SelectItem>
         <SelectItem value="next-screen">{t("Next Screen")}</SelectItem>
         {screenNames?.map((screenName, index) => (
           <SelectItem className="text-xs" value={screenName}>

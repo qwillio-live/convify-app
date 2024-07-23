@@ -91,12 +91,17 @@ export default function NewFlowPreview() {
     if (!selectedScreenError) {
       // console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
 
-      router.push(`${pathname}?screen=${currentScreenName}`, { scroll: false })
+      router.push(
+        `${pathname}?screen=${
+          currentScreenName !== "" ? currentScreenName : firstScreenName
+        }`,
+        { scroll: false }
+      )
 
       router.refresh()
       // router.replace(`${pathName}#${currentScreenName}`);
     }
-  }, [currentScreenName, pathname])
+  }, [currentScreenName, firstScreenName, pathname])
 
   useEffect(() => {
     if (headerMode) {

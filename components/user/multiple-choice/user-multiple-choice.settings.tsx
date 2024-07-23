@@ -756,7 +756,7 @@ const MultipleChoiceItemNavigationSettings = ({
       </SelectTrigger>
       <SelectContent className="text-left">
         <SelectItem value="next-screen">{t("Next Screen")}</SelectItem>
-        <SelectItem value={"none"}>{t("Do nothing")}</SelectItem>
+        <SelectItem value={"none"}>{t("Do Nothing")}</SelectItem>
         {screenNames?.map((screenName, index) => (
           <SelectItem className="text-xs" value={screenName}>
             {index + 1} : {screenName}

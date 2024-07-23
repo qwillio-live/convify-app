@@ -65,11 +65,6 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
       : "transparent"
   }};
   z-index: 10;
-  &:hover {
-    border-width: 1px !important;
-    border-style: dotted;
-    border-color: #60a5fa;
-  }
 `
 
 export default StyledNodeDiv
@@ -196,6 +191,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       selectedComponent={selectedComponent}
       name={name}
       isActive={isActive}
+      className="parent-component"
     >
       {render}
     </StyledNodeDiv>

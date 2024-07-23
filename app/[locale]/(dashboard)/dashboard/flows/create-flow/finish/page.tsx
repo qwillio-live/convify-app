@@ -19,6 +19,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
 import { useRouter } from "next/navigation"
+import NewFlowPreview from "@/components/flow-preview/flow-preview-new.cpmponent"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 // Define Zod schema for input validation
 const nameSchema = z
@@ -131,14 +133,10 @@ export default function SelectColor() {
           </div>
 
           <Separator orientation="vertical" className="z-20 h-full" />
-          <div className="mx-auto w-full py-6 md:w-6/12">
-            <iframe
-              src="https://convify.io/survey"
-              name="page"
-              height={800}
-              width="100%"
-              title="Survey"
-            ></iframe>
+          <div className={`mx-auto w-full pb-6 md:w-6/12`}>
+            <ScrollArea className="z-20 h-full bg-white pb-10">
+              <NewFlowPreview />
+            </ScrollArea>
           </div>
         </div>
         <div className="fixed bottom-0 left-4 right-5 z-10 flex w-full items-center justify-between bg-white px-6 py-3 pr-11 md:w-6/12">
