@@ -330,9 +330,13 @@ export const IconButtonSettings = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value={"back-screen"}>Back Screen</SelectItem>
-                    <SelectItem value={"next-screen"}>Next Screen</SelectItem>
-                    <SelectItem value={"none"}>Do Nothing</SelectItem>
+                    <SelectItem value={"back-screen"}>
+                      {t("Back Screen")}
+                    </SelectItem>
+                    <SelectItem value={"next-screen"}>
+                      {t("Next Screen")}
+                    </SelectItem>
+                    <SelectItem value={"none"}> {t("Do Nothing")}</SelectItem>
                     {screenNames?.map((screen, index) => {
                       return (
                         <SelectItem value={screen.screenId}>
