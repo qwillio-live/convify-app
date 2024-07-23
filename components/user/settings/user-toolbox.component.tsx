@@ -558,8 +558,8 @@ export const UserToolbox = () => {
                         size={"small"}
                         marginTop={20}
                         marginBottom={20}
-                        marginLeft={20}
-                        marginRight={20}
+                        marginLeft={0}
+                        marginRight={0}
                         paddingLeft={0}
                         paddingRight={0}
                         iconType={PictureTypes.ICON}
@@ -579,8 +579,8 @@ export const UserToolbox = () => {
                       size="lasmallrge"
                       marginTop={20}
                       marginBottom={20}
-                      marginLeft={20}
-                      marginRight={20}
+                      marginLeft={0}
+                      marginRight={0}
                       text={t("WhatsApp")}
                       justifyContent={"center"}
                       paddingLeft={0}
@@ -606,8 +606,8 @@ export const UserToolbox = () => {
                         size={"small"}
                         marginTop={20}
                         marginBottom={20}
-                        marginLeft={20}
-                        marginRight={20}
+                        marginLeft={0}
+                        marginRight={0}
                         paddingLeft={0}
                         paddingRight={0}
                         iconType={PictureTypes.ICON}
