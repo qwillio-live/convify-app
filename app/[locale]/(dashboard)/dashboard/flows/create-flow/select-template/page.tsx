@@ -120,8 +120,8 @@ export default function SelectTemplate() {
     "templates | categories",
     templates,
     categories,
-    selectedCard,
-    templates[selectedCard]?.content
+    selectedCard
+    // templates[selectedCard]?.content
     // state
   )
   return (
@@ -269,9 +269,7 @@ export default function SelectTemplate() {
                 width="100%"
                 title="Survey"
                 style={{ minHeight: "800px" }}
-              >
-                Your browser doesn't support iframes
-              </iframe>
+              ></iframe>
             )}
           </div>
         </div>
