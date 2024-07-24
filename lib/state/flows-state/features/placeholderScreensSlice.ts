@@ -130,8 +130,8 @@ export const screensSlice = createSlice({
   reducers: {
     setScreensData: (state, action: PayloadAction<any>) => {
       state.flowName = action.payload.name
-      state.firstScreenName = action.payload.steps[0].name
-      state.currentScreenName = action.payload.steps[0].name
+      state.firstScreenName = action.payload.steps[0]?.name
+      state.currentScreenName = action.payload.steps[0]?.name
 
       const screensFieldsList = {}
 
@@ -152,7 +152,7 @@ export const screensSlice = createSlice({
         screenToggleError: false,
       }))
 
-      state.editorLoad = state.screens[state.selectedScreen].screenData
+      state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
     setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload
@@ -297,7 +297,7 @@ export const screensSlice = createSlice({
       state.screensHeader = headerScreenData
       state.screensFooter = footerScreenData
       // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
-      state.editorLoad = state.screens[state.selectedScreen].screenData
+      state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
       state.editorLoad = action.payload
@@ -346,7 +346,7 @@ export const screensSlice = createSlice({
       state.headerMode = false
       state.footerMode = false
       state.selectedScreen = action.payload
-      state.editorLoad = state.screens[action.payload].screenData // Ensure new reference
+      state.editorLoad = state.screens[action.payload]?.screenData // Ensure new reference
     },
     addAvatarComponentId(state, action) {
       if (!state.avatarComponentIds) {
