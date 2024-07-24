@@ -668,7 +668,7 @@ export const TelegramShareButton = ({
               </div>
             )}
           <div
-            className={`relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col items-center justify-center overflow-hidden overflow-x-clip px-[7px] ${
+            className={`relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col items-center justify-center overflow-hidden overflow-x-clip  ${
               enableIcon && (icon !== "" || null) ? "ml-1" : ""
             }`}
           >
