@@ -104,7 +104,7 @@ export default function CreateFlowsPage() {
                 </Button>
               </div>
 
-              <div className="lg:block hidden">
+              <div className="">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -139,7 +139,7 @@ export default function CreateFlowsPage() {
                       <span className="sr-only">Toggle user menu</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end"  style={{zIndex:80}}>
                     <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
