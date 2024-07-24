@@ -38,6 +38,7 @@ import {
 } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
 import { GlobalThemeSettings } from "@/components/user/settings/global-theme-settings"
+import { useRouter } from "next/navigation"
 
 const ColorPicker = ({ color, onChange }) => {
   const t = useTranslations("Components")
@@ -148,6 +149,7 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
 export default function SelectColor() {
   const templateSetting = useAppSelector((state) => state.newTheme)
   const dispatch = useAppDispatch()
+  const router = useRouter()
   console.log("localFlowSettings", templateSetting)
 
   const [primaryColor, setPrimaryColor] = useState(
@@ -183,8 +185,8 @@ export default function SelectColor() {
   }
   useEffect(() => {
     // Function to send style updates to the iframe
-
-    updateIframeStyles()
+    if (templateSetting?.templateId === "") router.push("./select-template")
+    else updateIframeStyles()
   }, [])
 
   /** GENERAL STYLES */

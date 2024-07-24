@@ -376,7 +376,7 @@ export const newScreensSlice = createSlice({
       state.headerMode = false
       state.footerMode = false
       state.selectedScreen = action.payload
-      state.editorLoad = state.screens[action.payload].screenData // Ensure new reference
+      state.editorLoad = state.screens[action.payload]?.screenData // Ensure new reference
     },
     addAvatarComponentId(state, action) {
       if (!state.avatarComponentIds) {

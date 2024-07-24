@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import {
   Breadcrumb,
@@ -85,6 +85,10 @@ export default function SelectColor() {
     }
   }
 
+  useEffect(() => {
+    // Function to send style updates to the iframe
+    if (templateId === "") router.push("./select-template")
+  }, [])
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
       <div className="flex h-full w-full px-6">
