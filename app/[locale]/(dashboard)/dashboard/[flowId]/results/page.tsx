@@ -1,10 +1,22 @@
 "use client"
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 import Header from "../constants/headerEls"
+import { useEffect } from "react";
 
 // sections
 
 export default function CreateFlowsPage() {
+  useEffect(() => {
+    // to remove extra main scroll
+    // Add the class when the component mounts
+    document.body.classList.add("overflow-hidden");
+
+    // Remove the class when the component unmounts
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, []);
+  
   return (
     <div className="min-h-screen w-full">
       <div className="min-h-screen flex flex-col">

@@ -35,7 +35,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { FlowsList } from "@/components/flows"
 import SkeletonFlowCard from "@/components/flows-skeleton"
 
-interface User {
+export interface User {
   name: string
   email: string
   image: string
