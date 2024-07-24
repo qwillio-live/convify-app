@@ -110,7 +110,8 @@ export default function CreateFlowsPage() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="rounded-full size-10"
+                      className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
+                      style={{ width: '40px', height: '40px' }} // Adjust the size as needed
                     >
                       {userData ? (
                         userData?.name ? (

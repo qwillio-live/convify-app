@@ -29,7 +29,7 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-scroll h-[calc(-10px+99vh)] max-h-[calc(-10px+99vh)] md:max-h-[calc(-120px+99vh)] sm:max-h-[calc(-120px+99vh)]">
+        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-auto h-[99vh] sm:h-[calc(100vh-120px)]  md:h-[calc(100vh-120px)]  lg:h-[calc(100vh-120px)] xl:h-[calc(100vh+45px)]">
           <div className="tabs-content flex w-full items-center">
             <TabsContent
               className="mt-0 w-full sm:mt-[10px]"
