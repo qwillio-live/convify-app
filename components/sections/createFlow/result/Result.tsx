@@ -29,10 +29,10 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-scroll h-[calc(100vh-120px)]">
+        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-scroll h-[calc(-10px+99vh)] max-h-[calc(-10px+99vh)] md:max-h-[calc(-120px+99vh)] sm:max-h-[calc(-120px+99vh)]">
           <div className="tabs-content flex w-full items-center">
             <TabsContent
-              className="mt-0 w-full h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)] sm:mt-[10px]"
+              className="mt-0 w-full sm:mt-[10px]"
               value="insights"
             >
               <InsightsFlowComponents />
