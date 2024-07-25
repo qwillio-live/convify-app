@@ -2,7 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import { Controller } from '../settings/controller.component';
 import { Element, useNode } from '@/lib/craftjs'
-import { TextDefaultProps, UserText } from '../text/user-text.component';
+import { TextInputDefaultProps, UserText } from '../text/user-text.component';
 
 
 export const ScreenFooterGen = () => {

@@ -209,7 +209,7 @@ const ScreensList = () => {
               <ResolvedComponentsFromCraftState screen={screensHeader} />
 
             </div>
-            <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+            <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
           </Card>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
@@ -230,7 +230,7 @@ const ScreensList = () => {
             )}
             onClick={() => handleFooterScreenClick()}
           >
-            <div className="absolute w-full h-full z-10 bg-transparent bottom-0 left-0"></div>
+            <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
             <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
             </div>
@@ -290,6 +290,9 @@ const ScreensList = () => {
                       style={{
                         backgroundColor: backgroundColor,
                         backgroundImage: backgroundImage,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                       }}
                       className={cn(
                         "h-60 w-[13.5vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
@@ -299,7 +302,7 @@ const ScreensList = () => {
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
-                      <div className="absolute w-full h-full size-full z-10 bg-transparent top-0 left-0"></div>
+                      <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div>
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div style={{ background: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor }}>
                           <ResolvedComponentsFromCraftState screen={screensHeader} />

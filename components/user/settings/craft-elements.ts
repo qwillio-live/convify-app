@@ -21,6 +21,7 @@ export const CRAFT_ELEMENTS = {
   TEXTIMAGECOMPONENT: "TextImageComponent",
   SELECT: "Select",
   USERINPUT: "UserInput",
+  INPUTCHECKBOX: "InputCheckbox",
   USERTEXT: "UserText",
   HEADLINETEXT: "HeadlineText",
   MULTIPLECHOICE: "MultipleChoice",
@@ -29,4 +30,9 @@ export const CRAFT_ELEMENTS = {
   CHECKLIST: "Checklist",
   LIST: "List",
   SCREENFOOTER: "ScreenFooter",
+  INPUTMAIL: "InputMail",
+  INPUTPHONE: "InputPhone",
+  TEXTAREA: "Textarea",
+  FORM: "Form",
+  FORMCONTENT: "FormContent",
 }

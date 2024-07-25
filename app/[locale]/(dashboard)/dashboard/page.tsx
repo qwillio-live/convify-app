@@ -33,12 +33,22 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { FlowsList } from "@/components/flows"
+import SkeletonFlowCard from "@/components/flows-skeleton"
 
-interface User {
+export interface User {
   name: string
   email: string
   image: string
   id: string
+}
+
+const clearFlowNamesFromLocalStorage = () => {
+  for (let i = localStorage.length - 1; i >= 0; i--) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith("flowName_")) {
+      localStorage.removeItem(key)
+    }
+  }
 }
 
 export default function DashboardPage() {
@@ -46,6 +56,9 @@ export default function DashboardPage() {
   const [userData, setUserData] = useState<User>()
   const router = useRouter()
   const t = useTranslations("Dashboard")
+  const [flows, setFlows] = useState([])
+  const [status, setStatus] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     fetch("/api/users")
@@ -54,11 +67,26 @@ export default function DashboardPage() {
       .catch((error) => console.error("Error fetching user data:", error))
   }, [])
 
-  const handleOpenCreateFlow = () => {
-    setOpenCreatedFlow(true)
-  }
+  useEffect(() => {
+    async function fetchFlows() {
+      setLoading(true)
+      const response = await fetch("/api/flows")
+      const data = await response.json()
+      if (data.length > 0) {
+        setOpenCreatedFlow(true)
+      }
+      setFlows(data)
+      setLoading(false)
+    }
+    fetchFlows()
+  }, [status])
 
   const handleLogout = async () => {
+    localStorage.removeItem("flowData")
+    localStorage.removeItem("flowId")
+    localStorage.removeItem("responses")
+    localStorage.removeItem("flowName")
+    clearFlowNamesFromLocalStorage()
     await signOut({ redirect: false })
     // document.cookie = "next-auth.session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     router.push("/login")
@@ -69,9 +97,9 @@ export default function DashboardPage() {
       <div className="bg-muted/40 hidden border-r md:block">
         <div className="fixed flex h-full max-h-screen flex-col gap-2 md:w-[220px] lg:w-[280px]">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
+            <div className="flex items-center gap-2 font-semibold">
               <svg
-                className="size-7"
+                className="h-6 w-6 md:h-7 md:w-7"
                 viewBox="0 0 720 524"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -128,8 +156,9 @@ export default function DashboardPage() {
                   />
                 </g>
               </svg>
-              <span className="">Convify</span>
-            </Link>
+              <span className="text-base md:text-lg">Convify</span>
+            </div>
+
             <Button variant="outline" size="icon" className="ml-auto size-8">
               <Bell className="size-4" />
               <span className="sr-only">Toggle notifications</span>
@@ -194,73 +223,67 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div
+        style={{ height: "100vh", overflow: "auto" }}
+        className="flex flex-col"
+      >
         <div className="sticky top-0 z-20">
           <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
             <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="link"
-                  size="icon"
-                  className="w-auto shrink-0 px-2 md:hidden"
+              {/* <SheetTrigger asChild> */}
+              <Button
+                variant="link"
+                size="icon"
+                className="w-auto shrink-0 px-2 hover:no-underline md:hidden"
+              >
+                <svg
+                  width="25"
+                  viewBox="0 0 22 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-7"
                 >
-                  <svg
-                    width="25"
-                    viewBox="0 0 22 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-7"
+                  <mask
+                    id="mask0_2486_36154"
+                    style={{ maskType: "alpha" }}
+                    maskUnits="userSpaceOnUse"
+                    x="0"
+                    y="0"
+                    width="22"
+                    height="12"
                   >
-                    <mask
-                      id="mask0_2486_36154"
-                      style={{ maskType: "alpha" }}
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="22"
-                      height="12"
-                    >
-                      <rect width="22" height="12" fill="#D9D9D9" />
-                    </mask>
-                    <g mask="url(#mask0_2486_36154)">
-                      <path
-                        d="M2 14L7 6L2 -2"
-                        stroke="white"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M2 14L7 6L2 -2"
-                        stroke="black"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M8 14L13 6L8 -2"
-                        stroke="white"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M8 14L13 6L8 -2"
-                        stroke="black"
-                        stroke-opacity="0.6"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M14 14L19 6L14 -2"
-                        stroke="white"
-                        stroke-width="4"
-                      />
-                      <path
-                        d="M14 14L19 6L14 -2"
-                        stroke="black"
-                        stroke-opacity="0.2"
-                        stroke-width="4"
-                      />
-                    </g>
-                  </svg>
-                  <span className="sr-only">Toggle navigation menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="flex flex-col">
+                    <rect width="22" height="12" fill="#D9D9D9" />
+                  </mask>
+                  <g mask="url(#mask0_2486_36154)">
+                    <path d="M2 14L7 6L2 -2" stroke="white" stroke-width="4" />
+                    <path d="M2 14L7 6L2 -2" stroke="black" stroke-width="4" />
+                    <path d="M8 14L13 6L8 -2" stroke="white" stroke-width="4" />
+                    <path
+                      d="M8 14L13 6L8 -2"
+                      stroke="black"
+                      stroke-opacity="0.6"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M14 14L19 6L14 -2"
+                      stroke="white"
+                      stroke-width="4"
+                    />
+                    <path
+                      d="M14 14L19 6L14 -2"
+                      stroke="black"
+                      stroke-opacity="0.2"
+                      stroke-width="4"
+                    />
+                  </g>
+                </svg>
+                <span className="pl-1 text-base font-semibold md:text-lg ">
+                  Convify
+                </span>
+                {/* <span className="sr-only">Toggle navigation menu</span> */}
+              </Button>
+              {/* </SheetTrigger> */}
+              {/* <SheetContent className="flex flex-col">
                 <nav className="grid gap-2 text-lg font-medium">
                   <Link
                     href="#"
@@ -308,7 +331,7 @@ export default function DashboardPage() {
                     {t("Analytics")}
                   </Link>
                 </nav>
-              </SheetContent>
+              </SheetContent> */}
             </Sheet>
             <div className="w-full flex-1">
               {/* <form>
@@ -327,13 +350,14 @@ export default function DashboardPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
+                  className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
+                  style={{ width: "40px", height: "40px" }} // Adjust the size as needed
                 >
                   {userData ? (
                     userData?.name ? (
                       userData?.name?.charAt(0).toUpperCase()
                     ) : (
-                      userData?.email?.charAt(0)
+                      userData?.email?.charAt(0).toUpperCase()
                     )
                   ) : (
                     <svg
@@ -349,7 +373,7 @@ export default function DashboardPage() {
                       className="lucide lucide-circle-user"
                     >
                       <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="10" r="3" />
+                      <circle cx="12" cy="12" r="10" />
                       <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                     </svg>
                   )}
@@ -376,41 +400,56 @@ export default function DashboardPage() {
               {t("My workspace")}
             </h1>
           </div>
-          <div
-            className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
-              openCreateFlow ? "border-none" : "border"
-            }`}
-            x-chunk="dashboard-02-chunk-1"
-          >
-            {openCreateFlow ? (
-              <FlowsList />
-            ) : (
-              <div className="flex flex-col items-center gap-1 text-center">
-                <img
-                  src="/images/character.svg"
-                  alt=""
-                  className="mb-4 h-[104px]"
+          {loading ? (
+            <div
+              className={`flex flex-1 items-center justify-center rounded-lg border-none shadow-sm`}
+              x-chunk="dashboard-02-chunk-1"
+            >
+              <SkeletonFlowCard />
+            </div>
+          ) : (
+            <div
+              className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
+                openCreateFlow ? "border-none" : "border"
+              }`}
+              x-chunk="dashboard-02-chunk-1"
+            >
+              {openCreateFlow ? (
+                <FlowsList
+                  flows={flows}
+                  setStatus={setStatus}
+                  status={status}
                 />
-                <h3 className="text-2xl font-bold tracking-tight">
-                  {t("There's not a flow in sight")}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {t.rich(
-                    "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
-                    {
-                      br: () => <br />,
-                    }
-                  )}
-                </p>
-                <Button
-                  className="itmes-center mt-4 flex gap-2"
-                  onClick={handleOpenCreateFlow}
-                >
-                  <Plus size={16} /> {t("Create new flow")}
-                </Button>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <img
+                    src="/images/character.svg"
+                    alt=""
+                    className="mb-4 h-[104px]"
+                  />
+                  <h3 className="text-2xl font-bold tracking-tight">
+                    {t("There's not a flow in sight")}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    {t.rich(
+                      "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
+                      {
+                        br: () => <br />,
+                      }
+                    )}
+                  </p>
+                  <Link
+                    className="flex items-center "
+                    href="/dashboard/flows/create-flow/select-template"
+                  >
+                    <Button className="itmes-center mt-4 flex gap-2">
+                      <Plus size={16} /> {t("Create new flow")}
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </main>
       </div>
     </div>

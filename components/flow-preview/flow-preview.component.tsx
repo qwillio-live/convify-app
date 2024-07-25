@@ -30,7 +30,7 @@ export default function FlowPreview() {
     if (search !== currentScreenName) {
       dispatch(setCurrentScreenName(search))
     }
-  }, [search])
+  }, [search, dispatch])
   const previewHeaderRef = React.useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = React.useState(90)
 

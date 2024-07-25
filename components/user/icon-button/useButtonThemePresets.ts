@@ -186,10 +186,87 @@ const useButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-  }
+  };
+  const formPreset: IconButtonProps = {
+    fontFamily: {
+      value: theme?.text?.primaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    containerBackground: "rgba(255,255,255,0)",
+    background: {
+      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
+      globalStyled: true,
+      isCustomized: false,
+    },
+    color: {
+      value: "#ffffff",
+      globalStyled: false,
+      isCustomized: true,
+    },
+    backgroundHover: {
+      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
+      globalStyled: true,
+      isCustomized: false,
+    },
+    colorHover: {
+      value: "#ffffff",
+      globalStyled: false,
+      isCustomized: true,
+    },
+    radius:{
+      value: "8",
+      globalStyled: false,
+      isCustomized: false,
+    },
+    borderColor: {
+      value: theme?.general?.primaryColor || "#4050ff",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    borderHoverColor: {
+      value: darkenedPrimaryColor || "#3182ce",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    justifyContent: "space-between",
+    disabled: false,
+    enableIcon: true,
+    width: IconButtonSizes.medium,
+    height: "auto",
+    size: IconButtonSizes.medium,
+    text: t("Submit"),
+    marginLeft: 0,
+    marginTop: 20,
+    marginRight: 0,
+    marginBottom: 20,
+    icon: {
+      picture: "interface-arrows-right-arrow-right-keyboard",
+      pictureType: PictureTypes.ICON,
+    },
+    paddingLeft: "16",
+    paddingTop: "14",
+    paddingRight: "16",
+    paddingBottom: "14",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    border: 2,
+    fullWidth: true,
+    preset: 'filled',
+    settingsTab: 'content',
+    buttonSize: 'medium',
+    tracking: false,
+    trackingEvent: "button-"+hexoid(6)().toLowerCase(),
+    nextScreen: {
+      screenId: "",
+      screenName: "",
+    },
+    buttonAction: "next-screen",
+  };
 
-  return { filledPreset, outLinePreset }
-}
+  return { filledPreset, outLinePreset, formPreset };
+};
 
 export const getBackgroundForPreset = (color, preset) => {
   switch (preset) {

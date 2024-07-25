@@ -7,7 +7,7 @@ import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.c
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
 import { ImageComponentGen } from "../image-new/user-image.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
-import { UserTextGen } from "@/components/user/text/user-text.component"
+import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { UserInputGen } from "../input/user-input.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
@@ -30,6 +30,11 @@ import { SocialShareButtonGen } from "../socialShareButton/share-component"
 import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
 import { useNode } from "@craftjs/core"
 import { rgba } from "polished"
+import { UserInputCheckboxGen } from "../input-checkbox/user-input-checkbox.component"
+import { UserInputMailGen } from "../input-email/user-input-mail.component"
+import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
+import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
+import { FormContentGen, FormGen } from "../form/user-form.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -50,7 +55,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.TEXTIMAGECOMPONENT]: TextImageComponentGen,
   [CRAFT_ELEMENTS.SELECT]: SelectGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
-  [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
+  [CRAFT_ELEMENTS.USERTEXT]: UserTextInputGen,
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
@@ -60,6 +65,12 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
   [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
+  [CRAFT_ELEMENTS.INPUTCHECKBOX]: UserInputCheckboxGen,
+  [CRAFT_ELEMENTS.INPUTMAIL]: UserInputMailGen,
+  [CRAFT_ELEMENTS.INPUTPHONE]: UserInputPhoneGen,
+  [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
+  [CRAFT_ELEMENTS.FORM]: FormGen,
+  [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
 }
 
 interface Props {

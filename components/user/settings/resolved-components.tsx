@@ -1,23 +1,44 @@
 import React, { Suspense, useEffect, useState } from "react"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
-import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
-import { UserContainerGen } from "@/components/user/container/user-container.component"
+import {
+  UserContainer,
+  UserContainerGen,
+} from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
-import { ImageComponentGen } from "../image-new/user-image.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
-import { UserTextGen } from "@/components/user/text/user-text.component"
+// import lz from "lzutf8";
+import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
+import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { UserInputGen } from "../input/user-input.component"
+import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
 import { ProgressBarGen } from "../progress/user-progress.component"
-import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
+import { FormContentGen, FormGen } from "../form/user-form.component"
+import jsonData from "./parse.json"
 import { PictureChoiceGen } from "../picture-choice/user-picture-choice.component"
+import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
+import globalThemeSlice, {
+  setPartialStyles,
+  themeSlice,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import {
+  UserInputCheckboxGen,
+  UserInputCheckbox,
+} from "../input-checkbox/user-input-checkbox.component"
+import {
+  UserInputMailGen,
+  UserInputMail,
+} from "../input-email/user-input-mail.component"
+import { User } from "lucide-react"
+import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
+import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
+import { ImageComponentGen } from "../image-new/user-image.component"
 import { SelectGen } from "../select/user-select.component"
 import { ChecklistGen } from "../checklist/user-checklist.component"
 import { ListGen } from "../list/user-list.component"
-import { LogoBarGen } from "../logo-bar/user-logo-bar.component"
 import { StepsGen } from "../steps/user-steps.component"
 import { IconLineSeperator } from "../lineSeperator/line-seperator-component"
 import { BackButtonGen } from "../backButton/back-component"
@@ -48,7 +69,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.TEXTIMAGECOMPONENT]: TextImageComponentGen,
   [CRAFT_ELEMENTS.SELECT]: SelectGen,
   [CRAFT_ELEMENTS.USERINPUT]: UserInputGen,
-  [CRAFT_ELEMENTS.USERTEXT]: UserTextGen,
+  [CRAFT_ELEMENTS.USERTEXT]: UserTextInputGen,
   [CRAFT_ELEMENTS.HEADLINETEXT]: HeadlineTextGen,
   [CRAFT_ELEMENTS.PICTURECHOICE]: PictureChoiceGen,
   [CRAFT_ELEMENTS.MULTIPLECHOICE]: MultipleChoiceGen,
@@ -58,6 +79,12 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
   [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
+  [CRAFT_ELEMENTS.INPUTCHECKBOX]: UserInputCheckboxGen,
+  [CRAFT_ELEMENTS.INPUTMAIL]: UserInputMailGen,
+  [CRAFT_ELEMENTS.INPUTPHONE]: UserInputPhoneGen,
+  [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
+  [CRAFT_ELEMENTS.FORM]: FormGen,
+  [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
 }
 
 interface Props {
@@ -73,11 +100,14 @@ const ResolvedComponentsFromCraftState = ({
   useEffect(() => {
     try {
       const craftState = JSON.parse(screen)
+      console.log("Parsed Craft State:", craftState) // Log parsed JSON data
+
       const resolveComponents = () => {
         const parsedNodes = {}
 
         const parse = (nodeId: string, parentNodeId?: string) => {
           if (parsedNodes[nodeId]) return parsedNodes[nodeId]
+          console.log(`Parsing node: ${parsedNodes[nodeId]}`)
 
           const nodeData = craftState[nodeId]
           if (!nodeData) return null

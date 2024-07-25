@@ -6,7 +6,7 @@ import { DashboardNav } from "@/components/nav"
 import { SiteFooter } from "@/components/site-footer"
 import { UserAccountNav } from "@/components/user-account-nav"
 import StoreProvider from "@/lib/state/flows-state/store-provider"
-import {Toaster} from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -26,11 +26,11 @@ export default async function DashboardLayout({
 
   return (
     <StoreProvider>
-    <div className="flex min-h-screen flex-col space-y-6 max-h-screen">
-      <main>{children}</main>
-      <Toaster />
-      {/* <SiteFooter className="border-t" /> */}
-    </div>
+      <div className="flex h-screen flex-col space-y-6">
+        <main>{children}</main>
+        <Toaster />
+        {/* <SiteFooter className="border-t" /> */}
+      </div>
     </StoreProvider>
   )
 }
