@@ -615,8 +615,8 @@ const ShareFlowComponents = ({
                   <Image
                     src={TelegramPic}
                     alt="telegram_pic"
-                    height={40}
-                    width={40}
+                    height={44}
+                    width={44}
                   ></Image>
                 </Link>
                 <button
