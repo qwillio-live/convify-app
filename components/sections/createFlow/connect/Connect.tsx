@@ -199,7 +199,7 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
       </div>
     </div>
   ) : (
-    <div className="connect-flow-content min-h-screen w-full overflow-auto pb-[20px]">
+    <div className="connect-flow-content h-full max-h-[92.7vh] w-full overflow-auto pb-[20px]">
       <div className="mx-auto mt-8  flex flex-col items-center justify-center px-4 lg:w-7/12">
         <SearchBar search={search} setSearch={setSearch} />
         <div className="mt-10 flex w-full flex-col">
