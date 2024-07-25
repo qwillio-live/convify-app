@@ -40,10 +40,6 @@ const ShareFlowComponents = ({
   })
   const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
   const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
-
-  const t = useTranslations("Components")
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
   const updateView = () => {
     if (window.innerWidth >= 1024) {
       setShareDrawerOpen(false)
@@ -61,6 +57,10 @@ const ShareFlowComponents = ({
     window.addEventListener("resize", updateView)
     return () => window.removeEventListener("resize", updateView)
   }, [])
+  const t = useTranslations("Components")
+  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
+  const telegramUser = env.NEXT_PUBLIC_TL_URL
+
   useEffect(() => {
     if (data) {
       setLink(data.link)

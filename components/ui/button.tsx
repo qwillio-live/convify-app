@@ -28,7 +28,8 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
         filterIcon: "h-[2.13rem] flex grow px-[0.1rem] ",
-        mobileForwarder: "w-[248px] h-[38px] font-semibold text-base",
+        mobileForwarder:
+          "w-full max-w-[248px] h-auto py-3 px-4 max-h-[38px] flex grow font-semibold text-base",
       },
     },
     defaultVariants: {

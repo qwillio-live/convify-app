@@ -44,8 +44,8 @@ export default function MobileForwarder() {
 
   // if (isBrowser) router.push("/dashboard")
   return (
-    <div className="font-sans3  flex min-h-screen flex-col justify-between bg-white text-center md:justify-normal">
-      <header className="flex items-center justify-between border-b-2 p-4">
+    <div className="font-sans3  flex min-h-screen flex-col   bg-white text-center md:justify-normal">
+      <header className="flex items-center justify-between border-b-2 bg-[#FAFBFC] p-4">
         <Link
           href="/"
           className="flex items-center gap-2 text-xl font-semibold"
@@ -166,10 +166,10 @@ export default function MobileForwarder() {
             alt="Illustration"
             className=""
           />
-          <h1 className="mx-7 mt-6 text-2xl font-semibold text-[#0F172A]">
+          <h1 className="mx-9 mt-6 text-2xl font-semibold text-[#0F172A]">
             {t("Convify is best experienced on a bigger screen")}
           </h1>
-          <p className="font-sans3 mx-9 mt-2 items-center text-base font-normal text-[#64748B] ">
+          <p className="font-sans3 mx-[51px] mt-2 items-center text-sm font-normal text-[#64748B] ">
             {t(
               "Click the button below to send a link to your inbox and continue your journey with Convify on another device"
             )}
@@ -222,7 +222,10 @@ export default function MobileForwarder() {
           </Button>
         </div>
       </main>
-      <footer className="font-sans3 p-4 text-base font-semibold text-[#64748B]">
+      <footer
+        className="font-sans3 p-4 text-base font-semibold text-[#64748B] hover:cursor-pointer"
+        onClick={() => router.push("/dashboard")}
+      >
         {t("Continue on mobile device")}
       </footer>
     </div>
