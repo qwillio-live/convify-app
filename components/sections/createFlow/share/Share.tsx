@@ -72,7 +72,7 @@ const ShareFlowComponents = ({
   return (
     <div>
       {innerview === "desktop" && (
-        <div className="flex h-[calc(-52px+98vh)] flex-row items-start justify-between">
+        <div className="flex  flex-row items-start justify-between">
           <div className="relative flex h-full  w-64  flex-col overflow-hidden border-r border-[rgba(0,0,0,0.07)] bg-white">
             <nav className="grid items-start  text-sm font-medium ">
               <Link

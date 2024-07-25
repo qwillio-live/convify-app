@@ -309,7 +309,12 @@ export function FlowsList({ flows, setStatus, status }) {
                         return (
                           <TableRow key={flow.id}>
                             <TableCell
-                              className="hidden sm:table-cell"
+                              onClick={() =>
+                                router.push(
+                                  `/dashboard/flows/${flow.id}/create-flow`
+                                )
+                              }
+                              className="hidden hover:cursor-pointer sm:table-cell"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -319,7 +324,7 @@ export function FlowsList({ flows, setStatus, status }) {
                             >
                               <Image
                                 alt="Product image"
-                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover"
+                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover "
                                 height="64"
                                 width="113"
                                 src={
@@ -330,12 +335,17 @@ export function FlowsList({ flows, setStatus, status }) {
                               />
                             </TableCell>
                             <TableCell
+                              onClick={() =>
+                                router.push(
+                                  `/dashboard/flows/${flow.id}/create-flow`
+                                )
+                              }
                               ref={
                                 cellRef as
                                   | LegacyRef<HTMLTableCellElement>
                                   | undefined
                               }
-                              className="font-bold"
+                              className="font-bold hover:cursor-pointer"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"

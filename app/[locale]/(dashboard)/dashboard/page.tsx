@@ -164,7 +164,7 @@ export default function DashboardPage() {
               <span className="sr-only">Toggle notifications</span>
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="flex-1 overflow-x-hidden">
             <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
               <form>
                 <div className="relative">
@@ -179,20 +179,8 @@ export default function DashboardPage() {
               <Separator className="my-4" />
               <div className="text-muted-foreground flex items-center gap-3 rounded-lg px-3 py-2 uppercase">
                 <ChevronDown className="size-4" />
-                {/* <User className="h-4 w-4" /> */}
                 {t("Private")}
               </div>
-
-              {/* <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                Orders
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link> */}
               <div
                 onClick={() => setOpenCreatedFlow(true)}
                 // href="/dashboard/flows"
@@ -205,28 +193,11 @@ export default function DashboardPage() {
                   1
                 </Badge>
               </div>
-              {/* <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Users className="h-4 w-4" />
-                Customers
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <LineChart className="h-4 w-4" />
-                Analytics
-              </Link> */}
             </nav>
           </div>
         </div>
       </div>
-      <div
-        style={{ height: "100vh", overflow: "auto" }}
-        className="flex flex-col"
-      >
+      <div className="flex flex-col">
         <div className="sticky top-0 z-20">
           <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
             <Sheet>
@@ -282,69 +253,8 @@ export default function DashboardPage() {
                 </span>
                 {/* <span className="sr-only">Toggle navigation menu</span> */}
               </Button>
-              {/* </SheetTrigger> */}
-              {/* <SheetContent className="flex flex-col">
-                <nav className="grid gap-2 text-lg font-medium">
-                  <Link
-                    href="#"
-                    className="flex items-center gap-2 text-lg font-semibold"
-                  >
-                    <Package2 className="size-6" />
-                    <span className="sr-only">Convify</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
-                  >
-                    <Home className="size-5" />
-                    {t("Dashboard")}
-                  </Link>
-                  <Link
-                    href="#"
-                    className="bg-muted text-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
-                  >
-                    <ShoppingCart className="size-5" />
-                    {t("Orders")}
-                    <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full">
-                      6
-                    </Badge>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
-                  >
-                    <Package className="size-5" />
-                    {t("Products")}
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
-                  >
-                    <Users className="size-5" />
-                    {t("Customers")}
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-muted-foreground hover:text-foreground mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2"
-                  >
-                    <LineChart className="size-5" />
-                    {t("Analytics")}
-                  </Link>
-                </nav>
-              </SheetContent> */}
             </Sheet>
-            <div className="w-full flex-1">
-              {/* <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search products..."
-                  className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form> */}
-            </div>
+            <div className="w-full flex-1"></div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -394,7 +304,7 @@ export default function DashboardPage() {
           </header>
         </div>
 
-        <main className="flex flex-1 flex-col p-4 lg:p-6">
+        <main className="flex h-[100vh] max-h-[92.74vh] flex-1 flex-col overflow-auto  p-4 lg:p-6">
           <div className="mb-4 flex items-center">
             <h1 className="text-lg font-semibold md:text-lg">
               {t("My workspace")}
