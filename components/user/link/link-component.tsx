@@ -645,6 +645,7 @@ export const LinkButton = ({
               enableIcon && (icon !== "" || null) ? "ml-2" : ""
             }`}
           >
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}

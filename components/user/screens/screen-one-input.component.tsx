@@ -9,10 +9,10 @@ import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
 import {
-  TextDefaultProps,
+  TextInputDefaultProps,
   UserText
 } from "../text/user-text.component"
-import { UserTextSettings } from "../text/user-text-settings"
+import { UserTextInputSettings } from "../text/user-text-settings"
 
 
 export const ScreenOneInput = ({ ...props }) => {
@@ -44,22 +44,24 @@ export const ScreenOneInput = ({ ...props }) => {
           id="one-choice-content"
         >
           <UserText
-            {...TextDefaultProps}
+            {...TextInputDefaultProps}
             textColor={"inherit"}
             tagType={"p"}
             text="Two more steps."
             fontSize={45}
             textAlign="center"
             fontWeight="font-bold"
+            gap={"inherit"}
           />
           <UserText
-            {...TextDefaultProps}
+            {...TextInputDefaultProps}
             text="Last few details required"
             fontSize={22}
             textAlign="center"
             fontWeight="font-light"
             textColor={"inherit"}
             tagType={"p"}
+            gap={"inherit"}
           />
           <Element
             is={"div"}

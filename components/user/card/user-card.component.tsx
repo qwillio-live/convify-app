@@ -5,15 +5,18 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '../button/user-button.component';
+import { Button } from "../button/user-button.component"
 import {
   Container,
-  UserContainerSettings,
   ContainerDefaultProps,
-} from '../container/user-container.component';
-import { Controller } from '../settings/controller.component';
-import { UserText } from '../text/user-text.component';
-import { CardContainerSettings } from './user-card-settings';
+  UserContainerSettings,
+} from "../container/user-container.component"
+import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
+import { UserInputMail } from "../input-email/user-input-mail.component"
+import { UserInput } from "../input/user-input.component"
+import { Controller } from "../settings/controller.component"
+import { UserText } from "../text/user-text.component"
+import { CardContainerSettings } from "./user-card-settings"
 
 interface CardOuterStyles {
   fullWidth: boolean;
@@ -45,9 +48,8 @@ interface CardOuterStyles {
   selected: boolean;
 }
 
-
-const CardContentOuter=styled.div<CardOuterStyles>`
-  width: '100%';
+const CardContentOuter = styled.div<CardOuterStyles>`
+  width: "100%";
   flex-shrink: 0;
   flex-basis: 100%;
   min-width: 100%;
@@ -79,23 +81,23 @@ const CardContentOuter=styled.div<CardOuterStyles>`
 `;
 
 interface CardInnerStyles {
-  width: string;
-  direction: string;
-  size: string;
-  marginTop: string;
-  marginBottom: string;
-  marginLeft: string;
-  marginRight: string;
-  gap: string;
-  mobileFlexDirection: string;
-  alignItems: string;
-  justifyContent: string;
-  mobileAlignItems: string;
-  mobileJustifyContent: string;
+  width: string
+  direction: string
+  size: string
+  marginTop: string
+  marginBottom: string
+  marginLeft: string
+  marginRight: string
+  gap: string
+  mobileFlexDirection: string
+  alignItems: string
+  justifyContent: string
+  mobileAlignItems: string
+  mobileJustifyContent: string
 }
 
-const CardContentInner=styled.div<CardInnerStyles>`
-  max-width: ${(props) => CardSizeValues[props.size || "medium"] };
+const CardContentInner = styled.div<CardInnerStyles>`
+  max-width: ${(props) => CardSizeValues[props.size || "medium"]};
   width: 100%;
   display: flex;
   padding-top: ${(props) => props.marginTop}px;
@@ -115,12 +117,10 @@ const CardContentInner=styled.div<CardInnerStyles>`
     align-items: ${(props) => props.mobileAlignItems};
     justify-content: ${(props) => props.mobileJustifyContent};
   }
-`;
-
-
+`
 
 export const CardContentGen = ({ children, ...props }) => {
-  return(
+  return (
     <CardContentOuter
     parentHovered={props.parentHovered}
     fullWidth={props.fullWidth}
@@ -150,24 +150,24 @@ export const CardContentGen = ({ children, ...props }) => {
     selected={props.selected}
     borderColor={props.backgroundColor}
     >
-    <CardContentInner
-    size={props.size}
-    width={props.width}
-    gap={props.gap}
-    alignItems={props.alignItems}
-    justifyContent={props.justifyContent}
-    mobileAlignItems={props.mobileAlignItems}
-    mobileJustifyContent={props.mobileJustifyContent}
-    direction={props.flexDirection || "column"}
-    marginTop={props.marginTop}
-    marginBottom={props.marginBottom}
-    marginLeft={props.marginLeft}
-    marginRight={props.marginRight}
-    mobileFlexDirection={props.mobileFlexDirection}
-    >
-      {children}
+      <CardContentInner
+        size={props.size}
+        width={props.width}
+        gap={props.gap}
+        alignItems={props.alignItems}
+        justifyContent={props.justifyContent}
+        mobileAlignItems={props.mobileAlignItems}
+        mobileJustifyContent={props.mobileJustifyContent}
+        direction={props.flexDirection || "column"}
+        marginTop={props.marginTop}
+        marginBottom={props.marginBottom}
+        marginLeft={props.marginLeft}
+        marginRight={props.marginRight}
+        mobileFlexDirection={props.mobileFlexDirection}
+      >
+        {children}
       </CardContentInner>
-      </CardContentOuter>
+    </CardContentOuter>
   )
 }
 export const CardContent = ({ children, ...props }) => {
@@ -242,22 +242,22 @@ export const CardContent = ({ children, ...props }) => {
         {/* {children} */}
     </CardContentGen>
     </div>
-  );
-};
+  )
+}
 export enum CardSizes {
   small = "small",
   medium = "medium",
   large = "large",
   full = "full",
 }
-const CardSizeValues={
+const CardSizeValues = {
   small: "300px",
   medium: "376px",
   large: "576px",
   full: "100%",
 }
 
-export type CardContentDefaultPropsTypes= {
+export type CardContentDefaultPropsTypes = {
   fullWidth: boolean
   parentHovered: boolean
   width: string
@@ -345,7 +345,7 @@ backgroundColor: string;
   background: ${({ backgroundColor }) => `${backgroundColor}`};
   max-width: fit-content;
   width: 100%;
-`;
+`
 export const CardGen = ({ children, ...props }) => {
   return(
    <div
@@ -382,7 +382,10 @@ export const Card = ({ children,backgroundColor ,...props }) => {
     >
       {hover && <Controller nameOfComponent={t("Container")} />}
       <Element
-        canvas id="usercard" is={CardContent} data-cy="card-content"
+        canvas
+        id="usercard"
+        is={CardContent}
+        data-cy="card-content"
         className=""
       >
         {children}

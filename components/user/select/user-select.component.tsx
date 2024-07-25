@@ -350,6 +350,7 @@ export const Select = ({
                 : SelectSizeValues[size || "small"],
             }}
           >
+            {/** @ts-ignore */}
             <ContentEditable
               className="px-1"
               html={label}

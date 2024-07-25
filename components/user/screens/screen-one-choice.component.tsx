@@ -8,10 +8,10 @@ import { ScreenFooter } from "@/components/user/screens/screen-footer.component"
 import { ScreenHeader } from "@/components/user/screens/screen-header.component"
 
 import {
-  TextDefaultProps,
+  TextInputDefaultProps,
   UserText
 } from "../text/user-text.component"
-import { UserTextSettings } from "../text/user-text-settings"
+import { UserTextInputSettings } from "../text/user-text-settings"
 
 export const ScreenOneChoice = ({ ...props }) => {
   return (
@@ -43,13 +43,14 @@ export const ScreenOneChoice = ({ ...props }) => {
           id="one-choice-content"
         >
           <UserText
-            {...TextDefaultProps}
+            {...TextInputDefaultProps}
             text="Which marketing channels do you use?"
             fontSize={40}
             textAlign="center"
             fontWeight="font-bold"
             textColor={"inherit"}
             tagType={"p"}
+            gap={"inherit"}
           />
           <Element
             is={"div"}
