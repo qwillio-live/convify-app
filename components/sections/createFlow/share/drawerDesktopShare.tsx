@@ -28,7 +28,7 @@ export const ShareDrawerDesktop = ({
   const t = useTranslations("CreateFlow.SharePage")
   return (
     <Drawer open={desktopDrawerOpen} onOpenChange={setDesktopDrawerOpen}>
-      <DrawerContent>
+      <DrawerContent className="disable-after outline-none">
         <div className="mx-auto w-full max-w-sm border-none ">
           <DrawerHeader style={{ alignItems: "left" }}>
             <DrawerTitle>{t("Continue on desktop")}</DrawerTitle>

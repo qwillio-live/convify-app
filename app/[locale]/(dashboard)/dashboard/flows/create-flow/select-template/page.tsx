@@ -337,7 +337,7 @@ export default function SelectTemplate() {
           </div>
         </div>
       )}
-      <div className="m-4">
+      <div>
         <ShareDrawerDesktop
           desktopDrawerOpen={desktopDrawerOpen}
           setDesktopDrawerOpen={setDesktopDrawerOpen}
