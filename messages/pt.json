@@ -343,7 +343,18 @@
     "Send to my inbox":"Alternar menu do usuário",
     "Click the button below to send a link to your inbox and continue your journey with Convify on another device": "Clique no botão abaixo para enviar um link para sua caixa de entrada e continuar sua jornada com o Convify em outro dispositivo",
     "Convify is best experienced on a bigger screen":"O Convify é melhor experimentado em uma tela maior",
-    "Toggle user menu":"Alternar menu do usuário"
+    "Toggle user menu":"Alternar menu do usuário",
+    "Link copied to clipboard": "Link copiado para a área de transferência",
+    "Page Not Found": "Página não encontrada",
+    "Sorry, we couldn't find the page you're looking for": "Desculpe, não conseguimos encontrar a página que você está procurando",
+    "This flow is not published yet": "Este typeform ainda não foi publicado.",
+    "before you share your flow": "antes de compartilhar seu typeform.",
+    "Publish your flow to preview it here": "Publique seu typeform para visualizá-lo aqui",
+    "Edit the link and let people know what your flow is about": "Edite o link e informe às pessoas sobre o que é o seu typeform.",
+    "Share your convify": "Compartilhe seu convify",
+    "Embed your convify on desktop": "Incorpore seu convify no desktop",
+    "Don't miss the full power of convify on desktop and embed directly on your site": "Não perca o poder total do convify no desktop e incorpore diretamente em seu site",
+    "I would like to get link for my flow":"Gostaria de obter link para meu fluxo"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",

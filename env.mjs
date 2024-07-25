@@ -23,6 +23,8 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
+    NEXT_PUBLIC_WA_NUMBER: z.string().min(1),
+    NEXT_PUBLIC_TL_URL: z.string().min(1),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -41,5 +43,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     LOG_URL: process.env.LOG_URL,
     LOG_APP_KEY: process.env.LOG_APP_KEY,
+    NEXT_PUBLIC_WA_NUMBER: process.env.NEXT_PUBLIC_WA_NUMBER,
+    NEXT_PUBLIC_TL_URL: process.env.NEXT_PUBLIC_TL_URL,
   },
 })

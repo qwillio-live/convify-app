@@ -346,7 +346,17 @@
     "Send to my inbox":"Send to my inbox",
     "Click the button below to send a link to your inbox and continue your journey with Convify on another device": "Click the button below to send a link to your inbox and continue your journey with Convify on another device",
     "Convify is best experienced on a bigger screen":"Convify is best experienced on a bigger screen",
-    "Toggle user menu":"Toggle user menu"
+    "Toggle user menu":"Toggle user menu",
+    "Link copied to clipboard": "Link copied to clipboard",
+    "Page Not Found": "Page Not Found",
+    "Sorry, we couldn't find the page you're looking for": "Sorry, we couldn't find the page you're looking for.",
+    "This flow is not published yet": "This flow is not published yet.",
+    "before you share your flow": "before you share your flow.",
+    "Publish your flow to preview it here": "Publish your flow to preview it here",
+    "Share your convify": "Share your convify",
+    "Embed your convify on desktop": "Embed your convify on desktop",
+    "Don't miss the full power of convify on desktop and embed directly on your site": "Don't miss the full power of convify on desktop and embed directly on your site",
+    "I would like to get link for my flow":"I would like to get link for my flow"
  
   },
   "CreateFlow": {

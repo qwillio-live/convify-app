@@ -13,8 +13,14 @@ import ResultFlowComponents from "@/components/sections/createFlow/result/Result
 import Header from "../constants/headerEls"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 
-export default function CreateFlowsPage() {
+export default function CreateFlowsPage({
+  params,
+}: {
+  params: { flowId: string; en: string }
+}) {
   const router = useRouter()
+  const flowId = params?.flowId
+  console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState(
     "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
@@ -42,7 +48,7 @@ export default function CreateFlowsPage() {
         className="flex min-h-screen flex-col"
       >
         <div className="sticky top-0 z-[60]">
-          <Header />
+          <Header flowId={flowId} />
         </div>
         <main
           className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${

@@ -13,7 +13,11 @@ import ResultFlowComponents from "@/components/sections/createFlow/result/Result
 import Header from "../constants/headerEls"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 
-export default function CreateFlowsPage() {
+export default function CreateFlowsPage({
+  params,
+}: {
+  params: { flowId: string; en: string }
+}) {
   const router = useRouter()
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState(
@@ -33,7 +37,6 @@ export default function CreateFlowsPage() {
     setTab(value)
     // router.replace(`/dashboard/flows/${value}`);
   }
-
   return (
     <div className="min-h-screen w-full">
       <Tabs

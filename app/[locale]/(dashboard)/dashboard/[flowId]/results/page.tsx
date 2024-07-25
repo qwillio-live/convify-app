@@ -5,7 +5,11 @@ import { useEffect } from "react"
 
 // sections
 
-export default function CreateFlowsPage() {
+export default function CreateFlowsPage({
+  params,
+}: {
+  params: { flowId: string; en: string }
+}) {
   useEffect(() => {
     // to remove extra main scroll
     // Add the class when the component mounts
@@ -16,12 +20,12 @@ export default function CreateFlowsPage() {
       document.body.classList.remove("overflow-hidden")
     }
   }, [])
-
+  const flowId = params?.flowId
   return (
     <div className="min-h-screen w-full">
       <div className="flex min-h-screen flex-col">
         <div className="sticky top-0 z-[60]">
-          <Header />
+          <Header flowId={flowId} />
         </div>
         <main className="content relative z-50 h-full flex-1 overflow-hidden border-t bg-[#FAFAFA]">
           <ResultFlowComponents />

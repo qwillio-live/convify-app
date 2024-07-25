@@ -42,11 +42,11 @@ export default function MobileForwarder() {
     router.push("/login")
   }
 
-  if (isBrowser) router.push("/dashboard")
+  // if (isBrowser) router.push("/dashboard")
   return (
     isMobile && (
-      <div className="font-sans3  flex min-h-screen flex-col justify-between bg-white text-center">
-        <header className="mx-4 flex items-center justify-between py-4">
+      <div className="font-sans3  flex min-h-screen flex-col justify-between bg-white text-center md:justify-normal">
+        <header className="flex items-center justify-between border-b-2 p-4">
           <Link
             href="/"
             className="flex items-center gap-2 text-xl font-semibold"
@@ -157,8 +157,8 @@ export default function MobileForwarder() {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <Separator />
-        <main className="mt-4 flex flex-col  text-center ">
+        {/* <Separator s /> */}
+        <main className="mt-2 flex flex-col  text-center ">
           <div className="flex flex-col items-center">
             <Image
               src={Illustration}
@@ -176,7 +176,7 @@ export default function MobileForwarder() {
               )}
             </p>
           </div>
-          <div className="font-sans3 mt-6 space-y-2">
+          <div className="font-sans3 mt-6 flex flex-col items-center justify-center space-y-2 md:space-y-4">
             <Button variant={"default"} size={"mobileForwarder"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +223,7 @@ export default function MobileForwarder() {
             </Button>
           </div>
         </main>
-        <footer className="font-sans3 pb-4 text-base font-semibold text-[#64748B]">
+        <footer className="font-sans3 p-4 text-base font-semibold text-[#64748B]">
           {t("Continue on mobile device")}
         </footer>
       </div>
