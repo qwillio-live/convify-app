@@ -56,6 +56,24 @@ export default function middleware(req: NextRequest) {
     "^(/(" + locales.join("|") + "))?/(dashboard|editor)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
   const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
+  const response = NextResponse.next();
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    response.headers.set('Access-Control-Max-Age', '86400'); // Cache preflight response for 24 hours
+    // return  new NextResponse(null, { headers: response.headers });
+    return new NextResponse(null, { headers: response.headers });
+  }
+
+  // Add CORS headers
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.nextUrl.pathname?.includes("/api/")) {
+    return response
+  }
 
   if (isPublicPage) {
     return intlMiddleware(req)
@@ -65,5 +83,7 @@ export default function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  matcher: [
+    '/((?!_next.*\\..*).*)',
+  ],
 }
