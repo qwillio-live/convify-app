@@ -5,13 +5,51 @@
     "subtext": "I'm building a web app with Next.js 13 and open sourcing everything. Follow along as we figure this out together."
   },
   "Login": {
-    "Welcome back": "Welcome back"
+    "Welcome back": "Welcome back",
+    "Enter your email to sign in to your account": "Enter your email to sign in to your account",
+    "Don't have an account? Sign Up": "Don't have an account? Sign Up",
+    "Back": "Back",
+    "Something went wrong": "Something went wrong",
+    "Your sign in request failed Please try again": "Your sign in request failed Please try again",
+    "Login Successful": "Login Successful",
+    "Password": "Password",
+    "Email": "Email",
+    "Sign In with Email": "Sign In with Email",
+    "Sign In with Google": "Sign In with Google",
+    "Invalidemail": "Invalid email",
+    "Stringmustcontainatleast8character": "String must contain at least 8 character(s)",
+    "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
+  },
+  "SignUp": {
+    "Already have an account?": "Already have an account?",
+    "Get started for free": "Get started for free",
+    "Sign Up Failed": "Sign Up Failed",
+    "Email": "Email",
+    "Password": "Password",
+    "Create my Free Account": "Create my Free Account",
+    "Sign Up with Google": "Sign Up with Google",
+    "Or": "Or",
+    "Login": "Log in",
+    "Sign Up with Email": "Sign Up with Email",
+    "Something went wrong": "Something went wrong",
+    "Emailisrequired": "Email is required",
+    "Invalidemailaddress": "Invalid email address",
+    "Passwordisrequired": "Password is required",
+    "Passwordmustbeatleast8characterslong": "Password must be at least 8 characters long",
+    "termsAcceptanceError": "You must accept the terms and privacy policy",
+    "User with that email already exists! Try logging in instead": "User with that email already exists! Try logging in instead",
+    "I agree to the Terms of Service and Privacy Policy": "I agree to the Terms of Service and Privacy Policy.",
+    "Get started its free No credit card needed": "Get started – it’s free. No credit card needed",
+    "Your password is incorrect or this email address is not registered with Convify": "Your password is incorrect or this email address is not registered with Convify"
   },
   "Not-Found": {
     "title": "404",
     "description": "This page could not be found."
   },
   "Dashboard": {
+    "draft": "Draft",
+    "active": "Active",
+    "Cancel": "Cancel",
     "Dashboard": "Dashboard",
     "There's not a flow in sight": "There's not a flow in sight",
     "My workspace": "My workspace",
@@ -37,7 +75,8 @@
     "Orders": "Orders",
     "Products": "Products",
     "Customers": "Customers",
-    "Analytics": "Analytics"
+    "Analytics": "Analytics",
+    "Are you sure want to delete the Flow": "Are you sure want to delete the Flow?"
   },
   "Components": {
     "InputMail": "Email",
@@ -260,6 +299,8 @@
     "All": "All"
   },
   "CreateFlow": {
+    "Link copied to clipboard": "Link copied to clipboard",
+    "My new form": "My new form",
     "Create": "Create",
     "Connect": "Connect",
     "Share": "Share",
@@ -271,7 +312,10 @@
     "Logout": "Logout",
     "My workspace": "My workspace",
     "ResultsPage": {
+      "Pick a date": "Pick a date",
+      "This flow doesnt have any responses yet": "This flow doesn’t have any responses.",
       "insights": "insights",
+      "Loading": "Loading",
       "responses": "responses",
       "Last 28 days": "Last 28 days",
       "Last 14 days": "Last 14 days",
@@ -301,11 +345,13 @@
       "User aggrement": "User aggrement"
     },
     "ConnectPage": {
+      "Enter your email": "Enter your email",
+      "CompleteRegistration": "Complete Registration",
       "Email": "Email",
       "email des": "Recive an email every time a user submit their answer",
       "active": "active",
       "Google Analytics 4": "Google Analytics 4",
-      "google analytics des": "Discover how respondents find and interact with your heyflow. Get the data you need to measure ad campaigns, improve your conversion rate, and more",
+      "google analytics des": "Discover how respondents find and interact with your flow. Get the data you need to measure ad campaigns, improve your conversion rate, and more",
       "inactive": "inactive",
       "Google Tag Manager": "Google Tag Manager",
       "google tag manager des": "Get even more analytics features for most ambitious data mining demands.",
@@ -327,25 +373,35 @@
       "Email address to which the response is sent": "Email address to which the response is sent"
     },
     "SharePage": {
+      "Link copied to clipboard": "Link copied to clipboard",
+      "Page Not Found": "Page Not Found",
+      "Sorry, we couldn't find the page you're looking for": "Sorry, we couldn't find the page you're looking for.",
       "Share the link": "Share the link",
       "Embed in an email": "Embed in an email",
       "Embed in a webpage": "Embed in a webpage",
-      "This typeform is not published yet.": "This typeform is not published yet.",
+      "This flow is not published yet": "This flow is not published yet.",
       "Click here to publish the latest version": "Click here to publish the latest version",
-      "before you share your typeform.": "before you share your typeform.",
+      "before you share your flow": "before you share your flow.",
       "Copy link": "Copy link",
       "Customize link": "Customize link",
       "Email link": "Email link",
       "QR Code": "QR Code",
-      "Publish your typeform to preview it here": "Publish your typeform to preview it here",
+      "Publish your flow to preview it here": "Publish your flow to preview it here",
       "Desktop": "Desktop",
       "Mobile": "Mobile",
       "CUSTOM LINK": "CUSTOM LINK",
       "Create a custom link": "Create a custom link",
-      "Edit the link and let people know what your typeform is about.": "Edit the link and let people know what your typeform is about.",
+      "Edit the link and let people know what your flow is about": "Edit the link and let people know what your flow is about.",
       "Available on these plans: Plus, Business, Enterprise": "Available on these plans: Plus, Business, Enterprise",
       "Upgrade my plan": "Upgrade my plan",
-      "My workspace": "My workspace"
+      "My workspace": "My workspace",
+      "Share your convify": "Share your convify",
+      "Embed your convify on desktop": "Embed your convify on desktop",
+      "Continue on desktop": "Continue on desktop",
+      "Email me a direct link": "Email me a direct link",
+      "Dismiss": "Dismiss",
+      "continue on desktop desc": "Create flows with our most powerful features, such as logic or advanced design options, on desktop devices. We’ll email you a direct link.",
+      "Don't miss the full power of convify on desktop and embed directly on your site": "Don't miss the full power of convify on desktop and embed directly on your site"
     },
     "PictureChoice": {
       "icon": "Select Icons",

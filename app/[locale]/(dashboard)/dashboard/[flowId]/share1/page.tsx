@@ -17,11 +17,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import ShareFlowComponents from "@/components/sections/createFlow/share/Share"
+import { useEffect, useState } from "react"
+import { User } from "../../page"
 
 export default function CreateFlowsPage() {
   const t = useTranslations("CreateFlow")
 
   const router = useRouter()
+  const [userData, setUserData] = useState<User>()
+
+  useEffect(() => {
+      fetch("/api/users")
+          .then((res) => res.json())
+          .then((data) => setUserData(data))
+          .catch((error) => console.error("Error fetching user data:", error))
+  }, [])
 
   const handleLogout = async () => {
     await signOut({ redirect: false })
@@ -79,7 +89,7 @@ export default function CreateFlowsPage() {
             </div>
             <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
               <Link
-              href="/dashboard/flows/preview-flow" target="_blank">
+                href="/dashboard/flows/preview-flow" target="_blank">
                 <Button
                   variant="outline"
                   size="sm"
@@ -94,34 +104,43 @@ export default function CreateFlowsPage() {
                 </Button>
               </div>
 
-              <div className="lg:block hidden">
+              <div className="">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="rounded-full size-10"
+                      className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
+                      style={{ width: '40px', height: '40px' }} // Adjust the size as needed
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-circle-user"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <circle cx="12" cy="10" r="3" />
-                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                      </svg>
+                      {userData ? (
+                        userData?.name ? (
+                          userData?.name?.charAt(0).toUpperCase()
+                        ) : (
+                          userData?.email?.charAt(0).toUpperCase()
+                        )
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-circle-user"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <circle cx="12" cy="10" r="3" />
+                          <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                        </svg>
+                      )}
                       <span className="sr-only">Toggle user menu</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" style={{zIndex:80}}>
                     <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
@@ -137,7 +156,7 @@ export default function CreateFlowsPage() {
           </header>
         </div>
         <main className="content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full">
-          <ShareFlowComponents isPublished={false} />
+          {/* <ShareFlowComponents isPublished={false} /> */}
         </main>
       </div>
       <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">

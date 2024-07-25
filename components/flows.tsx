@@ -1,5 +1,14 @@
 "use client"
-
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import placeholder from "@/assets/placeholder.svg"
@@ -31,10 +40,159 @@ import {
 } from "@/components/ui/table"
 
 import { Badge } from "./ui/badge"
+import { useEffect, useState, useRef, LegacyRef } from "react"
+import { Icons } from "@/components/icons"
+import { useRouter, usePathname } from "next/navigation"
 
-export function FlowsList() {
+function formatDate(isoString: string): string {
+  const date = new Date(isoString);
+
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+const filterAllowedFields = (data) => {
+  const allowedFields = ["name", "previewImage", "link", "status", "numberOfSteps"]
+  return Object.keys(data).reduce((acc, key) => {
+    if (allowedFields.includes(key)) {
+      acc[key] = data[key]
+    }
+    return acc
+  }, {})
+}
+
+interface Flow {
+  id: string
+  name: string
+  previewImage: string
+  status: string
+  numberOfSteps: number
+  numberOfResponses: number
+  createdAt: string
+
+}
+function splitAndJoin(word: string, isClamped: boolean) {
+  if (isClamped) {
+    let segments: string[] = []; // Explicitly define the type of the segments array
+    for (let i = 0; i < word.length && i < 20; i += 1) {
+      segments.push(word.substring(i, i + 1));
+    }
+    return segments.join('').trim() + "...";
+  } else {
+    return word;
+  }
+}
+export function FlowsList({ flows, setStatus, status }) {
   const t = useTranslations("Dashboard")
+  const [deleteDialog, setDeleteDialog] = useState(false)
+  const [flow, setFlow] = useState<Flow>();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+  const currentPath = usePathname();
+  const router = useRouter();
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
+  useEffect(() => {
+    if (windowSize <= 360) {
+      setPaddingScreen("0.3rem")
+    }
+    else if (windowSize <= 390) {
+      if (currentPath?.includes("pt")) {
+        setPaddingScreen("0.3rem")
+      } else {
+        setPaddingScreen("0.35rem")
+      }
+    }
+    else if (windowSize <= 400) {
+      setPaddingScreen("0.75rem")
+    }
+    else if (windowSize <= 500) {
+      setPaddingScreen("0.85rem")
+    }
+  }, [windowSize])
+
+  // const cellRef = useRef(null);
+  const [isClamped, setIsClamped] = useState(false);
+  useEffect(() => {
+    if (windowSize > 600) {
+      setIsClamped(false)
+    }
+  }, [windowSize])
+  const cellRef = useRef<HTMLDivElement>(null); // Assign the correct type to cellRef
+
+  useEffect(() => {
+    const element = cellRef.current;
+    if (element) {
+      const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
+      const maxLines = 3;
+      const maxHeight = lineHeight * maxLines; // Calculate max height for 3 lines
+      // Calculate content height based on actual content
+      const contentHeight = element.scrollHeight;
+
+      // Check if content exceeds maximum height
+      if (contentHeight >= maxHeight) {
+        setIsClamped(true);
+      }
+    }
+  }, [windowSize]);
+  const editFlow = async (flow) => {
+    const flowId = flow.id;
+    const url = `/dashboard/${flowId}/create-flow`;
+
+    // Redirect the user to the constructed URL
+    router.push(url);
+  }
+
+  const duplicateFlow = async (flow_id) => {
+    try {
+      await fetch(`/api/flows/${flow_id}/duplicate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+      setStatus(!status)
+    } catch (error) {
+      console.error("Error duplicate flow:", error)
+    }
+    return null
+  }
+
+  const deleteFlow = async (flow_id) => {
+    try {
+      setIsLoading(true)
+      await fetch(`/api/flows/${flow_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+      setStatus(!status)
+      setIsLoading(false)
+      setDeleteDialog(false)
+    } catch (error) {
+      console.error("Error delete flow:", error)
+    }
+    return null
+  }
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="sm:py-0 md:gap-8">
@@ -48,344 +206,167 @@ export function FlowsList() {
               <span className="whitespace-nowrap">{t("Create new flow")}</span>
             </Button>
           </Link>
+
           <Card>
-            <CardHeader>
+            <CardHeader style={{
+              padding: paddingScreen !== "inherit" ? "1rem" : "1rem"
+            }}>
               <CardTitle>{t("My flows")}</CardTitle>
               <CardDescription>
                 {t("Manage your flows and view their performance")}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="hidden w-[144px] sm:table-cell">
-                      <span className="sr-only">Image</span>
-                    </TableHead>
-                    <TableHead>{t("Name")}</TableHead>
-                    <TableHead>{t("Status")}</TableHead>
-                    <TableHead>{t("Steps")}</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      {t("Responses")}
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      {t("Created at")}
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">{t("Actions")}</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Laser Lemonade Machine
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Draft</Badge>
-                    </TableCell>
-                    <TableCell>499</TableCell>
-                    <TableCell className="hidden md:table-cell">25</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-07-12 10:42
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
+            <CardContent
+              style={{
+                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+              }}
+            >
+              <div>
+                <Table className="min-w-full">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="hidden w-[144px] sm:table-cell" style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
+                        <span className="sr-only">Image</span>
+                      </TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>{t("Name")}</TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>{t("Status")}</TableHead>
+                      <TableHead className="hidden lg:table-cell" style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>{t("Steps")}</TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
+                        {t("Responses")}
+                      </TableHead>
+                      <TableHead className="hidden lg:table-cell" style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
+                        {t("Created at")}
+                      </TableHead>
+                      <TableHead style={{
+                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                      }}>
+                        <span className="sr-only">{t("Actions")}</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {
+                      flows.length > 0 && flows.map((flow) => {
+                        return (
+                          <TableRow key={flow.id}>
+                            <TableCell className="hidden sm:table-cell"
+                              style={{
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                              }}
                             >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Hypernova Headphones
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>129</TableCell>
-                    <TableCell className="hidden md:table-cell">100</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-10-18 15:21
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      AeroGlow Desk Lamp
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>39</TableCell>
-                    <TableCell className="hidden md:table-cell">50</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-11-29 08:15
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      TechTonic Energy Drink
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">Draft</Badge>
-                    </TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell className="hidden md:table-cell">0</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2023-12-25 23:59
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Gamer Gear Pro Controller
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>59</TableCell>
-                    <TableCell className="hidden md:table-cell">75</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2024-01-01 00:00
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
-                        height="64"
-                        width="113"
-                        src={placeholder.src}
-                      />
-                    </TableCell>
-                    <TableCell className="font-bold">
-                      Luminous VR Headset
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">Active</Badge>
-                    </TableCell>
-                    <TableCell>199</TableCell>
-                    <TableCell className="hidden md:table-cell">30</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      2024-02-14 14:14
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="size-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel>
-                          <DropdownMenuItem>{t("Edit")}</DropdownMenuItem>
-                          <DropdownMenuItem>{t("Duplicate")}</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {t("Delete")}
-                            </Button>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+                              <Image
+                                alt="Product image"
+                                className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                                height="64"
+                                width="113"
+                                src={flow.previewImage ? flow.previewImage : placeholder.src}
+                              />
+                            </TableCell>
+                            <TableCell ref={cellRef as LegacyRef<HTMLTableCellElement> | undefined} className="font-bold"
+                              style={{
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                              }}>
+                              {isClamped ? splitAndJoin(flow.name, isClamped) : flow.name}
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                              }}>
+                              <Badge variant="outline">{t(flow.status)}</Badge>
+                            </TableCell>
+                            <TableCell className="hidden lg:table-cell"
+                              style={{
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                              }}>{flow.numberOfSteps ? flow.numberOfSteps : 0}</TableCell>
+                            <TableCell
+                              style={{
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                              }}>{flow.numberOfResponses ? flow.numberOfResponses : 0}</TableCell>
+                            <TableCell className="hidden lg:table-cell"
+                              style={{
+                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                              }}>
+                              {formatDate(flow.createdAt)}
+                            </TableCell>
+                            <TableCell style={{
+                              padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                            }}>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    aria-haspopup="true"
+                                    size="icon"
+                                    variant="ghost"
+                                  >
+                                    <MoreHorizontal className="size-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  {/* <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel> */}
+                                  <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
+                                  <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
+                                  {/* <DropdownMenuItem> */}
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="bg-[none] text-black hover:text-[#FAFAFA] hover:bg-[#DC2626] w-full justify-start"
+                                    onClick={() => { setDeleteDialog(true); setFlow(flow) }}
+                                  >
+                                    {t("Delete")}
+                                  </Button>
+                                  {/* </DropdownMenuItem> */}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>)
+                      })
+                    }
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
             {/* <CardFooter>
-              <div className="text-xs text-muted-foreground">
-                Showing <strong>1-10</strong> of <strong>32</strong> products
-              </div>
-            </CardFooter> */}
+                  <div className="text-xs text-muted-foreground">
+                    Showing <strong>1-10</strong> of <strong>32</strong> products
+                  </div>
+                </CardFooter> */}
           </Card>
+
+          <AlertDialog open={deleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t("Are you sure want to delete the Flow")}</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setDeleteDialog(false)}>{t("Cancel")}</AlertDialogCancel>
+                <Button
+                  disabled={isLoading}
+                  variant="destructive"
+                  size="sm"
+                  className="bg-[#DC2626] text-[#FAFAFA]"
+                  onClick={() => deleteFlow(flow && flow?.id)}
+                >
+                  {isLoading && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {t("Delete")}
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </main>
     </div>

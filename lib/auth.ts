@@ -51,7 +51,8 @@ export const authOptions: NextAuthOptions = {
         ) {
           return { id: user.id, name: user.email, email: user.email }
         } else {
-          throw new Error("Invalid email or password")
+          // throw new Error("Invalid email or password")
+          return null
         }
       },
     }),
@@ -129,6 +130,12 @@ export const authOptions: NextAuthOptions = {
         email: dbUser.email,
         picture: dbUser.image,
       }
+    },
+    async redirect(url) {
+      if (url.url === url.baseUrl + "/login" || url.url === url.baseUrl + "/register" || url.url === url.baseUrl + "/pt/login" || url.url === url.baseUrl + "/pt/register") {
+        return '/dashboard'; // Redirect to your dashboard after Google authentication
+      }
+      return url.url;
     },
   },
 }
