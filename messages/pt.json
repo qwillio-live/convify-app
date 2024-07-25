@@ -458,7 +458,9 @@
       "Email me a direct link": "Me envie um link direto por email",
       "Dismiss": "Dispensar",
       "continue on desktop desc": "Crie fluxos com nossos recursos mais poderosos, como lógica ou opções de design avançadas, em dispositivos desktop. Enviaremos um link direto por email.",
-      "Don't miss the full power of convify on desktop and embed directly on your site": "Não perca o poder total do convify no desktop e incorpore diretamente em seu site"
+      "Don't miss the full power of convify on desktop and embed directly on your site": "Não perca o poder total do convify no desktop e incorpore diretamente em seu site",
+      "Send on Telegram":"Enviar no Telegram",
+      "Send on WhatsApp":"Enviar no WhatsApp"
     },
     "PictureChoice": {
       "icon": "Selecionar Ícones",

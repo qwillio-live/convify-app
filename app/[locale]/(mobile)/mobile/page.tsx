@@ -115,7 +115,7 @@ export default function MobileForwarder() {
             <Button
               variant="secondary"
               size="sm"
-              className="flex size-10 items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
+              className="flex h-[40px] w-[40px]  items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
             >
               {userData ? (
                 userData?.name ? (
@@ -126,8 +126,6 @@ export default function MobileForwarder() {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -164,7 +162,7 @@ export default function MobileForwarder() {
             height={254}
             width={328}
             alt="Illustration"
-            className=""
+            className="md:h-[350px] md:w-[450px]"
           />
           <h1 className="mx-9 mt-6 text-2xl font-semibold text-[#0F172A]">
             {t("Convify is best experienced on a bigger screen")}

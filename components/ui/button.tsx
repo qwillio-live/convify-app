@@ -29,7 +29,7 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
         filterIcon: "h-[2.13rem] flex grow px-[0.1rem] ",
         mobileForwarder:
-          "w-full max-w-[248px] h-auto py-3 px-4 max-h-[38px] flex grow font-semibold text-base",
+          "w-full max-h-[45px] max-w-[260px] md:max-w-[348px] h-auto py-3 px-4 md:max-h-[58px] flex grow font-semibold text-base",
       },
     },
     defaultVariants: {
