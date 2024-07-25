@@ -93,9 +93,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="fixed grid h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="bg-muted/40 hidden border-r md:block">
-        <div className="fixed flex h-full max-h-screen flex-col gap-2 md:w-[220px] lg:w-[280px]">
+        <div className="fixed flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <div className="flex items-center gap-2 font-semibold">
               <svg
@@ -197,7 +197,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex h-[100vh] flex-col overflow-hidden">
         <div className="sticky top-0 z-20">
           <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
             <Sheet>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
           </header>
         </div>
 
-        <main className="flex h-[100vh] max-h-[92.74vh] flex-1 flex-col overflow-auto  p-4 lg:p-6">
+        <main className="flex flex-1 flex-col overflow-y-auto p-4 lg:p-6">
           <div className="mb-4 flex items-center">
             <h1 className="text-lg font-semibold md:text-lg">
               {t("My workspace")}

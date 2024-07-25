@@ -29,7 +29,7 @@ export const ShareDrawerDesktop = ({
   return (
     <Drawer open={desktopDrawerOpen} onOpenChange={setDesktopDrawerOpen}>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+        <div className="mx-auto w-full max-w-sm border-none ">
           <DrawerHeader style={{ alignItems: "left" }}>
             <DrawerTitle>{t("Continue on desktop")}</DrawerTitle>
             <DrawerDescription>
@@ -38,7 +38,7 @@ export const ShareDrawerDesktop = ({
           </DrawerHeader>
           <DrawerFooter>
             <Button
-              className="mb-2 w-full bg-[rgb(38,38,39)] text-base text-white hover:bg-[rgb(71,71,71)]"
+              className=" w-full border-none bg-[rgb(38,38,39)] text-base text-white hover:bg-[rgb(71,71,71)] "
               onClick={() => setDesktopDrawerOpen(false)}
             >
               <svg
@@ -54,10 +54,7 @@ export const ShareDrawerDesktop = ({
               </svg>
               {t("Email me a direct link")}
             </Button>
-            <Button
-              variant={"green"}
-              className=" mb-2 w-full text-base text-white"
-            >
+            <Button variant={"green"} className=" w-full text-base text-white">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="-1 -1 16 16"
@@ -69,11 +66,11 @@ export const ShareDrawerDesktop = ({
                   <path d="M7.337 9.7c.829.531 1.692.144 2.294-.305c.415-.31.402-.907.047-1.285l-.7-.745c-.265.265-.783.397-1.142.287c-.773-.235-1.097-.637-1.36-1.047c-.301-.47.04-1.172.305-1.437l-.78-.712c-.329-.3-.828-.35-1.115-.01c-.568.673-.92 1.696-.503 2.347c.75 1.169 1.785 2.156 2.954 2.906Z"></path>
                 </g>
               </svg>
-              <span className="ml-2"> {t("Send on WhatsApp")}</span>
+              <span className="ml-2 mr-4"> {t("Send on WhatsApp")}</span>
             </Button>
             <Button
               variant={"lightBlue"}
-              className=" mb-2 w-full text-base text-white"
+              className="mb-2 w-full text-base text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +85,7 @@ export const ShareDrawerDesktop = ({
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span className="ml-2"> {t("Send on Telegram")}</span>
+              <span className="ml-2 mr-5"> {t("Send on Telegram")}</span>
             </Button>
             <DrawerClose asChild>
               <Button

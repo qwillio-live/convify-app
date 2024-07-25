@@ -11,12 +11,12 @@ export default function CreateFlowsPage({
 }) {
   const flowId = params?.flowId
   return (
-    <div className="min-h-screen w-full">
+    <div className="fixed min-h-screen w-full">
       <div className="flex min-h-screen flex-col">
         <div className="sticky top-0 z-[60]">
           <Header />
         </div>
-        <main className="content relative z-50 h-full flex-1 overflow-hidden border-t bg-[#FAFAFA]">
+        <main className="content relative z-50 h-full flex-1 overflow-hidden border-t bg-[#FAFAFA] ">
           <ConnectFlowComponents />
         </main>
       </div>

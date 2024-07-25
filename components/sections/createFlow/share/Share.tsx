@@ -70,7 +70,7 @@ const ShareFlowComponents = ({
   }, [])
 
   return (
-    <div>
+    <div className="max-h-[94vh] overflow-auto">
       {innerview === "desktop" && (
         <div className="flex  flex-row items-start justify-between">
           <div className="relative flex h-full  w-64  flex-col overflow-hidden border-r border-[rgba(0,0,0,0.07)] bg-white">
@@ -100,7 +100,7 @@ const ShareFlowComponents = ({
           </div>
 
           {/* Middle part */}
-          <div className="h-full flex-1 overflow-hidden  bg-[#FAFAFA] px-10 py-8">
+          <div className="h-[94vh] max-h-[94vh] flex-1 overflow-auto bg-[#FAFAFA] px-10 py-8">
             {/* Warning  */}
             {!isPublished && (
               <div className="max-h-[4.75rem] min-w-0 pb-6">
@@ -307,7 +307,7 @@ const ShareFlowComponents = ({
               {/* Main Content */}
               <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center  pt-6">
                 <div
-                  className="max-h-[585px] w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]"
+                  className="h-full max-h-[585px] w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]"
                   style={{
                     maxWidth: view === "desktop" ? "100%" : "360px",
                   }}

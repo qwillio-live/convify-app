@@ -310,9 +310,7 @@ export function FlowsList({ flows, setStatus, status }) {
                           <TableRow key={flow.id}>
                             <TableCell
                               onClick={() =>
-                                router.push(
-                                  `/dashboard/flows/${flow.id}/create-flow`
-                                )
+                                router.push(`/dashboard/${flow.id}/create-flow`)
                               }
                               className="hidden hover:cursor-pointer sm:table-cell"
                               style={{
@@ -336,9 +334,7 @@ export function FlowsList({ flows, setStatus, status }) {
                             </TableCell>
                             <TableCell
                               onClick={() =>
-                                router.push(
-                                  `/dashboard/flows/${flow.id}/create-flow`
-                                )
+                                router.push(`/dashboard/${flow.id}/create-flow`)
                               }
                               ref={
                                 cellRef as

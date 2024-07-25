@@ -50,7 +50,7 @@ export default function CreateFlowsPage({
   }
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="fixed min-h-screen w-full overflow-hidden">
       <div className="flex min-h-screen flex-col">
         <div className="sticky top-0 z-[60]">
           <Header flowId={flowId} />
