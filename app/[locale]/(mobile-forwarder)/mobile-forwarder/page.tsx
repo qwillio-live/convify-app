@@ -45,7 +45,7 @@ export default function MobileForwarder() {
   if (isBrowser) router.push("/dashboard")
   return (
     isMobile && (
-      <div className="font-sans3  flex min-h-screen flex-col justify-between bg-gray-50 bg-white text-center">
+      <div className="font-sans3  flex min-h-screen flex-col justify-between bg-white text-center">
         <header className="mx-4 flex items-center justify-between py-4">
           <Link
             href="/"
