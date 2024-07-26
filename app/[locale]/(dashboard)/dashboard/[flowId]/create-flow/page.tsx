@@ -14,6 +14,8 @@ import Header from "../constants/headerEls"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 export default function CreateFlowsPage({
   params,
@@ -42,9 +44,26 @@ export default function CreateFlowsPage({
     // router.replace(`/dashboard/flows/${value}`);
   }
   useEffect(() => {
+    const getFlowData = async () => {
+      try {
+        const response = await fetch(`/api/flows/${flowId}`)
+        const flowData = await response.json()
+        console.log("flowData", flowData)
+        dispatch(setScreensData(flowData))
+        dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+      } catch (error) {
+        console.error("Error fetching flow data:", error) // Handle the error
+      }
+    }
+
+    // Reset state first
     dispatch(reset())
     dispatch(resetScreens())
-  })
+
+    // Then fetch the flow data
+    getFlowData()
+  }, []) // Add flowId as a dependency if it can change
+
   return (
     <div className="min-h-screen w-full">
       <Tabs

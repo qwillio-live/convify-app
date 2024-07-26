@@ -93,8 +93,6 @@ export default function SelectColor() {
       const data = await res.json()
       console.log("result:", data)
       setIsLoading(false) // Stop loading
-      dispatch(setScreensData(data))
-      dispatch(setFlowSettings(data.flowSettings ?? {}))
       router.push(`/dashboard/${data.id}/create-flow`)
     } catch (err) {
       setIsLoading(false) // Stop loading
