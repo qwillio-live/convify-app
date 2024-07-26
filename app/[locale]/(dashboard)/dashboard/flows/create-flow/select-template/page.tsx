@@ -252,7 +252,7 @@ export default function SelectTemplate() {
                         <div
                           className={`relative h-44 w-full cursor-pointer space-y-3 overflow-hidden rounded-md border xl:h-40 2xl:h-56 ${
                             selectedCard - 1 === index
-                              ? "border-blue-700"
+                              ? "border-black"
                               : "border-none"
                           }`} // Adjusted height and rounded border
                           onClick={() => handleCardClick(index)}

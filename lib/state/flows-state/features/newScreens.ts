@@ -457,23 +457,53 @@ export const newScreensSlice = createSlice({
       state.firstScreenName = state.screens[0].screenName
     },
     deleteScreen: (state, action: PayloadAction<number>) => {
-      if (state.screens.length === 1) return
       const screenToDelete = action.payload
-      const screenIdToDelete = state.screens[screenToDelete].screenId
-      delete state.screensFieldsList[screenIdToDelete]
-      const newScreens = [...state.screens] // Create new array
-      newScreens.splice(screenToDelete, 1)
-      state.screens = newScreens
 
-      // If 0th screen is deleted, move to the next screen; if > 0, move to the previous screen
-      if (action.payload === 0) {
-        state.selectedScreen = 0 // Move to the new first screen
-      } else {
-        state.selectedScreen = Math.max(0, action.payload - 1) // Move to the previous screen
+      // Ensure state.screens is defined and is an array
+      if (!Array.isArray(state.screens) || state.screens.length === 0) return
+
+      // Ensure the index is valid
+      if (screenToDelete < 0 || screenToDelete >= state.screens.length) return
+
+      const screenToDeleteObject = state.screens[screenToDelete]
+
+      // Check if the screen object exists and has the screenId property
+      if (
+        !screenToDeleteObject ||
+        typeof screenToDeleteObject?.screenId === "undefined"
+      )
+        return
+
+      const screenIdToDelete = screenToDeleteObject?.screenId
+
+      // Safeguard: Check if screenIdToDelete exists in state.screensFieldsList
+      if (screenIdToDelete in state.screensFieldsList) {
+        delete state.screensFieldsList[screenIdToDelete]
       }
 
-      state.editorLoad = state.screens[state.selectedScreen] // Ensure new reference
-      state.firstScreenName = state.screens[0].screenName
+      // Create a new array without mutating the existing state directly
+      state.screens = state.screens.filter(
+        (_, index) => index !== screenToDelete
+      )
+
+      // Adjust selectedScreen based on the index of deleted screen
+      if (state.screens.length === 0) {
+        // No screens left after deletion
+        state.selectedScreen = null
+        state.editorLoad = null
+        state.firstScreenName = ""
+      } else {
+        // Set selectedScreen to the previous one or the first screen
+        if (screenToDelete === 0) {
+          state.selectedScreen = 0 // Move to the new first screen
+        } else {
+          state.selectedScreen = Math.max(0, screenToDelete - 1) // Move to the previous screen
+        }
+
+        // Ensure that the selectedScreen is within bounds
+        state.editorLoad = state.screens[state.selectedScreen] || null
+        state.firstScreenName = state.screens[0]?.screenName || ""
+      }
     },
     setScreenName: (
       state,

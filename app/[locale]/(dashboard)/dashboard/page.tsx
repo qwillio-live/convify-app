@@ -318,47 +318,56 @@ export default function DashboardPage() {
               <SkeletonFlowCard />
             </div>
           ) : (
-            <div
-              className={`flex flex-1  justify-center rounded-lg shadow-sm ${
-                openCreateFlow ? "border-none" : "border"
-              }`}
-              x-chunk="dashboard-02-chunk-1"
-            >
+            <>
               {openCreateFlow ? (
-                <FlowsList
-                  flows={flows}
-                  setStatus={setStatus}
-                  status={status}
-                />
-              ) : (
-                <div className="flex flex-col items-center gap-1 text-center">
-                  <img
-                    src="/images/character.svg"
-                    alt=""
-                    className="mb-4 h-[104px]"
+                <div
+                  className={`flex flex-1  justify-center rounded-lg shadow-sm ${
+                    openCreateFlow ? "border-none" : "border"
+                  }`}
+                  x-chunk="dashboard-02-chunk-1"
+                >
+                  <FlowsList
+                    flows={flows}
+                    setStatus={setStatus}
+                    status={status}
                   />
-                  <h3 className="text-2xl font-bold tracking-tight">
-                    {t("There's not a flow in sight")}
-                  </h3>
-                  <p className="text-muted-foreground text-sm">
-                    {t.rich(
-                      "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
-                      {
-                        br: () => <br />,
-                      }
-                    )}
-                  </p>
-                  <Link
-                    className="flex items-center "
-                    href="/dashboard/flows/create-flow/select-template"
-                  >
-                    <Button className="itmes-center mt-4 flex gap-2">
-                      <Plus size={16} /> {t("Create new flow")}
-                    </Button>
-                  </Link>
+                </div>
+              ) : (
+                <div
+                  className={`flex flex-1 items-center  justify-center rounded-lg shadow-sm ${
+                    openCreateFlow ? "border-none" : "border"
+                  }`}
+                  x-chunk="dashboard-02-chunk-1"
+                >
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <img
+                      src="/images/character.svg"
+                      alt=""
+                      className="mb-4 h-[104px]"
+                    />
+                    <h3 className="text-2xl font-bold tracking-tight">
+                      {t("There's not a flow in sight")}
+                    </h3>
+                    <p className="text-muted-foreground text-sm">
+                      {t.rich(
+                        "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
+                        {
+                          br: () => <br />,
+                        }
+                      )}
+                    </p>
+                    <Link
+                      className="flex items-center "
+                      href="/dashboard/flows/create-flow/select-template"
+                    >
+                      <Button className="itmes-center mt-4 flex gap-2">
+                        <Plus size={16} /> {t("Create new flow")}
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               )}
-            </div>
+            </>
           )}
         </main>
       </div>
