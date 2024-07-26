@@ -51,35 +51,39 @@ const authMiddleware = withAuth(
   }
 )
 
-export default function middleware(req: NextRequest) {
-  const excludePattern =
-    "^(/(" + locales.join("|") + "))?/(dashboard|editor)/?.*?$"
-  const publicPathnameRegex = RegExp(excludePattern, "i")
-  const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
-  const response = NextResponse.next();
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    response.headers.set('Access-Control-Max-Age', '86400'); // Cache preflight response for 24 hours
-    // return  new NextResponse(null, { headers: response.headers });
-    return new NextResponse(null, { headers: response.headers });
-  }
+const corsOptions = {
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Origin': '*'
+}
 
-  // Add CORS headers
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+export default function middleware(req: NextRequest) {
   if (req.nextUrl.pathname?.includes("/api/")) {
+    // Handle preflighted requests
+    const isPreflight = req.method === 'OPTIONS'
+
+    if (isPreflight) {
+      return NextResponse.json({}, { headers: corsOptions })
+    }
+
+    // Handle simple requests
+    const response = NextResponse.next()
+    Object.entries(corsOptions).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
     return response
   }
+
+  const excludePattern = "^(/(" + locales.join("|") + "))?/(dashboard|editor)/?.*?$"
+  const publicPathnameRegex = RegExp(excludePattern, "i")
+  const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
 
   if (isPublicPage) {
     return intlMiddleware(req)
   } else {
     return (authMiddleware as any)(req)
   }
+
 }
 
 export const config = {
