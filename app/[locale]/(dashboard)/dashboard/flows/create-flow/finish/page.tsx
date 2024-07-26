@@ -26,6 +26,8 @@ import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
 import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import { Icons } from "@/components/icons"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 // Define Zod schema for input validation
 const nameSchema = z
@@ -91,6 +93,8 @@ export default function SelectColor() {
       const data = await res.json()
       console.log("result:", data)
       setIsLoading(false) // Stop loading
+      dispatch(setScreensData(data))
+      dispatch(setFlowSettings(data.flowSettings ?? {}))
       router.push(`/dashboard/${data.id}/create-flow`)
     } catch (err) {
       setIsLoading(false) // Stop loading
