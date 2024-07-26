@@ -23,11 +23,12 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     try {
       const response = await fetch(`/api/flows/${flowId}`)
       const flowData = await response.json()
-
+      console.log("flowData", flowData)
       dispatch(setScreensData(flowData))
       dispatch(setFlowSettings(flowData.flowSettings ?? {}))
 
       setIsFlowLoaded(true)
+      console.log("flowData", flowData)
     } catch (error) {
       setIsFlowLoaded(false)
     }
@@ -90,7 +91,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   }, [isFlowLoaded, localFlowData, localFlowSettings])
 
   if (isFlowLoaded === null) return <Loading />
-  if (isFlowLoaded === false) return <NotFound/>
+  if (isFlowLoaded === false) return <NotFound />
 
   return children
 }

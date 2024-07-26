@@ -18,6 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        green: "bg-[#25D366] text-primary-foreground hover:bg-[#4ed876] ",
+        lightBlue: " bg-[#027BB7] text-primary-foreground hover:bg-[#0095dc] ",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -26,6 +28,8 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
         filterIcon: "h-[2.13rem] flex grow px-[0.1rem] ",
+        mobileForwarder:
+          "w-full max-h-[45px] max-w-[260px] md:max-w-[348px] h-auto py-3 px-4 md:max-h-[58px] flex grow font-semibold text-base",
       },
     },
     defaultVariants: {

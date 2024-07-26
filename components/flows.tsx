@@ -45,19 +45,25 @@ import { Icons } from "@/components/icons"
 import { useRouter, usePathname } from "next/navigation"
 
 function formatDate(isoString: string): string {
-  const date = new Date(isoString);
+  const date = new Date(isoString)
 
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const hours = String(date.getUTCHours()).padStart(2, '0');
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const year = date.getUTCFullYear()
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0")
+  const day = String(date.getUTCDate()).padStart(2, "0")
+  const hours = String(date.getUTCHours()).padStart(2, "0")
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0")
 
-  return `${year}-${month}-${day} ${hours}:${minutes}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}`
 }
 
 const filterAllowedFields = (data) => {
-  const allowedFields = ["name", "previewImage", "link", "status", "numberOfSteps"]
+  const allowedFields = [
+    "name",
+    "previewImage",
+    "link",
+    "status",
+    "numberOfSteps",
+  ]
   return Object.keys(data).reduce((acc, key) => {
     if (allowedFields.includes(key)) {
       acc[key] = data[key]
@@ -74,91 +80,93 @@ interface Flow {
   numberOfSteps: number
   numberOfResponses: number
   createdAt: string
-
 }
-function splitAndJoin(word: string, isClamped: boolean) {
+function splitAndJoin(word: string, isClamped: boolean): string {
+  const maxLength = 50
+
   if (isClamped) {
-    let segments: string[] = []; // Explicitly define the type of the segments array
-    for (let i = 0; i < word.length && i < 20; i += 1) {
-      segments.push(word.substring(i, i + 1));
+    // Check if the word length is greater than the maximum length
+    if (word.length > maxLength) {
+      // Trim the word to the maximum length and add ellipsis
+      return word.substring(0, maxLength).trim() + "..."
+    } else {
+      // Return the word as it is if it's within the length limit
+      return word
     }
-    return segments.join('').trim() + "...";
   } else {
-    return word;
+    // Return the word as it is if not clamped
+    return word
   }
 }
+
 export function FlowsList({ flows, setStatus, status }) {
   const t = useTranslations("Dashboard")
   const [deleteDialog, setDeleteDialog] = useState(false)
-  const [flow, setFlow] = useState<Flow>();
+  const [flow, setFlow] = useState<Flow>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
-  const [windowSize, setWindowSize] = useState(window.innerWidth);
-  const currentPath = usePathname();
-  const router = useRouter();
+  const [windowSize, setWindowSize] = useState(window.innerWidth)
+  const currentPath = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowSize(window.innerWidth);
-    };
+      setWindowSize(window.innerWidth)
+    }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   useEffect(() => {
     if (windowSize <= 360) {
       setPaddingScreen("0.3rem")
-    }
-    else if (windowSize <= 390) {
+    } else if (windowSize <= 390) {
       if (currentPath?.includes("pt")) {
         setPaddingScreen("0.3rem")
       } else {
         setPaddingScreen("0.35rem")
       }
-    }
-    else if (windowSize <= 400) {
+    } else if (windowSize <= 400) {
       setPaddingScreen("0.75rem")
-    }
-    else if (windowSize <= 500) {
+    } else if (windowSize <= 500) {
       setPaddingScreen("0.85rem")
     }
   }, [windowSize])
 
   // const cellRef = useRef(null);
-  const [isClamped, setIsClamped] = useState(false);
+  const [isClamped, setIsClamped] = useState(false)
   useEffect(() => {
     if (windowSize > 600) {
       setIsClamped(false)
     }
   }, [windowSize])
-  const cellRef = useRef<HTMLDivElement>(null); // Assign the correct type to cellRef
+  const cellRef = useRef<HTMLDivElement>(null) // Assign the correct type to cellRef
 
   useEffect(() => {
-    const element = cellRef.current;
+    const element = cellRef.current
     if (element) {
-      const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
-      const maxLines = 3;
-      const maxHeight = lineHeight * maxLines; // Calculate max height for 3 lines
+      const lineHeight = parseFloat(getComputedStyle(element).lineHeight)
+      const maxLines = 3
+      const maxHeight = lineHeight * maxLines // Calculate max height for 3 lines
       // Calculate content height based on actual content
-      const contentHeight = element.scrollHeight;
+      const contentHeight = element.scrollHeight
 
       // Check if content exceeds maximum height
       if (contentHeight >= maxHeight) {
-        setIsClamped(true);
+        setIsClamped(true)
       }
     }
-  }, [windowSize]);
+  }, [windowSize])
   const editFlow = async (flow) => {
-    const flowId = flow.id;
-    const url = `/dashboard/${flowId}/create-flow`;
+    const flowId = flow.id
+    const url = `/dashboard/${flowId}/create-flow`
 
     // Redirect the user to the constructed URL
-    router.push(url);
+    router.push(url)
   }
 
   const duplicateFlow = async (flow_id) => {
@@ -166,7 +174,7 @@ export function FlowsList({ flows, setStatus, status }) {
       await fetch(`/api/flows/${flow_id}/duplicate`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       })
       setStatus(!status)
@@ -182,7 +190,7 @@ export function FlowsList({ flows, setStatus, status }) {
       await fetch(`/api/flows/${flow_id}`, {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       })
       setStatus(!status)
@@ -194,12 +202,12 @@ export function FlowsList({ flows, setStatus, status }) {
     return null
   }
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex  w-full flex-col">
       <main className="sm:py-0 md:gap-8">
         <div className="flex flex-col">
           <Link
             className="flex items-center justify-start self-start"
-            href="/dashboard/flows/create-flow"
+            href="/dashboard/flows/create-flow/select-template"
           >
             <Button size="sm" className="my-4 h-8 gap-1 py-2">
               <Plus className="size-3.5" />
@@ -208,9 +216,11 @@ export function FlowsList({ flows, setStatus, status }) {
           </Link>
 
           <Card>
-            <CardHeader style={{
-              padding: paddingScreen !== "inherit" ? "1rem" : "1rem"
-            }}>
+            <CardHeader
+              style={{
+                padding: paddingScreen !== "inherit" ? "1rem" : "1rem",
+              }}
+            >
               <CardTitle>{t("My flows")}</CardTitle>
               <CardDescription>
                 {t("Manage your flows and view their performance")}
@@ -218,91 +228,191 @@ export function FlowsList({ flows, setStatus, status }) {
             </CardHeader>
             <CardContent
               style={{
-                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem",
               }}
             >
               <div>
                 <Table className="min-w-full">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="hidden w-[144px] sm:table-cell" style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>
+                      <TableHead
+                        className=" hidden w-[144px] sm:table-cell"
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                      >
                         <span className="sr-only">Image</span>
                       </TableHead>
-                      <TableHead style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>{t("Name")}</TableHead>
-                      <TableHead style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>{t("Status")}</TableHead>
-                      <TableHead className="hidden lg:table-cell" style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>{t("Steps")}</TableHead>
-                      <TableHead style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>
+                      <TableHead
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                        className=" w-[384px]"
+                      >
+                        {t("Name")}
+                      </TableHead>
+                      <TableHead
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                      >
+                        {t("Status")}
+                      </TableHead>
+                      <TableHead
+                        className="hidden lg:table-cell"
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                      >
+                        {t("Steps")}
+                      </TableHead>
+                      <TableHead
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                      >
                         {t("Responses")}
                       </TableHead>
-                      <TableHead className="hidden lg:table-cell" style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>
+                      <TableHead
+                        className="hidden lg:table-cell"
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                      >
                         {t("Created at")}
                       </TableHead>
-                      <TableHead style={{
-                        padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                      }}>
+                      <TableHead
+                        style={{
+                          padding:
+                            paddingScreen !== "inherit"
+                              ? paddingScreen
+                              : "1rem",
+                        }}
+                      >
                         <span className="sr-only">{t("Actions")}</span>
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {
-                      flows.length > 0 && flows.map((flow) => {
+                    {flows.length > 0 &&
+                      flows.map((flow) => {
                         return (
                           <TableRow key={flow.id}>
-                            <TableCell className="hidden sm:table-cell"
+                            <TableCell
+                              onClick={() =>
+                                router.push(`/dashboard/${flow.id}/create-flow`)
+                              }
+                              className="hidden hover:cursor-pointer sm:table-cell"
                               style={{
-                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
                               }}
                             >
                               <Image
                                 alt="Product image"
-                                className="aspect-video rounded-md object-cover !w-auto min-w-[113px] !min-h-16"
+                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover "
                                 height="64"
                                 width="113"
-                                src={flow.previewImage ? flow.previewImage : placeholder.src}
+                                src={
+                                  flow.previewImage
+                                    ? flow.previewImage
+                                    : placeholder.src
+                                }
                               />
                             </TableCell>
-                            <TableCell ref={cellRef as LegacyRef<HTMLTableCellElement> | undefined} className="font-bold"
+                            <TableCell
+                              onClick={() =>
+                                router.push(`/dashboard/${flow.id}/create-flow`)
+                              }
+                              ref={
+                                cellRef as
+                                  | LegacyRef<HTMLTableCellElement>
+                                  | undefined
+                              }
+                              className="font-bold hover:cursor-pointer"
                               style={{
-                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                              }}>
-                              {isClamped ? splitAndJoin(flow.name, isClamped) : flow.name}
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
+                              }}
+                            >
+                              {isClamped
+                                ? splitAndJoin(flow.name, isClamped)
+                                : flow.name}
                             </TableCell>
                             <TableCell
                               style={{
-                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                              }}>
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
+                              }}
+                            >
                               <Badge variant="outline">{t(flow.status)}</Badge>
                             </TableCell>
-                            <TableCell className="hidden lg:table-cell"
+                            <TableCell
+                              className="hidden lg:table-cell"
                               style={{
-                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                              }}>{flow.numberOfSteps ? flow.numberOfSteps : 0}</TableCell>
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
+                              }}
+                            >
+                              {flow.numberOfSteps ? flow.numberOfSteps : 0}
+                            </TableCell>
                             <TableCell
                               style={{
-                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                              }}>{flow.numberOfResponses ? flow.numberOfResponses : 0}</TableCell>
-                            <TableCell className="hidden lg:table-cell"
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
+                              }}
+                            >
+                              {flow.numberOfResponses
+                                ? flow.numberOfResponses
+                                : 0}
+                            </TableCell>
+                            <TableCell
+                              className="hidden lg:table-cell"
                               style={{
-                                padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                              }}>
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
+                              }}
+                            >
                               {formatDate(flow.createdAt)}
                             </TableCell>
-                            <TableCell style={{
-                              padding: paddingScreen !== "inherit" ? paddingScreen : "1rem"
-                            }}>
+                            <TableCell
+                              style={{
+                                padding:
+                                  paddingScreen !== "inherit"
+                                    ? paddingScreen
+                                    : "1rem",
+                              }}
+                            >
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button
@@ -316,14 +426,27 @@ export function FlowsList({ flows, setStatus, status }) {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   {/* <DropdownMenuLabel>{t("Actions")}</DropdownMenuLabel> */}
-                                  <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => editFlow(flow)}>{t("Edit")}</DropdownMenuItem>
-                                  <DropdownMenuItem className="pl-[12px] cursor-pointer" onClick={() => duplicateFlow(flow.id)} >{t("Duplicate")}</DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="cursor-pointer pl-[12px]"
+                                    onClick={() => editFlow(flow)}
+                                  >
+                                    {t("Edit")}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="cursor-pointer pl-[12px]"
+                                    onClick={() => duplicateFlow(flow.id)}
+                                  >
+                                    {t("Duplicate")}
+                                  </DropdownMenuItem>
                                   {/* <DropdownMenuItem> */}
                                   <Button
                                     variant="destructive"
                                     size="sm"
-                                    className="bg-[none] text-black hover:text-[#FAFAFA] hover:bg-[#DC2626] w-full justify-start"
-                                    onClick={() => { setDeleteDialog(true); setFlow(flow) }}
+                                    className="w-full justify-start bg-[none] text-black hover:bg-[#DC2626] hover:text-[#FAFAFA]"
+                                    onClick={() => {
+                                      setDeleteDialog(true)
+                                      setFlow(flow)
+                                    }}
                                   >
                                     {t("Delete")}
                                   </Button>
@@ -331,9 +454,9 @@ export function FlowsList({ flows, setStatus, status }) {
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </TableCell>
-                          </TableRow>)
-                      })
-                    }
+                          </TableRow>
+                        )
+                      })}
                   </TableBody>
                 </Table>
               </div>
@@ -348,10 +471,14 @@ export function FlowsList({ flows, setStatus, status }) {
           <AlertDialog open={deleteDialog}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>{t("Are you sure want to delete the Flow")}</AlertDialogTitle>
+                <AlertDialogTitle>
+                  {t("Are you sure want to delete the Flow")}
+                </AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setDeleteDialog(false)}>{t("Cancel")}</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setDeleteDialog(false)}>
+                  {t("Cancel")}
+                </AlertDialogCancel>
                 <Button
                   disabled={isLoading}
                   variant="destructive"

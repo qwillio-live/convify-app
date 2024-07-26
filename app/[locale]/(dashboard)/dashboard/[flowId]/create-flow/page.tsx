@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 
@@ -12,47 +12,77 @@ import ConnectFlowComponents from "@/components/sections/createFlow/connect/Conn
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 import Header from "../constants/headerEls"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
-export default function CreateFlowsPage() {
+export default function CreateFlowsPage({
+  params,
+}: {
+  params: { flowId: string; en: string }
+}) {
   const router = useRouter()
+  const flowId = params?.flowId
+  console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState(
     "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
   )
 
-  const dispatch = useAppDispatch();
-  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || "";
-
+  const dispatch = useAppDispatch()
+  const firstScreenName =
+    useAppSelector((state) => state?.screen?.firstScreenName) || ""
 
   const [tab, setTab] = useState("create")
 
-  const t = useTranslations("CreateFlow")
+  const t = useTranslations("Components")
 
   // store the current tab value
   const onTabChange = (value: string) => {
     setTab(value)
     // router.replace(`/dashboard/flows/${value}`);
   }
+  useEffect(() => {
+    const getFlowData = async () => {
+      try {
+        const response = await fetch(`/api/flows/${flowId}`)
+        const flowData = await response.json()
+        console.log("flowData", flowData)
+        dispatch(setScreensData(flowData))
+        dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+      } catch (error) {
+        console.error("Error fetching flow data:", error) // Handle the error
+      }
+    }
+
+    // Reset state first
+    dispatch(reset())
+    dispatch(resetScreens())
+
+    // Then fetch the flow data
+    getFlowData()
+  }, []) // Add flowId as a dependency if it can change
 
   return (
     <div className="min-h-screen w-full">
       <Tabs
         defaultValue="create"
         onValueChange={onTabChange}
-        className="min-h-screen flex flex-col"
+        className="flex min-h-screen flex-col"
       >
         <div className="sticky top-0 z-[60]">
-          <Header />
+          <Header flowId={flowId} />
         </div>
         <main
-          className={`content relative border-t z-50 overflow-hidden bg-[#FAFAFA] flex-1 ${tab === "results" ? "" : tab === "share" ? "" : ""
-            }`}
+          className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${
+            tab === "results" ? "" : tab === "share" ? "" : ""
+          }`}
         >
           <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
               <CreateFlowComponent />
             </TabsContent>
-
 
             {/* <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />
@@ -136,10 +166,9 @@ export default function CreateFlowsPage() {
         <TabsContent className="mt-0" value="results">
           <ResultFlowComponents />
         </TabsContent> */}
-
           </div>
-        </main >
-      </Tabs >
+        </main>
+      </Tabs>
       {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
         <button className="relative size-8 cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
           <div className="flex size-auto cursor-pointer items-center justify-center">
@@ -163,90 +192,88 @@ export default function CreateFlowsPage() {
           </div>
         </button>
       </div> */}
-      {
-        isCustomLinkOpen && (
-          <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
-            <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
-              <div className="z-[1] flex w-[512px] flex-col items-center p-8">
-                <div className="min-h-0 min-w-0 shrink-0 pb-6">
-                  <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
-                    {t("CUSTOM LINK")}
-                  </span>
-                </div>
-                <div className="min-h-0 min-w-0 shrink-0 pb-2">
-                  <span className="block text-center text-4xl font-light">
-                    {t("Create a custom link")}
-                  </span>
-                </div>
-                <div className="min-h-0 min-w-0 shrink-0">
-                  <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                    {t(
-                      "Edit the link and let people know what your flow is about"
-                    )}
-                  </span>
-                </div>
-                <div className="mb-10"></div>
-                <div className="min-h-0 min-w-0 shrink-0 pb-6">
-                  <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
-                    {t("Available on these plans: Plus, Business, Enterprise")}
-                  </span>
-                </div>
-                <div className="flex size-full items-center justify-center">
-                  <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
-                    <div className="flex">
-                      <span className="block flex-[0_0_auto]">
-                        {t("Upgrade my plan")}
-                      </span>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <button
-              aria-label="Close dialog"
-              color="#737373"
-              data-qa="upgrade-nag-screen-close-button"
-              style={{
-                marginTop: "60px",
-              }}
-              className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
-            >
-              <div className="flex size-auto items-center justify-center ">
-                <span
-                  onClick={() => setIsCustomLinkOpen(false)}
-                  className="cursor-pointer"
-                >
-                  {" "}
-                  <svg
-                    width="28px"
-                    height="28px"
-                    viewBox="0 0 16 16"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="#000000"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
-                    />
-                  </svg>
+      {isCustomLinkOpen && (
+        <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
+          <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
+            <div className="z-[1] flex w-[512px] flex-col items-center p-8">
+              <div className="min-h-0 min-w-0 shrink-0 pb-6">
+                <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
+                  {t("CUSTOM LINK")}
                 </span>
               </div>
-            </button>
+              <div className="min-h-0 min-w-0 shrink-0 pb-2">
+                <span className="block text-center text-4xl font-light">
+                  {t("Create a custom link")}
+                </span>
+              </div>
+              <div className="min-h-0 min-w-0 shrink-0">
+                <span className="block text-center text-xl text-[rgb(115,115,115)]">
+                  {t(
+                    "Edit the link and let people know what your flow is about"
+                  )}
+                </span>
+              </div>
+              <div className="mb-10"></div>
+              <div className="min-h-0 min-w-0 shrink-0 pb-6">
+                <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
+                  {t("Available on these plans: Plus, Business, Enterprise")}
+                </span>
+              </div>
+              <div className="flex size-full items-center justify-center">
+                <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
+                  <div className="flex">
+                    <span className="block flex-[0_0_auto]">
+                      {t("Upgrade my plan")}
+                    </span>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
-          // <Dialog open={isCustomLinkOpen} onOpenChange={setIsCustomLinkOpen}>
-          //   <DialogContent className=" sm:max-w-md">
-          //     <DialogHeader>
-          //       <DialogTitle className="">CUSTOM LINK</DialogTitle>
-          //       <DialogTitle>Create a custom link</DialogTitle>
-          //       <DialogDescription>
-          //         Edit the link and let people know what your flow is about.
-          //       </DialogDescription>
-          //     </DialogHeader>
-          //   </DialogContent>
-          // </Dialog>
-        )
-      }
-    </div >
+          <button
+            aria-label="Close dialog"
+            color="#737373"
+            data-qa="upgrade-nag-screen-close-button"
+            style={{
+              marginTop: "60px",
+            }}
+            className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+          >
+            <div className="flex size-auto items-center justify-center ">
+              <span
+                onClick={() => setIsCustomLinkOpen(false)}
+                className="cursor-pointer"
+              >
+                {" "}
+                <svg
+                  width="28px"
+                  height="28px"
+                  viewBox="0 0 16 16"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
+                  />
+                </svg>
+              </span>
+            </div>
+          </button>
+        </div>
+        // <Dialog open={isCustomLinkOpen} onOpenChange={setIsCustomLinkOpen}>
+        //   <DialogContent className=" sm:max-w-md">
+        //     <DialogHeader>
+        //       <DialogTitle className="">CUSTOM LINK</DialogTitle>
+        //       <DialogTitle>Create a custom link</DialogTitle>
+        //       <DialogDescription>
+        //         Edit the link and let people know what your flow is about.
+        //       </DialogDescription>
+        //     </DialogHeader>
+        //   </DialogContent>
+        // </Dialog>
+      )}
+    </div>
   )
 }

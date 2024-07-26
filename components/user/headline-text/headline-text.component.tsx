@@ -30,7 +30,6 @@ const MobileContainerWidthValues = {
   full: "100%",
 }
 
-
 const headlineFontSize = {
   mobile: 24,
   desktop: 32,
@@ -169,7 +168,7 @@ export const HeadlineTextGen = ({
 
   return (
     <div
-      className="w-full relative"
+      className="relative w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -480,7 +479,7 @@ export const HeadlineText = ({
           {...props}
           text={t("HeadlineDescription")}
         >
-          <div className="flex flex-col max-w-[100%] min-h-[16px] min-w-[32px] overflow-x-clip">
+          <div className="flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-x-clip">
             <ContentEditable
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
@@ -490,10 +489,10 @@ export const HeadlineText = ({
                 overflowX: "clip",
                 textOverflow: "ellipsis",
                 color: `${primaryTextColor}`,
-                fontSize:`${mobileScreen ? mobileFontSize : fontSize}px`,
+                fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
-              className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+              className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
                 handleTextChange(e)
               }}

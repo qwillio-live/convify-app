@@ -263,7 +263,6 @@ export const UserTextInputGen = ({
   borderHoverColor,
   ...props
 }) => {
-
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
@@ -278,7 +277,7 @@ export const UserTextInputGen = ({
 
   return (
     <div
-      className="w-full relative"
+      className="relative w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -527,7 +526,6 @@ export const UserText = ({
     [handlePropChangeDebounced]
   )
 
-
   return (
     <div
       ref={(el: any) => connect(drag(el))}
@@ -597,7 +595,7 @@ export const UserText = ({
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
-              className="min-w-16 border-transparent leading-relaxed border-dotted hover:border-blue-500"
+              className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
                 handleTextChange(e)
               }}

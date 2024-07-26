@@ -21,7 +21,6 @@ import {
   Image as ImageIcon,
   ImagePlus,
   Images,
-  LayoutList,
   Link,
   Linkedin,
   ListChecks,
@@ -47,6 +46,9 @@ import {
   TextCursorInput,
   Trophy,
   Type,
+  LayoutList,
+  MessageCircleMoreIcon,
+  Send,
   User,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -173,6 +175,16 @@ import {
   TextImageDefaultProps,
 } from "../textImage/user-textImage.component"
 import { ImageDefaultProps } from "../image-new/user-image.component"
+import useShareButtonTheme from "../socialShareButton/share-theme"
+import useTelegramButtonTheme from "../telegramShareButton/telegram-theme"
+import {
+  SocialShareButton,
+  SocialShareButtonGen,
+} from "../socialShareButton/share-component"
+import {
+  TelegramShareButton,
+  TelegramShareButtonGen,
+} from "../telegramShareButton/telegram-component"
 
 function HelperInformation() {
   return (
@@ -253,6 +265,8 @@ export const UserToolbox = () => {
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
   const { backFilledPreset, backOutLinePreset } = useBackThemePresets()
+  const { SocialFilledPreset } = useShareButtonTheme()
+  const { TelegramFilledPreset } = useTelegramButtonTheme()
   const { selectPreset } = useSelectThemePresets()
   const { outlinedPreset, underlinedPreset } = useInputThemePresets()
   const { normalPreset: checklistNormalPreset } = useChecklistThemePresets()
@@ -393,8 +407,8 @@ export const UserToolbox = () => {
                       title="Form"
                       icon={<NotebookPen size={12} className="mr-2 size-3" />}
                     >
-                      <div className="max-w-[350px] flex flex-col items-center justify-start ">
-                        <div className="flex gap-1 max-w-[376px]">
+                      <div className="flex max-w-[350px] flex-col items-center justify-start ">
+                        <div className="flex max-w-[376px] gap-1">
                           <UserInputGen
                             {...formPreset}
                             label={t("FirstName")}
@@ -753,6 +767,102 @@ export const UserToolbox = () => {
                       paddingLeft={0}
                       paddingRight={0}
                       iconType={PictureTypes.ICON}
+                    />
+                  </HoverCardComponent>
+                </div>
+                <div
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
+                      <SocialShareButton
+                        // {...IconButtonDefaultProps}
+                        {...SocialFilledPreset}
+                        disabled={false}
+                        text={t("WhatsApp")}
+                        justifyContent={"center"}
+                        size={"small"}
+                        marginTop={20}
+                        marginBottom={20}
+                        marginLeft={0}
+                        marginRight={0}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        iconType={PictureTypes.ICON}
+                        phoneNumber={""}
+                      />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title={t("WhatsApp Button")}
+                    icon={<MessageCircleMoreIcon className="mr-2 size-3" />}
+                  >
+                    <SocialShareButtonGen
+                      className="w-full"
+                      {...SocialFilledPreset}
+                      size="lasmallrge"
+                      marginTop={20}
+                      marginBottom={20}
+                      marginLeft={0}
+                      marginRight={0}
+                      text={t("WhatsApp")}
+                      justifyContent={"center"}
+                      paddingLeft={0}
+                      paddingRight={0}
+                      iconType={PictureTypes.ICON}
+                      phoneNumber={""}
+                    />
+                  </HoverCardComponent>
+                </div>
+                <div
+                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  //eslint-disable-next-line
+                  ref={(ref: any) =>
+                    ref &&
+                    connectors.create(
+                      ref,
+                      <TelegramShareButton
+                        // {...IconButtonDefaultProps}
+                        {...TelegramFilledPreset}
+                        disabled={false}
+                        text={t("Telegram")}
+                        justifyContent={"center"}
+                        size={"small"}
+                        marginTop={20}
+                        marginBottom={20}
+                        marginLeft={0}
+                        marginRight={0}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        iconType={PictureTypes.ICON}
+                        url={""}
+                      />
+                    )
+                  }
+                  data-cy="toolbox-text"
+                >
+                  <HoverCardComponent
+                    title={t("Telegram Button")}
+                    icon={<Send className="mr-2 size-3" />}
+                  >
+                    <TelegramShareButtonGen
+                      className="w-full"
+                      {...TelegramFilledPreset}
+                      size="small"
+                      marginTop={20}
+                      marginBottom={20}
+                      marginLeft={20}
+                      marginRight={20}
+                      text={t("Telegram")}
+                      justifyContent={"center"}
+                      paddingLeft={0}
+                      paddingRight={0}
+                      iconType={PictureTypes.ICON}
+                      url={""}
                     />
                   </HoverCardComponent>
                 </div>

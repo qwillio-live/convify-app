@@ -42,7 +42,7 @@ export default function FlowPreview() {
   const currentScreenName = useAppSelector(
     (state) => state?.screen?.currentScreenName
   )
-   const selectedScreen = useAppSelector(
+  const selectedScreen = useAppSelector(
     (state) =>
       state?.screen?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
@@ -125,14 +125,14 @@ export default function FlowPreview() {
             style={{
               display:
                 currentScreenName === screen?.screenName ? "block" : "none",
-              backgroundColor: backgroundColor,
+              // backgroundColor: backgroundColor,
               paddingTop:
                 headerPosition === "absolute" ? headerHeight + "px" : "0",
             }}
-            className="pt-14
+            className="min-w-full
           shrink-0
           basis-full
-          min-w-full"
+          pt-14"
           >
             <ResolvedComponentsFromCraftState
               key={index}

@@ -21,16 +21,16 @@ import { useEffect, useState } from "react"
 import { User } from "../../page"
 
 export default function CreateFlowsPage() {
-  const t = useTranslations("CreateFlow")
+  const t = useTranslations("Components")
 
   const router = useRouter()
   const [userData, setUserData] = useState<User>()
 
   useEffect(() => {
-      fetch("/api/users")
-          .then((res) => res.json())
-          .then((data) => setUserData(data))
-          .catch((error) => console.error("Error fetching user data:", error))
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => setUserData(data))
+      .catch((error) => console.error("Error fetching user data:", error))
   }, [])
 
   const handleLogout = async () => {
@@ -41,14 +41,14 @@ export default function CreateFlowsPage() {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <div className="sticky top-0 z-[60]">
-          <header className="flex flex-wrap lg:flex-nowrap h-28 items-center justify-between gap-x-4 lg:gap-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:px-6">
-            <div className="bread-crumbs flex h-1/2 lg:h-full max-h-screen flex-col items-center">
+          <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 border-b bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
+            <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
               <div className="flex h-14 items-center lg:h-[60px]">
-                <BreadCrumbs />
+                <BreadCrumbs flowId={""} />
               </div>
-              <div className="h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6 hidden">
+              <div className="hidden h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6">
                 <div className="flex flex-row items-center justify-between py-4">
                   <h4 className="scroll-m-20 text-lg font-normal tracking-tight">
                     {t("Content")}
@@ -59,37 +59,36 @@ export default function CreateFlowsPage() {
                 </div>
               </div>
             </div>
-            <div className="w-full order-last lg:order-[unset] basis-full lg:basis-auto lg:w-auto flex h-1/2 lg:h-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset]">
-              <div className="flex bg-inherit lg:justify-center py-0 size-full lg:w-auto">
+            <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
+              <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
                 <Link
-                  className="h-full rounded-none border-b-4 border-transparent flex-1 lg:flex-auto flex justify-center items-center text-sm text-muted-foreground px-3"
+                  className="text-muted-foreground flex h-full flex-1 items-center justify-center rounded-none border-b-4 border-transparent px-3 text-sm lg:flex-auto"
                   href="/dashboard/flows/create"
                 >
                   {t("Create")}
                 </Link>
                 <Link
-                  className="h-full rounded-none border-b-4 border-transparent flex-1 lg:flex-auto flex justify-center items-center text-sm text-muted-foreground px-3"
+                  className="text-muted-foreground flex h-full flex-1 items-center justify-center rounded-none border-b-4 border-transparent px-3 text-sm lg:flex-auto"
                   href="/dashboard/flows/connect"
                 >
                   {t("Connect")}
                 </Link>
                 <Link
-                  className="h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm text-foreground border-current px-3"
+                  className="text-foreground flex h-full flex-1 items-center justify-center rounded-none border-b-4 border-current px-3 text-sm lg:flex-auto"
                   href="/dashboard/flows/share1"
                 >
                   {t("Share")}
                 </Link>
                 <Link
-                  className="h-full rounded-none border-b-4 border-transparent flex-1 lg:flex-auto flex justify-center items-center text-sm text-muted-foreground px-3"
+                  className="text-muted-foreground flex h-full flex-1 items-center justify-center rounded-none border-b-4 border-transparent px-3 text-sm lg:flex-auto"
                   href="/dashboard/flows/results"
                 >
                   {t("Results")}
                 </Link>
               </div>
             </div>
-            <div className="account-settings flex flex-row items-center justify-between gap-4 h-1/2 lg:h-full">
-              <Link
-                href="/dashboard/flows/preview-flow" target="_blank">
+            <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
+              <Link href="/dashboard/flows/preview-flow" target="_blank">
                 <Button
                   variant="outline"
                   size="sm"
@@ -110,8 +109,8 @@ export default function CreateFlowsPage() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold hover:bg-[#eaeaec] uppercase"
-                      style={{ width: '40px', height: '40px' }} // Adjust the size as needed
+                      className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
+                      style={{ width: "40px", height: "40px" }} // Adjust the size as needed
                     >
                       {userData ? (
                         userData?.name ? (
@@ -140,7 +139,7 @@ export default function CreateFlowsPage() {
                       <span className="sr-only">Toggle user menu</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" style={{zIndex:80}}>
+                  <DropdownMenuContent align="end" style={{ zIndex: 80 }}>
                     <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
@@ -155,7 +154,7 @@ export default function CreateFlowsPage() {
             </div>
           </header>
         </div>
-        <main className="content relative z-50 overflow-hidden bg-[#FAFAFA] flex-1 h-full">
+        <main className="content relative z-50 h-full flex-1 overflow-hidden bg-[#FAFAFA]">
           {/* <ShareFlowComponents isPublished={false} /> */}
         </main>
       </div>

@@ -2,14 +2,19 @@
 import ShareFlowComponents from "@/components/sections/createFlow/share/Share"
 import Header from "../constants/headerEls"
 
-export default function CreateFlowsPage() {
+export default function CreateFlowsPage({
+  params,
+}: {
+  params: { flowId: string; en: string }
+}) {
+  const flowId = params?.flowId
   return (
     <div className="min-h-screen w-full">
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <div className="sticky top-0 z-[60]">
           <Header />
         </div>
-        <main className="content border-t relative overflow-hidden bg-[#FAFAFA] flex-1 h-full">
+        <main className="content relative h-full flex-1 overflow-hidden border-t bg-[#FAFAFA]">
           <ShareFlowComponents isPublished={false} data={null} />
         </main>
       </div>

@@ -1,5 +1,8 @@
 import React, { Suspense, useEffect, useState } from "react"
-import { UserContainer, UserContainerGen } from "@/components/user/container/user-container.component"
+import {
+  UserContainer,
+  UserContainerGen,
+} from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
@@ -15,11 +18,20 @@ import { PictureChoiceGen } from "../picture-choice/user-picture-choice.componen
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
-import globalThemeSlice, { setPartialStyles, themeSlice } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import globalThemeSlice, {
+  setPartialStyles,
+  themeSlice,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import { UserInputCheckboxGen, UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
-import { UserInputMailGen, UserInputMail } from "../input-email/user-input-mail.component"
+import {
+  UserInputCheckboxGen,
+  UserInputCheckbox,
+} from "../input-checkbox/user-input-checkbox.component"
+import {
+  UserInputMailGen,
+  UserInputMail,
+} from "../input-email/user-input-mail.component"
 import { User } from "lucide-react"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
@@ -35,6 +47,8 @@ import { AvatarComponentGen } from "../avatar-new/user-avatar.component"
 import { LogoComponentGen } from "../logo-new/user-logo.component"
 import { LoaderComponentGen } from "../loader-new/user-loader.component"
 import { TextImageComponentGen } from "../textImage/user-textImage.component"
+import { SocialShareButtonGen } from "../socialShareButton/share-component"
+import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -63,6 +77,8 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
+  [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
+  [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
   [CRAFT_ELEMENTS.INPUTCHECKBOX]: UserInputCheckboxGen,
   [CRAFT_ELEMENTS.INPUTMAIL]: UserInputMailGen,
   [CRAFT_ELEMENTS.INPUTPHONE]: UserInputPhoneGen,
@@ -84,7 +100,7 @@ const ResolvedComponentsFromCraftState = ({
   useEffect(() => {
     try {
       const craftState = JSON.parse(screen)
-      console.log("Parsed Craft State:", craftState); // Log parsed JSON data
+      console.log("Parsed Craft State:", craftState) // Log parsed JSON data
 
       const resolveComponents = () => {
         const parsedNodes = {}
@@ -106,11 +122,11 @@ const ResolvedComponentsFromCraftState = ({
           if (resolvedName !== "AvatarComponent") {
             const avatarComponents = nodes.filter(
               (childNodeId) =>
-                craftState[childNodeId].type.resolvedName === "AvatarComponent"
+                craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
             )
             filteredNodes = nodes.filter(
               (childNodeId) =>
-                craftState[childNodeId].type.resolvedName !== "AvatarComponent"
+                craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
             )
             if (avatarComponents.length > 0) {
               filteredNodes.push(avatarComponents[avatarComponents.length - 1])

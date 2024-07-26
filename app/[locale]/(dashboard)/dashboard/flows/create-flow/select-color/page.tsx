@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import { HexColorPicker } from "react-colorful"
 import tinycolor from "tinycolor2"
+import { debounce, throttle } from "lodash"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +17,32 @@ import { ChevronLeft } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import {
+  setNewBackgroundColor,
+  setNewFlowSettings,
+  setNewPartialSyles,
+  setNewPrimaryColor,
+  setNewTextColor,
+} from "@/lib/state/flows-state/features/theme/globalewTheme"
+import FlowPreview from "@/components/flow-preview/flow-preview.component"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
+import { setNewScreensData } from "@/lib/state/flows-state/features/newScreens"
+import NewFlowPreview from "@/components/flow-preview/flow-preview-new.cpmponent"
+import {
+  setBackgroundColors,
+  setPartialStyles,
+  setPrimaryColors,
+  setTextColors,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
+import { GlobalThemeSettings } from "@/components/user/settings/global-theme-settings"
+import { useRouter } from "next/navigation"
+import { Drawer } from "@/components/ui/drawer"
+import { DrawerContent } from "@/components/ui/drawerDesctop"
+import { env } from "@/env.mjs"
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 
 const ColorPicker = ({ color, onChange }) => {
   const t = useTranslations("Components")
@@ -124,124 +151,242 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
 }
 
 export default function SelectColor() {
-  const [primaryColor, setPrimaryColor] = useState("#40BF80")
-  const [textColor, setTextColor] = useState("#191919")
-  const [backgroundColor, setBackgroundColor] = useState("#F4F4F4")
-  const t = useTranslations("Components")
+  const templateSetting = useAppSelector((state) => state.newTheme)
+  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
+  const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
+  const [view, setView] = useState("desktop")
+  const [innerview, setInnerView] = useState("desktop")
+  const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
+  const updateView = () => {
+    if (window.innerWidth >= 1024) {
+      setDesktopDrawerOpen(false)
+      setView("desktop")
+      setInnerView("desktop")
+    } else {
+      setView("mobile")
+      setInnerView("mobile")
+      setDesktopDrawerOpen(true)
+    }
+  }
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  console.log("localFlowSettings", templateSetting)
 
+  const [primaryColor, setPrimaryColor] = useState(
+    templateSetting?.general?.primaryColor
+  )
+  const [textColor, setTextColor] = useState(
+    templateSetting?.text?.primaryColor
+  )
+  const [backgroundColor, setBackgroundColor] = useState(
+    templateSetting?.general?.backgroundColor
+  )
+  const handleBackgroundColor = (e) => {
+    setBackgroundColor(e)
+    dispatch(setNewBackgroundColor(e))
+  }
+  const handlePrimaryColor = (e) => {
+    setPrimaryColor(e)
+    dispatch(setNewPrimaryColor(e))
+  }
+  const handleTextColor = (e) => {
+    setTextColor(e)
+    dispatch(setNewTextColor(e))
+  }
+
+  const t = useTranslations("Components")
+  const updateIframeStyles = async () => {
+    const response = await fetch(
+      `/api/templates/${templateSetting?.templateId}/templateWithSteps`
+    )
+    const flowData = await response.json()
+    console.log("flowData", flowData)
+    dispatch(setNewScreensData(flowData))
+  }
+  useEffect(() => {
+    // Function to send style updates to the iframe
+    if (templateSetting?.templateId === "") router.push("./select-template")
+    else updateIframeStyles()
+  }, [])
+
+  useEffect(() => {
+    updateView()
+    window.addEventListener("resize", updateView)
+    return () => window.removeEventListener("resize", updateView)
+  }, [])
+  /** GENERAL STYLES */
+
+  const defaultPrimaryColor = useAppSelector(
+    (state) => state?.newTheme?.defaultGeneral?.primaryColor
+  )
+  const secondaryColor = useAppSelector(
+    (state) => state?.newTheme?.general?.secondaryColor
+  )
+  const defaultSecondaryColor = useAppSelector(
+    (state) => state?.newTheme?.defaultGeneral?.secondaryColor
+  )
+
+  const backgroundImage = useAppSelector(
+    (state) => state?.newTheme?.general?.backgroundImage
+  )
+  const defaultBackgroundColor = useAppSelector(
+    (state) => state?.newTheme?.defaultGeneral?.backgroundColor
+  )
+
+  const headerPosition = useAppSelector(
+    (state) => state?.newTheme?.header?.headerPosition
+  )
+
+  /** TEXT STYLES */
+  const primaryFonts = useAppSelector((state) => state?.newTheme?.primaryFonts)
+  const secondaryFonts = useAppSelector(
+    (state) => state?.newTheme?.secondaryFonts
+  )
+  const primaryFont = useAppSelector(
+    (state) => state?.newTheme?.text?.primaryFont
+  )
+  const defaultPrimaryFont = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.primaryFont
+  )
+  const secondaryFont = useAppSelector(
+    (state) => state?.newTheme?.text?.secondaryFont
+  )
+  const defaultSecondaryFont = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.secondaryFont
+  )
+  const primaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.text?.primaryColor
+  )
+  const defaultPrimaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.primaryColor
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.text?.secondaryColor
+  )
+  const defaultSecondaryTextColor = useAppSelector(
+    (state) => state?.newTheme?.defaultText?.secondaryColor
+  )
+  const screens = useAppSelector((state) => state?.screen?.screens)
+
+  console.log("templateid", templateSetting?.templateId)
+  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
+  const telegramUser = env.NEXT_PUBLIC_TL_URL
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
-      <div className="flex h-full w-full px-12">
-        <div className="flex w-full">
-          <div className="w-full   md:w-6/12">
-            <ScrollArea className="z-20 h-full py-9  ">
-              <h2 className="mb-5 text-4xl font-semibold">
-                {t("customiseColor")}
-              </h2>
-              <Breadcrumb className=" mt-4 text-base font-normal hover:cursor-pointer">
-                <BreadcrumbList>
-                  <BreadcrumbItem className="mr-2 text-base">
-                    <BreadcrumbLink>
-                      <Link
-                        href={"/dashboard/flows/create-flow/select-template"}
-                      >
-                        {t("templateBreadcrumb")}
-                      </Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem className="mx-2 text-base">
-                    <BreadcrumbPage className="font-semibold">
-                      {t("colorsBreadcrumb")}
-                    </BreadcrumbPage>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem className="mx-2 text-base">
-                    <BreadcrumbLink>
-                      <Link href={"/dashboard/flows/create-flow/finish"}>
-                        {t("finishBreadcrumb")}
-                      </Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-              {/* <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] "> */}
-              <div className="mb-8 mt-10 flex flex-wrap gap-3 ">
-                <div className="flex flex-col">
-                  <label className="my-3 block text-base font-semibold ">
-                    {t("primaryColor")}
-                  </label>
-                  <ColorPickerWithSuggestions
-                    color={primaryColor}
-                    onChange={setPrimaryColor}
-                  />
+      {!desktopDrawerOpen && (
+        <div className="flex h-full w-full pl-12">
+          <div className="flex w-full">
+            <div className="w-full   md:w-6/12">
+              <ScrollArea className="z-20 h-full py-9  ">
+                <h2 className="mb-5 text-4xl font-semibold">
+                  {t("customiseColor")}
+                </h2>
+                <Breadcrumb className=" mt-4 text-base font-normal hover:cursor-pointer">
+                  <BreadcrumbList>
+                    <BreadcrumbItem className="mr-2 text-base">
+                      <BreadcrumbLink>
+                        <Link
+                          href={"/dashboard/flows/create-flow/select-template"}
+                        >
+                          {t("templateBreadcrumb")}
+                        </Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem className="mx-2 text-base">
+                      <BreadcrumbPage className="font-semibold">
+                        {t("colorsBreadcrumb")}
+                      </BreadcrumbPage>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem className="mx-2 text-base">
+                      <BreadcrumbLink>
+                        <Link href={"/dashboard/flows/create-flow/finish"}>
+                          {t("finishBreadcrumb")}
+                        </Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+                {/* <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] "> */}
+                <div className="mb-8 mt-10 flex flex-wrap gap-3 ">
+                  <div className="flex flex-col">
+                    <label className="my-3 block text-base font-semibold ">
+                      {t("primaryColor")}
+                    </label>
+                    <ColorPickerWithSuggestions
+                      color={primaryColor}
+                      onChange={handlePrimaryColor}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="my-3 block text-base font-semibold ">
+                      {t("textColor")}
+                    </label>
+                    <ColorPickerWithSuggestions
+                      color={textColor}
+                      onChange={handleTextColor}
+                    />
+                    {/* <NewGlobalThemeSettings /> */}
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="my-3 block text-base font-semibold ">
+                      {t("backgroundColor")}
+                    </label>
+                    <ColorPickerWithSuggestions
+                      color={backgroundColor}
+                      onChange={handleBackgroundColor}
+                    />
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <label className="my-3 block text-base font-semibold ">
-                    {t("textColor")}
-                  </label>
-                  <ColorPickerWithSuggestions
-                    color={textColor}
-                    onChange={setTextColor}
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="my-3 block text-base font-semibold ">
-                    {t("backgroundColor")}
-                  </label>
-                  <ColorPickerWithSuggestions
-                    color={backgroundColor}
-                    onChange={setBackgroundColor}
-                  />
-                </div>
-              </div>
-            </ScrollArea>
-          </div>
+              </ScrollArea>
+            </div>
 
-          <Separator orientation="vertical" className="z-40 h-full" />
-          <div className="mx-auto  w-full py-6 md:w-6/12">
-            <iframe
-              src="https://convify.io/survey"
-              name="page"
-              height={800}
-              width="100%"
-              title="Survey"
-            ></iframe>
+            <Separator orientation="vertical" className="z-40 h-full" />
+            <div className={`mx-auto w-full  md:w-6/12`}>
+              <ScrollArea className="z-20 h-full bg-white ">
+                <NewFlowPreview />
+              </ScrollArea>
+            </div>
           </div>
-        </div>
-        <div className="fixed bottom-0 left-4 z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
-          <Link href={"/dashboard/flows/create-flow/select-template"}>
-            <Button
-              variant="secondary"
-              size="icon"
-              className="hover:cursor-pointer"
-            >
-              <ChevronLeft className="z-10 h-4 w-4" />
-            </Button>
-          </Link>
-
-          <div className="flex">
-            <Link href={"/dashboard"}>
+          <div className="fixed bottom-0 left-4 z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
+            <Link href={"/dashboard/flows/create-flow/select-template"}>
               <Button
-                className="mr-2 w-32 font-bold hover:cursor-pointer"
-                size="lg"
-                variant="outline"
+                variant="secondary"
+                size="icon"
+                className="hover:cursor-pointer"
               >
-                {t("exit")}
+                <ChevronLeft className="z-10 h-4 w-4" />
               </Button>
             </Link>
-            <Link href={"/dashboard/flows/create-flow/finish"}>
-              <Button
-                className="w-32 font-bold text-white hover:cursor-pointer"
-                size="lg"
-                variant="default"
-              >
-                {t("continue")}
-              </Button>
-            </Link>
+
+            <div className="flex">
+              <Link href={"/dashboard"}>
+                <Button
+                  className="mr-2 w-32 font-bold hover:cursor-pointer"
+                  size="lg"
+                  variant="outline"
+                >
+                  {t("exit")}
+                </Button>
+              </Link>
+              <Link href={"/dashboard/flows/create-flow/finish"}>
+                <Button
+                  className="w-32 font-bold text-white hover:cursor-pointer"
+                  size="lg"
+                  variant="default"
+                >
+                  {t("continue")}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      <ShareDrawerDesktop
+        desktopDrawerOpen={desktopDrawerOpen}
+        setDesktopDrawerOpen={setDesktopDrawerOpen}
+      />
     </div>
   )
 }
