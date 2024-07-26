@@ -25,6 +25,7 @@ import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
 import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
+import { Icons } from "@/components/icons"
 
 // Define Zod schema for input validation
 const nameSchema = z
@@ -200,7 +201,12 @@ export default function SelectColor() {
                 onClick={handleSubmit}
                 disabled={isLoading} // Disable button while loading
               >
-                {isLoading ? t("loading") : t("continue")}
+                {isLoading && (
+                  <div>
+                    <Icons.spinner className=" z-20 mr-2 h-4 w-4 animate-spin" />
+                  </div>
+                )}
+                {t("continue")}
               </Button>
             </div>
           </div>
