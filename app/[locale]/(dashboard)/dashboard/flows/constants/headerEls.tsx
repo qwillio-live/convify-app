@@ -18,6 +18,7 @@ import {
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { useState, useEffect } from "react"
 import { User } from "../../page"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -79,7 +80,7 @@ const Header = () => {
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
         <div className="flex h-14 items-center lg:h-[60px]">
-          <BreadCrumbs />
+          <BreadCrumbs flowId={""} />
         </div>
         <div className="hidden h-14 flex-1 flex-col items-center justify-between overflow-y-auto px-4 lg:h-[60px] lg:px-6">
           <div className="flex flex-row items-center justify-between py-4">
