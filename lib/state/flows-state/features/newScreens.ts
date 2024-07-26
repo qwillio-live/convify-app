@@ -489,7 +489,7 @@ export const newScreensSlice = createSlice({
       // Adjust selectedScreen based on the index of deleted screen
       if (state.screens.length === 0) {
         // No screens left after deletion
-        state.selectedScreen = null
+        state.selectedScreen = 0
         state.editorLoad = null
         state.firstScreenName = ""
       } else {
