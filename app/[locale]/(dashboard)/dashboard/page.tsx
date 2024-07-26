@@ -197,7 +197,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <div className="flex h-[100vh] flex-col overflow-hidden">
+      <div className="flex h-full flex-col overflow-hidden">
         <div className="sticky top-0 z-20">
           <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
             <Sheet>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
           </header>
         </div>
 
-        <main className="flex flex-1 flex-col overflow-y-auto p-4 lg:p-6">
+        <main className="flex h-full flex-1 flex-col overflow-y-auto p-4 lg:p-6">
           <div className="mb-4 flex items-center">
             <h1 className="text-lg font-semibold md:text-lg">
               {t("My workspace")}
@@ -319,7 +319,7 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div
-              className={`flex flex-1 items-center justify-center rounded-lg shadow-sm ${
+              className={`flex flex-1  justify-center rounded-lg shadow-sm ${
                 openCreateFlow ? "border-none" : "border"
               }`}
               x-chunk="dashboard-02-chunk-1"

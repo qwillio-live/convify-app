@@ -81,17 +81,24 @@ interface Flow {
   numberOfResponses: number
   createdAt: string
 }
-function splitAndJoin(word: string, isClamped: boolean) {
+function splitAndJoin(word: string, isClamped: boolean): string {
+  const maxLength = 50
+
   if (isClamped) {
-    let segments: string[] = [] // Explicitly define the type of the segments array
-    for (let i = 0; i < word.length && i < 20; i += 1) {
-      segments.push(word.substring(i, i + 1))
+    // Check if the word length is greater than the maximum length
+    if (word.length > maxLength) {
+      // Trim the word to the maximum length and add ellipsis
+      return word.substring(0, maxLength).trim() + "..."
+    } else {
+      // Return the word as it is if it's within the length limit
+      return word
     }
-    return segments.join("").trim() + "..."
   } else {
+    // Return the word as it is if not clamped
     return word
   }
 }
+
 export function FlowsList({ flows, setStatus, status }) {
   const t = useTranslations("Dashboard")
   const [deleteDialog, setDeleteDialog] = useState(false)
@@ -195,7 +202,7 @@ export function FlowsList({ flows, setStatus, status }) {
     return null
   }
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex  w-full flex-col">
       <main className="sm:py-0 md:gap-8">
         <div className="flex flex-col">
           <Link

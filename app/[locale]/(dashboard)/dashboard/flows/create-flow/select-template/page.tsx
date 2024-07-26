@@ -117,6 +117,8 @@ export default function SelectTemplate() {
 
       setCategories(Object?.keys(uniqueTags) || [])
       setTemplates(templates)
+      dispatch(setNewFlowSettings(JSON.parse(templates[0]?.templateSettings)))
+      dispatch(setTemplateId(templates[0]?.id))
     }
 
     getTemplates()
@@ -248,7 +250,11 @@ export default function SelectTemplate() {
                     {filteredCards.map((card, index) => (
                       <div key={index} className="pr-2">
                         <div
-                          className="relative h-44 w-full cursor-pointer space-y-3 overflow-hidden rounded-md xl:h-40 2xl:h-56" // Adjusted height and rounded border
+                          className={`relative h-44 w-full cursor-pointer space-y-3 overflow-hidden rounded-md border xl:h-40 2xl:h-56 ${
+                            selectedCard - 1 === index
+                              ? "border-blue-700"
+                              : "border-none"
+                          }`} // Adjusted height and rounded border
                           onClick={() => handleCardClick(index)}
                         >
                           {loadingCardIndex === index && (
@@ -311,9 +317,11 @@ export default function SelectTemplate() {
             </div>
           </div>
           <div className="fixed bottom-0 left-4 right-5  z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
-            <Button variant="secondary" size="icon">
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+            <Link href={"/dashboard"}>
+              <Button variant="secondary" size="icon">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+            </Link>
             <div className="flex hover:cursor-pointer">
               <Link href={"/dashboard"}>
                 <Button

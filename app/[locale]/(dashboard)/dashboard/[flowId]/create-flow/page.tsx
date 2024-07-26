@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 
@@ -12,6 +12,8 @@ import ConnectFlowComponents from "@/components/sections/createFlow/connect/Conn
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 import Header from "../constants/headerEls"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
 
 export default function CreateFlowsPage({
   params,
@@ -39,7 +41,10 @@ export default function CreateFlowsPage({
     setTab(value)
     // router.replace(`/dashboard/flows/${value}`);
   }
-
+  useEffect(() => {
+    dispatch(reset())
+    dispatch(resetScreens())
+  })
   return (
     <div className="min-h-screen w-full">
       <Tabs

@@ -91,14 +91,7 @@ export default function SelectColor() {
       const data = await res.json()
       console.log("result:", data)
       setIsLoading(false) // Stop loading
-
-      dispatch(reset())
-      dispatch(resetScreens())
-
-      // Set success message and navigate to dashboard after some time (simulating a delay)
-      setTimeout(() => {
-        router.push(`/dashboard/${data.id}/create-flow`)
-      }, 2000) // Navigate after 2 seconds
+      router.push(`/dashboard/${data.id}/create-flow`)
     } catch (err) {
       setIsLoading(false) // Stop loading
       setError(t("Name is required"))
@@ -210,12 +203,6 @@ export default function SelectColor() {
               </Button>
             </div>
           </div>
-        </div>
-      )}
-      {/* Success message display */}
-      {successMessage && (
-        <div className="fixed bottom-20 right-4 z-50 rounded-md bg-green-500 p-4 text-white shadow-lg">
-          {successMessage}
         </div>
       )}
       <div className="m-4">
