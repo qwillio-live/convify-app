@@ -430,6 +430,7 @@ export const screensSlice = createSlice({
       state.firstScreenName = action.payload
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
+      console.log("entered placeholders")
       const newScreens = [...state.screens] // Create new array
       const newId = hexoid(8)()
       const previousId = state.screens[action.payload].screenId

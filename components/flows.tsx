@@ -236,7 +236,7 @@ export function FlowsList({ flows, setStatus, status }) {
                   <TableHeader>
                     <TableRow>
                       <TableHead
-                        className="hidden w-[144px] sm:table-cell"
+                        className=" hidden w-[144px] sm:table-cell"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -253,6 +253,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
+                        className=" w-[384px]"
                       >
                         {t("Name")}
                       </TableHead>

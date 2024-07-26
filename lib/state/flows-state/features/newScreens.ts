@@ -433,10 +433,11 @@ export const newScreensSlice = createSlice({
     setFirstScreenName: (state, action: PayloadAction<string>) => {
       state.firstScreenName = action.payload
     },
-    duplicateScreen: (state, action: PayloadAction<number>) => {
+    duplicateScreens: (state, action: PayloadAction<number>) => {
+      console.log("entered")
       const newScreens = [...state.screens] // Create new array
       const newId = hexoid(8)()
-      const previousId = state.screens[action.payload].screenId
+      const previousId = state.screens[action.payload]?.screenId
       const newScreen = {
         screenId: newId,
         screenName: "",
