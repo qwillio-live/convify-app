@@ -1074,7 +1074,7 @@ export const UserToolbox = () => {
                 </AccordionContent>
               </AccordionItem>
             )}
-            {isHeaderFooterMode && (
+            {!isHeaderFooterMode && (
               <AccordionItem value="item-4">
                 <AccordionTrigger className="uppercase hover:no-underline">
                   Display
