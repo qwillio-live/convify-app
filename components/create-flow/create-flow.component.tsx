@@ -159,7 +159,7 @@ const NodesToSerializedNodes = (nodes) => {
 }
 type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
-export function CreateFlowComponent() {
+export function CreateFlowComponent({ flowId }) {
   const t = useTranslations("Components");
   const containerRef = React.useRef<HTMLDivElement>(null);
   const editorHeaderRef = React.useRef(null);
@@ -379,7 +379,7 @@ export function CreateFlowComponent() {
         <div className="md:flex h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0">
           <ScrollArea className="max-h-screen md:basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-body">
-              <ScreensList />
+              <ScreensList  flowId={flowId} />
             </div>
           </ScrollArea>
           <ScrollArea
