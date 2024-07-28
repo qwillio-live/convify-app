@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 
@@ -12,6 +12,10 @@ import ConnectFlowComponents from "@/components/sections/createFlow/connect/Conn
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
 import Header from "../constants/headerEls"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 export default function CreateFlowsPage({
   params,
@@ -19,6 +23,8 @@ export default function CreateFlowsPage({
   params: { flowId: string; en: string }
 }) {
   const router = useRouter()
+  const flowId = params?.flowId
+  console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [link, setLink] = useState(
     "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
@@ -37,6 +43,27 @@ export default function CreateFlowsPage({
     setTab(value)
     // router.replace(`/dashboard/flows/${value}`);
   }
+  useEffect(() => {
+    const getFlowData = async () => {
+      try {
+        const response = await fetch(`/api/flows/${flowId}`)
+        const flowData = await response.json()
+        console.log("flowData", flowData)
+        dispatch(setScreensData(flowData))
+        dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+      } catch (error) {
+        console.error("Error fetching flow data:", error) // Handle the error
+      }
+    }
+
+    // Reset state first
+    dispatch(reset())
+    dispatch(resetScreens())
+
+    // Then fetch the flow data
+    getFlowData()
+  }, []) // Add flowId as a dependency if it can change
+
   return (
     <div className="min-h-screen w-full">
       <Tabs
@@ -45,17 +72,21 @@ export default function CreateFlowsPage({
         className="flex min-h-screen flex-col"
       >
         <div className="sticky top-0 z-[60]">
-          <Header />
+          <Header flowId={flowId} />
         </div>
         <main
           className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${
             tab === "results" ? "" : tab === "share" ? "" : ""
           }`}
         >
+
+          {/* --New Commit-- */}
           <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
-              <CreateFlowComponent />
+              <CreateFlowComponent flowId={flowId} />
             </TabsContent>
+
+
 
             {/* <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />
