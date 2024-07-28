@@ -177,7 +177,7 @@ const ScreensList = () => {
   return (
     <Accordion
       type="multiple"
-      className="w-full overflow-x-hidden max-w-[13.5vw] pb-32"
+      className="w-full overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -203,11 +203,11 @@ const ScreensList = () => {
             )}
             onClick={() => handleHeaderScreenClick()}
           >
-                        <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
+                <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
 
-<ResolvedComponentsFromCraftState screen={screensHeader} />
+                  <ResolvedComponentsFromCraftState screen={screensHeader} />
 
-</div>
+                </div>
             <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
           </Card>
           <Separator className="my-4" />
@@ -277,7 +277,6 @@ const ScreensList = () => {
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
-                    {" "}
                     <div className="mt-5 flex flex-row items-center justify-between px-2 gap-4">
                       <span className="font-bold">{index + 1}</span>
                       <EditScreenName
@@ -291,7 +290,7 @@ const ScreensList = () => {
                         backgroundImage: backgroundImage,
                       }}
                       className={cn(
-                        "h-32 w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "h-32 w-[96vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                           "hover:border-4": (selectedScreenIndex !== index),
@@ -410,7 +409,7 @@ function HelperInformation() {
   return (
     <Card
       className={cn(
-        "flex w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer"
+        "md:flex hidden w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer"
       )}
     >
       <div className="flex flex-row items-start gap-1 text-left">
