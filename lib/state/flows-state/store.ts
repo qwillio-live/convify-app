@@ -4,6 +4,8 @@ import createSagaMiddleware from "redux-saga"
 import rootSaga from "./features/sagas/rootSaga"
 import screensReducer from "./features/placeholderScreensSlice"
 import themeReducer from "./features/theme/globalThemeSlice"
+import newThemeReducer from "./features/theme/globalewTheme"
+import newScreeReducer from "./features/newScreens"
 import storage from "@/lib/redux-persist-storage"
 
 const sagaMiddleware = createSagaMiddleware()
@@ -15,6 +17,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   screen: screensReducer,
   theme: themeReducer,
+  newTheme: newThemeReducer,
+  newScreens: newScreeReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

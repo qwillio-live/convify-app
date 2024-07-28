@@ -1,0 +1,30 @@
+ .avatar {
+     position: absolute;
+     transition: transform 0.3s ease-in-out;
+     transform: translateY(-50%);
+ }
+
+ .avatar-half {
+     transition: transform 0.3s ease-in-out;
+     transform: translateY(-50%);
+ }
+
+ .avatar-top {
+     transition: transform 0.3s ease-in-out;
+     transform: translateY(-100%);
+ }
+
+ .avatar-none {
+     transform: translateY(10%);
+     transition: transform 0.3s ease-in-out;
+ }
+
+ .avatar-none-mobile {
+    transform: translateY(34%);
+    transition: transform 0.3s ease-in-out;
+}
+
+ .avatar-none-scrolled {
+     transform: translateY(0%);
+     transition: transform 0.3s ease-in-out;
+ }

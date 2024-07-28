@@ -12,7 +12,7 @@ const StepSchema = z.object({
   link: z.string(),
   order: z.number(),
   templateId: z.string().optional(),
-});
+})
 
 const FlowUpdateRequestSchema = z
   .object({
@@ -62,6 +62,14 @@ export async function GET(
       await logError({ statusCode, errorMessage, userId, requestUrl })
       return NextResponse.json({ error: errorMessage }, { status: statusCode })
     }
+    const flowSteps = await prisma.flowStep.findMany({
+      where: {
+        flowId: String(flowId),
+        isDeleted: false,
+      },
+    })
+
+    flow.steps = flowSteps.sort((a, b) => a.order - b.order)
 
     return NextResponse.json(flow)
   } catch (error) {
@@ -128,71 +136,71 @@ export async function PUT(
       const existingSteps = await prisma.FlowStep.findMany({
         where: {
           flowId: String(flowId),
-          isDeleted: false
+          isDeleted: false,
         },
-      });
-      const newStepIds = new Set(data.steps.map(step => step.id));
+      })
+      const newStepIds = new Set(data.steps.map((step) => step.id))
 
       // Mark missing steps as isDeleted: true
       for (const step of existingSteps) {
         if (!newStepIds.has(step.id)) {
           await prisma.FlowStep.update({
             where: {
-              id: step.id
+              id: step.id,
             },
             data: {
-              isDeleted: true
+              isDeleted: true,
             },
-          });
+          })
         }
       }
 
       // Upsert steps (Insert ignore on duplicate key update)
       for (const step of data.steps) {
         const existingStep = await prisma.FlowStep.findUnique({
-          where: { 
+          where: {
             id: step.id,
             flowId: String(flowId),
-           },
-        });
-      
+          },
+        })
+
         if (existingStep) {
           await prisma.FlowStep.update({
-            where: { 
+            where: {
               id: step.id,
               flowId: String(flowId),
-             },
+            },
             data: {
               link: step.link,
               content: step.content,
               order: step.order,
-              name: step.name || '',
-              templateId: step.templateId || '',
+              name: step.name || "",
+              templateId: step.templateId || "",
             },
-          });
+          })
         } else {
           await prisma.FlowStep.create({
             data: {
-              name: step.name || '',
+              name: step.name || "",
               flowId: String(flowId),
               link: step.link,
               content: step.content,
               order: step.order,
-              templateId: step.templateId || '',
+              templateId: step.templateId || "",
               isDeleted: false,
             },
-          });
+          })
         }
       }
-      
-        // Update numberOfSteps in Flows table
-        const numberOfSteps = data.steps.length;
-        data.numberOfSteps = numberOfSteps;
+
+      // Update numberOfSteps in Flows table
+      const numberOfSteps = data.steps.length
+      data.numberOfSteps = numberOfSteps
     }
 
     const updatedFlow = await prisma.flow.update({
       where: { id: String(flowId) },
-      data,
+      data: { ...data, steps: undefined },
     })
 
     return NextResponse.json(updatedFlow)

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signUp } from "@/actions/users/signUp"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
@@ -18,8 +18,13 @@ import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import { Checkbox } from "./ui/checkbox"
-
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+import { useTranslations } from "next-intl"
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 type FormData = z.infer<typeof userSignUpSchema>
 
@@ -28,26 +33,61 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
     register,
     handleSubmit,
     formState: { errors },
+    setValue, // Access setValue from useForm to set form field values
   } = useForm<FormData>({
     resolver: zodResolver(userSignUpSchema),
   })
+  const t = useTranslations("SignUp")
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
   const [isEmailLoading, setIsEmailLoading] = React.useState<boolean>(false)
   const [showEmailSignup, setShowEmailSignup] = React.useState<boolean>(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [error, setError] = React.useState<string | null>(searchParams?.get('error') ?? null)
+
+  React.useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null)
+      }, 5000);
+      return () => clearTimeout(timer);
+    } else {
+      sessionStorage.removeItem("userFormData");
+    }
+  }, [error]);
+
+  // State to temporarily store form data
+  const [formData, setFormData] = React.useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
+
+  React.useEffect(() => {
+    // Check if there's stored form data in sessionStorage
+    const storedFormData = sessionStorage.getItem("userFormData");
+    if (storedFormData) {
+      const { email, password } = JSON.parse(storedFormData);
+      setFormData({ email, password });
+      // Pre-fill form fields with stored data
+      setValue("email", email);
+      setValue("password", password);
+    }
+  }, []);
 
   async function onSubmit(data: FormData) {
     setIsLoading(true) // Start loading when form is submitted
+    sessionStorage.setItem("userFormData", JSON.stringify(data));
 
     try {
       const signUpResult = await signUp(data) // Sign up the user
 
       if (signUpResult.error) {
         setIsLoading(false) // Stop loading if there's an error
+        setError(signUpResult.error)
         toast({
-          title: "Sign Up Failed",
+          title: t("Sign Up Failed"),
           description: signUpResult.error,
           variant: "destructive",
         })
@@ -56,16 +96,16 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
 
       // Log in the user immediately after successful signup
       const signInResult = await signIn("credentials", {
-        redirect: false,
+        redirect: true,
         username: data.email,
         password: data.password,
       })
 
-      if (signInResult?.status === 200) {
-        router.push("/dashboard") // Redirect immediately to the dashboard on successful login
-      } else {
-        throw new Error("Failed to log in")
-      }
+      // if (signInResult?.status === 200) {
+      //   router.push("/dashboard") // Redirect immediately to the dashboard on successful login
+      // } else {
+      //   throw new Error("Failed to log in")
+      // }
     } catch (error) {
       setIsLoading(false) // Stop loading on error
       toast({
@@ -83,11 +123,11 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
           <div className="grid gap-2">
             <div className="grid gap-1">
               <Label className="sr-only" htmlFor="email">
-                Email
+                {t("Email")}
               </Label>
               <Input
                 id="email"
-                placeholder="Email"
+                placeholder={t("Email")}
                 type="email"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -103,13 +143,13 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 </p>
               )}
               <Label className="sr-only" htmlFor="password">
-                Password
+                {t("Password")}
               </Label>
               <Input
                 className="mt-5"
                 type="password"
                 id="password"
-                placeholder="Password"
+                placeholder={t("Password")}
                 disabled={isLoading}
                 {...register("password")}
               />
@@ -130,7 +170,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 {...register("termsAccepted")}
               />
               <span className="pl-1">
-                I agree to the Terms of Service and Privacy Policy.
+                {t("I agree to the Terms of Service and Privacy Policy")}
               </span>
             </label>
             {errors.termsAccepted && (
@@ -159,7 +199,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Create my Free Account
+              {t("Create my Free Account")}
             </button>
           </div>
         </form>
@@ -194,13 +234,13 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 )}
                 <Icons.googleSignup className="h-5 w-5" />
                 <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
-                  Sign Up with Google
+                  {t("Sign Up with Google")}
                 </span>
               </button>
               <div className="relative">
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background text-muted-foreground px-2 text-sm">
-                    Or
+                    {t("Or")}
                   </span>
                 </div>
               </div>
@@ -219,11 +259,42 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                   }, 1000)
                 }}
               >
-                Sign Up with Email
+                {t("Sign Up with Email")}
               </button>
             </>
           )}
         </>
+      )}
+      {error && (
+        <Alert variant="destructive" style={{
+          backgroundColor: 'red',
+          color: 'white',
+          padding: '1rem',
+          position: 'fixed',
+          bottom: '25px',
+          right: '25px',
+          maxWidth: '350px',
+          opacity: '0.7',
+        }}>
+          <div>
+            {/* <AlertTitle>{t("Something went wrong")}</AlertTitle> */}
+            <AlertDescription>
+              {t(`${error.slice(0, -1)}`)}
+            </AlertDescription>
+          </div>
+          <button
+            onClick={() => setError(null)}
+            className="ml-4 text-white font-bold focus:outline-none"
+            style={{
+              position: 'absolute',
+              top: '0',
+              right: '10px',
+            }}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </Alert>
       )}
     </div>
   )

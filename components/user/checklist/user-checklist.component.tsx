@@ -256,6 +256,7 @@ const ChecklistItemSettings = ({
         }}
       />
       <div className="flex-1">
+        {/** @ts-ignore */}
         <ContentEditable
           className="w-full px-1"
           html={itemValue}

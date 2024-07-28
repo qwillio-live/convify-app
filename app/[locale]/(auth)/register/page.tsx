@@ -6,6 +6,7 @@ import { Icons } from "@/components/icons"
 import { UserRegForm } from "@/components/user-reg-form"
 import signupImage from "@/assets/images/signup.svg"
 import convifyLogo from "@/assets/convify_logo_black.svg"
+import { useTranslations } from "next-intl"
 
 export const metadata = {
   title: "Create an account",
@@ -13,6 +14,7 @@ export const metadata = {
 }
 
 export default function RegisterPage() {
+  const t = useTranslations("SignUp")
   return (
     <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div
@@ -31,7 +33,7 @@ export default function RegisterPage() {
       </div>
       <div className="absolute right-4 top-3 flex md:right-6 md:top-3">
         <p className="mr-2 mt-1" style={{ fontSize: "0.8rem" }}>
-          Already have an account?
+          {t("Already have an account?")}
         </p>
         <Link
           href="/login"
@@ -41,7 +43,7 @@ export default function RegisterPage() {
           )}
           style={{ borderColor: "black", fontSize: "0.7rem" }}
         >
-          Log in
+          {t("Login")}
         </Link>
       </div>
 
@@ -57,10 +59,10 @@ export default function RegisterPage() {
               />
             </div>
             <h1 className="mt-2 text-center text-2xl font-semibold tracking-tight">
-              Get started for free
+              {t("Get started for free")}
             </h1>
             <p className="font-600 text-md text-muted-foreground mt-2 text-center">
-              Get started – it’s free. No credit card needed
+              {t("Get started its free No credit card needed")}
             </p>
           </div>
 
