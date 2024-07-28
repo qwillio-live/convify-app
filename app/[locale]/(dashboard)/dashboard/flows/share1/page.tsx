@@ -2,12 +2,7 @@
 import ShareFlowComponents from "@/components/sections/createFlow/share/Share"
 import Header from "../constants/headerEls"
 
-export default function CreateFlowsPage({
-  params,
-}: {
-  params: { flowId: string; en: string }
-}) {
-  const flowId = params?.flowId
+export default function CreateFlowsPage() {
   return (
     <div className="min-h-screen w-full">
       <div className="flex min-h-screen flex-col">

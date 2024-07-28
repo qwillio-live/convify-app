@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BreadCrumbs } from "@/components/breadcrumbs"
-import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
+import { CreateFlowComponent } from "@/components/create-flow/create-flow.component-with-flowId"
 import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
