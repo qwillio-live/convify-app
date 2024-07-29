@@ -51,6 +51,8 @@ export default function SelectTemplate() {
   const pathname = usePathname()
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const query = useSearchParams()
+  const isAllowed = query?.get("allow") || false
 
   const handleCardClick = (index: number) => {
     setLoadingCardIndex(index)
@@ -128,7 +130,7 @@ export default function SelectTemplate() {
     window.addEventListener("resize", updateView)
     return () => window.removeEventListener("resize", updateView)
   }, [])
-  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
+  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(true)
   const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
   const [view, setView] = useState("desktop")
   const [innerview, setInnerView] = useState("desktop")
@@ -141,7 +143,8 @@ export default function SelectTemplate() {
     } else {
       setView("mobile")
       setInnerView("mobile")
-      setDesktopDrawerOpen(true)
+      if (isAllowed) setDesktopDrawerOpen(false)
+      else router.push("/mobile")
     }
   }
 
@@ -178,7 +181,7 @@ export default function SelectTemplate() {
                       <BreadcrumbItem className="mx-2 text-base">
                         <BreadcrumbLink>
                           <Link
-                            href={"/dashboard/flows/create-flow/select-color"}
+                            href={`/dashboard/flows/create-flow/select-color?allow=${isAllowed}`}
                           >
                             {t("colorsBreadcrumb")}
                           </Link>
@@ -187,7 +190,9 @@ export default function SelectTemplate() {
                       <BreadcrumbSeparator />
                       <BreadcrumbItem className="mx-2 text-base">
                         <BreadcrumbLink>
-                          <Link href={"/dashboard/flows/create-flow/finish"}>
+                          <Link
+                            href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
+                          >
                             {t("finishBreadcrumb")}
                           </Link>
                         </BreadcrumbLink>
@@ -332,7 +337,9 @@ export default function SelectTemplate() {
                   {t("exit")}
                 </Button>
               </Link>
-              <Link href={`/dashboard/flows/create-flow/select-color`}>
+              <Link
+                href={`/dashboard/flows/create-flow/select-color?allow=${isAllowed}`}
+              >
                 <Button
                   className="w-32 font-bold text-white hover:cursor-pointer"
                   size="lg"
@@ -345,12 +352,6 @@ export default function SelectTemplate() {
           </div>
         </div>
       )}
-      <div>
-        <ShareDrawerDesktop
-          desktopDrawerOpen={desktopDrawerOpen}
-          setDesktopDrawerOpen={setDesktopDrawerOpen}
-        />
-      </div>
     </div>
   )
 }
