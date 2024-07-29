@@ -18,13 +18,9 @@ import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import { Checkbox } from "./ui/checkbox"
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useTranslations } from "next-intl"
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userSignUpSchema>
 
@@ -45,40 +41,45 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const [showEmailSignup, setShowEmailSignup] = React.useState<boolean>(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [error, setError] = React.useState<string | null>(searchParams?.get('error') ?? null)
+  const [error, setError] = React.useState<string | null>(
+    searchParams?.get("error") ?? null
+  )
 
   React.useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
         setError(null)
-      }, 5000);
-      return () => clearTimeout(timer);
+      }, 5000)
+      return () => clearTimeout(timer)
     } else {
-      sessionStorage.removeItem("userFormData");
+      sessionStorage.removeItem("userFormData")
     }
-  }, [error]);
+  }, [error])
 
   // State to temporarily store form data
-  const [formData, setFormData] = React.useState<{ email: string; password: string }>({
+  const [formData, setFormData] = React.useState<{
+    email: string
+    password: string
+  }>({
     email: "",
     password: "",
-  });
+  })
 
   React.useEffect(() => {
     // Check if there's stored form data in sessionStorage
-    const storedFormData = sessionStorage.getItem("userFormData");
+    const storedFormData = sessionStorage.getItem("userFormData")
     if (storedFormData) {
-      const { email, password } = JSON.parse(storedFormData);
-      setFormData({ email, password });
+      const { email, password } = JSON.parse(storedFormData)
+      setFormData({ email, password })
       // Pre-fill form fields with stored data
-      setValue("email", email);
-      setValue("password", password);
+      setValue("email", email)
+      setValue("password", password)
     }
-  }, []);
+  }, [])
 
   async function onSubmit(data: FormData) {
     setIsLoading(true) // Start loading when form is submitted
-    sessionStorage.setItem("userFormData", JSON.stringify(data));
+    sessionStorage.setItem("userFormData", JSON.stringify(data))
 
     try {
       const signUpResult = await signUp(data) // Sign up the user
@@ -99,13 +100,8 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         redirect: true,
         username: data.email,
         password: data.password,
+        // callbackUrl: "/dashboard/flows/create-flow/select-template",
       })
-
-      // if (signInResult?.status === 200) {
-      //   router.push("/dashboard") // Redirect immediately to the dashboard on successful login
-      // } else {
-      //   throw new Error("Failed to log in")
-      // }
     } catch (error) {
       setIsLoading(false) // Stop loading on error
       toast({
@@ -266,29 +262,30 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         </>
       )}
       {error && (
-        <Alert variant="destructive" style={{
-          backgroundColor: 'red',
-          color: 'white',
-          padding: '1rem',
-          position: 'fixed',
-          bottom: '25px',
-          right: '25px',
-          maxWidth: '350px',
-          opacity: '0.7',
-        }}>
+        <Alert
+          variant="destructive"
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            padding: "1rem",
+            position: "fixed",
+            bottom: "25px",
+            right: "25px",
+            maxWidth: "350px",
+            opacity: "0.7",
+          }}
+        >
           <div>
             {/* <AlertTitle>{t("Something went wrong")}</AlertTitle> */}
-            <AlertDescription>
-              {t(`${error.slice(0, -1)}`)}
-            </AlertDescription>
+            <AlertDescription>{t(`${error.slice(0, -1)}`)}</AlertDescription>
           </div>
           <button
             onClick={() => setError(null)}
-            className="ml-4 text-white font-bold focus:outline-none"
+            className="ml-4 font-bold text-white focus:outline-none"
             style={{
-              position: 'absolute',
-              top: '0',
-              right: '10px',
+              position: "absolute",
+              top: "0",
+              right: "10px",
             }}
             aria-label="Close"
           >

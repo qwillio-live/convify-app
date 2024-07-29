@@ -53,7 +53,7 @@ const authMiddleware = withAuth(
 
 export default function middleware(req: NextRequest) {
   const excludePattern =
-    "^(/(" + locales.join("|") + "))?/(dashboard|editor)/?.*?$"
+    "^(/(" + locales.join("|") + "))?/(dashboard|editor|mobile)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
   const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
 

@@ -132,10 +132,18 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async redirect(url) {
-      if (url.url === url.baseUrl + "/login" || url.url === url.baseUrl + "/register" || url.url === url.baseUrl + "/pt/login" || url.url === url.baseUrl + "/pt/register") {
-        return '/dashboard'; // Redirect to your dashboard after Google authentication
-      }
-      return url.url;
+      if (
+        url.url === url.baseUrl + "/login" ||
+        url.url === url.baseUrl + "/pt/login"
+      ) {
+        return "/dashboard" // Redirect to your dashboard after Google authentication
+      } else if (
+        url.url === url.baseUrl + "/pt/register" ||
+        url.url === url.baseUrl + "/register"
+      )
+        return "/dashboard/flows/create-flow/select-template"
+
+      return url.url
     },
   },
 }
