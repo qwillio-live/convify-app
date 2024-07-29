@@ -322,7 +322,6 @@ const ScreensList = ({ flowId }) => {
                             "hover:border-4": (selectedScreenIndex !== index),
                           }
                         )}
-                        onClick={() => handleScreenClick(index)}
                       >
                         {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                         <div className="text-xs text-muted-foreground scale-[.20] relative">
