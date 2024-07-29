@@ -65,7 +65,7 @@ export default function CreateFlowsPage({
   }, []) // Add flowId as a dependency if it can change
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="fixed min-h-screen w-full">
       <Tabs
         defaultValue="create"
         onValueChange={onTabChange}

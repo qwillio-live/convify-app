@@ -178,7 +178,7 @@ const ScreensList = () => {
   return (
     <Accordion
       type="multiple"
-      className="w-full overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
+      className="w-[94vw]  small:w-[98vw] overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -295,7 +295,7 @@ const ScreensList = () => {
                         backgroundImage: backgroundImage,
                       }}
                       className={cn(
-                        "h-32 w-[96vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "h-32 w-[94vw] small:w-[97vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                           "hover:border-4": (selectedScreenIndex !== index),

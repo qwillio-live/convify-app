@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -64,6 +65,9 @@ const ScreensList = ({ flowId }) => {
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
   const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
+
+  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
+  const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -182,7 +186,8 @@ const ScreensList = ({ flowId }) => {
   return (
     <Accordion
       type="multiple"
-      className="w-full overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
+      // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
+       className="w-[95vw] overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -201,7 +206,7 @@ const ScreensList = ({ flowId }) => {
               backgroundPosition: "center",
             }}
             className={cn(
-              "flex h-12 w-[13.5vw] mt-1 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
+              "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
               {
                 "border-blue-500": headerMode,
               }
@@ -227,7 +232,7 @@ const ScreensList = ({ flowId }) => {
               backgroundPosition: "center",
             }}
             className={cn(
-              "flex h-12 w-[13.5vw] mt-1 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
+              "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
               {
                 "border-blue-500": footerMode,
               }
@@ -290,12 +295,19 @@ const ScreensList = ({ flowId }) => {
                       />
                     </div>
                     {/* ---Steps Card--- */}
-                    <Link
+                    <button
                       className="md:hidden"
-                      href={`/dashboard/${flowId}/share`}
+                      onClick={() => {
+                        setDesktopDrawerOpen(true)
+                        setShareDrawerOpen(false)
+                      }}
                     >
                       {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
                       <Card
+                      onClick={() => {
+                        setDesktopDrawerOpen(true)
+                        setShareDrawerOpen(false)
+                      }}
                         style={{
                           backgroundColor: backgroundColor,
                           backgroundImage: backgroundImage,
@@ -304,7 +316,7 @@ const ScreensList = ({ flowId }) => {
                           backgroundPosition: "center",
                         }}
                         className={cn(
-                          "h-32 md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                         "h-32 w-[94vw] md:hidden md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                           {
                             "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                             "hover:border-4": (selectedScreenIndex !== index),
@@ -325,7 +337,7 @@ const ScreensList = ({ flowId }) => {
                           <ResolvedComponentsFromCraftState screen={screensFooter} />
                         </div>
                       </Card>
-                    </Link>
+                    </button>
                     {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
                     <Card
                       style={{
@@ -336,7 +348,7 @@ const ScreensList = ({ flowId }) => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "hidden h-32 w-[96vw] md:w-[13.5vw] mt-1 md:flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "hidden h-32 w-[94vw] md:w-[13.5vw] mt-1 md:flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                           "hover:border-4": (selectedScreenIndex !== index),
@@ -388,6 +400,10 @@ const ScreensList = ({ flowId }) => {
           {/* </ScrollArea> */}
         </AccordionContent>
       </AccordionItem>
+      <ShareDrawerDesktop
+        desktopDrawerOpen={desktopDrawerOpen}
+        setDesktopDrawerOpen={setDesktopDrawerOpen}
+      />
     </Accordion>
   )
 }
