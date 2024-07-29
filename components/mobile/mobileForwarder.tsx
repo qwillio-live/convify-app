@@ -194,7 +194,7 @@ const MobileForwarderComponent = () => {
           </Button>
           <Link
             href={`https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(
-              `${t("I would like to get link for my flow")}=${userId}`
+              `${t("I would like to receive link for my account")}=${userId}`
             )}`}
             className="flex w-full justify-center"
           >
@@ -218,7 +218,7 @@ const MobileForwarderComponent = () => {
             href={`https://telegram.me/share/url?url=${encodeURIComponent(
               telegramUser
             )}&text=${encodeURIComponent(
-              `${t("I would like to get link for my flow")}=${userId}`
+              `${t("I would like to receive link for my account")}=${userId}`
             )}`}
             className="flex w-full justify-center"
           >
