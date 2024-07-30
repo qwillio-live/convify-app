@@ -4,10 +4,11 @@ import { authOptions } from "@/lib/auth"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
-export async function GET(req: NextRequest,
-    { params }: { params: { id: string } }
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-    let { id } = params
+  let { id } = params
   const data = await getServerSession(authOptions)
 
   if (!data) {
@@ -24,9 +25,11 @@ export async function GET(req: NextRequest,
     const templates = await prisma.template.findMany({
       where: {
         isActive: true,
-        id: id,
+        language: id,
       },
     })
+
+    console.log("templates in api", templates)
     return NextResponse.json(templates)
   } catch (error) {
     console.log(error)

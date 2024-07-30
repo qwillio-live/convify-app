@@ -14,6 +14,11 @@ jobs:
 
     steps:
       - name: Trigger Webhook for dev/syed
+        if: github.ref == 'refs/heads/dev/kberkey'
+        run: |
+          curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6ImMwMGE5Njg4LWExODgtNGFmNS04YzE5LTRmMDI0NTk5OWU3OCIsImFwcE5hbWUiOiJjb252aWZ5LXRlc3QiLCJuYW1lc3BhY2UiOiJjYXB0YWluIn0sImlhdCI6MTcxNTU5MDc0OX0.0bUxT1iRBvKR7KW0-V2Iz9E82Nt2GHaVdzE2Zgezduw"
+
+      - name: Trigger Webhook for dev/syed
         if: github.ref == 'refs/heads/dev/syed'
         run: |
           curl -X POST "https://captain.server4.xyz/api/v2/user/apps/webhooks/triggerbuild?namespace=captain&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InRva2VuVmVyc2lvbiI6IjliYTQ2YjBiLTNjOGEtNDM0Yi04ODlkLTI0OTJjMWE2ZDhhYyIsImFwcE5hbWUiOiJjb252aWZ5LXN5ZWQiLCJuYW1lc3BhY2UiOiJjYXB0YWluIn0sImlhdCI6MTcxNTI0MTUyNX0.BHHiz8bwnElT2GLITZXMh14uVzJgbmg0j0ZrkrRFA-U"

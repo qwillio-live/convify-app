@@ -147,8 +147,8 @@ export const PictureChoiceSettings = () => {
       (props) =>
         (props.choices = choices.map((choice) => ({
           ...choice,
-          buttonAction: null,
-          nextScreen: null,
+          buttonAction: "custom-action",
+          nextScreen: "none",
         }))),
       200
     )
@@ -222,8 +222,8 @@ export const PictureChoiceSettings = () => {
                     picture: defaultIcon,
                     pictureType: PictureTypes.ICON,
                     value: `${t("Option")} ${choices.length + 1}`,
-                    buttonAction: null,
-                    nextScreen: null,
+                    buttonAction: "custom-action",
+                    nextScreen: "none",
                     trackingEvent: null,
                   },
                 ])
@@ -609,7 +609,7 @@ export const PictureChoiceItemSettings = ({
       ...choices.slice(index + 1),
     ])
   }
-
+  console.log("choicessssssss:", choices)
   return (
     <Reorder.Item
       dragListener={false}
@@ -694,14 +694,15 @@ const PictureChoiceItemNavigationSettings = ({
       onChange("next-screen", nextScreenName)
     }
   }, [onChange])
-
+  console.log("button action", buttonAction, nextScreen)
   return (
     <Select
-      defaultValue={buttonAction === "next-screen" ? "next-screen" : nextScreen}
       value={buttonAction === "next-screen" ? "next-screen" : nextScreen}
       onValueChange={(e) => {
         if (e === "next-screen") {
           onChange("next-screen", nextScreenName)
+        } else if (e === "none") {
+          onChange("custom-action", e)
         } else {
           onChange("custom-action", e)
         }
@@ -715,6 +716,7 @@ const PictureChoiceItemNavigationSettings = ({
         <SelectValue placeholder={t("Navigate to screen")} />
       </SelectTrigger>
       <SelectContent className="text-left">
+        <SelectItem value={"none"}>{t("Do Nothing")}</SelectItem>
         <SelectItem value="next-screen">{t("Next Screen")}</SelectItem>
         {screenNames?.map((screenName, index) => (
           <SelectItem className="text-xs" value={screenName}>

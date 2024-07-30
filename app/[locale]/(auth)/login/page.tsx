@@ -27,7 +27,7 @@ export default function LoginPage() {
       >
         <>
           <Icons.chevronLeft className="mr-2 size-4" />
-          Back
+          {t("Back")}
         </>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -44,7 +44,7 @@ export default function LoginPage() {
             {t("Welcome back")}
           </h1>
           <p className="text-muted-foreground text-sm">
-            Enter your email to sign in to your account
+            {t("Enter your email to sign in to your account")}
           </p>
         </div>
         <UserAuthForm />
@@ -53,7 +53,7 @@ export default function LoginPage() {
             href="/register"
             className="hover:text-brand underline underline-offset-4"
           >
-            Don&apos;t have an account? Sign Up
+            {t("Don't have an account? Sign Up")}
           </Link>
         </p>
       </div>

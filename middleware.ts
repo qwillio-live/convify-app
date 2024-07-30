@@ -74,7 +74,7 @@ export default function middleware(req: NextRequest) {
     return response
   }
 
-  const excludePattern = "^(/(" + locales.join("|") + "))?/(dashboard|editor)/?.*?$"
+  const excludePattern = "^(/(" + locales.join("|") + "))?/(dashboard|editor|mobile)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
   const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
 

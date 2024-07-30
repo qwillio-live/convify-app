@@ -13,12 +13,19 @@ import {
   Laptop,
   PlusCircle
 } from "lucide-react"
-import React, { useCallback } from "react"
-import { throttle,debounce } from 'lodash';
-
+import React, { useCallback, useEffect, useRef } from "react"
+import { throttle, debounce } from "lodash"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setCurrentScreenName, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen, addScreen, setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setCurrentScreenName,
+  setScrollY,
+  setComponentBeforeAvatar,
+  setEditorLoad,
+  setFirstScreenName,
+  setSelectedComponent,
+  setValidateScreen, addScreen, setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -34,15 +41,21 @@ import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import { Card, CardContent } from "../user/card/user-card.component"
+import { CardContent } from "../user/card/user-card.component"
 import {
   Container,
   UserContainer,
 } from "../user/container/user-container.component"
+import { UserInputTextarea } from "../user/input-textarea/user-input-textarea.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
+import { ImageComponent } from "../user/image-new/user-image.component"
 import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
+import { Form, FormContent } from "../user/form/user-form.component"
+import { UserInputCheckbox } from "../user/input-checkbox/user-input-checkbox.component"
+import { UserInputMail } from "../user/input-email/user-input-mail.component"
+import { UserInputPhone } from "../user/input-phone/user-input-phone.component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
 import { Loader } from "../user/loader/user-loader.component"
@@ -59,13 +72,22 @@ import { ScreenOneInput } from "../user/screens/screen-one-input.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
+import { LoaderComponent } from "../user/loader-new/user-loader.component"
 import { Checklist } from "../user/checklist/user-checklist.component"
 import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
-import { RootState } from "@/lib/state/flows-state/store";
-import { clear } from "console";
+import { LogoComponent } from "../user/logo-new/user-logo.component"
+import { AvatarComponent } from "../user/avatar-new/user-avatar.component"
+import { TextImageComponent } from "../user/textImage/user-textImage.component"
+import { RootState } from "@/lib/state/flows-state/store"
+import { clear } from "console"
+import { LineSelector } from "../user/lineSeperator/line-seperator-component"
+import { BackButton } from "../user/backButton/back-component"
+import { LinkButton } from "../user/link/link-component"
+import { SocialShareButton } from "../user/socialShareButton/share-component"
+import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
 import { useTranslations } from "next-intl"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
@@ -142,38 +164,63 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
-type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
+type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
 export function CreateFlowComponent() {
   const t = useTranslations("Components");
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const editorHeaderRef = React.useRef(null);
-  const [height, setHeight] = React.useState(90);
-  const [width, setWidth] = React.useState(0);
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const editorHeaderRef = React.useRef(null)
+  const [height, setHeight] = React.useState(90)
+  const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
-  const [topMargin,setTopMargin] = React.useState<number>(0);
+  const [topMargin, setTopMargin] = React.useState<number>(0)
   const dispatch = useAppDispatch()
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
 
-  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
-  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
-  const startScreenName = useAppSelector((state) => state?.screen?.screens[0].screenName || "")
+  const selectedComponent = useAppSelector(
+    (state) => state?.screen?.selectedComponent
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+  const selectedScreenId = useAppSelector(
+    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
+  )
+  const startScreen = useAppSelector(
+    (state) => state?.screen?.screens[0].screenData || ""
+  )
+  const startScreenName = useAppSelector(
+    (state) => state?.screen?.screens[0].screenName || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
+  const avatarComponentId = useAppSelector(
+    (state) => state.screen?.avatarComponentId
+  )
+  const previousAvatarComponentId = useAppSelector(
+    (state) => state.screen?.previousAvatarComponentId
+  )
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
-  const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
-  const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
-  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName ) || ""
+  const headerMode = useAppSelector(
+    (state: RootState) => state.screen?.headerMode
+  )
+  const headerPosition =
+    useAppSelector((state) => state?.theme?.header?.headerPosition) ||
+    "relative"
+  const firstScreenName =
+    useAppSelector((state) => state?.screen?.firstScreenName) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -187,43 +234,78 @@ export function CreateFlowComponent() {
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
-    },1200),
+    }, 1200),
     [dispatch]
   )
 
   React.useEffect(() => {
-    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
+    dispatch(setMobileScreen(false))
+    dispatch(
+      setValidateScreen({
+        screenId: selectedScreenId,
+        screenValidated: false,
+        screenToggleError: false,
+      })
+    )
     dispatch(setFirstScreenName(startScreenName))
     dispatch(setCurrentScreenName(startScreenName))
   }, [])
-  React.useEffect(() => {
-    if(headerMode){
-      const height = document?.getElementById("editor-content")?.offsetHeight || 0;
-      setHeight(height)
-    }else{
-      if (editorHeaderRef.current && editorHeaderRef) {
-        //@ts-ignore
-        setHeight(editorHeaderRef?.current?.offsetHeight);
+
+  useEffect(() => {
+    const checkComponentBeforeAvatar = () => {
+      const parsedEditor = JSON.parse(screensHeader)
+      const container = parsedEditor["ROOT"]
+      if (!container) {
+        return false
       }
+      const avatarIndex = container.nodes.findIndex(
+        (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+      )
+      return avatarIndex > 0
     }
 
-  }, [headerMode,height]);
+    const hasComponentBeforeAvatar = checkComponentBeforeAvatar()
+    dispatch(setComponentBeforeAvatar(hasComponentBeforeAvatar))
+  }, [editorLoad, dispatch])
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const scrollTop = event.currentTarget.scrollTop
+    dispatch(setScrollY(scrollTop))
+  }
+
   React.useEffect(() => {
-    const updateWidth = () => {
-      const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
-      setWidth(newWidth);
-    };
+    if (headerMode) {
+      const height =
+        document?.getElementById("editor-content")?.offsetHeight || 0
+      setHeight(height)
+    } else {
+      if (editorHeaderRef.current && editorHeaderRef) {
+        //@ts-ignore
+        setHeight(editorHeaderRef?.current?.offsetHeight)
+      }
+    }
+  }, [headerMode, height])
+  React.useEffect(() => {
+    if (!headerMode) {
+      const updateWidth = () => {
+        const newWidth =
+          document.getElementById("editor-content")?.offsetWidth || 0
+        console.log("NEW WIDTH IS: ", newWidth)
+        setWidth(newWidth)
+      }
 
-    // Initial width setting
-    updateWidth();
+      // Initial width setting
+      if (!mobileScreen) {
+        updateWidth()
+      }
 
-    // Event listener for window resize
-    window.addEventListener('resize', updateWidth);
-    window.addEventListener('', updateWidth);
+      // Event listener for window resize
+      window.addEventListener("resize", updateWidth)
+      window.addEventListener("", updateWidth)
+      return () => window.removeEventListener("resize", updateWidth)
+    }
+  }, [headerMode, height, mobileScreen, width])
 
-    // Cleanup event listener on component unmount
-    return () => window.removeEventListener('resize', updateWidth);
-  }, [headerMode, height]);
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -242,8 +324,13 @@ export function CreateFlowComponent() {
           Controller,
           Logo,
           HeadlineText,
+          Form,
+          FormContent,
           UserText,
           UserButton,
+          UserInputCheckbox,
+          UserInputMail,
+          UserInputPhone,
           ProgressBar,
           Element,
           Progress,
@@ -253,6 +340,11 @@ export function CreateFlowComponent() {
           ScreenFooter,
           ScreensList,
           ScreenOneChoice,
+          LineSelector,
+          BackButton,
+          LinkButton,
+          SocialShareButton,
+          TelegramShareButton,
           // UserProgressBar,
           ScreenOneInput,
           Input,
@@ -265,13 +357,18 @@ export function CreateFlowComponent() {
           Globe,
           Linkedin,
           Container,
-          Card,
+          // Card,
           CardContent,
           UserContainer,
           IconButton,
           Select,
           DragDrop,
           UserToolbox,
+          ImageComponent,
+          LoaderComponent,
+          LogoComponent,
+          AvatarComponent,
+          TextImageComponent,
           Image,
           PictureChoice,
           MultipleChoice,
@@ -281,6 +378,7 @@ export function CreateFlowComponent() {
           LogoBar,
           LayoutContainer,
           Loader,
+          UserInputTextarea,
           Img,
         }}
         onRender={RenderNode}
@@ -292,9 +390,11 @@ export function CreateFlowComponent() {
             </div>
           </ScrollArea>
           <ScrollArea
-          ref={containerRef}
-          id="scroll-container"
-          className="max-h-[calc(-52px+99vh)] hidden md:block basis-[55%] overflow-y-auto border-r">
+            onScroll={handleScroll}
+            ref={containerRef}
+            id="scroll-container"
+            className="max-h-[calc(-52px+99vh)] hidden md:block basis-[55%] overflow-y-auto border-r"
+          >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -311,10 +411,10 @@ export function CreateFlowComponent() {
                     backgroundImage: backgroundImage,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundPosition: "center",
                   }}
                   className={cn(
-                    "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
+                    "page-container z-20 mx-auto mt-0 box-content min-h-[400px] py-0 font-sans antialiased",
                     footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
@@ -322,38 +422,45 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-
-                  {
-                  !headerMode && !footerMode &&
-                   <div
-                   ref={editorHeaderRef}
-                   id="editor-header"
-                   style={{
-                    position: headerPosition as Position,
-                    width: mobileScreen ? '384px' : (headerPosition === 'absolute' && !mobileScreen) ? width+'px' : '100%',
-                    top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
-                    // top: headerPosition === 'absolute' ? '66px' : '0',
-                    // width: width,
-                    zIndex: 20,
-                    backgroundColor: backgroundColor,
-                    }}>
-                    <ResolvedComponentsFromCraftState screen={screensHeader} />
-                   </div>
-                  }
+                  {!headerMode && !footerMode && (
+                    <div
+                      ref={editorHeaderRef}
+                      id="editor-header"
+                      style={{
+                        position: headerPosition as Position,
+                        width: mobileScreen
+                          ? "384px"
+                          : headerPosition === "absolute"
+                          ? width + "px"
+                          : "100%",
+                        top: "0",
+                        zIndex: 20,
+                        backgroundColor:
+                          avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                            ? avatarBackgroundColor
+                            : backgroundColor,
+                      }}
+                    >
+                      <ResolvedComponentsFromCraftState
+                        screen={screensHeader}
+                      />
+                    </div>
+                  )}
                   <div
-                  id="editor-content"
-                  style={{
-                    backgroundColor: backgroundColor,
-                    paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
-          // marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "0",
-        }}>
-                  <Frame data={editorLoad}></Frame>
+                    id="editor-content"
+                    style={{
+                      paddingTop:
+                        !headerMode && headerPosition === "absolute"
+                          ? `${height + 40}px`
+                          : "40px",
+                      backgroundColor: headerMode ? avatarBackgroundColor : "",
+                    }}
+                  >
+                    <Frame data={editorLoad}></Frame>
                   </div>
-                  {
-                    !headerMode && !footerMode &&
-                  <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  )}
                 </TabsContent>
                 <TabsList className="absolute bottom-0 z-20  w-100 ">
                   <AddScreenButton/>
@@ -362,11 +469,10 @@ export function CreateFlowComponent() {
                 </TabsList>
               </Tabs>
 
-
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="h-full max-h-[calc(-60px+99vh)]  hidden md:block basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -374,7 +480,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r py-6 bg-[#fafafa]">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6 hidden md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
