@@ -1,9 +1,10 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { PictureChoiceSettings } from "./user-picture-choice.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import styled from "styled-components"
@@ -18,6 +19,9 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const PictureChoiceSizeValues = {
   small: "400px",
@@ -55,12 +59,11 @@ export const PictureChoiceGen = ({
   tracking,
   ...props
 }) => {
+  console.log("of pic props", choices)
   const [selectedChoices, setSelectedChoices] = useState(selections)
-
   useEffect(() => {
     setSelectedChoices(selections)
   }, [selections])
-
   return (
     <div
       className="relative w-full"
@@ -114,6 +117,7 @@ export const PictureChoiceGen = ({
             hoverStyles={hoverStyles}
             selectedStyles={selectedStyles}
             onValueChange={null}
+            forGen={true}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
@@ -346,6 +350,7 @@ export const PictureChoice = ({
               defaultStyles={defaultStyles}
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
+              forGen={false}
               onValueChange={(updatedValue) => {
                 setProp((props) => {
                   props.choices[index].value = updatedValue
@@ -398,6 +403,7 @@ const PictureChoiceItem = ({
   selectedStyles,
   onValueChange,
   onSelectChange,
+  forGen,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
@@ -429,11 +435,48 @@ const PictureChoiceItem = ({
       return 33.33
     }
   }
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const { replace } = useRouter()
+  const dispatch = useAppDispatch()
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    replace(`${pathname}?${params.toString()}`)
+  }
+  const handleNavigateToContent = () => {
+    if (choice?.nextScreen !== "none") {
+      dispatch(
+        validateScreen({
+          current: currentScreenName,
+          next: choice.nextScreen,
+        })
+      )
+      handleSearch(choice.nextScreen)
+    }
+    // if(screenValidated){
+    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+    //   router.push(`${pathName}#${nextScreen?.screenName}`);
+    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+    // }else{
+    //   console.log("SCREEN NOT VALIDATED", screenValidated)
+    // }
+  }
   return (
     <li
       className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]"
       style={{
         flexBasis: `${getFlexBasis(choicesLength)}%`,
+      }}
+      onClick={() => {
+        if (forGen) {
+          handleNavigateToContent()
+        }
       }}
     >
       <StyledPictureChoiceItem

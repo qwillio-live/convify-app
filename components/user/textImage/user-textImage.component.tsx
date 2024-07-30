@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 import {

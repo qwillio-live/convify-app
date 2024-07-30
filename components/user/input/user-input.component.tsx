@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
@@ -730,19 +731,19 @@ export const UserInput = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `outline-none
+                `ring-opacity-0/0
+          send-response
+          outline-none
           ring-0
-          ring-opacity-0/0
           transition-all
           duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0
-          send-response
+          ease-in-out focus-visible:ring-transparent
+          focus-visible:ring-offset-0
           `
-          // focus-visible:outline-none
-          // focus-visible:ring-0
-          // focus-visible:ring-transparent
-          // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+                // focus-visible:outline-none
+                // focus-visible:ring-0
+                // focus-visible:ring-transparent
+                // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
               )}
               onChange={
                 (e) => {

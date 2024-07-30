@@ -18,6 +18,7 @@ import {
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { useEffect, useState } from "react"
 import { User } from "../../page"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
     const key = localStorage.key(i)
@@ -73,6 +74,9 @@ const Header = ({ flowId }) => {
         ? "text-foreground border-current"
         : "text-muted-foreground border-transparent"
     }`
+  const currentScreenName = useAppSelector(
+    (state) => state?.screen?.currentScreenName
+  )
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
@@ -122,7 +126,10 @@ const Header = ({ flowId }) => {
         </div>
       </div>
       <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
-        <Link href="/dashboard/flows/preview-flow" target="_blank">
+        <Link
+          href={`/dashboard/${flowId}/preview-flow?screen=${currentScreenName}`}
+          target="_blank"
+        >
           <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">
             <Eye className="size-3.5" />
           </Button>

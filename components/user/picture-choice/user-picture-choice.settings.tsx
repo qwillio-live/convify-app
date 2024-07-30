@@ -691,7 +691,7 @@ const PictureChoiceItemNavigationSettings = ({
 
   useEffect(() => {
     if (!nextScreen) {
-      onChange("next-screen", nextScreenName)
+      onChange("nextScreen", nextScreenName)
     }
   }, [onChange])
   console.log("button action", buttonAction, nextScreen)

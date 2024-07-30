@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import local from "next/font/local"
 import { usePathname, useRouter } from "next/navigation"

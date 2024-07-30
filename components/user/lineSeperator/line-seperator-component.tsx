@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { throttle, debounce } from "lodash"

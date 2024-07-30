@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -61,6 +62,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
 import { IconButtonSettings } from "./user-icon-button.settings"
+import { useSearchParams } from "next/navigation"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -171,7 +173,18 @@ export const IconButtonGen = ({
       (state: RootState) =>
         state.screen?.screens[selectedScreen]?.screenValidated
     ) || false
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
 
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    replace(`${pathname}?${params.toString()}`)
+  }
   const handleNavigateToContent = () => {
     dispatch(
       validateScreen({
@@ -179,6 +192,7 @@ export const IconButtonGen = ({
         next: nextScreen.screenName,
       })
     )
+    handleSearch(nextScreen.screenName)
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
     //   router.push(`${pathName}#${nextScreen?.screenName}`);
@@ -637,10 +651,13 @@ export const IconButton = ({
   const handlePropChangeThrottled = (property, value) => {
     throttledSetProp(property, value)
   }
+
   const handleNavigateToScreen = async () => {
+    console.log("entered validating")
     dispatch(
       validateScreen({ current: selectedScreen, next: nextScreen.screenName })
     )
+
     // dispatch(navigateToScreen(nextScreen));
     // if(screens){
     //   const screen = screens.find(screen => screen.screenName === nextScreen);
@@ -932,8 +949,6 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   buttonAction: "next-screen",
 }
-
-
 
 IconButton.craft = {
   props: IconButtonDefaultProps,

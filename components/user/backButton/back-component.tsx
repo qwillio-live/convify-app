@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import {
   Activity,
@@ -48,9 +49,12 @@ import {
 import { useTranslations } from "next-intl"
 import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  navigateToScreen,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import {
@@ -159,10 +163,35 @@ export const BackButtonGen = ({
   iconType,
   ...props
 }) => {
-  const router = useRouter()
-  const pathName = usePathname()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const { replace } = useRouter()
+  const dispatch = useAppDispatch()
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    replace(`${pathname}?${params.toString()}`)
+  }
   const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
+    dispatch(
+      validateScreen({
+        current: currentScreenName,
+        next: nextScreen.screenName,
+      })
+    )
+    handleSearch(nextScreen.screenName)
+    // if(screenValidated){
+    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+    //   router.push(`${pathName}#${nextScreen?.screenName}`);
+    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+    // }else{
+    //   console.log("SCREEN NOT VALIDATED", screenValidated)
+    // }
   }
 
   return (
@@ -180,63 +209,61 @@ export const BackButtonGen = ({
         paddingRight: `${props.marginRight}px`,
       }}
     >
-      <Link href={`${pathName}#${nextScreen?.screenName}`} className="contents">
-        <StyledCustomButton
-          fontFamily={fontFamily?.value}
-          color={color.value}
-          background={background.value}
-          backgroundHover={backgroundHover.value}
-          borderHoverColor={borderHoverColor?.value}
-          colorHover={colorHover.value}
-          radius={radius.value}
-          flexDirection={flexDirection}
-          justifyContent={justifyContent}
-          borderColor={borderColor.value}
-          border={border}
-          marginLeft={marginLeft}
-          width={width}
-          size={size}
-          buttonSize={buttonSize}
-          height={height}
-          marginRight={marginRight}
-          marginTop={marginTop}
-          marginBottom={marginBottom}
-          paddingLeft={paddingLeft}
-          paddingTop={paddingTop}
-          paddingRight={paddingRight}
-          paddingBottom={paddingBottom}
-          alignItems={alignItems}
-          gap={gap}
-          mobileScreen={false}
-          {...props}
-          className="text-[1rem]"
-          onClick={() => console.log("Button clicked", text)}
-        >
-          {iconType !== PictureTypes.NULL && enableIcon && (
-            <div className="flex items-center justify-center">
-              {iconType === PictureTypes.ICON ? (
-                <SvgRenderer iconName={icon} width="1em" height="1em" />
-              ) : iconType === PictureTypes.EMOJI ? (
-                <span className="text-[1em] leading-[1em]">{icon}</span>
-              ) : (
-                <picture key={(icon as ImagePictureTypes).desktop}>
-                  <source
-                    media="(min-width:560px)"
-                    srcSet={(icon as ImagePictureTypes).mobile}
-                  />
-                  <img
-                    src={(icon as ImagePictureTypes).desktop}
-                    className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
-                    style={{ height: "1em", width: "auto" }}
-                    loading="lazy"
-                  />
-                </picture>
-              )}
-            </div>
-          )}
-          <span className="text-md ml-2">{text}</span>
-        </StyledCustomButton>
-      </Link>
+      <StyledCustomButton
+        fontFamily={fontFamily?.value}
+        color={color.value}
+        background={background.value}
+        backgroundHover={backgroundHover.value}
+        borderHoverColor={borderHoverColor?.value}
+        colorHover={colorHover.value}
+        radius={radius.value}
+        flexDirection={flexDirection}
+        justifyContent={justifyContent}
+        borderColor={borderColor.value}
+        border={border}
+        marginLeft={marginLeft}
+        width={width}
+        size={size}
+        buttonSize={buttonSize}
+        height={height}
+        marginRight={marginRight}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        paddingLeft={paddingLeft}
+        paddingTop={paddingTop}
+        paddingRight={paddingRight}
+        paddingBottom={paddingBottom}
+        alignItems={alignItems}
+        gap={gap}
+        mobileScreen={false}
+        {...props}
+        className="text-[1rem]"
+        onClick={() => handleNavigateToContent()}
+      >
+        {iconType !== PictureTypes.NULL && enableIcon && (
+          <div className="flex items-center justify-center">
+            {iconType === PictureTypes.ICON ? (
+              <SvgRenderer iconName={icon} width="1em" height="1em" />
+            ) : iconType === PictureTypes.EMOJI ? (
+              <span className="text-[1em] leading-[1em]">{icon}</span>
+            ) : (
+              <picture key={(icon as ImagePictureTypes).desktop}>
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(icon as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(icon as ImagePictureTypes).desktop}
+                  className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                  style={{ height: "1em", width: "auto" }}
+                  loading="lazy"
+                />
+              </picture>
+            )}
+          </div>
+        )}
+        <span className="text-md ml-2">{text}</span>
+      </StyledCustomButton>
     </div>
   )
 }

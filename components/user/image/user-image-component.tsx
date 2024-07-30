@@ -1,3 +1,4 @@
+"use client"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 import "cropperjs/dist/cropper.css"
 import React from "react"
@@ -84,7 +85,7 @@ export const Img = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const [hover,setHover] = React.useState(false)
+  const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
   return (
     <div
@@ -180,9 +181,9 @@ export const ImgSettings = () => {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
       setProp(
         (props) =>
-        (props.src = cropperRef.current?.cropper
-          .getCroppedCanvas()
-          .toDataURL()),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
       setProp((props) => (props.width = "100%"), 1000)
@@ -191,9 +192,9 @@ export const ImgSettings = () => {
       setActiveAspectRatioBtn("source")
       setProp(
         (props) =>
-        (props.src = cropperRef.current?.cropper
-          .getCroppedCanvas()
-          .toDataURL()),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
     }
@@ -203,7 +204,7 @@ export const ImgSettings = () => {
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
       cropperRef.current?.cropper.getImageData().width /
-      cropperRef.current?.cropper.getImageData().height
+        cropperRef.current?.cropper.getImageData().height
     )
     setActiveAspectRatioBtn("source")
   }
@@ -250,9 +251,9 @@ export const ImgSettings = () => {
           />
           <div
             onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-            className="relative flex w-full flex-row justify-center group hover:cursor-pointer"
+            className="group relative flex w-full flex-row justify-center hover:cursor-pointer"
           >
-            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent group-hover:bg-white/[0.85] group-hover:opacity-100 opacity-0 transition-opacity duration-200 ease-in">
+            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent opacity-0 transition-opacity duration-200 ease-in group-hover:bg-white/[0.85] group-hover:opacity-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -270,7 +271,7 @@ export const ImgSettings = () => {
                 <path d="M17 22v-5.5" />
                 <circle cx="9" cy="9" r="2" />
               </svg>
-              <span className="text-sm font-semibold text-black mt-1">
+              <span className="mt-1 text-sm font-semibold text-black">
                 {t("Upload")}
               </span>
             </div>
@@ -285,7 +286,7 @@ export const ImgSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Alt label")}</p>
+              <p className="text-muted-foreground text-sm">{t("Alt label")}</p>
               <Input
                 className="p-2 text-sm"
                 value={alt}
@@ -297,7 +298,7 @@ export const ImgSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Width")}</p>
+              <p className="text-muted-foreground text-sm">{t("Width")}</p>
               <Input
                 defaultValue={width}
                 className="w-full"
@@ -308,7 +309,7 @@ export const ImgSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Height")}</p>
+              <p className="text-muted-foreground text-sm">{t("Height")}</p>
               <Input
                 defaultValue={height}
                 className="w-full"
@@ -325,7 +326,7 @@ export const ImgSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Top</Label>
+              <Label className="text-muted-foreground text-sm">Top</Label>
               <Input
                 type="number"
                 max={100}
@@ -338,7 +339,7 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">
+              <Label className="text-muted-foreground text-sm">
                 {t("Bottom")}
               </Label>
               <Input
@@ -356,7 +357,7 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">
+              <Label className="text-muted-foreground text-sm">
                 {t("Left")}
               </Label>
               <Input
@@ -371,7 +372,7 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">
+              <Label className="text-muted-foreground text-sm">
                 {t("Right")}
               </Label>
               <Input
@@ -393,7 +394,7 @@ export const ImgSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Background")}</p>
+              <p className="text-muted-foreground text-sm">{t("Background")}</p>
               <Input
                 type="color"
                 value={background}
@@ -403,7 +404,7 @@ export const ImgSettings = () => {
               />
             </div>
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Align")}</p>
+              <p className="text-muted-foreground text-sm">{t("Align")}</p>
               <RadioGroup
                 value={align}
                 onValueChange={(value) =>
@@ -425,7 +426,7 @@ export const ImgSettings = () => {
               </RadioGroup>
             </div>
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Radius")}</p>
+              <p className="text-muted-foreground text-sm">{t("Radius")}</p>
               <Input
                 type="number"
                 placeholder={radius}
@@ -442,7 +443,7 @@ export const ImgSettings = () => {
       </Accordion>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent
-          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[70%] relative flex flex-col gap-4 p-4 sm:p-8"
+          className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8"
           ref={dialogRef}
         >
           <Cropper
@@ -463,63 +464,69 @@ export const ImgSettings = () => {
             responsive={true}
           />
           <div className="flex items-center justify-between gap-4">
-            <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+            <div className="bg-secondary flex gap-0 rounded-lg p-1">
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "source"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "source"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioSource}
               >
                 {t("Source")}
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "square"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "square"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioSquare}
               >
                 1:1
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portrait"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "portrait"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioPortrait}
               >
                 4:3
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscape"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "landscape"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioLandscape}
               >
                 16:9
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portraito"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "portraito"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioPortraitO}
               >
                 3:4
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscapeo"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "landscapeo"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioLandscape0}
               >
                 9:16
@@ -563,8 +570,8 @@ export const ImgDefaultProps = {
   background: "inherit",
   radius: "none",
   align: "center",
-  width: '85%',
-  height: 'auto',
+  width: "85%",
+  height: "auto",
   src: ImagePlaceholder.src,
 }
 

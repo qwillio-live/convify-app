@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"

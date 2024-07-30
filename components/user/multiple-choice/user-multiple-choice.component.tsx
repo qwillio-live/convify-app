@@ -1,9 +1,10 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { MultipleChoiceSettings } from "./user-multiple-choice.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import styled from "styled-components"
@@ -18,6 +19,10 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { usePathname } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const MultipleChoiceSizeValues = {
   small: "300px",
@@ -65,7 +70,7 @@ export const MultipleChoiceGen = ({
   ...props
 }) => {
   const [selectedChoices, setSelectedChoices] = useState(selections)
-
+  console.log("of mc props", choices)
   return (
     <div
       className="relative w-full"
@@ -104,6 +109,7 @@ export const MultipleChoiceGen = ({
         </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem
+            forGen={true}
             key={index}
             isFirst={index === 0}
             isLast={index === choices.length - 1}
@@ -344,6 +350,7 @@ export const MultipleChoice = ({
         >
           {choices.map((choice, index) => (
             <MultipleChoiceItem
+              forGen={false}
               key={index}
               isFirst={index === 0}
               isLast={index === choices.length - 1}
@@ -415,6 +422,7 @@ const MultipleChoiceItem = ({
   selectedStyles,
   onValueChange,
   onSelectChange,
+  forGen,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
@@ -422,9 +430,47 @@ const MultipleChoiceItem = ({
   useEffect(() => {
     setChoiceValue(choice.value)
   }, [choice.value])
-
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const { replace } = useRouter()
+  const dispatch = useAppDispatch()
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    replace(`${pathname}?${params.toString()}`)
+  }
+  const handleNavigateToContent = () => {
+    if (choice?.nextScreen !== "none") {
+      dispatch(
+        validateScreen({
+          current: currentScreenName,
+          next: choice.nextScreen,
+        })
+      )
+      handleSearch(choice.nextScreen)
+    }
+    // if(screenValidated){
+    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+    //   router.push(`${pathName}#${nextScreen?.screenName}`);
+    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+    // }else{
+    //   console.log("SCREEN NOT VALIDATED", screenValidated)
+    // }
+  }
   return (
-    <li className="w-full">
+    <li
+      className="w-full"
+      onClick={() => {
+        if (forGen) {
+          handleNavigateToContent()
+        }
+      }}
+    >
       <StyledMultipleChoiceItem
         isFirst={isFirst}
         isLast={isLast}

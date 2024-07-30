@@ -23,7 +23,6 @@ export default async function DashboardLayout({
     return notFound()
   }
 
-
   return (
     <StoreProvider>
       <div className="flex h-screen flex-col space-y-6">

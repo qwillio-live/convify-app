@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
@@ -51,7 +52,6 @@ const UserInputSizeValues = {
   large: "576px",
   full: "100%",
 }
-
 
 const UserInputMobileSizeValues = {
   small: "300px",
@@ -236,7 +236,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
           }}
         >
           <div
-            className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
@@ -247,7 +247,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
             {props.label}
           </div>
 
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputTextareaStyled
               ref={textAreaRef}
               textColor={props.textColor}
@@ -275,22 +275,22 @@ export const UserInputTextareaGen = ({ ...props }) => {
               onFocus={() => setIsActive(true)}
               className={cn(
                 {
-                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-                  "font-semibold px-3 py-2.5 text-base placeholder:text-gray-400 placeholder:font-light":
+                  "px-3 pb-4 pt-8 text-base font-semibold": props.floatingLabel,
+                  "px-3 py-2.5 text-base font-semibold placeholder:font-light placeholder:text-gray-400":
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `ring-0
-                outline-none
-                focus-visible:outline-none
-                peer-focus-visible:outline-none
-                focus-visible:ring-0
-                ring-opacity-0/0
+                `ring-opacity-0/0
                 bg-white
+                outline-none
+                ring-0
                 transition-all
                 duration-200
                 ease-in-out
-                focus-visible:ring-transparent focus-visible:ring-offset-0`
+                focus-visible:outline-none
+                focus-visible:ring-0
+                focus-visible:ring-transparent
+                focus-visible:ring-offset-0 peer-focus-visible:outline-none`
               )}
               onChange={(e) => setInputValue(e.target.value)}
               onBlur={() => setIsActive(false)}
@@ -303,7 +303,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
           {/** Error container */}
           {props.error && (
             <div
-              className="error-container border flex flex-row items-center gap-0 mt-0"
+              className="error-container mt-0 flex flex-row items-center gap-0 border"
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -472,7 +472,11 @@ export const UserInputTextarea = ({ ...props }) => {
         <div
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
-            width: `${mobileScreen ? UserInputMobileSizeValues[props.size] : UserInputSizeValues[props.size]}`,
+            width: `${
+              mobileScreen
+                ? UserInputMobileSizeValues[props.size]
+                : UserInputSizeValues[props.size]
+            }`,
           }}
         >
           <ContentEditable
@@ -486,7 +490,7 @@ export const UserInputTextarea = ({ ...props }) => {
                 500
               )
             }
-            className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
@@ -495,7 +499,7 @@ export const UserInputTextarea = ({ ...props }) => {
             }}
           />
 
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {/* {props.enableIcon && (
               <div
                 className={cn(
@@ -551,18 +555,18 @@ export const UserInputTextarea = ({ ...props }) => {
               height={props.height}
               onFocus={() => setProp((props) => (props.isActive = true))}
               className={cn(
-                `font-semibold px-3 pt-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light ring-0
+                `ring-opacity-0/0 send-response bg-white px-3 pb-4 pt-3 text-base font-semibold
               outline-none
-              focus-visible:outline-none
-              peer-focus-visible:outline-none
-              focus-visible:ring-0
-              ring-opacity-0/0
-              bg-white
+              ring-0
               transition-all
               duration-200
               ease-in-out
+              placeholder:font-light
+              placeholder:text-gray-400
+              focus-visible:outline-none
+              focus-visible:ring-0
               focus-visible:ring-transparent focus-visible:ring-offset-0
-              send-response
+              peer-focus-visible:outline-none
               `
               )}
               onChange={
@@ -579,7 +583,7 @@ export const UserInputTextarea = ({ ...props }) => {
           {/** Error container */}
           {props.error && (
             <div
-              className="error-container border flex flex-row items-center gap-0 mt-0"
+              className="error-container mt-0 flex flex-row items-center gap-0 border"
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,

@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"

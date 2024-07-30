@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import styled from "styled-components"
 import { useNode } from "@/lib/craftjs"
