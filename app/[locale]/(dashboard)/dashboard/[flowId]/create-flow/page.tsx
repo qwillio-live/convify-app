@@ -81,7 +81,8 @@ export default function CreateFlowsPage({
         >
           <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
-              <CreateFlowComponent />
+              <CreateFlowComponent 
+              flowId={flowId}/>
             </TabsContent>
 
             {/* <TabsContent className="mt-0" value="connect">
