@@ -612,12 +612,20 @@ const ShareFlowComponents = ({
                     e.currentTarget.style.color = "rgb(115, 115, 115)"
                   }}
                 >
-                  <Image
-                    src={TelegramPic}
-                    alt="telegram_pic"
-                    height={44}
-                    width={44}
-                  ></Image>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    viewBox="0 0 16 16"
+                    fill="#FFF"
+                  >
+                    <path
+                      fill="white"
+                      fill-rule="evenodd"
+                      d="M.25 7a6.75 6.75 0 1 1 13.5 0A6.75 6.75 0 0 1 .25 7m9.002 4.064l1.045-7.932l-8.165 3.935l2.417.876l2.686-2.076a.5.5 0 1 1 .611.792L5.618 8.38v2.726l1.685-1.604z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
                 </Link>
                 <button
                   className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] text-[rgb(115,115,115)]"
