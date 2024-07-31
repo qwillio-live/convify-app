@@ -25,16 +25,18 @@ export default function FlowLayout({ isHeader }: { isHeader: boolean }) {
     if (search !== currentScreenName) {
       dispatch(setCurrentScreenName(search))
     }
-    const index: number =
-      screens?.findIndex((screen) => screen.screenName === search) || -1
+    const index: number | undefined = screens?.findIndex(
+      (screen) => screen.screenName === search
+    )
     console.log(
+      search,
       "before dispatching",
       index,
       screens,
       index
       // screens[index]?.screenData
     )
-    if (index !== -1) {
+    if (index !== -1 && index !== undefined) {
       console.log("-------dispatching---------")
       dispatch(setSelectedScreen(index))
     } else {

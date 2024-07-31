@@ -18,7 +18,8 @@ import {
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { useEffect, useState } from "react"
 import { User } from "../../page"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
     const key = localStorage.key(i)
@@ -32,7 +33,7 @@ const Header = ({ flowId }) => {
   const t = useTranslations("CreateFlow") // Initialize your translation hook
   const router = useRouter()
   const currentPath = usePathname()
-
+  const dispatch = useAppDispatch()
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [userData, setUserData] = useState<User>()
   console.log("flowId in header", flowId)
@@ -78,6 +79,10 @@ const Header = ({ flowId }) => {
     (state) => state?.screen?.currentScreenName
   )
   console.log("currentScreenName", currentScreenName)
+  const handleNavigation = () => {
+    console.log("-------dispatching---------")
+    dispatch(setSelectedScreen(0))
+  }
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
@@ -126,7 +131,10 @@ const Header = ({ flowId }) => {
           </Link>
         </div>
       </div>
-      <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
+      <div
+        className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full"
+        onClick={handleNavigation}
+      >
         <Link
           href={`/dashboard/preview-flow/${flowId}?screen=${currentScreenName}`}
           target="_blank"
