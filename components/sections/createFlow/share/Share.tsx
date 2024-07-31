@@ -815,6 +815,7 @@ const ShareFlowComponents = ({
       <ShareDrawerDesktop
         desktopDrawerOpen={desktopDrawerOpen}
         setDesktopDrawerOpen={setDesktopDrawerOpen}
+        flowId={flowId}
       />
     </div>
   )
