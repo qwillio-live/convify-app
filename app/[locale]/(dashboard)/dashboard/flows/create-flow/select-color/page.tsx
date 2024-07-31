@@ -38,7 +38,7 @@ import {
 } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
 import { GlobalThemeSettings } from "@/components/user/settings/global-theme-settings"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
@@ -152,11 +152,13 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
 
 export default function SelectColor() {
   const templateSetting = useAppSelector((state) => state.newTheme)
-  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
+  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(true)
   const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
   const [view, setView] = useState("desktop")
   const [innerview, setInnerView] = useState("desktop")
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
+  const query = useSearchParams()
+  const isAllowed = query?.get("allow") || false
   const updateView = () => {
     if (window.innerWidth >= 1024) {
       setDesktopDrawerOpen(false)
@@ -165,7 +167,8 @@ export default function SelectColor() {
     } else {
       setView("mobile")
       setInnerView("mobile")
-      setDesktopDrawerOpen(true)
+      if (isAllowed) setDesktopDrawerOpen(false)
+      else router.push("/mobile")
     }
   }
   const dispatch = useAppDispatch()
@@ -286,7 +289,7 @@ export default function SelectColor() {
                     <BreadcrumbItem className="mr-2 text-base">
                       <BreadcrumbLink>
                         <Link
-                          href={"/dashboard/flows/create-flow/select-template"}
+                          href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
                         >
                           {t("templateBreadcrumb")}
                         </Link>
@@ -301,7 +304,9 @@ export default function SelectColor() {
                     <BreadcrumbSeparator />
                     <BreadcrumbItem className="mx-2 text-base">
                       <BreadcrumbLink>
-                        <Link href={"/dashboard/flows/create-flow/finish"}>
+                        <Link
+                          href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
+                        >
                           {t("finishBreadcrumb")}
                         </Link>
                       </BreadcrumbLink>
@@ -350,7 +355,9 @@ export default function SelectColor() {
             </div>
           </div>
           <div className="fixed bottom-0 left-4 z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
-            <Link href={"/dashboard/flows/create-flow/select-template"}>
+            <Link
+              href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
+            >
               <Button
                 variant="secondary"
                 size="icon"
@@ -370,7 +377,9 @@ export default function SelectColor() {
                   {t("exit")}
                 </Button>
               </Link>
-              <Link href={"/dashboard/flows/create-flow/finish"}>
+              <Link
+                href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
+              >
                 <Button
                   className="w-32 font-bold text-white hover:cursor-pointer"
                   size="lg"
@@ -383,10 +392,6 @@ export default function SelectColor() {
           </div>
         </div>
       )}
-      <ShareDrawerDesktop
-        desktopDrawerOpen={desktopDrawerOpen}
-        setDesktopDrawerOpen={setDesktopDrawerOpen}
-      />
     </div>
   )
 }
