@@ -77,6 +77,7 @@ const Header = ({ flowId }) => {
   const currentScreenName = useAppSelector(
     (state) => state?.screen?.currentScreenName
   )
+  console.log("currentScreenName", currentScreenName)
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
@@ -127,7 +128,7 @@ const Header = ({ flowId }) => {
       </div>
       <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
         <Link
-          href={`/dashboard/${flowId}/preview-flow?screen=${currentScreenName}`}
+          href={`/dashboard/preview-flow/${flowId}?screen=${currentScreenName}`}
           target="_blank"
         >
           <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">

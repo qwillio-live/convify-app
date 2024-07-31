@@ -49,6 +49,7 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
+import FlowLayout from "@/components/flow-preview/flow-preview-server"
 
 export default async function PreviewFlows({
   params,
@@ -101,16 +102,13 @@ export default async function PreviewFlows({
     .join("; ")
 
   const flowId = params?.flowId
-  const response = await fetch(
-    `https://conv-hassan.picreel.bid/api/flows/${flowId}`,
-    {
-      method: "GET",
-      headers: {
-        Cookie: cookieString,
-      },
-      cache: "no-cache",
-    }
-  )
+  const response = await fetch(`http://localhost:3000/api/flows/${flowId}`, {
+    method: "GET",
+    headers: {
+      Cookie: cookieString,
+    },
+    cache: "no-cache",
+  })
   const data = await response.json()
 
   const resolveComponents = (screen) => {
@@ -197,16 +195,15 @@ export default async function PreviewFlows({
             style={{
               display: screenName === screen?.name ? "block" : "none",
               backgroundColor: data?.flowSettings?.general?.backgroundColor,
-              // paddingTop:
-              //   data.header.headerPosition === "absolute"
-              //     ? headerHeight + "px"
-              //     : "0",
             }}
-            className="h-[100vh]
+            className="
+relative
+          h-[100vh]
           min-w-full
           shrink-0
           basis-full
-          pt-14"
+          pt-14
+          "
           >
             {resolveComponents(screen.content)}
           </div>
