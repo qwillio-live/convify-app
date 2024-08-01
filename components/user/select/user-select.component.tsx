@@ -12,12 +12,16 @@ import {
 import { Controller } from "../settings/controller.component"
 import { SelectSettings } from "./user-select.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import hexoid from "hexoid"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
 import ContentEditable from "react-contenteditable"
 import { debounce } from "lodash"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const SelectSizeValues = {
   small: "300px",
@@ -65,7 +69,26 @@ export const SelectGen = ({
   const [selectedOptionId, setSelectedOptionId] = React.useState<
     string | undefined
   >()
-
+  const [isFilled, setIsFiiled] = useState(false)
+  const screenData = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props.selectedOptionId
+  )
+  useEffect(() => {
+    console.log("setting filled true", screenData)
+    if (screenData !== "" || screenData !== undefined) {
+      console.log("setting filled true", screenData)
+      // setIsFiiled(true)
+    }
+    setSelectedOptionId(screenData)
+  }, [])
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
+  const dispatch = useAppDispatch()
+  console.log("in sselect", screenData, selectedOptionId, isFilled)
   return (
     <div
       className="relative w-full"
@@ -85,10 +108,25 @@ export const SelectGen = ({
     >
       <CustomSelect
         value={selectedOptionId}
-        onValueChange={(value) => setSelectedOptionId(value)}
+        onValueChange={(value) => {
+          dispatch(
+            setPreviewScreenData({
+              nodeId: props.nodeId,
+              isArray: false,
+              newSelections: [value],
+              entity: selectedOptionId || "",
+            })
+          )
+          if (!isFilled) {
+            console.log("diispathving", isFilled)
+            dispatch(setUpdateFilledCount(1))
+            setIsFiiled(true)
+          }
+          setSelectedOptionId(value)
+        }}
       >
         <div
-          className="w-full p-1"
+          className={`w-full p-1 `}
           style={{
             color: labelColor,
             fontFamily: `var(${fontFamily?.value})`,
@@ -100,7 +138,7 @@ export const SelectGen = ({
         <StyledCustomSelectTrigger
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
-          }`}
+          } ${alarm && !isFilled && "shake !border-red-600"}`}
           fontFamily={fontFamily?.value}
           borderHoverColor={borderHoverColor?.value}
           borderColor={borderColor.value}
@@ -160,7 +198,7 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   font-weight: 400;
   font-size: 16px;
-  border: 1px dashed transparent;
+  border: ${(props) => props.border};
   transition: all 0.2s ease;
 
   &:hover {

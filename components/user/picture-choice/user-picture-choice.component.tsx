@@ -21,7 +21,12 @@ import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setPreviewScreenData,
+  setSelectedData,
+  setUpdateFilledCount,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const PictureChoiceSizeValues = {
   small: "400px",
@@ -59,11 +64,23 @@ export const PictureChoiceGen = ({
   tracking,
   ...props
 }) => {
-  console.log("of pic props", choices)
   const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [isCountUpdated, setIsCountUpdated] = useState(false)
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
+  const screenData = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.selections
+  )
+  console.log("selected data in opic", screenData)
+  const dispatch = useAppDispatch()
   useEffect(() => {
-    setSelectedChoices(selections)
-  }, [selections])
+    setSelectedChoices(screenData)
+  }, [])
+
   return (
     <div
       className="relative w-full"
@@ -104,7 +121,7 @@ export const PictureChoiceGen = ({
             key={index}
             isFirst={index === 0}
             isLast={index === choices.length - 1}
-            isSelected={selectedChoices?.includes(choice.id)}
+            isSelected={selectedChoices?.includes(choice.id) || false}
             size={size}
             required={required}
             tracking={tracking}
@@ -118,18 +135,72 @@ export const PictureChoiceGen = ({
             selectedStyles={selectedStyles}
             onValueChange={null}
             forGen={true}
+            selections={selectedChoices}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
                   if (prev.includes(choice.id)) {
-                    return prev.filter(
+                    // Remove choice from selection
+                    const updatedChoices = prev.filter(
                       (selectionId) => selectionId !== choice.id
                     )
+
+                    // Dispatch action for removing choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+
+                    return updatedChoices
                   } else {
-                    return [...prev, choice.id]
+                    // Add choice to selection
+                    const updatedChoices = [...prev, choice.id]
+
+                    // Dispatch action for adding choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+                    return updatedChoices
                   }
                 })
               } else {
+                console.log("entered else")
+                const newSelection = selectedChoices.includes(choice.id)
+                  ? []
+                  : [choice.id]
+
+                dispatch(
+                  setSelectedData(
+                    selectedChoices.includes(choice.id) ? [] : [choice.id]
+                  )
+                )
+                dispatch(
+                  setPreviewScreenData({
+                    nodeId: props.nodeId,
+                    newSelections: selectedChoices.includes(choice.id)
+                      ? []
+                      : [choice.id],
+                    entity: "selections",
+                    isArray: true,
+                  })
+                )
+
+                if (newSelection.length > 0 && !isCountUpdated) {
+                  dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                  setIsCountUpdated(true) // Set count updated flag
+                } else if (newSelection.length === 0 && isCountUpdated) {
+                  dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                  setIsCountUpdated(false) // Reset count updated flag
+                }
                 setSelectedChoices(
                   selectedChoices.includes(choice.id) ? [] : [choice.id]
                 )
@@ -351,6 +422,7 @@ export const PictureChoice = ({
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
               forGen={false}
+              selections={selections}
               onValueChange={(updatedValue) => {
                 setProp((props) => {
                   props.choices[index].value = updatedValue
@@ -404,6 +476,7 @@ const PictureChoiceItem = ({
   onValueChange,
   onSelectChange,
   forGen,
+  selections,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
@@ -441,6 +514,9 @@ const PictureChoiceItem = ({
   const dispatch = useAppDispatch()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
     if (term) {
@@ -450,7 +526,8 @@ const PictureChoiceItem = ({
     replace(`${pathname}?${params.toString()}`)
   }
   const handleNavigateToContent = () => {
-    if (choice?.nextScreen !== "none") {
+    console.log("validation in pic", choice?.nextScreen, required, !isSelected)
+    if (choice?.nextScreen !== "none" && required && !isSelected) {
       dispatch(
         validateScreen({
           current: currentScreenName,
@@ -467,9 +544,10 @@ const PictureChoiceItem = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
+
   return (
     <li
-      className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]"
+      className={` flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}
       style={{
         flexBasis: `${getFlexBasis(choicesLength)}%`,
       }}
@@ -485,6 +563,9 @@ const PictureChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
+        className={`${
+          alarm && selections.length === 0 && "shake !border-2 !border-red-600"
+        }`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}

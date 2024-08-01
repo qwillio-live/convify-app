@@ -34,6 +34,10 @@ export type ScreenType = {
   screenFields: ScreenFieldsObject | {}
   screenValidated: boolean | null | undefined
   screenToggleError: boolean
+  selectedData: string[]
+  alarm: boolean
+  totalRequired: number
+  totalFilled: number
 }
 
 export interface ScreensState {
@@ -134,7 +138,6 @@ export const screensSlice = createSlice({
       state.flowName = action.payload.name
       state.firstScreenName = action.payload.steps[0]?.name
       state.currentScreenName = action.payload.steps[0]?.name
-
       const screensFieldsList = {}
 
       action.payload.steps.forEach((screen: any) => {
@@ -152,12 +155,105 @@ export const screensSlice = createSlice({
         screenFields: {},
         screenValidated: false,
         screenToggleError: false,
+        selectedData: [],
+        alarm: false,
       }))
 
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
+    setSelectedData: (state, action: PayloadAction<string[]>) => {
+      const screens = JSON.parse(JSON.stringify(state.screens[0]))
+      console.log(
+        "changing selected data",
+        action.payload,
+        screens,
+        state.selectedScreen
+      )
+      state.screens[state.selectedScreen] = {
+        ...state.screens[state.selectedScreen],
+        selectedData: action.payload,
+      }
+    },
+    setPreviewScreenData: (
+      state,
+      action: PayloadAction<{
+        nodeId: number
+        entity: string
+        isArray: boolean
+        newSelections: string[]
+      }>
+    ) => {
+      // Clone the current screen data
+      let prevScreenData = JSON.parse(
+        JSON.stringify(state.screens[state.selectedScreen])
+      )
+
+      // Parse the screenData to access the individual nodes
+      let screenData = JSON.parse(prevScreenData.screenData)
+
+      // Update the selections for the specified nodeId
+      if (screenData[action.payload.nodeId]) {
+        screenData[action.payload.nodeId].props[action.payload.entity] = action
+          .payload.isArray
+          ? action.payload.newSelections
+          : action.payload.newSelections[0]
+      }
+
+      // Convert the updated screenData back to a string
+      prevScreenData.screenData = JSON.stringify(screenData)
+
+      // Update the state with the modified screen data
+      state.screens[state.selectedScreen] = {
+        ...prevScreenData,
+      }
+      let newScreenData = JSON.parse(
+        JSON.stringify(state.screens[state.selectedScreen])
+      )
+      console.log("newScreenData", JSON.parse(newScreenData.screenData))
+    },
+    setAlarm: (state, action: PayloadAction<boolean>) => {
+      state.screens[state.selectedScreen].alarm = action.payload
+    },
+    setTotalRequired: (state, action: PayloadAction<boolean>) => {
+      state.screens.map((screen, index) => {
+        let eachScreen = JSON.parse(JSON.stringify(screen))
+        let screenData = JSON.parse(eachScreen.screenData)
+        console.log(
+          "------eachSCreen, screenData ------",
+          eachScreen,
+          screenData
+        )
+        let count = Object.values(screenData).filter(
+          (node) =>
+            node.type !== "UserContainer" &&
+            (node.props?.required === true ||
+              node.props?.inputRequired === true)
+        )
+        let count2 = Object.values(screenData).filter(
+          (node) =>
+            node.type !== "UserContainer" &&
+            (node.props?.required === true ||
+              node.props?.inputRequired === true) &&
+            ((node.props?.selections && node.props?.selections?.length > 0) ||
+              (node.props?.inputValue && node.props.inputValue.trim() !== "") ||
+              (node.props?.selectedOptionId &&
+                node.props.selectedOptionId.trim() !== "") ||
+              (node.props?.input && node.props.input.trim() !== ""))
+        )
+
+        console.log("count", count, count2)
+        screen.totalRequired = count.length
+        screen.totalFilled = count2.length
+      })
+    },
     setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload
+    },
+    setUpdateFilledCount: (state, action: PayloadAction<number>) => {
+      if (action.payload) {
+        state.screens[state.selectedScreen].totalFilled =
+          state.screens[state.selectedScreen].totalFilled + action.payload
+      }
     },
     updateHeaderPosition: (state, action: PayloadAction<string>) => {
       // const headerSlice = JSON.parse(state.screensHeader);
@@ -417,6 +513,10 @@ export const screensSlice = createSlice({
         screenFields: {},
         screenValidated: false,
         screenToggleError: false,
+        selectedData: [],
+        alarm: false,
+        totalRequired: 0,
+        totalFilled: 0,
       })
       state.screens = newScreens
       state.selectedScreen = action.payload + 1
@@ -443,6 +543,10 @@ export const screensSlice = createSlice({
         screenFields: {},
         screenValidated: false,
         screenToggleError: false,
+        selectedData: [],
+        alarm: false,
+        totalRequired: 0,
+        totalFilled: 0,
       }
       state.screensFieldsList[newId] = state.screensFieldsList[previousId]
       newScreen.screenData = state.screens[action.payload].screenData // Create new object
@@ -549,6 +653,11 @@ export const {
   setHeaderId,
   setScreenName,
   setRenamingScreen,
+  setSelectedData,
+  setPreviewScreenData,
+  setAlarm,
+  setTotalRequired,
+  setUpdateFilledCount,
 } = screensSlice.actions
 
 export default screensSlice.reducer

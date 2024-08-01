@@ -20,6 +20,8 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
   setFieldProp,
+  setPreviewScreenData,
+  setUpdateFilledCount,
   setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -81,8 +83,22 @@ export const UserInputGen = ({ ...props }) => {
   const icon = props.icon
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
+  const [isFilled, setIsFilled] = useState(false)
+  const fullScreenData = useAppSelector((state) =>
+    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
+  )
+  const parsedData = Object.keys(fullScreenData)
+    .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
+    .filter(
+      (screen) =>
+        screen.props.label === props.label && screen.props.inputRequired
+    )
+  const screenData =
+    parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
+  const nodeId = parsedData.length > 0 && parsedData[0].props.compId
+  console.log("user input", screenData, nodeId)
   useEffect(() => {
-    setInputValue(fieldValue)
+    setInputValue(screenData)
     dispatch(
       setFieldProp({
         screenId: props.parentScreenId,
@@ -153,7 +169,9 @@ export const UserInputGen = ({ ...props }) => {
       fieldInScreen &&
       toggleError) ||
     false
-
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -339,18 +357,35 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:outline-none
           focus-visible:ring-0
           focus-visible:ring-transparent
-          focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+          focus-visible:ring-offset-0 peer-focus-visible:outline-none
+          ${!isFilled && alarm && "!border-red-600"}
+          `
               )}
               onChange={(e) => {
-                setInputValue(e.target.value),
-                  dispatch(
-                    setFieldProp({
-                      screenId: props.parentScreenId,
-                      fieldId: props.nodeId,
-                      fieldName: "fieldValue",
-                      fieldValue: e.target.value,
-                    })
-                  )
+                if (isFilled && e.target.value === "") {
+                  dispatch(setUpdateFilledCount(-1))
+                  setIsFilled(false)
+                } else {
+                  if (!isFilled) dispatch(setUpdateFilledCount(1))
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setFieldProp({
+                        screenId: props.parentScreenId,
+                        fieldId: props.nodeId,
+                        fieldName: "fieldValue",
+                        fieldValue: e.target.value,
+                      }),
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: [e.target.value],
+                        })
+                      ),
+                      setIsFilled(true)
+                    )
+                }
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -361,9 +396,9 @@ export const UserInputGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {fieldError && (
+          {!isFilled && alarm && (
             <div
-              className="error-container mt-0 flex flex-row items-center gap-0 border"
+              className={`error-container shake mt-0 flex flex-row items-center gap-0 border text-red-600`}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -376,8 +411,7 @@ export const UserInputGen = ({ ...props }) => {
                 borderBottomRightRadius: props.errorStyles.bottomRightRadius,
               }}
             >
-              <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">x Please specify an answer</div>
             </div>
           )}
           {/** End error container */}

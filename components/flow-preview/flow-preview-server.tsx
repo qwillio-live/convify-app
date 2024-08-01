@@ -7,6 +7,7 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form"
 import {
   setCurrentScreenName,
   setSelectedScreen,
+  setTotalRequired,
   setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -107,6 +108,9 @@ export default function FlowLayout({ isHeader }: { isHeader: boolean }) {
       setHeaderHeight(height)
     }
   }, [headerMode, headerHeight, headerPosition])
+  useEffect(() => {
+    dispatch(setTotalRequired(true))
+  }, [])
   console.log("op", screens, sf, search, selectedScreen)
 
   return (

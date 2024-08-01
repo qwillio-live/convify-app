@@ -21,6 +21,7 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
   navigateToScreen,
+  setAlarm,
   setCurrentScreenName,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -161,13 +162,26 @@ export const IconButtonGen = ({
   const pathName = usePathname()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const alarm = useAppSelector(
+    (state) => state?.screen?.screens[state.screen.selectedScreen].alarm
+  )
+  const currentScreenTotal =
+    useAppSelector(
+      (state) =>
+        state?.screen?.screens[state.screen.selectedScreen].totalRequired
+    ) || ""
+  const currentScreenFilled =
+    useAppSelector(
+      (state) => state?.screen?.screens[state.screen.selectedScreen].totalFilled
+    ) || ""
+  const AllScreens = useAppSelector((state) => state?.screen?.screens)
   const selectedScreen = useAppSelector(
     (state) =>
       state?.screen?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-  //  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const sc = useAppSelector((state) => state?.screen?.screens) || ""
   const screenValidated =
     useAppSelector(
       (state: RootState) =>
@@ -186,13 +200,18 @@ export const IconButtonGen = ({
     replace(`${pathname}?${params.toString()}`)
   }
   const handleNavigateToContent = () => {
-    dispatch(
-      validateScreen({
-        current: currentScreenName,
-        next: nextScreen.screenName,
-      })
-    )
-    handleSearch(nextScreen.screenName)
+    if (currentScreenFilled === currentScreenTotal) {
+      dispatch(
+        validateScreen({
+          current: currentScreenName,
+          next: nextScreen.screenName,
+        })
+      )
+      handleSearch(nextScreen.screenName)
+    } else {
+      console.log("alarm called")
+      dispatch(setAlarm(true))
+    }
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
     //   router.push(`${pathName}#${nextScreen?.screenName}`);
@@ -201,6 +220,7 @@ export const IconButtonGen = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
+  console.log("screenssssss", currentScreenTotal, currentScreenFilled)
   return (
     <div
       className="relative w-full"

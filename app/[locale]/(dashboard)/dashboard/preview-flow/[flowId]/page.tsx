@@ -102,13 +102,16 @@ export default async function PreviewFlows({
     .join("; ")
 
   const flowId = params?.flowId
-  const response = await fetch(`https://conv-hassan.picreel.bid/api/flows/${flowId}`, {
-    method: "GET",
-    headers: {
-      Cookie: cookieString,
-    },
-    cache: "no-cache",
-  })
+  const response = await fetch(
+    `https://conv-hassan.picreel.bid/api/flows/${flowId}`,
+    {
+      method: "GET",
+      headers: {
+        Cookie: cookieString,
+      },
+      cache: "no-cache",
+    }
+  )
   const data = await response.json()
 
   const resolveComponents = (screen) => {

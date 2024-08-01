@@ -22,7 +22,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { usePathname } from "next/navigation"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { validateScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setPreviewScreenData,
+  setSelectedData,
+  setUpdateFilledCount,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const MultipleChoiceSizeValues = {
   small: "300px",
@@ -70,6 +75,17 @@ export const MultipleChoiceGen = ({
   ...props
 }) => {
   const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [isCountUpdated, setIsCountUpdated] = useState(false)
+  const screenData = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.selections
+  )
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    setSelectedChoices(screenData)
+  }, [])
   console.log("of mc props", choices)
   return (
     <div
@@ -114,7 +130,7 @@ export const MultipleChoiceGen = ({
             isFirst={index === 0}
             isLast={index === choices.length - 1}
             isCollapsed={layout === MultipleChoiceLayouts.collapsed}
-            isSelected={selectedChoices.includes(choice.id)}
+            isSelected={selectedChoices?.includes(choice.id) || false}
             isPreviousSelected={
               index > 0 && selections.includes(choices[index - 1].id)
             }
@@ -129,18 +145,72 @@ export const MultipleChoiceGen = ({
             hoverStyles={hoverStyles}
             selectedStyles={selectedStyles}
             onValueChange={null}
+            selections={selectedChoices}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
                   if (prev.includes(choice.id)) {
-                    return prev.filter(
+                    // Remove choice from selection
+                    const updatedChoices = prev.filter(
                       (selectionId) => selectionId !== choice.id
                     )
+
+                    // Dispatch action for removing choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+
+                    return updatedChoices
                   } else {
-                    return [...prev, choice.id]
+                    // Add choice to selection
+                    const updatedChoices = [...prev, choice.id]
+
+                    // Dispatch action for adding choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+                    return updatedChoices
                   }
                 })
               } else {
+                console.log("entered else")
+                const newSelection = selectedChoices.includes(choice.id)
+                  ? []
+                  : [choice.id]
+
+                dispatch(
+                  setSelectedData(
+                    selectedChoices.includes(choice.id) ? [] : [choice.id]
+                  )
+                )
+                dispatch(
+                  setPreviewScreenData({
+                    nodeId: props.nodeId,
+                    newSelections: selectedChoices.includes(choice.id)
+                      ? []
+                      : [choice.id],
+                    entity: "selections",
+                    isArray: true,
+                  })
+                )
+
+                if (newSelection.length > 0 && !isCountUpdated) {
+                  dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                  setIsCountUpdated(true) // Set count updated flag
+                } else if (newSelection.length === 0 && isCountUpdated) {
+                  dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                  setIsCountUpdated(false) // Reset count updated flag
+                }
                 setSelectedChoices(
                   selectedChoices.includes(choice.id) ? [] : [choice.id]
                 )
@@ -369,6 +439,7 @@ export const MultipleChoice = ({
               defaultStyles={defaultStyles}
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
+              selections={selections}
               onValueChange={(updatedValue) => {
                 setProp((props) => {
                   props.choices[index].value = updatedValue
@@ -423,10 +494,13 @@ const MultipleChoiceItem = ({
   onValueChange,
   onSelectChange,
   forGen,
+  selections,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
-
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
   useEffect(() => {
     setChoiceValue(choice.value)
   }, [choice.value])
@@ -445,7 +519,7 @@ const MultipleChoiceItem = ({
     replace(`${pathname}?${params.toString()}`)
   }
   const handleNavigateToContent = () => {
-    if (choice?.nextScreen !== "none") {
+    if (choice?.nextScreen !== "none" && required && !isSelected) {
       dispatch(
         validateScreen({
           current: currentScreenName,
@@ -483,6 +557,12 @@ const MultipleChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
+        className={`${
+          alarm &&
+          !checkboxVisible &&
+          selections.length === 0 &&
+          "shake !border-2 !border-red-600"
+        }`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}
@@ -502,14 +582,22 @@ const MultipleChoiceItem = ({
             (multiSelect ? (
               checkboxVisible && (
                 <Checkbox
-                  className="!size-5 [&>span>svg]:!size-4"
+                  className={`!size-5 [&>span>svg]:!size-4 ${
+                    alarm &&
+                    selections.length === 0 &&
+                    "shake !border-2 !border-red-600"
+                  }`}
                   checked={true}
                 />
               )
             ) : (
               <RadioGroup value="checked">
                 <RadioGroupItem
-                  className="!size-5 [&>span>svg]:!size-3.5"
+                  className={`!size-5 [&>span>svg]:!size-3.5 ${
+                    alarm &&
+                    selections.length === 0 &&
+                    "shake !border-2 !border-red-600"
+                  }`}
                   value="checked"
                 />
               </RadioGroup>
