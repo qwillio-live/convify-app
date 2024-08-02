@@ -224,13 +224,13 @@ export const screensSlice = createSlice({
           screenData
         )
         let count = Object.values(screenData).filter(
-          (node) =>
+          (node: any) =>
             node.type !== "UserContainer" &&
             (node.props?.required === true ||
               node.props?.inputRequired === true)
         )
         let count2 = Object.values(screenData).filter(
-          (node) =>
+          (node: any) =>
             node.type !== "UserContainer" &&
             (node.props?.required === true ||
               node.props?.inputRequired === true) &&
