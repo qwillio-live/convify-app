@@ -333,7 +333,11 @@ export function FlowsList({ flows, setStatus, status }) {
                                 className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover "
                                 height="64"
                                 width="113"
-                                src={placeholder.src}
+                                src={
+                                  flow.previewImage
+                                    ? flow.previewImage
+                                    : placeholder.src
+                                }
                               />
                             </TableCell>
                             <TableCell
