@@ -76,18 +76,27 @@ export const MultipleChoiceGen = ({
 }) => {
   const [selectedChoices, setSelectedChoices] = useState(selections)
   const [isCountUpdated, setIsCountUpdated] = useState(false)
-  const screenData = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.selections
-  )
-  const isRequired = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.required || false
-  )
+  const screenData = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.selections
+    }
+    return []
+  })
+
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.required
+    }
+    return false
+  })
   const dispatch = useAppDispatch()
   useEffect(() => {
     setSelectedChoices(screenData)
@@ -509,7 +518,8 @@ const MultipleChoiceItem = ({
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
   )
   useEffect(() => {
     setChoiceValue(choice.value)

@@ -70,18 +70,28 @@ export const SelectGen = ({
     string | undefined
   >()
   const [isFilled, setIsFiiled] = useState(false)
-  const screenData = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props.selectedOptionId
-  )
-  const isRequired = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.required || false
-  )
+
+  const screenData = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props.selectedOptionId
+    }
+    return []
+  })
+
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.required
+    }
+    return false
+  })
   useEffect(() => {
     console.log("setting filled true", screenData)
     if (screenData !== "" || screenData !== undefined) {
@@ -91,7 +101,8 @@ export const SelectGen = ({
     setSelectedOptionId(screenData)
   }, [])
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
   )
   const dispatch = useAppDispatch()
   console.log("in sselect", screenData, selectedOptionId, isFilled, isRequired)

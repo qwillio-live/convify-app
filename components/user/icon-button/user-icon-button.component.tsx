@@ -163,16 +163,18 @@ export const IconButtonGen = ({
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
   const alarm = useAppSelector(
-    (state) => state?.screen?.screens[state.screen.selectedScreen].alarm
+    (state) =>
+      state?.screen?.screens[state.screen.selectedScreen]?.alarm || false
   )
   const currentScreenTotal =
     useAppSelector(
       (state) =>
-        state?.screen?.screens[state.screen.selectedScreen].totalRequired
+        state?.screen?.screens[state.screen.selectedScreen]?.totalRequired
     ) || ""
   const currentScreenFilled =
     useAppSelector(
-      (state) => state?.screen?.screens[state.screen.selectedScreen].totalFilled
+      (state) =>
+        state?.screen?.screens[state.screen.selectedScreen]?.totalFilled
     ) || ""
   const AllScreens = useAppSelector((state) => state?.screen?.screens)
   const selectedScreen = useAppSelector(

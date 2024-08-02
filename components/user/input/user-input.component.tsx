@@ -85,21 +85,32 @@ export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
-  const fullScreenData = useAppSelector((state) =>
-    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
-  )
+  const fullScreenData = useAppSelector((state) => {
+    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
+
+    if (selectedScreen && selectedScreen.screenData) {
+      return JSON.parse(selectedScreen.screenData)
+    }
+    return {} // or return null or any default value you prefer
+  })
+
   const parsedData = Object.keys(fullScreenData)
     .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
     .filter(
       (screen) =>
-        screen.props.label === props.label && screen.props.inputRequired
+        screen?.props?.label === props?.label && screen?.props?.inputRequired
     )
-  const isRequired = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.inputRequired || false
-  )
+
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.inputRequired
+    }
+    return false
+  })
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
@@ -177,7 +188,8 @@ export const UserInputGen = ({ ...props }) => {
       toggleError) ||
     false
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
   )
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
