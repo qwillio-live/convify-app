@@ -235,7 +235,9 @@ export const screensSlice = createSlice({
             (node.props?.required === true ||
               node.props?.inputRequired === true) &&
             ((node.props?.selections && node.props?.selections?.length > 0) ||
-              (node.props?.inputValue && node.props.inputValue.trim() !== "") ||
+              (node.props?.inputValue &&
+                node.props.inputValue.trim() !== "" &&
+                node.props.inputValue !== "Components.Text Area") ||
               (node.props?.selectedOptionId &&
                 node.props.selectedOptionId.trim() !== "") ||
               (node.props?.input && node.props.input.trim() !== ""))

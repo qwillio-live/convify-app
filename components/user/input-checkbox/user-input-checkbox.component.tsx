@@ -15,6 +15,10 @@ import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { Checkbox } from "./checkbox-element"
 import { UserInputCheckboxSettings } from "./user-input-checkbox-settings.component"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export enum UserInputSizes {
   small = "small",
@@ -215,7 +219,19 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
+  const [isFilled, setIsFilled] = useState(false)
+  const dispatch = useAppDispatch()
+  const fullScreenData = useAppSelector((state) =>
+    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
+  )
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
+  const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  useEffect(() => {
+    // if (inputRef.current) inputRef.current.value = screenData
+    setInputValue(screenData)
+  }, [])
   console.log(props.backgroundImage)
 
   const primaryTextColor = useAppSelector(
@@ -258,7 +274,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
             width: `${UserInputSizeValues[props.size]}`,
           }}
         >
-          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div
+            className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
+          >
             <UserInputCheckboxStyled
               ref={inputRef}
               textColor={props.textColor}
@@ -294,6 +312,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 focus-visible:ring-0
                 focus-visible:ring-transparent
                 focus-visible:ring-offset-0 peer-focus-visible:outline-none
+                ${alarm && !isFilled && "!border-red-600"}
                 `
               )}
             >
@@ -305,10 +324,44 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 }}
               >
                 <DefoCheckbox
-                  className={cn(`z-50 mr-2 h-4 w-4 rounded-[5px]  bg-white `)}
+                  checked={inputValue === "true"}
+                  className={cn(
+                    `z-50 mr-2 h-4 w-4 rounded-[5px] bg-white ${
+                      alarm && !isFilled && "!border-red-600"
+                    }`
+                  )}
                   checkmarkColor={primaryTextColor}
                   style={{
-                    borderColor: `#dfdfdf`,
+                    borderColor: "#dfdfdf",
+                  }}
+                  onClick={() => {
+                    if (isFilled) {
+                      // If the checkbox is already filled, uncheck it
+                      dispatch(setUpdateFilledCount(-1)) // Decrease filled count
+                      setIsFilled(false) // Update isFilled state
+                      setInputValue("false") // Set inputValue to false
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: ["false"],
+                        })
+                      )
+                    } else {
+                      // If the checkbox is not filled, check it
+                      dispatch(setUpdateFilledCount(1)) // Increase filled count
+                      setIsFilled(true) // Update isFilled state
+                      setInputValue("true") // Set inputValue to true
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: ["true"],
+                        })
+                      )
+                    }
                   }}
                 />
 

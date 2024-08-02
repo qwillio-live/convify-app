@@ -17,13 +17,17 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { TextArea } from "@/components/textarea-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputTextareaSettings } from "./user-input-textarea-settings.component"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -199,8 +203,23 @@ export const UserInputTextareaGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const t = useTranslations("Components")
   const [error, setError] = useState(props.error)
-
+  const [isFilled, setIsFilled] = useState(false)
+  const dispatch = useAppDispatch()
+  const fullScreenData = useAppSelector((state) =>
+    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
+  )
+  const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
+  // useEffect(() => {
+  //   if (screenData !== "Components.Text Area") {
+  //     // textAreaRef.current.value = screenData //
+  //     setInputValue(screenData)
+  //   }
+  // }, [])
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
@@ -290,9 +309,28 @@ export const UserInputTextareaGen = ({ ...props }) => {
                 focus-visible:outline-none
                 focus-visible:ring-0
                 focus-visible:ring-transparent
-                focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+                focus-visible:ring-offset-0 peer-focus-visible:outline-none
+                ${!isFilled && alarm && "shake !border-red-600"}
+                `
               )}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => {
+                if (isFilled && e.target.value === "") {
+                  dispatch(setUpdateFilledCount(-1))
+                  setIsFilled(false)
+                } else {
+                  if (!isFilled) dispatch(setUpdateFilledCount(1))
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        isArray: false,
+                        entity: "inputValue",
+                        newSelections: [e.target.value],
+                      })
+                    ),
+                    setIsFilled(true)
+                }
+              }}
               onBlur={() => setIsActive(false)}
               autoFocus={isFocused}
               height={props.height}
@@ -301,7 +339,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {props.error && (
+          {alarm && !isFilled && (
             <div
               className="error-container mt-0 flex flex-row items-center gap-0 border"
               style={{
@@ -316,7 +354,8 @@ export const UserInputTextareaGen = ({ ...props }) => {
                 borderBottomRightRadius: props.errorStyles.bottomRightRadius,
               }}
             >
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">{IconsList[props.errorIcon]}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}

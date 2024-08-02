@@ -563,9 +563,7 @@ const PictureChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
-        className={`${
-          alarm && selections.length === 0 && "shake !border-2 !border-red-600"
-        }`}
+        className={`${alarm && selections?.length === 0 && "shake"}`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}

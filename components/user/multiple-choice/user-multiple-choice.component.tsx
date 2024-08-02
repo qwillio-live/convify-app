@@ -558,10 +558,7 @@ const MultipleChoiceItem = ({
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
         className={`${
-          alarm &&
-          !checkboxVisible &&
-          selections.length === 0 &&
-          "shake !border-2 !border-red-600"
+          alarm && !checkboxVisible && selections?.length === 0 && "shake"
         }`}
       >
         <input

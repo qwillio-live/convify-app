@@ -358,7 +358,7 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:ring-0
           focus-visible:ring-transparent
           focus-visible:ring-offset-0 peer-focus-visible:outline-none
-          ${!isFilled && alarm && "!border-red-600"}
+          ${!isFilled && alarm && "shake !border-red-600"}
           `
               )}
               onChange={(e) => {
@@ -411,7 +411,8 @@ export const UserInputGen = ({ ...props }) => {
                 borderBottomRightRadius: props.errorStyles.bottomRightRadius,
               }}
             >
-              <div className="p-2">x Please specify an answer</div>
+              <div className="p-2">{IconsList[props.errorIcon]}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}
@@ -676,7 +677,7 @@ export const UserInput = ({ ...props }) => {
               }}
               className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (props.isActive && props.floatingLabel) ||
-                (props.inputValue.length > 0 && props.floatingLabel)
+                (props.inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
                   : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${

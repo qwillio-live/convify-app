@@ -589,6 +589,7 @@ export const UserToolbox = () => {
                         label={t("TextArea")}
                         // label={t("Label")}
                         placeholder={t("TextArea")}
+                        inputValue={""}
                         // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>

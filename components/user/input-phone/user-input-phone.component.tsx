@@ -20,13 +20,17 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputPhoneSettings } from "./user-input-phone-settings.component"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -249,15 +253,26 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations("Components")
   const [error, setError] = useState(props.error)
   const [uniqueId, setUniqueId] = useState("")
   const [svgIcon, setSvgIcon] = useState("")
-
+  const [isFilled, setIsFilled] = useState(false)
+  const dispatch = useAppDispatch()
+  const fullScreenData = useAppSelector((state) =>
+    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
+  )
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+  )
+  const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  console.log("iin user phone", typeof screenData, screenData)
   useEffect(() => {
     const generateUniqueId = () => {
       return Math.random().toString(36).substring(7)
     }
-
+    // if (inputRef.current) inputRef.current.value = screenData //
+    setInputValue(screenData)
     setUniqueId(generateUniqueId())
   }, [])
 
@@ -335,7 +350,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
               }}
               className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
-                (inputValue.length > 0 && props.floatingLabel)
+                (inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
                   : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${
@@ -360,7 +375,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  `flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200
+                  ${!isFilled && alarm && "shake !border-red-600"}
+                  `
                 )}
                 style={{
                   backgroundColor: "#fff",
@@ -432,9 +449,28 @@ export const UserInputPhoneGen = ({ ...props }) => {
                 focus-visible:outline-none
                 focus-visible:ring-0
                 focus-visible:ring-transparent focus-visible:ring-offset-0
-                peer-focus-visible:outline-none`
+                peer-focus-visible:outline-none
+                ${!isFilled && alarm && "shake !border-red-600"}
+                `
               )}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => {
+                if (isFilled && e.target.value === "") {
+                  dispatch(setUpdateFilledCount(-1))
+                  setIsFilled(false)
+                } else {
+                  if (!isFilled) dispatch(setUpdateFilledCount(1))
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        isArray: false,
+                        entity: "inputValue",
+                        newSelections: [e.target.value],
+                      })
+                    ),
+                    setIsFilled(true)
+                }
+              }}
               onBlur={() => setIsActive(false)}
               autoFocus={isFocused}
             />
@@ -442,9 +478,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {props.error && (
+          {alarm && !isFilled && (
             <div
-              className="error-container mt-0 flex flex-row items-center gap-0 border"
+              className={`error-container shake shake mt-0 flex flex-row items-center gap-0 border `}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -458,7 +494,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">
+                {t("Please enter a valid phone number")}
+              </div>
             </div>
           )}
           {/** End error container */}
@@ -657,7 +695,7 @@ export const UserInputPhone = ({ ...props }) => {
               }}
               className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (props.isActive && props.floatingLabel) ||
-                (props.inputValue.length > 0 && props.floatingLabel)
+                (props?.inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
                   : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${
@@ -804,7 +842,7 @@ export const UserInputPhone = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}
