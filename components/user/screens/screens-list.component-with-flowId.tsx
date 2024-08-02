@@ -187,7 +187,7 @@ const ScreensList = ({ flowId }) => {
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-       className="w-[95vw] overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-32"
+      className="w-[95vw] overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -197,53 +197,122 @@ const ScreensList = ({ flowId }) => {
         <AccordionContent className="w-full">
           <div className="mt-4">{t("Header")}</div>
 
+          {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
+          <div className="  hidden md:block">
           <Card
-            style={{
-              backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
-              backgroundImage: backgroundImage,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-            className={cn(
-              "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
-              {
-                "border-blue-500": headerMode,
-              }
-            )}
-            onClick={() => handleHeaderScreenClick()}
-          >
-            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
+              style={{
+                backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+                backgroundImage: backgroundImage,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className={cn(
+                "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                {
+                  "border-blue-500": headerMode,
+                }
+              )}
+              onClick={() => handleHeaderScreenClick()}
+            >
+              <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
 
-              <ResolvedComponentsFromCraftState screen={screensHeader} />
+                <ResolvedComponentsFromCraftState screen={screensHeader} />
 
+              </div>
+              <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
+            </Card>
             </div>
-            <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
-          </Card>
+            
+                      {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
+          <button
+            className="md:hidden"
+            onClick={() => {
+              setDesktopDrawerOpen(true)
+              setShareDrawerOpen(false)
+            }}
+          >
+            <Card
+              style={{
+                backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+                backgroundImage: backgroundImage,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className={cn(
+                "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                {
+                  "border-blue-500": headerMode,
+                }
+              )}
+              onClick={() => handleHeaderScreenClick()}
+            >
+              <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
+
+                <ResolvedComponentsFromCraftState screen={screensHeader} />
+
+              </div>
+              <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
+            </Card>
+          </button>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
-
+          
+                      {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
+          <div className="  hidden md:block">
           <Card
-            style={{
-              backgroundColor: backgroundColor,
-              backgroundImage: backgroundImage,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-            className={cn(
-              "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
-              {
-                "border-blue-500": footerMode,
-              }
-            )}
-            onClick={() => handleFooterScreenClick()}
-          >
-            <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
-              <ResolvedComponentsFromCraftState screen={screensFooter} />
+              style={{
+                backgroundColor: backgroundColor,
+                backgroundImage: backgroundImage,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className={cn(
+                "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                {
+                  "border-blue-500": footerMode,
+                }
+              )}
+              onClick={() => handleFooterScreenClick()}
+            >
+              <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
+              <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
+                <ResolvedComponentsFromCraftState screen={screensFooter} />
+              </div>
+            </Card>
             </div>
-          </Card>
+            
+                      {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
+          <button
+            className="md:hidden"
+            onClick={() => {
+              setDesktopDrawerOpen(true)
+              setShareDrawerOpen(false)
+            }}
+          >
+            <Card
+              style={{
+                backgroundColor: backgroundColor,
+                backgroundImage: backgroundImage,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className={cn(
+                "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                {
+                  "border-blue-500": footerMode,
+                }
+              )}
+            >
+              <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
+              <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
+                <ResolvedComponentsFromCraftState screen={screensFooter} />
+              </div>
+            </Card>
+          </button>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
@@ -304,10 +373,10 @@ const ScreensList = ({ flowId }) => {
                     >
                       {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
                       <Card
-                      onClick={() => {
-                        setDesktopDrawerOpen(true)
-                        setShareDrawerOpen(false)
-                      }}
+                        onClick={() => {
+                          setDesktopDrawerOpen(true)
+                          setShareDrawerOpen(false)
+                        }}
                         style={{
                           backgroundColor: backgroundColor,
                           backgroundImage: backgroundImage,
@@ -316,7 +385,7 @@ const ScreensList = ({ flowId }) => {
                           backgroundPosition: "center",
                         }}
                         className={cn(
-                         "h-32 w-[94vw] md:hidden md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                          "h-32 w-[94vw] md:hidden md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                           {
                             "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
                             "hover:border-4": (selectedScreenIndex !== index),
