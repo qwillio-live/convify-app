@@ -75,6 +75,12 @@ export const PictureChoiceGen = ({
         props.nodeId
       ]?.props?.selections
   )
+  const isRequired = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.required || false
+  )
   console.log("selected data in opic", screenData)
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -136,6 +142,7 @@ export const PictureChoiceGen = ({
             onValueChange={null}
             forGen={true}
             selections={selectedChoices}
+            isRequired={isRequired}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
@@ -174,7 +181,7 @@ export const PictureChoiceGen = ({
                 })
               } else {
                 console.log("entered else")
-                const newSelection = selectedChoices.includes(choice.id)
+                const newSelection = selectedChoices?.includes(choice.id)
                   ? []
                   : [choice.id]
 
@@ -193,13 +200,14 @@ export const PictureChoiceGen = ({
                     isArray: true,
                   })
                 )
-
-                if (newSelection.length > 0 && !isCountUpdated) {
-                  dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                  setIsCountUpdated(true) // Set count updated flag
-                } else if (newSelection.length === 0 && isCountUpdated) {
-                  dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                  setIsCountUpdated(false) // Reset count updated flag
+                if (isRequired) {
+                  if (newSelection.length > 0 && !isCountUpdated) {
+                    dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                    setIsCountUpdated(true) // Set count updated flag
+                  } else if (newSelection.length === 0 && isCountUpdated) {
+                    dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                    setIsCountUpdated(false) // Reset count updated flag
+                  }
                 }
                 setSelectedChoices(
                   selectedChoices.includes(choice.id) ? [] : [choice.id]
@@ -406,6 +414,7 @@ export const PictureChoice = ({
         >
           {choices.map((choice, index) => (
             <PictureChoiceItem
+              isRequired={false}
               key={index}
               isFirst={index === 0}
               isLast={index === choices.length - 1}
@@ -476,6 +485,7 @@ const PictureChoiceItem = ({
   onValueChange,
   onSelectChange,
   forGen,
+  isRequired,
   selections,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
@@ -563,7 +573,9 @@ const PictureChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
-        className={`${alarm && selections?.length === 0 && "shake"}`}
+        className={`${
+          alarm && isRequired && selections?.length === 0 && "shake"
+        }`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}

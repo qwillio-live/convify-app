@@ -76,6 +76,12 @@ export const SelectGen = ({
         props.nodeId
       ]?.props.selectedOptionId
   )
+  const isRequired = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.required || false
+  )
   useEffect(() => {
     console.log("setting filled true", screenData)
     if (screenData !== "" || screenData !== undefined) {
@@ -88,7 +94,7 @@ export const SelectGen = ({
     (state) => state.screen?.screens[state.screen.selectedScreen].alarm
   )
   const dispatch = useAppDispatch()
-  console.log("in sselect", screenData, selectedOptionId, isFilled)
+  console.log("in sselect", screenData, selectedOptionId, isFilled, isRequired)
   return (
     <div
       className="relative w-full"
@@ -117,7 +123,7 @@ export const SelectGen = ({
               entity: selectedOptionId || "",
             })
           )
-          if (!isFilled) {
+          if (!isFilled && isRequired) {
             console.log("diispathving", isFilled)
             dispatch(setUpdateFilledCount(1))
             setIsFiiled(true)
@@ -138,7 +144,7 @@ export const SelectGen = ({
         <StyledCustomSelectTrigger
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
-          } ${alarm && !isFilled && "shake !border-red-600"}`}
+          } ${alarm && isRequired && !isFilled && "shake !border-red-600"}`}
           fontFamily={fontFamily?.value}
           borderHoverColor={borderHoverColor?.value}
           borderColor={borderColor.value}

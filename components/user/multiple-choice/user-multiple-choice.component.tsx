@@ -82,6 +82,12 @@ export const MultipleChoiceGen = ({
         props.nodeId
       ]?.props?.selections
   )
+  const isRequired = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.required || false
+  )
   const dispatch = useAppDispatch()
   useEffect(() => {
     setSelectedChoices(screenData)
@@ -125,6 +131,7 @@ export const MultipleChoiceGen = ({
         </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem
+            isRequired={isRequired}
             forGen={true}
             key={index}
             isFirst={index === 0}
@@ -203,13 +210,14 @@ export const MultipleChoiceGen = ({
                     isArray: true,
                   })
                 )
-
-                if (newSelection.length > 0 && !isCountUpdated) {
-                  dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                  setIsCountUpdated(true) // Set count updated flag
-                } else if (newSelection.length === 0 && isCountUpdated) {
-                  dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                  setIsCountUpdated(false) // Reset count updated flag
+                if (isRequired) {
+                  if (newSelection.length > 0 && !isCountUpdated) {
+                    dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                    setIsCountUpdated(true) // Set count updated flag
+                  } else if (newSelection.length === 0 && isCountUpdated) {
+                    dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                    setIsCountUpdated(false) // Reset count updated flag
+                  }
                 }
                 setSelectedChoices(
                   selectedChoices.includes(choice.id) ? [] : [choice.id]
@@ -421,6 +429,7 @@ export const MultipleChoice = ({
           {choices.map((choice, index) => (
             <MultipleChoiceItem
               forGen={false}
+              isRequired={false}
               key={index}
               isFirst={index === 0}
               isLast={index === choices.length - 1}
@@ -477,6 +486,7 @@ export const MultipleChoice = ({
 
 const MultipleChoiceItem = ({
   isFirst,
+  isRequired,
   isLast,
   isCollapsed,
   isSelected,
@@ -558,7 +568,11 @@ const MultipleChoiceItem = ({
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
         className={`${
-          alarm && !checkboxVisible && selections?.length === 0 && "shake"
+          alarm &&
+          isRequired &&
+          !checkboxVisible &&
+          selections?.length === 0 &&
+          "shake"
         }`}
       >
         <input
@@ -581,6 +595,7 @@ const MultipleChoiceItem = ({
                 <Checkbox
                   className={`!size-5 [&>span>svg]:!size-4 ${
                     alarm &&
+                    isRequired &&
                     selections.length === 0 &&
                     "shake !border-2 !border-red-600"
                   }`}
@@ -592,6 +607,7 @@ const MultipleChoiceItem = ({
                 <RadioGroupItem
                   className={`!size-5 [&>span>svg]:!size-3.5 ${
                     alarm &&
+                    isRequired &&
                     selections.length === 0 &&
                     "shake !border-2 !border-red-600"
                   }`}

@@ -266,6 +266,12 @@ export const UserInputPhoneGen = ({ ...props }) => {
     (state) => state.screen?.screens[state.screen.selectedScreen].alarm
   )
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  const isRequired = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.inputRequired || false
+  )
   console.log("iin user phone", typeof screenData, screenData)
   useEffect(() => {
     const generateUniqueId = () => {
@@ -376,7 +382,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
               <div
                 className={cn(
                   `flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200
-                  ${!isFilled && alarm && "shake !border-red-600"}
+                  ${!isFilled && alarm && isRequired && "shake !border-red-600"}
                   `
                 )}
                 style={{
@@ -450,15 +456,28 @@ export const UserInputPhoneGen = ({ ...props }) => {
                 focus-visible:ring-0
                 focus-visible:ring-transparent focus-visible:ring-offset-0
                 peer-focus-visible:outline-none
-                ${!isFilled && alarm && "shake !border-red-600"}
+                ${!isFilled && alarm && isRequired && "shake !border-red-600"}
                 `
               )}
               onChange={(e) => {
-                if (isFilled && e.target.value === "") {
-                  dispatch(setUpdateFilledCount(-1))
-                  setIsFilled(false)
+                if (isRequired) {
+                  if (isFilled && e.target.value === "") {
+                    dispatch(setUpdateFilledCount(-1))
+                    setIsFilled(false)
+                  } else {
+                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    setInputValue(e.target.value),
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: [e.target.value],
+                        })
+                      ),
+                      setIsFilled(true)
+                  }
                 } else {
-                  if (!isFilled) dispatch(setUpdateFilledCount(1))
                   setInputValue(e.target.value),
                     dispatch(
                       setPreviewScreenData({
@@ -467,8 +486,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                         entity: "inputValue",
                         newSelections: [e.target.value],
                       })
-                    ),
-                    setIsFilled(true)
+                    )
                 }
               }}
               onBlur={() => setIsActive(false)}
@@ -478,7 +496,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {alarm && !isFilled && (
+          {alarm && !isFilled && isRequired && (
             <div
               className={`error-container shake shake mt-0 flex flex-row items-center gap-0 border `}
               style={{

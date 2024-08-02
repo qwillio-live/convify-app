@@ -228,6 +228,12 @@ export const UserInputCheckboxGen = ({ ...props }) => {
     (state) => state.screen?.screens[state.screen.selectedScreen].alarm
   )
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  const isRequired = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.inputRequired || false
+  )
   useEffect(() => {
     // if (inputRef.current) inputRef.current.value = screenData
     setInputValue(screenData)
@@ -312,7 +318,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 focus-visible:ring-0
                 focus-visible:ring-transparent
                 focus-visible:ring-offset-0 peer-focus-visible:outline-none
-                ${alarm && !isFilled && "!border-red-600"}
+                ${alarm && isRequired && !isFilled && "!border-red-600"}
                 `
               )}
             >
@@ -327,7 +333,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                   checked={inputValue === "true"}
                   className={cn(
                     `z-50 mr-2 h-4 w-4 rounded-[5px] bg-white ${
-                      alarm && !isFilled && "!border-red-600"
+                      alarm && isRequired && !isFilled && "!border-red-600"
                     }`
                   )}
                   checkmarkColor={primaryTextColor}
@@ -335,24 +341,35 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                     borderColor: "#dfdfdf",
                   }}
                   onClick={() => {
-                    if (isFilled) {
-                      // If the checkbox is already filled, uncheck it
-                      dispatch(setUpdateFilledCount(-1)) // Decrease filled count
-                      setIsFilled(false) // Update isFilled state
-                      setInputValue("false") // Set inputValue to false
-                      dispatch(
-                        setPreviewScreenData({
-                          nodeId: props.nodeId,
-                          isArray: false,
-                          entity: "inputValue",
-                          newSelections: ["false"],
-                        })
-                      )
+                    if (isRequired) {
+                      if (isFilled) {
+                        // If the checkbox is already filled, uncheck it
+                        dispatch(setUpdateFilledCount(-1)) // Decrease filled count
+                        setIsFilled(false) // Update isFilled state
+                        setInputValue("false") // Set inputValue to false
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId: props.nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: ["false"],
+                          })
+                        )
+                      } else {
+                        // If the checkbox is not filled, check it
+                        dispatch(setUpdateFilledCount(1)) // Increase filled count
+                        setIsFilled(true) // Update isFilled state
+                        setInputValue("true") // Set inputValue to true
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId: props.nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: ["true"],
+                          })
+                        )
+                      }
                     } else {
-                      // If the checkbox is not filled, check it
-                      dispatch(setUpdateFilledCount(1)) // Increase filled count
-                      setIsFilled(true) // Update isFilled state
-                      setInputValue("true") // Set inputValue to true
                       dispatch(
                         setPreviewScreenData({
                           nodeId: props.nodeId,

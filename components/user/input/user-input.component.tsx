@@ -83,6 +83,7 @@ export const UserInputGen = ({ ...props }) => {
   const icon = props.icon
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
+  const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
   const fullScreenData = useAppSelector((state) =>
     JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
@@ -93,6 +94,12 @@ export const UserInputGen = ({ ...props }) => {
       (screen) =>
         screen.props.label === props.label && screen.props.inputRequired
     )
+  const isRequired = useAppSelector(
+    (state) =>
+      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+        props.nodeId
+      ]?.props?.inputRequired || false
+  )
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
@@ -358,15 +365,36 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:ring-0
           focus-visible:ring-transparent
           focus-visible:ring-offset-0 peer-focus-visible:outline-none
-          ${!isFilled && alarm && "shake !border-red-600"}
+          ${!isFilled && alarm && isRequired && "shake !border-red-600"}
           `
               )}
               onChange={(e) => {
-                if (isFilled && e.target.value === "") {
-                  dispatch(setUpdateFilledCount(-1))
-                  setIsFilled(false)
+                if (isRequired) {
+                  if (isFilled && e.target.value === "") {
+                    dispatch(setUpdateFilledCount(-1))
+                    setIsFilled(false)
+                  } else {
+                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    setInputValue(e.target.value),
+                      dispatch(
+                        setFieldProp({
+                          screenId: props.parentScreenId,
+                          fieldId: props.nodeId,
+                          fieldName: "fieldValue",
+                          fieldValue: e.target.value,
+                        }),
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: [e.target.value],
+                          })
+                        ),
+                        setIsFilled(true)
+                      )
+                  }
                 } else {
-                  if (!isFilled) dispatch(setUpdateFilledCount(1))
                   setInputValue(e.target.value),
                     dispatch(
                       setFieldProp({
@@ -382,8 +410,7 @@ export const UserInputGen = ({ ...props }) => {
                           entity: "inputValue",
                           newSelections: [e.target.value],
                         })
-                      ),
-                      setIsFilled(true)
+                      )
                     )
                 }
               }}
@@ -396,7 +423,7 @@ export const UserInputGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {!isFilled && alarm && (
+          {!isFilled && isRequired && alarm && (
             <div
               className={`error-container shake mt-0 flex flex-row items-center gap-0 border text-red-600`}
               style={{

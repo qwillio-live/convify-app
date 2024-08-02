@@ -609,7 +609,7 @@ export const PictureChoiceItemSettings = ({
       ...choices.slice(index + 1),
     ])
   }
-  console.log("choicessssssss:", choices)
+  console.log("choicessssssss:", choices, selections)
   return (
     <Reorder.Item
       dragListener={false}
