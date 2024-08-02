@@ -402,6 +402,7 @@ const ScreensList = ({ flowId }) => {
       <ShareDrawerDesktop
         desktopDrawerOpen={desktopDrawerOpen}
         setDesktopDrawerOpen={setDesktopDrawerOpen}
+        flowId={flowId}
       />
     </Accordion>
   )
