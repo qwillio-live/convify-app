@@ -471,7 +471,7 @@ const UserInputStyled = styled(Input)<{
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 50px;
-  background-color: "transparent";
+  background: #ffffff;
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
