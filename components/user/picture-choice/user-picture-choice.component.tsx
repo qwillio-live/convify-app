@@ -377,9 +377,9 @@ export const PictureChoice = ({
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
-          paddingTop: `${marginTop + 10}px`,
+          paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft + 10}px`,
+          paddingLeft: `${marginLeft}px`,
           paddingRight: `${marginRight}px`,
         }}
       >
