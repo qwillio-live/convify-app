@@ -196,6 +196,7 @@ const MobileForwarderComponent = () => {
             href={`https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(
               `${t("I would like to receive link for my account")}=${userId}`
             )}`}
+            target="_blank"
             className="flex w-full justify-center"
           >
             <Button variant={"green"} size={"mobileForwarder"}>
@@ -220,6 +221,7 @@ const MobileForwarderComponent = () => {
             )}&text=${encodeURIComponent(
               `${t("I would like to receive link for my account")}=${userId}`
             )}`}
+            target="_blank"
             className="flex w-full justify-center"
           >
             <Button variant={"lightBlue"} size={"mobileForwarder"}>
