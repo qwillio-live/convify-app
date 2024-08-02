@@ -22,12 +22,11 @@ import { Minus, Plus } from "lucide-react"
 import { Bar, BarChart, ResponsiveContainer } from "recharts"
 import "./Share.css"
 
+
 export const ShareDrawerDesktop = ({
   desktopDrawerOpen,
   setDesktopDrawerOpen,
   flowId,
-}:{
-  flowId?: string
 }) => {
   const t = useTranslations("CreateFlow.SharePage")
   
@@ -115,14 +114,6 @@ export const ShareDrawerDesktop = ({
                   <span className="ml-2 mr-5"> {t("Send on Telegram")}</span>
                 </Button>
                 </Link>
-
-
-
-
-
-
-
-
 
             <DrawerClose asChild>
               <Button
