@@ -229,7 +229,7 @@ export const MultipleChoiceGen = ({
                   }
                 }
                 setSelectedChoices(
-                  selectedChoices.includes(choice.id) ? [] : [choice.id]
+                  selectedChoices?.includes(choice.id) ? [] : [choice.id]
                 )
               }
             }}

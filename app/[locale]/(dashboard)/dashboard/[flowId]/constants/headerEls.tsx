@@ -36,6 +36,9 @@ const Header = ({ flowId }) => {
   const dispatch = useAppDispatch()
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [userData, setUserData] = useState<User>()
+  const screeenName = useAppSelector(
+    (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
+  )
   console.log("flowId in header", flowId)
   useEffect(() => {
     fetch("/api/users")
@@ -75,10 +78,10 @@ const Header = ({ flowId }) => {
         ? "text-foreground border-current"
         : "text-muted-foreground border-transparent"
     }`
-  const currentScreenName = useAppSelector(
-    (state) => state?.screen?.currentScreenName
+  const selectedScreen = useAppSelector(
+    (state) => state?.screen?.selectedScreen
   )
-  console.log("currentScreenName", currentScreenName)
+  console.log("currentScreenName", screeenName)
   const handleNavigation = () => {
     console.log("-------dispatching---------")
     dispatch(setSelectedScreen(0))
@@ -131,12 +134,9 @@ const Header = ({ flowId }) => {
           </Link>
         </div>
       </div>
-      <div
-        className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full"
-        onClick={handleNavigation}
-      >
+      <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
         <Link
-          href={`/dashboard/preview-flow/${flowId}?screen=${currentScreenName}`}
+          href={`/dashboard/preview-flow/${flowId}?screen=${screeenName}`}
           target="_blank"
         >
           <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">
