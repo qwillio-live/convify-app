@@ -49,7 +49,7 @@ import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { useTranslations } from "next-intl"
 
 const ScreensList = () => {
-  const t = useTranslations("Components");
+  const t = useTranslations("Components")
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
@@ -59,7 +59,9 @@ const ScreensList = () => {
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
-  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -99,7 +101,6 @@ const ScreensList = () => {
   // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
   // }
   // }, []);
-
 
   const handleReorder = (data) => {
     dispatch(setScreens(data))
@@ -143,7 +144,8 @@ const ScreensList = () => {
     async (index: number) => {
       if (screens) {
         dispatch(duplicateScreen(index))
-        await actions.deserialize(editorLoad)
+        await actions.deserialize(screens[index].screenData)
+        // })
       }
     },
     [dispatch, screens]
@@ -178,7 +180,7 @@ const ScreensList = () => {
   return (
     <Accordion
       type="multiple"
-      className="w-full overflow-x-hidden max-w-[13.5vw] pb-32"
+      className="w-full max-w-[13.5vw] overflow-x-hidden pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1">
@@ -190,29 +192,30 @@ const ScreensList = () => {
 
           <Card
             style={{
-              backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+              backgroundColor:
+                avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                  ? avatarBackgroundColor
+                  : backgroundColor,
               backgroundImage: backgroundImage,
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
             className={cn(
-              "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
+              "relative mt-2 flex h-12 w-[13.5vw] flex-col items-center justify-center overflow-hidden border p-4 hover:cursor-pointer",
               {
                 "border-blue-500": headerMode,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
           >
-            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
-
+            <div className="text-muted-foreground absolute bottom-[70%] top-0 h-auto w-[40vw] scale-[.30] text-xs">
               <ResolvedComponentsFromCraftState screen={screensHeader} />
-
             </div>
-            <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
+            <div className="absolute left-0 top-0 z-10 size-full bg-transparent"></div>
           </Card>
           <Separator className="my-4" />
-          <p className="text-sm text-muted-foreground">{t("Footer")}</p>
+          <p className="text-muted-foreground text-sm">{t("Footer")}</p>
 
           <Card
             style={{
@@ -223,15 +226,15 @@ const ScreensList = () => {
               backgroundPosition: "center",
             }}
             className={cn(
-              "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
+              "relative mt-2 flex h-12 w-[13.5vw] flex-col items-center justify-center overflow-hidden border p-4 hover:cursor-pointer",
               {
                 "border-blue-500": footerMode,
               }
             )}
             onClick={() => handleFooterScreenClick()}
           >
-            <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
-            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
+            <div className="absolute bottom-0 left-0 z-10 size-full bg-transparent"></div>
+            <div className="text-muted-foreground absolute bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
               <ResolvedComponentsFromCraftState screen={screensFooter} />
             </div>
           </Card>
@@ -261,9 +264,9 @@ const ScreensList = () => {
             axis="y"
             onReorder={handleReorder}
             values={screens || []}
-          // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
-          // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
-          // layoutScroll
+            // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
+            // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
+            // layoutScroll
           >
             {screens?.map((screen: any, index) => (
               <Reorder.Item
@@ -274,12 +277,12 @@ const ScreensList = () => {
                   dispatch(setSelectedComponent("ROOT")),
                     dispatch(setHeaderFooterMode(false))
                 }}
-              // className="relative"
+                // className="relative"
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
                     {" "}
-                    <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
+                    <div className="mt-4 flex flex-row items-center justify-between gap-4 px-2">
                       <span>{index + 1}</span>
                       <EditScreenName
                         screenId={screen.screenId}
@@ -295,24 +298,36 @@ const ScreensList = () => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "h-60 w-[13.5vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "relative mt-2 flex h-60 w-[13.5vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer",
                         {
-                          "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
+                          "border-blue-500":
+                            selectedScreenIndex === index && !headerFooterMode,
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
-                      <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div>
-                      <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <div style={{ background: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor }}>
-                          <ResolvedComponentsFromCraftState screen={screensHeader} />
+                      <div className="absolute left-0 top-0 z-10 size-full size-full bg-transparent"></div>
+                      <div className="text-muted-foreground relative scale-[.20] text-xs">
+                        <div
+                          style={{
+                            background:
+                              avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                                ? avatarBackgroundColor
+                                : backgroundColor,
+                          }}
+                        >
+                          <ResolvedComponentsFromCraftState
+                            screen={screensHeader}
+                          />
                         </div>
-                        <div style={{ paddingTop: '50px' }}>
+                        <div style={{ paddingTop: "50px" }}>
                           <ResolvedComponentsFromCraftState
                             screen={screen.screenData ? screen.screenData : {}}
                           />
                         </div>
-                        <ResolvedComponentsFromCraftState screen={screensFooter} />
+                        <ResolvedComponentsFromCraftState
+                          screen={screensFooter}
+                        />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
@@ -336,7 +351,7 @@ const ScreensList = () => {
                       onClick={() => handleDeleteScreen(index)}
                     >
                       <Trash2 size={18} />
-                      <span>{("Delete")}</span>
+                      <span>{"Delete"}</span>
                     </ContextMenuItem>
                   </ContextMenuContent>
                 </ContextMenu>
@@ -389,14 +404,14 @@ const EditScreenName = ({ screenId, screenName }) => {
       {!editing && (
         <div
           onClick={() => setEditing(true)}
-          className="flex flex-row gap-2 items-center border border-transparent text-current bg-slate-gray-200 p-2 grow justify-end hover:cursor-text"
+          className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-2 border border-transparent p-2 text-current hover:cursor-text"
         >
           <Pencil size={16} className="shrink-0" />
-          <div className="h-10 p-2 truncate">{screenName}</div>
+          <div className="h-10 truncate p-2">{screenName}</div>
         </div>
       )}
       {editing && (
-        <div className="flex flex-row gap-2 items-center text-current bg-slate-gray-200 p-2 grow justify-end">
+        <div className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-2 p-2 text-current">
           <Input
             ref={ref}
             className="text-right"
@@ -413,7 +428,7 @@ const EditScreenName = ({ screenId, screenName }) => {
 }
 
 function HelperInformation() {
-  const t = useTranslations("Components");
+  const t = useTranslations("Components")
   return (
     <Card
       className={cn(
@@ -426,7 +441,9 @@ function HelperInformation() {
           <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
             {t("Right-Click")}
           </h2>
-          <p className="text-sm font-light">{t("Click on a screen to edit it")}</p>
+          <p className="text-sm font-light">
+            {t("Click on a screen to edit it")}
+          </p>
         </div>
       </div>
     </Card>

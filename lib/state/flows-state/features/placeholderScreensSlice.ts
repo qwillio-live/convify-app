@@ -533,32 +533,55 @@ export const screensSlice = createSlice({
     },
     duplicateScreen: (state, action: PayloadAction<number>) => {
       console.log("entered placeholders")
-      const newScreens = [...state.screens] // Create new array
+
+      // Create a copy of the current screens array
+      const newScreens = [...state.screens]
+
+      // Generate a new unique ID
       const newId = hexoid(8)()
-      const previousId = state.screens[action.payload].screenId
+
+      // Get the index of the screen to duplicate
+      const indexToDuplicate = action.payload
+
+      // Get the screen data to duplicate
+      const screenToDuplicate = state.screens[indexToDuplicate]
+
+      // Create a new screen object, copying all properties except the ID
       const newScreen = {
         screenId: newId,
-        screenName: "",
-        screenData: "",
-        screenLink: "",
-        screenTemplateId: "",
-        screenFields: {},
-        screenValidated: false,
-        screenToggleError: false,
-        selectedData: [],
-        alarm: false,
-        totalRequired: 0,
-        totalFilled: 0,
+        screenName: "screen-" + newId,
+        screenData: screenToDuplicate.screenData,
+        screenLink: screenToDuplicate.screenLink,
+        screenTemplateId: screenToDuplicate.screenTemplateId,
+        screenFields: { ...screenToDuplicate.screenFields }, // Deep copy if necessary
+        screenValidated: screenToDuplicate.screenValidated,
+        screenToggleError: screenToDuplicate.screenToggleError,
+        selectedData: [...screenToDuplicate.selectedData],
+        alarm: screenToDuplicate.alarm,
+        totalRequired: screenToDuplicate.totalRequired,
+        totalFilled: screenToDuplicate.totalFilled,
       }
-      state.screensFieldsList[newId] = state.screensFieldsList[previousId]
-      newScreen.screenData = state.screens[action.payload].screenData // Create new object
-      newScreen.screenName = "screen-" + newScreen.screenId
-      newScreens.splice(action.payload + 1, 0, newScreen)
+
+      // Add the new screen right after the original
+      newScreens.splice(indexToDuplicate + 1, 0, newScreen)
+
+      // Update the screens array in the state
       state.screens = newScreens
-      state.selectedScreen = action.payload + 1
-      state.editorLoad = newScreen.screenData // Ensure new reference
+
+      // Ensure the new screen data is loaded in the editor
+      state.editorLoad = newScreen.screenData
+
+      // Update selectedScreen to point to the newly duplicated screen
+      state.selectedScreen = indexToDuplicate + 1
+
+      // Update the screensFieldsList if necessary
+      state.screensFieldsList[newId] =
+        state.screensFieldsList[screenToDuplicate.screenId]
+
+      // Update the first screen name if necessary
       state.firstScreenName = state.screens[0].screenName
     },
+
     deleteScreen: (state, action: PayloadAction<number>) => {
       if (state.screens.length === 1) return
       const screenToDelete = action.payload
