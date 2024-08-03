@@ -544,7 +544,7 @@ const PictureChoiceItem = ({
   }
   const handleNavigateToContent = () => {
     console.log("validation in pic", choice?.nextScreen, required, !isSelected)
-    if (choice?.nextScreen !== "none" && required && !isSelected) {
+    if (choice?.nextScreen !== "none") {
       dispatch(
         validateScreen({
           current: currentScreenName,

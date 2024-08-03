@@ -387,12 +387,16 @@ export const UserInputPhoneGen = ({ ...props }) => {
                 )}
                 style={{
                   backgroundColor: "#fff",
-                  borderColor: error
-                    ? "#cc0000"
-                    : isActive
-                    ? props.activeBorderColor.value
-                    : props.borderColor.value,
-                  borderBottomLeftRadius: error ? 0 : props.bottomLeftRadius,
+                  borderColor:
+                    !isFilled && alarm && isRequired
+                      ? "#cc0000"
+                      : isActive
+                      ? props.activeBorderColor.value
+                      : props.borderColor.value,
+                  borderBottomLeftRadius:
+                    !isFilled && alarm && isRequired
+                      ? 0
+                      : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
                   borderTopWidth: props.borderTopWidth,
                   borderBottomWidth: props.borderBottomWidth,
@@ -420,7 +424,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
-              error={props.error}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -459,6 +463,13 @@ export const UserInputPhoneGen = ({ ...props }) => {
                 ${!isFilled && alarm && isRequired && "shake !border-red-600"}
                 `
               )}
+              onKeyPress={(e) => {
+                const charCode = e.charCode
+                // Allow only digits
+                if (charCode < 48 || charCode > 57) {
+                  e.preventDefault()
+                }
+              }}
               onChange={(e) => {
                 if (isRequired) {
                   if (isFilled && e.target.value === "") {

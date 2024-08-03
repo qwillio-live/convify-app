@@ -309,14 +309,16 @@ export const UserInputGen = ({ ...props }) => {
                 )}
                 style={{
                   backgroundColor: "transparent",
-                  borderColor: fieldError
-                    ? "#cc0000"
-                    : isActive
-                    ? props.activeBorderColor.value
-                    : props.borderColor.value,
-                  borderBottomLeftRadius: fieldError
-                    ? 0
-                    : props.bottomLeftRadius,
+                  borderColor:
+                    !isFilled && alarm && isRequired
+                      ? "#cc0000"
+                      : isActive
+                      ? props.activeBorderColor.value
+                      : props.borderColor.value,
+                  borderBottomLeftRadius:
+                    !isFilled && alarm && isRequired
+                      ? 0
+                      : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
                   borderTopWidth: props.borderTopWidth,
                   borderBottomWidth: props.borderBottomWidth,
@@ -344,7 +346,7 @@ export const UserInputGen = ({ ...props }) => {
                   : props.borderColor.value
               }
               // error={props.error}
-              error={fieldError}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}

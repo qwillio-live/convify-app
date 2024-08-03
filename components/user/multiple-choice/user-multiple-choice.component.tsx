@@ -200,19 +200,19 @@ export const MultipleChoiceGen = ({
                 })
               } else {
                 console.log("entered else")
-                const newSelection = selectedChoices.includes(choice.id)
+                const newSelection = selectedChoices?.includes(choice.id)
                   ? []
                   : [choice.id]
 
                 dispatch(
                   setSelectedData(
-                    selectedChoices.includes(choice.id) ? [] : [choice.id]
+                    selectedChoices?.includes(choice.id) ? [] : [choice.id]
                   )
                 )
                 dispatch(
                   setPreviewScreenData({
                     nodeId: props.nodeId,
-                    newSelections: selectedChoices.includes(choice.id)
+                    newSelections: selectedChoices?.includes(choice.id)
                       ? []
                       : [choice.id],
                     entity: "selections",
@@ -539,7 +539,7 @@ const MultipleChoiceItem = ({
     replace(`${pathname}?${params.toString()}`)
   }
   const handleNavigateToContent = () => {
-    if (choice?.nextScreen !== "none" && required && !isSelected) {
+    if (choice?.nextScreen !== "none") {
       dispatch(
         validateScreen({
           current: currentScreenName,

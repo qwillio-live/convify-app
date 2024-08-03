@@ -182,29 +182,21 @@ export const TextInputDefaultProps: TextInputProps = {
 
 const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
-  background: ${(props) => `var(${props?.background})`};
+  background: ${(props) => `${props?.background}`};
   display: flex;
   flex-direction: row;
   position: relative;
-  font-size: 18;
-  font-weight: 400;
+  font-size: ${(props) => `${props?.fontSize}`}px;
+  font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
   transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
 
   &:focus {
     border-color: ${(props) =>
       props.borderHoverColor}; /* Change to your desired focus border color */
   }
 
-  color: ${(props) => `var(${props?.color})`};
+  color: ${(props) => `${props?.color}`};
   overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
@@ -212,7 +204,7 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
       : ContainerWidthValues[props.size || "medium"]};
   width: 100%;
   box-sizing: border-box;
-  height: ${(props) => props.height}px;
+  height: ${(props) => props.height};
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
@@ -294,7 +286,9 @@ export const UserTextInputGen = ({
       <StyledCustomTextInput
         fontFamily={primaryFont}
         color={color?.value}
-        background={background?.value}
+        background={containerBackground}
+        fontSize={fontSize}
+        fontWeight={fontWeight}
         backgroundHover={backgroundHover?.value}
         borderHoverColor={borderHoverColor?.value}
         colorHover={colorHover?.value}

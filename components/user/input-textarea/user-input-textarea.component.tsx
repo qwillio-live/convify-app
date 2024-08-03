@@ -282,7 +282,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
-              error={props.error}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
