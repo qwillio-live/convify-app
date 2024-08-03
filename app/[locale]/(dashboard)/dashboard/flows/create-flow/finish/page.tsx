@@ -120,8 +120,8 @@ export default function SelectColor() {
       {!desktopDrawerOpen && (
         <div className="flex h-full w-full pl-6">
           <div className="flex w-full">
-            <div className="w-full px-6 py-9 md:w-6/12">
-              <h2 className="mb-5 text-4xl font-semibold">
+            <div className="w-full px-6 pb-9 md:w-6/12">
+              <h2 className="mb-5 mt-9 text-4xl font-semibold">
                 {t("createConvify")}
               </h2>
               <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
