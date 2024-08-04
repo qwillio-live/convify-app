@@ -9,6 +9,9 @@ import {
   Globe,
   Image,
   Linkedin,
+  Smartphone,
+  Laptop,
+  PlusCircle
 } from "lucide-react"
 import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from "lodash"
@@ -21,7 +24,7 @@ import {
   setEditorLoad,
   setFirstScreenName,
   setSelectedComponent,
-  setValidateScreen,
+  setValidateScreen, addScreen, setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -85,6 +88,8 @@ import { BackButton } from "../user/backButton/back-component"
 import { LinkButton } from "../user/link/link-component"
 import { SocialShareButton } from "../user/socialShareButton/share-component"
 import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
+import { useTranslations } from "next-intl"
+import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -109,6 +114,44 @@ const SaveButton = () => {
     </a>
   )
 }
+const AddScreenButton = () => {
+  const dispatch = useAppDispatch()
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const selectedScreenIndex = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  const t = useTranslations("Components");
+
+  const { actions } = useEditor((state, query) => ({
+    enabled: state.options.enabled,
+    actions: state.events.selected,
+  }))
+
+  const handleAddScreen = useCallback(
+    async (index: number) => {
+      if (screens && screens[index]) {
+        console.log(index)
+        dispatch(addScreen(index))
+        await actions.deserialize(JSON.stringify(emptyScreenData))
+      } else {
+        console.error("screens is undefined or index is out of bounds")
+      }
+    },
+    [dispatch, screens]
+  )
+
+  return(
+    <Button
+        variant="outline"
+        size="sm"
+        className="bg-[#f4f4f5]"
+        onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+      >
+        <PlusCircle className="mr-2 size-4" />
+        {t("Add Screen")}
+    </Button>
+  )
+}
 const NodesToSerializedNodes = (nodes) => {
   // getSerializedNodes is present in the useEditor hook
   const {
@@ -123,7 +166,12 @@ const NodesToSerializedNodes = (nodes) => {
 }
 type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
-export function CreateFlowComponent() {
+export function CreateFlowComponent({
+  flowId,
+}: {
+  flowId?: string
+}) {
+  const t = useTranslations("Components");
   const containerRef = React.useRef<HTMLDivElement>(null)
   const editorHeaderRef = React.useRef(null)
   const [height, setHeight] = React.useState(90)
@@ -182,6 +230,11 @@ export function CreateFlowComponent() {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const selectedScreenIndex = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
+  
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
@@ -334,17 +387,17 @@ export function CreateFlowComponent() {
         }}
         onRender={RenderNode}
       >
-        <div className="flex h-[calc(-60px+99vh)] max-h-[calc(-60px+99vh)] flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen basis-[15%] overflow-y-auto border-r px-2 py-6 pr-0">
+        <div className="md:flex h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0">
+          <ScrollArea className="max-h-screen md:basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-body">
-              <ScreensList />
+              <ScreensList flowId={flowId}/>
             </div>
           </ScrollArea>
           <ScrollArea
             onScroll={handleScroll}
             ref={containerRef}
             id="scroll-container"
-            className="max-h-[calc(-60px+99vh)] basis-[55%] overflow-y-auto border-r px-2 py-6 pt-0 "
+            className="max-h-[calc(-52px+99vh)] hidden md:block basis-[55%] overflow-y-auto border-r"
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
@@ -413,16 +466,17 @@ export function CreateFlowComponent() {
                     <ResolvedComponentsFromCraftState screen={screensFooter} />
                   )}
                 </TabsContent>
-                <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">
-                  <TabsTrigger value={VIEWS.MOBILE}>Mobile</TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}>Desktop</TabsTrigger>
+                <TabsList className="absolute bottom-0 z-20  w-100 ">
+                  <AddScreenButton/>
+                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1"><Smartphone className="size-5"/></TabsTrigger>
+                  <TabsTrigger value={VIEWS.DESKTOP}><Laptop className="size-5" /></TabsTrigger>
                 </TabsList>
               </Tabs>
 
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="h-full max-h-[calc(-60px+99vh)]  hidden md:block basis-[15%] overflow-y-auto border-r px-2 py-6">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -430,7 +484,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="max-h-[calc(-60px+99vh)] h-full basis-[15%] overflow-y-auto border-r px-2 py-6 hidden md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>

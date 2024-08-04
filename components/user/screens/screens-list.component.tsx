@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Reorder } from "framer-motion"
 import {
   ClipboardCopy,
@@ -10,7 +10,6 @@ import {
   Trash2,
 } from "lucide-react"
 import { toast } from "sonner"
-
 import { Frame, useEditor } from "@/lib/craftjs"
 import {
   addScreen,
@@ -35,6 +34,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import Link from "next/link"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -47,8 +47,15 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { useTranslations } from "next-intl"
+import { env } from "@/env.mjs"
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
+import Image from "next/image"
 
-const ScreensList = () => {
+const ScreensList = ({
+  flowId,
+}: {
+  flowId?: string
+}) => {
   const t = useTranslations("Components");
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
@@ -79,7 +86,20 @@ const ScreensList = () => {
     enabled: state.options.enabled,
     actions: state.events.selected,
   }))
-
+  const [view, setView] = useState("desktop")
+  const [innerview, setInnerView] = useState("desktop")
+  const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
+  const updateView = () => {
+    if (window.innerWidth >= 1024) {
+      setDesktopDrawerOpen(false)
+      setView("desktop")
+      setInnerView("desktop")
+    } else {
+      setView("mobile")
+      setInnerView("mobile")
+      setDesktopDrawerOpen(true)
+    }
+  }
   const themeSettings = useAppSelector((state: RootState) => state.theme)
   // const [compareLoad,setCompareLoad] = React.useState<any>(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
 
@@ -115,6 +135,7 @@ const ScreensList = () => {
 
   const handleScreenClick = useCallback(
     async (index: number) => {
+      updateView();
       if (screens && screens[index] && screens[index].screenData) {
         dispatch(setSelectedScreen(index))
         await actions.deserialize(screens[index].screenData || {})
@@ -176,12 +197,13 @@ const ScreensList = () => {
   }
 
   return (
+    <>
     <Accordion
       type="multiple"
-      className="w-full overflow-x-hidden max-w-[13.5vw] pb-32"
+      className="w-full overflow-x-hidden md:pt-0 md:max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
-      <AccordionItem value="item-1">
+      <AccordionItem value="item-1" className="border-b-0 hidden md:block">
         <AccordionTrigger className="uppercase hover:no-underline">
           {t("Header & Footer")}
         </AccordionTrigger>
@@ -197,18 +219,18 @@ const ScreensList = () => {
               backgroundPosition: "center",
             }}
             className={cn(
-              "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
+              "flex h-12 w-[13.5vw] mt-1 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
                 "border-blue-500": headerMode,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
           >
-            <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
+                <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
 
-              <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  <ResolvedComponentsFromCraftState screen={screensHeader} />
 
-            </div>
+                </div>
             <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
           </Card>
           <Separator className="my-4" />
@@ -223,7 +245,7 @@ const ScreensList = () => {
               backgroundPosition: "center",
             }}
             className={cn(
-              "flex h-12 w-[13.5vw] mt-2 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
+              "flex h-12 w-[13.5vw] mt-1 flex-col items-center justify-center border p-4 hover:cursor-pointer overflow-hidden relative",
               {
                 "border-blue-500": footerMode,
               }
@@ -246,7 +268,7 @@ const ScreensList = () => {
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
           <HelperInformation />
-          <div className="section-header flex items-center justify-end">
+          {/* <div className="section-header flex items-center justify-end">
             <Button
               variant={"secondary"}
               className=""
@@ -255,7 +277,7 @@ const ScreensList = () => {
               <PlusCircle className="mr-2 size-4" />
               {t("Add Screen")}
             </Button>
-          </div>
+          </div> */}
           {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
           <Reorder.Group
             axis="y"
@@ -278,9 +300,9 @@ const ScreensList = () => {
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
-                    {" "}
-                    <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
-                      <span>{index + 1}</span>
+                    <div className="mt-5 flex flex-row items-center justify-between px-2 gap-4"
+                     onClick={() => updateView()}>
+                      <span className="font-bold">{index + 1}</span>
                       <EditScreenName
                         screenId={screen.screenId}
                         screenName={screen.screenName}
@@ -295,14 +317,15 @@ const ScreensList = () => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "h-60 w-[13.5vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+                        "h-32 w-[96vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
                           "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
+                          "hover:border-4": (selectedScreenIndex !== index),
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
-                      <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div>
+                        {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
                         <div style={{ background: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor }}>
                           <ResolvedComponentsFromCraftState screen={screensHeader} />
@@ -347,6 +370,12 @@ const ScreensList = () => {
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+    <ShareDrawerDesktop
+      desktopDrawerOpen={desktopDrawerOpen}
+      setDesktopDrawerOpen={setDesktopDrawerOpen}
+      flowId={flowId}
+    />
+  </>
   )
 }
 
@@ -389,10 +418,10 @@ const EditScreenName = ({ screenId, screenName }) => {
       {!editing && (
         <div
           onClick={() => setEditing(true)}
-          className="flex flex-row gap-2 items-center border border-transparent text-current bg-slate-gray-200 p-2 grow justify-end hover:cursor-text"
+          className="flex flex-row gap-1 items-center border border-transparent text-current bg-slate-gray-200 grow justify-end hover:cursor-text"
         >
           <Pencil size={16} className="shrink-0" />
-          <div className="h-10 p-2 truncate">{screenName}</div>
+          <div className="truncate">{screenName}</div>
         </div>
       )}
       {editing && (
@@ -417,7 +446,7 @@ function HelperInformation() {
   return (
     <Card
       className={cn(
-        "flex w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer"
+        "md:flex hidden w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer"
       )}
     >
       <div className="flex flex-row items-start gap-1 text-left">

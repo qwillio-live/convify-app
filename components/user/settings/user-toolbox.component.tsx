@@ -329,7 +329,7 @@ export const UserToolbox = () => {
             type="multiple"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
           >
-            <AccordionItem value="item-1">
+            <AccordionItem value="item-1" className="border-b-0">
               <AccordionTrigger className="uppercase hover:no-underline">
                 Text
               </AccordionTrigger>
@@ -385,7 +385,7 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             {!isHeaderFooterMode && (
-              <AccordionItem value="item-2">
+              <AccordionItem value="item-2" className="border-b-0">
                 <AccordionTrigger className="uppercase hover:no-underline">
                   {t("Input")}
                 </AccordionTrigger>
@@ -687,7 +687,7 @@ export const UserToolbox = () => {
               </AccordionItem>
             )}
 
-            <AccordionItem value="item-3">
+            <AccordionItem value="item-3" className="border-b-0">
               <AccordionTrigger className="uppercase hover:no-underline">
                 {t("Button")}
               </AccordionTrigger>
@@ -1076,7 +1076,7 @@ export const UserToolbox = () => {
             )}
 
             {!isHeaderFooterMode && (
-              <AccordionItem value="item-4">
+              <AccordionItem value="item-4" className="border-b-0">
                 <AccordionTrigger className="uppercase hover:no-underline">
                   Display
                 </AccordionTrigger>
@@ -1192,9 +1192,9 @@ export const UserToolbox = () => {
                       >
                         <div className="flex w-[260px] flex-row items-center justify-center">
                           <div className="relative">
-                            <div className="h-24 w-24 rounded-full border-2 border-gray-300"></div>
+                            <div className="size-24 rounded-full border-2 border-gray-300"></div>
                             <div
-                              className="loader absolute left-0 top-0 inline-block h-24 w-24 animate-spin rounded-full border-2 border-t-2 border-transparent"
+                              className="loader absolute left-0 top-0 inline-block size-24 animate-spin rounded-full border-2 border-transparent"
                               style={{ borderTopColor: primaryColor }}
                             />
                           </div>

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { toast } from "@/components/ui/use-toast"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { Button } from "@/components/ui/button"
+import { env } from "@/env.mjs"
 import {
   Drawer,
   DrawerClose,
@@ -24,8 +25,11 @@ import "./Share.css"
 export const ShareDrawerDesktop = ({
   desktopDrawerOpen,
   setDesktopDrawerOpen,
+  flowId
 }) => {
   const t = useTranslations("CreateFlow.SharePage")
+  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
+  const telegramUser = env.NEXT_PUBLIC_TL_URL
   return (
     <Drawer open={desktopDrawerOpen} onOpenChange={setDesktopDrawerOpen}>
       <DrawerContent className="disable-after outline-none">
@@ -54,7 +58,10 @@ export const ShareDrawerDesktop = ({
               </svg>
               {t("Email me a direct link")}
             </Button>
-            <Button variant={"green"} className=" w-full text-base text-white">
+            <Button variant={"green"} className=" w-full text-base text-white"
+            onClick={() => window.open(`https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(
+              `${t("I would like to get link for my flow")}=${flowId}`
+            )}`, '_blank')}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="-1 -1 16 16"
@@ -71,6 +78,11 @@ export const ShareDrawerDesktop = ({
             <Button
               variant={"lightBlue"}
               className="mb-2 w-full text-base text-white"
+              onClick={() => window.open(`https://telegram.me/share/url?url=${encodeURIComponent(
+                telegramUser
+              )}&text=${encodeURIComponent(
+                `${t("I would like to get link for my flow")}=${flowId}`
+              )}`, '_blank')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
