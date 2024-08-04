@@ -308,7 +308,7 @@ export const UserInputGen = ({ ...props }) => {
                   "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "transparent",
+                  backgroundColor: "#ffffff",
                   borderColor:
                     !isFilled && alarm && isRequired
                       ? "#cc0000"
@@ -745,7 +745,7 @@ export const UserInput = ({ ...props }) => {
                   "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "transparent",
+                  backgroundColor: "#ffffff",
                   borderColor: props.error
                     ? "#cc0000"
                     : props.isActive
