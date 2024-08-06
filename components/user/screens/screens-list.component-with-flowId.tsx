@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState, useRef  } from "react"
 import Link from "next/link"
 import { Reorder } from "framer-motion"
 import {
@@ -183,11 +183,44 @@ const ScreensList = ({ flowId }) => {
     await actions.deserialize(screensHeader)
   }
 
+
+
+  const divRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setDesktopDrawerOpen(true);
+            console.log("------scrolled------")
+          } else {
+            setDesktopDrawerOpen(false);
+          }
+        });
+      },
+      { threshold: 0.1 } // Adjust this value to trigger when a small portion is visible
+    );
+
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
+
+    return () => {
+      if (divRef.current) {
+        observer.unobserve(divRef.current);
+      }
+    };
+  }, []);
+
+
+
+
   return (
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-      className="w-[95vw] overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-32"
+      className="w-[95vw] relative overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-32"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -468,6 +501,9 @@ const ScreensList = ({ flowId }) => {
           {/* </ScrollArea> */}
         </AccordionContent>
       </AccordionItem>
+        
+        <div  ref={divRef} className=" w-full h-2 "></div>
+      
       <ShareDrawerDesktop
         desktopDrawerOpen={desktopDrawerOpen}
         setDesktopDrawerOpen={setDesktopDrawerOpen}
