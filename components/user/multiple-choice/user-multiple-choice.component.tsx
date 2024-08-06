@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import {
   setPreviewScreenData,
   setSelectedData,
+  setSelectedScreen,
   setUpdateFilledCount,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -140,6 +141,7 @@ export const MultipleChoiceGen = ({
         </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem
+            buttonAction={choice.buttonAction}
             isRequired={isRequired}
             forGen={true}
             key={index}
@@ -437,6 +439,7 @@ export const MultipleChoice = ({
         >
           {choices.map((choice, index) => (
             <MultipleChoiceItem
+              buttonAction={choice.buttonAction}
               forGen={false}
               isRequired={false}
               key={index}
@@ -514,6 +517,7 @@ const MultipleChoiceItem = ({
   onSelectChange,
   forGen,
   selections,
+  buttonAction,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
@@ -528,8 +532,15 @@ const MultipleChoiceItem = ({
   const searchParams = useSearchParams()
   const { replace } = useRouter()
   const dispatch = useAppDispatch()
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
     if (term) {
@@ -538,23 +549,43 @@ const MultipleChoiceItem = ({
     console.log("new path", `${pathname}?${params.toString()}`)
     replace(`${pathname}?${params.toString()}`)
   }
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 <= sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : "none",
+    "back-screen":
+      selectedScreen - 2 >= 0 ? sc[selectedScreen - 2]?.screenName : "none",
+    none: "none",
+  }
+  const newsc = choice.screenName
+  const updatedScreenName = newScreensMapper[buttonAction] || newsc
+  const index =
+    sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
   const handleNavigateToContent = () => {
-    if (choice?.nextScreen !== "none") {
+    if (
+      buttonAction === "next-screen" ||
+      (buttonAction === "custom-action" && newsc !== "none")
+    ) {
       dispatch(
         validateScreen({
           current: currentScreenName,
-          next: choice.nextScreen,
+          next: updatedScreenName,
         })
       )
-      handleSearch(choice.nextScreen)
+      handleSearch(updatedScreenName)
+      dispatch(setSelectedScreen(index))
+    } else {
+      dispatch(
+        validateScreen({
+          current: currentScreenName,
+          next: newsc,
+        })
+      )
+      handleSearch(newsc)
+      const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+      dispatch(setSelectedScreen(index))
     }
-    // if(screenValidated){
-    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
-    //   router.push(`${pathName}#${nextScreen?.screenName}`);
-    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
-    // }else{
-    //   console.log("SCREEN NOT VALIDATED", screenValidated)
-    // }
   }
   return (
     <li
@@ -578,11 +609,7 @@ const MultipleChoiceItem = ({
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
         className={`${
-          alarm &&
-          isRequired &&
-          !checkboxVisible &&
-          selections?.length === 0 &&
-          "shake"
+          alarm && isRequired && selections?.length === 0 && "shake"
         }`}
       >
         <input

@@ -254,18 +254,23 @@ export const UserInputMailGen = ({ ...props }) => {
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
   const dispatch = useAppDispatch()
-  const fullScreenData = useAppSelector((state) =>
-    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
+  const fullScreenData = useAppSelector(
+    (state) =>
+      JSON.parse(
+        state.screen?.screens[state?.screen?.selectedScreen]?.screenData
+      ) || {}
   )
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+    (state) => state.screen?.screens[state?.screen?.selectedScreen]?.alarm
   )
-  const isRequired = useAppSelector(
+  const requ = useAppSelector(
     (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.inputRequired || false
+      JSON.parse(
+        state.screen?.screens[state?.screen?.selectedScreen]?.screenData
+      ) || {}
   )
+  const isRequired =
+    (requ[props.nodeId] && requ[props.nodeId]?.props?.inputRequired) || false
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
   useEffect(() => {
     // if (inputRef.current) {
@@ -498,7 +503,9 @@ export const UserInputMailGen = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{t("Enter a valid email address")}</div>
+              <div className="p-2">
+                {t("Please enter a valid email address")}
+              </div>
             </div>
           )}
           {/** End error container */}

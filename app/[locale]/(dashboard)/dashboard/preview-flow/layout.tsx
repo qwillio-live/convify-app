@@ -9,8 +9,8 @@ export default function PreviewFlowsLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="h-full min-h-[100vh]">
-      <FlowLayout isHeader={true} />
+    <div>
+      {/* <FlowLayout isHeader={true} /> */}
       {children}
       <FlowLayout isHeader={false} />
     </div>

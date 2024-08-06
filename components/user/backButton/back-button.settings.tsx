@@ -282,6 +282,12 @@ export const IconButtonSettings = () => {
                 Navigation
               </label>
               <Select
+                defaultValue="back-screen"
+                value={
+                  buttonAction === "custom-action"
+                    ? nextScreen.screenId
+                    : buttonAction
+                }
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))

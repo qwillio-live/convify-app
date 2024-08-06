@@ -269,6 +269,18 @@ export const ProgressBarGen = ({
     useAppSelector(
       (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
     ) || ""
+  // const mv = useAppSelector(
+  //   (state) =>
+  //     JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+  //       props.nodeId
+  //     ].props.maxValue
+  // )
+  // const pv = useAppSelector(
+  //   (state) =>
+  //     JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
+  //       props.nodeId
+  //     ].props.progressvalue
+  // )
   console.log(
     "selectedScreen, screensLength",
     selectedScreen,
@@ -277,6 +289,7 @@ export const ProgressBarGen = ({
     isHeaderFooterMode,
     forHeader,
     selectedScreenName
+    // mv
   )
   const bgColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
@@ -358,9 +371,10 @@ export const ProgressBarGen = ({
       >
         <Progress
           value={
-            progressvalue === 1 && maxValue === 5
-              ? ((selectedScreen + 1) / screensLength) * 100
-              : (progressvalue / maxValue) * 100
+            // progressvalue === 1 && maxValue === 5
+            // ? ((selectedScreen + 1) / screensLength) * 100
+            // : (progressvalue / maxValue) * 100
+            ((selectedScreen + 1) / screensLength) * 100
           }
           style={{
             marginTop: `${props.marginTop}px`,

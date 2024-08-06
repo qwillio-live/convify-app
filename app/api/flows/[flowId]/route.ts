@@ -14,17 +14,15 @@ const StepSchema = z.object({
   templateId: z.string().optional(),
 })
 
-const FlowUpdateRequestSchema = z
-  .object({
-    name: z.string().optional(),
-    previewImage: z.string().optional(),
-    link: z.string().optional(),
-    status: z.string().optional(),
-    numberOfSteps: z.number().optional(),
-    flowSettings: z.record(z.unknown()).optional(),
-    steps: z.array(StepSchema).optional(),
-  })
-  .strict()
+const FlowUpdateRequestSchema = z.object({
+  name: z.string().optional(),
+  previewImage: z.string().optional(),
+  link: z.string().optional(),
+  status: z.string().optional(),
+  numberOfSteps: z.number().optional(),
+  flowSettings: z.record(z.unknown()).optional(),
+  steps: z.array(StepSchema).optional(),
+})
 
 export async function GET(
   req: NextRequest,

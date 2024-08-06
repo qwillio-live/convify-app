@@ -145,7 +145,8 @@ export const screensSlice = createSlice({
       })
 
       state.screensFieldsList = screensFieldsList
-
+      state.screensHeader = action.payload.headerData ?? state.screensHeader
+      state.screensFooter = action.payload.footerData ?? state.screensFooter
       state.selectedScreen = 0
       state.screens = action.payload.steps.map((screen: any) => ({
         screenId: screen.id,

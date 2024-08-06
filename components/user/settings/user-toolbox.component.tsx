@@ -748,6 +748,7 @@ export const UserToolbox = () => {
                         paddingLeft={0}
                         paddingRight={0}
                         iconType={PictureTypes.ICON}
+                        buttonAction="back-screen"
                       />
                     )
                   }
@@ -768,6 +769,7 @@ export const UserToolbox = () => {
                       paddingLeft={0}
                       paddingRight={0}
                       iconType={PictureTypes.ICON}
+                      buttonAction="back-screen"
                     />
                   </HoverCardComponent>
                 </div>

@@ -386,10 +386,7 @@ export function CreateFlowComponent() {
                           : "100%",
                         top: "0",
                         zIndex: 20,
-                        backgroundColor:
-                          avatarBackgroundColor !== "rgba(255,255,255,.1)"
-                            ? avatarBackgroundColor
-                            : backgroundColor,
+                        backgroundColor: backgroundColor,
                       }}
                     >
                       <ResolvedComponentsFromCraftState
@@ -404,7 +401,7 @@ export function CreateFlowComponent() {
                         !headerMode && headerPosition === "absolute"
                           ? `${height + 40}px`
                           : "40px",
-                      backgroundColor: headerMode ? avatarBackgroundColor : "",
+                      backgroundColor: headerMode ? backgroundColor : "",
                     }}
                   >
                     <Frame data={editorLoad}></Frame>

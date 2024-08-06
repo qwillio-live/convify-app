@@ -23,6 +23,7 @@ import {
   navigateToScreen,
   setAlarm,
   setCurrentScreenName,
+  setSelectedScreen,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
@@ -183,7 +184,7 @@ export const IconButtonGen = ({
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-  const sc = useAppSelector((state) => state?.screen?.screens) || ""
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
   const screenValidated =
     useAppSelector(
       (state: RootState) =>
@@ -192,7 +193,6 @@ export const IconButtonGen = ({
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
-
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
     if (term) {
@@ -201,15 +201,28 @@ export const IconButtonGen = ({
     console.log("new path", `${pathname}?${params.toString()}`)
     replace(`${pathname}?${params.toString()}`)
   }
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 <= sc.length ? sc[selectedScreen + 1]?.screenName : "",
+    "back-screen":
+      selectedScreen - 1 >= 0 ? sc[selectedScreen - 1]?.screenName : "",
+    none: "none",
+  }
+  const newsc = nextScreen.screenName
+  const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
+  const index =
+    sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
+  console.log("next-screen to navigatte", newsc, updatedScreenName, sc)
   const handleNavigateToContent = () => {
     if (currentScreenFilled === currentScreenTotal) {
       dispatch(
         validateScreen({
           current: currentScreenName,
-          next: nextScreen.screenName,
+          next: updatedScreenName,
         })
       )
-      handleSearch(nextScreen.screenName)
+      dispatch(setSelectedScreen(index))
+      handleSearch(updatedScreenName)
     } else {
       console.log("alarm called")
       dispatch(setAlarm(true))
@@ -222,7 +235,12 @@ export const IconButtonGen = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
-  console.log("screenssssss", currentScreenTotal, currentScreenFilled)
+  console.log(
+    "screenssssss",
+    currentScreenTotal,
+    currentScreenFilled,
+    sc[selectedScreen]
+  )
   return (
     <div
       className="relative w-full"

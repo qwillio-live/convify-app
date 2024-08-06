@@ -51,6 +51,7 @@ import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
 import {
   navigateToScreen,
+  setSelectedScreen,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
@@ -169,6 +170,14 @@ export const BackButtonGen = ({
   const dispatch = useAppDispatch()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
+
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
     if (term) {
@@ -177,14 +186,29 @@ export const BackButtonGen = ({
     console.log("new path", `${pathname}?${params.toString()}`)
     replace(`${pathname}?${params.toString()}`)
   }
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 <= sc.length ? sc[selectedScreen + 1]?.screenName : "",
+    "back-screen":
+      selectedScreen - 1 >= 0 ? sc[selectedScreen - 1]?.screenName : "",
+    none: "none",
+  }
+
   const handleNavigateToContent = () => {
+    const newsc = nextScreen.screenName
+    const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
+    const index =
+      sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
+    console.log("backButton to navigatte", newsc, updatedScreenName, sc)
     dispatch(
       validateScreen({
         current: currentScreenName,
-        next: nextScreen.screenName,
+        next: updatedScreenName,
       })
     )
-    handleSearch(nextScreen.screenName)
+    if (index >= 0) dispatch(setSelectedScreen(index))
+    handleSearch(updatedScreenName)
+
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
     //   router.push(`${pathName}#${nextScreen?.screenName}`);

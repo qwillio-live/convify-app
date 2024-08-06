@@ -83,7 +83,6 @@ export const AvatarComponentGen = ({
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY || 0)
   const hasComponentBeforeAvatar = useAppSelector(
     (state) => state?.screen?.hasComponentBeforeAvatar
   )
@@ -93,30 +92,13 @@ export const AvatarComponentGen = ({
   const sizeReductionFactor = 0.5 // Control the rate of size reduction
   const mobileBaseSize = 60
 
-  let mobileDynamicSize = Math.max(
-    mobileBaseSize - scrollY * sizeReductionFactor,
-    minimumSize
-  )
   // Calculate dynamic size
-  let dynamicSize = Math.max(
-    baseSize - scrollY * sizeReductionFactor,
-    minimumSize
-  )
-  let translateYPercent = Math.max(0, 35 - scrollY)
-  const translateY = mobileScreen ? `calc(${translateYPercent}%)` : "0px"
-  const avatarClass = `${
-    hasComponentBeforeAvatar
-      ? scrollY && scrollY > 50
-        ? "avatar-top"
-        : "avatar-half"
-      : !mobileScreen && scrollY && scrollY > 50
-      ? "avatar-none-scrolled"
-      : mobileScreen && scrollY
-      ? `transition-transform ease-in-out duration-300`
-      : mobileScreen
-      ? "avatar-none-mobile"
-      : "avatar-none"
-  }`
+  // let dynamicSize = Math.max(
+  //   baseSize - scrollY * sizeReductionFactor,
+  //   minimumSize
+  // )
+  // let translateYPercent = Math.max(0, 35 - scrollY)
+  // const translateY = mobileScreen ? `calc(${translateYPercent}%)` : "0px"
   const avatarBackgroundColor = useAppSelector(
     (state) => state?.screen?.avatarBackgroundColor
   )
@@ -131,17 +113,13 @@ export const AvatarComponentGen = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        height: hasComponentBeforeAvatar ? "" : "50px",
+        // height: "50px",
       }}
     >
       <div
         className="relative w-full"
         style={{
-          background: `${
-            avatarBackgroundColor !== "rgba(255,255,255,.1)"
-              ? avatarBackgroundColor
-              : backgroundColor
-          }`,
+          background: `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -155,28 +133,29 @@ export const AvatarComponentGen = ({
           <div
             ref={avatarRef}
             id="avatar-component"
-            className={classNames(
-              avatarClass,
-              hasComponentBeforeAvatar
-                ? "absolute translate-y-[-50%] transition-transform duration-300 ease-in-out"
-                : ""
-            )}
-            style={{
-              transform: mobileScreen ? `translateY(${translateY})` : "",
-            }}
+            // className={classNames(
+            //   avatarClass,
+            //   hasComponentBeforeAvatar
+            //     ? "absolute translate-y-[-50%] transition-transform duration-300 ease-in-out"
+            //     : ""
+            // )}
+            // style={{
+            //   transform: mobileScreen ? `translateY(${translateY})` : "",
+            // }}
           >
             <img
               alt={alt}
               src={src}
               style={{
-                width: mobileScreen
-                  ? `${mobileDynamicSize}px`
-                  : `${dynamicSize}px`,
-                height: mobileScreen
-                  ? `${mobileDynamicSize}px`
-                  : `${dynamicSize}px`,
+                height: "80px",
+                width: "80px",
+                //   ? `${mobileDynamicSize}px`
+                //   : `${dynamicSize}px`,
+                // height: mobileScreen
+                //   ? `${mobileDynamicSize}px`
+                //   : `${dynamicSize}px`,
                 borderRadius: `${cornRad}px`,
-                backgroundColor: background,
+                backgroundColor: "transparent",
               }}
             />
           </div>
@@ -215,51 +194,40 @@ export const UserLogo = ({
 
   const avatarRef = useRef(null)
 
-  const avatarClass = `${
-    hasComponentBeforeAvatar
-      ? scrollY && scrollY > 50
-        ? "avatar-top"
-        : "avatar-half"
-      : scrollY && scrollY > 50
-      ? "avatar-none-scrolled"
-      : mobileScreen
-      ? "avatar-none-mobile"
-      : "avatar-none"
-  }`
+  // const avatarClass = `${
+  //   // hasComponentBeforeAvatar
+  //   //   ? scrollY && scrollY > 50
+  //   //     ? "avatar-top"
+  //   //     : "avatar-half"
+  //   //   : scrollY && scrollY > 50
+  //   //   ? "avatar-none-scrolled"
+  //   //   : mobileScreen
+  //   //   ? "avatar-none-mobile"
+  //   //   : "avatar-none"
+  // }`
   return (
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={classNames(
-        avatarClass,
-        hasComponentBeforeAvatar
-          ? "absolute translate-y-[-50%] transition-transform duration-300 ease-in-out"
-          : ""
-      )}
+      className={
+        classNames()
+        // avatarClass
+        // hasComponentBeforeAvatar
+        //   ? "transition-transform duration-300 ease-in-out"
+        //   : ""
+      }
     >
       <img
         alt={alt}
         src={src}
         // className="rounded-full"
         style={{
-          width: mobileScreen
-            ? "60px"
-            : hasComponentBeforeAvatar && scrollY && scrollY > 50
-            ? "80px"
-            : scrollY && scrollY > 50
-            ? "48px"
-            : "90px",
-          height: mobileScreen
-            ? "60px"
-            : hasComponentBeforeAvatar && scrollY && scrollY > 50
-            ? "80px"
-            : scrollY && scrollY > 50
-            ? "48px"
-            : "90px",
+          width: "80px",
+          height: "80px",
           borderRadius: `${cornRad}px`,
-          backgroundColor: background,
+          backgroundColor: "transparent",
           objectFit: "cover",
-          transform: `translateY(${top}px)`,
+          // transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
         }}
@@ -471,7 +439,6 @@ export const AvatarComponent = ({
       style={{
         width: "100%",
         display: "flex",
-        height: hasComponentBeforeAvatar ? "" : "50px",
         justifyContent: "center",
       }}
       onMouseOver={() => setDisplayController(true)}
@@ -481,11 +448,7 @@ export const AvatarComponent = ({
       <div
         className="relative w-full"
         style={{
-          background: `${
-            avatarBackgroundColor !== "rgba(255,255,255,.1)"
-              ? avatarBackgroundColor
-              : backgroundColor
-          }`,
+          background: `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",

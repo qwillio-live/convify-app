@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation"
 import {
   setPreviewScreenData,
   setSelectedData,
+  setSelectedScreen,
   setUpdateFilledCount,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -87,11 +88,15 @@ export const PictureChoiceGen = ({
     }
     return false
   })
-  console.log("selected data in opic", screenData)
+  console.log("selected data in opic", screenData, choices)
   const dispatch = useAppDispatch()
   useEffect(() => {
     setSelectedChoices(screenData)
   }, [])
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
 
   return (
     <div
@@ -122,7 +127,9 @@ export const PictureChoiceGen = ({
         <label>{label}</label>
       </div>
       <ul
-        className="flex w-full flex-wrap justify-center"
+        className={`${
+          alarm && isRequired && selectedChoices?.length === 0 && "shake"
+        } flex w-full flex-wrap justify-center`}
         style={{
           fontFamily: `var(${fontFamily?.value})`,
           maxWidth: PictureChoiceSizeValues[size || "medium"],
@@ -130,6 +137,7 @@ export const PictureChoiceGen = ({
       >
         {choices?.map((choice, index) => (
           <PictureChoiceItem
+            buttonAction={choice.buttonAction}
             key={index}
             isFirst={index === 0}
             isLast={index === choices.length - 1}
@@ -193,13 +201,13 @@ export const PictureChoiceGen = ({
 
                 dispatch(
                   setSelectedData(
-                    selectedChoices.includes(choice.id) ? [] : [choice.id]
+                    selectedChoices?.includes(choice.id) ? [] : [choice.id]
                   )
                 )
                 dispatch(
                   setPreviewScreenData({
                     nodeId: props.nodeId,
-                    newSelections: selectedChoices.includes(choice.id)
+                    newSelections: selectedChoices?.includes(choice.id)
                       ? []
                       : [choice.id],
                     entity: "selections",
@@ -216,7 +224,7 @@ export const PictureChoiceGen = ({
                   }
                 }
                 setSelectedChoices(
-                  selectedChoices.includes(choice.id) ? [] : [choice.id]
+                  selectedChoices?.includes(choice.id) ? [] : [choice.id]
                 )
               }
             }}
@@ -420,6 +428,7 @@ export const PictureChoice = ({
         >
           {choices.map((choice, index) => (
             <PictureChoiceItem
+              buttonAction={choice.buttonAction}
               isRequired={false}
               key={index}
               isFirst={index === 0}
@@ -492,6 +501,7 @@ const PictureChoiceItem = ({
   onSelectChange,
   forGen,
   isRequired,
+  buttonAction,
   selections,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
@@ -528,8 +538,15 @@ const PictureChoiceItem = ({
   const searchParams = useSearchParams()
   const { replace } = useRouter()
   const dispatch = useAppDispatch()
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
@@ -541,18 +558,6 @@ const PictureChoiceItem = ({
     }
     console.log("new path", `${pathname}?${params.toString()}`)
     replace(`${pathname}?${params.toString()}`)
-  }
-  const handleNavigateToContent = () => {
-    console.log("validation in pic", choice?.nextScreen, required, !isSelected)
-    if (choice?.nextScreen !== "none") {
-      dispatch(
-        validateScreen({
-          current: currentScreenName,
-          next: choice.nextScreen,
-        })
-      )
-      handleSearch(choice.nextScreen)
-    }
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
     //   router.push(`${pathName}#${nextScreen?.screenName}`);
@@ -561,7 +566,46 @@ const PictureChoiceItem = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
-
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 <= sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : "none",
+    "back-screen":
+      selectedScreen - 2 >= 0 ? sc[selectedScreen - 2]?.screenName : "none",
+    none: "none",
+  }
+  const newsc = choice.nextScreen
+  const updatedScreenName = newScreensMapper[buttonAction] || newsc
+  const index =
+    sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
+  const handleNavigateToContent = () => {
+    if (
+      buttonAction === "next-screen" ||
+      (buttonAction === "custom-action" && newsc !== "none")
+    ) {
+      console.log("navigating.....", buttonAction, updatedScreenName, newsc)
+      dispatch(
+        validateScreen({
+          current: currentScreenName,
+          next: updatedScreenName,
+        })
+      )
+      handleSearch(updatedScreenName)
+      dispatch(setSelectedScreen(index))
+    }
+    // else {
+    //   dispatch(
+    //     validateScreen({
+    //       current: currentScreenName,
+    //       next: newsc,
+    //     })
+    //   )
+    //   handleSearch(newsc)
+    //   const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+    //   dispatch(setSelectedScreen(index))
+    // }
+  }
   return (
     <li
       className={` flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}

@@ -20,6 +20,7 @@ import { useEffect, useState } from "react"
 import { User } from "../../page"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { revalidateFlow } from "@/actions/flow/revalidateFlow"
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
     const key = localStorage.key(i)
@@ -134,7 +135,10 @@ const Header = ({ flowId }) => {
           </Link>
         </div>
       </div>
-      <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
+      <div
+        className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full"
+        onClick={() => revalidateFlow()}
+      >
         <Link
           href={`/dashboard/preview-flow/${flowId}?screen=${screeenName}`}
           target="_blank"
