@@ -109,7 +109,8 @@ export default async function PreviewFlows({
       headers: {
         Cookie: cookieString,
       },
-      cache: "no-cache",
+      cache: "default",
+      next: { tags: ["flow"] },
     }
   )
   const data = await response.json()
@@ -121,7 +122,7 @@ export default async function PreviewFlows({
 
     const parse = (nodeId: string, parentNodeId?: string) => {
       if (parsedNodes[nodeId]) return parsedNodes[nodeId]
-      console.log(`Parsing node: ${parsedNodes[nodeId]}`)
+      // console.log(`Parsing node: ${parsedNodes[nodeId]}`)
 
       const nodeData = craftState[nodeId]
       if (!nodeData) return null
@@ -185,33 +186,51 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
-  console.log("dataaaaa", data, searchParams)
+  console.log("dataaaaa")
   return (
-    <div
-      className={`flex w-full flex-col items-center justify-center bg-[${data?.flowSettings?.general?.backgroundColor}] h-full min-h-[100vh]`}
-    >
-      {data.steps?.map((screen, index) => {
-        return (
-          <div
-            key={index}
-            id={screen?.name}
-            style={{
-              display: screenName === screen?.name ? "block" : "none",
-              backgroundColor: data?.flowSettings?.general?.backgroundColor,
-            }}
-            className="
+    <>
+      <div
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+        style={{
+          backgroundColor: data?.flowSettings?.general?.backgroundColor,
+        }}
+      >
+        {resolveComponents(JSON.parse(data?.headerData || {}))}
+      </div>
+      <div
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] h-full `}
+      >
+        {data.steps?.map((screen, index) => {
+          return (
+            <div
+              key={index}
+              id={screen?.name}
+              style={{
+                display: screenName === screen?.name ? "block" : "none",
+                backgroundColor: data?.flowSettings?.general?.backgroundColor,
+              }}
+              className="
 relative
-          h-[100vh]
+          
           min-w-full
           shrink-0
           basis-full
           pt-14
           "
-          >
-            {resolveComponents(screen.content)}
-          </div>
-        )
-      })}
-    </div>
+            >
+              {resolveComponents(screen.content)}
+            </div>
+          )
+        })}
+      </div>
+      {/* <div
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] h-full`}
+        style={{
+          backgroundColor: data?.flowSettings?.general?.backgroundColor,
+        }}
+      >
+        {resolveComponents(JSON.parse(data?.footerData || {}))}
+      </div> */}
+    </>
   )
 }
