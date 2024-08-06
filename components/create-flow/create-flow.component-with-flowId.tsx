@@ -468,15 +468,15 @@ export function CreateFlowComponent({ flowId }) {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body py-6 ">
+            <div className="section-body pt-4 ">
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="  max-h-[calc(-52px+99vh)] hidden md:block h-full basis-[15%] overflow-y-auto border-r  py-4 bg-[#fafafa]">
+          <ScrollArea className="  max-h-[calc(-52px+99vh)] hidden md:block h-full basis-[15%] overflow-y-auto border-r  bg-[#fafafa]">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto">
+            <div className="section-body pt-2 overflow-y-auto">
               <SettingsPanel />
             </div>
           </ScrollArea>

@@ -44,7 +44,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/input-custom"
+import { Input } from "@/components/input-custom-for-screen-list"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
@@ -564,11 +564,11 @@ const EditScreenName = ({ screenId, screenName }) => {
           <div className="truncate">{screenName}</div>
         </div>
         
-        <Pencil size={16} className="shrink-0 ml-2" />
+        <Pencil size={16} className="shrink-0 ml-2 cursor-pointer" />
         </div>
       )}
       {editing && (
-        <div className="flex flex-row gap-2 items-center text-current bg-slate-gray-200 p-2 grow justify-end">
+        <div className="flex flex-row gap-2 items-center text-current bg-slate-gray-200  grow justify-end">
           <Input
             ref={ref}
             className="text-right"
@@ -578,7 +578,7 @@ const EditScreenName = ({ screenId, screenName }) => {
             onKeyDown={handleKeyDown}
             autoFocus
           />
-            <svg onClick={() => handleChange(name)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-save"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>
+            <svg onClick={() => handleChange(name)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-save  cursor-pointer"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>
         </div>
       )}
       {/* <Toaster position="bottom-right" /> */}
