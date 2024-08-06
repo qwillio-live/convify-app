@@ -220,7 +220,7 @@ const ScreensList = ({ flowId }) => {
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-      className="w-[95vw] relative overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-32"
+      className="w-[95vw] relative overflow-x-hidden pt-0 md:max-w-[13.5vw] pb-24 md:pb-0"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -524,7 +524,7 @@ const EditScreenName = ({ screenId, screenName }) => {
     if (!checkDuplicateName(inputName)) {
       dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
       setName(inputName)
-      toast.success("Screen name changed successfully")
+      // toast.success("Screen name changed successfully")
       setEditing(false)
     } else {
       toast.error("Screen name already exists")
@@ -556,12 +556,15 @@ const EditScreenName = ({ screenId, screenName }) => {
   return (
     <>
       {!editing && (
+        <div className="flex items-center "
+        onClick={() => setEditing(true)}>
         <div
-          onClick={() => setEditing(true)}
           className="flex flex-row gap-1 items-center border border-transparent text-current bg-slate-gray-200 grow justify-end hover:cursor-text"
         >
-          <Pencil size={16} className="shrink-0" />
           <div className="truncate">{screenName}</div>
+        </div>
+        
+        <Pencil size={16} className="shrink-0 ml-2" />
         </div>
       )}
       {editing && (
