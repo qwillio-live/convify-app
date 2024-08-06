@@ -502,7 +502,7 @@ const ScreensList = ({ flowId }) => {
         </AccordionContent>
       </AccordionItem>
         
-        <div  ref={divRef} className=" w-full h-2 "></div>
+        <div  ref={divRef} className="md:hidden w-full h-2 "></div>
       
       <ShareDrawerDesktop
         desktopDrawerOpen={desktopDrawerOpen}
