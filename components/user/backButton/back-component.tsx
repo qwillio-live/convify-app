@@ -51,6 +51,7 @@ import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
 import {
   navigateToScreen,
+  setAlarm,
   setSelectedScreen,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -206,7 +207,10 @@ export const BackButtonGen = ({
         next: updatedScreenName,
       })
     )
-    if (index >= 0) dispatch(setSelectedScreen(index))
+    if (index >= 0) {
+      dispatch(setAlarm(false))
+      dispatch(setSelectedScreen(index))
+    }
     handleSearch(updatedScreenName)
 
     // if(screenValidated){

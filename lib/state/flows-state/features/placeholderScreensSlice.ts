@@ -38,6 +38,7 @@ export type ScreenType = {
   alarm: boolean
   totalRequired: number
   totalFilled: number
+  errorCount: number
 }
 
 export interface ScreensState {
@@ -158,6 +159,7 @@ export const screensSlice = createSlice({
         screenToggleError: false,
         selectedData: [],
         alarm: false,
+        errorCount: 0,
       }))
 
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
@@ -215,6 +217,9 @@ export const screensSlice = createSlice({
     setAlarm: (state, action: PayloadAction<boolean>) => {
       state.screens[state.selectedScreen].alarm = action.payload
     },
+    setErrorCount: (state, action: PayloadAction<number>) => {
+      state.screens[state.selectedScreen].errorCount = action.payload
+    },
     setTotalRequired: (state, action: PayloadAction<boolean>) => {
       state.screens.map((screen, index) => {
         let eachScreen = JSON.parse(JSON.stringify(screen))
@@ -247,6 +252,7 @@ export const screensSlice = createSlice({
         console.log("count", count, count2)
         screen.totalRequired = count.length
         screen.totalFilled = count2.length
+        screen.errorCount = 0
       })
     },
     setSelectedComponent: (state, action: PayloadAction<string>) => {
@@ -520,6 +526,7 @@ export const screensSlice = createSlice({
         alarm: false,
         totalRequired: 0,
         totalFilled: 0,
+        errorCount: 0,
       })
       state.screens = newScreens
       state.selectedScreen = action.payload + 1
@@ -561,6 +568,7 @@ export const screensSlice = createSlice({
         alarm: screenToDuplicate.alarm,
         totalRequired: screenToDuplicate.totalRequired,
         totalFilled: screenToDuplicate.totalFilled,
+        errorCount: 0,
       }
 
       // Add the new screen right after the original
@@ -682,6 +690,7 @@ export const {
   setSelectedData,
   setPreviewScreenData,
   setAlarm,
+  setErrorCount,
   setTotalRequired,
   setUpdateFilledCount,
 } = screensSlice.actions

@@ -207,7 +207,28 @@ export const UserInputGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
-
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   // useEffect(() => {
   //   if(inputField){
   //     if(inputField.fieldValue==0){
@@ -221,6 +242,7 @@ export const UserInputGen = ({ ...props }) => {
 
   return (
     <div
+      ref={itemRefNew}
       className={cn(
         "relative focus-visible:ring-0 focus-visible:ring-transparent"
       )}
@@ -379,7 +401,7 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:ring-0
           focus-visible:ring-transparent
           focus-visible:ring-offset-0 peer-focus-visible:outline-none
-          ${!isFilled && alarm && isRequired && "shake !border-red-600"}
+          ${!isFilled && alarm && isRequired && " !border-red-600"}
           `
               )}
               onChange={(e) => {

@@ -102,17 +102,14 @@ export default async function PreviewFlows({
     .join("; ")
 
   const flowId = params?.flowId
-  const response = await fetch(
-    `https://conv-hassan.picreel.bid/api/flows/${flowId}`,
-    {
-      method: "GET",
-      headers: {
-        Cookie: cookieString,
-      },
-      cache: "default",
-      next: { tags: ["flow"] },
-    }
-  )
+  const response = await fetch(`http://localhost:3000/api/flows/${flowId}`, {
+    method: "GET",
+    headers: {
+      Cookie: cookieString,
+    },
+    cache: "default",
+    next: { tags: ["flow"] },
+  })
   const data = await response.json()
 
   const resolveComponents = (screen) => {
@@ -195,7 +192,8 @@ export default async function PreviewFlows({
           backgroundColor: data?.flowSettings?.general?.backgroundColor,
         }}
       >
-        {resolveComponents(JSON.parse(data?.headerData || {}))}
+        {data?.headerData &&
+          resolveComponents(JSON.parse(data?.headerData || {}))}
       </div>
       <div
         className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] h-full `}

@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { PictureChoiceSettings } from "./user-picture-choice.settings"
@@ -88,6 +88,7 @@ export const PictureChoiceGen = ({
     }
     return false
   })
+
   console.log("selected data in opic", screenData, choices)
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -97,7 +98,29 @@ export const PictureChoiceGen = ({
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
   )
-
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRef = useRef<HTMLUListElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRef.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    console.log("shaking again pc", alarm, isRequired, selectedChoices?.length)
+    if (alarm && isRequired && selectedChoices?.length === 0) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   return (
     <div
       className="relative w-full"
@@ -127,9 +150,9 @@ export const PictureChoiceGen = ({
         <label>{label}</label>
       </div>
       <ul
-        className={`${
-          alarm && isRequired && selectedChoices?.length === 0 && "shake"
-        } flex w-full flex-wrap justify-center`}
+        // className="flex w-full flex-wrap justify-center"
+        ref={itemRef}
+        className={`flex w-full flex-wrap justify-center`}
         style={{
           fontFamily: `var(${fontFamily?.value})`,
           maxWidth: PictureChoiceSizeValues[size || "medium"],
@@ -584,7 +607,12 @@ const PictureChoiceItem = ({
       buttonAction === "next-screen" ||
       (buttonAction === "custom-action" && newsc !== "none")
     ) {
-      console.log("navigating.....", buttonAction, updatedScreenName, newsc)
+      console.log(
+        "navigating pc if.....",
+        buttonAction,
+        updatedScreenName,
+        newsc
+      )
       dispatch(
         validateScreen({
           current: currentScreenName,
@@ -593,18 +621,23 @@ const PictureChoiceItem = ({
       )
       handleSearch(updatedScreenName)
       dispatch(setSelectedScreen(index))
+    } else if (newsc !== "none") {
+      console.log(
+        "navigating pc else.....",
+        buttonAction,
+        updatedScreenName,
+        newsc
+      )
+      dispatch(
+        validateScreen({
+          current: currentScreenName,
+          next: newsc,
+        })
+      )
+      handleSearch(newsc)
+      const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+      dispatch(setSelectedScreen(index))
     }
-    // else {
-    //   dispatch(
-    //     validateScreen({
-    //       current: currentScreenName,
-    //       next: newsc,
-    //     })
-    //   )
-    //   handleSearch(newsc)
-    //   const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
-    //   dispatch(setSelectedScreen(index))
-    // }
   }
   return (
     <li
@@ -624,9 +657,9 @@ const PictureChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
-        className={`${
-          alarm && isRequired && selections?.length === 0 && "shake"
-        }`}
+        // className={`${
+        //   alarm && isRequired && selections?.length === 0 && "shake"
+        // }`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}

@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useNode } from "@/lib/craftjs"
 import {
@@ -105,9 +105,32 @@ export const SelectGen = ({
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
   )
   const dispatch = useAppDispatch()
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   console.log("in sselect", screenData, selectedOptionId, isFilled, isRequired)
   return (
     <div
+      ref={itemRefNew}
       className="relative w-full"
       style={{
         width: "100%",
@@ -155,7 +178,7 @@ export const SelectGen = ({
         <StyledCustomSelectTrigger
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
-          } ${alarm && isRequired && !isFilled && "shake !border-red-600"}`}
+          } ${alarm && isRequired && !isFilled && "!border-red-600"}`}
           fontFamily={fontFamily?.value}
           borderHoverColor={borderHoverColor?.value}
           borderColor={borderColor.value}

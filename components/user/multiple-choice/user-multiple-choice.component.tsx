@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { MultipleChoiceSettings } from "./user-multiple-choice.settings"
@@ -102,6 +102,33 @@ export const MultipleChoiceGen = ({
   useEffect(() => {
     setSelectedChoices(screenData)
   }, [])
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRef = useRef<HTMLUListElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRef.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    console.log("shaking again", alarm, isRequired, selections?.length)
+    if (alarm && isRequired && selectedChoices?.length === 0) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   console.log("of mc props", choices)
   return (
     <div
@@ -122,6 +149,7 @@ export const MultipleChoiceGen = ({
       }}
     >
       <ul
+        ref={itemRef}
         className="flex w-full flex-col items-center justify-center"
         style={{
           gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
@@ -558,7 +586,7 @@ const MultipleChoiceItem = ({
       selectedScreen - 2 >= 0 ? sc[selectedScreen - 2]?.screenName : "none",
     none: "none",
   }
-  const newsc = choice.screenName
+  const newsc = choice.nextScreen
   const updatedScreenName = newScreensMapper[buttonAction] || newsc
   const index =
     sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
@@ -567,6 +595,12 @@ const MultipleChoiceItem = ({
       buttonAction === "next-screen" ||
       (buttonAction === "custom-action" && newsc !== "none")
     ) {
+      console.log(
+        "navigating mc if.....",
+        buttonAction,
+        updatedScreenName,
+        newsc
+      )
       dispatch(
         validateScreen({
           current: currentScreenName,
@@ -575,7 +609,13 @@ const MultipleChoiceItem = ({
       )
       handleSearch(updatedScreenName)
       dispatch(setSelectedScreen(index))
-    } else {
+    } else if (newsc !== "none") {
+      console.log(
+        "navigating mc else.....",
+        buttonAction,
+        updatedScreenName,
+        newsc
+      )
       dispatch(
         validateScreen({
           current: currentScreenName,
@@ -608,9 +648,6 @@ const MultipleChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
-        className={`${
-          alarm && isRequired && selections?.length === 0 && "shake"
-        }`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}

@@ -288,9 +288,31 @@ export const UserInputMailGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
-
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   return (
     <div
+      ref={itemRefNew}
       className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: "100%",
@@ -371,7 +393,7 @@ export const UserInputMailGen = ({ ...props }) => {
               <div
                 className={cn(
                   `flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200
-                  ${!isFilled && alarm && isRequired && "shake !border-red-600"}
+                  ${!isFilled && alarm && isRequired && "!border-red-600"}
                   `
                 )}
                 style={{
@@ -447,7 +469,7 @@ export const UserInputMailGen = ({ ...props }) => {
                 focus-visible:ring-0
                 focus-visible:ring-transparent
                 focus-visible:ring-offset-0 peer-focus-visible:outline-none
-                ${!isFilled && alarm && isRequired && "shake !border-red-600"}
+                ${!isFilled && alarm && isRequired && "!border-red-600"}
                 `
               )}
               onChange={(e) => {

@@ -238,6 +238,28 @@ export const UserInputCheckboxGen = ({ ...props }) => {
     // if (inputRef.current) inputRef.current.value = screenData
     setInputValue(screenData)
   }, [])
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   console.log(props.backgroundImage)
 
   const primaryTextColor = useAppSelector(
@@ -252,6 +274,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
 
   return (
     <div
+      ref={itemRefNew}
       className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: "100%",

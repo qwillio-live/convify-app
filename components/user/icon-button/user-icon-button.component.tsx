@@ -23,6 +23,7 @@ import {
   navigateToScreen,
   setAlarm,
   setCurrentScreenName,
+  setErrorCount,
   setSelectedScreen,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -226,6 +227,7 @@ export const IconButtonGen = ({
     } else {
       console.log("alarm called")
       dispatch(setAlarm(true))
+      dispatch(setErrorCount((sc[selectedScreen]?.errorCount || 0) + 1))
     }
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
