@@ -558,7 +558,7 @@ const MultipleChoiceItem = ({
   }, [choice.value])
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { replace } = useRouter()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const sc = useAppSelector((state) => state?.screen?.screens) || []
   const currentScreenName =
@@ -575,7 +575,7 @@ const MultipleChoiceItem = ({
       params.set("screen", term)
     }
     console.log("new path", `${pathname}?${params.toString()}`)
-    replace(`${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
   }
   const newScreensMapper = {
     "next-screen":

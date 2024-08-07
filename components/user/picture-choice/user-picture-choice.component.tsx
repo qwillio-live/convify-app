@@ -559,7 +559,7 @@ const PictureChoiceItem = ({
   }
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { replace } = useRouter()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const sc = useAppSelector((state) => state?.screen?.screens) || []
   const currentScreenName =
@@ -580,7 +580,7 @@ const PictureChoiceItem = ({
       params.set("screen", term)
     }
     console.log("new path", `${pathname}?${params.toString()}`)
-    replace(`${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
     //   router.push(`${pathName}#${nextScreen?.screenName}`);

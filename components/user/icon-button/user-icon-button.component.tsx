@@ -200,7 +200,7 @@ export const IconButtonGen = ({
       params.set("screen", term)
     }
     console.log("new path", `${pathname}?${params.toString()}`)
-    replace(`${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
   }
   const newScreensMapper = {
     "next-screen":

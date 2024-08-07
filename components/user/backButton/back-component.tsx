@@ -167,7 +167,7 @@ export const BackButtonGen = ({
 }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { replace } = useRouter()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
@@ -185,7 +185,7 @@ export const BackButtonGen = ({
       params.set("screen", term)
     }
     console.log("new path", `${pathname}?${params.toString()}`)
-    replace(`${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
   }
   const newScreensMapper = {
     "next-screen":
