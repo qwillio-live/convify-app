@@ -189,17 +189,22 @@ export const BackButtonGen = ({
   }
   const newScreensMapper = {
     "next-screen":
-      selectedScreen + 1 <= sc.length ? sc[selectedScreen + 1]?.screenName : "",
+      selectedScreen + 1 < sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : sc[selectedScreen]?.screenName,
     "back-screen":
-      selectedScreen - 1 >= 0 ? sc[selectedScreen - 1]?.screenName : "",
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
     none: "none",
   }
 
   const handleNavigateToContent = () => {
     const newsc = nextScreen.screenName
     const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
-    const index =
-      sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
+    const index = sc.findIndex(
+      (screen) => screen.screenName === updatedScreenName
+    )
     console.log("backButton to navigatte", newsc, updatedScreenName, sc)
     dispatch(
       validateScreen({

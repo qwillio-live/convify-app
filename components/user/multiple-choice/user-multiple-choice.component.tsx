@@ -200,6 +200,18 @@ export const MultipleChoiceGen = ({
                     const updatedChoices = prev.filter(
                       (selectionId) => selectionId !== choice.id
                     )
+                    if (isRequired) {
+                      if (updatedChoices.length > 0 && !isCountUpdated) {
+                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                        setIsCountUpdated(true) // Set count updated flag
+                      } else if (
+                        updatedChoices.length === 0 &&
+                        isCountUpdated
+                      ) {
+                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                        setIsCountUpdated(false) // Reset count updated flag
+                      }
+                    }
 
                     // Dispatch action for removing choice
                     dispatch(
@@ -215,7 +227,18 @@ export const MultipleChoiceGen = ({
                   } else {
                     // Add choice to selection
                     const updatedChoices = [...prev, choice.id]
-
+                    if (isRequired) {
+                      if (updatedChoices.length > 0 && !isCountUpdated) {
+                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                        setIsCountUpdated(true) // Set count updated flag
+                      } else if (
+                        updatedChoices.length === 0 &&
+                        isCountUpdated
+                      ) {
+                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                        setIsCountUpdated(false) // Reset count updated flag
+                      }
+                    }
                     // Dispatch action for adding choice
                     dispatch(
                       setPreviewScreenData({
@@ -579,52 +602,57 @@ const MultipleChoiceItem = ({
   }
   const newScreensMapper = {
     "next-screen":
-      selectedScreen + 1 <= sc.length
+      selectedScreen + 1 < sc.length
         ? sc[selectedScreen + 1]?.screenName
-        : "none",
+        : sc[selectedScreen]?.screenName,
     "back-screen":
-      selectedScreen - 2 >= 0 ? sc[selectedScreen - 2]?.screenName : "none",
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
     none: "none",
   }
   const newsc = choice.nextScreen
   const updatedScreenName = newScreensMapper[buttonAction] || newsc
-  const index =
-    sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
+  const index = sc.findIndex(
+    (screen) => screen.screenName === updatedScreenName
+  )
   const handleNavigateToContent = () => {
-    if (
-      buttonAction === "next-screen" ||
-      (buttonAction === "custom-action" && newsc !== "none")
-    ) {
-      console.log(
-        "navigating mc if.....",
-        buttonAction,
-        updatedScreenName,
-        newsc
-      )
-      dispatch(
-        validateScreen({
-          current: currentScreenName,
-          next: updatedScreenName,
-        })
-      )
-      handleSearch(updatedScreenName)
-      dispatch(setSelectedScreen(index))
-    } else if (newsc !== "none") {
-      console.log(
-        "navigating mc else.....",
-        buttonAction,
-        updatedScreenName,
-        newsc
-      )
-      dispatch(
-        validateScreen({
-          current: currentScreenName,
-          next: newsc,
-        })
-      )
-      handleSearch(newsc)
-      const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
-      dispatch(setSelectedScreen(index))
+    if (index !== -1) {
+      if (
+        buttonAction === "next-screen" ||
+        (buttonAction === "custom-action" && newsc !== "none")
+      ) {
+        console.log(
+          "navigating mc if.....",
+          buttonAction,
+          updatedScreenName,
+          newsc
+        )
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: updatedScreenName,
+          })
+        )
+        handleSearch(updatedScreenName)
+        dispatch(setSelectedScreen(index))
+      } else if (newsc !== "none") {
+        console.log(
+          "navigating mc else.....",
+          buttonAction,
+          updatedScreenName,
+          newsc
+        )
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: newsc,
+          })
+        )
+        handleSearch(newsc)
+        const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+        dispatch(setSelectedScreen(index))
+      }
     }
   }
   return (

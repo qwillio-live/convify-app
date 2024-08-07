@@ -102,8 +102,24 @@ const ScreensList = () => {
   // }
   // }, []);
 
-  const handleReorder = (data) => {
+  const handleReorder = async (data) => {
+    // Dispatch the new order of screens
     dispatch(setScreens(data))
+
+    // Get the currently selected screen's index
+    const newIndex = selectedScreen
+      ? data.findIndex((screen) => screen.screenId === selectedScreen.screenId)
+      : -1
+
+    // If a valid screen is selected and its data exists, deserialize the new screen data
+    if (newIndex !== -1 && data[newIndex]?.screenData) {
+      await actions.deserialize(data[newIndex].screenData)
+      dispatch(setSelectedScreen(newIndex)) // Update the selected screen index if needed
+    } else if (data.length > 0) {
+      // If no valid screen is selected, fall back to the first screen
+      await actions.deserialize(data[0].screenData)
+      dispatch(setSelectedScreen(0))
+    }
   }
 
   // useEffect(() => {

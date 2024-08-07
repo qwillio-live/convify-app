@@ -194,7 +194,7 @@ export const newScreensSlice = createSlice({
     },
     removeField: (state, action: PayloadAction<string>) => {
       const selectedScreen = state.selectedScreen
-      const selectedScreenId = state.screens[selectedScreen].screenId
+      const selectedScreenId = state.screens[selectedScreen]?.screenId
       const fieldId = action.payload
       const screenFields = state.screens[selectedScreen]?.screenFields
 

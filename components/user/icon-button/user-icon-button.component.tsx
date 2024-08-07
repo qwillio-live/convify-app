@@ -204,30 +204,46 @@ export const IconButtonGen = ({
   }
   const newScreensMapper = {
     "next-screen":
-      selectedScreen + 1 <= sc.length ? sc[selectedScreen + 1]?.screenName : "",
+      selectedScreen + 1 < sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : sc[selectedScreen]?.screenName,
     "back-screen":
-      selectedScreen - 1 >= 0 ? sc[selectedScreen - 1]?.screenName : "",
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
     none: "none",
   }
   const newsc = nextScreen.screenName
   const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
-  const index =
-    sc.findIndex((screen) => screen.screenName === updatedScreenName) || 0
-  console.log("next-screen to navigatte", newsc, updatedScreenName, sc)
+  const index = sc.findIndex(
+    (screen) => screen.screenName === updatedScreenName
+  )
+  console.log(
+    "next-screen to navigatte",
+    newsc,
+    updatedScreenName,
+    props.buttonAction,
+    selectedScreen + 1,
+    sc.length,
+    selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
+    sc
+  )
   const handleNavigateToContent = () => {
-    if (currentScreenFilled === currentScreenTotal) {
-      dispatch(
-        validateScreen({
-          current: currentScreenName,
-          next: updatedScreenName,
-        })
-      )
-      dispatch(setSelectedScreen(index))
-      handleSearch(updatedScreenName)
-    } else {
-      console.log("alarm called")
-      dispatch(setAlarm(true))
-      dispatch(setErrorCount((sc[selectedScreen]?.errorCount || 0) + 1))
+    if (index !== -1) {
+      if (currentScreenFilled === currentScreenTotal) {
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: updatedScreenName,
+          })
+        )
+        dispatch(setSelectedScreen(index))
+        handleSearch(updatedScreenName)
+      } else {
+        console.log("alarm called")
+        dispatch(setAlarm(true))
+        dispatch(setErrorCount((sc[selectedScreen]?.errorCount || 0) + 1))
+      }
     }
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
