@@ -216,7 +216,6 @@ relative
           min-w-full
           shrink-0
           basis-full
-          pt-14
           "
             >
               {resolveComponents(screen.content)}

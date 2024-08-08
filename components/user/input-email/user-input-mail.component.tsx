@@ -273,10 +273,13 @@ export const UserInputMailGen = ({ ...props }) => {
     (requ[props.nodeId] && requ[props.nodeId]?.props?.inputRequired) || false
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
   useEffect(() => {
-    // if (inputRef.current) {
-    //   inputRef.current.value = screenData
-    // }
     setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
+    if (screenData !== "") {
+      setIsFilled(true)
+    }
   }, [])
   console.log("iin user email", typeof screenData, screenData)
   const primaryTextColor = useAppSelector(
@@ -426,7 +429,8 @@ export const UserInputMailGen = ({ ...props }) => {
               </div>
             )}
             <UserInputMailStyled
-              ref={inputRef}
+              // ref={inputRef}
+              value={inputValue}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
@@ -477,6 +481,7 @@ export const UserInputMailGen = ({ ...props }) => {
                   if (isFilled && e.target.value === "") {
                     dispatch(setUpdateFilledCount(-1))
                     setIsFilled(false)
+                    setInputValue(e.target.value)
                   } else {
                     if (!isFilled) dispatch(setUpdateFilledCount(1))
                     setInputValue(e.target.value),

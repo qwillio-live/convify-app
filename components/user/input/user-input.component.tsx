@@ -117,6 +117,12 @@ export const UserInputGen = ({ ...props }) => {
   console.log("user input", screenData, nodeId)
   useEffect(() => {
     setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
+    if (screenData !== "") {
+      setIsFilled(true)
+    }
     dispatch(
       setFieldProp({
         screenId: props.parentScreenId,
@@ -409,6 +415,7 @@ export const UserInputGen = ({ ...props }) => {
                   if (isFilled && e.target.value === "") {
                     dispatch(setUpdateFilledCount(-1))
                     setIsFilled(false)
+                    setInputValue(e.target.value)
                   } else {
                     if (!isFilled) dispatch(setUpdateFilledCount(1))
                     setInputValue(e.target.value),

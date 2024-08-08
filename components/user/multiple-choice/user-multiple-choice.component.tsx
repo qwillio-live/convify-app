@@ -101,6 +101,9 @@ export const MultipleChoiceGen = ({
   const dispatch = useAppDispatch()
   useEffect(() => {
     setSelectedChoices(screenData)
+    if (screenData?.length > 0) {
+      setIsCountUpdated(true)
+    }
   }, [])
   const alarm = useAppSelector(
     (state) =>

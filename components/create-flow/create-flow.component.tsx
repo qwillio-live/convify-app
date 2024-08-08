@@ -365,7 +365,7 @@ export function CreateFlowComponent() {
                     backgroundPosition: "center",
                   }}
                   className={cn(
-                    "page-container z-20 mx-auto mt-0 box-content min-h-[400px] py-0 font-sans antialiased",
+                    "page-container z-20 mx-auto mt-0 box-content min-h-[200px] py-0 font-sans antialiased",
                     footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
@@ -407,7 +407,11 @@ export function CreateFlowComponent() {
                     <Frame data={editorLoad}></Frame>
                   </div>
                   {!headerMode && !footerMode && (
-                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                    <div className="max-h-[200px]">
+                      <ResolvedComponentsFromCraftState
+                        screen={screensFooter}
+                      />
+                    </div>
                   )}
                 </TabsContent>
                 <TabsList className="absolute bottom-2 left-[37%] z-20 grid w-40 grid-cols-2">

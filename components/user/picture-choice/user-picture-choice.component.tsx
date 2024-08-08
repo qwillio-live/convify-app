@@ -93,7 +93,11 @@ export const PictureChoiceGen = ({
   const dispatch = useAppDispatch()
   useEffect(() => {
     setSelectedChoices(screenData)
+    if (screenData?.length > 0) {
+      setIsCountUpdated(true)
+    }
   }, [])
+
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
@@ -189,6 +193,11 @@ export const PictureChoiceGen = ({
                       (selectionId) => selectionId !== choice.id
                     )
                     if (isRequired) {
+                      console.log(
+                        "updatedChoices.length > 0 && !isCountUpdated",
+                        updatedChoices.length,
+                        isCountUpdated
+                      )
                       if (updatedChoices.length > 0 && !isCountUpdated) {
                         dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
                         setIsCountUpdated(true) // Set count updated flag

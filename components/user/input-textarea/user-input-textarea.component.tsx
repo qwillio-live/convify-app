@@ -222,7 +222,9 @@ export const UserInputTextareaGen = ({ ...props }) => {
   )
   useEffect(() => {
     if (screenData !== "Components.Text Area") {
-      // textAreaRef.current.value = screenData //
+      if (screenData !== "") {
+        setIsFilled(true)
+      }
       setInputValue(screenData)
     }
   }, [])
@@ -297,7 +299,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
 
           <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputTextareaStyled
-              ref={textAreaRef}
+              value={inputValue}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
@@ -347,6 +349,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
                   if (isFilled && e.target.value === "") {
                     dispatch(setUpdateFilledCount(-1))
                     setIsFilled(false)
+                    setInputValue(e.target.value)
                   } else {
                     if (!isFilled) dispatch(setUpdateFilledCount(1))
                     setInputValue(e.target.value),

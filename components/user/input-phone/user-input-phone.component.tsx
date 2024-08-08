@@ -277,8 +277,13 @@ export const UserInputPhoneGen = ({ ...props }) => {
     const generateUniqueId = () => {
       return Math.random().toString(36).substring(7)
     }
-    // if (inputRef.current) inputRef.current.value = screenData //
     setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
+    if (screenData !== "") {
+      setIsFilled(true)
+    }
     setUniqueId(generateUniqueId())
   }, [])
 
@@ -432,7 +437,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
               </div>
             )}
             <UserInputPhoneStyled
-              ref={inputRef}
+              value={inputValue}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
@@ -491,6 +496,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   if (isFilled && e.target.value === "") {
                     dispatch(setUpdateFilledCount(-1))
                     setIsFilled(false)
+                    setInputValue(e.target.value)
                   } else {
                     if (!isFilled) dispatch(setUpdateFilledCount(1))
                     setInputValue(e.target.value),
