@@ -121,10 +121,11 @@ const Header = ({ flowId }) => {
           </Link>
         </div>
       </div>
-      <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full">
+      <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-2 lg:h-full">
         <Link href="/dashboard/flows/preview-flow" target="_blank">
           <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">
             <Eye className="size-3.5" />
+            {t("Preview")}
           </Button>
         </Link>
         <div className="">

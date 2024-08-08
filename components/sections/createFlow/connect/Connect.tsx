@@ -200,9 +200,13 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
     </div>
   ) : (
     <div className="connect-flow-content h-full max-h-[92.7vh] w-full overflow-auto pb-[20px]">
-      <div className="mx-auto mt-8  flex flex-col items-center justify-center px-4 lg:w-7/12">
-        <SearchBar search={search} setSearch={setSearch} />
-        <div className="mt-10 flex w-full flex-col">
+      <div className="md:bg-white md:py-6 py-4 md:border border-[#E6E2DD]">
+        <div className="px-4 max-w-[480px] w-full mx-auto">
+          <SearchBar search={search} setSearch={setSearch} />
+        </div>
+      </div>
+      <div className="mx-auto md:mt-8 flex flex-col items-center justify-center px-4 lg:w-7/12">
+        <div className="flex w-full flex-col">
           {filteredDatas?.length > 0 ? (
             <Accordion type="multiple">
               {filteredDatas?.map((Integrationitem: TIntegrationCardData) => (

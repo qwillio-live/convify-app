@@ -242,7 +242,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800 text-left">
+        <p className="mb-4 text-sm text-[#505050] text-left">
           {t(
             "Changes to the Google Analytics 4 integration will only become active after re-publishing"
           )}
@@ -250,7 +250,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
         <div className="mb-4">
           <div className="input-container css-1ee99c9 e1veqj306">
             <div className="">
-              <label className="text-black" htmlFor="measurement-id">
+              <label className="text-black block mb-1.5" htmlFor="measurement-id">
                 {t("Measurement ID")}
               </label>
               <Input
@@ -260,7 +260,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 value={googleAnalyticsId}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600 text-left">
+            <p className="mt-1.5 text-xs text-[#9B9A99] text-left">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -384,7 +384,7 @@ export const GTagManager: React.FC<ContentProps> = ({
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-sm text-gray-800 text-left">
+        <p className="mb-4 text-sm text-[#505050] text-left">
           {t(
             "Changes to the Google Tag Manager integration will only become active after re-publishing"
           )}
@@ -392,7 +392,7 @@ export const GTagManager: React.FC<ContentProps> = ({
         <div className="mb-4">
           <div className="input-container css-1ee99c9 e1veqj306">
             <div className="">
-              <label className="text-black" htmlFor="container-id">
+              <label className="text-black block mb-1.5" htmlFor="container-id">
                 {t("Container ID")}
               </label>
               <Input
@@ -402,7 +402,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 value={googleTagManagerId}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600 text-left">
+            <p className="mt-1.5 text-[#9B9A99] text-xs text-left">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -528,7 +528,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
         <div className="mb-4">
           <div className="input-container css-1ee99c9 e1veqj306">
             <div className="mb-4">
-              <label className="text-black" htmlFor="pixel-id">
+              <label className="text-black block mb-1.5" htmlFor="pixel-id">
                 {t("Pixel ID")}
               </label>
               <Input
@@ -541,7 +541,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
               />
             </div>
             <div className="">
-              <label className="text-black" htmlFor="event">
+              <label className="text-black block mb-1.5" htmlFor="event">
                 {t("Submit Event")}
               </label>
               <Input
@@ -553,7 +553,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 value={metaPixelAccessToken}
               />
             </div>
-            <p className="mt-0.5 text-xs text-gray-600 text-left">
+            <p className="mt-1.5 text-[#9B9A99] text-xs text-left">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>

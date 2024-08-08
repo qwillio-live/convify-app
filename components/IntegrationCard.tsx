@@ -38,27 +38,27 @@ const IntegrationCard = ({
   return (
     <AccordionItem
       value={title}
-      className="mb-2.5 rounded-md border bg-white shadow dark:bg-[#070e1f]"
+      className="mb-6 md:rounded-[20px] rounded-[12px] border border-[#E9E9E9] bg-white dark:bg-[#070e1f] font-poppins"
     >
       <AccordionTrigger
-        className="flex flex-col md:flex-row items-start md:items-center pl-5 md:pl-0 lg:mx-0 pr-5 py-6 hover:no-underline min-h-32"
+        className="flex flex-col md:flex-row md:gap-8 gap-2 items-start md:items-center md:p-6 p-[20px] lg:mx-0 hover:no-underline"
         noIcon={true}
       >
-        <div className=" mx-0 md:mx-2 lg:mx-5">
-          <Image src={image} width={60} height={60} alt={alt} />
+        <div className="md:h-12 h-8 md:w-12 w-8">
+          <Image src={image} width={60} height={60} alt={alt} className="h-full w-full object-contain" />
         </div>
         <div className="mt-2 md:mt-0 ml-0 flex w-full items-center justify-between">
           <div className="w-full flex-col justify-start text-base font-normal text-black">
             <div className="mb-1 flex items-center ">
-              <h1 className="text-black dark:text-white">{t(title)}</h1>
+              <h1 className="font-bold text-[#23262C] dark:text-white">{t(title)}</h1>
               {status === "active" && (
-                <small className="ml-3 flex items-center rounded-2xl bg-[#EBF9F1] px-2 py-0.5 text-[11px] font-semibold leading-4 text-[#34AC68] capitalize">
+                <small className="ml-3 flex items-center rounded-2xl bg-[#0EB300] px-2 py-0.5 text-[11px] font-semibold leading-4 text-white capitalize">
                   {t("active")}
                   <Check className="ml-1 w-3 h-3" strokeWidth={3} />
                 </small>
               )}
             </div>
-            <p className="text-left w-full text-sm text-black dark:text-white">
+            <p className="text-left w-full text-sm text-[#505050] dark:text-white">
               {t(description)}
             </p>
           </div>

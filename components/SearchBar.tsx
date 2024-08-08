@@ -14,7 +14,7 @@ const SearchBar = ({ search, setSearch }: SearchBarProps) => {
   const t = useTranslations("CreateFlow.ConnectPage")
 
   return (
-    <div className="flex w-full items-center rounded-md border-[1px] border-solid border-gray-400 px-3 bg-white">
+    <div className="flex w-full items-center rounded-[8px] border border-[#E6E2DD] px-3 bg-white">
       <Search className="h-3.5 w-3.5" />
       <div className="relative w-full">
         <Input
