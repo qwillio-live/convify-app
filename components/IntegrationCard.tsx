@@ -50,7 +50,7 @@ const IntegrationCard = ({
         <div className="mt-2 md:mt-0 ml-0 flex w-full items-center justify-between">
           <div className="w-full flex-col justify-start text-base font-normal text-black">
             <div className="mb-1 flex items-center ">
-              <h1 className="font-bold text-[#23262C] dark:text-white">{t(title)}</h1>
+              <h1 className="font-semibold text-[#23262C] dark:text-white">{t(title)}</h1>
               {status === "active" && (
                 <small className="ml-3 flex items-center rounded-2xl bg-[#0EB300] px-2 py-0.5 text-[11px] font-semibold leading-4 text-white capitalize">
                   {t("active")}

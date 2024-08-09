@@ -125,7 +125,7 @@ const Header = ({ flowId }) => {
         <Link href="/dashboard/flows/preview-flow" target="_blank">
           <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">
             <Eye className="size-3.5" />
-            {t("Preview")}
+            <div className="md:block hidden">{t("Preview")}</div>
           </Button>
         </Link>
         <div className="">
