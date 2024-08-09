@@ -324,7 +324,7 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
-        <ScrollArea className="w-full overflow-y-auto pb-32 pt-4">
+        <ScrollArea className="w-full overflow-y-auto  pb-24 md:pb-0 pt-4">
           <Accordion
             type="multiple"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}

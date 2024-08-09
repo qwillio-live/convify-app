@@ -376,9 +376,10 @@ export function CreateFlowComponent({ flowId }) {
         }}
         onRender={RenderNode}
       >
+        {/* <div className="md:flex h-[calc(-52px+99vh)]  max-h-[calc(-52px+99vh)] flex-row justify-between gap-0"> */}
         <div className="md:flex h-[calc(-52px+99vh)]  max-h-[calc(-52px+99vh)] flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen md:basis-[15%] overflow-y-auto border-r px-2 py-6  ">
-            <div className="section-body">
+          <ScrollArea className="max-h-screen md:basis-[15%] overflow-y-auto border-r px-2 ">
+            <div className="section-body py-6">
               <ScreensList  flowId={flowId} />
             </div>
           </ScrollArea>
@@ -463,19 +464,19 @@ export function CreateFlowComponent({ flowId }) {
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className=" max-h-[calc(-52px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r px-2 ">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body">
+            <div className="section-body pt-4 ">
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r py-6 bg-[#fafafa]">
+          <ScrollArea className="  max-h-[calc(-52px+99vh)] hidden md:block h-full basis-[15%] overflow-y-auto border-r  bg-[#fafafa]">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto">
+            <div className="section-body pt-2 overflow-y-auto">
               <SettingsPanel />
             </div>
           </ScrollArea>
