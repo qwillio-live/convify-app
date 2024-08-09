@@ -259,19 +259,28 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const [svgIcon, setSvgIcon] = useState("")
   const [isFilled, setIsFilled] = useState(false)
   const dispatch = useAppDispatch()
-  const fullScreenData = useAppSelector((state) =>
-    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
-  )
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
+
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
   )
-  const screenData = fullScreenData[props.nodeId]?.props.inputValue
-  const isRequired = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.inputRequired || false
-  )
+
+  // Access inputValue safely
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
+
+  // Check if inputRequired is present and parse it safely
+  const isRequired = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData
+      ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
+      : false
+  })
+
   console.log("iin user phone", typeof screenData, screenData)
   useEffect(() => {
     const generateUniqueId = () => {

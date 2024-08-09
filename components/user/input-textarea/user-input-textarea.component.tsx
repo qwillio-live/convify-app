@@ -207,25 +207,28 @@ export const UserInputTextareaGen = ({ ...props }) => {
   const [error, setError] = useState(props.error)
   const [isFilled, setIsFilled] = useState(false)
   const dispatch = useAppDispatch()
-  const fullScreenData = useAppSelector((state) =>
-    JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)
-  )
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
-  const isRequired = useAppSelector(
-    (state) =>
-      JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
-        props.nodeId
-      ]?.props?.inputRequired || false
-  )
+  const isRequired = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData
+      ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
+      : false
+  })
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen].alarm
+    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
   )
   useEffect(() => {
     if (screenData !== "Components.Text Area") {
-      if (screenData !== "") {
-        setIsFilled(true)
-      }
       setInputValue(screenData)
+      // if (screenData !== "") {
+      //   setIsFilled(true)
+      // }
     }
   }, [])
   const counttt = useAppSelector(

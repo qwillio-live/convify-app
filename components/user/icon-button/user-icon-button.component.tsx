@@ -223,12 +223,22 @@ export const IconButtonGen = ({
     newsc,
     updatedScreenName,
     props.buttonAction,
+    selectedScreen,
     selectedScreen + 1,
     sc.length,
     selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
     sc
   )
   const handleNavigateToContent = () => {
+    console.log(
+      "btn navigating",
+      "currentScreenFilled",
+      currentScreenFilled,
+      "currentScreenTotal",
+      currentScreenTotal,
+      "index",
+      index
+    )
     if (index !== -1) {
       if (currentScreenFilled === currentScreenTotal) {
         dispatch(
@@ -255,9 +265,14 @@ export const IconButtonGen = ({
   }
   console.log(
     "screenssssss",
+    "currentScreenTotal",
     currentScreenTotal,
+    "currentScreenFilled",
     currentScreenFilled,
-    sc[selectedScreen]
+    " sc[selectedScreen]",
+    sc[selectedScreen],
+    "currentScreenName",
+    currentScreenName
   )
   return (
     <div

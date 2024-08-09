@@ -127,11 +127,11 @@ export const MultipleChoiceGen = ({
     }
   }
   useEffect(() => {
-    console.log("shaking again", alarm, isRequired, selections?.length)
-    if (alarm && isRequired && selectedChoices?.length === 0) {
+    console.log("shaking again ", alarm, isRequired, screenData?.length)
+    if (alarm && isRequired && screenData?.length === 0) {
       shakeItem() // Call shake function when alarm is updated
     }
-  }, [counttt]) // Depend on alarm state
+  }, [counttt, alarm, isRequired]) // Depend on alarm state
   console.log("of mc props", choices)
   return (
     <div
@@ -198,7 +198,7 @@ export const MultipleChoiceGen = ({
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
-                  if (prev.includes(choice.id)) {
+                  if (prev?.includes(choice.id)) {
                     // Remove choice from selection
                     const updatedChoices = prev.filter(
                       (selectionId) => selectionId !== choice.id
@@ -229,7 +229,9 @@ export const MultipleChoiceGen = ({
                     return updatedChoices
                   } else {
                     // Add choice to selection
-                    const updatedChoices = [...prev, choice.id]
+                    const updatedChoices = prev
+                      ? [...prev, choice.id]
+                      : [choice.id]
                     if (isRequired) {
                       if (updatedChoices.length > 0 && !isCountUpdated) {
                         dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection

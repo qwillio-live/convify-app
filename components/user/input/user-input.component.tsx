@@ -98,7 +98,7 @@ export const UserInputGen = ({ ...props }) => {
     .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
     .filter(
       (screen) =>
-        screen?.props?.label === props?.label && screen?.props?.inputRequired
+        screen?.props?.id === props?.id && screen?.props?.inputRequired
     )
 
   const isRequired = useAppSelector((state) => {
@@ -114,7 +114,7 @@ export const UserInputGen = ({ ...props }) => {
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  console.log("user input", screenData, nodeId)
+  console.log("user input", screenData, nodeId, parsedData, props)
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {

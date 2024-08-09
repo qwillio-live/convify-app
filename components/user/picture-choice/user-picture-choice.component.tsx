@@ -120,11 +120,11 @@ export const PictureChoiceGen = ({
     }
   }
   useEffect(() => {
-    console.log("shaking again pc", alarm, isRequired, selectedChoices?.length)
-    if (alarm && isRequired && selectedChoices?.length === 0) {
+    console.log("shaking again pc", alarm, isRequired, screenData?.length)
+    if (alarm && isRequired && screenData?.length === 0) {
       shakeItem() // Call shake function when alarm is updated
     }
-  }, [counttt]) // Depend on alarm state
+  }, [counttt, alarm, isRequired]) // Depend on alarm state
   return (
     <div
       className="relative w-full"

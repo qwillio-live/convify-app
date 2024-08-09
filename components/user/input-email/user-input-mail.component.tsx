@@ -254,21 +254,25 @@ export const UserInputMailGen = ({ ...props }) => {
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
   const dispatch = useAppDispatch()
-  const fullScreenData = useAppSelector(
-    (state) =>
-      JSON.parse(
-        state.screen?.screens[state?.screen?.selectedScreen]?.screenData
-      ) || {}
-  )
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen?.selectedScreen]?.screenData
+
+    // Check if screenData is a string before parsing
+    return screenData ? JSON.parse(screenData) : {}
+  })
+
   const alarm = useAppSelector(
     (state) => state.screen?.screens[state?.screen?.selectedScreen]?.alarm
   )
-  const requ = useAppSelector(
-    (state) =>
-      JSON.parse(
-        state.screen?.screens[state?.screen?.selectedScreen]?.screenData
-      ) || {}
-  )
+  const requ = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen?.selectedScreen]?.screenData
+
+    // Check if screenData is a string before parsing
+    return screenData ? JSON.parse(screenData) : {}
+  })
+
   const isRequired =
     (requ[props.nodeId] && requ[props.nodeId]?.props?.inputRequired) || false
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
@@ -280,8 +284,8 @@ export const UserInputMailGen = ({ ...props }) => {
     if (screenData !== "") {
       setIsFilled(true)
     }
-  }, [])
-  console.log("iin user email", typeof screenData, screenData)
+  }, [screenData])
+  console.log("iin user email", typeof screenData, screenData, isFilled)
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
