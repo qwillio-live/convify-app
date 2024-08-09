@@ -65,16 +65,16 @@ const Header = ({ flowId }) => {
     router.push("/login")
   }
   const linkClasses = (path) =>
-    `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm ${
+    `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-[16px] ${
       isSmallScreen ? "px-2.5" : "px-3"
     } ${
       currentPath?.split("/").at(-1) === path.split("/").at(-1) ||
       currentPath === "/pt" + path
-        ? "text-foreground border-current"
-        : "text-muted-foreground border-transparent"
+        ? "text-[#23262C] border-current"
+        : "text-[#9B9A99] border-transparent"
     }`
   return (
-    <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
+    <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#F6F6F6] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6 font-poppins">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
         <div className="flex h-14 items-center lg:h-[60px]">
           <BreadCrumbs flowId={flowId} />
@@ -90,6 +90,7 @@ const Header = ({ flowId }) => {
           </div>
         </div>
       </div>
+
       <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
           <Link
@@ -121,16 +122,17 @@ const Header = ({ flowId }) => {
           </Link>
         </div>
       </div>
-      <div className="account-settings flex h-1/2 flex-row items-center justify-between gap-2 lg:h-full">
+
+      <div className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full">
         <Link href="/dashboard/flows/preview-flow" target="_blank">
-          <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">
+          <Button variant="outline" size="sm" className="h-10 gap-2 md:px-4 px-3">
             <Eye className="size-3.5" />
-            <div className="md:block hidden">{t("Preview")}</div>
+            <div className="md:block hidden font-normal">{t("Preview")}</div>
           </Button>
         </Link>
         <div className="">
-          <Button size="sm" className="my-4 h-8 gap-1 py-2">
-            {t("Publish")}
+          <Button size="sm" className="h-10 md:px-4 px-3 gap-1 py-2">
+            <span className="font-normal">{t("Publish")}</span>
           </Button>
         </div>
 

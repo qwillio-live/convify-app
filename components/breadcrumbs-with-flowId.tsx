@@ -120,7 +120,7 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/dashboard">
-            <span className="hidden lg:inline-block">{t("My workspace")}</span>
+            <span className="hidden lg:inline-block text-[#9B9A99] text-[16px]">{t("My workspace")}</span>
             <Button
               className="size-8 max-h-8 p-0 lg:hidden"
               size="sm"
@@ -142,6 +142,7 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
                 ? smallScreenTruncateStyle
                 : truncateStyle
             }
+            className="text-[#23262C] text-[16px]"
           >
             {loading
               ? "..."

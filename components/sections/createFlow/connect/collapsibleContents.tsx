@@ -130,12 +130,12 @@ export const EmailContent: React.FC<ContentProps> = ({
           value={email}
         />
       </div>
-      <p className="mt-0.5 mb-4 text-xs text-gray-600">
+      <p className="mt-1.5 mb-4 text-xs text-[#9B9A99]">
         {t("Email address to which the response is sent")}
       </p>
       <div className="flex w-full justify-between">
         <AccordionPrimitive.Trigger>
-          <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
+          <Button variant="secondary" className="bg-[#F2F2F2] font-normal text-[#23262C]" style={buttonStyle}>{t("Close")}</Button>
         </AccordionPrimitive.Trigger>
         <div>
           {status !== "active" ? (
@@ -153,7 +153,7 @@ export const EmailContent: React.FC<ContentProps> = ({
             <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`}>
               <Button
                 variant="ghost"
-                className="text-red-500 hover:bg-red-100 hover:text-red-500"
+                className="text-[#CF2B24] hover:bg-red-100 hover:text-red-500 font-normal"
                 onClick={() => {
                   handleClick()
                   putRequest("", flowId ?? "", integrationId ?? "")
@@ -162,7 +162,8 @@ export const EmailContent: React.FC<ContentProps> = ({
               >
                 {t("Disconnect")}
               </Button>
-              <Button style={buttonStyle} onClick={() => { putRequest(email, flowId ?? "", integrationId ?? "") }}>{t("Save changes")}</Button>
+              <Button className="md:block hidden font-normal text-white" style={buttonStyle} onClick={() => { putRequest(email, flowId ?? "", integrationId ?? "") }}>{t("Save changes")}</Button>
+              <Button className="block md:hidden font-normal text-white" style={buttonStyle} onClick={() => { putRequest(email, flowId ?? "", integrationId ?? "") }}>{t("Save")}</Button>
             </div>
           )}
         </div>
@@ -267,7 +268,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
+            <Button variant="secondary" className="bg-[#F2F2F2] font-normal text-[#23262C]" style={buttonStyle}>{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
@@ -290,12 +291,12 @@ export const GAnalytics: React.FC<ContentProps> = ({
               <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`} >
                 <Button
                   variant="ghost"
-                  className="text-red-500 hover:bg-red-100 hover:text-red-500"
+                  style={buttonStyle}
+                  className="text-[#CF2B24] hover:bg-red-100 hover:text-red-500 font-normal"
                   onClick={() => {
                     handleClick()
                     putRequest("", flowId ?? "", integrationId ?? "")
                   }}
-                  style={buttonStyle}
                 >
                   {t("Disconnect")}
                 </Button>
@@ -409,7 +410,7 @@ export const GTagManager: React.FC<ContentProps> = ({
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
+            <Button variant="secondary" className="bg-[#F2F2F2] font-normal text-[#23262C]" style={buttonStyle}>{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
@@ -432,7 +433,7 @@ export const GTagManager: React.FC<ContentProps> = ({
               <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`}>
                 <Button
                   variant="ghost"
-                  className="text-red-500 hover:bg-red-100 hover:text-red-500"
+                  className="text-[#CF2B24] hover:bg-red-100 hover:text-red-500 font-normal"
                   onClick={() => {
                     handleClick()
                     putRequest("", flowId ?? "", integrationId ?? "")
@@ -560,7 +561,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
         </div>
         <div className="flex w-full justify-between">
           <AccordionPrimitive.Trigger>
-            <Button variant="secondary" style={buttonStyle}>{t("Close")}</Button>
+            <Button variant="secondary" className="bg-[#F2F2F2] font-normal text-[#23262C]" style={buttonStyle}>{t("Close")}</Button>
           </AccordionPrimitive.Trigger>
           <div>
             {status !== "active" ? (
@@ -582,7 +583,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
               <div className={`flex ${isSmallScreen ? 'gap-0' : 'gap-1.5'}`}>
                 <Button
                   variant="ghost"
-                  className="text-red-500 hover:bg-red-100 hover:text-red-500"
+                  className="text-[#CF2B24] hover:bg-red-100 hover:text-red-500 font-normal"
                   onClick={() => {
                     handleClick()
                     putRequest("", "", flowId ?? "", integrationId ?? "")

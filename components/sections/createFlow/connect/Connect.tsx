@@ -200,7 +200,7 @@ const ConnectFlowComponents: React.FC = (): JSX.Element | null => {
     </div>
   ) : (
     <div className="connect-flow-content h-full max-h-[92.7vh] w-full overflow-auto pb-[20px]">
-      <div className="md:bg-white md:py-6 py-4 md:border border-[#E6E2DD]">
+      <div className="md:bg-white md:py-6 py-4 md:border-b border-[#E6E2DD]">
         <div className="px-4 max-w-[480px] w-full mx-auto">
           <SearchBar search={search} setSearch={setSearch} />
         </div>
