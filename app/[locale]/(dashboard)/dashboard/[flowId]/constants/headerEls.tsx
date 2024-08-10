@@ -127,7 +127,7 @@ const Header = ({ flowId }) => {
         <Link href="/dashboard/flows/preview-flow" target="_blank">
           <Button variant="outline" size="sm" className="h-10 gap-2 md:px-4 px-3">
             <Eye className="size-3.5" />
-            <div className="md:block hidden font-normal">{t("Preview")}</div>
+            <div className="md:block hidden font-normal text-[16px]">{t("Preview")}</div>
           </Button>
         </Link>
         <div className="">
@@ -142,7 +142,7 @@ const Header = ({ flowId }) => {
               <Button
                 variant="secondary"
                 size="sm"
-                className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
+                className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-semibold uppercase hover:bg-[#eaeaec]"
                 style={{ width: "40px", height: "40px" }} // Adjust the size as needed
               >
                 {userData ? (
