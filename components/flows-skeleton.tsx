@@ -110,21 +110,16 @@ const SkeletonFlowCard = () => {
     const skeletonMarkup = (
         <div className="flex flex-col">
             {/* Create new flow button skeleton */}
-            <div className="flex items-center justify-start self-start animate-pulse">
-                <Button size="sm" className="my-4 h-8 gap-1 py-2">
-                    <div className="animate-pulse bg-gray-200 h-4 w-4 rounded-full"></div>
-                    <span className="whitespace-nowrap animate-pulse">Loading...</span>
-                </Button>
-            </div>
+            
 
             {/* Card skeleton */}
-            <Card>
+            <Card className="rounded-[20px] p-4">
                 <CardHeader>
                     <CardTitle><div className="animate-pulse bg-gray-200 h-4 w-20 rounded"></div></CardTitle>
                     <CardDescription><div className="animate-pulse bg-gray-200 h-3 w-64 rounded"></div></CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto mt-4">
                         <Table className="min-w-full">
                             <TableHeader>
                                 <TableRow>

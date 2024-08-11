@@ -215,16 +215,16 @@ export function FlowsList({ flows, setStatus, status }) {
             </Button>
           </Link> */}
 
-          <Card className="rounded-[20px] border border-[#E9E9E9] p-4">
+          <Card className="rounded-[12px] md:rounded-[20px] border border-[#E9E9E9] p-2 md:p-4">
             <CardHeader
               style={{
                 padding: paddingScreen !== "inherit" ? "1rem" : "1rem",
               }}
             >
-              <CardTitle className="text-xl text-[#23262C]">
+              <CardTitle className="text-base md:text-xl text-[#23262C]">
                 {t("My flows")}
               </CardTitle>
-              <CardDescription className="text-base text-[#505050]">
+              <CardDescription className="text-sm md:text-base text-[#505050]">
                 {t("Manage your flows and view their performance")}
               </CardDescription>
             </CardHeader>
@@ -238,7 +238,7 @@ export function FlowsList({ flows, setStatus, status }) {
                   <TableHeader>
                     <TableRow>
                       <TableHead
-                        className="hidden w-[144px] text-base font-normal text-[#9B9A99] sm:table-cell"
+                        className="hidden w-[144px] text-xs md:text-base font-normal text-[#9B9A99] md:table-cell"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -255,7 +255,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className="sr-only w-[384px] text-left text-base font-normal text-[#9B9A99]"
+                        className="md:sr-only table-cell w-[384px] text-left text-xs md:text-base font-normal text-[#9B9A99]"
                       >
                         {t("Name")}
                       </TableHead>
@@ -266,12 +266,12 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className="text-base font-normal text-[#9B9A99]"
+                        className="text-xs md:text-base font-normal text-[#9B9A99]"
                       >
                         {t("Status")}
                       </TableHead>
                       <TableHead
-                        className="hidden text-base font-normal text-[#9B9A99] lg:table-cell"
+                        className="hidden text-xs md:text-base font-normal text-[#9B9A99] lg:table-cell"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -288,12 +288,12 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className="text-base font-normal text-[#9B9A99]"
+                        className="text-xs md:text-base font-normal text-[#9B9A99]"
                       >
                         {t("Responses")}
                       </TableHead>
                       <TableHead
-                        className="hidden text-base font-normal text-[#9B9A99] lg:table-cell"
+                        className="hidden text-xs md:text-base font-normal text-[#9B9A99] lg:table-cell"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -310,7 +310,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className="text-base font-normal text-[#9B9A99]"
+                        className="text-xs md:text-base font-normal text-[#9B9A99]"
                       >
                         <span className="sr-only">{t("Actions")}</span>
                       </TableHead>
@@ -335,7 +335,7 @@ export function FlowsList({ flows, setStatus, status }) {
                             >
                               <Image
                                 alt="Product image"
-                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-[8px] border border-[#F2F0EE] object-cover"
+                                className="aspect-video 2xl:h-[72px] xl:h-[48px] 2xl:w-[120px] xl:w-[72px] rounded-[8px] border border-[#F2F0EE] object-cover"
                                 height="64"
                                 width="113"
                                 src={
@@ -354,7 +354,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                   | LegacyRef<HTMLTableCellElement>
                                   | undefined
                               }
-                              className="text-base text-[#23262C] hover:cursor-pointer"
+                              className="text-xs md:text-base text-[#23262C] hover:cursor-pointer"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -385,7 +385,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               </Badge>
                             </TableCell>
                             <TableCell
-                              className="hidden lg:table-cell text-base text-[#23262C]"
+                              className="hidden lg:table-cell text-xs md:text-base text-[#23262C]"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -402,14 +402,14 @@ export function FlowsList({ flows, setStatus, status }) {
                                     ? paddingScreen
                                     : "1rem",
                               }}
-                              className="text-base text-[#23262C]"
+                              className="text-xs md:text-base text-[#23262C]"
                             >
                               {flow.numberOfResponses
                                 ? flow.numberOfResponses
                                 : 0}
                             </TableCell>
                             <TableCell
-                              className="hidden lg:table-cell text-base text-[#23262C]"
+                              className="hidden lg:table-cell text-xs md:text-base text-[#23262C]"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -426,7 +426,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                     ? paddingScreen
                                     : "1rem",
                               }}
-                              className="text-base text-[#23262C] text-right"
+                              className="text-xs md:text-base text-[#23262C] text-right"
                             >
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>

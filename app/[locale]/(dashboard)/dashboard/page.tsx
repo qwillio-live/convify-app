@@ -94,7 +94,7 @@ export default function DashboardPage() {
 
   return (
     <div className="font-poppins bg-[#F6F6F6]">
-      <div className="sticky top-0 flex h-[60px] items-center justify-between border-b border-b-[#E6E2DD] px-6 ">
+      <div className="sticky top-0 flex md:h-[60px] h-[56px] items-center justify-between border-b border-b-[#E6E2DD] px-6 ">
         {/* logo */}
         <div>
           <div className="flex items-center gap-2 font-semibold">
@@ -219,8 +219,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="sticky top-[60px] flex h-[88px] border-b border-b-[#E6E2DD]">
-        <div className="h-full border-r border-r-[#E6E2DD] md:w-[220px] lg:w-[280px]">
+      <div className="sticky md:top-[60px] top-[56px] flex h-[88px] md:border-b md:border-b-[#E6E2DD]">
+        <div className="h-full border-r border-r-[#E6E2DD] md:w-[220px] lg:w-[280px] hidden md:block">
           
           <form className="h-full flex items-center lg:px-6 px-2">
             <div className="relative w-full">
@@ -233,16 +233,16 @@ export default function DashboardPage() {
             </div>
           </form>
         </div>
-        <div className="flex-1 bg-white">
-          <div className="h-full flex items-center justify-between px-8 ">
-            <h1 className="text-2xl font-semibold text-[#23262C]">
+        <div className="flex-1 md:bg-white pt-5 md:pt-0">
+          <div className="h-full flex md:flex-row flex-col md:items-center items-start md:justify-between gap-4 px-4 md:px-8 ">
+            <h1 className="text-base md:text-2xl font-semibold text-[#23262C]">
               {t("My workspace")}
             </h1>
             <Link
-              className="flex items-center "
+              className="flex items-center w-full md:w-fit"
               href="/dashboard/flows/create-flow/select-template"
             >
-              <Button className="itmes-center flex gap-2 px-4 py-2 font-normal rounded-lg text-base text-white bg-[#23262C]">
+              <Button className="itmes-center flex gap-2 px-4 py-2 font-normal rounded-lg  text-sm md:text-base text-white bg-[#23262C] w-full">
                 <Plus size={16} /> {t("Create new flow")}
               </Button>
             </Link>
@@ -275,7 +275,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="flex h-full flex-col overflow-y-auto">
+        <div className="mt-4 md:mt-0 flex h-full flex-col overflow-y-auto">
           <main className="flex h-full flex-1 flex-col overflow-y-auto bg-[#F6F6F6] p-4 lg:p-8">
             {loading ? (
               <div
