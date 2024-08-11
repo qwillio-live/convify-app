@@ -39,6 +39,7 @@ export type ScreenType = {
   totalRequired: number
   totalFilled: number
   errorCount: number
+  isVisible: boolean
 }
 
 export interface ScreensState {
@@ -160,8 +161,9 @@ export const screensSlice = createSlice({
         selectedData: [],
         alarm: false,
         errorCount: 0,
+        isVisible: false,
       }))
-
+      state.screens[state.selectedScreen].isVisible = true
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
     setSelectedData: (state, action: PayloadAction<string[]>) => {
@@ -254,6 +256,7 @@ export const screensSlice = createSlice({
         screen.totalFilled = count2.length
         screen.errorCount = 0
       })
+      state.screens[state.selectedScreen].isVisible = true
     },
     setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload
@@ -471,12 +474,14 @@ export const screensSlice = createSlice({
     },
     setScreens: (state, action: PayloadAction<any[]>) => {
       state.screens = [...action.payload]
-      state.firstScreenName = state.screens[0].screenName
+      // state.firstScreenName = state.screens[0].screenName
     },
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.headerMode = false
       state.footerMode = false
+      state.screens[state.selectedScreen].isVisible = false
       state.selectedScreen = action.payload
+      state.screens[action.payload].isVisible = true
       state.editorLoad = state.screens[action.payload]?.screenData // Ensure new reference
     },
     addAvatarComponentId(state, action) {
@@ -527,9 +532,12 @@ export const screensSlice = createSlice({
         totalRequired: 0,
         totalFilled: 0,
         errorCount: 0,
+        isVisible: true,
       })
       state.screens = newScreens
+      state.screens[state.selectedScreen].isVisible = false
       state.selectedScreen = action.payload + 1
+      state.screens[action.payload + 1].isVisible = true
       state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
       state.firstScreenName = state.screens[0].screenName
     },
@@ -569,6 +577,7 @@ export const screensSlice = createSlice({
         totalRequired: screenToDuplicate.totalRequired,
         totalFilled: screenToDuplicate.totalFilled,
         errorCount: 0,
+        isVisible: true,
       }
 
       // Add the new screen right after the original
@@ -581,8 +590,9 @@ export const screensSlice = createSlice({
       state.editorLoad = newScreen.screenData
 
       // Update selectedScreen to point to the newly duplicated screen
+      state.screens[state.selectedScreen].isVisible = false
       state.selectedScreen = indexToDuplicate + 1
-
+      state.screens[indexToDuplicate + 1].isVisible = true
       // Update the screensFieldsList if necessary
       state.screensFieldsList[newId] =
         state.screensFieldsList[screenToDuplicate.screenId]

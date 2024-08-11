@@ -6,13 +6,20 @@ import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { LoaderSettings } from "./user-loader.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useLoaderThemePresets"
 import { useTranslations } from "next-intl"
 import { RootState } from "@/lib/state/flows-state/store"
+import {
+  setSelectedScreen,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const ButtonTextLimit = {
   small: 100,
@@ -65,24 +72,136 @@ export const LoaderComponentGen = ({
   bottom,
   align,
   time,
+  buttonAction,
   ...props
 }) => {
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
   const [showLoader, setShowLoader] = React.useState(true)
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
+  const isVisible =
+    useAppSelector(
+      (state) =>
+        state.screen?.screens[
+          state?.screen?.screens.findIndex(
+            (screen) => screen.screenName === currentScreenName
+          )
+        ]?.isVisible
+    ) || false
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 < sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    "back-screen":
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    none: "none",
+  }
+  const dispatch = useAppDispatch()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
+  }
+  const handleNavigateToContent = () => {
+    const newsc = nextScreen
+    const updatedScreenName = newScreensMapper[buttonAction] || newsc
+    const index = sc.findIndex(
+      (screen) => screen.screenName === updatedScreenName
+    )
+    console.log(
+      "entere avigation in loader",
+      buttonAction,
+      updatedScreenName,
+      newsc,
+      index,
+      currentScreenName,
+      searchParams?.get("screen"),
+      pathname,
+      pathname?.includes("preview-flow" || "published-flow"),
+      "final contition",
+      currentScreenName === searchParams?.get("screen") &&
+        pathname?.includes("preview-flow" || "published-flow")
+        ? searchParams?.get("screen")
+        : sc[0].screenName
+    )
+    if (index !== -1 && currentScreenName !== updatedScreenName) {
+      if (buttonAction === "next-screen") {
+        console.log("entered if")
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: updatedScreenName,
+          })
+        )
+        dispatch(setSelectedScreen(index))
+        handleSearch(updatedScreenName)
+      } else if (newsc !== "none" || newsc !== "") {
+        console.log("entered else if")
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: newsc,
+          })
+        )
+        const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+        dispatch(setSelectedScreen(index))
+        handleSearch(newsc)
+      }
+    }
+  }
 
   const restartLoader = () => {
     setShowLoader(true)
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       setShowLoader(false)
+      if (enableRedirect) {
+        console.log("enableRedirect", enableRedirect)
+        handleNavigateToContent()
+      }
     }, time * 1000)
-    return () => clearTimeout(timer)
   }
 
   useEffect(() => {
-    restartLoader()
-  }, [time])
+    // Call restartLoader when the component mounts
+    console.log(
+      "conditiona check",
+      "currentScreenName",
+      currentScreenName,
+      "nextScreen",
+      nextScreen,
+      `searchParams?.get("screen")`,
+      searchParams?.get("screen"),
+      pathname?.includes("preview-flow" || "published-flow"),
+      "isVisible",
+      isVisible,
+      sc
+    )
+    if (
+      currentScreenName === searchParams?.get("screen") &&
+      currentScreenName !== nextScreen &&
+      pathname?.includes("preview-flow" || "published-flow")
+    ) {
+      restartLoader()
+    }
+  }, [searchParams?.get("screen")]) // Empty dependency array means this effect runs once when the component mounts
 
   return (
     <div
@@ -314,13 +433,13 @@ export const LoaderComponent = ({
 
   useEffect(() => {
     restartLoader()
-  }, [time])
+  }, [])
 
-  useEffect(() => {
-    if (buttonAction === "next-screen") {
-      setProp((props) => (props.nextScreen = nextScreenName), 1000)
-    }
-  }, [nextScreenName, buttonAction])
+  // useEffect(() => {
+  //   if (buttonAction === "next-screen") {
+  //     setProp((props) => (props.nextScreen = nextScreenName), 1000)
+  //   }
+  // }, [nextScreenName, buttonAction])
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {

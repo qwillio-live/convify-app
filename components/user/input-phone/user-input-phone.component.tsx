@@ -290,7 +290,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
     if (inputRef.current) {
       inputRef.current.value = screenData
     }
-    if (screenData !== "") {
+    if (screenData?.length > 0) {
       setIsFilled(true)
     }
     setUniqueId(generateUniqueId())

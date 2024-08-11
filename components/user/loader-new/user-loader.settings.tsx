@@ -365,6 +365,7 @@ export const LoaderSettings = () => {
                     setProp((props) => (props.buttonAction = "next-screen"))
                     setProp((props) => (props.nextScreen = nextScreenName))
                   } else {
+                    console.log("custom action value in loader", e)
                     setProp((props) => (props.buttonAction = "custom-action"))
                     setProp((props) => (props.nextScreen = e))
                   }
@@ -380,7 +381,7 @@ export const LoaderSettings = () => {
                     </SelectItem>
                     {screenNames?.map((screen, index) => {
                       return (
-                        <SelectItem value={screen.screenId}>
+                        <SelectItem value={screen.screenName}>
                           {index + 1} : {screen.screenName}
                         </SelectItem>
                       )

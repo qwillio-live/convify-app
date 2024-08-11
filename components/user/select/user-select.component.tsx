@@ -70,13 +70,18 @@ export const SelectGen = ({
     string | undefined
   >()
   const [isFilled, setIsFiiled] = useState(false)
-
+  const gh = useAppSelector(
+    (state) =>
+      JSON.parse(
+        state.screen?.screens[state.screen?.selectedScreen].screenData
+      )[props.nodeId]
+  )
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.screens[state.screen?.selectedScreen]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.screens[state.screen?.selectedScreen].screenData
       )[props.nodeId]?.props.selectedOptionId
     }
     return []
@@ -93,13 +98,13 @@ export const SelectGen = ({
     return false
   })
   useEffect(() => {
-    console.log("setting filled true", screenData)
-    if (screenData !== "" || screenData !== undefined) {
+    console.log("setting filled true", screenData, gh)
+    if (screenData !== undefined) {
       console.log("setting filled true", screenData)
-      // setIsFiiled(true)
+      setIsFiiled(true)
     }
     setSelectedOptionId(screenData)
-  }, [])
+  }, [screenData])
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
@@ -127,7 +132,14 @@ export const SelectGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt]) // Depend on alarm state
-  console.log("in sselect", screenData, selectedOptionId, isFilled, isRequired)
+  console.log(
+    "in sselect",
+    screenData,
+    selectedOptionId,
+    gh,
+    isFilled,
+    isRequired
+  )
   return (
     <div
       ref={itemRefNew}
@@ -154,7 +166,7 @@ export const SelectGen = ({
               nodeId: props.nodeId,
               isArray: false,
               newSelections: [value],
-              entity: selectedOptionId || "",
+              entity: "selectedOptionId",
             })
           )
           if (!isFilled && isRequired) {

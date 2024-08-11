@@ -256,32 +256,31 @@ export const UserInputMailGen = ({ ...props }) => {
   const dispatch = useAppDispatch()
   const fullScreenData = useAppSelector((state) => {
     const screenData =
-      state.screen?.screens[state.screen?.selectedScreen]?.screenData
-
-    // Check if screenData is a string before parsing
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
     return screenData ? JSON.parse(screenData) : {}
   })
 
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state?.screen?.selectedScreen]?.alarm
+    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
   )
-  const requ = useAppSelector((state) => {
+
+  // Access inputValue safely
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
+
+  // Check if inputRequired is present and parse it safely
+  const isRequired = useAppSelector((state) => {
     const screenData =
-      state.screen?.screens[state.screen?.selectedScreen]?.screenData
-
-    // Check if screenData is a string before parsing
-    return screenData ? JSON.parse(screenData) : {}
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData
+      ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
+      : false
   })
-
-  const isRequired =
-    (requ[props.nodeId] && requ[props.nodeId]?.props?.inputRequired) || false
-  const screenData = fullScreenData[props.nodeId]?.props.inputValue
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {
       inputRef.current.value = screenData
     }
-    if (screenData !== "") {
+    if (screenData?.length > 0) {
       setIsFilled(true)
     }
   }, [screenData])
@@ -316,7 +315,7 @@ export const UserInputMailGen = ({ ...props }) => {
     if (alarm && !isFilled && isRequired) {
       shakeItem() // Call shake function when alarm is updated
     }
-  }, [counttt]) // Depend on alarm state
+  }, [counttt, alarm]) // Depend on alarm state
   return (
     <div
       ref={itemRefNew}

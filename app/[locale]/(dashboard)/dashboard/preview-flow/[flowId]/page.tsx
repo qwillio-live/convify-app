@@ -94,35 +94,33 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
   }
-  const cookie = cookies()
+
   const screenName = searchParams?.screen || ""
-  const cookieString = cookie
+  const cookieString = cookies()
     .getAll()
     .map((cookie) => `${cookie.name}=${cookie.value}`)
     .join("; ")
 
   const flowId = params?.flowId
-  const response = await fetch(
-    `https://conv-hassan.picreel.bid/api/flows/${flowId}`,
-    {
-      method: "GET",
-      headers: {
-        Cookie: cookieString,
-      },
-      cache: "default",
-      next: { tags: ["flow"] },
-    }
-  )
+  const response = await fetch(`http://localhost:3000/api/flows/${flowId}`, {
+    method: "GET",
+    headers: {
+      Cookie: cookieString,
+    },
+    cache: "default",
+    next: { tags: ["flow"] },
+  })
   const data = await response.json()
+  const filteredStep = data.steps.find((screen) => screen.name === screenName)
 
-  const resolveComponents = (screen) => {
-    const craftState = screen
-    // console.log("Parsed Craft State:", craftState) // Log parsed JSON data
+  const resolveComponents = (screenContent) => {
+    if (!screenContent) return <></>
+
+    const craftState = screenContent
     const parsedNodes = {}
 
     const parse = (nodeId: string, parentNodeId?: string) => {
       if (parsedNodes[nodeId]) return parsedNodes[nodeId]
-      // console.log(`Parsing node: ${parsedNodes[nodeId]}`)
 
       const nodeData = craftState[nodeId]
       if (!nodeData) return null
@@ -164,7 +162,6 @@ export default async function PreviewFlows({
           parentNodeId={parentNodeId}
           nodeId={nodeId}
           key={nodeId}
-          // scrollY={scrollY}
         >
           {linkedNodesElements}
         </ReactComponent>
@@ -183,10 +180,10 @@ export default async function PreviewFlows({
       return parsedNode
     }
 
+    // Ensure that `ROOT` exists and is valid
     return parse("ROOT") || <></>
   }
 
-  console.log("dataaaaa")
   return (
     <>
       <div
@@ -199,38 +196,28 @@ export default async function PreviewFlows({
           resolveComponents(JSON.parse(data?.headerData || {}))}
       </div>
       <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] h-full `}
-      >
-        {data.steps?.map((screen, index) => {
-          return (
-            <div
-              key={index}
-              id={screen?.name}
-              style={{
-                display: screenName === screen?.name ? "block" : "none",
-                backgroundColor: data?.flowSettings?.general?.backgroundColor,
-              }}
-              className="
-relative
-          
-          min-w-full
-          shrink-0
-          basis-full
-          "
-            >
-              {resolveComponents(screen.content)}
-            </div>
-          )
-        })}
-      </div>
-      {/* <div
         className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] h-full`}
         style={{
           backgroundColor: data?.flowSettings?.general?.backgroundColor,
         }}
       >
-        {resolveComponents(JSON.parse(data?.footerData || {}))}
-      </div> */}
+        {filteredStep && (
+          <div
+            id={filteredStep.name}
+            style={{
+              backgroundColor: data?.flowSettings?.general?.backgroundColor,
+            }}
+            className="
+relative
+min-w-full
+shrink-0
+basis-full
+"
+          >
+            {resolveComponents(filteredStep.content)}
+          </div>
+        )}
+      </div>
     </>
   )
 }
