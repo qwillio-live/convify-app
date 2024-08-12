@@ -474,6 +474,7 @@ export const HeadlineText = ({
           text={t("HeadlineDescription")}
         >
           <div className="flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-x-clip">
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}

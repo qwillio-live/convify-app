@@ -459,6 +459,7 @@ export const PictureChoice = ({
           }}
         >
           {/** @ts-ignore */}
+          {/** @ts-ignore */}
           <ContentEditable
             className="px-1"
             html={label}
@@ -773,6 +774,7 @@ const PictureChoiceItem = ({
             </span>
           ) : (
             <>
+              {/** @ts-ignore */}
               {/** @ts-ignore */}
               <ContentEditable
                 className="w-fit max-w-full whitespace-break-spaces p-1"

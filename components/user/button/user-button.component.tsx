@@ -68,6 +68,7 @@ export const Button = ({
       {isHovered && <Controller nameOfComponent={"BUTTON"} />}
 
       {/** @ts-ignore */}
+      {/** @ts-ignore */}
       <ContentEditable
         html={text}
         onChange={(e) =>

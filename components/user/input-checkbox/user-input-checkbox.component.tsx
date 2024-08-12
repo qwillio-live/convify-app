@@ -634,6 +634,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                   : props.backgroundColor,
               }}
             >
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}

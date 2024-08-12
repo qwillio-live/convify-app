@@ -668,6 +668,7 @@ export const UserInputMail = ({ ...props }) => {
         >
           {!props.floatingLabel && (
             <>
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}

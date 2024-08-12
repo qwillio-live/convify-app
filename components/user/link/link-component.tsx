@@ -676,6 +676,7 @@ export const LinkButton = ({
             }`}
           >
             {/** @ts-ignore */}
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}

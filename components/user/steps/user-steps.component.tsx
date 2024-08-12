@@ -345,6 +345,7 @@ const StepItem = ({
       </div>
       <div className="w-full max-w-[200px]">
         {/** @ts-ignore */}
+        {/** @ts-ignore */}
         <ContentEditable
           className="text-enter w-full text-center text-lg"
           disabled={disabled}

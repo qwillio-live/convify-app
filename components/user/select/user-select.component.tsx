@@ -429,6 +429,7 @@ export const Select = ({
             }}
           >
             {/** @ts-ignore */}
+            {/** @ts-ignore */}
             <ContentEditable
               className="px-1"
               html={label}

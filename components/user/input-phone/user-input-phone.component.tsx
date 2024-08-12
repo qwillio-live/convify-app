@@ -720,6 +720,7 @@ export const UserInputPhone = ({ ...props }) => {
         >
           {!props.floatingLabel && (
             <>
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}

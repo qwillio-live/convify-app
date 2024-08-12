@@ -578,6 +578,7 @@ export const UserText = ({
           {...props}
         >
           <div className="flex flex-col overflow-x-clip">
+            {/** @ts-ignore */}
             <ContentEditable
               html={text}
               innerRef={ref}

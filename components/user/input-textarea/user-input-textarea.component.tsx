@@ -565,6 +565,7 @@ export const UserInputTextarea = ({ ...props }) => {
             }`,
           }}
         >
+          {/** @ts-ignore */}
           <ContentEditable
             html={props.label}
             disabled={false}

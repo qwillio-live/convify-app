@@ -469,6 +469,7 @@ export const MultipleChoice = ({
           }}
         >
           {/** @ts-ignore */}
+          {/** @ts-ignore */}
           <ContentEditable
             className="px-1"
             html={label}
@@ -755,6 +756,7 @@ const MultipleChoiceItem = ({
             </span>
           ) : (
             <>
+              {/** @ts-ignore */}
               {/** @ts-ignore */}
               <ContentEditable
                 className="w-fit max-w-full whitespace-break-spaces p-1"

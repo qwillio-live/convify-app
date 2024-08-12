@@ -672,6 +672,7 @@ export const SocialShareButton = ({
               enableIcon && (icon !== "" || null) ? "ml-1" : ""
             }`}
           >
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}

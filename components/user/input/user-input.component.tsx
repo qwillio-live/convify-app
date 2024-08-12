@@ -713,6 +713,7 @@ export const UserInput = ({ ...props }) => {
           {!props.floatingLabel && (
             <>
               {/** @ts-ignore */}
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}
