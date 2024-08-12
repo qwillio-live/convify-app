@@ -412,7 +412,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
               <div
                 className={cn(
                   `flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200
-                  ${!isFilled && alarm && isRequired && "shake !border-red-600"}
+                  ${!isFilled && alarm && isRequired && " !border-red-600"}
                   `
                 )}
                 style={{
@@ -490,7 +490,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                 focus-visible:ring-0
                 focus-visible:ring-transparent focus-visible:ring-offset-0
                 peer-focus-visible:outline-none
-                ${!isFilled && alarm && isRequired && "shake !border-red-600"}
+                ${!isFilled && alarm && isRequired && " !border-red-600"}
                 `
               )}
               onKeyPress={(e) => {

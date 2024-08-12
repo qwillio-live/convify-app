@@ -1,5 +1,6 @@
 "use client"
 import {
+  setResetTotalFilled,
   setScreensData,
   setTotalRequired,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -7,7 +8,7 @@ import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalTh
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useSearchParams } from "next/navigation"
 import React, { useEffect } from "react"
-
+import GoogleTagManager from "../../../components/googleMetaAnalytics"
 interface FlowStateSetterProps {
   flowData: any
   screenNames: string[]
@@ -22,17 +23,20 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const dispatch = useAppDispatch()
   const state = useAppSelector((state) => state.screen)
 
-  console.log("entered seter", flowData, screen)
+  console.log("entered setter", flowData, screen)
 
   useEffect(() => {
-    console.log("entered seter useEffect")
+    console.log("entered setter useEffect")
+
+    // Handle flow data dispatch
     if (flowData) {
       dispatch(setScreensData(flowData))
       dispatch(setFlowSettings(flowData.flowSettings ?? {}))
       dispatch(setTotalRequired(true))
+      dispatch(setResetTotalFilled(true))
       console.log("flowData in store", flowData, state?.screens)
     }
-  }, [])
+  }, []) // Add dependencies
 
   useEffect(() => {
     // If screen is an empty string, show only the first screen and hide others

@@ -48,9 +48,9 @@ export async function GET(
         userId,
         isDeleted: false,
       },
-      // include: {
-      //   flowSteps: true,
-      // },
+      include: {
+        integrations: true,
+      },
     })
 
     if (!flow) {
@@ -66,7 +66,6 @@ export async function GET(
         isDeleted: false,
       },
     })
-
     flow.steps = flowSteps.sort((a, b) => a.order - b.order)
 
     return NextResponse.json(flow)

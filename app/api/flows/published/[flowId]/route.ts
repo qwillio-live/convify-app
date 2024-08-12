@@ -16,6 +16,9 @@ export async function GET(
         isDeleted: false,
         id: flowId,
       },
+      include: {
+        integrations: true,
+      },
       orderBy: {
         createdAt: "desc",
       },
