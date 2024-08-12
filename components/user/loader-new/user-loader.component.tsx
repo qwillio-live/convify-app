@@ -189,15 +189,18 @@ export const LoaderComponentGen = ({
       nextScreen,
       `searchParams?.get("screen")`,
       searchParams?.get("screen"),
-      pathname?.includes("preview-flow" || "published-flow"),
+      pathname?.includes("preview-flow"),
+      pathname?.includes("published-flow"),
       "isVisible",
       isVisible,
       sc
     )
     if (
-      currentScreenName === searchParams?.get("screen") &&
+      (currentScreenName === searchParams?.get("screen") ||
+        currentScreenName === sc[0]?.screenName) &&
       currentScreenName !== nextScreen &&
-      pathname?.includes("preview-flow" || "published-flow")
+      (pathname?.includes("preview-flow") ||
+        pathname?.includes("published-flow"))
     ) {
       restartLoader()
     }

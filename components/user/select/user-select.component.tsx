@@ -70,12 +70,6 @@ export const SelectGen = ({
     string | undefined
   >()
   const [isFilled, setIsFiiled] = useState(false)
-  const gh = useAppSelector(
-    (state) =>
-      JSON.parse(
-        state.screen?.screens[state.screen?.selectedScreen].screenData
-      )[props.nodeId]
-  )
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen?.selectedScreen]?.screenData
@@ -98,13 +92,13 @@ export const SelectGen = ({
     return false
   })
   useEffect(() => {
-    console.log("setting filled true", screenData, gh)
+    console.log("setting filled true", screenData)
     if (screenData !== undefined) {
       console.log("setting filled true", screenData)
       setIsFiiled(true)
     }
     setSelectedOptionId(screenData)
-  }, [screenData])
+  }, [])
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
@@ -132,14 +126,7 @@ export const SelectGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt]) // Depend on alarm state
-  console.log(
-    "in sselect",
-    screenData,
-    selectedOptionId,
-    gh,
-    isFilled,
-    isRequired
-  )
+  console.log("in sselect", screenData, selectedOptionId, isFilled, isRequired)
   return (
     <div
       ref={itemRefNew}
