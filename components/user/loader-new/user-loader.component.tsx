@@ -140,7 +140,9 @@ export const LoaderComponentGen = ({
       currentScreenName === searchParams?.get("screen") &&
         pathname?.includes("preview-flow" || "published-flow")
         ? searchParams?.get("screen")
-        : sc[0].screenName
+        : sc.length > 0
+        ? sc[0].screenName
+        : ""
     )
     if (index !== -1) {
       if (buttonAction === "next-screen") {

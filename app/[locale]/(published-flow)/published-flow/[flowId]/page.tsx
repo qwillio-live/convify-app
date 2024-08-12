@@ -24,7 +24,6 @@ export default async function PublishedFlows({
 }: PageProps) {
   unstable_setRequestLocale(params.locale)
 
-  const screenName = searchParams?.screen || ""
   const flowId = params?.flowId
   // api to fetch steps and make it static -- need to update it with s3 link instead
   const response = await fetch(
@@ -36,8 +35,9 @@ export default async function PublishedFlows({
     }
   )
   const data = await response.json()
-  console.log("dataaaaa in publisedh", data)
   const screenNames = data?.steps?.map((screen) => screen.name)
+  const screenName = searchParams?.screen || screenNames[0]
+  console.log("dataaaaa in publisedh", screenName, screenNames)
   return (
     <>
       <MetaGoogleAnalytics
@@ -48,7 +48,7 @@ export default async function PublishedFlows({
       <FlowStateSetter flowData={data} screenNames={screenNames} />
       <StaticPublishedFile
         data={data}
-        screenName={screenName}
+        screenName={screenName === undefined ? screenNames[0] : screenName}
         allScreens={screenNames}
       />
     </>

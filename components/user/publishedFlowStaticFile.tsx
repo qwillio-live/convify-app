@@ -1,5 +1,5 @@
 // export const runtime = "nodejs"
-export const dynamic = "force-static"
+// export const dynamic = "force-static"
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import React, { Suspense } from "react"
 
@@ -55,17 +55,20 @@ import FlowLayout from "@/components/flow-preview/flow-preview-server"
 import { unstable_setRequestLocale } from "next-intl/server"
 import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
+import { StringToBoolean } from "class-variance-authority/dist/types"
 // import { cookies } from "next/headers"
+
+interface PageProps {
+  data: any
+  allScreens: string[]
+  screenName: string
+}
 
 export default function StaticPublishedFile({
   data,
-  screenName,
   allScreens,
-}: {
-  data: any
-  screenName: string
-  allScreens: string[]
-}) {
+  screenName,
+}: PageProps) {
   const CraftJsUserComponents = {
     [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
     [CRAFT_ELEMENTS.LOGO]: UserLogo,
@@ -173,8 +176,9 @@ export default function StaticPublishedFile({
     return parse("ROOT") || <></>
   }
   const filteredStep = data.steps.find(
-    (screen) => screen.name === (screenName === "" ? allScreens[0] : screenName)
+    (screen) => screen.name === screenName ?? allScreens[0]
   )
+  console.log("filtered step: ", screenName, allScreens[0])
   return (
     <div
       className={`flex w-full flex-col`}
