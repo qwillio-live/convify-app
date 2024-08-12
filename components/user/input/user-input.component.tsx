@@ -468,7 +468,7 @@ export const UserInputGen = ({ ...props }) => {
           {/** Error container */}
           {!isFilled && isRequired && alarm && (
             <div
-              className={`error-container shake mt-0 flex flex-row items-center gap-0 border text-red-600`}
+              className={`error-container mt-0 flex flex-row items-center gap-0 border text-red-600`}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,

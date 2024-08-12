@@ -163,7 +163,8 @@ export const screensSlice = createSlice({
         errorCount: 0,
         isVisible: false,
       }))
-      state.screens[state.selectedScreen].isVisible = true
+      if (state.screens[state.selectedScreen]?.isVisible)
+        state.screens[state.selectedScreen].isVisible = true
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
     setSelectedData: (state, action: PayloadAction<string[]>) => {
@@ -256,8 +257,45 @@ export const screensSlice = createSlice({
         screen.totalFilled = count2.length
         screen.errorCount = 0
       })
-      state.screens[state.selectedScreen].isVisible = true
+      if (state.screens[state.selectedScreen]?.isVisible)
+        state.screens[state.selectedScreen].isVisible = true
     },
+    setResetTotalFilled: (state, action: PayloadAction<boolean>) => {
+      state.screens.forEach((screen) => {
+        // Changed map to forEach
+        let eachScreen = JSON.parse(JSON.stringify(screen))
+        let screenData = JSON.parse(eachScreen.screenData)
+        console.log(
+          "------eachScreen, screenData for resetting ------",
+          eachScreen,
+          screenData
+        )
+
+        // Reset fields to empty strings for non-UserContainer nodes
+        Object.values(screenData).forEach((node: any) => {
+          if (node.type !== "UserContainer") {
+            if (node.props?.inputValue) {
+              node.props.inputValue = ""
+            }
+            if (node.props?.selectedOptionId) {
+              node.props.selectedOptionId = ""
+            }
+            if (node.props?.input) {
+              node.props.input = ""
+            }
+            if (node.props?.selections) {
+              node.props.selections = []
+            }
+          }
+        })
+
+        // Update totalFilled and reset other properties
+        screen.totalFilled = 0 // Set totalFilled to 0
+        screen.alarm = false // Reset alarm
+        screen.errorCount = 0 // Reset error count
+      })
+    },
+
     setSelectedComponent: (state, action: PayloadAction<string>) => {
       state.selectedComponent = action.payload
     },
@@ -703,6 +741,7 @@ export const {
   setErrorCount,
   setTotalRequired,
   setUpdateFilledCount,
+  setResetTotalFilled,
 } = screensSlice.actions
 
 export default screensSlice.reducer

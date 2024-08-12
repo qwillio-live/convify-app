@@ -254,6 +254,7 @@ export const UserInputMailGen = ({ ...props }) => {
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
   const dispatch = useAppDispatch()
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const fullScreenData = useAppSelector((state) => {
     const screenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -277,11 +278,25 @@ export const UserInputMailGen = ({ ...props }) => {
   })
   useEffect(() => {
     setInputValue(screenData)
+
     if (inputRef.current) {
       inputRef.current.value = screenData
     }
-    if (screenData?.length > 0) {
+
+    // Validate email format
+    const isValidEmail =
+      screenData?.length > 0 &&
+      screenData?.includes("@") &&
+      screenData.includes(".") &&
+      screenData.split("@")[0].length > 0 && // At least one character before "@"
+      screenData.split("@")[1]?.split(".")[0].length > 0 && // At least one character between "@" and "."
+      screenData.split(".").length > 1 && // At least one "." in the value
+      (screenData.split(".").pop()?.length || 0) > 0 && // At least one character after the last "."
+      !screenData.includes("..") // No consecutive dots
+    if (screenData?.length > 0 && isValidEmail) {
       setIsFilled(true)
+    } else {
+      setIsFilled(false) // Set to false if the email is invalid or empty
     }
   }, [screenData])
   console.log("iin user email", typeof screenData, screenData, isFilled)
@@ -480,34 +495,96 @@ export const UserInputMailGen = ({ ...props }) => {
                 `
               )}
               onChange={(e) => {
+                const value = e.target.value
+
                 if (isRequired) {
-                  if (isFilled && e.target.value === "") {
-                    dispatch(setUpdateFilledCount(-1))
-                    setIsFilled(false)
-                    setInputValue(e.target.value)
+                  // Update input value immediately
+                  setInputValue(value)
+
+                  if (value === "") {
+                    // If the input is empty, set isFilled to false and update the filled count
+                    if (isFilled) {
+                      dispatch(setUpdateFilledCount(-1))
+                      setIsFilled(false)
+                    }
                   } else {
-                    if (!isFilled) dispatch(setUpdateFilledCount(1))
-                    setInputValue(e.target.value),
-                      dispatch(
-                        setPreviewScreenData({
-                          nodeId: props.nodeId,
-                          isArray: false,
-                          entity: "inputValue",
-                          newSelections: [e.target.value],
-                        })
-                      ),
+                    // Validate email format if the input is not empty
+                    const isValidEmail =
+                      value.includes("@") &&
+                      value.includes(".") &&
+                      value.split("@")[0].length > 0 && // At least one character before "@"
+                      value.split("@")[1]?.split(".")[0].length > 0 && // At least one character between "@" and "."
+                      value.split(".").length > 1 && // At least one "." in the value
+                      (value.split(".").pop()?.length || 0) > 0 && // At least one character after the last "."
+                      !value.includes("..") // No consecutive dots
+
+                    if (!isValidEmail) {
+                      // Handle invalid email format (e.g., show an error message)
+                      console.error("Invalid email format")
+                      if (isFilled) {
+                        dispatch(setUpdateFilledCount(-1))
+                        setIsFilled(false)
+                      }
+                      return // Exit early if the email is invalid
+                    }
+
+                    // If valid email and was not filled, update the filled count
+                    if (!isFilled) {
+                      dispatch(setUpdateFilledCount(1))
                       setIsFilled(true)
+                    }
                   }
+
+                  // Dispatch the preview screen data update regardless of validity
+                  dispatch(
+                    setPreviewScreenData({
+                      nodeId: props.nodeId,
+                      isArray: false,
+                      entity: "inputValue",
+                      newSelections: [value],
+                    })
+                  )
                 } else {
-                  setInputValue(e.target.value),
-                    dispatch(
-                      setPreviewScreenData({
-                        nodeId: props.nodeId,
-                        isArray: false,
-                        entity: "inputValue",
-                        newSelections: [e.target.value],
-                      })
-                    )
+                  // Handle optional input similarly
+                  setInputValue(value)
+
+                  if (value === "") {
+                    // If the input is empty, no need to check validity
+                    if (isFilled) {
+                      dispatch(setUpdateFilledCount(-1))
+                      setIsFilled(false)
+                    }
+                  } else {
+                    // Validate email format
+                    const isValidEmail =
+                      value.includes("@") &&
+                      value.includes(".") &&
+                      value.split("@")[0].length > 0 && // At least one character before "@"
+                      value.split("@")[1]?.split(".")[0].length > 0 && // At least one character between "@" and "."
+                      value.split(".").length > 1 && // At least one "." in the value
+                      (value.split(".").pop()?.length || 0) > 0 && // At least one character after the last "."
+                      !value.includes("..") // No consecutive dots
+
+                    if (!isValidEmail) {
+                      // Handle invalid email format (e.g., show an error message)
+                      console.error("Invalid email format")
+                      if (isFilled) {
+                        dispatch(setUpdateFilledCount(-1))
+                        setIsFilled(false)
+                      }
+                      return // Exit early if the email is invalid
+                    }
+                  }
+
+                  // Dispatch the preview screen data update
+                  dispatch(
+                    setPreviewScreenData({
+                      nodeId: props.nodeId,
+                      isArray: false,
+                      entity: "inputValue",
+                      newSelections: [value],
+                    })
+                  )
                 }
               }}
               onBlur={() => setIsActive(false)}
@@ -519,7 +596,7 @@ export const UserInputMailGen = ({ ...props }) => {
           {/** Error container */}
           {alarm && !isFilled && isRequired && (
             <div
-              className="error-container shake mt-0 flex flex-row items-center gap-0 border"
+              className="error-container  mt-0 flex flex-row items-center gap-0 border"
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,

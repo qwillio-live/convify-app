@@ -540,7 +540,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
           {/** Error container */}
           {alarm && !isFilled && isRequired && (
             <div
-              className={`error-container shake shake mt-0 flex flex-row items-center gap-0 border `}
+              className={`error-container mt-0 flex flex-row items-center gap-0 border `}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,

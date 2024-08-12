@@ -142,7 +142,7 @@ export const LoaderComponentGen = ({
         ? searchParams?.get("screen")
         : sc[0].screenName
     )
-    if (index !== -1 && currentScreenName !== updatedScreenName) {
+    if (index !== -1) {
       if (buttonAction === "next-screen") {
         console.log("entered if")
         dispatch(
@@ -196,15 +196,14 @@ export const LoaderComponentGen = ({
       sc
     )
     if (
-      (currentScreenName === searchParams?.get("screen") ||
-        currentScreenName === sc[0]?.screenName) &&
-      currentScreenName !== nextScreen &&
-      (pathname?.includes("preview-flow") ||
-        pathname?.includes("published-flow"))
+      // (currentScreenName === searchParams?.get("screen") ||
+      //   currentScreenName === sc[0]?.screenName) &&
+      pathname?.includes("preview-flow") ||
+      pathname?.includes("published-flow")
     ) {
       restartLoader()
     }
-  }, [searchParams?.get("screen")]) // Empty dependency array means this effect runs once when the component mounts
+  }, []) // Empty dependency array means this effect runs once when the component mounts
 
   return (
     <div

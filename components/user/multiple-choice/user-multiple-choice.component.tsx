@@ -705,7 +705,7 @@ const MultipleChoiceItem = ({
                     alarm &&
                     isRequired &&
                     selections.length === 0 &&
-                    "shake !border-2 !border-red-600"
+                    " !border-2 !border-red-600"
                   }`}
                   checked={true}
                 />
@@ -717,7 +717,7 @@ const MultipleChoiceItem = ({
                     alarm &&
                     isRequired &&
                     selections.length === 0 &&
-                    "shake !border-2 !border-red-600"
+                    " !border-2 !border-red-600"
                   }`}
                   value="checked"
                 />

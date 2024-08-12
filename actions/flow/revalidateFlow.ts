@@ -4,5 +4,5 @@ import { revalidateTag } from "next/cache"
 
 export async function revalidateFlow() {
   console.log("revalidating flow...")
-  revalidateTag("flow")
+  revalidateTag("previewFlow")
 }

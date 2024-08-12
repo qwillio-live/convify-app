@@ -102,14 +102,17 @@ export default async function PreviewFlows({
     .join("; ")
 
   const flowId = params?.flowId
-  const response = await fetch(`http://localhost:3000/api/flows/${flowId}`, {
-    method: "GET",
-    headers: {
-      Cookie: cookieString,
-    },
-    cache: "default",
-    next: { tags: ["flow"] },
-  })
+  const response = await fetch(
+    `https://conv-hassan.picreel.bid/api/flows/${flowId}`,
+    {
+      method: "GET",
+      headers: {
+        Cookie: cookieString,
+      },
+      cache: "no-cache",
+      next: { tags: ["previewFlow"] },
+    }
+  )
   const data = await response.json()
   const filteredStep = data.steps.find((screen) => screen.name === screenName)
 
