@@ -1,5 +1,5 @@
 // export const runtime = "nodejs"
-// export const dynamic = "force-static"
+export const dynamic = "force-static"
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import React, { Suspense } from "react"
 
@@ -57,7 +57,7 @@ import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 // import { cookies } from "next/headers"
 
-export default async function StaticPublishedFile({
+export default function StaticPublishedFile({
   data,
   screenName,
   allScreens,
