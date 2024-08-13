@@ -95,7 +95,7 @@ export default function DashboardPage() {
 
   return (
     <div className="font-poppins min-h-screen">
-      <div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-b-[#E6E2DD] bg-[#F6F6F6] px-6 md:h-[60px] ">
+      <div className="sticky top-0 z-20 flex h-[56px] items-center justify-between border-b border-b-[#E6E2DD] bg-[#F6F6F6] px-6 md:h-[60px] ">
         {/* logo */}
         <div>
           <div className="flex items-center gap-2 font-semibold">
@@ -240,7 +240,7 @@ export default function DashboardPage() {
             </h1>
             
             <Link
-              className={`flex w-full items-center md:w-fit ${openCreateFlow ? "hidden md:block":"block"}`}
+              className={`flex w-full items-center md:w-fit ${openCreateFlow ? "block":"hidden md:block"}`}
               href="/dashboard/flows/create-flow/select-template"
             >
               <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-4 py-2 text-sm font-normal text-white md:text-base">
@@ -251,7 +251,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="z-0 grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] min-h-[calc(100vh-(56px+94px))]">
+      <div style={!openCreateFlow ? {marginTop:"-60px"}:{}} className="z-0 grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] min-h-[calc(100vh-(56px+94px))]">
         <div className="hidden border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
           <div className="fixed flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
             <div className="flex-1 overflow-x-hidden">

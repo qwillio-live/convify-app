@@ -113,7 +113,7 @@ const SkeletonFlowCard = () => {
             
 
             {/* Card skeleton */}
-            <Card className="rounded-[20px] p-4">
+            <Card className="rounded-[12px] md:rounded-[20px]  p-4">
                 <CardHeader>
                     <CardTitle><div className="animate-pulse bg-gray-200 h-4 w-20 rounded"></div></CardTitle>
                     <CardDescription><div className="animate-pulse bg-gray-200 h-3 w-64 rounded"></div></CardDescription>
