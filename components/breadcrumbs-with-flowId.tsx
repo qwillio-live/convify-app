@@ -119,15 +119,13 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">
-            <span className="hidden lg:inline-block text-[#9B9A99] text-[16px]">{t("My workspace")}</span>
-            <Button
-              className="size-8 max-h-8 p-0 lg:hidden"
-              size="sm"
-              variant="outline"
-            >
-              <ChevronLeft />
-            </Button>
+          <BreadcrumbLink href="/dashboard" className="flex items-center -mr-4 lg:mr-0">
+            <span className="hidden text-[16px] text-[#9B9A99] lg:inline-block">
+              {t("My workspace")}
+            </span>
+            <button className="text-[#AAAAAA] lg:hidden">
+              <ChevronLeft className="h-4"/>
+            </button>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="hidden lg:inline-block">
@@ -142,7 +140,7 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
                 ? smallScreenTruncateStyle
                 : truncateStyle
             }
-            className="text-[#23262C] text-[16px]"
+            className="text-[#23262C] text-sm md:text-base"
           >
             {loading
               ? "..."

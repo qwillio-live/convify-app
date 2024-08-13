@@ -139,14 +139,14 @@ export const EmailContent: React.FC<ContentProps> = ({
           value={email}
         />
       </div>
-      <p className="mb-4 mt-1.5 text-[#9B9A99]">
+      <p className="mb-4 mt-1.5 text-[#9B9A99] text-xs md:text-sm">
         {t("Email address to which the response is sent")}
       </p>
       <div className="flex w-full justify-between">
         <AccordionPrimitive.Trigger>
           <Button
             variant="secondary"
-            className="bg-[#F2F2F2] text-[12px] font-normal text-[#23262C] md:text-[14px]"
+            className="bg-[#F2F2F2] font-normal text-[#23262C] text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
             style={buttonStyle}
           >
             {t("Close")}
@@ -162,7 +162,7 @@ export const EmailContent: React.FC<ContentProps> = ({
                 setIsLoader(true) // Show loader
               }}
               style={buttonStyle}
-              className="text-[12px] md:text-[14px] font-normal"
+              className="font-normal text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
             >
               {isLoader && (
                 <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -173,7 +173,7 @@ export const EmailContent: React.FC<ContentProps> = ({
             <div className={`flex ${isSmallScreen ? "gap-0" : "gap-1.5"}`}>
               <Button
                 variant="ghost"
-                className="text-[12px] font-normal text-[#CF2B24] hover:bg-red-100 hover:text-red-500 md:text-[14px]"
+                className="font-normal text-[#CF2B24] hover:bg-red-100 hover:text-red-500 text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
                 onClick={() => {
                   handleClick()
                   putRequest("", flowId ?? "", integrationId ?? "")
@@ -183,7 +183,7 @@ export const EmailContent: React.FC<ContentProps> = ({
                 {t("Disconnect")}
               </Button>
               <Button
-                className="hidden text-[12px] font-normal text-white md:block md:text-[14px]"
+                className="hidden font-normal text-white md:block text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
                 style={buttonStyle}
                 onClick={() => {
                   putRequest(email, flowId ?? "", integrationId ?? "")
@@ -192,7 +192,7 @@ export const EmailContent: React.FC<ContentProps> = ({
                 {t("Save changes")}
               </Button>
               <Button
-                className="block text-[12px] font-normal text-white md:hidden md:text-[14px]"
+                className="block font-normal text-white md:hidden text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
                 style={buttonStyle}
                 onClick={() => {
                   putRequest(email, flowId ?? "", integrationId ?? "")
@@ -294,7 +294,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
   return (
     <div className="border-t border-solid border-gray-200 p-5">
       <div className="">
-        <p className="mb-4 text-left text-sm text-[#505050]">
+        <p className="mb-4 text-left text-[#505050]">
           {t(
             "Changes to the Google Analytics 4 integration will only become active after re-publishing"
           )}
@@ -315,7 +315,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                 value={googleAnalyticsId}
               />
             </div>
-            <p className="mt-1.5 text-left text-[#9B9A99]">
+            <p className="mt-1.5 text-left text-[#9B9A99] text-xs md:text-sm">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -324,7 +324,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
           <AccordionPrimitive.Trigger>
             <Button
               variant="secondary"
-              className="bg-[#F2F2F2] text-[12px] font-normal text-[#23262C] md:text-[14px]"
+              className="bg-[#F2F2F2] font-normal text-[#23262C] text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
               style={buttonStyle}
             >
               {t("Close")}
@@ -344,7 +344,7 @@ export const GAnalytics: React.FC<ContentProps> = ({
                   setIsLoader(true) // Show loader
                 }}
                 style={buttonStyle}
-                className="text-[12px] md:text-[14px] font-normal"
+                className="font-normal text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
               >
                 {isLoader && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -489,7 +489,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                 value={googleTagManagerId}
               />
             </div>
-            <p className="mt-1.5 text-left text-[#9B9A99]">
+            <p className="mt-1.5 text-left text-[#9B9A99] text-xs md:text-sm">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -498,7 +498,7 @@ export const GTagManager: React.FC<ContentProps> = ({
           <AccordionPrimitive.Trigger>
             <Button
               variant="secondary"
-              className="bg-[#F2F2F2] text-[12px] font-normal text-[#23262C] md:text-[14px]"
+              className="bg-[#F2F2F2] font-normal text-[#23262C] text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
               style={buttonStyle}
             >
               {t("Close")}
@@ -518,7 +518,7 @@ export const GTagManager: React.FC<ContentProps> = ({
                   setIsLoader(true) // Show loader
                 }}
                 style={buttonStyle}
-                className="text-[12px] md:text-[14px] font-normal"
+                className="font-normal text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
               >
                 {isLoader && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -680,7 +680,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                 value={metaPixelAccessToken}
               />
             </div>
-            <p className="mt-1.5 text-left text-[#9B9A99]">
+            <p className="mt-1.5 text-left text-[#9B9A99] text-xs md:text-sm">
               {t("Copy and paste your Google Analytics 4 Measurement ID here")}
             </p>
           </div>
@@ -689,7 +689,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
           <AccordionPrimitive.Trigger>
             <Button
               variant="secondary"
-              className="bg-[#F2F2F2] text-[12px] font-normal text-[#23262C] md:text-[14px]"
+              className="bg-[#F2F2F2] font-normal text-[#23262C] text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
               style={buttonStyle}
             >
               {t("Close")}
@@ -710,7 +710,7 @@ export const MetaPixel: React.FC<ContentProps> = ({
                   setIsLoader(true) // Show loader
                 }}
                 style={buttonStyle}
-                className="text-[12px] md:text-[14px] font-normal"
+                className="font-normal text-xs md:text-sm h-[35px] md:h-[40px] px-3 md:px-4"
               >
                 {isLoader && (
                   <Icons.spinner className="mr-2 size-4 animate-spin" />

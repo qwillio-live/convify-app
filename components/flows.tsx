@@ -234,9 +234,9 @@ export function FlowsList({ flows, setStatus, status }) {
               }}
             >
               <div>
-                <Table className="min-w-full">
-                  <TableHeader>
-                    <TableRow>
+                <Table className="min-w-full ">
+                  <TableHeader >
+                    <TableRow className="border-b border-[#F2F0EE]">
                       <TableHead
                         className="hidden w-[144px] text-xs md:text-base font-normal text-[#9B9A99] md:table-cell"
                         style={{
@@ -255,7 +255,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className="md:sr-only table-cell w-[384px] text-left text-xs md:text-base font-normal text-[#9B9A99]"
+                        className="md:sr-only table-cell max-w-[99%] w-[384px] text-left text-xs md:text-base font-normal text-[#9B9A99]"
                       >
                         {t("Name")}
                       </TableHead>
@@ -320,7 +320,7 @@ export function FlowsList({ flows, setStatus, status }) {
                     {flows.length > 0 &&
                       flows.map((flow) => {
                         return (
-                          <TableRow key={flow.id} className="border-t border-t-[#F2F0EE]">
+                          <TableRow key={flow.id} className="border-t border-t-[#F2F0EE] border-b border-b-[#F2F0EE]">
                             <TableCell
                               onClick={() =>
                                 router.push(`/dashboard/${flow.id}/create-flow`)
@@ -378,7 +378,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                 variant={
                                   flow.status === "active"
                                     ? "active"
-                                    : "outline"
+                                    : "draft"
                                 }
                               >
                                 {t(flow.status)}

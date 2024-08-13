@@ -65,7 +65,7 @@ const Header = ({ flowId }) => {
     router.push("/login")
   }
   const linkClasses = (path) =>
-    `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-[16px] ${
+    `h-full rounded-none border-b-2 md:border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm md:text-base ${
       isSmallScreen ? "px-2.5" : "px-3"
     } ${
       currentPath?.split("/").at(-1) === path.split("/").at(-1) ||
@@ -125,24 +125,24 @@ const Header = ({ flowId }) => {
 
       <div className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full">
         <Link href="/dashboard/flows/preview-flow" target="_blank">
-          <Button variant="outline" size="sm" className="h-10 gap-2 md:px-4 px-3">
-            <Eye className="size-3.5" />
-            <div className="md:block hidden font-normal text-[16px]">{t("Preview")}</div>
+          <Button variant="outline" size="sm" className="h-8 md:h-10 gap-2 md:px-4 px-2 border border-[#E6E2DD]">
+            <Eye className="size-4 text-[#23262C]" />
+            <div className="md:block hidden font-normal text-sm md:text-base ">{t("Preview")}</div>
           </Button>
         </Link>
         <div className="">
-          <Button size="sm" className="h-10 md:px-4 px-3 gap-1 py-2">
+          <Button size="sm" className="h-8 md:h-10  md:px-4 px-3 gap-1 py-2 text-sm md:text-base">
             <span className="font-normal">{t("Publish")}</span>
           </Button>
         </div>
 
-        <div className="">
+        <div className="hidden md:block">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="secondary"
                 size="sm"
-                className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-semibold uppercase hover:bg-[#eaeaec]"
+                className="flex items-center justify-center rounded-full bg-[#EAEAEC] p-0 text-base font-semibold uppercase hover:bg-[#eaeaec]"
                 style={{ width: "40px", height: "40px" }} // Adjust the size as needed
               >
                 {userData ? (

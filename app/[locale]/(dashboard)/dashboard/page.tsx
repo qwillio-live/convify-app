@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import {
   Bell,
   ChevronDown,
+  FolderClosed,
   FolderOpen,
   Home,
   LineChart,
@@ -93,8 +94,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="font-poppins bg-[#F6F6F6]">
-      <div className="sticky top-0 flex md:h-[60px] h-[56px] items-center justify-between border-b border-b-[#E6E2DD] px-6 ">
+    <div className="font-poppins min-h-screen">
+      <div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-b-[#E6E2DD] bg-[#F6F6F6] px-6 md:h-[60px] ">
         {/* logo */}
         <div>
           <div className="flex items-center gap-2 font-semibold">
@@ -219,30 +220,30 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="sticky md:top-[60px] top-[56px] flex h-[88px] md:border-b md:border-b-[#E6E2DD]">
-        <div className="h-full border-r border-r-[#E6E2DD] md:w-[220px] lg:w-[280px] hidden md:block">
-          
-          <form className="h-full flex items-center lg:px-6 px-2">
+      <div className="sticky top-0 z-10 flex h-[88px] md:top-[60px] md:border-b md:border-b-[#E6E2DD]">
+        <div className="hidden h-full border-r border-r-[#E6E2DD] md:block md:w-[220px] lg:w-[280px]">
+          <form className="flex h-full items-center px-2 lg:px-6">
             <div className="relative w-full">
-              <Search className="text-muted-foreground absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
+              <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-[#23262C]" />
               <Input
                 type="search"
                 placeholder={t("Find workspace or flow")}
-                className="bg-background w-full appearance-none pl-8 shadow-none"
+                className="bg-background w-full appearance-none border border-[#E6E2DD] pl-8 shadow-none  placeholder:text-[#9B9A99]"
               />
             </div>
           </form>
         </div>
-        <div className="flex-1 md:bg-white pt-5 md:pt-0">
-          <div className="h-full flex md:flex-row flex-col md:items-center items-start md:justify-between gap-4 px-4 md:px-8 ">
-            <h1 className="text-base md:text-2xl font-semibold text-[#23262C]">
+        <div className="flex-1 pt-5 md:bg-white md:pt-0">
+          <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
+            <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
               {t("My workspace")}
             </h1>
+            
             <Link
-              className="flex items-center w-full md:w-fit"
+              className={`flex w-full items-center md:w-fit ${openCreateFlow ? "hidden md:block":"block"}`}
               href="/dashboard/flows/create-flow/select-template"
             >
-              <Button className="itmes-center flex gap-2 px-4 py-2 font-normal rounded-lg  text-sm md:text-base text-white bg-[#23262C] w-full">
+              <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-4 py-2 text-sm font-normal text-white md:text-base">
                 <Plus size={16} /> {t("Create new flow")}
               </Button>
             </Link>
@@ -250,32 +251,30 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="z-0 grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] min-h-[calc(100vh-(56px+94px))]">
         <div className="hidden border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
           <div className="fixed flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
             <div className="flex-1 overflow-x-hidden">
-              <nav className="grid items-start px-2 mt-8 text-base lg:px-6">
-                <div className="text-[#9B9A99] flex items-center gap-3 rounded-lg px-3 py-2">
-                  <ChevronDown className="size-4" />
+              <nav className="mt-8 grid items-start px-2 text-base lg:px-6">
+                <div className="flex items-center gap-2 rounded-lg px-3 py-2 text-[#9B9A99]">
+                  <ChevronDown className="size-5" />
                   {t("Private")}
                 </div>
                 <div
                   onClick={() => setOpenCreatedFlow(true)}
                   // href="/dashboard/flows"
-                  className="border border-[#E6E2DD] bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg lg:px-4 py-2 transition-all hover:cursor-pointer"
+                  className="bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg border border-[#E6E2DD] py-2 transition-all hover:cursor-pointer md:px-4"
                 >
                   {/* <Package className="size-4" /> */}
-                  <FolderOpen className="size-4" />
+                  <FolderClosed className="size-5" />
                   {t("My workspace")}{" "}
-                  <span className="ml-auto text-[#9B9A99]">
-                    1
-                  </span>
+                  <span className="ml-auto text-[#9B9A99]">1</span>
                 </div>
               </nav>
             </div>
           </div>
         </div>
-        <div className="mt-4 md:mt-0 flex h-full flex-col overflow-y-auto">
+        <div className="mt-4 flex h-full flex-col overflow-y-auto md:mt-0">
           <main className="flex h-full flex-1 flex-col overflow-y-auto bg-[#F6F6F6] p-4 lg:p-8">
             {loading ? (
               <div
@@ -288,7 +287,7 @@ export default function DashboardPage() {
               <>
                 {openCreateFlow ? (
                   <div
-                    className={`flex flex-1  justify-center rounded-lg ${
+                    className={`flex flex-1 justify-center rounded-lg ${
                       openCreateFlow ? "border-none" : "border"
                     }`}
                     x-chunk="dashboard-02-chunk-1"
@@ -301,28 +300,37 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div
-                    className={`flex flex-1 items-center  justify-center rounded-lg shadow-sm ${
-                      openCreateFlow ? "border-none" : "border"
-                    }`}
+                    className={`flex flex-1 items-center justify-center rounded-[12px] md:rounded-[20px] border border-[#E9E9E9] p-2 md:p-4 bg-white`}
                     x-chunk="dashboard-02-chunk-1"
                   >
                     <div className="flex flex-col items-center gap-1 text-center">
                       <img
                         src="/images/character.svg"
                         alt=""
-                        className="mb-4 h-[104px]"
+                        className="mb-4 h-[240px]"
                       />
-                      <h3 className="text-2xl font-bold tracking-tight">
-                        {t("There's not a flow in sight")}
+                      <h3 className="text-base font-semibold text-[#23262C] md:text-xl">
+                        {t("You have no flows")}
                       </h3>
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-sm text-[#505050] md:text-base">
+                        {t("Start by creating by creating a new flow")}
+                      </p>
+                      <Link
+                        className="flex w-full items-center md:w-fit mt-8"
+                        href="/dashboard/flows/create-flow/select-template"
+                      >
+                        <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-[31px] md:px-4 py-2 text-sm font-normal text-white md:text-base">
+                          <Plus size={16} /> {t("Create new flow")}
+                        </Button>
+                      </Link>
+                      {/* <p className="text-[#505050] text-sm md:text-base">
                         {t.rich(
                           "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
                           {
                             br: () => <br />,
                           }
                         )}
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 )}
