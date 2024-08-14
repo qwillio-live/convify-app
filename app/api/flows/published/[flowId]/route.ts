@@ -23,7 +23,7 @@ export async function GET(
         createdAt: "desc",
       },
     })
-    const flowSteps = await prisma.flowStep.findMany({
+    const flowSteps = await prisma.publishedFlowStep.findMany({
       where: {
         flowId: String(flowId),
         isDeleted: false,
@@ -33,6 +33,71 @@ export async function GET(
     if (flows) finalFlow.steps = flowSteps.sort((a, b) => a.order - b.order)
     console.log("solo", finalFlow, flowId)
     return NextResponse.json(finalFlow)
+  } catch (error) {
+    console.error(error)
+
+    const statusCode = 500
+
+    return NextResponse.json(
+      { error: "Failed to fetch flows" },
+      { status: statusCode }
+    )
+  }
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { flowId: string } }
+) {
+  try {
+    const { flowId } = params
+    const flows = await prisma.flow.findMany({
+      where: {
+        isDeleted: false,
+        id: flowId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    })
+    if (flows.length > 0) {
+      const flowSteps = await prisma.flowStep.findMany({
+        where: {
+          flowId: flowId,
+          isDeleted: false,
+        },
+      })
+      const publishedFlowSteps = flowSteps.map((step) => ({
+        flowId,
+        name: step.name,
+        link: step.link || "",
+        content: step.content || {},
+        order: step.order,
+      }))
+      const deletedFlowSteps = await prisma.publishedFlowStep.deleteMany({
+        where: {
+          flowId: flowId,
+        },
+      })
+      console.log("deleted flowSteps", deletedFlowSteps)
+      const result = await prisma.publishedFlowStep.createMany({
+        data: publishedFlowSteps,
+      })
+      const update = await prisma.flow.update({
+        where: {
+          id: flowId,
+        },
+        data: {
+          isPublished: true,
+          link:
+            publishedFlowSteps.length > 0
+              ? `${req.nextUrl.origin}/published-flow/${flowId}?screen=${publishedFlowSteps[0].name}`
+              : `${req.nextUrl.origin}/published-flow/${flowId}`,
+        },
+      })
+      console.log("final result", result, update)
+      return NextResponse.json(result)
+    }
   } catch (error) {
     console.error(error)
 

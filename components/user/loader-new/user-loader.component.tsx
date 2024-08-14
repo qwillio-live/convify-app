@@ -120,18 +120,29 @@ export const LoaderComponentGen = ({
     console.log("new path", `${pathname}?${params.toString()}`)
     router.push(`${pathname}?${params.toString()}`)
   }
-  const handleNavigateToContent = () => {
+  const handleNavigateToContent = (retry = false) => {
     const newsc = nextScreen
     const updatedScreenName = newScreensMapper[buttonAction] || newsc
-    const index = sc.findIndex(
+    let index = sc.findIndex(
       (screen) => screen.screenName === updatedScreenName
     )
+    if (index === -1 && sc.length === 0 && buttonAction === "next-screen") {
+      index = 1
+    }
     console.log(
       "entere avigation in loader",
+      "sc",
+      sc,
       buttonAction,
+      "updatedScreenName",
       updatedScreenName,
+      "newsc",
       newsc,
+      "index",
       index,
+      "selectedScreen",
+      selectedScreen,
+      "currentScreenName",
       currentScreenName,
       searchParams?.get("screen"),
       pathname,
@@ -144,6 +155,7 @@ export const LoaderComponentGen = ({
         ? sc[0].screenName
         : ""
     )
+
     if (index !== -1) {
       if (buttonAction === "next-screen") {
         console.log("entered if")
@@ -155,7 +167,7 @@ export const LoaderComponentGen = ({
         )
         dispatch(setSelectedScreen(index))
         handleSearch(updatedScreenName)
-      } else if (newsc !== "none" || newsc !== "") {
+      } else if (newsc !== "none" && newsc !== "") {
         console.log("entered else if")
         dispatch(
           validateScreen({
@@ -163,10 +175,15 @@ export const LoaderComponentGen = ({
             next: newsc,
           })
         )
-        const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
-        dispatch(setSelectedScreen(index))
+        const newIndex =
+          sc.findIndex((screen) => screen.screenName === newsc) || 0
+        dispatch(setSelectedScreen(newIndex))
         handleSearch(newsc)
       }
+    } else if (!retry) {
+      // If the index is -1 and it's not a retry, call the function again with retry set to true
+      console.log("Retrying navigation")
+      handleNavigateToContent(true)
     }
   }
 

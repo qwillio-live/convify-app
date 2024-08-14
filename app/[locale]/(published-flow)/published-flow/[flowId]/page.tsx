@@ -1,5 +1,4 @@
 //this below command makes it static, you can check build logs as well, it is static
-export const dynamic = "force-static"
 import React from "react"
 
 import FlowStateSetter from "../../storeSetter"
@@ -7,6 +6,7 @@ import { unstable_setRequestLocale } from "next-intl/server"
 import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 import StaticPublishedFile from "@/components/user/publishedFlowStaticFile"
+import dynamic from "next/dynamic"
 
 interface PageProps {
   params: {

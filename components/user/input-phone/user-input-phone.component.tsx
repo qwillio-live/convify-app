@@ -294,7 +294,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
       setIsFilled(true)
     }
     setUniqueId(generateUniqueId())
-  }, [])
+  }, [screenData])
 
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor

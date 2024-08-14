@@ -136,6 +136,7 @@ export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
+    resetScreen: (state) => initialState,
     setScreensData: (state, action: PayloadAction<any>) => {
       state.flowName = action.payload.name
       state.firstScreenName = action.payload.steps[0]?.name
@@ -399,8 +400,8 @@ export const screensSlice = createSlice({
       state,
       action: PayloadAction<{ current: number | string; next: string }>
     ) => {
-      // const screenName = state.screens[action.payload];
       console.log("SCREEN NAMES ENTRY: ", action.payload)
+
       let screenName = ""
       if (typeof action.payload.current === "number") {
         screenName = state.screens[action.payload.current].screenName
@@ -409,38 +410,52 @@ export const screensSlice = createSlice({
       }
 
       let screenId = ""
-      let screenIndex = 0
-      state.screens.map((screen, index) => {
+      let screenIndex = -1 // Initialize to -1 for easier error checking
+
+      state.screens.forEach((screen, index) => {
         console.log("SCREEN NAMES ARE: ", screen.screenName)
         if (screen.screenName === screenName) {
           screenId = screen.screenId
           screenIndex = index
         }
       })
+
+      if (screenIndex === -1) {
+        console.error("Screen not found!")
+        return
+      }
+
       console.log("SCREEN ID GOT: ", screenId)
-      // const screenFields = screen.screenFields as ScreenFieldsObject;
-      const screenFields = state.screensFieldsList[screenId]
+
+      // Get the fields for the found screen
+      const screenFields = state.screensFieldsList[screenId] || {}
 
       let errors = false
-      Object?.values(screenFields).forEach((field: ScreenFieldType) => {
+
+      // Validate each field in screenFields
+      Object.values(screenFields).forEach((field: ScreenFieldType) => {
         if (field.fieldRequired && !field.fieldValue) {
           field.toggleError = true
-          state.screens[screenIndex].screenValidated = true
           errors = true
         } else {
           field.toggleError = false
-          state.screens[screenIndex].screenValidated = true
-          // state.screens[screenIndex].screenToggleError = false;
         }
       })
+
+      // Update screen validation status
+      state.screens[screenIndex].screenValidated = true
       state.screens[screenIndex].screenToggleError = errors
+
+      // Update current screen name if there are no errors and the next screen is different
       if (
-        errors === false &&
+        !errors &&
         action.payload.next !== state.currentScreenName &&
         action.payload.next
       ) {
         state.currentScreenName = action.payload.next
       }
+
+      // Update the fields and fields list in the state
       state.screens[screenIndex].screenFields = screenFields
       state.screensFieldsList[screenId] = screenFields
     },
@@ -517,9 +532,11 @@ export const screensSlice = createSlice({
     setSelectedScreen: (state, action: PayloadAction<number>) => {
       state.headerMode = false
       state.footerMode = false
-      state.screens[state.selectedScreen].isVisible = false
+      if (state.screens[state.selectedScreen]?.isVisible)
+        state.screens[state.selectedScreen].isVisible = false
       state.selectedScreen = action.payload
-      state.screens[action.payload].isVisible = true
+      if (state.screens[action.payload]?.isVisible)
+        state.screens[action.payload].isVisible = true
       state.editorLoad = state.screens[action.payload]?.screenData // Ensure new reference
     },
     addAvatarComponentId(state, action) {
@@ -742,6 +759,7 @@ export const {
   setTotalRequired,
   setUpdateFilledCount,
   setResetTotalFilled,
+  resetScreen,
 } = screensSlice.actions
 
 export default screensSlice.reducer

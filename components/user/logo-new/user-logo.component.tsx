@@ -66,6 +66,8 @@ export const LogoComponentGen = ({
   borderColor,
   borderHoverColor,
   nextScreen,
+  top,
+
   ...props
 }) => {
   return (

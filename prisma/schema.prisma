@@ -72,11 +72,11 @@ model VerificationToken {
 }
 
 model Flow {
-  id                String       @id @default(cuid())
+  id                String              @id @default(cuid())
   name              String
-  isDeleted         Boolean      @default(false)
-  createdAt         DateTime     @default(now()) @map("created_at")
-  updatedAt         DateTime     @default(now()) @map("updated_at")
+  isDeleted         Boolean             @default(false)
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @default(now()) @map("updated_at")
   previewImage      String?
   link              String?
   status            String?
@@ -87,13 +87,14 @@ model Flow {
   headerData        Json?
   footerData        Json?
   flowSettings      Json?
-  customDomain      String       @default("") @db.VarChar(50)
-  isPublished       Boolean?     @default(false)
+  customDomain      String              @default("") @db.VarChar(50)
+  isPublished       Boolean?            @default(false)
   flow              FlowStep[]
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   integrations      Integration?
   responses         Response[]
   visits            Visit[]
+  PublishedFlowStep PublishedFlowStep[]
 
   @@index([userId], map: "flows_userId_fkey")
   @@map("flows")
@@ -191,6 +192,23 @@ model FlowStep {
   @@map("flowSteps")
 }
 
+model PublishedFlowStep {
+  id         String   @id @default(cuid())
+  flowId     String
+  name       String
+  link       String
+  content    Json
+  order      Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  isDeleted  Boolean  @default(false)
+  templateId String?  @db.VarChar(45)
+  flow       Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId], map: "publishedFlowSteps_flowId_fkey")
+  @@map("publishedFlowSteps")
+}
+
 model name_searches {
   id              Int     @id @default(autoincrement())
   word            String? @db.VarChar(100)
@@ -203,6 +221,7 @@ model names {
 
   @@ignore
 }
+
 model Post {
   id        String   @id @default(cuid())
   title     String

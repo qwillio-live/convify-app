@@ -1,4 +1,4 @@
-import StoreProvider from "@/lib/state/flows-state/store-provider"
+import StoreProviderNonPersist from "@/lib/state/store-provider-non-persist"
 import React from "react"
 
 interface FlowsLayoutProps {
@@ -7,5 +7,5 @@ interface FlowsLayoutProps {
 }
 
 export default async function FlowsLayout({ children }: FlowsLayoutProps) {
-  return <StoreProvider>{children}</StoreProvider>
+  return <StoreProviderNonPersist>{children}</StoreProviderNonPersist>
 }

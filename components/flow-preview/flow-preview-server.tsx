@@ -92,7 +92,7 @@ export default function FlowLayout({ isHeader }: { isHeader: boolean }) {
         screenToggleError: false,
       })
     )
-  }, [screen])
+  }, [search])
   useEffect(() => {
     if (!selectedScreenError) {
       router.refresh()

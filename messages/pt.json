@@ -372,6 +372,8 @@
     "Support": "Suporte",
     "Logout": "Sair",
     "My workspace": "Meu espaço de trabalho",
+    "Flow published successfully!": "Fluxo publicado com sucesso!",
+    "Error publishing flow":"Erro ao publicar fluxo",
     "ResultsPage": {
       "Pick a date": "Escolha uma data",
       "This flow doesnt have any responses yet": "Este typeform ainda não tem respostas.",

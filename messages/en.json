@@ -375,6 +375,8 @@
     "Support": "Support",
     "Logout": "Logout",
     "My workspace": "My workspace",
+    "Flow published successfully!": "Flow published successfully!",
+    "Error publishing flow":"Error publishing flow",
     "ResultsPage": {
       "Pick a date": "Pick a date",
       "This flow doesnt have any responses yet": "This flow doesn’t have any responses.",

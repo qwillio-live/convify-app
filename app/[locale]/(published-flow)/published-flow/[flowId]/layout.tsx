@@ -1,5 +1,4 @@
-import dynamic from "next/dynamic"
-
+// export const dynamic = "force-static"
 // Client Components:
 import FlowLayout from "@/components/flow-preview/flow-preview-server"
 

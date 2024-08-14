@@ -38,7 +38,20 @@ export const makeStore = () => {
   return { store, persistor }
 }
 
+// Configure the non-persistent store
+export const makeNoPersistStore = () => {
+  const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(sagaMiddleware),
+  })
+  sagaMiddleware.run(rootSaga)
+  return store
+}
+
+// Type definitions for stores and dispatch
 export type AppStore = ReturnType<typeof makeStore>["store"]
 export type AppPersistor = ReturnType<typeof makeStore>["persistor"]
+export type AppNoPersistStore = ReturnType<typeof makeNoPersistStore>
 export type RootState = ReturnType<AppStore["getState"]>
 export type AppDispatch = AppStore["dispatch"]

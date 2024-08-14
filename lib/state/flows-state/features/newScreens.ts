@@ -130,7 +130,7 @@ export const newScreensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
-    resetScreens: () => initialState,
+    resetScreens: (state) => initialState,
     setNewScreensData: (state, action: PayloadAction<any>) => {
       state.flowName = action.payload.name
       state.firstScreenName = action.payload.steps[0].name
@@ -307,7 +307,7 @@ export const newScreensSlice = createSlice({
         screen.screenToggleError = screenToggleError
       }
     },
-    resetScreensState: (state) => {
+    resetScreensStates: (state) => {
       state.selectedScreen = 0
       state.headerId = ""
       state.headerMode = false
