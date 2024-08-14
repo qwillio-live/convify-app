@@ -220,43 +220,24 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="sticky top-0 z-10 flex h-[88px] md:top-[60px] md:border-b md:border-b-[#E6E2DD]">
-        <div className="hidden h-full border-r border-r-[#E6E2DD] md:block md:w-[220px] lg:w-[280px]">
-          <form className="flex h-full items-center px-2 lg:px-6">
-            <div className="relative w-full">
-              <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-[#23262C]" />
-              <Input
-                type="search"
-                placeholder={t("Find workspace or flow")}
-                className="bg-background w-full appearance-none border border-[#E6E2DD] pl-8 shadow-none  placeholder:text-[#9B9A99]"
-              />
-            </div>
-          </form>
-        </div>
-        <div className="flex-1 pt-5 md:bg-white md:pt-0">
-          <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
-            <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
-              {t("My workspace")}
-            </h1>
-            
-            <Link
-              className={`flex w-full items-center md:w-fit ${openCreateFlow ? "block":"hidden md:block"}`}
-              href="/dashboard/flows/create-flow/select-template"
-            >
-              <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-4 py-2 text-sm font-normal text-white md:text-base">
-                <Plus size={16} /> {t("Create new flow")}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div style={!openCreateFlow ? {marginTop:"-60px"}:{}} className="z-0 grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] min-h-[calc(100vh-(56px+94px))]">
+      <div className="z-0 grid min-h-[calc(100vh-(56px+94px))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div className="hidden border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
           <div className="fixed flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
+            <div className="h-[88px] md:border-b md:border-b-[#E6E2DD]">
+              <form className="flex h-full items-center px-2 lg:px-6">
+                <div className="relative w-full">
+                  <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-[#23262C]" />
+                  <Input
+                    type="search"
+                    placeholder={t("Find workspace or flow")}
+                    className="bg-background w-full appearance-none border border-[#E6E2DD] pl-8 shadow-none  placeholder:text-[#9B9A99]"
+                  />
+                </div>
+              </form>
+            </div>
             <div className="flex-1 overflow-x-hidden">
-              <nav className="mt-8 grid items-start px-2 text-base lg:px-6">
-                <div className="flex items-center gap-2 rounded-lg px-3 py-2 text-[#9B9A99]">
+              <nav className="mt-4 grid items-start px-2 text-base lg:px-6">
+                <div className="flex items-center gap-2 rounded-lg px-4 py-3 text-[#9B9A99]">
                   <ChevronDown className="size-5" />
                   {t("Private")}
                 </div>
@@ -274,7 +255,26 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
         <div className="mt-4 flex h-full flex-col overflow-y-auto md:mt-0">
+          <div className="h-[88px]  md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0">
+            <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
+              <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
+                {t("My workspace")}
+              </h1>
+
+              <Link
+                className={`flex w-full items-center md:w-fit ${
+                  openCreateFlow ? "block" : "hidden md:block"
+                }`}
+                href="/dashboard/flows/create-flow/select-template"
+              >
+                <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-4 py-2 text-sm font-normal text-white md:text-base">
+                  <Plus size={16} /> {t("Create new flow")}
+                </Button>
+              </Link>
+            </div>
+          </div>
           <main className="flex h-full flex-1 flex-col overflow-y-auto bg-[#F6F6F6] p-4 lg:p-8">
             {loading ? (
               <div
@@ -300,7 +300,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div
-                    className={`flex flex-1 items-center justify-center rounded-[12px] md:rounded-[20px] border border-[#E9E9E9] p-2 md:p-4 bg-white`}
+                    className={`flex flex-1 items-center justify-center rounded-[12px] border border-[#E9E9E9] bg-white p-2 md:rounded-[20px] md:p-4`}
                     x-chunk="dashboard-02-chunk-1"
                   >
                     <div className="flex flex-col items-center gap-1 text-center">
@@ -316,10 +316,10 @@ export default function DashboardPage() {
                         {t("Start by creating by creating a new flow")}
                       </p>
                       <Link
-                        className="flex w-full items-center md:w-fit mt-8"
+                        className="mt-8 flex w-full items-center md:w-fit"
                         href="/dashboard/flows/create-flow/select-template"
                       >
-                        <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-[31px] md:px-4 py-2 text-sm font-normal text-white md:text-base">
+                        <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-[31px] py-2 text-sm font-normal text-white md:px-4 md:text-base">
                           <Plus size={16} /> {t("Create new flow")}
                         </Button>
                       </Link>
