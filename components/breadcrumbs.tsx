@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/breadcrumb"
 
 import { Button } from "./ui/button"
+import { revalidateFlow } from "@/actions/flow/revalidateFlow"
 
 const extractFlowIdFromUrl = (currentPath) => {
   const url = currentPath
@@ -119,7 +120,10 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">
+          <BreadcrumbLink
+            href="/dashboard"
+            onClick={() => revalidateFlow({ tag: "previewFlow" })}
+          >
             <span className="hidden lg:inline-block">{t("My workspace")}</span>
             <Button
               className="size-8 max-h-8 p-0 lg:hidden"

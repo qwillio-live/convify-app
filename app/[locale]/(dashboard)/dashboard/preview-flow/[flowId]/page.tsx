@@ -109,13 +109,14 @@ export default async function PreviewFlows({
       headers: {
         Cookie: cookieString,
       },
-      cache: "no-cache",
+      cache: "default",
       next: { tags: ["previewFlow"] },
     }
   )
   const data = await response.json()
   const filteredStep = data.steps.find((screen) => screen.name === screenName)
-
+    ? data.steps.find((screen) => screen.name === screenName)
+    : data.steps[0]
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
 
