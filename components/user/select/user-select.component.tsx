@@ -98,7 +98,7 @@ export const SelectGen = ({
       setIsFiiled(true)
     }
     setSelectedOptionId(screenData)
-  }, [screenData])
+  }, [])
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
