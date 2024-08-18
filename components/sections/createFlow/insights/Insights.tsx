@@ -32,28 +32,28 @@ import { differenceInCalendarDays, format, parse, subDays } from "date-fns"
 const visitsAndSubmitsData: SubmitData[] = [
   {
     time: convertDate(subDays(new Date(), 5).toISOString()),
-    visits: 10,
-    submits: 2,
+    visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 4).toISOString()),
-    visits: 12,
-    submits: 3,
+    visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 3).toISOString()),
-    visits: 8,
-    submits: 9,
+    visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 2).toISOString()),
-    visits: 11,
-    submits: 2,
+    visits: 0,
+    submits: 0,
   },
   {
     time: convertDate(subDays(new Date(), 1).toISOString()),
-    visits: 4,
-    submits: 8,
+    visits: 0,
+    submits: 0,
   },
 ]
 
@@ -693,7 +693,7 @@ const InsightsFlowComponents = () => {
           <div className="w-full" style={{ height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={visitsAndSubmitsData.map((data) => ({
+                data={data.map((data) => ({
                   ...data,
                   time: format(
                     parse(
@@ -718,7 +718,7 @@ const InsightsFlowComponents = () => {
                   tickLine={false}
                   tickMargin={16}
                   axisLine={false}
-                  className="text-[10px] md:text-sm text-[#9B9A99]"
+                  className="text-[10px] text-[#9B9A99] md:text-sm"
                 />
                 {/* <YAxis
                   dataKey={
