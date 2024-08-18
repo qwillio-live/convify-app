@@ -9,19 +9,19 @@ const ResultFlowComponents = () => {
   const t = useTranslations("CreateFlow.ResultsPage")
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen font-poppins">
       <Tabs defaultValue="insights">
-        <header className="flex h-14 items-center justify-center gap-4 border-b bg-muted/20 px-4 lg:h-[60px] bg-white">
-          <div className="tabs-list-container flex size-full sm:w-3/5 items-center justify-center sm:justify-start">
-            <TabsList className="flex h-full bg-inherit py-0">
+        <header className="flex h-14 lg:h-[88px] items-center justify-center gap-4 border-b bg-muted/20 lg:px-12 px-4 bg-white">
+          <div className="tabs-list-container flex size-full items-center justify-center sm:justify-start">
+            <TabsList className="flex w-full md:w-fit h-full bg-inherit py-0">
               <TabsTrigger
-                className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
+                className="w-full h-full rounded-none border-b-2 md:border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit text-[#9B9A99] data-[state=active]:text-[#23262C] data-[state=active]:font-semibold font-medium px-3"
                 value="insights"
               >
                 {t("insights")}
               </TabsTrigger>
               <TabsTrigger
-                className="h-full rounded-none  border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
+                className="w-full h-full rounded-none  border-b-2 md:border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit text-[#9B9A99] data-[state=active]:text-[#23262C] data-[state=active]:font-semibold font-medium px-3"
                 value="responses"
               >
                 {t("responses")}

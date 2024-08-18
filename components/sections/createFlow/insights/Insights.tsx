@@ -26,86 +26,99 @@ import {
 } from "@/components/ui/table"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange"
-import { pt } from 'date-fns/locale';
-import { differenceInCalendarDays, subDays } from "date-fns"
+import { pt } from "date-fns/locale"
+import { differenceInCalendarDays, format, parse, subDays } from "date-fns"
 
 const visitsAndSubmitsData: SubmitData[] = [
   {
     time: convertDate(subDays(new Date(), 5).toISOString()),
-    visits: 0,
-    submits: 0,
+    visits: 10,
+    submits: 2,
   },
   {
     time: convertDate(subDays(new Date(), 4).toISOString()),
-    visits: 0,
-    submits: 0,
+    visits: 12,
+    submits: 3,
   },
   {
     time: convertDate(subDays(new Date(), 3).toISOString()),
-    visits: 0,
-    submits: 0,
+    visits: 8,
+    submits: 9,
   },
   {
     time: convertDate(subDays(new Date(), 2).toISOString()),
-    visits: 0,
-    submits: 0,
+    visits: 11,
+    submits: 2,
   },
   {
     time: convertDate(subDays(new Date(), 1).toISOString()),
-    visits: 0,
-    submits: 0,
+    visits: 4,
+    submits: 8,
   },
 ]
 
 function convertDate(dateStr: string): string {
-  if (!dateStr) return "0";
-  const date = new Date(dateStr);
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  return `${day}.${month}`;
+  if (!dateStr) return "0"
+  const date = new Date(dateStr)
+  const day = date.getDate().toString().padStart(2, "0")
+  const month = (date.getMonth() + 1).toString().padStart(2, "0")
+  return `${day}.${month}`
 }
 
-const visitConverter = (data: SubmitData[], startDate: Date, endDate: Date, loc: string): { time: string; visits?: number; visitas?: number }[] => {
+const visitConverter = (
+  data: SubmitData[],
+  startDate: Date,
+  endDate: Date,
+  loc: string
+): { time: string; visits?: number; visitas?: number }[] => {
   // Create an array of dates from startDate to endDate
-  const dateArray: string[] = [];
-  let currentDate = new Date(startDate);
+  const dateArray: string[] = []
+  let currentDate = new Date(startDate)
   while (currentDate <= new Date(endDate)) {
-    dateArray.push(convertDate(currentDate.toDateString()));
-    currentDate.setDate(currentDate.getDate() + 1);
+    dateArray.push(convertDate(currentDate.toDateString()))
+    currentDate.setDate(currentDate.getDate() + 1)
   }
   // Map through the dateArray and replace if there's a match with convertDate(d.date)
   return dateArray.map((date: string) => {
-    const matchingData = data.find((d: SubmitData) => convertDate(d.date ?? "0") === date);
+    const matchingData = data.find(
+      (d: SubmitData) => convertDate(d.date ?? "0") === date
+    )
 
-    const count = matchingData ? matchingData.count ?? 0 : 0;
+    const count = matchingData ? matchingData.count ?? 0 : 0
     return {
       time: date,
       visits: loc === "pt" ? undefined : count,
       visitas: loc === "pt" ? count : undefined,
-    };
-  });
-};
+    }
+  })
+}
 
-
-const submitConverter = (data: SubmitData[], startDate: Date, endDate: Date, loc: string): { time: string; submits?: number; envios?: number }[] => {
+const submitConverter = (
+  data: SubmitData[],
+  startDate: Date,
+  endDate: Date,
+  loc: string
+): { time: string; submits?: number; envios?: number }[] => {
   // Create an array of dates from startDate to endDate
-  const dateArray: string[] = [];
-  let currentDate = new Date(startDate);
+  const dateArray: string[] = []
+  let currentDate = new Date(startDate)
   while (currentDate <= new Date(endDate)) {
-    dateArray.push(convertDate(currentDate.toDateString()));
-    currentDate.setDate(currentDate.getDate() + 1);
+    dateArray.push(convertDate(currentDate.toDateString()))
+    currentDate.setDate(currentDate.getDate() + 1)
   }
   // Map through the dateArray and replace if there's a match with convertDate(d.date)
   return dateArray.map((date: string) => {
-    const matchingData = data.find((d: SubmitData) => convertDate(d.date ?? "0") === date);
-    const count = matchingData ? matchingData.count ?? 0 : 0;
+    const matchingData = data.find(
+      (d: SubmitData) => convertDate(d.date ?? "0") === date
+    )
+    const count = matchingData ? matchingData.count ?? 0 : 0
     return {
       time: date,
       submits: loc === "pt" ? undefined : count,
       envios: loc === "pt" ? count : undefined,
-    };
-  });
-};
+    }
+  })
+}
 
 interface SubmitData {
   time?: string
@@ -115,13 +128,13 @@ interface SubmitData {
   count?: number
 }
 const formatDate = (dateString) => {
-  if (!dateString) return "0";
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+  if (!dateString) return "0"
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const day = date.getDate().toString().padStart(2, "0")
+  const month = (date.getMonth() + 1).toString().padStart(2, "0")
+  return `${year}-${month}-${day}`
+}
 
 interface Analytics {
   totalVisits: number
@@ -142,60 +155,60 @@ interface Dropoff {
 
 const fakeDropOff = []
 
-
 const setItems = (key: string, value: any) => {
-  const storedFlowData = JSON.parse(localStorage.getItem('flowData') ?? "null");
+  const storedFlowData = JSON.parse(localStorage.getItem("flowData") ?? "null")
   if (storedFlowData) {
     const updatedFlowData = {
       ...storedFlowData,
       [key]: value,
-    };
+    }
     // Store the updated flowData object back in localStorage
-    localStorage.setItem('flowData', JSON.stringify(updatedFlowData));
+    localStorage.setItem("flowData", JSON.stringify(updatedFlowData))
   }
 }
 
 const getItems = (key: string) => {
-  const storedFlowData = JSON.parse(localStorage.getItem('flowData') ?? "null");
+  const storedFlowData = JSON.parse(localStorage.getItem("flowData") ?? "null")
   if (storedFlowData) {
-    return storedFlowData[key];
+    return storedFlowData[key]
   }
 }
 const getInitialDate = () => {
-  const storedDate = getItems('date')
+  const storedDate = getItems("date")
   if (storedDate) {
     return {
       startDate: new Date(storedDate.startDate),
       endDate: new Date(storedDate.endDate),
-    };
+    }
   } else {
     return {
       startDate: subDays(new Date(), 7),
       endDate: new Date(),
-    };
+    }
   }
-};
-
+}
 
 const navbarHighlighter = () => {
-  const storedDate = getItems('date')
+  const storedDate = getItems("date")
   if (storedDate) {
-    const startDate = storedDate.startDate;
-    const endDate = storedDate.endDate;
-    const isToday = (new Date().toDateString() === new Date(endDate).toDateString());
-    const difference = differenceInCalendarDays(new Date(endDate), new Date(startDate));
+    const startDate = storedDate.startDate
+    const endDate = storedDate.endDate
+    const isToday =
+      new Date().toDateString() === new Date(endDate).toDateString()
+    const difference = differenceInCalendarDays(
+      new Date(endDate),
+      new Date(startDate)
+    )
     // add one day to enddate and compare it today
-    const oneDayToday = differenceInCalendarDays(new Date(endDate), new Date()) === 1;
-    if (isToday && difference === 7 || oneDayToday && difference === 8) {
+    const oneDayToday =
+      differenceInCalendarDays(new Date(endDate), new Date()) === 1
+    if ((isToday && difference === 7) || (oneDayToday && difference === 8)) {
       return "custom"
-    }
-    else if (isToday && difference === 14) {
+    } else if (isToday && difference === 14) {
       return "14days"
-    }
-    else if (isToday && difference === 28) {
+    } else if (isToday && difference === 28) {
       return "28days"
-    }
-    else {
+    } else {
       return "calendar"
     }
   } else {
@@ -204,32 +217,30 @@ const navbarHighlighter = () => {
 }
 
 const InsightsFlowComponents = () => {
-  const currentPath = usePathname();
+  const currentPath = usePathname()
   const [paddingScreen, setPaddingScreen] = useState<string>("inherit")
-  const [windowSize, setWindowSize] = useState(window.innerWidth);
+  const [windowSize, setWindowSize] = useState(window.innerWidth)
 
   useEffect(() => {
     const handleResize = () => {
-      setWindowSize(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
+      setWindowSize(window.innerWidth)
+    }
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   // Determine height based on window width
   const getHeight = () => {
-    return windowSize < 600 ? 'fit-content' : 350;
-  };
+    return windowSize < 600 ? "fit-content" : 350
+  }
 
   useEffect(() => {
     if (windowSize <= 370) {
       setPaddingScreen("0.2rem")
-    }
-    else if (windowSize <= 390) {
+    } else if (windowSize <= 390) {
       setPaddingScreen("0.3rem")
     } else if (windowSize <= 450) {
       setPaddingScreen("0.4rem")
@@ -239,34 +250,33 @@ const InsightsFlowComponents = () => {
     }
   }, [windowSize])
 
-
   const [date, setDate] = useState(() => {
-    return getInitialDate();
+    return getInitialDate()
   })
   const [days, setDays] = useState(() => {
-    const days = getItems('days') || 7;
-    return days;
+    const days = getItems("days") || 7
+    return days
   })
   const [status, setStatus] = useState(false)
   // will be replaced dynamic flow id
-  const [flowId, setFlowId] = useState<string | null>(null);
-  const [firstRender, setFirstRender] = useState(false);
+  const [flowId, setFlowId] = useState<string | null>(null)
+  const [firstRender, setFirstRender] = useState(false)
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
-      const url = currentPath; // Get the current URL
-      const match = url && url.match(/dashboard\/([^\/]+)\/results/); // Use regex to match the flowId
+      const url = currentPath // Get the current URL
+      const match = url && url.match(/dashboard\/([^\/]+)\/results/) // Use regex to match the flowId
       if (match && match[1] && match[1] !== "flows") {
-        setFlowId(match[1]);
-        setDays(days);
+        setFlowId(match[1])
+        setDays(days)
 
         const storedFlowId = getItems("flowId")
-        const storedFlowData = localStorage.getItem('flowData');
+        const storedFlowData = localStorage.getItem("flowData")
         if (storedFlowId && match[1]) {
           if (storedFlowId !== match[1]) {
             setDate({
               startDate: subDays(new Date(), 7),
               endDate: new Date(),
-            });
+            })
             const flowData = {
               flowId: match[1],
               days: 7,
@@ -275,10 +285,10 @@ const InsightsFlowComponents = () => {
                 endDate: new Date(),
               },
               Dropoff: [],
-            };
-            setFirstRender(true);
-            setDays(7);
-            localStorage.setItem('flowData', JSON.stringify(flowData));
+            }
+            setFirstRender(true)
+            setDays(7)
+            localStorage.setItem("flowData", JSON.stringify(flowData))
           }
         }
         if (!storedFlowData) {
@@ -290,66 +300,101 @@ const InsightsFlowComponents = () => {
               endDate: new Date(),
             },
             Dropoff: [],
-          };
-          localStorage.setItem('flowData', JSON.stringify(flowData));
+          }
+          localStorage.setItem("flowData", JSON.stringify(flowData))
         }
-
       }
-    };
-    extractFlowIdFromUrl();
-  }, []);
+    }
+    extractFlowIdFromUrl()
+  }, [])
 
-  const [dataKey, setDataKey] = useState(getItems('dataKey') ?? 'visits');
+  const [dataKey, setDataKey] = useState(getItems("dataKey") ?? "visits")
 
   useEffect(() => {
-    setItems('dataKey', dataKey)
-  }, [dataKey]);
+    setItems("dataKey", dataKey)
+  }, [dataKey])
 
-  const [data, setData] = useState<SubmitData[]>(visitsAndSubmitsData);
+  const [data, setData] = useState<SubmitData[]>(visitsAndSubmitsData)
   let [dropoff, setDropoff] = useState<Dropoff[]>(() => {
-    const dataRes = getItems('Dropoff');
-    const url = currentPath; // Get the current URL
-    const match = url && url.match(/dashboard\/([^\/]+)\/results/);
+    const dataRes = getItems("Dropoff")
+    const url = currentPath // Get the current URL
+    const match = url && url.match(/dashboard\/([^\/]+)\/results/)
     const storedFlowId = getItems("flowId")
-    if (dataRes && match && storedFlowId === match[1]) { // Added null check for 'match'
+    if (dataRes && match && storedFlowId === match[1]) {
+      // Added null check for 'match'
       return dataRes
     } else {
       return []
     }
-  });
+  })
 
-  const t = useTranslations("CreateFlow.ResultsPage");
+  const t = useTranslations("CreateFlow.ResultsPage")
   const locale = useLocale() // Get the locale from the query parameters
-  const datePickerLocale = locale === 'pt' ? pt : undefined
+  const datePickerLocale = locale === "pt" ? pt : undefined
 
   const [analytics, setAnalytics] = useState<Analytics>({
     totalVisits: 0,
     totalSubmits: 0,
-    conversionRate: '0',
-    desktopDevicePercentage: '0',
-    mobileDevicePercentage: '0',
+    conversionRate: "0",
+    desktopDevicePercentage: "0",
+    mobileDevicePercentage: "0",
     submitsArray: visitsAndSubmitsData,
     uniqueVisitsArray: visitsAndSubmitsData,
   })
 
   useEffect(() => {
     // Parse analytics from local storage when component mounts or updates
-    const dataRes = getItems('analyticsData');
+    const dataRes = getItems("analyticsData")
     if (dataRes) {
-      const parsedData = dataRes; // Parse the dataRes string into an object
-      setAnalytics(parsedData);
-      if (dataKey === "submits" && parsedData.submitsArray?.length > 0) setData(submitConverter(parsedData.submitsArray, date.startDate, date.endDate, locale))
-      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length > 0) setData(visitConverter(parsedData.uniqueVisitsArray, date.startDate, date.endDate, locale))
-      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0) setData(submitConverter(visitsAndSubmitsData, date.startDate, date.endDate, locale))
-      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length <= 0) setData(visitConverter(visitsAndSubmitsData, date.startDate, date.endDate, locale))
+      const parsedData = dataRes // Parse the dataRes string into an object
+      setAnalytics(parsedData)
+      if (dataKey === "submits" && parsedData.submitsArray?.length > 0)
+        setData(
+          submitConverter(
+            parsedData.submitsArray,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
+      else if (dataKey === "visits" && parsedData.uniqueVisitsArray?.length > 0)
+        setData(
+          visitConverter(
+            parsedData.uniqueVisitsArray,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
+      else if (dataKey === "submits" && parsedData.submitsArray?.length <= 0)
+        setData(
+          submitConverter(
+            visitsAndSubmitsData,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
+      else if (
+        dataKey === "visits" &&
+        parsedData.uniqueVisitsArray?.length <= 0
+      )
+        setData(
+          visitConverter(
+            visitsAndSubmitsData,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
     }
-  }, []);
+  }, [])
   function setDateBasedOnDays(day: number) {
     setDate({
       startDate: subDays(new Date(), day),
       endDate: new Date(),
     })
-    setItems('date', {
+    setItems("date", {
       startDate: subDays(new Date(), day),
       endDate: new Date(),
     })
@@ -357,10 +402,14 @@ const InsightsFlowComponents = () => {
 
   useEffect(() => {
     const getDropoff = async () => {
-      const response = await fetch(`/api/analytics/dropoff/?flowId=${flowId}&startDate=${formatDate(date.startDate)}&endDate=${formatDate(date.endDate)}`)
+      const response = await fetch(
+        `/api/analytics/dropoff/?flowId=${flowId}&startDate=${formatDate(
+          date.startDate
+        )}&endDate=${formatDate(date.endDate)}`
+      )
       const dataRes = await response.json()
       setDropoff(dataRes)
-      setItems('Dropoff', dataRes)
+      setItems("Dropoff", dataRes)
     }
     if (flowId) {
       getDropoff()
@@ -370,15 +419,49 @@ const InsightsFlowComponents = () => {
   useEffect(() => {
     const getAnalytics = async () => {
       const response = await fetch(
-        `/api/analytics/?flowId=${flowId}&startDate=${formatDate(date.startDate)}&endDate=${formatDate(date.endDate)}`
+        `/api/analytics/?flowId=${flowId}&startDate=${formatDate(
+          date.startDate
+        )}&endDate=${formatDate(date.endDate)}`
       )
       const dataRes = await response.json()
       setAnalytics(dataRes)
-      setItems('analyticsData', dataRes)
-      if (dataKey === "submits" && dataRes.submitsArray.length > 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate, locale))
-      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate, locale))
-      else if (dataKey === "submits" && dataRes.submitsArray.length <= 0) setData(submitConverter(dataRes.submitsArray, date.startDate, date.endDate, locale))
-      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0) setData(visitConverter(dataRes.uniqueVisitsArray, date.startDate, date.endDate, locale))
+      setItems("analyticsData", dataRes)
+      if (dataKey === "submits" && dataRes.submitsArray.length > 0)
+        setData(
+          submitConverter(
+            dataRes.submitsArray,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length > 0)
+        setData(
+          visitConverter(
+            dataRes.uniqueVisitsArray,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
+      else if (dataKey === "submits" && dataRes.submitsArray.length <= 0)
+        setData(
+          submitConverter(
+            dataRes.submitsArray,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
+      else if (dataKey === "visits" && dataRes.uniqueVisitsArray.length <= 0)
+        setData(
+          visitConverter(
+            dataRes.uniqueVisitsArray,
+            date.startDate,
+            date.endDate,
+            locale
+          )
+        )
     }
     if (flowId) {
       getAnalytics()
@@ -387,146 +470,197 @@ const InsightsFlowComponents = () => {
 
   const repeatedJSX = (
     <>
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
-        <Card className="flex flex-col">
-          <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-            <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground"
-              style={{ color: "#71717A" }}
-            >
-              {t("Visits")}
-            </h3>
-            <User />
-          </div>
-          <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-            <div className="text-4xl font-semibold font-geist" style={{ color: "#09090B" }}>
-              {analytics.totalVisits || 0}
+      <div className="mt-4 flex flex-col gap-4 md:flex-row md:gap-6">
+        <div className="flex w-full flex-col gap-4 md:w-[57%] md:flex-row md:gap-6">
+          <div className="flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
+            <div className="flex flex-row items-center justify-between space-y-0">
+              <h3 className="text-base font-semibold text-[#23262C]">
+                {t("Visits")}
+              </h3>
+              <User className="h-6 text-[#7B7D80]" />
             </div>
-            <p className="text-xs text-muted-foreground font-geist" style={{ color: "#71717A" }}>
-              {t("visits from last month", { visits: "0%" })}
-            </p>
-          </div>
-        </Card>
-        <Card className="flex flex-col">
-          <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-            <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground" style={{ color: "#71717A" }}>
-              {t("Submits")}
-            </h3>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-goal"
-            >
-              <path d="M12 13V2l8 4-8 4" />
-              <path d="M20.561 10.222a9 9 0 1 1-12.55-5.29" />
-              <path d="M8.002 9.997a5 5 0 1 0 8.9 2.02" />
-            </svg>
-          </div>
-          <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-            <div className=" text-4xl font-semibold font-geist" style={{ color: "#09090B" }}>{analytics.totalSubmits}</div>
-            <p className="text-xs text-muted-foreground font-geist" style={{ color: "#71717A" }}>
-              {t("submits from last month", { submits: "0%" })}
-            </p>
-          </div>
-        </Card>
-        <Card className="flex flex-col">
-          <div className="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-            <h3 className="text-sm font-normal tracking-tight font-geist text-muted-foreground" style={{ color: "#71717A" }}>
-              {t("Conversion Rate")}
-            </h3>
-            <Percent />
-          </div>
-          <div className="flex flex-1 flex-col justify-end p-6 pt-0">
-            <div className=" text-4xl font-semibold font-geist" style={{ color: "#09090B" }}>{analytics.conversionRate}</div>
-            <p className="text-xs text-muted-foreground font-geist" style={{ color: "#71717A" }}>
-              {t("conversionRate from last month", {
-                conversionRate: "0%",
-              })}
-            </p>
-          </div>
-        </Card>
-        <Card className="flex flex-col">
-          <div className="flex w-full flex-1 justify-evenly gap-2 p-6 px-0">
-            <div className="">
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  className="size-8"
-                >
-                  <rect width="20" height="14" x="2" y="3" rx="2" />
-                  <line x1="8" x2="16" y1="21" y2="21" />
-                  <line x1="12" x2="12" y1="17" y2="21" />
-                </svg>
-                <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
-                  {t("Desktop")}
-                </p>
+            <div className="flex flex-1 flex-col justify-end">
+              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+                {analytics.totalVisits || 0}
+              </h1>
+              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                {t("visits from last month", { visits: "0%" })}
               </div>
-              <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.desktopDevicePercentage) === '0' ? 0 : Number(analytics.desktopDevicePercentage).toFixed(1)} `}%
-              </span>
             </div>
-            <div className="">
-              <div>
-                <svg
-                  viewBox="0 0 48 48"
-                  width="18"
-                  height="18"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="size-8"
-                >
-                  <g
+          </div>
+
+          <div className="flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
+            <div className="flex flex-row items-center justify-between space-y-0">
+              <h3 className="text-base font-semibold text-[#23262C]">
+                {t("Submits")}
+              </h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#7B7D80"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                className="lucide lucide-goal"
+              >
+                <path d="M12 13V2l8 4-8 4" />
+                <path d="M20.561 10.222a9 9 0 1 1-12.55-5.29" />
+                <path d="M8.002 9.997a5 5 0 1 0 8.9 2.02" />
+              </svg>
+            </div>
+            <div className="flex flex-1 flex-col justify-end">
+              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+                {analytics.totalSubmits}
+              </h1>
+              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                {t("submits from last month", { submits: "0%" })}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
+            <div className="flex flex-row items-center justify-between space-y-0">
+              <h3 className="text-base font-semibold text-[#23262C]">
+                {t("Conversion Rate")}
+              </h3>
+              <Percent className="h-6 text-[#7B7D80]" />
+            </div>
+            <div className="flex flex-1 flex-col justify-end">
+              <div className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+                {analytics.conversionRate}
+              </div>
+              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                {t("conversionRate from last month", {
+                  conversionRate: "0%",
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full rounded-[12px] border border-[#E9E9E9] bg-white md:w-[43%] md:rounded-[20px]">
+          <div className="flex w-full flex-col md:flex-row md:gap-8">
+            <div className="w-full p-5 md:p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold text-[#23262C]">
+                  {t("Desktop")}
+                </h3>
+                <div>
+                  <svg
+                    width="25"
+                    height="24"
+                    viewBox="0 0 25 24"
                     fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M16.5 30l3.346-2.51a3.14 3.14 0 014.494.77h0a3.138 3.138 0 010 3.48l-3.29 4.934a9 9 0 01-4.146 3.364L12 42v4.5M18 19.5l-7.2 3.082a9 9 0 00-4.726 4.728L3.728 32.8A9 9 0 003 36.348V46.5"
-                      stroke-width="3"
-                    ></path>
+                      d="M20.5 3H4.5C3.39543 3 2.5 3.89543 2.5 5V15C2.5 16.1046 3.39543 17 4.5 17H20.5C21.6046 17 22.5 16.1046 22.5 15V5C22.5 3.89543 21.6046 3 20.5 3Z"
+                      stroke="#7B7D80"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                     <path
-                      d="M18 28.876V7.5a6 6 0 016-6h15a6 6 0 016 6v33a6 6 0 01-6 6H24a6 6 0 01-6-6v-1M20.428 37.5H45"
-                      stroke-width="3"
-                    ></path>
-                  </g>
-                </svg>
-                <p className="pb-1 text-sm font-medium tracking-tight font-geist text-muted-foreground">
-                  {t("Mobile")}
-                </p>
+                      d="M8.5 21H16.5"
+                      stroke="#7B7D80"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M12.5 17V21"
+                      stroke="#7B7D80"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
               </div>
-              <span className=" text-4xl font-semibold font-geist">
-                {`${String(analytics.mobileDevicePercentage) === '0.00' || String(analytics.mobileDevicePercentage) === '0' ? 0 : Number(analytics.mobileDevicePercentage).toFixed(1)}`}%
-              </span>
+              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+                {`${
+                  String(analytics.desktopDevicePercentage) === "0"
+                    ? 0
+                    : Number(analytics.desktopDevicePercentage).toFixed(1)
+                }`}
+                %
+              </h1>
+              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                {t("visits from last month", { visits: "0%" })}
+              </div>
+            </div>
+
+            <div className="px-6 py-0 md:px-0 md:py-6">
+              <div className="w-full border-b border-[#EAEAEC] md:h-full md:border-r"></div>
+            </div>
+
+            <div className="w-full p-5 md:p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold text-[#23262C]">
+                  {t("Mobile")}
+                </h3>
+                <div>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.5 6H13.5M16.286 3H7.714C6.768 3 6 3.806 6 4.8V19.2C6 20.194 6.768 21 7.714 21H16.286C17.233 21 18 20.194 18 19.2V4.8C18 3.806 17.233 3 16.286 3Z"
+                      stroke="#7B7D80"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+                {`${
+                  String(analytics.mobileDevicePercentage) === "0.00" ||
+                  String(analytics.mobileDevicePercentage) === "0"
+                    ? 0
+                    : Number(analytics.mobileDevicePercentage).toFixed(1)
+                }`}
+                %
+              </h1>
+              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                {t("visits from last month", { visits: "0%" })}
+              </div>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
-      <div className="mt-4 grid lg:grid-cols-2 gap-4 items-start" style={{ marginBottom: '70px', height: getHeight() }}>
-        <Card className="w-full">
-          <div className="p-[0.70rem] flex justify-start">
-            <div className="p-0.5 flex gap-0 bg-secondary rounded-lg">
+
+      <div className="mt-6 flex flex-col gap-4 md:flex-row md:gap-6">
+        <div className="w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[57%] md:rounded-[20px]">
+          <div className="mb-6 flex justify-between">
+            <h2 className="text-base font-semibold text-[#23262C] md:text-2xl">
+              {t("Statistics")}
+            </h2>
+            <div className="flex h-[34px] gap-0 rounded-lg bg-[#EEEEEE] p-1 md:h-9">
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border ${dataKey === "visits"
-                  ? "bg-white border-input hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-[26px] w-[53px] rounded border-none text-sm font-normal md:h-7 md:w-[58px] md:text-base ${
+                  dataKey === "visits"
+                    ? "bg-white text-[#23262C] hover:bg-white"
+                    : "bg-transparent text-[#7B7D80] hover:bg-transparent"
+                }`}
                 onClick={() => {
                   setDataKey("visits")
-                  setData(visitConverter(analytics.uniqueVisitsArray, date.startDate, date.endDate, locale))
+                  setData(
+                    visitConverter(
+                      analytics.uniqueVisitsArray,
+                      date.startDate,
+                      date.endDate,
+                      locale
+                    )
+                  )
                 }}
                 size="sm"
               >
@@ -534,13 +668,21 @@ const InsightsFlowComponents = () => {
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border hover:bg-white ${dataKey === "submits"
-                  ? "bg-white border-input hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-[26px] w-[73px] rounded border text-sm font-normal hover:bg-white md:h-7 md:w-[82px] md:text-base ${
+                  dataKey === "submits"
+                    ? "border-input bg-white text-[#23262C] hover:bg-white"
+                    : "border-transparent bg-transparent text-[#7B7D80] hover:bg-transparent"
+                }`}
                 onClick={() => {
                   setDataKey("submits")
-                  setData(submitConverter(analytics.submitsArray, date.startDate, date.endDate, locale))
+                  setData(
+                    submitConverter(
+                      analytics.submitsArray,
+                      date.startDate,
+                      date.endDate,
+                      locale
+                    )
+                  )
                 }}
                 size="sm"
               >
@@ -551,145 +693,246 @@ const InsightsFlowComponents = () => {
           <div className="w-full" style={{ height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={data}
+                data={visitsAndSubmitsData.map((data) => ({
+                  ...data,
+                  time: format(
+                    parse(
+                      `${data?.time.split(".")[1]}.${data?.time.split(".")[0]}`,
+                      "M.d",
+                      new Date()
+                    ),
+                    "MMM dd"
+                  ),
+                }))}
                 margin={{
                   top: 0,
                   right: 20,
                   left: 0,
-                  bottom: 20,
+                  bottom: 10,
                 }}
                 className="w-full"
               >
                 {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                <XAxis dataKey="time" fontSize={14} />
-                <YAxis dataKey={dataKey === "visits" ? locale === "pt" ? "visitas" : "visits" : locale === "pt" ? "envios" : "submits"} fontSize={14} />
+                <XAxis
+                  dataKey="time"
+                  tickLine={false}
+                  tickMargin={16}
+                  axisLine={false}
+                  className="text-[10px] md:text-sm text-[#9B9A99]"
+                />
+                {/* <YAxis
+                  dataKey={
+                    dataKey === "visits"
+                      ? locale === "pt"
+                        ? "visitas"
+                        : "visits"
+                      : locale === "pt"
+                      ? "envios"
+                      : "submits"
+                  }
+                  fontSize={14}
+                /> */}
                 <Tooltip cursor={false} />
                 {/* <Legend /> */}
                 <Bar
-                  dataKey={dataKey === "visits" ? locale === "pt" ? "visitas" : "visits" : locale === "pt" ? "envios" : "submits"}
-                  fill="#000"
-                  activeBar={<Rectangle fill="#000" />}
-                  radius={[4, 4, 0, 0]}
+                  dataKey={
+                    dataKey === "visits"
+                      ? locale === "pt"
+                        ? "visitas"
+                        : "visits"
+                      : locale === "pt"
+                      ? "envios"
+                      : "submits"
+                  }
+                  fill="#23262C"
+                  activeBar={<Rectangle fill="#2B3398" />}
+                  radius={4}
                 />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </Card>
-        <Card className="size-full min-h-[350px]">
-          <div className="overflow-x-hidden sm:overflow-x-auto size-full">
+        </div>
+        <div className="h-fill w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px]">
+          <div className="size-full overflow-x-hidden sm:overflow-x-auto">
             <Table className="size-full">
               <TableHeader>
-                <TableRow className="p-[0.60rem]">
-                  <TableHead className="whitespace-nowrap p-[0.60rem] pr-0">#</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Step")}</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Views")}</TableHead>
-                  <TableHead className="whitespace-nowrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Exits")}</TableHead>
-                  <TableHead className="whitespace-wrap p-[0.60rem]" style={{ padding: paddingScreen }}>{t("Drop-off rate")}</TableHead>
+                <TableRow className="mb-0 border-b border-[#EAEAEC] text-xs md:text-base">
+                  <TableHead className="hidden h-full whitespace-nowrap border-r border-[#EAEAEC] py-4 pr-0 font-normal text-[#9B9A99] md:block">
+                    #
+                  </TableHead>
+                  <TableHead
+                    className="whitespace-nowrap px-2 py-4 font-normal text-[#9B9A99] md:px-4"
+                    // style={{ padding: paddingScreen }}
+                  >
+                    {t("Step")}
+                  </TableHead>
+                  <TableHead
+                    className="whitespace-nowrap px-2 py-4 font-normal text-[#9B9A99]"
+                    // style={{ padding: paddingScreen }}
+                  >
+                    {t("Visits")}
+                  </TableHead>
+                  <TableHead
+                    className="whitespace-nowrap px-2 py-4 font-normal text-[#9B9A99]"
+                    // style={{ padding: paddingScreen }}
+                  >
+                    {t("Exits")}
+                  </TableHead>
+                  <TableHead
+                    className="whitespace-wrap px-2 py-4 font-normal text-[#9B9A99]"
+                    // style={{ padding: paddingScreen }}
+                  >
+                    {t("Drop-off rate")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="h-full">
-                {dropoff && dropoff.length >= 0 ? (
-                  dropoff.map((item, index) => (
-                    <TableRow key={index} className="p-[0.60rem]"> {/* Reduced padding here */}
-                      <TableCell className="p-[0.60rem] pr-0">{index + 1}</TableCell>
-                      <TableCell className="p-[0.60rem] whitespace-wrap" style={{ padding: paddingScreen }}>{item.stepName}</TableCell>
-                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.visits}</TableCell>
-                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.exits}</TableCell>
-                      <TableCell className="p-[0.60rem]" style={{ padding: paddingScreen }}>{item.dropOffRate.split('.')[0]}%</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  fakeDropOff.map((item, index) => (
-                    <TableRow key={index} className="p-4"> {/* Reduced padding here */}
-                      <TableCell className="p-4"></TableCell>
-                      <TableCell className="p-4 whitespace-wrap" style={{ padding: paddingScreen }}></TableCell>
-                      <TableCell className="p-4" style={{ padding: paddingScreen }}></TableCell>
-                      <TableCell className="p-4" style={{ padding: paddingScreen }}></TableCell>
-                      <TableCell className="p-4" style={{ padding: paddingScreen }}></TableCell>
-                    </TableRow>
-                  ))
-                )}
+                {dropoff && dropoff.length >= 0
+                  ? dropoff.map((item, index) => (
+                      <TableRow
+                        key={index}
+                        className="border-b border-[#EAEAEC] px-2 py-4 text-xs text-[#23262C] md:px-4 md:text-base"
+                      >
+                        {" "}
+                        {/* Reduced padding here */}
+                        <TableCell className="hidden h-full border-r border-[#EAEAEC] px-2 py-4 pr-0 text-[#9B9A99] md:block md:px-4">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell
+                          className="whitespace-wrap px-2 py-4 md:px-4"
+                          // style={{ padding: paddingScreen }}
+                        >
+                          {item.stepName}
+                        </TableCell>
+                        <TableCell
+                          className="px-2 py-4"
+                          // style={{ padding: paddingScreen }}
+                        >
+                          {item.visits}
+                        </TableCell>
+                        <TableCell
+                          className="px-2 py-4"
+                          // style={{ padding: paddingScreen }}
+                        >
+                          {item.exits}
+                        </TableCell>
+                        <TableCell
+                          className="px-2 py-4"
+                          // style={{ padding: paddingScreen }}
+                        >
+                          {item.dropOffRate.split(".")[0]}%
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : fakeDropOff.map((item, index) => (
+                      <TableRow key={index} className="p-4">
+                        {" "}
+                        {/* Reduced padding here */}
+                        <TableCell className="p-4"></TableCell>
+                        <TableCell
+                          className="whitespace-wrap p-4"
+                          style={{ padding: paddingScreen }}
+                        ></TableCell>
+                        <TableCell
+                          className="p-4"
+                          style={{ padding: paddingScreen }}
+                        ></TableCell>
+                        <TableCell
+                          className="p-4"
+                          style={{ padding: paddingScreen }}
+                        ></TableCell>
+                        <TableCell
+                          className="p-4"
+                          style={{ padding: paddingScreen }}
+                        ></TableCell>
+                      </TableRow>
+                    ))}
               </TableBody>
             </Table>
           </div>
-        </Card>
-      </div >
+        </div>
+      </div>
     </>
   )
   return (
-    <Tabs defaultValue={navbarHighlighter()}
-      className="pb-[100px]"
-    >
-      <header className="mt-4 flex items-center gap-4 px-0 lg:px-6">
-        <div className="tabs-list-container flex items-center justify-start rounded-lg bg-white p-[0.70rem] overflow-x-hidden">
-          <TabsList className="flex h-full bg-inherit py-0 overflow-x-auto" >
+    <Tabs defaultValue={navbarHighlighter()} className="pb-16">
+      <header className="z-[100] mt-4 flex items-center gap-4 px-0 md:fixed md:right-7 md:top-[84px] md:mt-0 lg:px-6">
+        <div className="tabs-list-container flex items-center justify-start overflow-x-hidden">
+          <TabsList className="flex h-full overflow-x-auto bg-inherit py-0">
             <TabsTrigger
-              className="[&>div>button]:data-[state=active]:border-input [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=inactive]:bg-transparent [&>div>button]:data-[state=active]:bg-muted [&>div>button]:font-medium"
+              className="w-full [&>div>button]:data-[state=active]:border-[#E6E2DD] [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=active]:text-[#23262C] [&>div>button]:data-[state=inactive]:text-[#9B9A99]"
               value="calendar"
               onClick={() => {
-                setDays(days);
-                setDateBasedOnDays(days);
+                setDays(days)
+                setDateBasedOnDays(days)
               }}
             >
-              <DatePickerWithRange className="" firstRender={firstRender} days={days} setDays={setDays} locale={datePickerLocale} status={status} setStatus={setStatus} setDater={(v: any) => setDate({ startDate: v.startDate, endDate: v.endDate })} />
+              <DatePickerWithRange
+                className="w-full"
+                firstRender={firstRender}
+                days={days}
+                setDays={setDays}
+                locale={datePickerLocale}
+                status={status}
+                setStatus={setStatus}
+                setDater={(v: any) =>
+                  setDate({ startDate: v.startDate, endDate: v.endDate })
+                }
+              />
             </TabsTrigger>
             <TabsTrigger
-              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"
+              className="hidden whitespace-nowrap rounded-md border px-3 py-1 text-base data-[state=active]:border-[#E6E2DD] data-[state=inactive]:border-transparent data-[state=active]:text-[#23262C] data-[state=inactive]:text-[#9B9A99] md:block"
               value="28days"
-              onClick={() => { setDays(28); setDateBasedOnDays(28); setStatus(!status); }}
+              onClick={() => {
+                setDays(28)
+                setDateBasedOnDays(28)
+                setStatus(!status)
+              }}
             >
               {t("Last 28 days")}
             </TabsTrigger>
             <TabsTrigger
-              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"
+              className="hidden whitespace-nowrap rounded-md border px-3 py-1 text-base data-[state=active]:border-[#E6E2DD] data-[state=inactive]:border-transparent data-[state=active]:text-[#23262C] data-[state=inactive]:text-[#9B9A99] md:block"
               value="14days"
-              onClick={() => { setDays(14); setDateBasedOnDays(14); setStatus(!status); }}
+              onClick={() => {
+                setDays(14)
+                setDateBasedOnDays(14)
+                setStatus(!status)
+              }}
             >
               {t("Last 14 days")}
             </TabsTrigger>
             <TabsTrigger
-              className="px-3 py-1 text-sm font-medium data-[state=active]:bg-muted data-[state=inactive]:bg-transparent rounded-md border data-[state=active]:border-input data-[state=inactive]:border-transparent whitespace-nowrap"
+              className="hidden whitespace-nowrap rounded-md border px-3 py-1 text-base data-[state=active]:border-[#E6E2DD] data-[state=inactive]:border-transparent data-[state=active]:text-[#23262C] data-[state=inactive]:text-[#9B9A99] md:block"
               value="custom"
-              onClick={() => { setDays(7); setDateBasedOnDays(7); setStatus(!status); }}
+              onClick={() => {
+                setDays(7)
+                setDateBasedOnDays(7)
+                setStatus(!status)
+              }}
             >
               {t("Last 7 days")}
             </TabsTrigger>
           </TabsList>
         </div>
       </header>
-      <main className="content relative z-50 flex items-start bg-transparent px-0 mb-4 lg:px-6 mt-2">
+      <main className="content relative z-50 mb-4 flex items-start bg-transparent px-0 pb-32 md:mt-2 lg:px-6">
         <div className="tabs-content flex w-full items-center justify-start">
-          <TabsContent
-            // className="mt-0 w-full h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 size-full"
-            value="custom"
-          >
+          <TabsContent className="mt-0 size-full" value="custom">
             {repeatedJSX}
           </TabsContent>
-          <TabsContent
-            // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 size-full"
-            value="14days"
-          >
+          <TabsContent className="mt-0 size-full" value="14days">
             {repeatedJSX}
           </TabsContent>
-          <TabsContent
-            // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 size-full"
-            value="28days"
-          >
+          <TabsContent className="mt-0 size-full" value="28days">
             {repeatedJSX}
           </TabsContent>
-          <TabsContent
-            // className="mt-0 w-full overflow-y-auto h-[calc(100vh-232px)] lg:h-[calc(100vh-180px)]"
-            className="mt-0 size-full"
-            value="calendar"
-          >
+          <TabsContent className="mt-0 size-full" value="calendar">
             {repeatedJSX}
           </TabsContent>
-        </div >
-      </main >
-    </Tabs >
+        </div>
+      </main>
+    </Tabs>
   )
 }
 
