@@ -1182,6 +1182,8 @@ export const UserToolbox = () => {
                             {...LoaderDefaultProps}
                             // {...filledPreset}
                             {...filledPreset}
+                            buttonAction={"custom-action"}
+                            nextScreen={""}
                             // {...outLinePreset}
                             disabled={false}
                           />

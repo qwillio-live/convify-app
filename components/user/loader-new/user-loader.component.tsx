@@ -189,11 +189,15 @@ export const LoaderComponentGen = ({
 
   const restartLoader = () => {
     setShowLoader(true)
+
     setTimeout(() => {
       setShowLoader(false)
+
       if (enableRedirect) {
         console.log("enableRedirect", enableRedirect)
-        handleNavigateToContent()
+        setTimeout(() => {
+          handleNavigateToContent()
+        }, 1300)
       }
     }, time * 1000)
   }
@@ -791,7 +795,7 @@ export const LoaderDefaultProps: IconButtonProps = {
   tracking: false,
   trackingEvent: "button_clicked",
   nextScreen: "",
-  buttonAction: "next-screen",
+  buttonAction: "custom-action",
 }
 
 LoaderComponent.craft = {

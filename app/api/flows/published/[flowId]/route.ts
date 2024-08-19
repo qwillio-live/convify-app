@@ -83,6 +83,9 @@ export async function POST(
       const result = await prisma.publishedFlowStep.createMany({
         data: publishedFlowSteps,
       })
+      let sortedSteps = publishedFlowSteps
+      if (flows)
+        sortedSteps = publishedFlowSteps.sort((a, b) => a.order - b.order)
       const update = await prisma.flow.update({
         where: {
           id: flowId,
@@ -90,9 +93,9 @@ export async function POST(
         data: {
           isPublished: true,
           link:
-            publishedFlowSteps.length > 0
-              ? `${req.nextUrl.origin}/published-flow/${flowId}?screen=${publishedFlowSteps[0].name}`
-              : `${req.nextUrl.origin}/published-flow/${flowId}`,
+            sortedSteps.length > 0
+              ? `https://conv-hassan.picreel.bid/published-flow/${flowId}?screen=${sortedSteps[0].name}`
+              : `https://conv-hassan.picreel.bid/published-flow/${flowId}`,
         },
       })
       console.log("final result", result, update)
