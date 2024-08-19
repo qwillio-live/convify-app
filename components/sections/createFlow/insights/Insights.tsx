@@ -695,14 +695,16 @@ const InsightsFlowComponents = () => {
               <BarChart
                 data={data.map((data) => ({
                   ...data,
-                  time: format(
-                    parse(
-                      `${data?.time.split(".")[1]}.${data?.time.split(".")[0]}`,
-                      "M.d",
-                      new Date()
-                    ),
-                    "MMM dd"
-                  ),
+                  time: data?.time
+                    ? format(
+                        parse(
+                          `${data.time.split(".")[1]}.${data.time.split(".")[0]}`,
+                          "M.d",
+                          new Date()
+                        ),
+                        "MMM dd"
+                      )
+                    : undefined, // or you can use a fallback value like an empty string
                 }))}
                 margin={{
                   top: 0,
@@ -752,8 +754,8 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="h-fill w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px]">
-          <div className="size-full overflow-x-hidden sm:overflow-x-auto">
+        <div className="max-h-[436px] h-fill w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px]">
+          <div className="size-full overflow-x-hidden sm:overflow-x-auto" style={{scrollbarWidth:"thin", scrollbarColor:"#dfdfdf #fff"}}>
             <Table className="size-full">
               <TableHeader>
                 <TableRow className="mb-0 border-b border-[#EAEAEC] text-xs md:text-base">
