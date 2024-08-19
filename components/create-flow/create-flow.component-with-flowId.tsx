@@ -185,10 +185,10 @@ export function CreateFlowComponent({ flowId }) {
     (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
   )
   const startScreen = useAppSelector(
-    (state) => state?.screen?.screens[0].screenData || ""
+    (state) => state?.screen?.screens[0]?.screenData || ""
   )
   const startScreenName = useAppSelector(
-    (state) => state?.screen?.screens[0].screenName || ""
+    (state) => state?.screen?.screens[0]?.screenName || ""
   )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const avatarComponentId = useAppSelector(

@@ -162,8 +162,8 @@ export function CreateFlowComponent() {
   const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
   const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
   const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0].screenData || "")
-  const startScreenName = useAppSelector((state) => state?.screen?.screens[0].screenName || "")
+  const startScreen = useAppSelector((state) => state?.screen?.screens[0]?.screenData || "")
+  const startScreenName = useAppSelector((state) => state?.screen?.screens[0]?.screenName || "")
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)

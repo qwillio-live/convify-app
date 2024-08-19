@@ -6,6 +6,7 @@ import { useTranslations, useLocale } from "next-intl"
 import {
   Bar,
   BarChart,
+  CartesianGrid,
   Rectangle,
   ResponsiveContainer,
   Tooltip,
@@ -28,6 +29,12 @@ import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange"
 import { pt } from "date-fns/locale"
 import { differenceInCalendarDays, format, parse, subDays } from "date-fns"
+
+interface CustomTooltipProps {
+  active?: boolean
+  payload?: any[]
+  label?: string
+}
 
 const visitsAndSubmitsData: SubmitData[] = [
   {
@@ -389,6 +396,7 @@ const InsightsFlowComponents = () => {
         )
     }
   }, [])
+
   function setDateBasedOnDays(day: number) {
     setDate({
       startDate: subDays(new Date(), day),
@@ -467,6 +475,35 @@ const InsightsFlowComponents = () => {
       getAnalytics()
     }
   }, [status, flowId])
+
+  // tooltip component
+  const CustomTooltip: React.FC<CustomTooltipProps> = ({
+    active,
+    payload,
+    label,
+  }) => {
+    
+    if (active && payload && payload.length) {
+      const { value, payload: pl } = payload[0]
+      
+
+      return (
+        <div
+          className="rounded-md border border-[#E6E2DD] bg-white py-2 px-3"
+          style={{
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <p className="text-sm font-medium text-[#23262C]">{label}, {pl?.year}</p>
+          <p className="text-xs text-[#9B9A99]">
+            Visits: <span className="text-[#23262C]">{value}</span>
+          </p>
+        </div>
+      )
+    }
+
+    return null
+  }
 
   const repeatedJSX = (
     <>
@@ -698,13 +735,27 @@ const InsightsFlowComponents = () => {
                   time: data?.time
                     ? format(
                         parse(
-                          `${data.time.split(".")[1]}.${data.time.split(".")[0]}`,
+                          `${data.time.split(".")[1]}.${
+                            data.time.split(".")[0]
+                          }`,
                           "M.d",
                           new Date()
                         ),
                         "MMM dd"
                       )
-                    : undefined, // or you can use a fallback value like an empty string
+                    : undefined,
+                  year: data?.time
+                    ? format(
+                        parse(
+                          `${data.time.split(".")[1]}.${
+                            data.time.split(".")[0]
+                          }.${new Date().getFullYear()}`,
+                          "M.d.yyyy",
+                          new Date()
+                        ),
+                        "yyyy"
+                      )
+                    : undefined,
                 }))}
                 margin={{
                   top: 0,
@@ -714,7 +765,11 @@ const InsightsFlowComponents = () => {
                 }}
                 className="w-full"
               >
-                {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                <CartesianGrid
+                  stroke="#EAEAEC"
+                  horizontal={true}
+                  vertical={false}
+                />
                 <XAxis
                   dataKey="time"
                   tickLine={false}
@@ -734,7 +789,7 @@ const InsightsFlowComponents = () => {
                   }
                   fontSize={14}
                 /> */}
-                <Tooltip cursor={false} />
+                <Tooltip content={<CustomTooltip />} cursor={false} />
                 {/* <Legend /> */}
                 <Bar
                   dataKey={
@@ -754,8 +809,11 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="max-h-[436px] h-fill w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px]">
-          <div className="size-full overflow-x-hidden sm:overflow-x-auto" style={{scrollbarWidth:"thin", scrollbarColor:"#dfdfdf #fff"}}>
+        <div className="h-fill max-h-[436px] w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px]">
+          <div
+            className="size-full overflow-x-hidden sm:overflow-x-auto"
+            style={{ scrollbarWidth: "thin", scrollbarColor: "#dfdfdf #fff" }}
+          >
             <Table className="size-full">
               <TableHeader>
                 <TableRow className="mb-0 border-b border-[#EAEAEC] text-xs md:text-base">
