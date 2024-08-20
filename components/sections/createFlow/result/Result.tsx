@@ -15,13 +15,13 @@ const ResultFlowComponents = () => {
           <div className="tabs-list-container flex size-full items-center justify-center sm:justify-start">
             <TabsList className="flex w-full md:w-fit h-full bg-inherit py-0">
               <TabsTrigger
-                className="w-full h-full rounded-none border-b-2 md:border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit text-[#9B9A99] data-[state=active]:text-[#23262C] data-[state=active]:font-semibold font-medium px-3"
+                className="w-full h-full rounded-none border-b-2 md:border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit text-[#9B9A99] data-[state=active]:text-[#23262C] data-[state=active]:font-semibold font-medium px-3 text-base md:text-xl"
                 value="insights"
               >
                 {t("insights")}
               </TabsTrigger>
               <TabsTrigger
-                className="w-full h-full rounded-none  border-b-2 md:border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit text-[#9B9A99] data-[state=active]:text-[#23262C] data-[state=active]:font-semibold font-medium px-3"
+                className="w-full h-full rounded-none  border-b-2 md:border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit text-[#9B9A99] data-[state=active]:text-[#23262C] data-[state=active]:font-semibold font-medium px-3 text-base md:text-xl"
                 value="responses"
               >
                 {t("responses")}
