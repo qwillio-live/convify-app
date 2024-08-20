@@ -222,7 +222,7 @@ export const LoaderComponentGen = ({
       // (currentScreenName === searchParams?.get("screen") ||
       //   currentScreenName === sc[0]?.screenName) &&
       pathname?.includes("preview-flow") ||
-      pathname?.includes("published-flow")
+      !pathname?.includes("create-flow")
     ) {
       restartLoader()
     }
