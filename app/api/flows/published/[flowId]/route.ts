@@ -52,7 +52,11 @@ export async function GET(
       const finalFlow: any = { ...flows }
       if (flows) finalFlow.steps = flowSteps.sort((a, b) => a.order - b.order)
       console.log("solo", finalFlow, flowId)
-      return NextResponse.json(finalFlow)
+      return NextResponse.json({
+        finalFlow,
+        primaryFont: finalFlow.flowSettings.text.primaryFont,
+        secondaryFont: finalFlow.flowSettings.text.secondaryFont,
+      })
     }
   } catch (error) {
     console.error(error)

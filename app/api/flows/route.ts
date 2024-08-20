@@ -117,6 +117,7 @@ export async function POST(req: NextRequest) {
         userId,
         headerData: JSON.stringify(headerScreenData),
         footerData: JSON.stringify(footerScreenData),
+        thumbnail_updatedAt: new Date(),
       },
     })
     const flowId = flow.id

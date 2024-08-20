@@ -328,31 +328,17 @@ export function FlowsList({ flows, setStatus, status }) {
                                     : "1rem",
                               }}
                             >
-                              <div
-                                style={{
-                                  width: "113px", // Container width
-                                  height: "64px", // Container height
-                                  overflow: "hidden", // Hide overflow content
-                                  position: "relative", // Positioning context for the iframe
-                                }}
-                              >
-                                <iframe
-                                  src={`${currentPath}/preview-flow/${flow?.id}`}
-                                  title="Embedded Content"
-                                  style={{
-                                    border: "none",
-                                    transform: "scale(0.1)", // Further zoom out
-                                    transformOrigin: "top left", // Scale from the top-left corner
-                                    width: "1130px", // Increase width to fit scaled content
-                                    height: "640px", // Increase height to fit scaled content
-                                    position: "absolute", // Absolute positioning
-                                    top: "0",
-                                    left: "0",
-                                    pointerEvents: "none", // Make iframe non-clickable
-                                    overflow: "hidden", // Hide scrollbars if they appear
-                                  }}
-                                />
-                              </div>
+                              <Image
+                                alt="Product image"
+                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover "
+                                height="64"
+                                width="113"
+                                src={
+                                  flow.previewImage
+                                    ? flow.previewImage
+                                    : placeholder.src
+                                }
+                              />
                             </TableCell>
                             <TableCell
                               onClick={() =>

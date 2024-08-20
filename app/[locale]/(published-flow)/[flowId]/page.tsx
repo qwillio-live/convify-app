@@ -7,6 +7,7 @@ import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 import StaticPublishedFile from "@/components/user/publishedFlowStaticFile"
 import { env } from "@/env.mjs"
+import FlowLayout from "@/components/flow-preview/flow-preview-server"
 
 interface PageProps {
   params: {
@@ -32,19 +33,19 @@ export default async function PublishedFlows({
     next: { tags: ["publishedFlow"] },
   })
   const data = await response.json()
-  const screenNames = data?.steps?.map((screen) => screen.name)
+  const screenNames = data?.finalFlow?.steps?.map((screen) => screen.name)
   const screenName = searchParams?.screen || screenNames[0]
-  console.log("dataaaaa in publisedh", screenName, screenNames)
+  console.log("dataaaaa in publisedh", screenName, screenNames, data)
   return (
     <>
       <MetaGoogleAnalytics
-        gtm={data?.integrations?.googleTagManagerId}
-        gta={data?.integrations?.googleAnalyticsId}
-        meta={data?.integrations?.metaPixelId}
+        gtm={data?.finalFlow?.integrations?.googleTagManagerId}
+        gta={data?.finalFlow?.integrations?.googleAnalyticsId}
+        meta={data?.finalFlow?.integrations?.metaPixelId}
       />
-      <FlowStateSetter flowData={data} screenNames={screenNames} />
+      <FlowStateSetter flowData={data.finalFlow} screenNames={screenNames} />
       <StaticPublishedFile
-        data={data}
+        data={data.finalFlow}
         screenName={screenName === undefined ? screenNames[0] : screenName}
         allScreens={screenNames}
       />
