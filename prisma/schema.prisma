@@ -72,29 +72,31 @@ model VerificationToken {
 }
 
 model Flow {
-  id                String              @id @default(cuid())
-  name              String
-  isDeleted         Boolean             @default(false)
-  createdAt         DateTime            @default(now()) @map("created_at")
-  updatedAt         DateTime            @default(now()) @map("updated_at")
-  previewImage      String?
-  link              String?
-  status            String?
-  numberOfSteps     Int?
-  numberOfResponses Int?
-  userId            String
-  templateId        String?
-  headerData        Json?
-  footerData        Json?
-  flowSettings      Json?
-  customDomain      String              @default("") @db.VarChar(50)
-  isPublished       Boolean?            @default(false)
-  flow              FlowStep[]
-  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  integrations      Integration?
-  responses         Response[]
-  visits            Visit[]
-  PublishedFlowStep PublishedFlowStep[]
+  id                  String              @id @default(cuid())
+  name                String
+  publishedName       String?
+  isDeleted           Boolean             @default(false)
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @default(now()) @map("updated_at")
+  thumbnail_updatedAt DateTime?
+  previewImage        String?
+  link                String?
+  status              String?
+  numberOfSteps       Int?
+  numberOfResponses   Int?
+  userId              String
+  templateId          String?
+  headerData          Json?
+  footerData          Json?
+  flowSettings        Json?
+  customDomain        String              @default("") @db.VarChar(50)
+  isPublished         Boolean?            @default(false)
+  flow                FlowStep[]
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  integrations        Integration?
+  responses           Response[]
+  visits              Visit[]
+  PublishedFlowStep   PublishedFlowStep[]
 
   @@index([userId], map: "flows_userId_fkey")
   @@map("flows")

@@ -44,6 +44,7 @@ export default function SelectColor() {
   const header = useAppSelector((state) => state.newTheme?.header)
   const text = useAppSelector((state) => state.newTheme?.text)
   const templateId = useAppSelector((state) => state.newTheme?.templateId)
+  const templateLink = useAppSelector((state) => state.newTheme?.templateLink)
   const [name, setName] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false) // State for loading state
@@ -88,6 +89,7 @@ export default function SelectColor() {
           flowSettings: { general, mobileScreen, header, text },
           templateId,
           name,
+          link: templateLink,
         }),
       }).then((res) => {
         setSuccessMessage(t("Flow created successfully!"))

@@ -1,12 +1,12 @@
 //this below command makes it static, you can check build logs as well, it is static
 import React from "react"
 
-import FlowStateSetter from "../../storeSetter"
+import FlowStateSetter from "../storeSetter"
 import { unstable_setRequestLocale } from "next-intl/server"
 import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 import StaticPublishedFile from "@/components/user/publishedFlowStaticFile"
-import dynamic from "next/dynamic"
+import { env } from "@/env.mjs"
 
 interface PageProps {
   params: {
@@ -23,17 +23,14 @@ export default async function PublishedFlows({
   searchParams,
 }: PageProps) {
   unstable_setRequestLocale(params.locale)
-
+  const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const flowId = params?.flowId
   // api to fetch steps and make it static -- need to update it with s3 link instead
-  const response = await fetch(
-    `https://conv-hassan.picreel.bid/api/flows/published/${flowId}`,
-    {
-      method: "GET",
-      cache: "force-cache",
-      next: { tags: ["publishedFlow"] },
-    }
-  )
+  const response = await fetch(`${flowDomain}/api/flows/published/${flowId}`, {
+    method: "GET",
+    cache: "force-cache",
+    next: { tags: ["publishedFlow"] },
+  })
   const data = await response.json()
   const screenNames = data?.steps?.map((screen) => screen.name)
   const screenName = searchParams?.screen || screenNames[0]

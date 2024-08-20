@@ -6,6 +6,7 @@ export interface GlobalThemeState {
   primaryFonts?: PrimaryFontType
   secondaryFonts?: SecondaryFontType
   templateId: string
+  templateLink: string
   defaultHeader?: {
     headerPosition: string
   }
@@ -43,6 +44,7 @@ const initialState: GlobalThemeState = {
   primaryFonts: FONTS.primaryFonts,
   secondaryFonts: FONTS.secondaryFonts,
   templateId: "",
+  templateLink: "",
   defaultHeader: {
     headerPosition: "absolute",
   },
@@ -127,6 +129,9 @@ export const themeSlice = createSlice({
     setTemplateId: (state, action: PayloadAction<string>) => {
       state.templateId = action.payload
     },
+    setTemplateLink: (state, action: PayloadAction<string>) => {
+      state.templateLink = action.payload
+    },
   },
 })
 
@@ -136,6 +141,7 @@ export const {
   setNewTextColor,
   setNewPrimaryColor,
   setTemplateId,
+  setTemplateLink,
   setNewPartialSyles,
   setNewHeaderPosition,
   reset,

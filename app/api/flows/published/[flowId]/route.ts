@@ -1,8 +1,27 @@
 export const runtime = "nodejs"
 
+import { env } from "@/env.mjs"
 import prisma from "@/lib/prisma"
 import { logError } from "@/lib/utils/logger"
 import { NextRequest, NextResponse } from "next/server"
+import { v4 as uuidv4 } from "uuid" // Ensure you have this library installed
+
+/**
+ * Generate a unique, URL-friendly name.
+ * @param {string} name - The original name.
+ * @returns {string} - The transformed unique name.
+ */
+function generateUniqueName(name) {
+  if (!name) return ""
+
+  // Convert to lowercase and replace spaces with hyphens
+  const formattedName = name.toLowerCase().trim().replace(/\s+/g, "-")
+
+  // Generate a 6-digit random string
+  const uniqueSuffix = uuidv4().slice(0, 6) // Example: "94dh23"
+
+  return `${formattedName}-${uniqueSuffix}`
+}
 
 export async function GET(
   req: NextRequest,
@@ -14,7 +33,7 @@ export async function GET(
       where: {
         isPublished: true,
         isDeleted: false,
-        id: flowId,
+        publishedName: flowId,
       },
       include: {
         integrations: true,
@@ -23,16 +42,18 @@ export async function GET(
         createdAt: "desc",
       },
     })
-    const flowSteps = await prisma.publishedFlowStep.findMany({
-      where: {
-        flowId: String(flowId),
-        isDeleted: false,
-      },
-    })
-    const finalFlow: any = { ...flows }
-    if (flows) finalFlow.steps = flowSteps.sort((a, b) => a.order - b.order)
-    console.log("solo", finalFlow, flowId)
-    return NextResponse.json(finalFlow)
+    if (flows) {
+      const flowSteps = await prisma.publishedFlowStep.findMany({
+        where: {
+          flowId: String(flows.id),
+          isDeleted: false,
+        },
+      })
+      const finalFlow: any = { ...flows }
+      if (flows) finalFlow.steps = flowSteps.sort((a, b) => a.order - b.order)
+      console.log("solo", finalFlow, flowId)
+      return NextResponse.json(finalFlow)
+    }
   } catch (error) {
     console.error(error)
 
@@ -50,6 +71,7 @@ export async function POST(
   { params }: { params: { flowId: string } }
 ) {
   try {
+    const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
     const { flowId } = params
     const flows = await prisma.flow.findMany({
       where: {
@@ -84,18 +106,24 @@ export async function POST(
         data: publishedFlowSteps,
       })
       let sortedSteps = publishedFlowSteps
-      if (flows)
+      let uniqueName = ""
+      if (flows) {
         sortedSteps = publishedFlowSteps.sort((a, b) => a.order - b.order)
+        uniqueName = flows[0].publishedName
+          ? flows[0].publishedName
+          : generateUniqueName(flows[0].name)
+      }
       const update = await prisma.flow.update({
         where: {
           id: flowId,
         },
         data: {
           isPublished: true,
+          publishedName: uniqueName,
           link:
             sortedSteps.length > 0
-              ? `https://conv-hassan.picreel.bid/published-flow/${flowId}?screen=${sortedSteps[0].name}`
-              : `https://conv-hassan.picreel.bid/published-flow/${flowId}`,
+              ? `${flowDomain}/${uniqueName}?screen=${sortedSteps[0].name}`
+              : `${flowDomain}/${uniqueName}`,
         },
       })
       console.log("final result", result, update)

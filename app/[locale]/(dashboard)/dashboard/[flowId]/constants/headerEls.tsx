@@ -25,6 +25,7 @@ import {
 import { revalidateFlow } from "@/actions/flow/revalidateFlow"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Icons } from "@/components/icons"
+import { env } from "@/env.mjs"
 
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -42,9 +43,8 @@ const Header = ({ flowId }) => {
   const dispatch = useAppDispatch()
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [alertMessage, setAlertMessage] = useState<string | null>(null)
-  const [alertType, setAlertType] = useState<"success" | "error" | null>(null)
   const [userData, setUserData] = useState<User>()
+  const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
   )
@@ -94,28 +94,23 @@ const Header = ({ flowId }) => {
   const publishFlow = async () => {
     try {
       setIsLoading(true)
-      setAlertMessage(null) // Clear any previous alerts
 
       const response = await fetch(`/api/flows/published/${flowId}`, {
         method: "POST",
       })
       if (response.ok) {
-        revalidateFlow({ tag: "publishedFlow" })
-        setAlertMessage(t("Flow published successfully!"))
-        setAlertType("success")
-        setTimeout(() => {
-          router.push(`./share`)
-        }, 2000)
-      } else {
-        setAlertMessage(t("Error publishing flow"))
-        setAlertType("error")
+        const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
+          method: "GET",
+        })
+        if (res.ok) {
+          setTimeout(() => {
+            setIsLoading(false)
+            router.push(`./share`)
+          }, 3000)
+        }
       }
     } catch (err) {
-      setAlertMessage(t("An unexpected error occurred."))
-      setAlertType("error")
       console.error("Publishing flow failed:", err)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -197,37 +192,6 @@ const Header = ({ flowId }) => {
               </div>
             )}
           </Button>
-          {alertMessage && (
-            <Alert
-              variant={alertType === "error" ? "destructive" : "default"}
-              style={{
-                backgroundColor: alertType === "error" ? "red" : "green",
-                color: "white",
-                padding: "1rem",
-                position: "fixed",
-                bottom: "25px",
-                right: "25px",
-                maxWidth: "350px",
-                opacity: "0.9",
-              }}
-            >
-              <div>
-                <AlertDescription>{alertMessage}</AlertDescription>
-              </div>
-              <button
-                onClick={() => setAlertMessage(null)}
-                className="ml-4 font-bold text-white focus:outline-none"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  right: "10px",
-                }}
-                aria-label="Close"
-              >
-                &times;
-              </button>
-            </Alert>
-          )}
         </div>
 
         <div className="">

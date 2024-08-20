@@ -80,6 +80,7 @@
     "emoji-picker-react": "^4.9.3",
     "framer-motion": "^11.1.7",
     "hexoid": "^1.0.0",
+    "html-to-image": "^1.11.11",
     "lodash": "^4.17.21",
     "lucide-react": "^0.352.0",
     "lzutf8": "^0.6.3",
@@ -89,6 +90,7 @@
     "next-contentlayer": "^0.3.1",
     "next-intl": "^3.12.2",
     "next-themes": "^0.2.1",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.1",
     "polished": "^4.3.1",
     "postmark": "^3.0.15",
@@ -121,6 +123,7 @@
     "tinycolor2": "^1.6.0",
     "ua-parser-js": "^1.0.37",
     "usehooks-ts": "^3.1.0",
+    "uuid": "^10.0.0",
     "vaul": "^0.9.1",
     "zod": "^3.21.4"
   },
