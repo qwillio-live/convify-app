@@ -287,7 +287,7 @@ export const screensSlice = createSlice({
           ) {
             // Extract one of the values that meet the conditions
             if (node.props?.selections && node.props.selections.length > 0) {
-              totalFilled.push(JSON.stringify(node.props.selections))
+              totalFilled.push(node.props.selections)
             } else if (
               node.props?.inputValue &&
               node.props.inputValue.trim() !== "" &&
