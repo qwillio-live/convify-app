@@ -174,10 +174,10 @@ export default function RootLayout({
   const messages = useMessages()
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale}>
       <body
         className={cn(
-          "bg-background min-h-screen font-sans antialiased"
+          "bg-background  min-h-screen antialiased"
           // roboto.variable,
           // fontSans.variable,
           // fontHeading.variable,

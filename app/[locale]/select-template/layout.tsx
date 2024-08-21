@@ -31,9 +31,9 @@ export default async function SelectTemplateLayout({
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-[#f9f9fb] font-sans antialiased text-[#1c212c]",
-          fontSans.variable,
-          fontHeading.variable
+          "min-h-screen bg-[#f9f9fb] font-sans text-[#1c212c] antialiased",
+          fontSans.className,
+          fontHeading.className
         )}
       >
         <main>{children}</main>
