@@ -4,12 +4,8 @@ import Header from "../constants/headerEls"
 
 // sections
 
-export default function CreateFlowsPage({
-  params,
-}: {
-  params: { flowId: string; en: string }
-}) {
-  const flowId = params?.flowId
+export default function CreateFlowsPage() {
+
   return (
     <div className="fixed min-h-screen w-full">
       <div className="flex min-h-screen flex-col">

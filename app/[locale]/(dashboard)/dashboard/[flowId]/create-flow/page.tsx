@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BreadCrumbs } from "@/components/breadcrumbs"
-import { CreateFlowComponent } from "@/components/create-flow/create-flow.component"
+import { CreateFlowComponent } from "@/components/create-flow/create-flow.component-with-flowId"
 import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
@@ -65,7 +65,7 @@ export default function CreateFlowsPage({
   }, []) // Add flowId as a dependency if it can change
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="fixed min-h-screen w-full">
       <Tabs
         defaultValue="create"
         onValueChange={onTabChange}
@@ -79,10 +79,14 @@ export default function CreateFlowsPage({
             tab === "results" ? "" : tab === "share" ? "" : ""
           }`}
         >
+
+          {/* --New Commit-- */}
           <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
-              <CreateFlowComponent />
+              <CreateFlowComponent flowId={flowId} />
             </TabsContent>
+
+
 
             {/* <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />

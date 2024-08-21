@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { BreadCrumbs } from "@/components/breadcrumbs"
+import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId"
 import { useEffect, useState } from "react"
 import { User } from "../../page"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"

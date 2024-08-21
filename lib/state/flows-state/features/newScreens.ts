@@ -523,7 +523,7 @@ export const newScreensSlice = createSlice({
       } else if (screen) {
         screen.screenName = screenName
       }
-      state.firstScreenName = state.screens[0].screenName
+state.firstScreenName = state.screens[0]? state.screens[0].screenName: ''
     },
     setRenamingScreen: (state, action: PayloadAction<boolean>) => {
       state.renamingScreen = action.payload
