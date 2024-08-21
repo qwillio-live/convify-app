@@ -7,6 +7,7 @@ import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 import StaticPublishedFile from "@/components/user/publishedFlowStaticFile"
 import { env } from "@/env.mjs"
+import { fontDictionary } from "../../fonts"
 
 interface PageProps {
   params: {
@@ -33,9 +34,22 @@ export default async function PublishedFlows({
   const data = await response.json()
   const screenNames = data?.steps?.map((screen) => screen.name)
   const screenName = searchParams?.screen || screenNames[0]
-  console.log("dataaaaa in publisedh", screenName, screenNames)
+  console.log(
+    "dataaaaa in publisedh",
+    screenName,
+    screenNames,
+    data?.flowSettings?.text?.primaryFont,
+    data?.flowSettings?.text?.secondaryFont,
+    fontDictionary[data?.flowSettings?.text?.primaryFont],
+    fontDictionary[data?.flowSettings?.text?.secondaryFont]
+  )
+  const primaryFont = data?.flowSettings?.text?.primaryFont
+  const secondaryFont = data?.flowSettings?.text?.secondaryFont
+
   return (
-    <>
+    <div
+      className={`${fontDictionary[primaryFont]} ${fontDictionary[secondaryFont]}`}
+    >
       <MetaGoogleAnalytics
         gtm={data?.integrations?.googleTagManagerId}
         gta={data?.integrations?.googleAnalyticsId}
@@ -47,6 +61,6 @@ export default async function PublishedFlows({
         screenName={screenName === undefined ? screenNames[0] : screenName}
         allScreens={screenNames}
       />
-    </>
+    </div>
   )
 }

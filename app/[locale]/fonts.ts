@@ -57,14 +57,14 @@ export const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const roboto_mono = Roboto_Mono({
@@ -90,7 +90,7 @@ export const lato = Lato({
   subsets: ["latin"],
   variable: "--font-lato",
   display: "swap",
-  weight: ["100","300","400","700","900",],
+  weight: ["100", "300", "400", "700", "900"],
 })
 
 export const oswald = Oswald({
@@ -116,14 +116,14 @@ export const merriweather = Merriweather({
   subsets: ["latin"],
   variable: "--font-merriweather",
   display: "swap",
-  weight: ["300","400","700","900"],
+  weight: ["300", "400", "700", "900"],
 })
 
 export const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
   display: "swap",
-  weight: ["200","300","400","500","700","900"],
+  weight: ["200", "300", "400", "500", "700", "900"],
 })
 
 export const playfair_display = Playfair_Display({
@@ -136,161 +136,161 @@ export const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const ubuntu = Ubuntu({
   subsets: ["latin"],
   variable: "--font-ubuntu",
   display: "swap",
-  weight: ["300","400","500","700"],
+  weight: ["300", "400", "500", "700"],
 })
 
 export const mukta = Mukta({
   subsets: ["latin"],
   variable: "--font-mukta",
   display: "swap",
-  weight: ["200","300","400","500","700"],
+  weight: ["200", "300", "400", "500", "700"],
 })
 
 export const rubik = Rubik({
   subsets: ["latin"],
   variable: "--font-rubik",
   display: "swap",
-  weight: ["300","400","500","600","700","900"],
+  weight: ["300", "400", "500", "600", "700", "900"],
 })
 
 export const work_sans = Work_Sans({
   subsets: ["latin"],
   variable: "--font-work-sans",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const roboto_condensed = Roboto_Condensed({
   subsets: ["latin"],
   variable: "--font-roboto-condensed",
   display: "swap",
-  weight: ["300","400", "700"],
+  weight: ["300", "400", "700"],
 })
 
 export const noto_sans = Noto_Sans({
   subsets: ["latin"],
   variable: "--font-noto-sans",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const fira_sans = Fira_Sans({
   subsets: ["latin"],
   variable: "--font-fira-sans",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const quicksand = Quicksand({
   subsets: ["latin"],
   variable: "--font-quicksand",
   display: "swap",
-  weight: ["300","400","500","700","600"],
+  weight: ["300", "400", "500", "700", "600"],
 })
 
 export const karla = Karla({
   subsets: ["latin"],
   variable: "--font-karla",
   display: "swap",
-  weight: ["300","400","500","700","600"],
+  weight: ["300", "400", "500", "700", "600"],
 })
 
 export const cabin = Cabin({
   subsets: ["latin"],
   variable: "--font-cabin",
   display: "swap",
-  weight: ["400","500","700","600"],
+  weight: ["400", "500", "700", "600"],
 })
 
 export const barlow = Barlow({
   subsets: ["latin"],
   variable: "--font-barlow",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const arimo = Arimo({
   subsets: ["latin"],
   variable: "--font-arimo",
   display: "swap",
-  weight: ["600","400","500","700"],
+  weight: ["600", "400", "500", "700"],
 })
 
 export const teko = Teko({
   subsets: ["latin"],
   variable: "--font-teko",
   display: "swap",
-  weight: ["300","400","500","700","600"],
+  weight: ["300", "400", "500", "700", "600"],
 })
 
 export const catamaran = Catamaran({
   subsets: ["latin"],
   variable: "--font-catamaran",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const libre_franklin = Libre_Franklin({
   subsets: ["latin"],
   variable: "--font-libre-franklin",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const oxygen = Oxygen({
   subsets: ["latin"],
   variable: "--font-oxygen",
   display: "swap",
-  weight: ["300","400","700"],
+  weight: ["300", "400", "700"],
 })
 
 export const heebo = Heebo({
   subsets: ["latin"],
   variable: "--font-heebo",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const asap = Asap({
   subsets: ["latin"],
   variable: "--font-asap",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const bitter = Bitter({
   subsets: ["latin"],
   variable: "--font-bitter",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const ibm_plex_sans = IBM_Plex_Sans({
   subsets: ["latin"],
   variable: "--font-ibm-plex-sans",
   display: "swap",
-  weight: ["100","300","400","500","700",'200'],
+  weight: ["100", "300", "400", "500", "700", "200"],
 })
 
 export const exo_2 = Exo_2({
   subsets: ["latin"],
   variable: "--font-exo-2",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const dosis = Dosis({
   subsets: ["latin"],
   variable: "--font-dosis",
   display: "swap",
-  weight: ["300","400","500","700","800"],
+  weight: ["300", "400", "500", "700", "800"],
 })
 
 export const pt_serif = PT_Serif({
@@ -304,7 +304,7 @@ export const overpass = Overpass({
   subsets: ["latin"],
   variable: "--font-overpass",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const varela_round = Varela_Round({
@@ -325,42 +325,42 @@ export const inconsolata = Inconsolata({
   subsets: ["latin"],
   variable: "--font-inconsolata",
   display: "swap",
-  weight: ["200","300","400","500","700","900"],
+  weight: ["200", "300", "400", "500", "700", "900"],
 })
 
 export const rokkitt = Rokkitt({
   subsets: ["latin"],
   variable: "--font-rokkitt",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 export const red_hat_display = Red_Hat_Display({
   subsets: ["latin"],
   variable: "--font-red-hat-display",
   display: "swap",
-  weight: ["300","400","500","700","900"],
+  weight: ["300", "400", "500", "700", "900"],
 })
 
 export const cairo = Cairo({
   subsets: ["latin"],
   variable: "--font-cairo",
   display: "swap",
-  weight: ["200","300","400","500","700","900"],
+  weight: ["200", "300", "400", "500", "700", "900"],
 })
 
 export const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
   display: "swap",
-  weight: ["400","500","700","600"],
+  weight: ["400", "500", "700", "600"],
 })
 
 export const titillium_web = Titillium_Web({
   subsets: ["latin"],
   variable: "--font-titillium-web",
   display: "swap",
-  weight: ["200","300","400","600","700","900"],
+  weight: ["200", "300", "400", "600", "700", "900"],
 })
 
 export const bebas_neue = Bebas_Neue({
@@ -381,21 +381,21 @@ export const zilla_slab = Zilla_Slab({
   subsets: ["latin"],
   variable: "--font-zilla-slab",
   display: "swap",
-  weight: ["300","400","500","700"],
+  weight: ["300", "400", "500", "700"],
 })
 
 export const nunito_sans = Nunito_Sans({
   subsets: ["latin"],
   variable: "--font-nunito-sans",
   display: "swap",
-  weight: ["200","300","400","500","700","900"],
+  weight: ["200", "300", "400", "500", "700", "900"],
 })
 
 export const roboto_slab = Roboto_Slab({
   subsets: ["latin"],
   variable: "--font-roboto-slab",
   display: "swap",
-  weight: ["100","300","400","500","700","900"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 })
 
 // local fonts
@@ -415,3 +415,59 @@ export const sans3 = Source_Sans_3({
   display: "swap",
   weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 })
+
+export const fontDictionary: Record<string, string> = {
+  "--font-sans": fontSans.variable,
+  "--font-inter": inter.variable,
+  "--font-roboto": roboto.variable,
+  "--font-cal-sans": fontHeading.variable,
+  "--font-roboto-mono": roboto_mono.variable,
+  "--font-open-sans": open_sans.variable,
+  "--font-montserrat": montserrat.variable,
+  "--font-lato": lato.variable,
+  "--font-oswald": oswald.variable,
+  "--font-raleway": raleway.variable,
+  "--font-pt-sans": pt_sans.variable,
+  "--font-merriweather": merriweather.variable,
+  "--font-nunito": nunito.variable,
+  "--font-playfair-display": playfair_display.variable,
+  "--font-poppins": poppins.variable,
+  "--font-ubuntu": ubuntu.variable,
+  "--font-mukta": mukta.variable,
+  "--font-rubik": rubik.variable,
+  "--font-work-sans": work_sans.variable,
+  "--font-roboto-condensed": roboto_condensed.variable,
+  "--font-noto-sans": noto_sans.variable,
+  "--font-fira-sans": fira_sans.variable,
+  "--font-quicksand": quicksand.variable,
+  "--font-karla": karla.variable,
+  "--font-cabin": cabin.variable,
+  "--font-barlow": barlow.variable,
+  "--font-arimo": arimo.variable,
+  "--font-teko": teko.variable,
+  "--font-catamaran": catamaran.variable,
+  "--font-libre-franklin": libre_franklin.variable,
+  "--font-oxygen": oxygen.variable,
+  "--font-heebo": heebo.variable,
+  "--font-asap": asap.variable,
+  "--font-bitter": bitter.variable,
+  "--font-ibm-plex-sans": ibm_plex_sans.variable,
+  "--font-exo-2": exo_2.variable,
+  "--font-dosis": dosis.variable,
+  "--font-pt-serif": pt_serif.variable,
+  "--font-overpass": overpass.variable,
+  "--font-varela-round": varela_round.variable,
+  "--font-questrial": questrial.variable,
+  "--font-inconsolata": inconsolata.variable,
+  "--font-rokkitt": rokkitt.variable,
+  "--font-red-hat-display": red_hat_display.variable,
+  "--font-cairo": cairo.variable,
+  "--font-lora": lora.variable,
+  "--font-titillium-web": titillium_web.variable,
+  "--font-bebas-neue": bebas_neue.variable,
+  "--font-anton": anton.variable,
+  "--font-zilla-slab": zilla_slab.variable,
+  "--font-nunito-sans": nunito_sans.variable,
+  "--font-roboto-slab": roboto_slab.variable,
+  "--font-sans3": sans3.variable,
+}
