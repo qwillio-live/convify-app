@@ -1,11 +1,12 @@
+import { revalidateFlow } from "@/actions/flow/revalidateFlow"
 import prisma from "@/lib/prisma"
 import { logError } from "@/lib/utils/logger"
-import { revalidateTag } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
   try {
-    revalidateTag("publishedFlow")
+    await revalidateFlow({ tag: "publishedFlow" })
     return NextResponse.json({ revalidated: true })
   } catch (error) {
     console.error(error)

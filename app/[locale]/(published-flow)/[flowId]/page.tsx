@@ -1,4 +1,4 @@
-//this below command makes it static, you can check build logs as well, it is static
+export const revalidate = 0
 import React from "react"
 
 import FlowStateSetter from "../storeSetter"
@@ -17,7 +17,6 @@ interface PageProps {
     screen: string
   }
 }
-
 export default async function PublishedFlows({
   params,
   searchParams,
@@ -28,7 +27,7 @@ export default async function PublishedFlows({
   // api to fetch steps and make it static -- need to update it with s3 link instead
   const response = await fetch(`${flowDomain}/api/flows/published/${flowId}`, {
     method: "GET",
-    cache: "force-cache",
+    cache: "default",
     next: { tags: ["publishedFlow"] },
   })
   const data = await response.json()
