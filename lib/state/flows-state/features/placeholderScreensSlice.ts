@@ -69,6 +69,7 @@ export interface ScreensState {
   scrollY: number
   hasComponentBeforeAvatar: boolean
   avatarBackgroundColor: string | undefined
+  filledContent: string
 }
 
 const initialState: ScreensState = {
@@ -130,6 +131,7 @@ const initialState: ScreensState = {
   editorLoad: {},
   screenRoller: "",
   scrollY: 0,
+  filledContent: "",
 }
 
 export const screensSlice = createSlice({
@@ -260,6 +262,62 @@ export const screensSlice = createSlice({
       })
       if (state.screens[state.selectedScreen]?.isVisible)
         state.screens[state.selectedScreen].isVisible = true
+    },
+    getAllFilledAnswers: (state, action: PayloadAction<boolean>) => {
+      // Initialize an array to hold the filled data for each screen
+      let totalFilled: Array<any[]> = [] // Adjust type as needed
+
+      state.screens.forEach((screen) => {
+        // Deep clone screen and parse screenData
+        let eachScreen = JSON.parse(JSON.stringify(screen))
+        let screenData = JSON.parse(eachScreen.screenData)
+
+        Object.values(screenData).forEach((node: any) => {
+          if (
+            node.type !== "UserContainer" &&
+            (node.props?.required === true ||
+              node.props?.inputRequired === true) &&
+            ((node.props?.selections && node.props?.selections.length > 0) ||
+              (node.props?.inputValue &&
+                node.props.inputValue.trim() !== "" &&
+                node.props.inputValue !== "Components.Text Area") ||
+              (node.props?.selectedOptionId &&
+                node.props.selectedOptionId.trim() !== "") ||
+              (node.props?.input && node.props.input.trim() !== ""))
+          ) {
+            // Extract one of the values that meet the conditions
+            if (node.props?.selections && node.props.selections.length > 0) {
+              totalFilled.push(JSON.stringify(node.props.selections))
+            } else if (
+              node.props?.inputValue &&
+              node.props.inputValue.trim() !== "" &&
+              node.props.inputValue !== "Components.Text Area"
+            ) {
+              totalFilled.push(node.props.inputValue)
+            } else if (
+              node.props?.selectedOptionId &&
+              node.props.selectedOptionId.trim() !== ""
+            ) {
+              totalFilled.push(node.props.selectedOptionId)
+            } else if (node.props?.input && node.props.input.trim() !== "") {
+              totalFilled.push(node.props.input)
+            }
+          }
+        })
+      })
+
+      // Convert totalFilled to a JSON string
+      const totalFilledJson = JSON.stringify(totalFilled)
+
+      // For demonstration purposes, log the totalFilled array
+      console.log(
+        "Total Filled Answers by Screen:",
+        totalFilled,
+        JSON.stringify(totalFilled)
+      )
+      state.filledContent = JSON.stringify(totalFilled)
+      // Optionally, update the state with the totalFilled array if needed
+      // state.filledAnswers = totalFilled; // Adjust according to your state shape
     },
     setResetTotalFilled: (state, action: PayloadAction<boolean>) => {
       state.screens.forEach((screen) => {
@@ -760,6 +818,7 @@ export const {
   setUpdateFilledCount,
   setResetTotalFilled,
   resetScreen,
+  getAllFilledAnswers,
 } = screensSlice.actions
 
 export default screensSlice.reducer
