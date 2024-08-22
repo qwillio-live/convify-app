@@ -216,6 +216,9 @@ export default function StaticPublishedFile({
           </div>
         )}
       </div>
+
+      {data?.headerData &&
+        resolveComponents(JSON.parse(data?.footerData || {}))}
     </div>
   )
 }

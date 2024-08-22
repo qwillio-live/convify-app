@@ -99,15 +99,16 @@ const Header = ({ flowId }) => {
         method: "POST",
       })
       if (response.ok) {
-        const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
-          method: "GET",
-        })
-        if (res.ok) {
-          setTimeout(() => {
-            setIsLoading(false)
-            router.push(`./share`)
-          }, 3000)
-        }
+        // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
+        //   method: "GET",
+        // })
+        // if (res.ok) {
+        revalidateFlow({ tag: "publishedFlow" })
+        setTimeout(() => {
+          setIsLoading(false)
+          router.push(`./share`)
+        }, 3000)
+        // }
       }
     } catch (err) {
       console.error("Publishing flow failed:", err)

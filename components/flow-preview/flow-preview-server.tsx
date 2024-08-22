@@ -113,39 +113,40 @@ export default function FlowLayout({ isHeader }: { isHeader: boolean }) {
   }, [])
   console.log("op", screens, sf, search, selectedScreen)
 
-  return (
-    <>
-      {isHeader ? (
-        <div
-          ref={previewHeaderRef}
-          id={currentScreenName}
-          style={{
-            position:
-              (headerPosition as Position) === "absolute"
-                ? "fixed"
-                : "relative",
-            width: "100%",
-            top: "0",
-            zIndex: 20,
-            backgroundColor: backgroundColor,
-            // marginBottom: "760px",
-            // (headerPosition as Position) === "absolute"
-            //   ? headerHeight + "px"
-            //   : "0",
-          }}
-        >
-          <ResolvedComponentsFromCraftState screen={screenHeader} />
-        </div>
-      ) : (
-        <div
-          style={{
-            width: "100%",
-            backgroundColor: backgroundColor,
-          }}
-        >
-          <ResolvedComponentsFromCraftState screen={screenFooter} />
-        </div>
-      )}
-    </>
-  )
+  return null
+  // return (
+  //   <>
+  //     {isHeader ? (
+  //       <div
+  //         ref={previewHeaderRef}
+  //         id={currentScreenName}
+  //         style={{
+  //           position:
+  //             (headerPosition as Position) === "absolute"
+  //               ? "fixed"
+  //               : "relative",
+  //           width: "100%",
+  //           top: "0",
+  //           zIndex: 20,
+  //           backgroundColor: backgroundColor,
+  //           // marginBottom: "760px",
+  //           // (headerPosition as Position) === "absolute"
+  //           //   ? headerHeight + "px"
+  //           //   : "0",
+  //         }}
+  //       >
+  //         <ResolvedComponentsFromCraftState screen={screenHeader} />
+  //       </div>
+  //     ) : (
+  //       <div
+  //         style={{
+  //           width: "100%",
+  //           backgroundColor: backgroundColor,
+  //         }}
+  //       >
+  //         <ResolvedComponentsFromCraftState screen={screenFooter} />
+  //       </div>
+  //     )}
+  //   </>
+  // )
 }
