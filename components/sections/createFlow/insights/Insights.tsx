@@ -482,19 +482,19 @@ const InsightsFlowComponents = () => {
     payload,
     label,
   }) => {
-    
     if (active && payload && payload.length) {
       const { value, payload: pl } = payload[0]
-      
 
       return (
         <div
-          className="rounded-md border border-[#E6E2DD] bg-white py-2 px-3"
+          className="rounded-md border border-[#E6E2DD] bg-white px-3 py-2"
           style={{
             boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <p className="text-sm font-medium text-[#23262C]">{label}, {pl?.year}</p>
+          <p className="text-sm font-medium text-[#23262C]">
+            {label}, {pl?.year}
+          </p>
           <p className="text-xs text-[#9B9A99]">
             Visits: <span className="text-[#23262C]">{value}</span>
           </p>
@@ -509,7 +509,7 @@ const InsightsFlowComponents = () => {
     <>
       <div className="mt-4 flex flex-col gap-4 md:flex-row md:gap-6">
         <div className="flex w-full flex-col gap-4 md:w-[57%] md:flex-row md:gap-6">
-          <div className="flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
+          <div className="h-[160px] md:h-[196px] flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
             <div className="flex flex-row items-center justify-between space-y-0">
               <h3 className="text-base font-semibold text-[#23262C]">
                 {t("Visits")}
@@ -517,7 +517,7 @@ const InsightsFlowComponents = () => {
               <User className="h-6 text-[#7B7D80]" />
             </div>
             <div className="flex flex-1 flex-col justify-end">
-              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+              <h1 className="text-[48px] font-semibold text-[#23262C] md:text-[52px]">
                 {analytics.totalVisits || 0}
               </h1>
               <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
@@ -526,7 +526,7 @@ const InsightsFlowComponents = () => {
             </div>
           </div>
 
-          <div className="flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
+          <div className="h-[160px] md:h-[196px] flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
             <div className="flex flex-row items-center justify-between space-y-0">
               <h3 className="text-base font-semibold text-[#23262C]">
                 {t("Submits")}
@@ -549,7 +549,7 @@ const InsightsFlowComponents = () => {
               </svg>
             </div>
             <div className="flex flex-1 flex-col justify-end">
-              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+              <h1 className="text-[48px] font-semibold text-[#23262C] md:text-[52px]">
                 {analytics.totalSubmits}
               </h1>
               <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
@@ -558,7 +558,7 @@ const InsightsFlowComponents = () => {
             </div>
           </div>
 
-          <div className="flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
+          <div className="h-[160px] md:h-[196px] flex w-full flex-col rounded-[12px] border border-[#E9E9E9] bg-white p-5 md:rounded-[20px] md:p-6">
             <div className="flex flex-row items-center justify-between space-y-0">
               <h3 className="text-base font-semibold text-[#23262C]">
                 {t("Conversion Rate")}
@@ -566,7 +566,7 @@ const InsightsFlowComponents = () => {
               <Percent className="h-6 text-[#7B7D80]" />
             </div>
             <div className="flex flex-1 flex-col justify-end">
-              <div className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
+              <div className="text-[48px] font-semibold text-[#23262C] md:text-[52px]">
                 {analytics.conversionRate}
               </div>
               <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
@@ -579,8 +579,8 @@ const InsightsFlowComponents = () => {
         </div>
 
         <div className="w-full rounded-[12px] border border-[#E9E9E9] bg-white md:w-[43%] md:rounded-[20px]">
-          <div className="flex w-full flex-col md:flex-row md:gap-8">
-            <div className="w-full p-5 md:p-6">
+          <div className="flex h-full w-full flex-col md:flex-row md:gap-8">
+            <div className="h-[160px] md:h-[196px] flex w-full flex-col justify-between p-5 md:p-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold text-[#23262C]">
                   {t("Desktop")}
@@ -617,16 +617,19 @@ const InsightsFlowComponents = () => {
                   </svg>
                 </div>
               </div>
-              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
-                {`${
-                  String(analytics.desktopDevicePercentage) === "0"
-                    ? 0
-                    : Number(analytics.desktopDevicePercentage).toFixed(1)
-                }`}
-                %
-              </h1>
-              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
-                {t("visits from last month", { visits: "0%" })}
+
+              <div className="">
+                <h1 className="text-[48px] font-semibold text-[#23262C] md:text-[52px]">
+                  {`${
+                    String(analytics.desktopDevicePercentage) === "0"
+                      ? 0
+                      : Number(analytics.desktopDevicePercentage).toFixed(1)
+                  }`}
+                  %
+                </h1>
+                <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                  {t("visits from last month", { visits: "0%" })}
+                </div>
               </div>
             </div>
 
@@ -634,7 +637,7 @@ const InsightsFlowComponents = () => {
               <div className="w-full border-b border-[#EAEAEC] md:h-full md:border-r"></div>
             </div>
 
-            <div className="w-full p-5 md:p-6">
+            <div className="h-[160px] md:h-[196px] flex w-full flex-col justify-between p-5 md:p-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold text-[#23262C]">
                   {t("Mobile")}
@@ -657,17 +660,19 @@ const InsightsFlowComponents = () => {
                   </svg>
                 </div>
               </div>
-              <h1 className="mt-[18px] text-[48px] font-semibold text-[#23262C] md:mt-[46px] md:text-[52px]">
-                {`${
-                  String(analytics.mobileDevicePercentage) === "0.00" ||
-                  String(analytics.mobileDevicePercentage) === "0"
-                    ? 0
-                    : Number(analytics.mobileDevicePercentage).toFixed(1)
-                }`}
-                %
-              </h1>
-              <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
-                {t("visits from last month", { visits: "0%" })}
+              <div>
+                <h1 className="text-[48px] font-semibold text-[#23262C] md:text-[52px]">
+                  {`${
+                    String(analytics.mobileDevicePercentage) === "0.00" ||
+                    String(analytics.mobileDevicePercentage) === "0"
+                      ? 0
+                      : Number(analytics.mobileDevicePercentage).toFixed(1)
+                  }`}
+                  %
+                </h1>
+                <div className="flex h-[22px] w-fit items-center rounded-full bg-[#E9E9E9]/60 px-3 text-xs text-[#505050]">
+                  {t("visits from last month", { visits: "0%" })}
+                </div>
               </div>
             </div>
           </div>
@@ -727,8 +732,8 @@ const InsightsFlowComponents = () => {
               </Button>
             </div>
           </div>
-          <div className="w-full" style={{ height: 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="w-full overflow-x-auto h-[300px]">
+            <ResponsiveContainer  minWidth={data.length * 20} height="100%">
               <BarChart
                 data={data.map((data) => ({
                   ...data,
@@ -742,7 +747,7 @@ const InsightsFlowComponents = () => {
                           new Date()
                         ),
                         "MMM dd"
-                      )
+                      ).toUpperCase()
                     : undefined,
                   year: data?.time
                     ? format(
@@ -804,6 +809,7 @@ const InsightsFlowComponents = () => {
                   fill="#23262C"
                   activeBar={<Rectangle fill="#2B3398" />}
                   radius={4}
+                  // barSize={20}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -917,8 +923,8 @@ const InsightsFlowComponents = () => {
   return (
     <Tabs defaultValue={navbarHighlighter()} className="pb-16">
       <header className="z-[100] mt-4 flex items-center gap-4 px-0 md:fixed md:right-7 md:top-[84px] md:mt-0 lg:px-6">
-        <div className="tabs-list-container flex items-center justify-start overflow-x-hidden">
-          <TabsList className="flex h-full overflow-x-auto bg-inherit py-0">
+        <div className="w-full tabs-list-container flex items-center justify-start overflow-x-hidden">
+          <TabsList className="w-full flex h-full overflow-x-auto bg-inherit py-0">
             <TabsTrigger
               className="w-full [&>div>button]:data-[state=active]:border-[#E6E2DD] [&>div>button]:data-[state=inactive]:border-transparent [&>div>button]:data-[state=active]:text-[#23262C] [&>div>button]:data-[state=inactive]:text-[#9B9A99]"
               value="calendar"
