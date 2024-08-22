@@ -70,18 +70,18 @@ const ShareFlowComponents = ({
   }, [])
 
   return (
-    <div className="font-poppins">
+    <div className="font-poppins flex h-[calc(100vh-60px)] flex-col">
       {innerview === "desktop" && (
         <>
-          <HeaderComponents
+          <HeaderComponent
             setIsCustomLinkOpen={setIsCustomLinkOpen}
             isPublished={isPublished}
             link={link}
             t={t}
           />
-          <div className="h-[80vh]">
+          <div className="h-full flex-1">
             {/* Middle part */}
-            <div className="h-full flex-1 overflow-hidden px-10 py-8">
+            <div className="h-full px-10 py-8">
               {/* Warning  */}
               {!isPublished && (
                 <div className="max-h-[4.75rem] min-w-0 pb-6">
@@ -105,7 +105,7 @@ const ShareFlowComponents = ({
                 {/* Main Content */}
                 <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center">
                   <div
-                    className="max-h-[585px] w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]"
+                    className="w-full flex-[1_0_auto] rounded-2xl bg-white transition-[width] duration-300 ease-in will-change-[width]"
                     style={{
                       maxWidth: view === "desktop" ? "100%" : "360px",
                     }}
@@ -160,56 +160,16 @@ const ShareFlowComponents = ({
                       </div>
                     )}
                   </div>
-
-                  {!isPublished ? (
-                    <div
-                      className="relative mt-5  flex w-full items-end justify-center"
-                      style={{
-                        marginBottom: "50px",
-                      }}
-                    >
-                      <Tabs defaultValue={view} className="w-[200px]">
-                        <TabsList className="grid w-full grid-cols-2">
-                          <TabsTrigger
-                            value="desktop"
-                            onClick={() => setView("desktop")}
-                          >
-                            {t("Desktop")}
-                          </TabsTrigger>{" "}
-                          <TabsTrigger
-                            value="mobile"
-                            onClick={() => setView("mobile")}
-                          >
-                            {t("Mobile")}
-                          </TabsTrigger>{" "}
-                        </TabsList>
-                      </Tabs>
-                    </div>
-                  ) : (
-                    <div className="relative mt-5  flex w-full items-end justify-center">
-                      <Tabs defaultValue={view} className="w-[200px]">
-                        <TabsList className="grid w-full grid-cols-2">
-                          <TabsTrigger
-                            value="desktop"
-                            onClick={() => setView("desktop")}
-                          >
-                            {" "}
-                            {t("Desktop")}
-                          </TabsTrigger>{" "}
-                          <TabsTrigger
-                            value="mobile"
-                            onClick={() => setView("mobile")}
-                          >
-                            {t("Mobile")}
-                          </TabsTrigger>{" "}
-                        </TabsList>
-                      </Tabs>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
           </div>
+          <FooterComponent
+            isPublished={isPublished}
+            view={view}
+            setView={setView}
+            t={t}
+          />
         </>
       )}
       {isCustomLinkOpen && (
@@ -275,6 +235,7 @@ const ShareFlowComponents = ({
           </button>
         </div>
       )}
+
       <Drawer open={shareDrawerOpen} onOpenChange={setShareDrawerOpen}>
         <DrawerContent
           className="disable-after outline-none"
@@ -614,14 +575,14 @@ const ShareFlowComponents = ({
 
 export default ShareFlowComponents
 
-const HeaderComponents = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
+const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
   return (
-    <div className="border-b border-[#E6E2DD] flex h-[88px] items-center justify-between bg-white px-2 md:px-10">
+    <div className="flex h-[88px] items-center justify-between border-b border-[#E6E2DD] bg-white px-2 md:px-10">
       <div className="flex w-full max-w-[480px] items-center">
         <input
           type="text"
           aria-label="copy link input"
-          className="h-10 w-full rounded-lg border border-[#E6E2DD] pl-4 outline-none text-base text-[#23262C]"
+          className="h-10 w-full rounded-lg border border-[#E6E2DD] pl-4 text-base text-[#23262C] outline-none"
           value={isPublished ? link : "https://convify.app/your-link-here"}
         />
         <Button
@@ -632,7 +593,7 @@ const HeaderComponents = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
               title: t("Link copied to clipboard"),
             })
           }}
-          className="-ml-3 h-10 rounded-md cursor-pointer font-sm font-medium text-white"
+          className="font-sm -ml-3 h-10 cursor-pointer rounded-md font-medium text-white"
         >
           {t("Copy link")}
         </Button>
@@ -641,7 +602,7 @@ const HeaderComponents = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         <Button
           variant="outline"
           onClick={() => setIsCustomLinkOpen(true)}
-          className="border border-[#E6E2DD] rounded-lg px-4 h-10 text-base cursor-pointer"
+          className="h-10 cursor-pointer rounded-lg border border-[#E6E2DD] px-4 text-base"
         >
           <PenLine className="h-4" />
           {t("Customize link")}
@@ -649,7 +610,7 @@ const HeaderComponents = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         <Button
           variant="outline"
           onClick={() => setIsCustomLinkOpen(true)}
-          className="border border-[#E6E2DD] rounded-lg px-4 h-10 text-base cursor-pointer"
+          className="h-10 cursor-pointer rounded-lg border border-[#E6E2DD] px-4 text-base"
         >
           <Mail className="h-4" />
           {t("Email link")}
@@ -657,12 +618,51 @@ const HeaderComponents = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         <Button
           variant="outline"
           onClick={() => setIsCustomLinkOpen(true)}
-          className="border border-[#E6E2DD] rounded-lg px-4 h-10 text-base cursor-pointer"
+          className="h-10 cursor-pointer rounded-lg border border-[#E6E2DD] px-4 text-base"
         >
           <QrCode className="h-4" />
           {t("QR Code")}
         </Button>
       </div>
     </div>
+  )
+}
+
+const FooterComponent = ({ isPublished, view, setView, t }) => {
+  return (
+    <>
+      {!isPublished && (
+        <div
+          className="mt-5 flex w-full items-end justify-center"
+          // style={{ marginBottom: "50px" }}
+        >
+          <Tabs defaultValue={view} className="w-[200px]">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="desktop" onClick={() => setView("desktop")}>
+                {t("Desktop")}
+              </TabsTrigger>
+              <TabsTrigger value="mobile" onClick={() => setView("mobile")}>
+                {t("Mobile")}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      )}
+
+      {isPublished && (
+        <div className="relative mt-5 flex w-full items-end justify-center">
+          <Tabs defaultValue={view} className="w-[200px]">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="desktop" onClick={() => setView("desktop")}>
+                {t("Desktop")}
+              </TabsTrigger>
+              <TabsTrigger value="mobile" onClick={() => setView("mobile")}>
+                {t("Mobile")}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      )}
+    </>
   )
 }

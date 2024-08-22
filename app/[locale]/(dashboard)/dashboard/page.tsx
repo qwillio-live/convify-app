@@ -94,8 +94,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="font-poppins min-h-screen">
-      <div className="sticky top-0 z-20 flex h-[56px] items-center justify-between border-b border-b-[#E6E2DD] bg-[#F6F6F6] px-6 md:h-[60px] ">
+    <div className="font-poppins flex h-screen flex-col">
+      <div className="flex h-[56px] w-full items-center justify-between border-b border-[#E6E2DD] bg-[#F6F6F6] px-6 md:h-[60px]">
         {/* logo */}
         <div>
           <div className="flex items-center gap-2 font-semibold">
@@ -220,9 +220,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="z-0 grid min-h-[calc(100vh-(56px+94px))] w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <div className="hidden border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
-          <div className="fixed flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
+      <div className="grid h-full w-full flex-1 overflow-y-auto md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <div className="sticky top-0 hidden h-[calc(100vh-60px)] border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
+          <div className="flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
             <div className="h-[88px] md:border-b md:border-b-[#E6E2DD]">
               <form className="flex h-full items-center px-2 lg:px-6">
                 <div className="relative w-full">
@@ -249,15 +249,17 @@ export default function DashboardPage() {
                   {/* <Package className="size-4" /> */}
                   <FolderClosed className="size-5" />
                   {t("My workspace")}{" "}
-                  <span className="ml-auto text-[#9B9A99]">1</span>
+                  <span className="ml-auto text-[#9B9A99]">
+                    {flows?.length || 0}
+                  </span>
                 </div>
               </nav>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex h-full flex-col overflow-y-auto md:mt-0">
-          <div className="h-[88px]  md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0">
+        <div className="overflow-x-hidden pt-4 md:pt-0">
+          <div className="h-[88px] md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0">
             <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
               <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
                 {t("My workspace")}
@@ -275,7 +277,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           </div>
-          <main className="flex h-full flex-1 flex-col overflow-y-auto bg-[#F6F6F6] p-4 lg:p-8">
+          <main className="flex h-[calc(100%-88px)] flex-col bg-[#F6F6F6] p-4 lg:p-8">
             {loading ? (
               <div
                 className={`flex flex-1 items-center justify-center rounded-lg border-none`}
@@ -300,7 +302,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div
-                    className={`flex flex-1 items-center justify-center rounded-[12px] border border-[#E9E9E9] bg-white p-2 md:rounded-[20px] md:p-4`}
+                    className={`flex h-full items-center justify-center rounded-[12px] border border-[#E9E9E9] bg-white p-2 md:rounded-[20px] md:p-4`}
                     x-chunk="dashboard-02-chunk-1"
                   >
                     <div className="flex flex-col items-center gap-1 text-center">
