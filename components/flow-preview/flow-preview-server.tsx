@@ -15,7 +15,13 @@ import ResolvedComponentsFromCraftState from "@/components/user/settings/resolve
 
 type Position = "static" | "relative" | "absolute" | "sticky" | "fixed"
 
-export default function FlowLayout({ isHeader }: { isHeader: boolean }) {
+export default function FlowLayout({
+  isHeader,
+  check,
+}: {
+  isHeader: boolean
+  check: boolean
+}) {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const pathname = usePathname()
@@ -112,41 +118,40 @@ export default function FlowLayout({ isHeader }: { isHeader: boolean }) {
     dispatch(setTotalRequired(true))
   }, [])
   console.log("op", screens, sf, search, selectedScreen)
-
-  return null
-  // return (
-  //   <>
-  //     {isHeader ? (
-  //       <div
-  //         ref={previewHeaderRef}
-  //         id={currentScreenName}
-  //         style={{
-  //           position:
-  //             (headerPosition as Position) === "absolute"
-  //               ? "fixed"
-  //               : "relative",
-  //           width: "100%",
-  //           top: "0",
-  //           zIndex: 20,
-  //           backgroundColor: backgroundColor,
-  //           // marginBottom: "760px",
-  //           // (headerPosition as Position) === "absolute"
-  //           //   ? headerHeight + "px"
-  //           //   : "0",
-  //         }}
-  //       >
-  //         <ResolvedComponentsFromCraftState screen={screenHeader} />
-  //       </div>
-  //     ) : (
-  //       <div
-  //         style={{
-  //           width: "100%",
-  //           backgroundColor: backgroundColor,
-  //         }}
-  //       >
-  //         <ResolvedComponentsFromCraftState screen={screenFooter} />
-  //       </div>
-  //     )}
-  //   </>
-  // )
+  if (check) return null
+  return (
+    <>
+      {isHeader ? (
+        <div
+          ref={previewHeaderRef}
+          id={currentScreenName}
+          style={{
+            position:
+              (headerPosition as Position) === "absolute"
+                ? "fixed"
+                : "relative",
+            width: "100%",
+            top: "0",
+            zIndex: 20,
+            backgroundColor: backgroundColor,
+            // marginBottom: "760px",
+            // (headerPosition as Position) === "absolute"
+            //   ? headerHeight + "px"
+            //   : "0",
+          }}
+        >
+          <ResolvedComponentsFromCraftState screen={screenHeader} />
+        </div>
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            backgroundColor: backgroundColor,
+          }}
+        >
+          <ResolvedComponentsFromCraftState screen={screenFooter} />
+        </div>
+      )}
+    </>
+  )
 }
