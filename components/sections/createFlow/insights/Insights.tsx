@@ -782,18 +782,7 @@ const InsightsFlowComponents = () => {
                   axisLine={false}
                   className="text-[10px] text-[#9B9A99] md:text-sm"
                 />
-                {/* <YAxis
-                  dataKey={
-                    dataKey === "visits"
-                      ? locale === "pt"
-                        ? "visitas"
-                        : "visits"
-                      : locale === "pt"
-                      ? "envios"
-                      : "submits"
-                  }
-                  fontSize={14}
-                /> */}
+               
                 <Tooltip content={<CustomTooltip />} cursor={false} />
                 {/* <Legend /> */}
                 <Bar
