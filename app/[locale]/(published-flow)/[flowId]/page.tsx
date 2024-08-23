@@ -114,10 +114,14 @@ export default async function PublishedFlows({
 
   const styles = `
   [font-family="${primaryFontKey}"] {
-    font-family: ${fontMappings[primaryFontKey].split(":")[0]} !important;
+    font-family: ${fontMappings[primaryFontKey]
+      .split(":")[0]
+      .replace("+", "")} !important;
   }
   [font-family="${secondaryFontKey}"] {
-    font-family: ${fontMappings[secondaryFontKey].split(":")[0]} !important;
+    font-family: ${fontMappings[secondaryFontKey]
+      .split(":")[0]
+      .replace("+", "")} !important;
   }`
   return (
     <>
