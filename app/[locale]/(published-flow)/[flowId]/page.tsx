@@ -116,12 +116,12 @@ export default async function PublishedFlows({
   [font-family="${primaryFontKey}"] {
     font-family: ${fontMappings[primaryFontKey]
       .split(":")[0]
-      .replace("+", "")} !important;
+      .replace("+", " ")} !important;
   }
   [font-family="${secondaryFontKey}"] {
     font-family: ${fontMappings[secondaryFontKey]
       .split(":")[0]
-      .replace("+", "")} !important;
+      .replace("+", " ")} !important;
   }`
   return (
     <>
