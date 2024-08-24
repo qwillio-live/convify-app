@@ -97,7 +97,7 @@ export const SelectGen = ({
       console.log("setting filled true", screenData)
       setIsFiiled(true)
     }
-    setSelectedOptionId(screenData)
+    if (screenData?.length > 0) setSelectedOptionId(screenData)
   }, [])
   const alarm = useAppSelector(
     (state) =>
@@ -126,7 +126,15 @@ export const SelectGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt]) // Depend on alarm state
-  console.log("in sselect", screenData, selectedOptionId, isFilled, isRequired)
+  console.log(
+    "in sselect",
+    screenData,
+    selectedOptionId,
+    isFilled,
+    isRequired,
+    "placeGolder",
+    placeholder
+  )
   return (
     <div
       ref={itemRefNew}
@@ -192,7 +200,7 @@ export const SelectGen = ({
           mobileScreen={false}
           {...props}
         >
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={"Please select an option"} />
         </StyledCustomSelectTrigger>
         <SelectContent>
           {getSortedSelectOptions(selectOptions, sortAlphabetically).map(

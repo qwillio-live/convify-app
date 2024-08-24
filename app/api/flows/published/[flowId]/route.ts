@@ -71,7 +71,7 @@ export async function POST(
   { params }: { params: { flowId: string } }
 ) {
   try {
-    const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
+    const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN
     const { flowId } = params
     const flows = await prisma.flow.findMany({
       where: {
