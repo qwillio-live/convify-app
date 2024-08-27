@@ -191,7 +191,7 @@ export default function StaticPublishedFile({
         resolveComponents(JSON.parse(data?.headerData || {}))}
 
       <div
-        className={`flex h-full w-full flex-col`}
+        className={`flex min-h-[71vh] w-full flex-col`}
         style={{
           backgroundColor:
             data?.flowSettings?.general?.backgroundColor || "transparent",
@@ -217,8 +217,11 @@ export default function StaticPublishedFile({
         )}
       </div>
 
-      {data?.headerData &&
-        resolveComponents(JSON.parse(data?.footerData || {}))}
+      {data?.footerData && (
+        <div className="font-geist">
+          {resolveComponents(JSON.parse(data?.footerData || {}))}
+        </div>
+      )}
     </div>
   )
 }

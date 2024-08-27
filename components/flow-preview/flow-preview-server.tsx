@@ -146,6 +146,7 @@ export default function FlowLayout({
         <div
           style={{
             width: "100%",
+            fontFamily: "var(--font-geist)",
             backgroundColor: backgroundColor,
           }}
         >

@@ -1,58 +1,54 @@
-import StoreProvider from "@/lib/state/flows-state/store-provider"
-import React from "react"
-import { redirect } from "next/navigation"
-import { FlowsAutoSaveProvider } from "./autoSyncProvider"
+import dynamic from "next/dynamic"
 
-interface FlowsLayoutProps {
-  children?: React.ReactNode
-  params: { flowId: string }
-}
+// Client Components:
+import FlowLayout from "@/components/flow-preview/flow-preview-server"
 import localFont from "next/font/local"
+import { cn } from "lib/utils"
 const geist = localFont({
   variable: "--font-geist",
   src: [
     {
-      path: "../../../../../assets/fonts/Geist-Black.woff2",
+      path: "../../../../../../assets/fonts/Geist-Black.woff2",
       weight: "900",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-UltraBlack.woff2",
+      path: "../../../../../../assets/fonts/Geist-UltraBlack.woff2",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-Bold.woff2",
+      path: "../../../../../../assets/fonts/Geist-Bold.woff2",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-SemiBold.woff2",
+      path: "../../../../../../assets/fonts/Geist-SemiBold.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-Medium.woff2",
+      path: "../../../../../../assets/fonts/Geist-Medium.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-Regular.woff2",
+      path: "../../../../../../assets/fonts/Geist-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-Light.woff2",
+      path: "../../../../../../assets/fonts/Geist-Light.woff2",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-UltraLight.woff2",
+      path: "../../../../../../assets/fonts/Geist-UltraLight.woff2",
       weight: "200",
       style: "normal",
     },
     {
-      path: "../../../../../assets/fonts/Geist-Thin.woff2",
+      path: "../../../../../../assets/fonts/Geist-Thin.woff2",
       weight: "100",
       style: "normal",
     },
@@ -113,15 +109,16 @@ import {
   work_sans,
   zilla_slab,
   sans3,
-} from "../../../fonts"
-import { cn } from "@/lib/utils"
-export default async function FlowsLayout({
+} from "../../../../fonts"
+export default function PreviewFlowsLayout({
   children,
-  params: { flowId },
-}: FlowsLayoutProps) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <main
+    <div
       className={cn(
+        "h-full",
         roboto.variable,
         fontSans.variable,
         fontHeading.variable,
@@ -178,11 +175,9 @@ export default async function FlowsLayout({
         sans3.variable
       )}
     >
-      <StoreProvider>
-        <FlowsAutoSaveProvider flowId={flowId}>
-          <div className="font-sans">{children}</div>
-        </FlowsAutoSaveProvider>
-      </StoreProvider>
-    </main>
+      {/* <FlowLayout isHeader={true} /> */}
+      {children}
+      <FlowLayout isHeader={false} check={true} />
+    </div>
   )
 }

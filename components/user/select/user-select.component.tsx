@@ -133,7 +133,9 @@ export const SelectGen = ({
     isFilled,
     isRequired,
     "placeGolder",
-    placeholder
+    placeholder,
+    "fontfamily",
+    fontFamily
   )
   return (
     <div
@@ -242,7 +244,7 @@ interface StyledSelectProps {
   mobileScreen: boolean
 }
 const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
+  font-family: ${(props) => `var(${props?.fontFamily})`} !important;
   font-weight: 400;
   font-size: 16px;
   border: ${(props) => props.border};
@@ -398,6 +400,7 @@ export const Select = ({
         className="relative w-full"
         style={{
           background: `${containerBackground}`,
+          fontFamily: `var(${fontFamily?.value})`,
           display: "inline-flex",
           flexDirection: "column",
           justifyContent: "center",

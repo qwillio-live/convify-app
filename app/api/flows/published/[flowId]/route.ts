@@ -6,23 +6,6 @@ import { logError } from "@/lib/utils/logger"
 import { NextRequest, NextResponse } from "next/server"
 import { v4 as uuidv4 } from "uuid" // Ensure you have this library installed
 
-/**
- * Generate a unique, URL-friendly name.
- * @param {string} name - The original name.
- * @returns {string} - The transformed unique name.
- */
-function generateUniqueName(name) {
-  if (!name) return ""
-
-  // Convert to lowercase and replace spaces with hyphens
-  const formattedName = name.toLowerCase().trim().replace(/\s+/g, "-")
-
-  // Generate a 6-digit random string
-  const uniqueSuffix = uuidv4().slice(0, 6) // Example: "94dh23"
-
-  return `${formattedName}-${uniqueSuffix}`
-}
-
 export async function GET(
   req: NextRequest,
   { params }: { params: { flowId: string } }
@@ -66,6 +49,47 @@ export async function GET(
   }
 }
 
+// Helper function to generate random letters
+const generateRandomLetters = (length: number) => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  let result = ""
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return result
+}
+
+// Function to generate a unique published name
+const generateUniqueName = async (baseName: string) => {
+  let uniqueName = baseName
+  let isUnique = await checkPublishedNameExists(uniqueName)
+
+  // Generate a unique publishedName if needed
+  while (!isUnique) {
+    const randomSuffix = generateRandomLetters(6) // Append 6 random characters
+    uniqueName = `${baseName}-${randomSuffix}`
+    isUnique = await checkPublishedNameExists(uniqueName)
+  }
+
+  return uniqueName
+}
+
+// Function to check if the published name exists
+const checkPublishedNameExists = async (publishedName: string) => {
+  try {
+    const count = await prisma.flow.count({
+      where: {
+        publishedName,
+      },
+    })
+    return count === 0
+  } catch (error) {
+    console.error("Error checking published name existence:", error)
+    return false
+  }
+}
+
 export async function POST(
   req: NextRequest,
   { params }: { params: { flowId: string } }
@@ -73,6 +97,8 @@ export async function POST(
   try {
     const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN
     const { flowId } = params
+
+    // Fetch the flow and its steps
     const flows = await prisma.flow.findMany({
       where: {
         isDeleted: false,
@@ -82,13 +108,16 @@ export async function POST(
         createdAt: "desc",
       },
     })
+
     if (flows.length > 0) {
+      const flow = flows[0]
       const flowSteps = await prisma.flowStep.findMany({
         where: {
-          flowId: flowId,
+          flowId,
           isDeleted: false,
         },
       })
+
       const publishedFlowSteps = flowSteps.map((step) => ({
         flowId,
         name: step.name,
@@ -96,23 +125,31 @@ export async function POST(
         content: step.content || {},
         order: step.order,
       }))
+
+      // Delete old published flow steps
       const deletedFlowSteps = await prisma.publishedFlowStep.deleteMany({
         where: {
-          flowId: flowId,
+          flowId,
         },
       })
       console.log("deleted flowSteps", deletedFlowSteps)
+
+      // Create new published flow steps
       const result = await prisma.publishedFlowStep.createMany({
         data: publishedFlowSteps,
       })
-      let sortedSteps = publishedFlowSteps
+
+      let sortedSteps = publishedFlowSteps.sort((a, b) => a.order - b.order)
       let uniqueName = ""
-      if (flows) {
-        sortedSteps = publishedFlowSteps.sort((a, b) => a.order - b.order)
-        uniqueName = flows[0].publishedName
-          ? flows[0].publishedName
-          : generateUniqueName(flows[0].name)
+
+      // Check and generate a unique published name
+      if (flow.publishedName) {
+        uniqueName = flow.publishedName
+      } else {
+        uniqueName = await generateUniqueName(flow.name)
       }
+
+      // Update the flow with the new published name
       const update = await prisma.flow.update({
         where: {
           id: flowId,
@@ -126,17 +163,15 @@ export async function POST(
               : `${flowDomain}/${uniqueName}`,
         },
       })
+
       console.log("final result", result, update)
       return NextResponse.json(result)
     }
   } catch (error) {
     console.error(error)
-
-    const statusCode = 500
-
     return NextResponse.json(
       { error: "Failed to fetch flows" },
-      { status: statusCode }
+      { status: 500 }
     )
   }
 }

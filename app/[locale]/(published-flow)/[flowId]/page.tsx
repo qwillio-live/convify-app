@@ -5,6 +5,7 @@ import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 import StaticPublishedFile from "@/components/user/publishedFlowStaticFile"
 import { env } from "@/env.mjs"
 import Head from "next/head"
+import localFont from "next/font/local"
 
 interface PageProps {
   params: {
@@ -70,7 +71,16 @@ const fontMappings: Record<string, string> = {
   "--font-roboto-slab": "Roboto+Slab:wght@100;300;400;500;600;700;900",
   "--font-sans3": "Source+Sans+3:wght@200;300;400;500;600;700;800;900",
 }
-
+const geist = localFont({
+  variable: "--font-geist",
+  src: [
+    {
+      path: "../../../../assets/fonts/Geist-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+})
 export default async function PublishedFlows({
   params,
   searchParams,
@@ -112,30 +122,46 @@ export default async function PublishedFlows({
     secondaryFontImport
   )
 
-  const styles = `
-  [font-family="${primaryFontKey}"] {
-    font-family: ${fontMappings[primaryFontKey]
-      .split(":")[0]
-      .replace("+", " ")} !important;
-  }
-  [font-family="${secondaryFontKey}"] {
-    font-family: ${fontMappings[secondaryFontKey]
-      .split(":")[0]
-      .replace("+", " ")} !important;
-  }`
+  // const styles = `
+  // [font-family="${primaryFontKey}"] {
+  //   font-family: ${fontMappings[primaryFontKey]
+  //     .split(":")[0]
+  //     .replace("+", " ")} !important;
+  // }
+  // [font-family="${secondaryFontKey}"] {
+  //   font-family: ${fontMappings[secondaryFontKey]
+  //     .split(":")[0]
+  //     .replace("+", " ")} !important;
+  // }`
+  const cssVariables = `
+    :root {
+      ${Object.entries(fontMappings)
+        .map(
+          ([key, value]) =>
+            `${key}: ${value.split(":")[0].replace(/\+/g, " ")};`
+        )
+        .join("\n")}
+    }
+  `
+  console.log("cssVariables", cssVariables)
   return (
     <>
       <style>
         {`
             ${primaryFontImport}
             ${secondaryFontImport}
-            ${styles}
+            ${cssVariables}
           `}
       </style>
       <div
-      // style={{
-      //   fontFamily: primaryFontKey.replace("--font-", "") || "Roboto", // Fallback to 'Roboto' if no primary font is provided
-      // }}
+        className={`${geist.variable}`}
+        // style={{
+        //   fontFamily: fontMappings[secondaryFontKey]
+        //     ? fontMappings[secondaryFontKey]
+        //         .split(":")[0] // Extract font family name
+        //         .replace(/\+/g, " ") // Replace '+' with spaces
+        //     : "sans-serif",
+        // }}
       >
         <MetaGoogleAnalytics
           gtm={data?.integrations?.googleTagManagerId}
