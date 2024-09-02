@@ -50,7 +50,7 @@ export async function GET(
 }
 
 // Helper function to generate random letters
-const generateRandomLetters = (length: number) => {
+export const generateRandomLetters = (length: number) => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   let result = ""

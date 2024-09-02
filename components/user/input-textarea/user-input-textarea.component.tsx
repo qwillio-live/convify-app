@@ -28,6 +28,7 @@ import {
   setPreviewScreenData,
   setUpdateFilledCount,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { generateRandomLetters } from "@/app/api/flows/published/[flowId]/route"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -177,7 +178,7 @@ export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
   fullWidth: true,
   size: UserInputSizes.medium,
   label: "Label",
-  fieldName: "Field name",
+  fieldName: "",
   floatingLabel: false,
   enableIcon: false,
   icon: "arrowright",
