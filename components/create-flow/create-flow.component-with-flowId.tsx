@@ -11,13 +11,23 @@ import {
   Linkedin,
   Smartphone,
   Laptop,
-  PlusCircle
+  PlusCircle,
 } from "lucide-react"
 import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from "lodash"
-
+import { Card, CardContent } from "../user/card/user-card.component"
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setCurrentScreenName, setEditorLoad, setScrollY, setComponentBeforeAvatar, setFirstScreenName, setSelectedComponent, setValidateScreen, addScreen, setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setCurrentScreenName,
+  setEditorLoad,
+  setScrollY,
+  setComponentBeforeAvatar,
+  setFirstScreenName,
+  setSelectedComponent,
+  setValidateScreen,
+  addScreen,
+  setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -34,7 +44,6 @@ import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import { CardContent } from "../user/card/user-card.component"
 import {
   Container,
   UserContainer,
@@ -113,7 +122,7 @@ const AddScreenButton = () => {
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
-  const t = useTranslations("Components");
+  const t = useTranslations("Components")
 
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
@@ -133,15 +142,15 @@ const AddScreenButton = () => {
     [dispatch, screens]
   )
 
-  return(
+  return (
     <Button
-        variant="outline"
-        size="sm"
-        className="bg-[#f4f4f5]"
-        onClick={() => handleAddScreen(selectedScreenIndex || 0)}
-      >
-        <PlusCircle className="mr-2 size-4" />
-        {t("Add Screen")}
+      variant="outline"
+      size="sm"
+      className="bg-[#f4f4f5]"
+      onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+    >
+      <PlusCircle className="mr-2 size-4" />
+      {t("Add Screen")}
     </Button>
   )
 }
@@ -160,11 +169,11 @@ const NodesToSerializedNodes = (nodes) => {
 type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
 export function CreateFlowComponent({ flowId }) {
-  const t = useTranslations("Components");
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const editorHeaderRef = React.useRef(null);
-  const [height, setHeight] = React.useState(90);
-  const [width, setWidth] = React.useState(0);
+  const t = useTranslations("Components")
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const editorHeaderRef = React.useRef(null)
+  const [height, setHeight] = React.useState(90)
+  const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
   const [topMargin, setTopMargin] = React.useState<number>(0)
   const dispatch = useAppDispatch()
@@ -223,7 +232,7 @@ export function CreateFlowComponent({ flowId }) {
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
-  
+
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
@@ -350,7 +359,7 @@ export function CreateFlowComponent({ flowId }) {
           Globe,
           Linkedin,
           Container,
-          // Card,
+          Card,
           CardContent,
           UserContainer,
           IconButton,
@@ -377,16 +386,17 @@ export function CreateFlowComponent({ flowId }) {
         onRender={RenderNode}
       >
         {/* <div className="md:flex h-[calc(-52px+99vh)]  max-h-[calc(-52px+99vh)] flex-row justify-between gap-0"> */}
-        <div className="md:flex h-[calc(-52px+99vh)]  max-h-[calc(-52px+99vh)] flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen md:basis-[15%] overflow-y-auto border-r px-2 ">
+        <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)]  flex-row justify-between gap-0 md:flex">
+          <ScrollArea className="max-h-screen overflow-y-auto border-r px-2 md:basis-[15%] ">
             <div className="section-body py-6">
-              <ScreensList  flowId={flowId} />
+              <ScreensList flowId={flowId} />
             </div>
           </ScrollArea>
           <ScrollArea
-          ref={containerRef}
-          id="scroll-container"
-          className="max-h-[calc(-52px+99vh)] hidden md:block basis-[55%] overflow-y-auto border-r">
+            ref={containerRef}
+            id="scroll-container"
+            className="hidden max-h-[calc(-52px+99vh)] basis-[55%] overflow-y-auto border-r md:block"
+          >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -454,17 +464,21 @@ export function CreateFlowComponent({ flowId }) {
                     <ResolvedComponentsFromCraftState screen={screensFooter} />
                   )}
                 </TabsContent>
-                <TabsList className="absolute bottom-0 z-20  w-100 ">
-                  <AddScreenButton/>
-                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1"><Smartphone className="size-5"/></TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}><Laptop className="size-5" /></TabsTrigger>
+                <TabsList className="w-100 absolute bottom-0  z-20 ">
+                  <AddScreenButton />
+                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1">
+                    <Smartphone className="size-5" />
+                  </TabsTrigger>
+                  <TabsTrigger value={VIEWS.DESKTOP}>
+                    <Laptop className="size-5" />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
 
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className=" max-h-[calc(-52px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r px-2 ">
+          <ScrollArea className=" hidden  h-full max-h-[calc(-52px+99vh)] basis-[15%] overflow-y-auto border-r px-2 md:block ">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -472,11 +486,11 @@ export function CreateFlowComponent({ flowId }) {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="  max-h-[calc(-52px+99vh)] hidden md:block h-full basis-[15%] overflow-y-auto border-r  bg-[#fafafa]">
+          <ScrollArea className="  hidden h-full max-h-[calc(-52px+99vh)] basis-[15%] overflow-y-auto border-r bg-[#fafafa]  md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body pt-2 overflow-y-auto">
+            <div className="section-body overflow-y-auto pt-2">
               <SettingsPanel />
             </div>
           </ScrollArea>
