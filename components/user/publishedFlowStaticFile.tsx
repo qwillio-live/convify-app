@@ -200,17 +200,19 @@ export default function StaticPublishedFile({
       >
         {filteredStep && (
           <div
+            key={`${filteredStep.name}`}
             id={filteredStep.name}
             style={{
               backgroundColor:
                 data?.flowSettings?.general?.backgroundColor || "transparent",
             }}
-            className="
+            className={`
+                animate-flow
                 relative
                 min-w-full
                 shrink-0
                 basis-full
-              "
+              `}
           >
             {resolveComponents(filteredStep.content)}
           </div>

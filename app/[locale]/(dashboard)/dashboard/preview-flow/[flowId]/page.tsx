@@ -207,11 +207,13 @@ export default async function PreviewFlows({
       >
         {filteredStep && (
           <div
+            key={`${filteredStep.name}`}
             id={filteredStep.name}
             style={{
               backgroundColor: data?.flowSettings?.general?.backgroundColor,
             }}
             className="
+            animate-flow
 relative
 min-w-full
 shrink-0

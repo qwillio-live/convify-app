@@ -231,3 +231,19 @@ userContainer > *:hover {
 .shake {
   animation: shake 0.5s ease-in-out;
 }
+
+@keyframes slideRightToLeft {
+  0% {
+    transform: translateX(4%);
+    opacity: 0; /* Optional: start with the element hidden */
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1; /* Optional: end with the element fully visible */
+  }
+}
+
+.animate-flow {
+  animation: slideRightToLeft 0.2s ease-out;
+  animation-fill-mode: forwards;
+}
