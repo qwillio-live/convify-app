@@ -200,7 +200,7 @@ export default async function PreviewFlows({
           resolveComponents(JSON.parse(data?.headerData || {}))}
       </div>
       <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] h-full`}
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] min-h-[71vh]`}
         style={{
           backgroundColor: data?.flowSettings?.general?.backgroundColor,
         }}
@@ -222,6 +222,16 @@ basis-full
           </div>
         )}
       </div>
+      {data?.footerData && (
+        <div
+          className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+          style={{
+            backgroundColor: data?.flowSettings?.general?.backgroundColor,
+          }}
+        >
+          {resolveComponents(JSON.parse(data?.footerData || {}))}
+        </div>
+      )}
     </>
   )
 }
