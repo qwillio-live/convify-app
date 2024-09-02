@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
@@ -16,13 +17,18 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { TextArea } from "@/components/textarea-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputTextareaSettings } from "./user-input-textarea-settings.component"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { generateRandomLetters } from "@/app/api/flows/published/[flowId]/route"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -51,7 +57,6 @@ const UserInputSizeValues = {
   large: "576px",
   full: "100%",
 }
-
 
 const UserInputMobileSizeValues = {
   small: "300px",
@@ -173,7 +178,7 @@ export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
   fullWidth: true,
   size: UserInputSizes.medium,
   label: "Label",
-  fieldName: "Field name",
+  fieldName: "",
   floatingLabel: false,
   enableIcon: false,
   icon: "arrowright",
@@ -199,14 +204,63 @@ export const UserInputTextareaGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const t = useTranslations("Components")
   const [error, setError] = useState(props.error)
-
+  const [isFilled, setIsFilled] = useState(false)
+  const dispatch = useAppDispatch()
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
+  const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  const isRequired = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData
+      ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
+      : false
+  })
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
+  )
+  useEffect(() => {
+    if (screenData !== "Components.Text Area") {
+      setInputValue(screenData)
+      // if (screenData !== "") {
+      //   setIsFilled(true)
+      // }
+    }
+  }, [])
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
 
   return (
     <div
+      ref={itemRefNew}
       className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: "100%",
@@ -236,7 +290,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
           }}
         >
           <div
-            className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
@@ -247,9 +301,9 @@ export const UserInputTextareaGen = ({ ...props }) => {
             {props.label}
           </div>
 
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputTextareaStyled
-              ref={textAreaRef}
+              value={inputValue}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
@@ -257,7 +311,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
-              error={props.error}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -275,24 +329,56 @@ export const UserInputTextareaGen = ({ ...props }) => {
               onFocus={() => setIsActive(true)}
               className={cn(
                 {
-                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-                  "font-semibold px-3 py-2.5 text-base placeholder:text-gray-400 placeholder:font-light":
+                  "px-3 pb-4 pt-8 text-base font-semibold": props.floatingLabel,
+                  "px-3 py-2.5 text-base font-semibold placeholder:font-light placeholder:text-gray-400":
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `ring-0
-                outline-none
-                focus-visible:outline-none
-                peer-focus-visible:outline-none
-                focus-visible:ring-0
-                ring-opacity-0/0
+                `ring-opacity-0/0
                 bg-white
+                outline-none
+                ring-0
                 transition-all
                 duration-200
                 ease-in-out
-                focus-visible:ring-transparent focus-visible:ring-offset-0`
+                focus-visible:outline-none
+                focus-visible:ring-0
+                focus-visible:ring-transparent
+                focus-visible:ring-offset-0 peer-focus-visible:outline-none
+                ${!isFilled && alarm && isRequired && "!border-red-600"}
+                `
               )}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => {
+                if (isRequired) {
+                  if (isFilled && e.target.value === "") {
+                    dispatch(setUpdateFilledCount(-1))
+                    setIsFilled(false)
+                    setInputValue(e.target.value)
+                  } else {
+                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    setInputValue(e.target.value),
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: [e.target.value],
+                        })
+                      ),
+                      setIsFilled(true)
+                  }
+                } else {
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        isArray: false,
+                        entity: "inputValue",
+                        newSelections: [e.target.value],
+                      })
+                    )
+                }
+              }}
               onBlur={() => setIsActive(false)}
               autoFocus={isFocused}
               height={props.height}
@@ -301,9 +387,9 @@ export const UserInputTextareaGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {props.error && (
+          {alarm && !isFilled && isRequired && (
             <div
-              className="error-container border flex flex-row items-center gap-0 mt-0"
+              className="error-container mt-0 flex flex-row items-center gap-0 border"
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -316,7 +402,8 @@ export const UserInputTextareaGen = ({ ...props }) => {
                 borderBottomRightRadius: props.errorStyles.bottomRightRadius,
               }}
             >
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">{IconsList[props.errorIcon]}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}
@@ -472,9 +559,14 @@ export const UserInputTextarea = ({ ...props }) => {
         <div
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
-            width: `${mobileScreen ? UserInputMobileSizeValues[props.size] : UserInputSizeValues[props.size]}`,
+            width: `${
+              mobileScreen
+                ? UserInputMobileSizeValues[props.size]
+                : UserInputSizeValues[props.size]
+            }`,
           }}
         >
+          {/** @ts-ignore */}
           <ContentEditable
             html={props.label}
             disabled={false}
@@ -486,7 +578,7 @@ export const UserInputTextarea = ({ ...props }) => {
                 500
               )
             }
-            className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+            className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
               minWidth: `${UserInputSizeValues[props.size]}`,
@@ -495,7 +587,7 @@ export const UserInputTextarea = ({ ...props }) => {
             }}
           />
 
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {/* {props.enableIcon && (
               <div
                 className={cn(
@@ -551,18 +643,18 @@ export const UserInputTextarea = ({ ...props }) => {
               height={props.height}
               onFocus={() => setProp((props) => (props.isActive = true))}
               className={cn(
-                `font-semibold px-3 pt-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light ring-0
+                `ring-opacity-0/0 send-response bg-white px-3 pb-4 pt-3 text-base font-semibold
               outline-none
-              focus-visible:outline-none
-              peer-focus-visible:outline-none
-              focus-visible:ring-0
-              ring-opacity-0/0
-              bg-white
+              ring-0
               transition-all
               duration-200
               ease-in-out
+              placeholder:font-light
+              placeholder:text-gray-400
+              focus-visible:outline-none
+              focus-visible:ring-0
               focus-visible:ring-transparent focus-visible:ring-offset-0
-              send-response
+              peer-focus-visible:outline-none
               `
               )}
               onChange={
@@ -579,7 +671,7 @@ export const UserInputTextarea = ({ ...props }) => {
           {/** Error container */}
           {props.error && (
             <div
-              className="error-container border flex flex-row items-center gap-0 mt-0"
+              className="error-container mt-0 flex flex-row items-center gap-0 border"
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,

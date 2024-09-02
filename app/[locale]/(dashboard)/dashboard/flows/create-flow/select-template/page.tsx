@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   setNewFlowSettings,
   setTemplateId,
+  setTemplateLink,
 } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
@@ -59,6 +60,7 @@ export default function SelectTemplate() {
     setSelectedCard(index + 1)
     dispatch(setNewFlowSettings(JSON.parse(templates[index]?.templateSettings)))
     dispatch(setTemplateId(templates[index]?.id))
+    dispatch(setTemplateLink(templates[index]?.link))
     setTimeout(() => {
       setLoadingCardIndex(null)
       // Perform your action here after loading
@@ -165,9 +167,9 @@ export default function SelectTemplate() {
         <div className="flex h-full w-full px-6">
           <div className="flex w-full">
             <div className="w-full md:w-6/12">
-              <ScrollArea className="z-20 h-full py-9 pl-6 pr-6">
+              <ScrollArea className="z-20  h-full pb-9 pl-6 pr-6">
                 <div className="mb-9">
-                  <h2 className="mb-5 text-4xl font-semibold">
+                  <h2 className="mb-5 mt-9 text-4xl font-semibold">
                     {t("selectTemplateHeader")}
                   </h2>
                   <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">

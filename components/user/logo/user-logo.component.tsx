@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { UploadCloud } from "lucide-react"
@@ -175,7 +176,7 @@ export const LogoSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Alt label</p>
+              <p className="text-muted-foreground text-sm">Alt label</p>
               <Input
                 className="p-2 text-sm"
                 value={alt}
@@ -187,7 +188,7 @@ export const LogoSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Width</p>
+              <p className="text-muted-foreground text-sm">Width</p>
               <Input
                 defaultValue={width}
                 className="w-full"
@@ -198,7 +199,7 @@ export const LogoSettings = () => {
             </div>
 
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Height</p>
+              <p className="text-muted-foreground text-sm">Height</p>
               <Input
                 defaultValue={height}
                 className="w-full"
@@ -215,7 +216,7 @@ export const LogoSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Top</Label>
+              <Label className="text-muted-foreground text-sm">Top</Label>
               <Input
                 type="number"
                 max={100}
@@ -228,7 +229,7 @@ export const LogoSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Bottom</Label>
+              <Label className="text-muted-foreground text-sm">Bottom</Label>
               <Input
                 type="number"
                 placeholder={marginBottom}
@@ -244,7 +245,7 @@ export const LogoSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Left</Label>
+              <Label className="text-muted-foreground text-sm">Left</Label>
               <Input
                 type="number"
                 placeholder={marginLeft}
@@ -257,7 +258,7 @@ export const LogoSettings = () => {
               />
             </div>
             <div className="style-control flex flex-col gap-2">
-              <Label className="text-sm text-muted-foreground">Right</Label>
+              <Label className="text-muted-foreground text-sm">Right</Label>
               <Input
                 type="number"
                 placeholder={marginRight}
@@ -277,7 +278,7 @@ export const LogoSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Background</p>
+              <p className="text-muted-foreground text-sm">Background</p>
               <Input
                 type="color"
                 value={background}
@@ -287,7 +288,7 @@ export const LogoSettings = () => {
               />
             </div>
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Align</p>
+              <p className="text-muted-foreground text-sm">Align</p>
               <RadioGroup
                 value={align}
                 onValueChange={(value) =>
@@ -309,7 +310,7 @@ export const LogoSettings = () => {
               </RadioGroup>
             </div>
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">Radius</p>
+              <p className="text-muted-foreground text-sm">Radius</p>
               <Input
                 type="number"
                 placeholder={radius}

@@ -1,13 +1,17 @@
+"use client"
 import React, { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import {  useNode } from "@/lib/craftjs"
+import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { LogoSettings } from "./user-logo.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useLogoThemePresets"
-import { useTranslations } from "next-intl";
-import { RootState } from "@/lib/state/flows-state/store";
+import {
+  getBackgroundForPreset,
+  getHoverBackgroundForPreset,
+} from "./useLogoThemePresets"
+import { useTranslations } from "next-intl"
+import { RootState } from "@/lib/state/flows-state/store"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 
 const ButtonTextLimit = {
@@ -62,6 +66,8 @@ export const LogoComponentGen = ({
   borderColor,
   borderHoverColor,
   nextScreen,
+  top,
+
   ...props
 }) => {
   return (
@@ -73,19 +79,21 @@ export const LogoComponentGen = ({
         justifyContent: "center",
       }}
     >
-      <div className="relative w-full"
+      <div
+        className="relative w-full"
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
-          boxSizing: 'border-box',
-          minWidth: '100%',
-          maxWidth: '100%',
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
-        }}>
+        }}
+      >
         <div
           className={cn(
             `relative flex flex-row justify-${align} w-full border border-transparent`
@@ -143,7 +151,9 @@ export const UserLogo = ({
   ...props
 }) => {
   return (
-    <div style={{ height: h, width: w, overflow: 'hidden', position: 'relative' }}>
+    <div
+      style={{ height: h, width: w, overflow: "hidden", position: "relative" }}
+    >
       <img
         alt={alt}
         src={src}
@@ -152,7 +162,7 @@ export const UserLogo = ({
           height: `calc(${80}px - ${top}px - ${bottom}px)`,
           borderRadius: `${borderRad}px`,
           backgroundColor: background,
-          objectFit: 'cover',
+          objectFit: "cover",
           transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
@@ -161,7 +171,6 @@ export const UserLogo = ({
     </div>
   )
 }
-
 
 export const LogoComponent = ({
   alt,
@@ -217,13 +226,25 @@ export const LogoComponent = ({
     isHovered: state.events.hovered,
   }))
   const t = useTranslations("Components")
-  const ref = useRef<HTMLDivElement>(null);
-  const [displayController, setDisplayController] = React.useState(false);
-  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
-  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
-  const screensLength = useAppSelector((state: RootState) => state?.screen?.screens?.length ?? 0);
-  const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
-  const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
+  const ref = useRef<HTMLDivElement>(null)
+  const [displayController, setDisplayController] = React.useState(false)
+  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
+  const screensLength = useAppSelector(
+    (state: RootState) => state?.screen?.screens?.length ?? 0
+  )
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || ""
 
   useEffect(() => {
     if (buttonAction === "next-screen") {
@@ -233,75 +254,82 @@ export const LogoComponent = ({
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => props.fontFamily.value = primaryFont, 200);
+      setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
-  },
-    [primaryFont])
+  }, [primaryFont])
 
   useEffect(() => {
-
     if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(primaryColor, props.preset);
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(primaryColor, props.preset);
+      const backgroundPrimaryColor = getBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
+      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
 
       if (background.globalStyled && !background.isCustomized) {
-        setProp((props) => props.background.value = backgroundPrimaryColor, 200)
+        setProp(
+          (props) => (props.background.value = backgroundPrimaryColor),
+          200
+        )
       }
       if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => props.color.value = primaryColor, 200)
+        setProp((props) => (props.color.value = primaryColor), 200)
       }
       if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => props.borderColor.value = primaryColor, 200)
+        setProp((props) => (props.borderColor.value = primaryColor), 200)
       }
 
       // hover colors
 
       if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp((props) => props.backgroundHover.value = hoverBackgroundPrimaryColor, 200)
+        setProp(
+          (props) =>
+            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+          200
+        )
       }
       if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => props.borderHoverColor.value = primaryColor, 200)
+        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
       }
       if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => props.colorHover.value = primaryColor, 200)
+        setProp((props) => (props.colorHover.value = primaryColor), 200)
       }
     }
-
   }, [primaryColor])
-  const maxLength = ButtonTextLimit[size];
+  const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
-
-    const value = e.target.innerText;
+    const value = e.target.innerText
     if (value.length <= maxLength) {
-      setProp((props) => props.text = value);
+      setProp((props) => (props.text = value))
       // handlePropChangeDebounced('text',value);
       // handlePropChangeThrottled('text',value)
     } else {
       if (ref.current) {
-        e.target.innerText = text || ''; // Restore the previous text
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(ref.current);
-        range.collapse(false); // Move cursor to the end
-        selection?.removeAllRanges();
-        selection?.addRange(range);
+        e.target.innerText = text || "" // Restore the previous text
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(ref.current)
+        range.collapse(false) // Move cursor to the end
+        selection?.removeAllRanges()
+        selection?.addRange(range)
       }
     }
-  };
+  }
 
   useEffect(() => {
-
-    const currentRef = ref.current;
+    const currentRef = ref.current
     if (currentRef) {
-      currentRef.addEventListener('input', handleTextChange);
+      currentRef.addEventListener("input", handleTextChange)
     }
     return () => {
       if (currentRef) {
-        currentRef.removeEventListener('input', handleTextChange);
+        currentRef.removeEventListener("input", handleTextChange)
       }
-    };
-
-  }, [text, maxLength]);
+    }
+  }, [text, maxLength])
 
   return (
     <div
@@ -316,19 +344,21 @@ export const LogoComponent = ({
       onMouseOut={() => setDisplayController(false)}
     >
       {displayController && <Controller nameOfComponent={t("Logo")} />}
-      <div className="relative w-full"
+      <div
+        className="relative w-full"
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
-          boxSizing: 'border-box',
-          minWidth: '100%',
-          maxWidth: '100%',
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
-        }}>
+        }}
+      >
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
@@ -365,15 +395,12 @@ export const LogoComponent = ({
   )
 }
 
-
 export enum IconButtonSizes {
   small = "small",
   medium = "medium",
   large = "large",
   full = "full",
 }
-
-
 
 export type IconButtonProps = {
   alt: string
@@ -455,7 +482,6 @@ export const LogoDefaultProps: IconButtonProps = {
     value: "#ffffff",
     globalStyled: false,
     isCustomized: false,
-
   },
   radius: {
     value: "0",
@@ -475,13 +501,13 @@ export const LogoDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: 'https://convify.io',
+  url: "https://convify.io",
   src: `${ConvifyLogo.src}`,
   disabled: false,
   enableLink: false,
-  minWidth: '120px',
-  w: 'auto',
-  h: '80px',
+  minWidth: "120px",
+  w: "auto",
+  h: "80px",
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,
@@ -507,13 +533,13 @@ export const LogoDefaultProps: IconButtonProps = {
   gap: 4,
   border: 0,
   fullWidth: true,
-  preset: 'filled',
-  settingsTab: 'content',
+  preset: "filled",
+  settingsTab: "content",
   tracking: false,
-  trackingEvent: 'button_clicked',
-  nextScreen: '',
+  trackingEvent: "button_clicked",
+  nextScreen: "",
   buttonAction: "next-screen",
-  borderRad: 0
+  borderRad: 0,
 }
 
 LogoComponent.craft = {

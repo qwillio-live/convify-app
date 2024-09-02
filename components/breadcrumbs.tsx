@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb"
 
 import { Button } from "./ui/button"
+import { revalidateFlow } from "@/actions/flow/revalidateFlow"
 
 export function BreadCrumbs() {
   const t = useTranslations("CreateFlow")
@@ -19,7 +20,10 @@ export function BreadCrumbs() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">
+          <BreadcrumbLink
+            href="/dashboard"
+            onClick={() => revalidateFlow({ tag: "previewFlow" })}
+          >
             <span className="hidden lg:inline-block">{t("My workspace")}</span>
             <Button
               className="lg:hidden p-0 size-8 max-h-8"

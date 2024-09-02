@@ -96,7 +96,7 @@ const useLinkThemePresets = () => {
       screenId: "",
       screenName: "",
     },
-    buttonAction: "next-screen",
+    buttonAction: "redirect",
     // iconType: PictureTypes.ICON,
   }
 
@@ -178,7 +178,7 @@ const useLinkThemePresets = () => {
       screenId: "",
       screenName: "",
     },
-    buttonAction: "next-screen",
+    buttonAction: "redirect",
     // iconType: PictureTypes.ICON,
   }
 

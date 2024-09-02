@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { logError } from "@/lib/utils/logger"
 import { authOptions } from "@/lib/auth"
+import footerScreenData from "@/components/user/screens/screen-footer.json"
+import headerScreenData from "@/components/user/screens/screen-header.json"
 
 export async function GET(req: NextRequest) {
   const data = await getServerSession(authOptions)
@@ -113,6 +115,9 @@ export async function POST(req: NextRequest) {
         numberOfSteps: templateSteps.length === 0 ? 1 : templateSteps.length,
         numberOfResponses: 0,
         userId,
+        headerData: JSON.stringify(headerScreenData),
+        footerData: JSON.stringify(footerScreenData),
+        thumbnail_updatedAt: new Date(),
       },
     })
     const flowId = flow.id
@@ -121,11 +126,13 @@ export async function POST(req: NextRequest) {
       const flowSteps = templateSteps.map((step) => ({
         flowId,
         name: step.name,
-        link: step.link,
-        content: step.content as any,
+        link: step.link || "",
+        content: step.content || {},
         order: step.order,
       }))
-      await prisma.flowStep.createMany({ data: flowSteps })
+      await prisma.flowStep.createMany({
+        data: flowSteps,
+      })
     } else {
       await prisma.flowStep.create({
         data: {

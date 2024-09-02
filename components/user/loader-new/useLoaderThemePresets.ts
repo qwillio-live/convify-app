@@ -1,15 +1,21 @@
-import { IconButtonProps, IconButtonSizes } from "./user-loader.component";
-import { useAppSelector } from "@/lib/state/flows-state/hooks";
-import { darken, rgba } from "polished";
-import { useTranslations } from "next-intl";
-import hexoid from "hexoid";
+import { IconButtonProps, IconButtonSizes } from "./user-loader.component"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { darken, rgba } from "polished"
+import { useTranslations } from "next-intl"
+import hexoid from "hexoid"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 
 const useButtonThemePresets = () => {
   const t = useTranslations("Components")
-  const theme = useAppSelector((state) => state.theme);
-  const darkenedPrimaryColor = darken(0.05, theme?.general?.primaryColor || "#3182ce");
-  const alphaBackgroundColor = rgba(theme?.general?.primaryColor || "#3182ce", 0.1);
+  const theme = useAppSelector((state) => state.theme)
+  const darkenedPrimaryColor = darken(
+    0.05,
+    theme?.general?.primaryColor || "#3182ce"
+  )
+  const alphaBackgroundColor = rgba(
+    theme?.general?.primaryColor || "#3182ce",
+    0.1
+  )
   const filledPreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -18,7 +24,10 @@ const useButtonThemePresets = () => {
     },
     containerBackground: "transparent",
     background: {
-      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "filled"),
+      value: getBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
+      ),
       globalStyled: true,
       isCustomized: false,
     },
@@ -28,7 +37,10 @@ const useButtonThemePresets = () => {
       isCustomized: true,
     },
     backgroundHover: {
-      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "filled"),
+      value: getHoverBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
+      ),
       globalStyled: true,
       isCustomized: false,
     },
@@ -52,10 +64,10 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    justifyContent: "space-between",  
+    justifyContent: "space-between",
     disabled: false,
     enableRedirect: true,
-    width: '85%',
+    width: "85%",
     height: "auto",
     time: 2,
     size: IconButtonSizes.medium,
@@ -64,10 +76,10 @@ const useButtonThemePresets = () => {
     marginTop: 0,
     marginRight: 0,
     marginBottom: 0,
-    top:0,
-    left:0,
-    right:0,
-    bottom:0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     icon: "arrowright",
     paddingLeft: "16",
     paddingTop: "14",
@@ -78,17 +90,17 @@ const useButtonThemePresets = () => {
     gap: 4,
     border: 2,
     fullWidth: true,
-    preset: 'filled',
-    settingsTab: 'content',
-    buttonSize: 'medium',
+    preset: "filled",
+    settingsTab: "content",
+    buttonSize: "medium",
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
-    nextScreen: '',
-    buttonAction: "next-screen",
+    nextScreen: "",
+    buttonAction: "custom-action",
     alt: "Image",
     align: "center",
-    src: ""
-  };
+    src: "",
+  }
 
   const outLinePreset: IconButtonProps = {
     fontFamily: {
@@ -96,9 +108,12 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: 'transparent',
+    containerBackground: "transparent",
     background: {
-      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "outline"),
+      value: getBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "outline"
+      ),
       globalStyled: true,
       isCustomized: false,
     },
@@ -108,7 +123,10 @@ const useButtonThemePresets = () => {
       isCustomized: false,
     },
     backgroundHover: {
-      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "outline"),
+      value: getHoverBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "outline"
+      ),
       globalStyled: true,
       isCustomized: false,
     },
@@ -136,7 +154,7 @@ const useButtonThemePresets = () => {
     disabled: false,
     enableRedirect: true,
     time: 2,
-    width: '85%',
+    width: "85%",
     height: "auto",
     size: IconButtonSizes.medium,
     text: t("Continue"),
@@ -144,10 +162,10 @@ const useButtonThemePresets = () => {
     marginTop: 0,
     marginRight: 0,
     marginBottom: 0,
-    top:0,
-    left:0,
-    right:0,
-    bottom:0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     icon: "arrowright",
     paddingLeft: "16",
     paddingTop: "14",
@@ -158,44 +176,41 @@ const useButtonThemePresets = () => {
     gap: 4,
     border: 2,
     fullWidth: true,
-    preset: 'outline',
-    settingsTab: 'content',
-    buttonSize: 'medium',
+    preset: "outline",
+    settingsTab: "content",
+    buttonSize: "medium",
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
-    nextScreen: '',
-    buttonAction: "next-screen",
+    nextScreen: "",
+    buttonAction: "custom-action",
     alt: "Image",
     align: "center",
-    src: ImagePlaceholder.src
-  };
+    src: ImagePlaceholder.src,
+  }
 
-  return { filledPreset, outLinePreset };
-};
+  return { filledPreset, outLinePreset }
+}
 
-export const getBackgroundForPreset= (color,preset) => {
+export const getBackgroundForPreset = (color, preset) => {
   switch (preset) {
     case "filled":
-      return color;
+      return color
     case "outline":
-      return rgba(color, 0.1);
+      return rgba(color, 0.1)
     default:
-      return color;
-
+      return color
   }
 }
 
-export const getHoverBackgroundForPreset= (color,preset) => {
-
+export const getHoverBackgroundForPreset = (color, preset) => {
   switch (preset) {
     case "filled":
-      return darken(0.03, color);
+      return darken(0.03, color)
     case "outline":
-      return rgba(color, 0.1);
+      return rgba(color, 0.1)
     default:
-      return color;
-
+      return color
   }
 }
 
-export default useButtonThemePresets;
+export default useButtonThemePresets

@@ -1,19 +1,31 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
-import { Activity, Anchor, Aperture, ArrowRight, Disc, DollarSign, Mountain } from "lucide-react"
+import {
+  Activity,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  Disc,
+  DollarSign,
+  Mountain,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import styled from "styled-components"
-import { throttle, debounce } from 'lodash';
+import { throttle, debounce } from "lodash"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { Button as CustomButton } from "@/components/ui/button"
 import { Controller } from "../settings/controller.component"
 import { ImageSettings } from "./user-image.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
-import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useButtonThemePresets"
-import { useTranslations } from "next-intl";
-import { RootState } from "@/lib/state/flows-state/store";
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import {
+  getBackgroundForPreset,
+  getHoverBackgroundForPreset,
+} from "./useButtonThemePresets"
+import { useTranslations } from "next-intl"
+import { RootState } from "@/lib/state/flows-state/store"
+import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -23,18 +35,19 @@ const IconsList = {
   disc: (props) => <Disc {...props} />,
   mountain: (props) => <Mountain {...props} />,
   arrowright: (props) => <ArrowRight {...props} />,
-};
+}
 
-const IconGenerator = ({ icon, size, className = '', ...rest }) => {
-  const IconComponent = IconsList[icon];
+const IconGenerator = ({ icon, size, className = "", ...rest }) => {
+  const IconComponent = IconsList[icon]
 
   if (!IconComponent) {
-    return null; // or some default icon or error handling
+    return null // or some default icon or error handling
   }
 
-  return <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />;
-};
-
+  return (
+    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
+  )
+}
 
 const IconButtonSizeValues = {
   small: "300px",
@@ -124,19 +137,21 @@ export const ImageComponentGen = ({
         justifyContent: "center",
       }}
     >
-      <div className="relative w-full"
+      <div
+        className="relative w-full"
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
-          boxSizing: 'border-box',
-          minWidth: '100%',
-          maxWidth: '100%',
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
-        }}>
+        }}
+      >
         <div
           className={cn(
             `relative flex flex-row justify-${align} w-full border border-transparent`
@@ -191,7 +206,7 @@ export const UserLogo = ({
   Right,
   ...props
 }) => {
-  console.log('max width in the image is: ', maxWidth, width)
+  console.log("max width in the image is: ", maxWidth, width)
   return (
     <>
       <img
@@ -212,7 +227,6 @@ export const UserLogo = ({
     </>
   )
 }
-
 
 export const ImageComponent = ({
   alt,
@@ -275,43 +289,111 @@ export const ImageComponent = ({
     enabled: state.options.enabled,
   }))
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch();
-  const ref = useRef<HTMLDivElement>(null);
-  const [displayController, setDisplayController] = React.useState(false);
-  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
-  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens);
-  const screensLength = useAppSelector((state: RootState) => state?.screen?.screens?.length ?? 0);
-  const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
-  const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
+  const dispatch = useAppDispatch()
+  const ref = useRef<HTMLDivElement>(null)
+  const [displayController, setDisplayController] = React.useState(false)
+  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screensLength = useAppSelector(
+    (state: RootState) => state?.screen?.screens?.length ?? 0
+  )
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || ""
 
   useEffect(() => {
     const handleResize = () => {
-      if (mobileScreen && picSize == 'small') {
-        setProp((props) => (props.maxWidth = '300px', props.picSize = 'small', props.width = `${props.imageSize}%`), 1000);
-      } else if (mobileScreen && picSize == 'medium') {
-        setProp((props) => (props.maxWidth = '300px', props.picSize = 'medium', props.width = `${props.imageSize}%`), 1000);
-      } else if (mobileScreen && picSize == 'large') {
-        setProp((props) => (props.maxWidth = '300px', props.picSize = 'large', props.width = `${props.imageSize}%`), 1000);
-      } else if (mobileScreen && picSize == 'full') {
-        setProp((props) => (props.maxWidth = '330px', props.picSize = 'full', props.width = `${props.imageSize}%`), 1000);
-      } else if (!mobileScreen && picSize == 'small') {
-        setProp((props) => (props.maxWidth = '400px', props.picSize = 'small', props.width = `${props.imageSize}%`), 1000);
-      } else if (!mobileScreen && picSize == 'medium') {
-        setProp((props) => (props.maxWidth = '800px', props.picSize = 'medium', props.width = `${props.imageSize}%`), 1000);
-      } else if (!mobileScreen && picSize == 'large') {
-        setProp((props) => (props.maxWidth = '850px', props.picSize = 'large', props.width = `${props.imageSize}%`), 1000);
-      } else if (!mobileScreen && picSize == 'full') {
-        setProp((props) => (props.maxWidth = '870px', props.picSize = 'full', props.width = `${props.imageSize}%`), 1000);
+      if (mobileScreen && picSize == "small") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "300px"),
+            (props.picSize = "small"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (mobileScreen && picSize == "medium") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "300px"),
+            (props.picSize = "medium"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (mobileScreen && picSize == "large") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "300px"),
+            (props.picSize = "large"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (mobileScreen && picSize == "full") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "330px"),
+            (props.picSize = "full"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (!mobileScreen && picSize == "small") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "400px"),
+            (props.picSize = "small"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (!mobileScreen && picSize == "medium") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "800px"),
+            (props.picSize = "medium"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (!mobileScreen && picSize == "large") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "850px"),
+            (props.picSize = "large"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (!mobileScreen && picSize == "full") {
+        setProp(
+          (props) => (
+            (props.maxWidth = "870px"),
+            (props.picSize = "full"),
+            (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
       }
     }
-    window.addEventListener('resize', handleResize);
-    handleResize();
+    window.addEventListener("resize", handleResize)
+    handleResize()
     return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [mobileScreen, picSize]);
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [mobileScreen, picSize])
 
   useEffect(() => {
     if (mobileScreen && uploadedImageMobileUrl) {
@@ -329,81 +411,90 @@ export const ImageComponent = ({
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => props.fontFamily.value = primaryFont, 200);
+      setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
-  },
-    [primaryFont])
+  }, [primaryFont])
 
   useEffect(() => {
-
     if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(primaryColor, props.preset);
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(primaryColor, props.preset);
+      const backgroundPrimaryColor = getBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
+      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
 
       if (background.globalStyled && !background.isCustomized) {
-        setProp((props) => props.background.value = backgroundPrimaryColor, 200)
+        setProp(
+          (props) => (props.background.value = backgroundPrimaryColor),
+          200
+        )
       }
       if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => props.color.value = primaryColor, 200)
+        setProp((props) => (props.color.value = primaryColor), 200)
       }
       if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => props.borderColor.value = primaryColor, 200)
+        setProp((props) => (props.borderColor.value = primaryColor), 200)
       }
 
       // hover colors
 
       if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp((props) => props.backgroundHover.value = hoverBackgroundPrimaryColor, 200)
+        setProp(
+          (props) =>
+            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+          200
+        )
       }
       if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => props.borderHoverColor.value = primaryColor, 200)
+        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
       }
       if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => props.colorHover.value = primaryColor, 200)
+        setProp((props) => (props.colorHover.value = primaryColor), 200)
       }
     }
-
   }, [primaryColor])
-  const maxLength = ButtonTextLimit[size];
+  const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
-
-    const value = e.target.innerText;
+    const value = e.target.innerText
     if (value.length <= maxLength) {
-      setProp((props) => props.text = value);
+      setProp((props) => (props.text = value))
       // handlePropChangeDebounced('text',value);
       // handlePropChangeThrottled('text',value)
     } else {
       if (ref.current) {
-        e.target.innerText = text || ''; // Restore the previous text
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(ref.current);
-        range.collapse(false); // Move cursor to the end
-        selection?.removeAllRanges();
-        selection?.addRange(range);
+        e.target.innerText = text || "" // Restore the previous text
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(ref.current)
+        range.collapse(false) // Move cursor to the end
+        selection?.removeAllRanges()
+        selection?.addRange(range)
       }
     }
-  };
+  }
 
   useEffect(() => {
-
-    const currentRef = ref.current;
+    const currentRef = ref.current
     if (currentRef) {
-      currentRef.addEventListener('input', handleTextChange);
+      currentRef.addEventListener("input", handleTextChange)
     }
     return () => {
       if (currentRef) {
-        currentRef.removeEventListener('input', handleTextChange);
+        currentRef.removeEventListener("input", handleTextChange)
       }
-    };
-
-  }, [text, maxLength]);
+    }
+  }, [text, maxLength])
   const throttledSetProp = useCallback(
     throttle((property, value) => {
-      setProp((prop) => { prop[property] = value }, 0);
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
     }, 200), // Throttle to 50ms to 200ms
     [setProp]
-  );
+  )
 
   return (
     <div
@@ -418,19 +509,21 @@ export const ImageComponent = ({
       onMouseOut={() => setDisplayController(false)}
     >
       {displayController && <Controller nameOfComponent={t("Image")} />}
-      <div className="relative w-full"
+      <div
+        className="relative w-full"
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
-          boxSizing: 'border-box',
-          minWidth: '100%',
-          maxWidth: '100%',
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
-        }}>
+        }}
+      >
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
@@ -466,15 +559,12 @@ export const ImageComponent = ({
   )
 }
 
-
 export enum IconButtonSizes {
   small = "small",
   medium = "medium",
   large = "large",
   full = "full",
 }
-
-
 
 export type IconButtonProps = {
   alt: string
@@ -557,7 +647,6 @@ export const ImageDefaultProps: IconButtonProps = {
     value: "#ffffff",
     globalStyled: false,
     isCustomized: false,
-
   },
   radius: {
     value: "0",
@@ -577,13 +666,13 @@ export const ImageDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: 'https://convify.io',
+  url: "https://convify.io",
   src: ImagePlaceholder.src,
   radiusCorner: 0,
   disabled: false,
   enableLink: false,
   width: "100%",
-  maxWidth: '400px',
+  maxWidth: "400px",
   height: "auto",
   size: IconButtonSizes.small,
   picSize: IconButtonSizes.small,
@@ -609,14 +698,14 @@ export const ImageDefaultProps: IconButtonProps = {
   gap: 4,
   border: 0,
   fullWidth: true,
-  preset: 'filled',
-  settingsTab: 'content',
+  preset: "filled",
+  settingsTab: "content",
   tracking: false,
-  trackingEvent: 'button_clicked',
-  nextScreen: '',
+  trackingEvent: "button_clicked",
+  nextScreen: "",
   buttonAction: "next-screen",
-  uploadedImageUrl: '',
-  uploadedImageMobileUrl: ''
+  uploadedImageUrl: "",
+  uploadedImageMobileUrl: "",
 }
 
 ImageComponent.craft = {

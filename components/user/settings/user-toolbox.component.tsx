@@ -589,6 +589,7 @@ export const UserToolbox = () => {
                         label={t("TextArea")}
                         // label={t("Label")}
                         placeholder={t("TextArea")}
+                        inputValue={""}
                         // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
@@ -747,6 +748,7 @@ export const UserToolbox = () => {
                         paddingLeft={0}
                         paddingRight={0}
                         iconType={PictureTypes.ICON}
+                        buttonAction="back-screen"
                       />
                     )
                   }
@@ -767,6 +769,7 @@ export const UserToolbox = () => {
                       paddingLeft={0}
                       paddingRight={0}
                       iconType={PictureTypes.ICON}
+                      buttonAction="back-screen"
                     />
                   </HoverCardComponent>
                 </div>
@@ -1179,6 +1182,8 @@ export const UserToolbox = () => {
                             {...LoaderDefaultProps}
                             // {...filledPreset}
                             {...filledPreset}
+                            buttonAction={"custom-action"}
+                            nextScreen={""}
                             // {...outLinePreset}
                             disabled={false}
                           />

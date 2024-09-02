@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
@@ -335,6 +336,7 @@ const ListItem = ({
       </div>
       <div className="flex flex-1 flex-col justify-center gap-1">
         {/** @ts-ignore */}
+        {/** @ts-ignore */}
         <ContentEditable
           className="w-fit max-w-full whitespace-break-spaces px-1 font-bold"
           style={{ wordBreak: "break-word" }}
@@ -345,6 +347,7 @@ const ListItem = ({
             onTitleChange(e.target.value)
           }}
         />
+        {/** @ts-ignore */}
         {/** @ts-ignore */}
         <ContentEditable
           className="w-fit max-w-full gap-x-0 whitespace-break-spaces px-1 text-sm"

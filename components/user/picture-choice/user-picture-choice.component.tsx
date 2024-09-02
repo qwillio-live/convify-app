@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react"
+"use client"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { PictureChoiceSettings } from "./user-picture-choice.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import styled from "styled-components"
@@ -18,6 +19,15 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import {
+  setPreviewScreenData,
+  setSelectedData,
+  setSelectedScreen,
+  setUpdateFilledCount,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const PictureChoiceSizeValues = {
   small: "400px",
@@ -56,11 +66,65 @@ export const PictureChoiceGen = ({
   ...props
 }) => {
   const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [isCountUpdated, setIsCountUpdated] = useState(false)
+  const screenData = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.selections
+    }
+    return []
+  })
 
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.required
+    }
+    return false
+  })
+
+  console.log("selected data in opic", screenData, choices)
+  const dispatch = useAppDispatch()
   useEffect(() => {
-    setSelectedChoices(selections)
-  }, [selections])
+    setSelectedChoices(screenData)
+    if (screenData?.length > 0) {
+      setIsCountUpdated(true)
+    }
+  }, [])
 
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRef = useRef<HTMLUListElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRef.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    console.log("shaking again pc", alarm, isRequired, screenData?.length)
+    if (alarm && isRequired && screenData?.length === 0) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt, alarm, isRequired]) // Depend on alarm state
   return (
     <div
       className="relative w-full"
@@ -90,7 +154,9 @@ export const PictureChoiceGen = ({
         <label>{label}</label>
       </div>
       <ul
-        className="flex w-full flex-wrap justify-center"
+        // className="flex w-full flex-wrap justify-center"
+        ref={itemRef}
+        className={`flex w-full flex-wrap justify-center`}
         style={{
           fontFamily: `var(${fontFamily?.value})`,
           maxWidth: PictureChoiceSizeValues[size || "medium"],
@@ -98,10 +164,11 @@ export const PictureChoiceGen = ({
       >
         {choices?.map((choice, index) => (
           <PictureChoiceItem
+            buttonAction={choice.buttonAction}
             key={index}
             isFirst={index === 0}
             isLast={index === choices.length - 1}
-            isSelected={selectedChoices?.includes(choice.id)}
+            isSelected={selectedChoices?.includes(choice.id) || false}
             size={size}
             required={required}
             tracking={tracking}
@@ -114,20 +181,104 @@ export const PictureChoiceGen = ({
             hoverStyles={hoverStyles}
             selectedStyles={selectedStyles}
             onValueChange={null}
+            forGen={true}
+            selections={selectedChoices}
+            isRequired={isRequired}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
                   if (prev.includes(choice.id)) {
-                    return prev.filter(
+                    // Remove choice from selection
+                    const updatedChoices = prev.filter(
                       (selectionId) => selectionId !== choice.id
                     )
+                    if (isRequired) {
+                      console.log(
+                        "updatedChoices.length > 0 && !isCountUpdated",
+                        updatedChoices.length,
+                        isCountUpdated
+                      )
+                      if (updatedChoices.length > 0 && !isCountUpdated) {
+                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                        setIsCountUpdated(true) // Set count updated flag
+                      } else if (
+                        updatedChoices.length === 0 &&
+                        isCountUpdated
+                      ) {
+                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                        setIsCountUpdated(false) // Reset count updated flag
+                      }
+                    }
+                    // Dispatch action for removing choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+
+                    return updatedChoices
                   } else {
-                    return [...prev, choice.id]
+                    // Add choice to selection
+                    const updatedChoices = [...prev, choice.id]
+                    if (isRequired) {
+                      if (updatedChoices.length > 0 && !isCountUpdated) {
+                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                        setIsCountUpdated(true) // Set count updated flag
+                      } else if (
+                        updatedChoices.length === 0 &&
+                        isCountUpdated
+                      ) {
+                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                        setIsCountUpdated(false) // Reset count updated flag
+                      }
+                    }
+                    // Dispatch action for adding choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+                    return updatedChoices
                   }
                 })
               } else {
+                console.log("entered else")
+                const newSelection = selectedChoices?.includes(choice.id)
+                  ? []
+                  : [choice.id]
+
+                dispatch(
+                  setSelectedData(
+                    selectedChoices?.includes(choice.id) ? [] : [choice.id]
+                  )
+                )
+                dispatch(
+                  setPreviewScreenData({
+                    nodeId: props.nodeId,
+                    newSelections: selectedChoices?.includes(choice.id)
+                      ? []
+                      : [choice.id],
+                    entity: "selections",
+                    isArray: true,
+                  })
+                )
+                if (isRequired) {
+                  if (newSelection.length > 0 && !isCountUpdated) {
+                    dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                    setIsCountUpdated(true) // Set count updated flag
+                  } else if (newSelection.length === 0 && isCountUpdated) {
+                    dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                    setIsCountUpdated(false) // Reset count updated flag
+                  }
+                }
                 setSelectedChoices(
-                  selectedChoices.includes(choice.id) ? [] : [choice.id]
+                  selectedChoices?.includes(choice.id) ? [] : [choice.id]
                 )
               }
             }}
@@ -294,9 +445,9 @@ export const PictureChoice = ({
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
-          paddingTop: `${marginTop + 10}px`,
+          paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft + 10}px`,
+          paddingLeft: `${marginLeft}px`,
           paddingRight: `${marginRight}px`,
         }}
       >
@@ -307,6 +458,7 @@ export const PictureChoice = ({
             maxWidth: PictureChoiceSizeValues[size || "medium"],
           }}
         >
+          {/** @ts-ignore */}
           {/** @ts-ignore */}
           <ContentEditable
             className="px-1"
@@ -331,6 +483,8 @@ export const PictureChoice = ({
         >
           {choices.map((choice, index) => (
             <PictureChoiceItem
+              buttonAction={choice.buttonAction}
+              isRequired={false}
               key={index}
               isFirst={index === 0}
               isLast={index === choices.length - 1}
@@ -346,6 +500,8 @@ export const PictureChoice = ({
               defaultStyles={defaultStyles}
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
+              forGen={false}
+              selections={selections}
               onValueChange={(updatedValue) => {
                 setProp((props) => {
                   props.choices[index].value = updatedValue
@@ -398,6 +554,10 @@ const PictureChoiceItem = ({
   selectedStyles,
   onValueChange,
   onSelectChange,
+  forGen,
+  isRequired,
+  buttonAction,
+  selections,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
@@ -429,11 +589,104 @@ const PictureChoiceItem = ({
       return 33.33
     }
   }
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
+    // if(screenValidated){
+    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+    //   router.push(`${pathName}#${nextScreen?.screenName}`);
+    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+    // }else{
+    //   console.log("SCREEN NOT VALIDATED", screenValidated)
+    // }
+  }
+
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 < sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    "back-screen":
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    none: "none",
+  }
+  const newsc = choice.nextScreen
+  const updatedScreenName = newScreensMapper[buttonAction] || newsc
+  const index = sc.findIndex(
+    (screen) => screen.screenName === updatedScreenName
+  )
+  const handleNavigateToContent = () => {
+    if (index !== -1) {
+      if (
+        buttonAction === "next-screen" ||
+        (buttonAction === "custom-action" && newsc !== "none")
+      ) {
+        console.log(
+          "navigating pc if.....",
+          buttonAction,
+          updatedScreenName,
+          newsc
+        )
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: updatedScreenName,
+          })
+        )
+        handleSearch(updatedScreenName)
+        dispatch(setSelectedScreen(index))
+      } else if (newsc !== "none") {
+        console.log(
+          "navigating pc else.....",
+          buttonAction,
+          updatedScreenName,
+          newsc
+        )
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: newsc,
+          })
+        )
+        handleSearch(newsc)
+        const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+        dispatch(setSelectedScreen(index))
+      }
+    }
+  }
   return (
     <li
-      className=" flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]"
+      className={` flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}
       style={{
         flexBasis: `${getFlexBasis(choicesLength)}%`,
+      }}
+      onClick={() => {
+        if (forGen) {
+          handleNavigateToContent()
+        }
       }}
     >
       <StyledPictureChoiceItem
@@ -442,6 +695,9 @@ const PictureChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
+        // className={`${
+        //   alarm && isRequired && selections?.length === 0 && "shake"
+        // }`}
       >
         <input
           className={!multiSelect ? "send-response" : undefined}
@@ -518,6 +774,7 @@ const PictureChoiceItem = ({
             </span>
           ) : (
             <>
+              {/** @ts-ignore */}
               {/** @ts-ignore */}
               <ContentEditable
                 className="w-fit max-w-full whitespace-break-spaces p-1"

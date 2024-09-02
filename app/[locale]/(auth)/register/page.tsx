@@ -7,9 +7,10 @@ import { UserRegForm } from "@/components/user-reg-form"
 import signupImage from "@/assets/images/signup.svg"
 import convifyLogo from "@/assets/convify_logo_black.svg"
 import { useTranslations } from "next-intl"
+import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: "Create an account",
+  title: "Sign up for free | " + env.NEXT_PUBLIC_APP_NAME,
   description: "Create an account to get started.",
 }
 

@@ -108,7 +108,9 @@ export const LoaderSettings = () => {
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
   const {
@@ -352,16 +354,22 @@ export const LoaderSettings = () => {
                 {t("Navigation")}
               </label>
               <Select
-                defaultValue={
-                  buttonAction === "next-screen" ? "next-screen" : nextScreen
-                }
+                defaultValue={"Do Nothing"}
                 value={
-                  buttonAction === "next-screen" ? "next-screen" : nextScreen
+                  buttonAction === "next-screen"
+                    ? "next-screen"
+                    : buttonAction === "custom-action" && nextScreen === ""
+                    ? "Do Nothing"
+                    : nextScreen
                 }
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))
                     setProp((props) => (props.nextScreen = nextScreenName))
+                  } else if (e === "Do Nothing") {
+                    console.log("custom action value in loader", e)
+                    setProp((props) => (props.buttonAction = "custom-action"))
+                    setProp((props) => (props.nextScreen = ""))
                   } else {
                     setProp((props) => (props.buttonAction = "custom-action"))
                     setProp((props) => (props.nextScreen = e))
@@ -373,12 +381,15 @@ export const LoaderSettings = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
+                    <SelectItem value={"Do Nothing"}>
+                      {t("Do Nothing")}
+                    </SelectItem>
                     <SelectItem value={"next-screen"}>
                       {t("Next Screen")}
                     </SelectItem>
                     {screenNames?.map((screen, index) => {
                       return (
-                        <SelectItem value={screen.screenId}>
+                        <SelectItem value={screen.screenName}>
                           {index + 1} : {screen.screenName}
                         </SelectItem>
                       )

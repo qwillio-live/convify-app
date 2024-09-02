@@ -1,3 +1,4 @@
+"use client"
 import styled from "styled-components"
 
 import { Element, useNode } from "@/lib/craftjs"
@@ -22,7 +23,7 @@ import {
 
 import { Controller } from "../settings/controller.component"
 
-const UserContainerGenInner= styled.div<{position: string}>`
+const UserContainerGenInner = styled.div<{ position: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,38 +75,38 @@ export const UserContainerGen = ({
   return (
     <UserContainerGenInner
       position={containerType === "header" ? "fixed" : "relative"}
-    // {...props}
-    // style={{
-    //   width: `${width}px`,
-    //   height: `${height}px`,
-    //   backgroundColor: `${background}`,
-    //   color: `${color}`,
-    //   marginLeft: `${marginLeft}px`,
-    //   marginTop: `${marginTop}px`,
-    //   marginRight: `${marginRight}px`,
-    //   marginBottom: `${marginBottom}px`,
-    //   paddingLeft: `${paddingLeft}px`,
-    //   paddingTop: `${paddingTop}px`,
-    //   paddingRight: `${paddingRight}px`,
-    //   paddingBottom: `${paddingBottom}px`,
-    //   borderRadius: `${radius}px`,
-    //   flexDirection,
-    //   alignItems: `${alignItems}`,
-    //   justifyContent: `${justifyContent}`,
-    //   flexWrap,
-    //   padding: `${padding}px`,
-    //   boxShadow:
-    //     shadow === 0
-    //       ? "none"
-    //       : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
-    //   flex: fillSpace == "1" ? 1 : "unset",
-    //   display: "flex",
-    //   overflowY,
-    //   overflowX,
-    //   gap: `${gap}px`,
-    //   border: `${border}px solid ${borderColor}`,
-    //   maxWidth: "100%",
-    // }}
+      // {...props}
+      // style={{
+      //   width: `${width}px`,
+      //   height: `${height}px`,
+      //   backgroundColor: `${background}`,
+      //   color: `${color}`,
+      //   marginLeft: `${marginLeft}px`,
+      //   marginTop: `${marginTop}px`,
+      //   marginRight: `${marginRight}px`,
+      //   marginBottom: `${marginBottom}px`,
+      //   paddingLeft: `${paddingLeft}px`,
+      //   paddingTop: `${paddingTop}px`,
+      //   paddingRight: `${paddingRight}px`,
+      //   paddingBottom: `${paddingBottom}px`,
+      //   borderRadius: `${radius}px`,
+      //   flexDirection,
+      //   alignItems: `${alignItems}`,
+      //   justifyContent: `${justifyContent}`,
+      //   flexWrap,
+      //   padding: `${padding}px`,
+      //   boxShadow:
+      //     shadow === 0
+      //       ? "none"
+      //       : `0px 3px 100px ${shadow}px rgba(0, 0, 0, 0.13)`,
+      //   flex: fillSpace == "1" ? 1 : "unset",
+      //   display: "flex",
+      //   overflowY,
+      //   overflowX,
+      //   gap: `${gap}px`,
+      //   border: `${border}px solid ${borderColor}`,
+      //   maxWidth: "100%",
+      // }}
     >
       {/* {isHovered && <Controller nameOfComponent={"CONTAINER"} />} */}
       {children}
@@ -628,7 +629,6 @@ export const UserContainerSettings = () => {
   )
 }
 
-
 {
   // container type can be container | header | footer
 }
@@ -681,7 +681,7 @@ export const Container = ({ ...props }) => {
   }))
   return (
     <div
-      className="border border-dashed border-transparent transition-all duration-200 fixed"
+      className="fixed border border-dashed border-transparent transition-all duration-200"
       // {...props}
       // ref={(ref: any) => ref && connect(drag(ref))}
     >

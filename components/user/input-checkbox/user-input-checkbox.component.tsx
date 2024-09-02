@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import { useTranslations } from "next-intl"
@@ -14,6 +15,10 @@ import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { Checkbox } from "./checkbox-element"
 import { UserInputCheckboxSettings } from "./user-input-checkbox-settings.component"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export enum UserInputSizes {
   small = "small",
@@ -35,8 +40,6 @@ const UserInputMobileSizeValues = {
   large: "376px",
   full: "100%",
 }
-
-
 
 export type UserInputCheckboxProps = {
   inputValue: string
@@ -216,7 +219,50 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
+  const [isFilled, setIsFilled] = useState(false)
+  const dispatch = useAppDispatch()
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
+  )
+  const screenData = fullScreenData[props.nodeId]?.props.inputValue
+  const isRequired = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData
+      ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
+      : false
+  })
+  useEffect(() => {
+    // if (inputRef.current) inputRef.current.value = screenData
+    setInputValue(screenData)
+  }, [])
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   console.log(props.backgroundImage)
 
   const primaryTextColor = useAppSelector(
@@ -231,6 +277,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
 
   return (
     <div
+      ref={itemRefNew}
       className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: "100%",
@@ -259,7 +306,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
             width: `${UserInputSizeValues[props.size]}`,
           }}
         >
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div
+            className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
+          >
             <UserInputCheckboxStyled
               ref={inputRef}
               textColor={props.textColor}
@@ -284,32 +333,78 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               width={props.width}
               size={props.size}
               className={cn(
-                `font-normal px-3 py-2 text-base placeholder:text-gray-400 placeholder:font-light
+                `ring-opacity-0/0 px-3 py-2 text-base font-normal outline-none
                 ring-0
-                outline-none
-                focus-visible:outline-none
-                peer-focus-visible:outline-none
-                focus-visible:ring-0
-                ring-opacity-0/0
                 transition-all
                 duration-200
                 ease-in-out
-                focus-visible:ring-transparent focus-visible:ring-offset-0
+                placeholder:font-light
+                placeholder:text-gray-400
+                focus-visible:outline-none
+                focus-visible:ring-0
+                focus-visible:ring-transparent
+                focus-visible:ring-offset-0 peer-focus-visible:outline-none
+                ${alarm && isRequired && !isFilled && "!border-red-600"}
                 `
               )}
             >
               <div
-                className={`mb-1 relative text-[14.5px] text-ellipsis transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative mb-1 text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${primaryTextColor}`,
                 }}
               >
                 <DefoCheckbox
-                  className={cn(`h-4 w-4 mr-2 z-50 bg-white  rounded-[5px] `)}
+                  checked={inputValue === "true"}
+                  className={cn(
+                    `z-50 mr-2 h-4 w-4 rounded-[5px] bg-white ${
+                      alarm && isRequired && !isFilled && "!border-red-600"
+                    }`
+                  )}
                   checkmarkColor={primaryTextColor}
                   style={{
-                    borderColor: `#dfdfdf`,
+                    borderColor: "#dfdfdf",
+                  }}
+                  onClick={() => {
+                    if (isRequired) {
+                      if (isFilled) {
+                        // If the checkbox is already filled, uncheck it
+                        dispatch(setUpdateFilledCount(-1)) // Decrease filled count
+                        setIsFilled(false) // Update isFilled state
+                        setInputValue("false") // Set inputValue to false
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId: props.nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: ["false"],
+                          })
+                        )
+                      } else {
+                        // If the checkbox is not filled, check it
+                        dispatch(setUpdateFilledCount(1)) // Increase filled count
+                        setIsFilled(true) // Update isFilled state
+                        setInputValue("true") // Set inputValue to true
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId: props.nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: ["true"],
+                          })
+                        )
+                      }
+                    } else {
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: ["true"],
+                        })
+                      )
+                    }
                   }}
                 />
 
@@ -360,8 +455,6 @@ export const UserInputCheckbox = ({ ...props }) => {
 
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
-
-
   const backgroundThemeColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
@@ -399,8 +492,6 @@ export const UserInputCheckbox = ({ ...props }) => {
       setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
     }
   }, [secondaryFont, props.secondaryFont, setProp])
-
-  
 
   useEffect(() => {
     if (
@@ -470,10 +561,14 @@ export const UserInputCheckbox = ({ ...props }) => {
         <div
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
-            width: `${mobileScreen ? UserInputMobileSizeValues[props.size] : UserInputSizeValues[props.size]}`,
+            width: `${
+              mobileScreen
+                ? UserInputMobileSizeValues[props.size]
+                : UserInputSizeValues[props.size]
+            }`,
           }}
         >
-          <div className="field-container flex flex-row gap-0 items-center w-full transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-full flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputCheckboxStyled
               ref={inputRef}
               textColor={props.textColor}
@@ -499,20 +594,20 @@ export const UserInputCheckbox = ({ ...props }) => {
               size={props.size}
               onFocus={() => setProp((props) => (props.isActive = true))}
               className={cn(
-                `p-2.5
-                ring-0
+                `ring-opacity-0/0
+                send-response
+                max-h-fit
+                p-2.5
                 outline-none
-                focus-visible:outline-none
-                peer-focus-visible:outline-none
-                focus-visible:ring-0
-                ring-opacity-0/0
+                ring-0
                 transition-all
                 duration-200
                 ease-in-out
-                max-h-fit
+                focus-visible:outline-none
+                focus-visible:ring-0
                 focus-visible:ring-transparent 
                 focus-visible:ring-offset-0 
-                send-response
+                peer-focus-visible:outline-none
                 `
               )}
               onBlur={() => setProp((props) => (props.isActive = false))}
@@ -539,6 +634,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                   : props.backgroundColor,
               }}
             >
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}
@@ -553,7 +649,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                     500
                   )
                 }
-                className={`pl-6 text-[14.4px] leading-[19.44px] border-none relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${getTextColor()}`,
@@ -564,7 +660,7 @@ export const UserInputCheckbox = ({ ...props }) => {
               {props.label.length === 0 ? null : (
                 <Checkbox
                   className={cn(
-                    `h-[18px] w-[18px] absolute rounded-[5px] left-3 bg-white top-[11px] z-50 `
+                    `absolute left-3 top-[11px] z-50 h-[18px] w-[18px] rounded-[5px] bg-white `
                   )}
                   isActive={props.isActive}
                   isHovered={containerHover}
@@ -578,7 +674,6 @@ export const UserInputCheckbox = ({ ...props }) => {
                   data-answer={props.label}
                   data-value={isChecked}
                   id={props.id}
-    
                 />
               )}
             </UserInputCheckboxStyled>

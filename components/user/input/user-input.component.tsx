@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
@@ -19,6 +20,8 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
   setFieldProp,
+  setPreviewScreenData,
+  setUpdateFilledCount,
   setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -80,8 +83,46 @@ export const UserInputGen = ({ ...props }) => {
   const icon = props.icon
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
+  const t = useTranslations("Components")
+  const [isFilled, setIsFilled] = useState(false)
+  const fullScreenData = useAppSelector((state) => {
+    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
+
+    if (selectedScreen && selectedScreen.screenData) {
+      return JSON.parse(selectedScreen.screenData)
+    }
+    return {} // or return null or any default value you prefer
+  })
+
+  const parsedData = Object.keys(fullScreenData)
+    .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
+    .filter(
+      (screen) =>
+        screen?.props?.id === props?.id && screen?.props?.inputRequired
+    )
+
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.inputRequired
+    }
+    return false
+  })
+  const screenData =
+    parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
+  const nodeId = parsedData.length > 0 && parsedData[0].props.compId
+  console.log("user input", screenData, nodeId, parsedData, props)
   useEffect(() => {
-    setInputValue(fieldValue)
+    setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
+    if (screenData?.length > 0) {
+      setIsFilled(true)
+    }
     dispatch(
       setFieldProp({
         screenId: props.parentScreenId,
@@ -152,7 +193,10 @@ export const UserInputGen = ({ ...props }) => {
       fieldInScreen &&
       toggleError) ||
     false
-
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -169,7 +213,28 @@ export const UserInputGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
-
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   // useEffect(() => {
   //   if(inputField){
   //     if(inputField.fieldValue==0){
@@ -183,6 +248,7 @@ export const UserInputGen = ({ ...props }) => {
 
   return (
     <div
+      ref={itemRefNew}
       className={cn(
         "relative focus-visible:ring-0 focus-visible:ring-transparent"
       )}
@@ -270,15 +336,17 @@ export const UserInputGen = ({ ...props }) => {
                   "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "transparent",
-                  borderColor: fieldError
-                    ? "#cc0000"
-                    : isActive
-                    ? props.activeBorderColor.value
-                    : props.borderColor.value,
-                  borderBottomLeftRadius: fieldError
-                    ? 0
-                    : props.bottomLeftRadius,
+                  backgroundColor: "#ffffff",
+                  borderColor:
+                    !isFilled && alarm && isRequired
+                      ? "#cc0000"
+                      : isActive
+                      ? props.activeBorderColor.value
+                      : props.borderColor.value,
+                  borderBottomLeftRadius:
+                    !isFilled && alarm && isRequired
+                      ? 0
+                      : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
                   borderTopWidth: props.borderTopWidth,
                   borderBottomWidth: props.borderBottomWidth,
@@ -306,7 +374,7 @@ export const UserInputGen = ({ ...props }) => {
                   : props.borderColor.value
               }
               // error={props.error}
-              error={fieldError}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -338,18 +406,56 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:outline-none
           focus-visible:ring-0
           focus-visible:ring-transparent
-          focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+          focus-visible:ring-offset-0 peer-focus-visible:outline-none
+          ${!isFilled && alarm && isRequired && " !border-red-600"}
+          `
               )}
               onChange={(e) => {
-                setInputValue(e.target.value),
-                  dispatch(
-                    setFieldProp({
-                      screenId: props.parentScreenId,
-                      fieldId: props.nodeId,
-                      fieldName: "fieldValue",
-                      fieldValue: e.target.value,
-                    })
-                  )
+                if (isRequired) {
+                  if (isFilled && e.target.value === "") {
+                    dispatch(setUpdateFilledCount(-1))
+                    setIsFilled(false)
+                    setInputValue(e.target.value)
+                  } else {
+                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    setInputValue(e.target.value),
+                      dispatch(
+                        setFieldProp({
+                          screenId: props.parentScreenId,
+                          fieldId: props.nodeId,
+                          fieldName: "fieldValue",
+                          fieldValue: e.target.value,
+                        }),
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: [e.target.value],
+                          })
+                        ),
+                        setIsFilled(true)
+                      )
+                  }
+                } else {
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setFieldProp({
+                        screenId: props.parentScreenId,
+                        fieldId: props.nodeId,
+                        fieldName: "fieldValue",
+                        fieldValue: e.target.value,
+                      }),
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: [e.target.value],
+                        })
+                      )
+                    )
+                }
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -360,9 +466,9 @@ export const UserInputGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {fieldError && (
+          {!isFilled && isRequired && alarm && (
             <div
-              className="error-container mt-0 flex flex-row items-center gap-0 border"
+              className={`error-container mt-0 flex flex-row items-center gap-0 border text-red-600`}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -376,7 +482,7 @@ export const UserInputGen = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}
@@ -408,7 +514,7 @@ const UserInputStyled = styled(Input)<{
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 50px;
-  background-color: "transparent";
+  background: #ffffff;
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
@@ -607,6 +713,7 @@ export const UserInput = ({ ...props }) => {
           {!props.floatingLabel && (
             <>
               {/** @ts-ignore */}
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}
@@ -641,7 +748,7 @@ export const UserInput = ({ ...props }) => {
               }}
               className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (props.isActive && props.floatingLabel) ||
-                (props.inputValue.length > 0 && props.floatingLabel)
+                (props.inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
                   : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${
@@ -668,7 +775,7 @@ export const UserInput = ({ ...props }) => {
                   "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "transparent",
+                  backgroundColor: "#ffffff",
                   borderColor: props.error
                     ? "#cc0000"
                     : props.isActive
@@ -730,19 +837,19 @@ export const UserInput = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `outline-none
+                `ring-opacity-0/0
+          send-response
+          outline-none
           ring-0
-          ring-opacity-0/0
           transition-all
           duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0
-          send-response
+          ease-in-out focus-visible:ring-transparent
+          focus-visible:ring-offset-0
           `
-          // focus-visible:outline-none
-          // focus-visible:ring-0
-          // focus-visible:ring-transparent
-          // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+                // focus-visible:outline-none
+                // focus-visible:ring-0
+                // focus-visible:ring-transparent
+                // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
               )}
               onChange={
                 (e) => {

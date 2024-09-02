@@ -76,7 +76,9 @@ export const LinkButtonSettings = () => {
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
 
@@ -266,7 +268,12 @@ export const LinkButtonSettings = () => {
               </label>
               <Select
                 // className="w-full"
-                // value={buttonAction}
+                defaultValue={"redirect"}
+                value={
+                  buttonAction === "custom-action"
+                    ? nextScreen.screenId
+                    : buttonAction
+                }
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))

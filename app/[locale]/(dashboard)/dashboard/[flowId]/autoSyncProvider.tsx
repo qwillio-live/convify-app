@@ -79,6 +79,8 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
 
     const data = {
       steps,
+      headerData: localFlowData?.screensHeader,
+      footerData: localFlowData?.screensFooter,
       flowSettings: {
         mobileScreen: localFlowSettings?.mobileScreen,
         header: localFlowSettings?.header,

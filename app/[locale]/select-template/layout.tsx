@@ -6,6 +6,11 @@ interface SelectTemplateLayoutProps {
   children: React.ReactNode
   params: { locale: string }
 }
+import { env } from "@/env.mjs"
+
+export const metadata = {
+  title: env.NEXT_PUBLIC_APP_NAME + " - Select template",
+}
 
 const fontSans = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -31,9 +36,9 @@ export default async function SelectTemplateLayout({
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-[#f9f9fb] font-sans antialiased text-[#1c212c]",
-          fontSans.variable,
-          fontHeading.variable
+          "min-h-screen bg-[#f9f9fb] font-sans text-[#1c212c] antialiased",
+          fontSans.className,
+          fontHeading.className
         )}
       >
         <main>{children}</main>

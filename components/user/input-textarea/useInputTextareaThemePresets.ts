@@ -8,6 +8,7 @@ import {
   UserInputSizes,
   UserInputTextareaProps,
 } from "./user-input-textarea.component"
+import { generateRandomLetters } from "@/app/api/flows/published/[flowId]/route"
 
 const useInputTextareaThemePresets = () => {
   const t = useTranslations("Components")
@@ -76,7 +77,7 @@ const useInputTextareaThemePresets = () => {
     fullWidth: true,
     size: UserInputSizes.medium,
     label: t("Label"),
-    fieldName: t("Field Name"),
+    fieldName: t("textarea") + "-" + generateRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
@@ -148,7 +149,7 @@ const useInputTextareaThemePresets = () => {
     fullWidth: true,
     size: UserInputSizes.medium,
     label: t("Label"),
-    fieldName: t("Field Name"),
+    fieldName: t("textarea") + "-" + generateRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",

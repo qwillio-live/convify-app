@@ -280,8 +280,8 @@ export default function SelectColor() {
         <div className="flex h-full w-full pl-12">
           <div className="flex w-full">
             <div className="w-full   md:w-6/12">
-              <ScrollArea className="z-20 h-full py-9  ">
-                <h2 className="mb-5 text-4xl font-semibold">
+              <ScrollArea className="z-20 h-full pb-9  ">
+                <h2 className="mb-5 mt-9 text-4xl font-semibold">
                   {t("customiseColor")}
                 </h2>
                 <Breadcrumb className=" mt-4 text-base font-normal hover:cursor-pointer">

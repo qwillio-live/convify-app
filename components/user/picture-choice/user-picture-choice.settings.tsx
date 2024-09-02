@@ -609,7 +609,7 @@ export const PictureChoiceItemSettings = ({
       ...choices.slice(index + 1),
     ])
   }
-  console.log("choicessssssss:", choices)
+  console.log("choicessssssss:", choices, selections)
   return (
     <Reorder.Item
       dragListener={false}
@@ -685,13 +685,15 @@ const PictureChoiceItemNavigationSettings = ({
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
 
   useEffect(() => {
     if (!nextScreen) {
-      onChange("next-screen", nextScreenName)
+      onChange("nextScreen", nextScreenName)
     }
   }, [onChange])
   console.log("button action", buttonAction, nextScreen)

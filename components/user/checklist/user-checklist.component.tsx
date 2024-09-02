@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
@@ -256,6 +257,7 @@ const ChecklistItemSettings = ({
         }}
       />
       <div className="flex-1">
+        {/** @ts-ignore */}
         {/** @ts-ignore */}
         <ContentEditable
           className="w-full px-1"

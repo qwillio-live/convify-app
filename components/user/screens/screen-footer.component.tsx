@@ -1,17 +1,17 @@
-import Link from 'next/link'
-import React from 'react'
-import { Controller } from '../settings/controller.component';
-import { Element, useNode } from '@/lib/craftjs'
-import { TextInputDefaultProps, UserText } from '../text/user-text.component';
-
+"use client"
+import Link from "next/link"
+import React from "react"
+import { Controller } from "../settings/controller.component"
+import { Element, useNode } from "@/lib/craftjs"
+import { TextInputDefaultProps, UserText } from "../text/user-text.component"
 
 export const ScreenFooterGen = () => {
-  return(
-<div className='w-full'>
-<div className='flex basis-full flex-row items-center justify-center'>as seen on <span>Convify blog</span></div>
-      <div
-      className="flex basis-full flex-row items-center justify-center">
-
+  return (
+    <div className="w-full">
+      <div className="flex basis-full flex-row items-center justify-center">
+        as seen on <span>Convify blog</span>
+      </div>
+      <div className="flex basis-full flex-row items-center justify-center">
         <Link href={"#"}>
           <span>Link to start</span>
         </Link>
@@ -19,11 +19,11 @@ export const ScreenFooterGen = () => {
           <span>Link to Convify</span>
         </Link>
       </div>
-</div>
+    </div>
   )
 }
 
-export const ScreenFooter = ({scale=1}) => {
+export const ScreenFooter = ({ scale = 1 }) => {
   const {
     connectors: { connect, drag },
     selected,
@@ -31,22 +31,21 @@ export const ScreenFooter = ({scale=1}) => {
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
-  }));
-  const [hover, setHover] = React.useState(false);
+  }))
+  const [hover, setHover] = React.useState(false)
   return (
-
     <div
-    ref={(ref: any) => connect(drag(ref))}
-    className={`flex basis-full w-full flex-col justify-center gap-6 py-3 text-center text-base`} style={{
-      transform: `scale(${scale})`
-     }}
-     onMouseOver={() => setHover(true)}
+      ref={(ref: any) => connect(drag(ref))}
+      className={`flex w-full basis-full flex-col justify-center gap-6 py-3 text-center text-base`}
+      style={{
+        transform: `scale(${scale})`,
+      }}
+      onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
-     >
+    >
       {hover && <Controller nameOfComponent={"Screen Footer"} />}
-     <ScreenFooterGen />
+      <ScreenFooterGen />
     </div>
-
   )
 }
 
@@ -58,7 +57,7 @@ ScreenFooter.craft = {
     canDrop: () => true,
     canDrag: () => true,
     canMoveIn: () => true,
-    canMoveOut: () => true
+    canMoveOut: () => true,
   },
-  related: {}
+  related: {},
 }

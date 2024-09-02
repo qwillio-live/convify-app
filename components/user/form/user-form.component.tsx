@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { transform } from "next/dist/build/swc"
 import hexoid from "hexoid"
@@ -197,8 +198,8 @@ export const FormContent = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
       className={cn(
-        `border border-transparent relative`,
-        isHovered ? "border border-blue-500 border-dotted" : ""
+        `relative border border-transparent`,
+        isHovered ? "border border-dotted border-blue-500" : ""
       )}
     >
       <FormContentGen
@@ -372,7 +373,7 @@ export const Form = ({ children, ...props }) => {
   return (
     <FormContainer
       background={props.background}
-      className="card-container relative shrink-0 overflow-visible basis-full min-w-full flex justify-center items-center flex-col w-[800px]"
+      className="card-container relative flex w-[800px] min-w-full shrink-0 basis-full flex-col items-center justify-center overflow-visible"
       ref={(ref: any) => connect(drag(ref))}
       onMouseEnter={(e) => {
         e.stopPropagation()
@@ -398,8 +399,8 @@ export const Form = ({ children, ...props }) => {
         ref={(ref: any) => connect(drag(ref))}
         style={{ width: "100%", height: "100%" }}
         className={`${
-          isHovered ? "border border-blue-500 border-dotted" : ""
-        } border border-transparent relative`}
+          isHovered ? "border border-dotted border-blue-500" : ""
+        } relative border border-transparent`}
       >
         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element

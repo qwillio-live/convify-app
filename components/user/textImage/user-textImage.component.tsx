@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 import {
@@ -423,6 +424,7 @@ export const TextImageComponentGen = ({
                     }}
                   >
                     {/** @ts-ignore */}
+                    {/** @ts-ignore */}
                     <ContentEditable
                       html={title}
                       innerRef={titleRef}
@@ -442,6 +444,7 @@ export const TextImageComponentGen = ({
                       }}
                       tagName="h1"
                     />
+                    {/** @ts-ignore */}
                     {/** @ts-ignore */}
                     <ContentEditable
                       html={Text}
@@ -481,6 +484,7 @@ export const TextImageComponentGen = ({
                     }}
                   >
                     {/** @ts-ignore */}
+                    {/** @ts-ignore */}
                     <ContentEditable
                       html={title}
                       innerRef={titleRef}
@@ -500,6 +504,7 @@ export const TextImageComponentGen = ({
                       }}
                       tagName="h1"
                     />
+                    {/** @ts-ignore */}
                     {/** @ts-ignore */}
                     <ContentEditable
                       html={Text}
@@ -743,6 +748,7 @@ export const UserLogo = ({
               }}
             >
               {/** @ts-ignore */}
+              {/** @ts-ignore */}
               <ContentEditable
                 html={title}
                 innerRef={titleRef}
@@ -761,6 +767,7 @@ export const UserLogo = ({
                 }}
                 tagName="h1"
               />
+              {/** @ts-ignore */}
               {/** @ts-ignore */}
               <ContentEditable
                 html={Text}
@@ -798,6 +805,7 @@ export const UserLogo = ({
               }}
             >
               {/** @ts-ignore */}
+              {/** @ts-ignore */}
               <ContentEditable
                 html={title}
                 innerRef={titleRef}
@@ -817,6 +825,7 @@ export const UserLogo = ({
                 }}
                 tagName="h1"
               />
+              {/** @ts-ignore */}
               {/** @ts-ignore */}
               <ContentEditable
                 html={Text}
@@ -884,6 +893,7 @@ export const UserLogo = ({
           </div>
           <div className="m-auto w-[85%] items-start self-center text-start">
             {/** @ts-ignore */}
+            {/** @ts-ignore */}
             <ContentEditable
               html={title}
               innerRef={titleRef}
@@ -903,6 +913,7 @@ export const UserLogo = ({
               }}
               tagName="h1"
             />
+            {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable
               html={Text}

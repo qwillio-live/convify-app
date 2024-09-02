@@ -97,7 +97,7 @@ const useBackThemePresets = () => {
       screenId: "",
       screenName: "",
     },
-    buttonAction: "next-screen",
+    buttonAction: "back-screen",
   }
 
   const backOutLinePreset: IconButtonProps = {
