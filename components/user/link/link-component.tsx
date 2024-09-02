@@ -62,6 +62,7 @@ import {
   SvgRenderer,
 } from "@/components/PicturePicker"
 import { useSearchParams } from "next/navigation"
+import { env } from "@/env.mjs"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -126,6 +127,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+const APP_URL = env.NEXT_PUBLIC_APP_URL
 export const LinkButtonGen = ({
   disabled,
   // windowTarget,
@@ -211,7 +213,9 @@ export const LinkButtonGen = ({
       <Link
         href={`${
           buttonAction === "redirect"
-            ? "https://" + props.href
+            ? props?.href?.includes("https://")
+              ? props.href
+              : "https://" + props.href
             : pathname + "#" + nextScreen?.screenName
         }`}
         target={`${props.windowTarget ? "_blank" : ""}`}
@@ -854,7 +858,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   buttonAction: "next-screen",
   windowTarget: true,
-  href: "",
+  href: APP_URL,
   iconType: PictureTypes.NULL,
 }
 

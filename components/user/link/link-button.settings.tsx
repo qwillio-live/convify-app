@@ -268,7 +268,12 @@ export const LinkButtonSettings = () => {
               </label>
               <Select
                 // className="w-full"
-                // value={buttonAction}
+                defaultValue={"redirect"}
+                value={
+                  buttonAction === "custom-action"
+                    ? nextScreen.screenId
+                    : buttonAction
+                }
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))
