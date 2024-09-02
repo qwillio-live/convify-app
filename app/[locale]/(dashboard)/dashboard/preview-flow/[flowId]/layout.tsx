@@ -4,6 +4,12 @@ import dynamic from "next/dynamic"
 import FlowLayout from "@/components/flow-preview/flow-preview-server"
 import localFont from "next/font/local"
 import { cn } from "lib/utils"
+
+import { env } from "@/env.mjs"
+
+export const metadata = {
+  title: env.NEXT_PUBLIC_APP_NAME + " - Preview",
+}
 const geist = localFont({
   variable: "--font-geist",
   src: [

@@ -8,6 +8,11 @@ interface FlowsLayoutProps {
   params: { flowId: string }
 }
 import localFont from "next/font/local"
+import { env } from "@/env.mjs"
+
+export const metadata = {
+  title: env.NEXT_PUBLIC_APP_NAME + " - Create",
+}
 const geist = localFont({
   variable: "--font-geist",
   src: [

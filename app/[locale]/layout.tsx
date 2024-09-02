@@ -7,6 +7,7 @@ import localFont from "next/font/local"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
+import { env } from "@/env.mjs"
 
 const fontSans = localFont({
   src: "../../assets/fonts/Inter-Regular.ttf",
@@ -16,10 +17,10 @@ interface RootLayoutProps {
   children: React.ReactNode
   params: { locale: string }
 }
-
+const APP_NAME = env.NEXT_PUBLIC_APP_NAME
 export const metadata = {
   title: {
-    default: siteConfig.name,
+    default: APP_NAME,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -58,7 +59,7 @@ export const metadata = {
   },
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
+    shortcut: "/icon_logo_blue.png",
     apple: "/apple-touch-icon.png",
   },
   manifest: `${siteConfig.url}/site.webmanifest`,

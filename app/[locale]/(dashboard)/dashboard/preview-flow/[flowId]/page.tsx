@@ -50,6 +50,7 @@ import { cookies } from "next/headers"
 import { useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
 import FlowLayout from "@/components/flow-preview/flow-preview-server"
+import { env } from "@/env.mjs"
 
 export default async function PreviewFlows({
   params,
@@ -102,17 +103,15 @@ export default async function PreviewFlows({
     .join("; ")
 
   const flowId = params?.flowId
-  const response = await fetch(
-    `https://conv-hassan.picreel.bid/api/flows/${flowId}`,
-    {
-      method: "GET",
-      headers: {
-        Cookie: cookieString,
-      },
-      cache: "default",
-      next: { tags: ["previewFlow"] },
-    }
-  )
+  const appUrl = env.NEXT_PUBLIC_APP_URL
+  const response = await fetch(`${appUrl}/api/flows/${flowId}`, {
+    method: "GET",
+    headers: {
+      Cookie: cookieString,
+    },
+    cache: "default",
+    next: { tags: ["previewFlow"] },
+  })
   const data = await response.json()
   const filteredStep = data.steps.find((screen) => screen.name === screenName)
     ? data.steps.find((screen) => screen.name === screenName)

@@ -6,6 +6,11 @@ interface SelectTemplateLayoutProps {
   children: React.ReactNode
   params: { locale: string }
 }
+import { env } from "@/env.mjs"
+
+export const metadata = {
+  title: env.NEXT_PUBLIC_APP_NAME + " - Select template",
+}
 
 const fontSans = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

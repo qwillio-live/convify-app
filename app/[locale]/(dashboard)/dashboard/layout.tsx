@@ -63,7 +63,10 @@ const geist = localFont({
     },
   ],
 })
-
+const APP_NAME = env.NEXT_PUBLIC_APP_NAME
+export const metadata: Metadata = {
+  title: `${APP_NAME} - Flows`,
+}
 import {
   anton,
   arimo,
@@ -120,6 +123,8 @@ import {
   sans3,
 } from "../../fonts"
 import { cn } from "@/lib/utils"
+import { env } from "@/env.mjs"
+import { Metadata } from "next"
 export default async function DashboardLayout({
   children,
   params: { locale },

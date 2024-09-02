@@ -7,9 +7,10 @@ import { UserAuthForm } from "@/components/user-auth-form"
 import convifyLogo from "@/assets/convify_logo_black.svg"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
+import { env } from "@/env.mjs"
 
 export const metadata: Metadata = {
-  title: "Login",
+  title: "Log in | " + env.NEXT_PUBLIC_APP_NAME,
   description: "Login to your account",
 }
 
