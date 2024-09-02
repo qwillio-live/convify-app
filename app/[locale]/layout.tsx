@@ -21,7 +21,6 @@ const APP_NAME = env.NEXT_PUBLIC_APP_NAME
 export const metadata = {
   title: {
     default: APP_NAME,
-    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   keywords: [
