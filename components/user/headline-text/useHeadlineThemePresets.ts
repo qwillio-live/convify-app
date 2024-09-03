@@ -87,6 +87,7 @@ const useHeadlineThemePresets = () => {
     tagType: "h1",
     preset: "h1",
     mobileFontSize: 24,
+    textAlign: "center",
   }
 
   const h2Preset: HeadlineTextProps = {
@@ -156,6 +157,7 @@ const useHeadlineThemePresets = () => {
     tagType: "h2",
     preset: "h2",
     mobileFontSize: 24,
+    textAlign: "center",
   }
 
   return { h1Preset, h2Preset }

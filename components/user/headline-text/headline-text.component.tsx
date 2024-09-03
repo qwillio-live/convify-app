@@ -539,6 +539,7 @@ export type HeadlineTextProps = {
   preset: string
   lineHeight: string | number
   mobileFontSize: number
+  textAlign: string
 }
 export enum TextContainerSize {
   small = "small",
@@ -608,6 +609,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   tagType: "h1",
   preset: "h2",
   mobileFontSize: 24,
+  textAlign: "center",
 }
 
 HeadlineText.craft = {
