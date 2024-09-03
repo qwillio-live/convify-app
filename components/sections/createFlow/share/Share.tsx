@@ -518,11 +518,7 @@ const ShareFlowComponents = ({
             </div>
             <div className="mt-4">
               <div className="mb-4 flex gap-[12px]">
-                <Link
-                  href={`https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(
-                    `${t("I would like to get link for my flow")}=${flowId}`
-                  )}`}
-                  target="_blank"
+                <button
                   className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)]"
                   style={{
                     borderRadius: "50%",
@@ -538,6 +534,10 @@ const ShareFlowComponents = ({
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)"
                     e.currentTarget.style.color = "rgb(115, 115, 115)"
+                  }}
+                  onClick={() => {
+                    setDesktopDrawerOpen(true)
+                    setShareDrawerOpen(false)
                   }}
                 >
                   <svg
@@ -586,14 +586,8 @@ const ShareFlowComponents = ({
                       ></path>
                     </g>
                   </svg>
-                </Link>
-                <Link
-                  href={`https://telegram.me/share/url?url=${encodeURIComponent(
-                    telegramUser
-                  )}&text=${encodeURIComponent(
-                    `${t("I would like to get link for my flow")}=${flowId}`
-                  )}`}
-                  target="_blank"
+                </button>
+                <button
                   className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] text-[rgb(115,115,115)]"
                   style={{
                     borderRadius: "50%",
@@ -611,6 +605,10 @@ const ShareFlowComponents = ({
                     e.currentTarget.style.backgroundColor = "rgb(10, 102, 194)"
                     e.currentTarget.style.color = "rgb(115, 115, 115)"
                   }}
+                  onClick={() => {
+                    setDesktopDrawerOpen(true)
+                    setShareDrawerOpen(false)
+                  }}
                 >
                   <Image
                     src={TelegramPic}
@@ -618,8 +616,12 @@ const ShareFlowComponents = ({
                     height={44}
                     width={44}
                   ></Image>
-                </Link>
+                </button>
                 <button
+                onClick={() => {
+                  setDesktopDrawerOpen(true)
+                  setShareDrawerOpen(false)
+                }}
                   className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] text-[rgb(115,115,115)]"
                   style={{
                     borderRadius: "50%",
@@ -652,6 +654,10 @@ const ShareFlowComponents = ({
                   </svg>
                 </button>
                 <button
+                onClick={() => {
+                  setDesktopDrawerOpen(true)
+                  setShareDrawerOpen(false)
+                }}
                   className="flex h-[32px] w-11 flex-[0_0_auto] cursor-pointer items-center justify-center rounded-[4px] bg-transparent text-[rgb(115,115,115)]"
                   style={{
                     borderRadius: "50%",
@@ -703,6 +709,10 @@ const ShareFlowComponents = ({
               <hr className="text-gray my-2" />
               <div className="my-5 flex flex-col items-start gap-2">
                 <button
+                onClick={() => {
+                  setDesktopDrawerOpen(true)
+                  setShareDrawerOpen(false)
+                }}
                   className="flex flex-[0_0_auto] cursor-pointer select-none items-center justify-center gap-2 rounded-[4px] bg-transparent px-3 py-[6px] text-[rgb(115,115,115)] no-underline  hover:bg-[rgb(227,227,227)] hover:text-[rgb(76,76,76)]"
                   style={{
                     fontSize: "14px",
@@ -727,6 +737,10 @@ const ShareFlowComponents = ({
                   {t("Email link")}
                 </button>
                 <button
+                onClick={() => {
+                  setDesktopDrawerOpen(true)
+                  setShareDrawerOpen(false)
+                }}
                   aria-label="qr code"
                   style={{
                     fontSize: "14px",
