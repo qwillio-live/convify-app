@@ -25,6 +25,7 @@ import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { FormSettings } from "./user-form-settings"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -489,7 +490,7 @@ export const Form = ({ children, ...props }) => {
           marginTop={0}
           marginBottom={0}
           label={t("CheckboxPlaceholder")}
-          fieldName={t("CheckboxFieldName")}
+          fieldName={t("checkbox") + "-" + produceRandomLetters(6)}
           inputRequired={false}
           size={"full"}
         />

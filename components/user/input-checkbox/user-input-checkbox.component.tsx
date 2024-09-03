@@ -19,6 +19,7 @@ import {
   setPreviewScreenData,
   setUpdateFilledCount,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 
 export enum UserInputSizes {
   small = "small",
@@ -152,7 +153,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   size: UserInputSizes.medium,
   label:
     "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
-  fieldName: "Agreement",
+  fieldName: "checkbox-" + produceRandomLetters(6),
   floatingLabel: false,
   enableIcon: true,
   icon: "arrowright",
@@ -175,7 +176,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
 
 interface StyledUserInputCheckboxProps {
   textColor: string
-  width: number
+  width?: number
   backgroundColor: string
   borderColor: string
   borderWidth: number
@@ -197,7 +198,6 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 39.44px;
-  width: ${(props) => props.width}px;
   background-color: "#fff";
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
@@ -213,7 +213,7 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   border-right-width: ${(props) => props.borderRightWidth}px;
   align-self: center;
 `
-
+// width: ${(props) => props.width}px;
 export const UserInputCheckboxGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
@@ -357,11 +357,11 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               borderLeftWidth={props.borderLeftWidth}
               borderRightWidth={props.borderRightWidth}
               borderRadius={props.borderRadius}
-              topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
+              topLeftRadius={props.topLeftRadius}
               topRightRadius={props.topRightRadius}
-              bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
+              bottomLeftRadius={props.bottomLeftRadius}
               bottomRightRadius={props.bottomRightRadius}
-              width={props.width}
+              // width={props.width}
               size={props.size}
               className={cn(
                 `ring-opacity-0/0 w-full px-3 py-2 text-base font-normal
@@ -404,7 +404,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 {props.label.length === 0 ? null : (
                   <Checkbox
                     className={cn(
-                      ` top-[11px] z-50 mr-[3px] mt-[4px] h-[18px] w-[18px] rounded-[5px] bg-white`
+                      ` top-[11px] z-50 mr-[3px] mt-[3px] h-[18px] w-[18px] rounded-[5px] bg-white`
                     )}
                     isActive={props.isActive}
                     isHovered={containerHover}
