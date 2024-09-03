@@ -169,9 +169,9 @@ export const TextInputDefaultProps: TextInputProps = {
     globalStyled: false,
     isCustomized: false,
   },
-  paddingLeft: "0",
+  paddingLeft: "12",
   paddingTop: "0",
-  paddingRight: "0",
+  paddingRight: "12",
   paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
@@ -191,6 +191,8 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   border: 1px dashed transparent;
   transition: all 0.2s ease;
   text-align: ${(props) => `${props?.textAlign}`};
+  padding-left: ${(props) => props.paddingLeft}px;
+  padding-right: ${(props) => props.paddingRight}px;
 
   &:focus {
     border-color: ${(props) =>
@@ -364,6 +366,8 @@ export const UserText = ({
   borderColor,
   ...props
 }) => {
+  paddingLeft = 16
+  paddingRight = 16
   const {
     actions: { setProp },
     connectors: { connect, drag },

@@ -324,7 +324,7 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
-        <ScrollArea className="w-full overflow-y-auto  pb-24 md:pb-0 pt-4">
+        <ScrollArea className="w-full overflow-y-auto  pb-24 pt-4 md:pb-0">
           <Accordion
             type="multiple"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
@@ -344,11 +344,11 @@ export const UserToolbox = () => {
                   data-cy="toolbox-headline"
                 >
                   <HoverCardComponent
-                    title={t("Headline")}
+                    title={t("Title")}
                     icon={<Type size={12} className="mr-2 size-3" />}
                     data-cy="toolbox-text"
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
                       <HeadlineTextGen
                         {...h2Preset}
                         label={t("Text")}
@@ -372,7 +372,7 @@ export const UserToolbox = () => {
                     icon={<Pencil size={12} className="mr-2 size-3" />}
                     data-cy="toolbox-text"
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
                       <UserTextInputGen
                         {...spanPreset}
                         label={t("Text")}
