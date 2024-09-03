@@ -35,7 +35,7 @@ import { ShareDrawerDesktop } from "./drawerDesktopShare"
 import Image from "next/image"
 import TelegramPic from "@/assets/images/telegram_pic.png"
 import WhatsAppPic from "@/assets/images/whatsapp-removebg-preview.png"
-import notPublishedImg from "@/assets/images/share-nopublish.png"
+import notPublishedImg from "@/assets/images/share-nopublish.svg"
 import { FbIcon, LnIcon, TgIcon, WpIcon } from "./assets"
 const ShareFlowComponents = ({
   isPublished,
@@ -97,21 +97,21 @@ const ShareFlowComponents = ({
             <div className="flex  h-full flex-col">
               <div className="flex min-w-0 !flex-[1_0_auto] flex-col items-center">
                 <div
-                  className="w-full flex-[1_0_auto] overflow-hidden rounded-[20px] border border-[#E9E9E9] transition-[width] duration-300 ease-in will-change-[width]"
+                  className="relative w-full flex-[1_0_auto] transition-[width] duration-300 ease-in will-change-[width]"
                   style={{
                     maxWidth: view === "desktop" ? "100%" : "360px",
                   }}
                 >
-                  {isPublished ? (
+                  {!isPublished ? (
                     <iframe
                       src={link ? link : "https://convify.io/survey"}
                       frameBorder="0"
-                      className="size-full"
+                      className="size-full rounded-[20px] border border-[#E9E9E9]"
                       style={{ background: "#e21af3 !important" }}
                     ></iframe>
                   ) : (
-                    <div className="flex h-full flex-col items-center bg-white pt-8">
-                      <div className="absolute flex h-[46px] flex-nowrap items-center whitespace-nowrap rounded-full bg-[#E37400] pl-6 pr-8 text-sm text-white">
+                    <div className="flex h-full flex-col justify-center items-center bg-white rounded-[20px] border border-[#E9E9E9]">
+                      <div className="absolute top-8 z-100 flex h-[46px] flex-nowrap items-center whitespace-nowrap rounded-full bg-[#E37400] pl-6 pr-8 text-sm text-white">
                         <span className="flex flex-nowrap items-center gap-1.5">
                           <TriangleAlert className="-mr-1.5 -mt-0.5 h-3.5" />{" "}
                           {t("This flow is not published yet")}{" "}
@@ -121,7 +121,7 @@ const ShareFlowComponents = ({
                           {t("before you share your flow")}
                         </span>
                       </div>
-                      <div className="absolute top-1/2 -translate-y-1/2">
+                      <div className="h-fit">
                         <Image
                           src={notPublishedImg}
                           height={500}

@@ -910,7 +910,7 @@ const InsightsFlowComponents = () => {
     </>
   )
   return (
-    <Tabs defaultValue={navbarHighlighter()} className="pb-16">
+    <Tabs defaultValue={navbarHighlighter()} className="pb-10">
       <header className="z-[100] mt-4 flex items-center gap-4 px-0 md:fixed md:right-7 md:top-[84px] md:mt-0 lg:px-6">
         <div className="w-full tabs-list-container flex items-center justify-start overflow-x-hidden">
           <TabsList className="w-full flex h-full overflow-x-auto bg-inherit py-0">
@@ -971,7 +971,7 @@ const InsightsFlowComponents = () => {
           </TabsList>
         </div>
       </header>
-      <main className="content relative z-50 mb-4 flex items-start bg-transparent px-0 pb-32 md:mt-2 lg:px-6">
+      <main className="content relative z-50 mb-4 flex items-start bg-transparent px-0 lg:px-6">
         <div className="tabs-content flex w-full items-center justify-start">
           <TabsContent className="mt-0 size-full" value="custom">
             {repeatedJSX}
