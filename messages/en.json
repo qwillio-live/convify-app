@@ -79,6 +79,7 @@
     "Are you sure want to delete the Flow": "Are you sure want to delete the Flow?"
   },
   "Components": {
+    "checkbox": "checkbox",
     "textarea": "textarea",
     "InputMail": "Email",
     "FontSize": "Font Size",

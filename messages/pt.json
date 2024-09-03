@@ -80,6 +80,7 @@
     "Are you sure want to delete the Flow": "Tem certeza de que deseja excluir o Fluxo?"
   },
   "Components": {
+    "checkbox": "caixa de seleção",
     "textarea": "área de texto",
     "InputMail": "Email",
     "FontSize": "Tamanho da Fonte",
