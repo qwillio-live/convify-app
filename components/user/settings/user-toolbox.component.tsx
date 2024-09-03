@@ -211,19 +211,45 @@ function HelperInformation() {
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
+  const [isDragging, setIsDragging] = React.useState(false)
   const themeBackgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
   const themeBackgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
+  // Handle mouse over event
+  const handleMouseEnter = () => {
+    // if (!isDragging) {
+    setOpenCard(true)
+    // }
+  }
 
+  // Handle mouse leave event
+  const handleMouseLeave = () => {
+    // if (!isDragging) {
+    setOpenCard(false)
+    // }
+  }
+
+  // Handle mouse down event
+  const handleMouseDown = () => {
+    setIsDragging(true)
+    setOpenCard(false)
+  }
+
+  // Handle mouse up event
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+  console.log("opencard", openCard, isDragging)
   return (
     <>
       <div
-        onMouseOver={() => setOpenCard(true)}
-        onMouseLeave={() => setOpenCard(false)}
-        onMouseDown={() => setOpenCard(!openCard)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         className="flex w-full flex-row items-center justify-between text-lg hover:cursor-move"
       >
         <span className="flex flex-row items-center gap-2 text-sm">
@@ -324,7 +350,7 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
-        <ScrollArea className="w-full overflow-y-auto  pb-24 md:pb-0 pt-4">
+        <ScrollArea className="w-full overflow-y-auto  pb-24 pt-4 md:pb-0">
           <Accordion
             type="multiple"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
@@ -395,6 +421,7 @@ export const UserToolbox = () => {
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       //@ts-ignore
+                      ref &&
                       connectors.create(
                         ref,
                         //@ts-ignore
@@ -1091,6 +1118,7 @@ export const UserToolbox = () => {
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
                           //@ts-ignore
@@ -1275,10 +1303,10 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
+
                           <Steps {...stepsDefaultPreset} />
                         )
                       }
@@ -1296,10 +1324,10 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
+
                           <List {...listHorizontalPreset} />
                         )
                       }
@@ -1323,10 +1351,10 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
+
                           <Checklist {...checklistNormalPreset} />
                         )
                       }
@@ -1344,10 +1372,10 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
+
                           <LogoBar {...logoBarDefaultPreset} />
                         )
                       }
