@@ -75,9 +75,9 @@ const useHeadlineThemePresets = () => {
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    paddingLeft: "16",
+    paddingLeft: "12",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "12",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -86,7 +86,7 @@ const useHeadlineThemePresets = () => {
     buttonSize: "medium",
     tagType: "h1",
     preset: "h1",
-    mobileFontSize: 24
+    mobileFontSize: 24,
   }
 
   const h2Preset: HeadlineTextProps = {
@@ -144,9 +144,9 @@ const useHeadlineThemePresets = () => {
     marginRight: 0,
     marginBottom: 20,
     lineHeight: "1.5",
-    paddingLeft: "16",
+    paddingLeft: "12",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "12",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -155,7 +155,7 @@ const useHeadlineThemePresets = () => {
     buttonSize: "medium",
     tagType: "h2",
     preset: "h2",
-    mobileFontSize: 24
+    mobileFontSize: 24,
   }
 
   return { h1Preset, h2Preset }

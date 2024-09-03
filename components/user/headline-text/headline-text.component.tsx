@@ -83,6 +83,8 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   border: 1px dashed transparent;
   transition: all 0.2s ease;
   text-align: ${(props) => `${props?.textAlign}`};
+  padding-left: ${(props) => props.paddingLeft}px;
+  padding-right: ${(props) => props.paddingRight}px;
 
   &:focus {
     border-color: ${(props) =>
@@ -594,9 +596,9 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   marginBottom: 20,
   fontSize: headlineFontSize.desktop,
   fontWeight: "700",
-  paddingLeft: "0",
+  paddingLeft: "12",
   paddingTop: "0",
-  paddingRight: "0",
+  paddingRight: "12",
   paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
