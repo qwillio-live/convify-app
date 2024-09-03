@@ -184,7 +184,7 @@ export const HeadlineTextGen = ({
         borderHoverColor={borderHoverColor?.value}
         colorHover={colorHover?.value}
         flexDirection={flexDirection}
-        fontSize={fontSize}
+        fontSize={fontSize[0]}
         fontWeight={fontWeight}
         // textAlign={textAlign?.value}
         justifyContent={justifyContent}
@@ -206,7 +206,7 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         text={t("HeadlineDescription")}
         {...props}
-        className={`!text-[24px] md:text-[${fontSize}px] items-center`}
+        className={`!text-[24px] md:!text-[${fontSize[0]}px] items-center`}
         onClick={() => console.log(text)}
       >
         <h1
