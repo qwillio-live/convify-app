@@ -8,7 +8,7 @@ import { cn } from "lib/utils"
 import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Preview",
+  title: process.env.APP_NAME + " - Preview",
 }
 const geist = localFont({
   variable: "--font-geist",

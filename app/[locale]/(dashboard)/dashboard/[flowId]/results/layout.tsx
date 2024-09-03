@@ -7,7 +7,7 @@ interface FlowsLayoutProps {
 import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Results",
+  title: process.env.APP_NAME + " - Results",
 }
 export default async function ResultsLayout({ children }: FlowsLayoutProps) {
   return <>{children}</>

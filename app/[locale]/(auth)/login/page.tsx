@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl"
 import { env } from "@/env.mjs"
 
 export const metadata: Metadata = {
-  title: "Log in | " + env.NEXT_PUBLIC_APP_NAME,
+  title: "Log in | " + process.env.APP_NAME,
   description: "Login to your account",
 }
 

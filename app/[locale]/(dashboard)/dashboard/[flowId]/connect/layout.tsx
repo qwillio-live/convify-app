@@ -7,7 +7,7 @@ interface FlowsLayoutProps {
 import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Connect",
+  title: process.env.APP_NAME + " - Connect",
 }
 export default async function ConnectLayout({ children }: FlowsLayoutProps) {
   return <>{children}</>

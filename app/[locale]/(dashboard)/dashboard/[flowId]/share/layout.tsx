@@ -7,7 +7,7 @@ interface FlowsLayoutProps {
 import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Share",
+  title: process.env.APP_NAME + " - Share",
 }
 export default async function ShareLayout({ children }: FlowsLayoutProps) {
   return <>{children}</>

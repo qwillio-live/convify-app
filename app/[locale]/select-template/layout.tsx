@@ -9,7 +9,7 @@ interface SelectTemplateLayoutProps {
 import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Select template",
+  title: process.env.APP_NAME + " - Select template",
 }
 
 const fontSans = Montserrat({

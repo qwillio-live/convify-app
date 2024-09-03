@@ -63,7 +63,7 @@ const geist = localFont({
     },
   ],
 })
-const APP_NAME = env.NEXT_PUBLIC_APP_NAME
+const APP_NAME = process.env.APP_NAME
 export const metadata: Metadata = {
   title: `${APP_NAME} - Flows`,
 }

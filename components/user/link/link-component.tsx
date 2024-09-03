@@ -127,7 +127,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
-const APP_URL = env.NEXT_PUBLIC_APP_URL
+const APP_URL = process.env.DOMAIN_URL || ""
 export const LinkButtonGen = ({
   disabled,
   // windowTarget,

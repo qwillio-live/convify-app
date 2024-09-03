@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl"
 import { env } from "@/env.mjs"
 
 export const metadata = {
-  title: "Sign up for free | " + env.NEXT_PUBLIC_APP_NAME,
+  title: "Sign up for free | " + process.env.APP_NAME,
   description: "Create an account to get started.",
 }
 
