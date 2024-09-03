@@ -115,6 +115,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   @media (max-width: 660px) {
     width: 100%; /* Make the container take the full width on smaller screens */
     max-width: 400px;
+    font-size: 24px;
   }
 `
 
@@ -189,7 +190,7 @@ export const HeadlineTextGen = ({
         borderHoverColor={borderHoverColor?.value}
         colorHover={colorHover?.value}
         flexDirection={flexDirection}
-        fontSize={fontSize[0]}
+        fontSize={fontSize}
         fontWeight={fontWeight}
         textAlign={textAlign}
         justifyContent={justifyContent}
@@ -211,7 +212,7 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         text={t("HeadlineDescription")}
         {...props}
-        className={`!text-[24px] md:!text-[${fontSize[0]}px] items-center`}
+        className={`items-center`}
         onClick={() => console.log(text)}
       >
         <h1
