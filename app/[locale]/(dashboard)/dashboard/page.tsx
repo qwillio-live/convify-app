@@ -259,7 +259,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="overflow-x-hidden pt-4 md:pt-0">
-          <div className="h-[88px] md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0">
+          <div className={`md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0 ${openCreateFlow? 'h-[88px]':"h-6"}`}>
             <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
               <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
                 {t("My workspace")}
@@ -277,7 +277,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           </div>
-          <main className="flex h-[calc(100%-88px)] flex-col bg-[#F6F6F6] p-4 lg:p-8">
+          <main className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8 ${openCreateFlow ? "h-[calc(100%-88px)]":"h-[calc(100%-24px)]"}`}>
             {loading ? (
               <div
                 className={`flex flex-1 items-center justify-center rounded-lg border-none`}

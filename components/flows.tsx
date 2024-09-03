@@ -131,9 +131,9 @@ export function FlowsList({ flows, setStatus, status }) {
         setPaddingScreen("0.35rem")
       }
     } else if (windowSize <= 400) {
-      setPaddingScreen("0.75rem")
+      setPaddingScreen("0.5rem")
     } else if (windowSize <= 500) {
-      setPaddingScreen("0.85rem")
+      setPaddingScreen("0.5rem")
     }
   }, [windowSize])
 
@@ -235,8 +235,8 @@ export function FlowsList({ flows, setStatus, status }) {
                 padding: paddingScreen !== "inherit" ? paddingScreen : "1rem",
               }}
             >
-              <div>
-                <Table className="min-w-full ">
+              <div className="overflow-x-auto">
+                <Table className="w-full">
                   <TableHeader>
                     <TableRow className="border-b border-[#F2F0EE]">
                       <TableHead

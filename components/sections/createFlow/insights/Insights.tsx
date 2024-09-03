@@ -134,6 +134,7 @@ interface SubmitData {
   date?: string
   count?: number
 }
+
 const formatDate = (dateString) => {
   if (!dateString) return "0"
   const date = new Date(dateString)
@@ -142,7 +143,6 @@ const formatDate = (dateString) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0")
   return `${year}-${month}-${day}`
 }
-
 interface Analytics {
   totalVisits: number
   totalSubmits: number
@@ -496,7 +496,7 @@ const InsightsFlowComponents = () => {
             {label}, {pl?.year}
           </p>
           <p className="text-xs text-[#9B9A99]">
-            Visits: <span className="text-[#23262C]">{value}</span>
+            <span className="capitalize">{dataKey}</span> <span className="text-[#23262C]">{value}</span>
           </p>
         </div>
       )
@@ -578,7 +578,7 @@ const InsightsFlowComponents = () => {
           </div>
         </div>
 
-        <div className="w-full rounded-[12px] border border-[#E9E9E9] bg-white md:w-[43%] md:rounded-[20px]">
+        <div className="w-full rounded-[12px] border border-[#E9E9E9] bg-transparent md:w-[43%] md:rounded-[20px]">
           <div className="flex h-full w-full flex-col md:flex-row md:gap-8">
             <div className="h-[160px] md:h-[196px] flex w-full flex-col justify-between p-5 md:p-6">
               <div className="flex items-center justify-between">

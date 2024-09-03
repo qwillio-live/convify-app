@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl"
 import { toast } from "@/components/ui/use-toast"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { Button } from "@/components/ui/button"
+import facebook from "@/assets/icons/facebook.png"
+import linkedin from "@/assets/icons/linkedin.png"
 import {
   Drawer,
   DrawerClose,
@@ -108,9 +110,9 @@ const ShareFlowComponents = ({
                       style={{ background: "#e21af3 !important" }}
                     ></iframe>
                   ) : (
-                    <div className="relative flex h-full flex-col items-center bg-white pt-8">
-                      <div className="flex h-[46px] items-center rounded-full bg-[#E37400] pl-6 pr-8 text-sm text-white">
-                        <span className="flex items-center gap-1.5">
+                    <div className="flex h-full flex-col items-center bg-white pt-8">
+                      <div className="absolute flex h-[46px] flex-nowrap items-center whitespace-nowrap rounded-full bg-[#E37400] pl-6 pr-8 text-sm text-white">
+                        <span className="flex flex-nowrap items-center gap-1.5">
                           <TriangleAlert className="-mr-1.5 -mt-0.5 h-3.5" />{" "}
                           {t("This flow is not published yet")}{" "}
                           <Link className="underline" href="#">
@@ -253,10 +255,22 @@ const ShareFlowComponents = ({
                   <TgIcon />
                 </Link>
                 <button className="flex h-10 w-full items-center justify-center rounded-md  bg-[#0A66C2]">
-                  <FbIcon />
+                  <Image
+                    src={facebook}
+                    className="h-4 w-4"
+                    height={60}
+                    width={60}
+                    alt="facebook"
+                  />
                 </button>
                 <button className="flex h-10 w-full items-center justify-center rounded-md bg-[#0A66C2]">
-                  <LnIcon />
+                  <Image
+                    src={linkedin}
+                    className="h-4 w-4"
+                    height={60}
+                    width={60}
+                    alt="linkedin"
+                  />
                 </button>
               </div>
 
@@ -308,7 +322,7 @@ const ShareFlowComponents = ({
                     setDesktopDrawerOpen(true)
                     setShareDrawerOpen(false)
                   }}
-                  style={{fontWeight:"400 !important"}}
+                  style={{ fontWeight: "400 !important" }}
                   size="sm"
                 >
                   {t("Continue on desktop")}
@@ -340,14 +354,16 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
           value={isPublished ? link : "https://convify.app/your-link-here"}
         />
         <Button
-          disabled={!isPublished}
           onClick={() => {
-            navigator.clipboard.writeText(link)
-            toast({
-              title: t("Link copied to clipboard"),
-            })
+            isPublished && navigator.clipboard.writeText(link)
+            isPublished &&
+              toast({
+                title: t("Link copied to clipboard"),
+              })
           }}
-          className="font-sm -ml-3 h-10 cursor-pointer rounded-md font-medium text-white"
+          className={`font-sm -ml-3 h-10 cursor-pointer rounded-md bg-opacity-100 font-medium text-white ${
+            isPublished ? "bg-[#23262C]" : "pointer-events-none bg-[#848589]"
+          }`}
         >
           {t("Copy link")}
         </Button>
@@ -356,7 +372,7 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         <Button
           variant="outline"
           onClick={() => setIsCustomLinkOpen(true)}
-          className="h-10 cursor-pointer rounded-lg border border-[#E6E2DD] px-4 text-base font-normal gap-1"
+          className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
         >
           <PenLine className="h-4" />
           {t("Customize link")}
@@ -364,7 +380,7 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         <Button
           variant="outline"
           onClick={() => setIsCustomLinkOpen(true)}
-          className="h-10 cursor-pointer rounded-lg border border-[#E6E2DD] px-4 text-base font-normal gap-1"
+          className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
         >
           <Mail className="h-4" />
           {t("Email link")}
@@ -372,7 +388,7 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         <Button
           variant="outline"
           onClick={() => setIsCustomLinkOpen(true)}
-          className="h-10 cursor-pointer rounded-lg border border-[#E6E2DD] px-4 text-base font-normal gap-1"
+          className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
         >
           <QrCode className="h-4" />
           {t("QR Code")}
@@ -386,7 +402,7 @@ const FooterComponent = ({ isPublished, view, setView, t }) => {
   return (
     <>
       {!isPublished && (
-        <div className="mt-5 flex w-full items-end justify-center">
+        <div className="mt-5 flex w-full items-end justify-center pb-2">
           <Tabs defaultValue={view} className="w-[200px]">
             <TabsList className="grid w-full grid-cols-2 bg-inherit">
               <TabsTrigger
