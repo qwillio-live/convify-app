@@ -70,6 +70,7 @@ interface StyledCustomHeadlineInput {
   padding?: string
   preset?: string
   settingsTab?: string
+  textAlign?: string
 }
 const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -81,6 +82,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
   transition: all 0.2s ease;
+  text-align: ${(props) => `${props?.textAlign}`};
 
   &:focus {
     border-color: ${(props) =>
@@ -140,6 +142,7 @@ export const HeadlineTextGen = ({
   fontSize: fontSize,
   fontWeight: fontWeight,
   border,
+  textAlign,
   borderColor,
   borderHoverColor,
   ...props
@@ -186,7 +189,7 @@ export const HeadlineTextGen = ({
         flexDirection={flexDirection}
         fontSize={fontSize[0]}
         fontWeight={fontWeight}
-        // textAlign={textAlign?.value}
+        textAlign={textAlign}
         justifyContent={justifyContent}
         borderColor={primarycolor}
         border={border}
