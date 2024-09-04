@@ -6,6 +6,44 @@ import { authOptions } from "@/lib/auth"
 import footerScreenData from "@/components/user/screens/screen-footer.json"
 import headerScreenData from "@/components/user/screens/screen-header.json"
 
+// Helper function to generate random letters
+const generateRandomLetters = (length: number) => {
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789"
+  let result = ""
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return result
+}
+// Function to generate a unique published name
+const generateUniqueName = async (baseName: string) => {
+  let uniqueName = baseName
+  let isUnique = await checkPublishedNameExists(uniqueName)
+
+  // Generate a unique publishedName if needed
+  while (!isUnique) {
+    const randomSuffix = generateRandomLetters(6) // Append 6 random characters
+    uniqueName = `${baseName}-${randomSuffix}`
+    isUnique = await checkPublishedNameExists(uniqueName)
+  }
+
+  return uniqueName
+}
+
+// Function to check if the published name exists
+const checkPublishedNameExists = async (publishedName: string) => {
+  try {
+    const count = await prisma.flow.count({
+      where: {
+        publishedName,
+      },
+    })
+    return count === 0
+  } catch (error) {
+    console.error("Error checking published name existence:", error)
+    return false
+  }
+}
 export async function GET(req: NextRequest) {
   const data = await getServerSession(authOptions)
   if (!data) {
@@ -48,6 +86,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN || ""
   const data = await getServerSession(authOptions)
   if (!data) {
     const statusCode = 401
@@ -104,6 +143,8 @@ export async function POST(req: NextRequest) {
         templateId: template.id,
       },
     })
+    let sortedSteps = templateSteps.sort((a, b) => a.order - b.order)
+    let uniqueName = await generateUniqueName(name || template.name)
     const flow = await prisma.flow.create({
       data: {
         templateId: template.id,
@@ -111,7 +152,10 @@ export async function POST(req: NextRequest) {
         flowSettings: flowSettings || template.templateSettings,
         status: status || "active",
         previewImage: previewImage || template.preview,
-        link: link || "",
+        link:
+          sortedSteps.length > 0
+            ? `${flowDomain}/${uniqueName}?screen=${sortedSteps[0].name}`
+            : `${flowDomain}/${uniqueName}`,
         numberOfSteps: templateSteps.length === 0 ? 1 : templateSteps.length,
         numberOfResponses: 0,
         userId,

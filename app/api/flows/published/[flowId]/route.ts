@@ -37,6 +37,7 @@ export async function GET(
       console.log("solo", finalFlow, flowId)
       return NextResponse.json(finalFlow)
     }
+    return NextResponse.json([])
   } catch (error) {
     console.error(error)
 
@@ -94,7 +95,7 @@ export async function POST(
   { params }: { params: { flowId: string } }
 ) {
   try {
-    const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
+    const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN || ""
     const { flowId } = params
 
     // Fetch the flow and its steps

@@ -131,7 +131,7 @@ const ShareFlowComponents = ({
                             aria-label="copy link input"
                             className={`m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none`}
                             value={
-                              isPublished
+                              link !== ""
                                 ? link
                                 : "https://convify.app/your-link-here"
                             }
@@ -141,7 +141,6 @@ const ShareFlowComponents = ({
                     </div>
                     <button
                       type="button"
-                      disabled={!isPublished}
                       onClick={() => {
                         navigator.clipboard.writeText(link)
                         toast({
