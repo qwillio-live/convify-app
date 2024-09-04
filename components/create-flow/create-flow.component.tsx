@@ -261,7 +261,7 @@ export function CreateFlowComponent() {
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
           debouncedSetEditorLoad(json)
-
+          dispatch(setSelectedComponent("ROOT"))
           // }else{
           // console.log("RE-REnder NOT called")
           // return;

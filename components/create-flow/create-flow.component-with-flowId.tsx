@@ -314,6 +314,7 @@ export function CreateFlowComponent({ flowId }) {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
+          dispatch(setSelectedComponent("ROOT"))
           debouncedSetEditorLoad(json)
 
           // }else{
