@@ -314,7 +314,7 @@ export const UserTextInputGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
-        textAlign={textAlign}
+        textAlign={textAlign.value}
         {...props}
         className="text-[1rem]"
       >

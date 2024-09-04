@@ -185,6 +185,7 @@ import {
   TelegramShareButton,
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
+import styled from "styled-components"
 
 function HelperInformation() {
   return (
@@ -209,6 +210,15 @@ function HelperInformation() {
   )
 }
 
+const HoverCardWrapper = styled.div`
+  .text-input-comp {
+    width: 100%;
+  }
+  .heading-text-comp {
+    margin: 0;
+  }
+`
+
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
   const themeBackgroundColor = useAppSelector(
@@ -231,30 +241,32 @@ const HoverCardComponent = ({ title, icon, children }) => {
         </span>{" "}
         <GripVertical className="right-4 shrink-0" />
       </div>
-      {openCard && (
-        <HoverCard openDelay={0}>
-          <HoverCardTrigger
-            asChild={false}
-            className="w-full"
-          ></HoverCardTrigger>
-          <HoverCardContent
-            className="flex min-w-[382px] flex-row items-center justify-center px-10 leading-normal"
-            forceMount={true}
-            style={{
-              background: themeBackgroundColor,
-              backgroundImage: themeBackgroundImage,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
-            avoidCollisions
-            side="left"
-            sideOffset={32}
-          >
-            {children}
-          </HoverCardContent>
-        </HoverCard>
-      )}
+      <HoverCardWrapper>
+        {openCard && (
+          <HoverCard openDelay={0}>
+            <HoverCardTrigger
+              asChild={false}
+              className="w-full"
+            ></HoverCardTrigger>
+            <HoverCardContent
+              className="flex min-w-[382px] flex-row items-center justify-center px-10 leading-normal"
+              forceMount={true}
+              style={{
+                background: themeBackgroundColor,
+                backgroundImage: themeBackgroundImage,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+              avoidCollisions
+              side="left"
+              sideOffset={32}
+            >
+              {children}
+            </HoverCardContent>
+          </HoverCard>
+        )}
+      </HoverCardWrapper>
     </>
   )
 }

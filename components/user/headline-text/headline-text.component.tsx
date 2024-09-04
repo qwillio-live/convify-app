@@ -168,7 +168,7 @@ export const HeadlineTextGen = ({
   console.log("container | bg", containerBackground, borderColor)
   return (
     <div
-      className="relative mt-7 w-full"
+      className="heading-text-comp relative mt-7 w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
