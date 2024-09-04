@@ -352,11 +352,17 @@ const FormContainer = styled.div<{
   .text-input-comp {
     width: 100%;
   }
+  .email-input-comp {
+    width: 100%;
+  }
 `
 const FormGenWrapper = styled.div<{}>`
   width: 100%;
   height: 100%;
   .text-input-comp {
+    width: 100%;
+  }
+  .email-input-comp {
     width: 100%;
   }
 `
