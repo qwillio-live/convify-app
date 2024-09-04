@@ -197,7 +197,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   }
 
   color: ${(props) => `${props?.color}`};
-  overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
       ? MobileContainerWidthValues[props.size || "medium"]

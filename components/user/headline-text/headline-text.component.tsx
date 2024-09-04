@@ -88,7 +88,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   }
 
   color: ${(props) => `var(${props?.color})`};
-  overflow: hidden;
+
   max-width: ${(props) =>
     props.mobileScreen
       ? MobileContainerWidthValues[props.size || "medium"]

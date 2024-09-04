@@ -433,6 +433,7 @@ const ScreensList = ({ flowId }) => {
                             overflow: "hidden", // Hide content that overflows
                             transform: "scale(1,1)", // Zoom out vertically
                             zoom: "35%",
+                            pointerEvents: "none",
                           }}
                         >
                           <div
@@ -493,6 +494,7 @@ const ScreensList = ({ flowId }) => {
                           overflow: "hidden", // Hide content that overflows
                           transform: "scale(1,1)", // Zoom out vertically
                           zoom: "25%",
+                          pointerEvents: "none",
                         }}
                       >
                         <div
