@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { UserAccountNav } from "@/components/user-account-nav"
 import StoreProvider from "@/lib/state/flows-state/store-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { getTranslations } from "next-intl/server"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -64,8 +65,13 @@ const geist = localFont({
   ],
 })
 const APP_NAME = process.env.APP_NAME
-export const metadata: Metadata = {
-  title: `${APP_NAME} - Flows`,
+
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${APP_NAME} - ${t("flows")}`, // Use translations for title
+  }
 }
 import {
   anton,
@@ -125,6 +131,8 @@ import {
 import { cn } from "@/lib/utils"
 import { env } from "@/env.mjs"
 import { Metadata } from "next"
+import { useTranslations } from "next-intl"
+
 export default async function DashboardLayout({
   children,
   params: { locale },

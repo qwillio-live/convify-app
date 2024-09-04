@@ -7,9 +7,16 @@ interface SelectTemplateLayoutProps {
   params: { locale: string }
 }
 import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
 
-export const metadata = {
-  title: process.env.APP_NAME + " - Select template",
+const APP_NAME = process.env.APP_NAME
+
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${APP_NAME} - ${t("Select template")}`, // Use translations for title
+  }
 }
 
 const fontSans = Montserrat({

@@ -8,10 +8,16 @@ import signupImage from "@/assets/images/signup.svg"
 import convifyLogo from "@/assets/convify_logo_black.svg"
 import { useTranslations } from "next-intl"
 import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
 
-export const metadata = {
-  title: "Sign up for free | " + process.env.APP_NAME,
-  description: "Create an account to get started.",
+export async function generateMetadata() {
+  const APP_NAME = process.env.APP_NAME
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${t("Sign up for free")} | ${APP_NAME}`, // Use translations for title
+    description: t("Create an account to get started"),
+  }
 }
 
 export default function RegisterPage() {

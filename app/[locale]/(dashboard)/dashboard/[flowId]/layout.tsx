@@ -10,8 +10,12 @@ interface FlowsLayoutProps {
 import localFont from "next/font/local"
 import { env } from "@/env.mjs"
 
-export const metadata = {
-  title: process.env.APP_NAME + " - Create",
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+  const APP_NAME = process.env.APP_NAME
+  return {
+    title: `${APP_NAME} - ${t("Create")}`, // Use translations for title
+  }
 }
 const geist = localFont({
   variable: "--font-geist",
@@ -120,6 +124,7 @@ import {
   sans3,
 } from "../../../fonts"
 import { cn } from "@/lib/utils"
+import { getTranslations } from "next-intl/server"
 export default async function FlowsLayout({
   children,
   params: { flowId },

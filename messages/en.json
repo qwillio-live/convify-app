@@ -79,6 +79,13 @@
     "Are you sure want to delete the Flow": "Are you sure want to delete the Flow?"
   },
   "Components": {
+    "Login to your account": "Login to your account",
+    "Create an account to get started": "Create an account to get started",
+    "flows": "Flows",
+    "Preview": "Preview",
+    "Select template": "Select template",
+    "Sign up for free": "Sign up for free",
+    "Log in": "Log in",
     "checkbox": "checkbox",
     "textarea": "textarea",
     "InputMail": "Email",
