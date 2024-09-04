@@ -73,7 +73,7 @@ export enum UserInputSizes {
 }
 
 const UserInputSizeValues = {
-  small: "260px",
+  small: "250px",
   medium: "376px",
   large: "576px",
   full: "100%",
@@ -273,16 +273,14 @@ export const UserInputGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
+        <Wrapper
+          size={props.size}
           className={cn(
-            "relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
+            "text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
             {
               "animate-shake": fieldError,
             }
           )}
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
         >
           {!props.floatingLabel && (
             <>
@@ -486,11 +484,57 @@ export const UserInputGen = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
 }
+
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { maxWidth: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { maxWidth: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
 
 const UserInputStyled = styled(Input)<{
   textColor: string
@@ -527,7 +571,6 @@ const UserInputStyled = styled(Input)<{
   border-bottom-width: ${(props) => props.borderBottomWidth}px;
   border-left-width: ${(props) => props.borderLeftWidth}px;
   border-right-width: ${(props) => props.borderRightWidth}px;
-
   align-self: center;
 `
 
@@ -553,6 +596,7 @@ export const UserInput = ({ ...props }) => {
     query: { node },
   } = useEditor()
   const dispatch = useAppDispatch()
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
@@ -704,11 +748,10 @@ export const UserInput = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -760,8 +803,6 @@ export const UserInput = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                // minWidth: `${UserInputSizeValues[props.size]}`,
-                // width: `${UserInputSizeValues[props.size]}`,
               }}
             >
               {props.floatingLabel && props.label}
@@ -895,7 +936,7 @@ export const UserInput = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

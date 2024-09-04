@@ -238,7 +238,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
             className="w-full"
           ></HoverCardTrigger>
           <HoverCardContent
-            className="flex min-w-[382px] flex-row items-center justify-center px-10"
+            className="flex min-w-[382px] flex-row items-center justify-center px-10 leading-normal"
             forceMount={true}
             style={{
               background: themeBackgroundColor,

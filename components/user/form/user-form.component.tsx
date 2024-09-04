@@ -120,6 +120,9 @@ const FormContentInner = styled.form<FormInnerStyles>`
     justify-content: ${(props) => props.mobileJustifyContent};
   }
   overflow: visible;
+  .text-input-comp {
+    width: 100%;
+  }
 `
 
 export const FormContentGen = ({ children, ...props }) => {
@@ -345,9 +348,20 @@ const FormContainer = styled.div<{
   background: ${({ background }) => background};
   max-width: fit-content;
   width: 100%;
+
+  .text-input-comp {
+    width: 100%;
+  }
+`
+const FormGenWrapper = styled.div<{}>`
+  width: 100%;
+  height: 100%;
+  .text-input-comp {
+    width: 100%;
+  }
 `
 export const FormGen = ({ children, ...props }) => {
-  return <div style={{ width: "100%", height: "100%" }}>{children}</div>
+  return <FormGenWrapper>{children}</FormGenWrapper>
 }
 
 export const Form = ({ children, ...props }) => {
