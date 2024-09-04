@@ -127,7 +127,6 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
-const APP_URL = process.env.DOMAIN_URL || ""
 export const LinkButtonGen = ({
   disabled,
   // windowTarget,
@@ -858,7 +857,6 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   buttonAction: "next-screen",
   windowTarget: true,
-  href: APP_URL,
   iconType: PictureTypes.NULL,
 }
 
