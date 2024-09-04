@@ -5,6 +5,7 @@ interface FlowsLayoutProps {
   children?: React.ReactNode
 }
 import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
 
 export async function generateMetadata() {
   const t = await getTranslations("Components") // Fetch translations

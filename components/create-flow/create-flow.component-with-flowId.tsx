@@ -27,6 +27,7 @@ import {
   setValidateScreen,
   addScreen,
   setSelectedScreen,
+  setEditorSelectedComponent,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
@@ -228,15 +229,23 @@ export function CreateFlowComponent({ flowId }) {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  const selectedScreenIndex = useAppSelector(
-    (state) => state?.screen?.selectedScreen
-  )
+  const screens =
+    useAppSelector((state: RootState) => state?.screen?.screens) || []
+  const selectedScreenIndex =
+    useAppSelector((state) => state?.screen?.currentScreenName) || 0
 
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
+      console.log("jsonnnnn", json)
       dispatch(setEditorLoad(JSON.stringify(json)))
     }, 1200),
+    [dispatch]
+  )
+
+  const debouncedSetSelectedComponent = useCallback(
+    (json) => {
+      dispatch(setEditorSelectedComponent(json))
+    },
     [dispatch]
   )
 
@@ -314,7 +323,9 @@ export function CreateFlowComponent({ flowId }) {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
-          dispatch(setSelectedComponent("ROOT"))
+          // dispatch(setEditorSelectedComponent(json))
+          // dispatch(setEditorLoad(JSON.stringify(json)))
+          debouncedSetSelectedComponent(json)
           debouncedSetEditorLoad(json)
 
           // }else{

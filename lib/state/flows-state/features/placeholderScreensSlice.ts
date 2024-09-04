@@ -545,13 +545,61 @@ export const screensSlice = createSlice({
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = action.payload
+      const newEditorLoad = action.payload
+
+      // Depending on mode, update the appropriate part of the state
       if (state.headerMode === true) {
-        state.screensHeader = action.payload
+        state.screensHeader = newEditorLoad
       } else if (state.footerMode === true) {
-        state.screensFooter = action.payload
+        state.screensFooter = newEditorLoad
       } else {
-        state.screens[state.selectedScreen].screenData = action.payload
+        state.screens[state.selectedScreen].screenData = newEditorLoad
+      }
+    },
+    setEditorSelectedComponent: (state, action: PayloadAction<any>) => {
+      const newEditorLoad = action.payload
+
+      // Function to find the first non-matching key in new vs. old objects
+      function filterCommonKeys(newObj, oldObj) {
+        for (const key in newObj) {
+          if (!(key in oldObj)) {
+            return key // Return the first non-matching key.
+          }
+        }
+        return null // Return null if all keys match.
+      }
+
+      try {
+        const oldEditorLoad = JSON.parse(
+          state.screens[state.selectedScreen].screenData
+        )
+
+        if (
+          newEditorLoad?.ROOT?.nodes?.length >
+          oldEditorLoad?.ROOT?.nodes?.length
+        ) {
+          const filteredNewEditorLoad = filterCommonKeys(
+            newEditorLoad,
+            oldEditorLoad
+          )
+
+          if (filteredNewEditorLoad) {
+            state.selectedComponent = filteredNewEditorLoad
+          }
+        } else {
+          for (const key in oldEditorLoad) {
+            const oldValue = oldEditorLoad[key]
+            if (oldValue.displayName === "Form Content") {
+              const newValue = newEditorLoad[key]
+              if (newValue && newValue.nodes.length > oldValue.nodes.length) {
+                state.selectedComponent = key // Early return
+                break // Stop the loop
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Error in setEditorData:", err)
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
@@ -819,6 +867,7 @@ export const {
   setResetTotalFilled,
   resetScreen,
   getAllFilledAnswers,
+  setEditorSelectedComponent,
 } = screensSlice.actions
 
 export default screensSlice.reducer
