@@ -352,7 +352,8 @@ const FormContainer = styled.div<{
   .text-input-comp,
   .email-input-comp,
   .phone-input-comp,
-  .checkbox-input-comp {
+  .checkbox-input-comp,
+  .textarea-input-comp {
     width: 100%;
   }
 `
@@ -362,7 +363,8 @@ const FormGenWrapper = styled.div<{}>`
   .text-input-comp,
   .email-input-comp,
   .phone-input-comp,
-  .checkbox-input-comp {
+  .checkbox-input-comp,
+  .textarea-input-comp {
     width: 100%;
   }
 `
