@@ -27,20 +27,6 @@ export enum UserInputSizes {
   full = "full",
 }
 
-const UserInputSizeValues = {
-  small: "260px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const UserInputMobileSizeValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
-
 export type UserInputCheckboxProps = {
   inputValue: string
   fontSize: number
@@ -49,7 +35,7 @@ export type UserInputCheckboxProps = {
   marginLeft: number
   marginRight: number
   marginTop: number
-  width: number
+  width: number | string
   marginBottom: number
   paddingLeft: number
   paddingRight: number
@@ -104,7 +90,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   inputValue: "",
   fontSize: 16,
   textColor: "#000",
-  width: 366,
+  width: "unset",
   fontWeight: "normal",
   marginLeft: 0,
   marginRight: 0,
@@ -214,6 +200,52 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   align-self: center;
 `
 
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
+
 export const UserInputCheckboxGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
@@ -300,11 +332,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          className="checkbox-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           <div
             className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
@@ -413,7 +443,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
             </UserInputCheckboxStyled>
           </div>
           {/** End field container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -558,15 +588,10 @@ export const UserInputCheckbox = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${
-              mobileScreen
-                ? UserInputMobileSizeValues[props.size]
-                : UserInputSizeValues[props.size]
-            }`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="checkbox-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           <div className="field-container flex w-full flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputCheckboxStyled
@@ -627,7 +652,6 @@ export const UserInputCheckbox = ({ ...props }) => {
                 }
               }}
               style={{
-                width: UserInputSizeValues[props.size],
                 zIndex: 1,
                 backgroundColor: containerHover
                   ? darkenedBg
@@ -678,7 +702,7 @@ export const UserInputCheckbox = ({ ...props }) => {
               )}
             </UserInputCheckboxStyled>
           </div>
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

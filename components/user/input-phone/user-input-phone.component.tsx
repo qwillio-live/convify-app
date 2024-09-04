@@ -55,20 +55,6 @@ export enum UserInputSizes {
   full = "full",
 }
 
-const UserInputSizeValues = {
-  small: "260px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const UserInputMobileSizeValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
-
 export type UserInputPhoneProps = {
   inputValue: string
   fontSize: number
@@ -248,6 +234,52 @@ const UserInputPhoneStyled = styled(Input)<StyledUserInputPhoneProps>`
   align-self: center;
 `
 
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
+
 export const UserInputPhoneGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
@@ -354,11 +386,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          className="phone-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -366,8 +396,6 @@ export const UserInputPhoneGen = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  minWidth: `${UserInputSizeValues[props.size]}`,
-                  width: `${UserInputSizeValues[props.size]}`,
                   color: `${primaryTextColor}`,
                 }}
               >
@@ -399,8 +427,6 @@ export const UserInputPhoneGen = ({ ...props }) => {
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
                 color: `#9CA3AF`,
-                // minWidth: `${UserInputSizeValues[props.size]}`,
-                // width: `${UserInputSizeValues[props.size]}`,
               }}
             >
               {props.floatingLabel && props.label}
@@ -560,7 +586,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -708,15 +734,10 @@ export const UserInputPhone = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${
-              mobileScreen
-                ? UserInputMobileSizeValues[props.size]
-                : UserInputSizeValues[props.size]
-            }`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="phone-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -738,8 +759,6 @@ export const UserInputPhone = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  minWidth: `${UserInputSizeValues[props.size]}`,
-                  width: `${UserInputSizeValues[props.size]}`,
                   color: `${primaryTextColor}`,
                 }}
               />
@@ -769,8 +788,6 @@ export const UserInputPhone = ({ ...props }) => {
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
                 color: `#9CA3AF`,
-                // minWidth: `${UserInputSizeValues[props.size]}`,
-                // width: `${UserInputSizeValues[props.size]}`,
               }}
             >
               {props.floatingLabel && props.label}
@@ -907,7 +924,7 @@ export const UserInputPhone = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

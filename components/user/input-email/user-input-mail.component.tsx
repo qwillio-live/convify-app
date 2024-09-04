@@ -62,13 +62,6 @@ const UserInputSizeValues = {
   full: "100%",
 }
 
-const UserInputMobileSizeValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
-
 export type UserInputMailProps = {
   inputValue: string
   fontSize: number
@@ -259,13 +252,13 @@ const Wrapper = styled.div<{
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { maxWidth: "376px" }
+        return { width: "376px" }
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { maxWidth: "576px" }
+        return { width: "576px" }
       }
     } else {
       return {

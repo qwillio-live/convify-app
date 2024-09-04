@@ -72,13 +72,6 @@ export enum UserInputSizes {
   full = "full",
 }
 
-const UserInputSizeValues = {
-  small: "250px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
 export const UserInputGen = ({ ...props }) => {
   const icon = props.icon
   const dispatch = useAppDispatch()
@@ -288,8 +281,6 @@ export const UserInputGen = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  minWidth: `${UserInputSizeValues[props.size]}`,
-                  width: `${UserInputSizeValues[props.size]}`,
                 }}
               >
                 {props.label}
@@ -319,8 +310,6 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                // minWidth: `${UserInputSizeValues[props.size]}`,
-                // width: `${UserInputSizeValues[props.size]}`,
               }}
             >
               {props.floatingLabel && props.label}
@@ -504,13 +493,13 @@ const Wrapper = styled.div<{
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { maxWidth: "376px" }
+        return { width: "376px" }
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { maxWidth: "576px" }
+        return { width: "576px" }
       }
     } else {
       return {
@@ -774,8 +763,6 @@ export const UserInput = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  minWidth: `${UserInputSizeValues[props.size]}`,
-                  width: `${UserInputSizeValues[props.size]}`,
                 }}
               />
             </>

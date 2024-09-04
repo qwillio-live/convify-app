@@ -349,20 +349,20 @@ const FormContainer = styled.div<{
   max-width: fit-content;
   width: 100%;
 
-  .text-input-comp {
-    width: 100%;
-  }
-  .email-input-comp {
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp {
     width: 100%;
   }
 `
 const FormGenWrapper = styled.div<{}>`
   width: 100%;
   height: 100%;
-  .text-input-comp {
-    width: 100%;
-  }
-  .email-input-comp {
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp {
     width: 100%;
   }
 `

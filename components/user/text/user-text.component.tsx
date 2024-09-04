@@ -22,19 +22,6 @@ import {
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
 
-const ContainerWidthValues = {
-  small: "520px",
-  medium: "647px",
-  large: "770px",
-  full: "100%",
-}
-const MobileContainerWidthValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
-
 export enum TextContainerSize {
   small = "small",
   medium = "medium",
@@ -197,10 +184,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
 
   color: ${(props) => `${props?.color}`};
   overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
   width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height};
