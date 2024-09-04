@@ -44,7 +44,7 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
-  const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN || ""
+  const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
   )

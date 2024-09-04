@@ -94,7 +94,7 @@ export async function POST(
   { params }: { params: { flowId: string } }
 ) {
   try {
-    const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN
+    const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
     const { flowId } = params
 
     // Fetch the flow and its steps
