@@ -535,11 +535,19 @@ export const UserToolbox = () => {
                         <SquareCheckIcon size={12} className="mr-2 size-3" />
                       }
                     >
-                      <UserInputCheckboxGen
-                        {...outlinedPresetChecbox}
-                        label={t("CheckboxPlaceholder")}
-                        placeholder={t("CheckboxPlaceholder")}
-                      />
+                      <div className="flex w-full  max-w-[376px] flex-col items-center justify-start ">
+                        <UserInputCheckboxGen
+                          {...outlinedPresetChecbox}
+                          label={t("CheckboxPlaceholder")}
+                          placeholder={t("CheckboxPlaceholder")}
+                          size={"large"}
+                          width={"50%"}
+                          paddingTop={0}
+                          paddingBottom={0}
+                          paddingLeft={0}
+                          paddingRight={0}
+                        />
+                      </div>
                     </HoverCardComponent>
                   </div>
 
