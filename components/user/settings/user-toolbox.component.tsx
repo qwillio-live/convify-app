@@ -264,7 +264,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
             className="w-full"
           ></HoverCardTrigger>
           <HoverCardContent
-            className="flex min-w-[382px] flex-row items-center justify-center px-10"
+            className="flex w-full min-w-[382px] flex-row items-center justify-center px-10"
             forceMount={true}
             style={{
               background: themeBackgroundColor,
@@ -434,8 +434,8 @@ export const UserToolbox = () => {
                       title="Form"
                       icon={<NotebookPen size={12} className="mr-2 size-3" />}
                     >
-                      <div className="flex max-w-[350px] flex-col items-center justify-start ">
-                        <div className="flex max-w-[376px] gap-1">
+                      <div className="flex w-full  max-w-[376px] flex-col items-center justify-start ">
+                        <div className="flex w-full max-w-[376px] gap-1">
                           <UserInputGen
                             {...formPreset}
                             label={t("FirstName")}
@@ -480,6 +480,7 @@ export const UserToolbox = () => {
                           placeholder={t("CheckboxPlaceholder")}
                           marginTop={5}
                           marginBottom={0}
+                          size={"full"}
                         />
                         <IconButtonGen
                           {...filledPreset}
