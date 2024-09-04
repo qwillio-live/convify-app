@@ -81,7 +81,7 @@ export type TextInputProps = {
   size: TextContainerSize
   fontSize: number
   fontWeight: string | number
-  textAlign: StyleProperty
+  textAlign: string
   containerBackground: string
   background: StyleProperty
   backgroundHover: StyleProperty
@@ -164,11 +164,7 @@ export const TextInputDefaultProps: TextInputProps = {
   marginBottom: 20,
   fontSize: 18,
   fontWeight: "400",
-  textAlign: {
-    value: "center",
-    globalStyled: false,
-    isCustomized: false,
-  },
+  textAlign: "center",
   paddingLeft: "12",
   paddingTop: "0",
   paddingRight: "12",
@@ -314,7 +310,7 @@ export const UserTextInputGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
-        textAlign={textAlign.value}
+        textAlign={textAlign}
         {...props}
         className="text-[1rem]"
       >
@@ -562,7 +558,7 @@ export const UserText = ({
           radius={radius.value}
           flexDirection={flexDirection}
           fontWeight={fontWeight.value}
-          textAlign={textAlign.value}
+          textAlign={textAlign}
           justifyContent={justifyContent}
           borderColor={borderColor.value}
           borderHoverColor={borderHoverColor.value}
