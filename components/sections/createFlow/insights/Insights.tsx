@@ -804,7 +804,7 @@ const InsightsFlowComponents = () => {
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="h-fill max-h-[436px] w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px]">
+        <div className="h-fill max-h-[436px] w-full w-full rounded-[12px] border border-[#E9E9E9] bg-white p-6 md:w-[43%] md:rounded-[20px] overflow-y-auto">
           <div
             className="size-full overflow-x-hidden sm:overflow-x-auto"
             style={{ scrollbarWidth: "thin", scrollbarColor: "#dfdfdf #fff" }}
@@ -910,7 +910,7 @@ const InsightsFlowComponents = () => {
     </>
   )
   return (
-    <Tabs defaultValue={navbarHighlighter()} className="pb-6">
+    <Tabs defaultValue={navbarHighlighter()}>
       <header className="z-[100] mt-4 flex items-center gap-4 px-0 md:fixed md:right-7 md:top-[84px] md:mt-0 lg:px-6">
         <div className="w-full tabs-list-container flex items-center justify-start overflow-x-hidden">
           <TabsList className="w-full flex h-full overflow-x-auto bg-inherit py-0">

@@ -9,7 +9,7 @@ const ResultFlowComponents = () => {
   const t = useTranslations("CreateFlow.ResultsPage")
 
   return (
-    <div className="w-full min-h-screen font-poppins">
+    <div className="w-full font-poppins">
       <Tabs defaultValue="insights">
         <header className="flex h-14 lg:h-[88px] items-center justify-center gap-4 border-b bg-muted/20 lg:px-12 px-4 bg-white">
           <div className="tabs-list-container flex size-full items-center justify-center sm:justify-start">
@@ -29,7 +29,7 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-auto h-[99vh] sm:h-[calc(100vh-120px)]  md:h-[calc(100vh-120px)]  lg:h-[calc(100vh-120px)]">
+        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-auto h-[calc(100vh-168px)]  lg:h-[calc(100vh-144px)]">
           <div className="tabs-content flex w-full items-center">
             <TabsContent
               className="mt-0 w-full sm:mt-[10px]"
