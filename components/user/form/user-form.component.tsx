@@ -356,7 +356,8 @@ const FormContainer = styled.div<{
   .textarea-input-comp,
   .button-input-comp,
   .mcq-input-comp,
-  .separator-comp {
+  .separator-comp,
+  .progress-comp {
     width: 100%;
   }
 `
@@ -370,7 +371,8 @@ const FormGenWrapper = styled.div<{}>`
   .textarea-input-comp,
   .button-input-comp,
   .mcq-input-comp,
-  .separator-comp {
+  .separator-comp,
+  .progress-comp {
     width: 100%;
   }
 `

@@ -211,7 +211,15 @@ function HelperInformation() {
 }
 
 const HoverCardWrapper = styled.div`
-  .text-input-comp {
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp,
+  .textarea-input-comp,
+  .button-input-comp,
+  .mcq-input-comp,
+  .separator-comp,
+  .progress-comp {
     width: 100%;
   }
   .heading-text-comp {
