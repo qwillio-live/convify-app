@@ -21,7 +21,7 @@ export const DragDrop = () => {
         </div>
         <div className="flex w-full  flex-col gap-2">
           <div
-            className="min-w-full cursor-pointer rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+            className="min-w-full cursor-pointer rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
             //eslint-disable-next-line
             ref={(ref: any) =>
               ref && connectors.create(ref, <ScreenOneChoice />)
