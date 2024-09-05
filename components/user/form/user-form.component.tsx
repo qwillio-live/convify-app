@@ -355,7 +355,8 @@ const FormContainer = styled.div<{
   .checkbox-input-comp,
   .textarea-input-comp,
   .button-input-comp,
-  .mcq-input-comp {
+  .mcq-input-comp,
+  .separator-comp {
     width: 100%;
   }
 `
@@ -368,7 +369,8 @@ const FormGenWrapper = styled.div<{}>`
   .checkbox-input-comp,
   .textarea-input-comp,
   .button-input-comp,
-  .mcq-input-comp {
+  .mcq-input-comp,
+  .separator-comp {
     width: 100%;
   }
 `
