@@ -29,20 +29,53 @@ import {
   setUpdateFilledCount,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { UserInputSizes } from "../input/user-input.component"
 
-const MultipleChoiceSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
 
-const MultipleChoiceMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
 
 export const MultipleChoiceGen = ({
   disabled = false,
@@ -127,12 +160,11 @@ export const MultipleChoiceGen = ({
     }
   }
   useEffect(() => {
-    console.log("shaking again ", alarm, isRequired, screenData?.length)
     if (alarm && isRequired && screenData?.length === 0) {
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
-  console.log("of mc props", choices)
+
   return (
     <div
       className="relative w-full"
@@ -151,149 +183,149 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <ul
-        ref={itemRef}
-        className="flex w-full flex-col items-center justify-center"
-        style={{
-          gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
-          fontFamily: `var(${fontFamily?.value})`,
-          maxWidth: MultipleChoiceSizeValues[size || "nedium"],
-        }}
-      >
-        <div
-          className="w-full p-1 text-center"
+      <Wrapper size={size} className="mcq-input-comp">
+        <ul
+          ref={itemRef}
+          className="flex w-full flex-col items-center justify-center"
           style={{
-            color: labelColor,
+            gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: MultipleChoiceSizeValues[size || "small"],
           }}
         >
-          <label>{label}</label>
-        </div>
-        {choices.map((choice, index) => (
-          <MultipleChoiceItem
-            buttonAction={choice.buttonAction}
-            isRequired={isRequired}
-            forGen={true}
-            key={index}
-            isFirst={index === 0}
-            isLast={index === choices.length - 1}
-            isCollapsed={layout === MultipleChoiceLayouts.collapsed}
-            isSelected={selectedChoices?.includes(choice.id) || false}
-            isPreviousSelected={
-              index > 0 && selections.includes(choices[index - 1].id)
-            }
-            required={required}
-            tracking={tracking}
-            choice={choice}
-            fieldName={fieldName}
-            multiSelect={multiSelect}
-            checkboxVisible={checkboxVisible}
-            contentReversed={contentReversed}
-            defaultStyles={defaultStyles}
-            hoverStyles={hoverStyles}
-            selectedStyles={selectedStyles}
-            onValueChange={null}
-            selections={selectedChoices}
-            onSelectChange={() => {
-              if (multiSelect) {
-                setSelectedChoices((prev) => {
-                  if (prev?.includes(choice.id)) {
-                    // Remove choice from selection
-                    const updatedChoices = prev.filter(
-                      (selectionId) => selectionId !== choice.id
-                    )
-                    if (isRequired) {
-                      if (updatedChoices.length > 0 && !isCountUpdated) {
-                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                        setIsCountUpdated(true) // Set count updated flag
-                      } else if (
-                        updatedChoices.length === 0 &&
-                        isCountUpdated
-                      ) {
-                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                        setIsCountUpdated(false) // Reset count updated flag
+          <div
+            className="w-full p-1 text-center"
+            style={{
+              color: labelColor,
+              fontFamily: `var(${fontFamily?.value})`,
+            }}
+          >
+            <label>{label}</label>
+          </div>
+          {choices.map((choice, index) => (
+            <MultipleChoiceItem
+              buttonAction={choice.buttonAction}
+              isRequired={isRequired}
+              forGen={true}
+              key={index}
+              isFirst={index === 0}
+              isLast={index === choices.length - 1}
+              isCollapsed={layout === MultipleChoiceLayouts.collapsed}
+              isSelected={selectedChoices?.includes(choice.id) || false}
+              isPreviousSelected={
+                index > 0 && selections.includes(choices[index - 1].id)
+              }
+              required={required}
+              tracking={tracking}
+              choice={choice}
+              fieldName={fieldName}
+              multiSelect={multiSelect}
+              checkboxVisible={checkboxVisible}
+              contentReversed={contentReversed}
+              defaultStyles={defaultStyles}
+              hoverStyles={hoverStyles}
+              selectedStyles={selectedStyles}
+              onValueChange={null}
+              selections={selectedChoices}
+              onSelectChange={() => {
+                if (multiSelect) {
+                  setSelectedChoices((prev) => {
+                    if (prev?.includes(choice.id)) {
+                      // Remove choice from selection
+                      const updatedChoices = prev.filter(
+                        (selectionId) => selectionId !== choice.id
+                      )
+                      if (isRequired) {
+                        if (updatedChoices.length > 0 && !isCountUpdated) {
+                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          setIsCountUpdated(true) // Set count updated flag
+                        } else if (
+                          updatedChoices.length === 0 &&
+                          isCountUpdated
+                        ) {
+                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          setIsCountUpdated(false) // Reset count updated flag
+                        }
                       }
-                    }
 
-                    // Dispatch action for removing choice
-                    dispatch(
-                      setPreviewScreenData({
-                        nodeId: props.nodeId,
-                        newSelections: updatedChoices,
-                        entity: "selections",
-                        isArray: true,
-                      })
-                    )
+                      // Dispatch action for removing choice
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          newSelections: updatedChoices,
+                          entity: "selections",
+                          isArray: true,
+                        })
+                      )
 
-                    return updatedChoices
-                  } else {
-                    // Add choice to selection
-                    const updatedChoices = prev
-                      ? [...prev, choice.id]
-                      : [choice.id]
-                    if (isRequired) {
-                      if (updatedChoices.length > 0 && !isCountUpdated) {
-                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                        setIsCountUpdated(true) // Set count updated flag
-                      } else if (
-                        updatedChoices.length === 0 &&
-                        isCountUpdated
-                      ) {
-                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                        setIsCountUpdated(false) // Reset count updated flag
+                      return updatedChoices
+                    } else {
+                      // Add choice to selection
+                      const updatedChoices = prev
+                        ? [...prev, choice.id]
+                        : [choice.id]
+                      if (isRequired) {
+                        if (updatedChoices.length > 0 && !isCountUpdated) {
+                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          setIsCountUpdated(true) // Set count updated flag
+                        } else if (
+                          updatedChoices.length === 0 &&
+                          isCountUpdated
+                        ) {
+                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          setIsCountUpdated(false) // Reset count updated flag
+                        }
                       }
+                      // Dispatch action for adding choice
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          newSelections: updatedChoices,
+                          entity: "selections",
+                          isArray: true,
+                        })
+                      )
+                      return updatedChoices
                     }
-                    // Dispatch action for adding choice
-                    dispatch(
-                      setPreviewScreenData({
-                        nodeId: props.nodeId,
-                        newSelections: updatedChoices,
-                        entity: "selections",
-                        isArray: true,
-                      })
+                  })
+                } else {
+                  console.log("entered else")
+                  const newSelection = selectedChoices?.includes(choice.id)
+                    ? []
+                    : [choice.id]
+
+                  dispatch(
+                    setSelectedData(
+                      selectedChoices?.includes(choice.id) ? [] : [choice.id]
                     )
-                    return updatedChoices
+                  )
+                  dispatch(
+                    setPreviewScreenData({
+                      nodeId: props.nodeId,
+                      newSelections: selectedChoices?.includes(choice.id)
+                        ? []
+                        : [choice.id],
+                      entity: "selections",
+                      isArray: true,
+                    })
+                  )
+                  if (isRequired) {
+                    if (newSelection.length > 0 && !isCountUpdated) {
+                      dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                      setIsCountUpdated(true) // Set count updated flag
+                    } else if (newSelection.length === 0 && isCountUpdated) {
+                      dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                      setIsCountUpdated(false) // Reset count updated flag
+                    }
                   }
-                })
-              } else {
-                console.log("entered else")
-                const newSelection = selectedChoices?.includes(choice.id)
-                  ? []
-                  : [choice.id]
-
-                dispatch(
-                  setSelectedData(
+                  setSelectedChoices(
                     selectedChoices?.includes(choice.id) ? [] : [choice.id]
                   )
-                )
-                dispatch(
-                  setPreviewScreenData({
-                    nodeId: props.nodeId,
-                    newSelections: selectedChoices?.includes(choice.id)
-                      ? []
-                      : [choice.id],
-                    entity: "selections",
-                    isArray: true,
-                  })
-                )
-                if (isRequired) {
-                  if (newSelection.length > 0 && !isCountUpdated) {
-                    dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                    setIsCountUpdated(true) // Set count updated flag
-                  } else if (newSelection.length === 0 && isCountUpdated) {
-                    dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                    setIsCountUpdated(false) // Reset count updated flag
-                  }
                 }
-                setSelectedChoices(
-                  selectedChoices?.includes(choice.id) ? [] : [choice.id]
-                )
-              }
-            }}
-          />
-        ))}
-      </ul>
+              }}
+            />
+          ))}
+        </ul>
+      </Wrapper>
     </div>
   )
 }
@@ -441,114 +473,114 @@ export const MultipleChoice = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Multiple Choice")} />}
-      <div
-        className="relative w-full"
-        style={{
-          background: `${containerBackground}`,
-          display: "inline-flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          boxSizing: "border-box",
-          minWidth: "100%",
-          maxWidth: "100%",
-          paddingTop: `${marginTop}px`,
-          paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft}px`,
-          paddingRight: `${marginRight}px`,
-        }}
+      <Wrapper
+        size={size}
+        mobileScreen={mobileScreen}
+        className="mcq-input-comp"
       >
+        {hover && <Controller nameOfComponent={t("Multiple Choice")} />}
         <div
-          className="w-full p-1 text-center"
+          className="relative w-full"
           style={{
-            fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: mobileScreen
-              ? MultipleChoiceMobileSizeValues[size || "small"]
-              : MultipleChoiceSizeValues[size || "small"],
+            background: `${containerBackground}`,
+            display: "inline-flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            minWidth: "100%",
+            maxWidth: "100%",
+            paddingTop: `${marginTop}px`,
+            paddingBottom: `${marginBottom}px`,
+            paddingLeft: `${marginLeft}px`,
+            paddingRight: `${marginRight}px`,
           }}
         >
-          {/** @ts-ignore */}
-          {/** @ts-ignore */}
-          <ContentEditable
-            className="px-1"
-            html={label}
-            onChange={(e) => {
-              setLabel(e.target.value)
-              handlePropChangeDebounced("label", e.target.value)
-            }}
+          <div
+            className="w-full p-1 text-center"
             style={{
-              color: labelColor,
-              outlineColor: labelBorderColor,
-              borderRadius: "4px",
+              fontFamily: `var(${fontFamily?.value})`,
             }}
-          />
-        </div>
-        <ul
-          className="flex w-full flex-col items-center justify-center"
-          style={{
-            gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
-            fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: mobileScreen
-              ? MultipleChoiceMobileSizeValues[size || "medium"]
-              : MultipleChoiceSizeValues[size || "nedium"],
-          }}
-        >
-          {choices.map((choice, index) => (
-            <MultipleChoiceItem
-              buttonAction={choice.buttonAction}
-              forGen={false}
-              isRequired={false}
-              key={index}
-              isFirst={index === 0}
-              isLast={index === choices.length - 1}
-              isCollapsed={layout === MultipleChoiceLayouts.collapsed}
-              isSelected={selections.includes(choice.id)}
-              isPreviousSelected={
-                index > 0 && selections.includes(choices[index - 1].id)
-              }
-              required={required}
-              tracking={tracking}
-              choice={choice}
-              fieldName={fieldName}
-              multiSelect={multiSelect}
-              checkboxVisible={checkboxVisible}
-              contentReversed={contentReversed}
-              defaultStyles={defaultStyles}
-              hoverStyles={hoverStyles}
-              selectedStyles={selectedStyles}
-              selections={selections}
-              onValueChange={(updatedValue) => {
-                setProp((props) => {
-                  props.choices[index].value = updatedValue
-                  return props
-                }, 200)
+          >
+            {/** @ts-ignore */}
+            {/** @ts-ignore */}
+            <ContentEditable
+              className="px-1"
+              html={label}
+              onChange={(e) => {
+                setLabel(e.target.value)
+                handlePropChangeDebounced("label", e.target.value)
               }}
-              onSelectChange={() => {
-                if (multiSelect) {
-                  setProp((props) => {
-                    if (props.selections.includes(choice.id)) {
-                      props.selections = props.selections.filter(
-                        (selectionId) => selectionId !== choice.id
-                      )
-                    } else {
-                      props.selections.push(choice.id)
-                    }
-                    return props
-                  }, 200)
-                } else {
-                  setProp((props) => {
-                    props.selections = selections.includes(choice.id)
-                      ? []
-                      : [choice.id]
-                    return props
-                  }, 200)
-                }
+              style={{
+                color: labelColor,
+                outlineColor: labelBorderColor,
+                borderRadius: "4px",
               }}
             />
-          ))}
-        </ul>
-      </div>
+          </div>
+          <ul
+            className="flex w-full flex-col items-center justify-center"
+            style={{
+              gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
+              fontFamily: `var(${fontFamily?.value})`,
+            }}
+          >
+            {choices.map((choice, index) => (
+              <MultipleChoiceItem
+                buttonAction={choice.buttonAction}
+                forGen={false}
+                isRequired={false}
+                key={index}
+                isFirst={index === 0}
+                isLast={index === choices.length - 1}
+                isCollapsed={layout === MultipleChoiceLayouts.collapsed}
+                isSelected={selections.includes(choice.id)}
+                isPreviousSelected={
+                  index > 0 && selections.includes(choices[index - 1].id)
+                }
+                required={required}
+                tracking={tracking}
+                choice={choice}
+                fieldName={fieldName}
+                multiSelect={multiSelect}
+                checkboxVisible={checkboxVisible}
+                contentReversed={contentReversed}
+                defaultStyles={defaultStyles}
+                hoverStyles={hoverStyles}
+                selectedStyles={selectedStyles}
+                selections={selections}
+                onValueChange={(updatedValue) => {
+                  setProp((props) => {
+                    props.choices[index].value = updatedValue
+                    return props
+                  }, 200)
+                }}
+                onSelectChange={() => {
+                  if (multiSelect) {
+                    setProp((props) => {
+                      if (props.selections.includes(choice.id)) {
+                        props.selections = props.selections.filter(
+                          (selectionId) => selectionId !== choice.id
+                        )
+                      } else {
+                        props.selections.push(choice.id)
+                      }
+                      return props
+                    }, 200)
+                  } else {
+                    setProp((props) => {
+                      props.selections = selections.includes(choice.id)
+                        ? []
+                        : [choice.id]
+                      return props
+                    }, 200)
+                  }
+                }}
+              />
+            ))}
+          </ul>
+        </div>
+      </Wrapper>
     </div>
   )
 }
