@@ -66,6 +66,7 @@ import {
 } from "./useButtonThemePresets"
 import { IconButtonSettings } from "./user-icon-button.settings"
 import { useSearchParams } from "next/navigation"
+import { UserInputSizes } from "../input/user-input.component"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -89,13 +90,6 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
   )
 }
 
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
 const ButtonSizeValues = {
   small: ".8rem",
   medium: "1rem",
@@ -105,13 +99,6 @@ const IconSizeValues = {
   small: 18,
   medium: 22,
   large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
 }
 
 const ButtonTextLimit = {
@@ -263,17 +250,7 @@ export const IconButtonGen = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
-  console.log(
-    "screenssssss",
-    "currentScreenTotal",
-    currentScreenTotal,
-    "currentScreenFilled",
-    currentScreenFilled,
-    " sc[selectedScreen]",
-    sc[selectedScreen],
-    "currentScreenName",
-    currentScreenName
-  )
+
   return (
     <div
       className="relative w-full"
@@ -318,7 +295,7 @@ export const IconButtonGen = ({
         gap={gap}
         mobileScreen={false}
         {...props}
-        className="text-[1rem]"
+        className="button-input-comp text-[1rem]"
         onClick={() => handleNavigateToContent()}
       >
         <div
@@ -422,7 +399,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   flex-direction: row;
   position: relative;
   overflow: hidden;
-  max-width: 100%;
   gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
@@ -445,11 +421,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? IconButtonMobileSizeValues[props.size || "medium"]
-      : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
@@ -466,13 +437,43 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 
@@ -809,6 +810,7 @@ export const IconButton = ({
           gap={gap}
           size={size}
           buttonSize={buttonSize}
+          className="button-input-comp"
           {...props}
           onClick={() => handleNavigateToScreen()}
         >
