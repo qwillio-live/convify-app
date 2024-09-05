@@ -219,7 +219,8 @@ const HoverCardWrapper = styled.div`
   .button-input-comp,
   .mcq-input-comp,
   .separator-comp,
-  .progress-comp {
+  .progress-comp,
+  .user-headline-comp {
     width: 100%;
   }
   .heading-text-comp {

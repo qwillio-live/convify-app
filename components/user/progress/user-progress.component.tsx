@@ -174,9 +174,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   cursor: default;
   border: none;
 
-  margin-left: auto;
-  margin-right: auto;
-
   ${({ size, mobileScreen }) => {
     if (size === UserInputSizes.small) {
       return { width: "250px" }

@@ -16,20 +16,7 @@ import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useHeadlineThemePresets"
-
-const ContainerWidthValues = {
-  small: "520px",
-  medium: "647px",
-  large: "770px",
-  full: "100%",
-}
-
-const MobileContainerWidthValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
+import { UserInputSizes } from "../input/user-input.component"
 
 const headlineFontSize = {
   mobile: 24,
@@ -83,8 +70,6 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   border: 1px dashed transparent;
   transition: all 0.2s ease;
   text-align: ${(props) => `${props?.textAlign}`};
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-right: ${(props) => props.paddingRight}px;
 
   &:focus {
     border-color: ${(props) =>
@@ -93,11 +78,6 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
 
   color: ${(props) => `var(${props?.color})`};
   overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
-  width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
@@ -108,14 +88,27 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
-    font-size: 24px;
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (mobileScreen) {
+      return { width: "calc(100% - 20px)" }
+    } else {
+      if (size === UserInputSizes.small) {
+        return { width: "520px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "650px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "770px" }
+      } else {
+        return { width: "calc(100% - 20px)" }
+      }
+    }
+  }};
+
+  @media (max-width: 520px) {
+    width: calc(100% - 20px);
   }
 `
 
@@ -212,7 +205,7 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         text={t("HeadlineDescription")}
         {...props}
-        className={`items-center`}
+        className={`user-headline-comp items-center`}
         onClick={() => console.log(text)}
       >
         <h1
@@ -476,6 +469,7 @@ export const HeadlineText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          className="user-headline-comp"
           {...props}
           text={t("HeadlineDescription")}
         >
