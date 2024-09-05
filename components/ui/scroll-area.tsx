@@ -14,7 +14,7 @@ const ScrollArea = React.forwardRef<
     {...props}
   >
     <ScrollAreaPrimitive.Viewport
-      className="h-full w-[101%] rounded-[inherit]"
+      className="h-full w-full rounded-[inherit]"
       onScroll={(e) => {
         if (onScroll) {
           onScroll(e)

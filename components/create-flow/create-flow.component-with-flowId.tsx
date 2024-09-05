@@ -389,7 +389,7 @@ export function CreateFlowComponent({ flowId }) {
         onRender={RenderNode}
       >
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)]  flex-row justify-between gap-0 md:flex">
-          <ScrollArea className="max-h-screen overflow-y-auto border-r p-5">
+          <ScrollArea className="max-h-screen min-w-fit overflow-y-auto border-r p-5">
             <div className="section-body">
               <ScreensList flowId={flowId} />
             </div>
