@@ -1,6 +1,7 @@
 import { Montserrat, Open_Sans } from "next/font/google"
 
 import { cn } from "@/lib/utils"
+import StoreProvider from "@/lib/state/flows-state/store-provider"
 
 interface SelectTemplateLayoutProps {
   children: React.ReactNode
@@ -48,7 +49,10 @@ export default async function SelectTemplateLayout({
           fontHeading.className
         )}
       >
-        <main>{children}</main>
+        <main>
+          {" "}
+          <StoreProvider>{children}</StoreProvider>
+        </main>
       </body>
     </html>
   )

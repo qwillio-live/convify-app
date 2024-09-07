@@ -246,9 +246,7 @@ const MobileForwarderComponent = () => {
       </main>
       <footer
         className="font-sans3 p-4 text-base font-semibold text-[#64748B] hover:cursor-pointer"
-        onClick={() =>
-          router.push("/dashboard/flows/create-flow/select-template?allow=true")
-        }
+        onClick={() => router.push("/select-template")}
       >
         {t("Continue on mobile device")}
       </footer>

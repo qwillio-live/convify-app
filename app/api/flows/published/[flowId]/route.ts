@@ -62,13 +62,13 @@ const generateRandomLetters = (length: number) => {
 
 // Function to generate a unique published name
 const generateUniqueName = async (baseName: string) => {
-  let uniqueName = baseName.replace(" ", "-")
+  let uniqueName = baseName.replaceAll(" ", "-")
   let isUnique = await checkPublishedNameExists(uniqueName)
 
   // Generate a unique publishedName if needed
   while (!isUnique) {
     const randomSuffix = generateRandomLetters(6) // Append 6 random characters
-    uniqueName = `${baseName.replace(" ", "-")}-${randomSuffix}`
+    uniqueName = `${baseName.replaceAll(" ", "-")}-${randomSuffix}`
     isUnique = await checkPublishedNameExists(uniqueName)
   }
 
