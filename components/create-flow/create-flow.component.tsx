@@ -11,14 +11,21 @@ import {
   Linkedin,
   Smartphone,
   Laptop,
-  PlusCircle
+  PlusCircle,
 } from "lucide-react"
 import React, { useCallback } from "react"
-import { throttle,debounce } from 'lodash';
-
+import { throttle, debounce } from "lodash"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
-import { setCurrentScreenName, setEditorLoad, setFirstScreenName, setSelectedComponent, setValidateScreen, addScreen, setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setCurrentScreenName,
+  setEditorLoad,
+  setFirstScreenName,
+  setSelectedComponent,
+  setValidateScreen,
+  addScreen,
+  setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
@@ -64,8 +71,8 @@ import { List } from "../user/list/user-list.component"
 import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
 import { useRouter } from "next/navigation"
-import { RootState } from "@/lib/state/flows-state/store";
-import { clear } from "console";
+import { RootState } from "@/lib/state/flows-state/store"
+import { clear } from "console"
 import { useTranslations } from "next-intl"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
@@ -98,7 +105,7 @@ const AddScreenButton = () => {
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
-  const t = useTranslations("Components");
+  const t = useTranslations("Components")
 
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
@@ -118,15 +125,15 @@ const AddScreenButton = () => {
     [dispatch, screens]
   )
 
-  return(
+  return (
     <Button
-        variant="outline"
-        size="sm"
-        className="bg-[#f4f4f5]"
-        onClick={() => handleAddScreen(selectedScreenIndex || 0)}
-      >
-        <PlusCircle className="mr-2 size-4" />
-        {t("Add Screen")}
+      variant="outline"
+      size="sm"
+      className="bg-[#f4f4f5]"
+      onClick={() => handleAddScreen(selectedScreenIndex || 0)}
+    >
+      <PlusCircle className="mr-2 size-4" />
+      {t("Add Screen")}
     </Button>
   )
 }
@@ -142,28 +149,39 @@ const NodesToSerializedNodes = (nodes) => {
   })
   return result
 }
-type Position = 'static' | 'relative' | 'absolute' | 'sticky' | 'absolute';
+type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 
 export function CreateFlowComponent() {
-  const t = useTranslations("Components");
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const editorHeaderRef = React.useRef(null);
-  const [height, setHeight] = React.useState(90);
-  const [width, setWidth] = React.useState(0);
+  const t = useTranslations("Components")
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const editorHeaderRef = React.useRef(null)
+  const [height, setHeight] = React.useState(90)
+  const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
-  const [topMargin,setTopMargin] = React.useState<number>(0);
+  const [topMargin, setTopMargin] = React.useState<number>(0)
   const dispatch = useAppDispatch()
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
 
-  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const selectedScreen = useAppSelector((state) => state?.screen?.selectedScreen) || 0;
-  const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId || "");
-  const startScreen = useAppSelector((state) => state?.screen?.screens[0]?.screenData || "")
-  const startScreenName = useAppSelector((state) => state?.screen?.screens[0]?.screenName || "")
+  const selectedComponent = useAppSelector(
+    (state) => state?.screen?.selectedComponent
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const selectedScreen =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+  const selectedScreenId = useAppSelector(
+    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
+  )
+  const startScreen = useAppSelector(
+    (state) => state?.screen?.screens[0]?.screenData || ""
+  )
+  const startScreenName = useAppSelector(
+    (state) => state?.screen?.screens[0]?.screenName || ""
+  )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
@@ -171,9 +189,14 @@ export function CreateFlowComponent() {
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
   const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
-  const headerMode = useAppSelector((state: RootState) => state.screen?.headerMode)
-  const headerPosition = useAppSelector((state) => state?.theme?.header?.headerPosition) || 'relative'
-  const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName ) || ""
+  const headerMode = useAppSelector(
+    (state: RootState) => state.screen?.headerMode
+  )
+  const headerPosition =
+    useAppSelector((state) => state?.theme?.header?.headerPosition) ||
+    "relative"
+  const firstScreenName =
+    useAppSelector((state) => state?.screen?.firstScreenName) || ""
   const editorLoadLength = useAppSelector(
     (state) => Object.keys(state?.screen?.editorLoad).length
   )
@@ -183,47 +206,54 @@ export function CreateFlowComponent() {
   const selectedScreenIndex = useAppSelector(
     (state) => state?.screen?.selectedScreen
   )
-  
+
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
       dispatch(setEditorLoad(JSON.stringify(json)))
-    },1200),
+    }, 1200),
     [dispatch]
   )
 
   React.useEffect(() => {
-    dispatch(setValidateScreen({screenId: selectedScreenId, screenValidated: false,screenToggleError: false}))
+    dispatch(
+      setValidateScreen({
+        screenId: selectedScreenId,
+        screenValidated: false,
+        screenToggleError: false,
+      })
+    )
     dispatch(setFirstScreenName(startScreenName))
     dispatch(setCurrentScreenName(startScreenName))
   }, [])
   React.useEffect(() => {
-    if(headerMode){
-      const height = document?.getElementById("editor-content")?.offsetHeight || 0;
+    if (headerMode) {
+      const height =
+        document?.getElementById("editor-content")?.offsetHeight || 0
       setHeight(height)
-    }else{
+    } else {
       if (editorHeaderRef.current && editorHeaderRef) {
         //@ts-ignore
-        setHeight(editorHeaderRef?.current?.offsetHeight);
+        setHeight(editorHeaderRef?.current?.offsetHeight)
       }
     }
-
-  }, [headerMode,height]);
+  }, [headerMode, height])
   React.useEffect(() => {
     const updateWidth = () => {
-      const newWidth = document.getElementById("editor-content")?.offsetWidth || 0;
-      setWidth(newWidth);
-    };
+      const newWidth =
+        document.getElementById("editor-content")?.offsetWidth || 0
+      setWidth(newWidth)
+    }
 
     // Initial width setting
-    updateWidth();
+    updateWidth()
 
     // Event listener for window resize
-    window.addEventListener('resize', updateWidth);
-    window.addEventListener('', updateWidth);
+    window.addEventListener("resize", updateWidth)
+    window.addEventListener("", updateWidth)
 
     // Cleanup event listener on component unmount
-    return () => window.removeEventListener('resize', updateWidth);
-  }, [headerMode, height]);
+    return () => window.removeEventListener("resize", updateWidth)
+  }, [headerMode, height])
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -285,16 +315,17 @@ export function CreateFlowComponent() {
         }}
         onRender={RenderNode}
       >
-        <div className="md:flex h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0">
-          <ScrollArea className="max-h-screen md:basis-[15%] overflow-y-auto border-r px-2 py-6">
-            <div className="section-body">
+        <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0 md:flex">
+          <ScrollArea className="max-h-screen overflow-y-auto border-r px-2 py-6 md:basis-[15%]">
+            <div className="section-body p-5">
               <ScreensList />
             </div>
           </ScrollArea>
           <ScrollArea
-          ref={containerRef}
-          id="scroll-container"
-          className="max-h-[calc(-52px+99vh)] hidden md:block basis-[55%] overflow-y-auto border-r">
+            ref={containerRef}
+            id="scroll-container"
+            className="hidden max-h-[calc(-52px+99vh)] basis-[55%] overflow-y-auto border-r md:block"
+          >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
               <Tabs
@@ -311,7 +342,7 @@ export function CreateFlowComponent() {
                     backgroundImage: backgroundImage,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundPosition: "center",
                   }}
                   className={cn(
                     "page-container z-20 mx-auto box-content min-h-[400px] font-sans antialiased",
@@ -322,59 +353,72 @@ export function CreateFlowComponent() {
                   )}
                   value={view}
                 >
-
-                  {
-                  !headerMode && !footerMode &&
-                   <div
-                   ref={editorHeaderRef}
-                   id="editor-header"
-                   style={{
-                    position: headerPosition as Position,
-                    width: mobileScreen ? '384px' : (headerPosition === 'absolute' && !mobileScreen) ? width+'px' : '100%',
-                    top: headerPosition === 'absolute' && !headerMode ? '32px' : '0',
-                    // top: headerPosition === 'absolute' ? '66px' : '0',
-                    // width: width,
-                    zIndex: 20,
-                    backgroundColor: backgroundColor,
-                    }}>
-                    <ResolvedComponentsFromCraftState screen={screensHeader} />
-                   </div>
-                  }
+                  {!headerMode && !footerMode && (
+                    <div
+                      ref={editorHeaderRef}
+                      id="editor-header"
+                      style={{
+                        position: headerPosition as Position,
+                        width: mobileScreen
+                          ? "384px"
+                          : headerPosition === "absolute" && !mobileScreen
+                          ? width + "px"
+                          : "100%",
+                        top:
+                          headerPosition === "absolute" && !headerMode
+                            ? "32px"
+                            : "0",
+                        // top: headerPosition === 'absolute' ? '66px' : '0',
+                        // width: width,
+                        zIndex: 20,
+                        backgroundColor: backgroundColor,
+                      }}
+                    >
+                      <ResolvedComponentsFromCraftState
+                        screen={screensHeader}
+                      />
+                    </div>
+                  )}
                   <div
-                  id="editor-content"
-                  style={{
-                    backgroundColor: backgroundColor,
-                    paddingTop: !headerMode && headerPosition === 'absolute' ? `${height+40}px` : "40px",
-          // marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "0",
-        }}>
-                  <Frame data={editorLoad}></Frame>
+                    id="editor-content"
+                    style={{
+                      backgroundColor: backgroundColor,
+                      paddingTop:
+                        !headerMode && headerPosition === "absolute"
+                          ? `${height + 40}px`
+                          : "40px",
+                      // marginTop: !headerMode && headerPosition === 'absolute' ? `${height+46}px` : "0",
+                    }}
+                  >
+                    <Frame data={editorLoad}></Frame>
                   </div>
-                  {
-                    !headerMode && !footerMode &&
-                  <ResolvedComponentsFromCraftState screen={screensFooter} />
-                  }
-
+                  {!headerMode && !footerMode && (
+                    <ResolvedComponentsFromCraftState screen={screensFooter} />
+                  )}
                 </TabsContent>
-                <TabsList className="absolute bottom-0 z-20  w-100 ">
-                  <AddScreenButton/>
-                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1"><Smartphone className="size-5"/></TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}><Laptop className="size-5" /></TabsTrigger>
+                <TabsList className="w-100 absolute bottom-0  z-20 ">
+                  <AddScreenButton />
+                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1">
+                    <Smartphone className="size-5" />
+                  </TabsTrigger>
+                  <TabsTrigger value={VIEWS.DESKTOP}>
+                    <Laptop className="size-5" />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
-
 
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r px-2 py-6">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-5 md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body">
+            <div className="section-body py-6">
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="max-h-[calc(-60px+99vh)]  hidden md:block h-full basis-[15%] overflow-y-auto border-r py-6 bg-[#fafafa]">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r bg-[#fafafa] py-6 md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>

@@ -389,8 +389,8 @@ export function CreateFlowComponent({ flowId }) {
         onRender={RenderNode}
       >
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)]  flex-row justify-between gap-0 md:flex">
-          <ScrollArea className="max-h-screen min-w-fit overflow-y-auto border-r p-5">
-            <div className="section-body">
+          <ScrollArea className="max-h-screen min-w-fit overflow-y-auto border-r">
+            <div className="section-body p-5">
               <ScreensList flowId={flowId} />
             </div>
           </ScrollArea>
@@ -497,11 +497,11 @@ export function CreateFlowComponent({ flowId }) {
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-5 py-6 md:block">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-5 md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body">
+            <div className="section-body py-6">
               <UserToolbox />
             </div>
           </ScrollArea>

@@ -75,18 +75,15 @@ export default function CreateFlowsPage({
           <Header flowId={flowId} />
         </div>
         <main
-          className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${
+          className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#F6F6F6] ${
             tab === "results" ? "" : tab === "share" ? "" : ""
           }`}
         >
-
           {/* --New Commit-- */}
           <div className="tabs-content">
             <TabsContent className="mt-0" value="create">
               <CreateFlowComponent flowId={flowId} />
             </TabsContent>
-
-
 
             {/* <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />

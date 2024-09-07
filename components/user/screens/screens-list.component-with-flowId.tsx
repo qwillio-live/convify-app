@@ -221,7 +221,7 @@ const ScreensList = ({ flowId }) => {
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-      className="font-poppins relative w-[95vw] overflow-x-hidden pb-32 pt-0 md:w-[13.5vw]"
+      className="font-poppins relative w-[95vw] overflow-x-hidden md:w-[13.5vw]"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -229,7 +229,7 @@ const ScreensList = ({ flowId }) => {
           {t("Header & Footer")}
         </AccordionTrigger>
         <AccordionContent className="w-full">
-          <div className="mt-4">{t("Header")}</div>
+          <div className="">{t("Header")}</div>
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
           <div className="  hidden md:block">
@@ -248,6 +248,7 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-blue-500": headerMode,
+                  "hover:border-4": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -293,7 +294,7 @@ const ScreensList = ({ flowId }) => {
             </Card>
           </button>
           <Separator className="my-4" />
-          <p className="text-muted-foreground text-sm">{t("Footer")}</p>
+          <p className="text-sm">{t("Footer")}</p>
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
           <div className="  hidden md:block">
@@ -309,6 +310,7 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-blue-500": footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
               onClick={() => handleFooterScreenClick()}
@@ -340,6 +342,7 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-blue-500": footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
             >

@@ -179,7 +179,7 @@ const ScreensList = () => {
   return (
     <Accordion
       type="multiple"
-      className="font-poppins small:w-[98vw] w-[94vw] overflow-x-hidden pb-32 pt-12 md:w-[13.5vw] md:pt-0"
+      className="font-poppins small:w-[98vw] w-[94vw] overflow-x-hidden md:w-[13.5vw] md:pt-0"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -187,7 +187,7 @@ const ScreensList = () => {
           {t("Header & Footer")}
         </AccordionTrigger>
         <AccordionContent className="w-full ">
-          <div className="mt-4">{t("Header")}</div>
+          <div className="">{t("Header")}</div>
 
           <Card
             style={{
@@ -201,6 +201,7 @@ const ScreensList = () => {
               "relative mt-1 flex h-12 w-[13.5vw] flex-col items-center justify-center overflow-hidden border p-4 hover:cursor-pointer",
               {
                 "border-blue-500": headerMode,
+                "hover:border-4": !headerMode,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
@@ -211,7 +212,7 @@ const ScreensList = () => {
             <div className="absolute left-0 top-0 z-10 size-full bg-transparent"></div>
           </Card>
           <Separator className="my-4" />
-          <p className="text-muted-foreground text-sm">{t("Footer")}</p>
+          <p className="text-sm">{t("Footer")}</p>
 
           <Card
             style={{
@@ -225,6 +226,7 @@ const ScreensList = () => {
               "relative mt-1 flex h-12 w-[13.5vw] flex-col items-center justify-center overflow-hidden border p-4 hover:cursor-pointer",
               {
                 "border-blue-500": footerMode,
+                "hover:border-4": !footerMode,
               }
             )}
             onClick={() => handleFooterScreenClick()}
