@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState } from "react"
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 
@@ -30,6 +36,7 @@ import {
 import { applyHeaderPosition } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 import { updateHeaderPosition } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { X } from "lucide-react"
+import clsx from "clsx"
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
@@ -163,16 +170,20 @@ export const GlobalThemeSettings = (props: Props) => {
   return (
     <>
       <ScrollArea>
-        <Accordion type="multiple" defaultValue={["item-1"]} className="w-full">
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">{t("General")} </span>
+        <Accordion
+          type="multiple"
+          defaultValue={["item-1"]}
+          className="font-poppins flex w-full flex-col gap-4 bg-[#f6f6f6] p-5"
+        >
+          <AccordionItem value="item-1" className="flex flex-col gap-6">
+            <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0 hover:no-underline">
+              <span className="font-medium">{t("General")} </span>
             </AccordionTrigger>
-            <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-              <div className="col-span-2 flex flex-row items-center space-x-2">
+            <AccordionContent className="grid grid-cols-2 gap-4">
+              {/* <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="headerscroll"
-                  className="basis-2/3 whitespace-nowrap text-nowrap font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 whitespace-nowrap text-nowrap text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Header Scroll")}
                 </label>
@@ -194,24 +205,23 @@ export const GlobalThemeSettings = (props: Props) => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="primarycolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Primary Color")}
                 </label>
-                <Input
-                  value={primaryColor || defaultPrimaryColor}
-                  onChange={(e) => {
+                <ColorInput
+                  value={primaryColor}
+                  onColorChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
                     handleStyleChangeDebounced({
-                      general: { primaryColor: e.target.value },
+                      general: { primaryColor: e },
                     })
                   }}
-                  className=" basis-1/3"
                   type={"color"}
                   id="primarycolor"
                 />
@@ -220,19 +230,18 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="secondarycolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Secondary Color")}
                 </label>
-                <Input
+                <ColorInput
                   value={secondaryColor || defaultSecondaryColor}
-                  onChange={(e) => {
+                  onColorChange={(e) => {
                     // handleStyleChange({general: { secondaryColor: e.target.value}})
                     handleStyleChangeDebounced({
-                      general: { secondaryColor: e.target.value },
+                      general: { secondaryColor: e },
                     })
                   }}
-                  className=" basis-1/3"
                   type={"color"}
                   id="secondarycolor"
                 />
@@ -241,47 +250,31 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="backgroundcolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Background Color")}
                 </label>
-                <Input
+                <ColorInput
                   defaultValue={"white"}
                   value={backgroundColor}
-                  onChange={(e) => {
+                  onColorChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
                     handleStyleChangeDebounced({
-                      general: { backgroundColor: e.target.value },
+                      general: { backgroundColor: e },
                     })
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
-                  className={` h-6 ${
-                    backgroundColor !== "#ffffff" ? "w-10" : "basis-1us/3"
-                  } border-none p-0`}
                   type={"color"}
                   id="backgroundcolor"
                 />
-                {backgroundColor !== "#ffffff" && (
-                  <button
-                    onClick={(e) => {
-                      // dispatch(setBackgroundColor(e.target.value))
-                      handleStyleChangeDebounced({
-                        general: { backgroundColor: "#ffffff" },
-                      })
-                      // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
-                    }}
-                  >
-                    <X size={15} />
-                  </button>
-                )}
               </div>
 
-              <div className="col-span-2 flex flex-col items-center space-y-2">
+              <div className="col-span-2 mt-2 flex flex-col items-center space-y-2">
                 <label
                   htmlFor="backgroundimage"
-                  className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-full self-start text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  {t("Background Image")}ca
+                  {t("Background Image")}
                 </label>
                 {/* <Input
                   onChange={handleFileChange}
@@ -301,11 +294,13 @@ export const GlobalThemeSettings = (props: Props) => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="item-2">
-            <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">{t("Text")} </span>
+          <hr className="w-full" />
+
+          <AccordionItem value="item-2" className="flex flex-col gap-6">
+            <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0 hover:no-underline">
+              <span className="font-medium">{t("Text")} </span>
             </AccordionTrigger>
-            <AccordionContent className="grid grid-cols-2 gap-4 p-2">
+            <AccordionContent className="grid grid-cols-2 gap-4">
               <FontSelector
                 fontList={primaryFonts}
                 selectedFont={primaryFont}
@@ -375,6 +370,43 @@ export const GlobalThemeSettings = (props: Props) => {
           </AccordionItem>
         </Accordion>
       </ScrollArea>
+    </>
+  )
+}
+
+interface ColorInputProps extends React.HTMLProps<HTMLInputElement> {
+  onColorChange?: (color: string | undefined) => void
+}
+
+const ColorInput = ({ value, onColorChange, ...rest }: ColorInputProps) => {
+  const handleChange = (e?: ChangeEvent<HTMLInputElement>) => {
+    onColorChange?.(e?.target?.value)
+  }
+  return (
+    <>
+      <div
+        style={{ backgroundColor: (value as string) ?? "transparent" }}
+        className="relative flex h-[32px] w-[62px] items-center justify-center rounded-sm"
+      >
+        {!value && (
+          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-sm border bg-[#FAFAFA]">
+            <span className="text-xs text-[#7B7D80]">Choose</span>
+          </div>
+        )}
+        <Input
+          {...rest}
+          onChange={(e) => handleChange(e)}
+          className="opacity-0"
+        />
+      </div>
+      <span onClick={() => handleChange()}>
+        <X
+          size={16}
+          className={clsx("text-muted-foreground", {
+            "pointer-events-none opacity-0": !value,
+          })}
+        />
+      </span>
     </>
   )
 }
