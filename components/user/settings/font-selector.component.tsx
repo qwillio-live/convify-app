@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@radix-ui/react-popover"
-import { ChevronsUpDown, Check } from "lucide-react"
+import { ChevronsUpDown, Check, ChevronDown } from "lucide-react"
 
 interface FontSelectorProps {
   fontList: { name: string; variable: string }[] | undefined
@@ -37,7 +37,7 @@ export const FontSelector = ({
   <div className="col-span-2 flex flex-col items-center space-y-2">
     <label
       htmlFor={label}
-      className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      className="basis-full self-start text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
     >
       {label}
     </label>
@@ -47,12 +47,12 @@ export const FontSelector = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="flex w-full items-center justify-between"
+          className="bg-card flex w-full items-center justify-between border-inherit px-3 py-2 text-xs font-normal"
         >
           {selectedFont ? (
             <>
               {fontList?.find((font) => font.variable === selectedFont)?.name}
-              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+              <ChevronDown className="ml-2 size-4 shrink-0 text-[#7B7D80] opacity-50" />
             </>
           ) : defaultFont ? (
             defaultFont

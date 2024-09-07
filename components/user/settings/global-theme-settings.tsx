@@ -272,7 +272,7 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="col-span-2 mt-2 flex flex-col items-center space-y-2">
                 <label
                   htmlFor="backgroundimage"
-                  className="basis-full self-start text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="mb-2 basis-full self-start text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Background Image")}
                 </label>
@@ -328,15 +328,15 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="primarytextcolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3  text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Primary Text Color")}
                 </label>
-                <Input
-                  value={primaryTextColor || defaultPrimaryTextColor}
-                  onChange={(e) => {
+                <ColorInput
+                  value={primaryTextColor}
+                  onColorChange={(e) => {
                     handleStyleChangeDebounced({
-                      text: { primaryColor: e.target.value },
+                      text: { primaryColor: e },
                     })
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }}
@@ -349,15 +349,15 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="primarytextcolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Secondary Text Color")}
                 </label>
-                <Input
-                  value={secondaryTextColor || defaultSecondaryTextColor}
-                  onChange={(e) => {
+                <ColorInput
+                  value={secondaryTextColor}
+                  onColorChange={(e) => {
                     handleStyleChangeDebounced({
-                      text: { secondaryColor: e.target.value },
+                      text: { secondaryColor: e },
                     })
                     // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }}
@@ -386,11 +386,13 @@ const ColorInput = ({ value, onColorChange, ...rest }: ColorInputProps) => {
     <>
       <div
         style={{ backgroundColor: (value as string) ?? "transparent" }}
-        className="relative flex h-[32px] w-[62px] items-center justify-center rounded-sm"
+        className="relative !ml-auto flex h-[32px] w-[62px] items-center justify-center rounded-sm"
       >
         {!value && (
           <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-sm border bg-[#FAFAFA]">
-            <span className="text-xs text-[#7B7D80]">Choose</span>
+            <span className="w-full text-center text-xs text-[#7B7D80]">
+              Choose
+            </span>
           </div>
         )}
         <Input
