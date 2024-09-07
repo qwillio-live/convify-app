@@ -587,16 +587,16 @@ export const screensSlice = createSlice({
             state.selectedComponent = filteredNewEditorLoad
           }
         } else {
-          for (const key in oldEditorLoad) {
-            const oldValue = oldEditorLoad[key]
-            if (oldValue.displayName === "Form Content") {
-              const newValue = newEditorLoad[key]
-              if (newValue && newValue.nodes.length > oldValue.nodes.length) {
-                state.selectedComponent = key // Early return
-                break // Stop the loop
-              }
-            }
-          }
+          // for (const key in oldEditorLoad) {
+          //   const oldValue = oldEditorLoad[key]
+          //   if (oldValue.displayName === "Form Content") {
+          //     const newValue = newEditorLoad[key]
+          //     if (newValue && newValue.nodes.length > oldValue.nodes.length) {
+          //       state.selectedComponent = key // Early return
+          //       break // Stop the loop
+          //     }
+          //   }
+          // }
         }
       } catch (err) {
         console.error("Error in setEditorData:", err)

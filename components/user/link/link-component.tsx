@@ -778,7 +778,7 @@ export type IconButtonProps = {
     screenId: string
     screenName: string
   }
-  href?: string
+  href: string
   windowTarget?: boolean
   iconType?: PictureTypes
 }
@@ -858,6 +858,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   buttonAction: "next-screen",
   windowTarget: true,
   iconType: PictureTypes.NULL,
+  href: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
 }
 
 LinkButton.craft = {

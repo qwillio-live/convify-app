@@ -238,7 +238,7 @@ export function CreateFlowComponent({ flowId }) {
     debounce((json) => {
       console.log("jsonnnnn", json)
       dispatch(setEditorLoad(JSON.stringify(json)))
-    }, 1200),
+    }, 300),
     [dispatch]
   )
 

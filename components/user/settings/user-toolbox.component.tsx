@@ -287,6 +287,8 @@ const HoverCardComponent = ({ title, icon, children }) => {
 
 export const UserToolbox = () => {
   const t = useTranslations("Components")
+  const APP_URL =
+    process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid"
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
@@ -922,6 +924,7 @@ export const UserToolbox = () => {
                         marginBottom={20}
                         // marginLeft={20}
                         // marginRight={20}
+                        href={APP_URL}
                         justifyContent={"center"}
                         enableIcon={false}
                         text={t("Link")}
@@ -940,6 +943,7 @@ export const UserToolbox = () => {
                       // alignItems={"center"}
                       {...linkOutLinePreset}
                       size="small"
+                      href={APP_URL}
                       text={t("Link")}
                       enableIcon={false}
                       justifyContent={"center"}
