@@ -96,7 +96,7 @@ export const SettingsPanel = () => {
                       }
                     }}
                     variant="destructive"
-                    className="mb-4"
+                    className="font-poppins mx-5 mb-4 text-base font-medium"
                   >
                     {t("Delete")}
                   </Button>
