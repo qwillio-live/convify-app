@@ -182,6 +182,7 @@ const useLinkThemePresets = () => {
       screenName: "",
     },
     buttonAction: "redirect",
+    href: APP_URL,
     // iconType: PictureTypes.ICON,
   }
 
