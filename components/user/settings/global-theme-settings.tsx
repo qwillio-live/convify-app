@@ -378,7 +378,11 @@ interface ColorInputProps extends React.HTMLProps<HTMLInputElement> {
   onColorChange?: (color: string | undefined) => void
 }
 
-const ColorInput = ({ value, onColorChange, ...rest }: ColorInputProps) => {
+export const ColorInput = ({
+  value,
+  onColorChange,
+  ...rest
+}: ColorInputProps) => {
   const handleChange = (e?: ChangeEvent<HTMLInputElement>) => {
     onColorChange?.(e?.target?.value)
   }
