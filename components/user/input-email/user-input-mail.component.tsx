@@ -373,7 +373,7 @@ export const UserInputMailGen = ({ ...props }) => {
                   width: `${UserInputSizeValues[props.size]}`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}

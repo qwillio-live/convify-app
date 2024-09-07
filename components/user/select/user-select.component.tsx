@@ -182,7 +182,7 @@ export const SelectGen = ({
             maxWidth: SelectSizeValues[size || "medium"],
           }}
         >
-          <label>{label}</label>
+          <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         <StyledCustomSelectTrigger
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${

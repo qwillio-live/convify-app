@@ -297,7 +297,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
               color: `${primaryTextColor}`,
             }}
           >
-            {props.label}
+            <div dangerouslySetInnerHTML={{ __html: props.label }} />
           </div>
 
           <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">

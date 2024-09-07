@@ -371,7 +371,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   color: `${primaryTextColor}`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}
