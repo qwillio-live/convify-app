@@ -168,7 +168,7 @@ export const MultipleChoiceGen = ({
             maxWidth: MultipleChoiceSizeValues[size || "small"],
           }}
         >
-          <label>{label}</label>
+          <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem

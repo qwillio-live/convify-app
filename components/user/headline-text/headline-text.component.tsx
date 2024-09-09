@@ -219,11 +219,12 @@ export const HeadlineTextGen = ({
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
+            lineHeight: "1.5",
           }}
         >
           {processedText.split("\n").map((line, index) => (
             <span key={index}>
-              {line}
+              <div dangerouslySetInnerHTML={{ __html: line }} />
               <br />
             </span>
           ))}

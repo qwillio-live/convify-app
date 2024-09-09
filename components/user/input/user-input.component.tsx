@@ -329,7 +329,7 @@ export const UserInputGen = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row  gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(

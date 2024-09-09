@@ -329,7 +329,7 @@ export const IconButtonGen = ({
             textOverflow: "ellipsis",
           }}
         >
-          {text}
+          <div dangerouslySetInnerHTML={{ __html: text }} />
         </div>
         {enableIcon && icon.pictureType !== PictureTypes.NULL && (
           <div

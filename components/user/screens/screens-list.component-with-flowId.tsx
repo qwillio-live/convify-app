@@ -477,9 +477,9 @@ const ScreensList = ({ flowId }) => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "relative mt-1 hidden h-32 w-[94vw] flex-col  overflow-hidden border hover:cursor-pointer md:flex md:w-[13.5vw]",
+                        "relative mt-1 hidden h-32 w-[94vw] flex-col overflow-hidden  border p-[3px] hover:cursor-pointer hover:p-0 md:flex md:w-[13.5vw]",
                         {
-                          "border-blue-500":
+                          "border-blue-500 p-0":
                             selectedScreenIndex === index && !headerFooterMode,
                           "hover:border-4": selectedScreenIndex !== index,
                         }

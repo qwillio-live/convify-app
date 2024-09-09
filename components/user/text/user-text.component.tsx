@@ -320,9 +320,10 @@ export const UserTextInputGen = ({
             overflowX: "clip",
             textOverflow: "ellipsis",
             color: `${secondaryTextColor}`,
+            lineHeight: "1.5",
           }}
         >
-          {text}
+          <div dangerouslySetInnerHTML={{ __html: text }} />
         </div>
       </StyledCustomTextInput>
     </div>

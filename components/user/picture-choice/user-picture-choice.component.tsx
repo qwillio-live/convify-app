@@ -151,7 +151,7 @@ export const PictureChoiceGen = ({
           maxWidth: PictureChoiceSizeValues[size || "small"],
         }}
       >
-        <label>{label}</label>
+        <div dangerouslySetInnerHTML={{ __html: label }} />
       </div>
       <ul
         // className="flex w-full flex-wrap justify-center"

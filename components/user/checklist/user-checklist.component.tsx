@@ -92,7 +92,7 @@ export const ChecklistGen = ({
                 fontSize: `${fontSize}px`,
               }}
             >
-              {item.value}
+              <div dangerouslySetInnerHTML={{ __html: item.value }} />
             </span>
           </li>
         ))}

@@ -44,7 +44,15 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const [error, setError] = React.useState<string | null>(
     searchParams?.get("error") ?? null
   )
+  const [isMobile, setIsMobile] = React.useState<boolean>(false) // Add mobile detection state
 
+  // Mobile detection logic
+  React.useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
+  }, [])
   React.useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -100,7 +108,9 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         redirect: true,
         username: data.email,
         password: data.password,
-        // callbackUrl: "/dashboard/flows/create-flow/select-template",
+        callbackUrl: isMobile
+          ? "/select-template"
+          : "/dashboard/flows/create-flow/select-template",
       })
     } catch (error) {
       setIsLoading(false) // Stop loading on error

@@ -295,7 +295,9 @@ export const BackButtonGen = ({
             )}
           </div>
         )}
-        <span className="text-md ml-2">{text}</span>
+        <span className="text-md ml-2">
+          <div dangerouslySetInnerHTML={{ __html: text }} />
+        </span>
       </StyledCustomButton>
     </div>
   )
