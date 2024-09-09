@@ -359,7 +359,8 @@ const FormContainer = styled.div<{
   .separator-comp,
   .progress-comp,
   .user-headline-comp,
-  .user-text-comp {
+  .user-text-comp,
+  .user-picture-choice-component {
     width: 100%;
   }
 `
@@ -376,7 +377,8 @@ const FormGenWrapper = styled.div<{}>`
   .separator-comp,
   .progress-comp,
   .user-headline-comp,
-  .user-text-comp {
+  .user-text-comp,
+  .user-picture-choice-component {
     width: 100%;
   }
 `

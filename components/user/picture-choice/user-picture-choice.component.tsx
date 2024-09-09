@@ -162,7 +162,7 @@ export const PictureChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <Wrapper size={size}>
+      <Wrapper size={size} className="user-picture-choice-component">
         <div
           className="w-full p-1 text-center"
           style={{
@@ -452,7 +452,11 @@ export const PictureChoice = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      <Wrapper size={size} mobileScreen={!!mobileScreen}>
+      <Wrapper
+        size={size}
+        mobileScreen={!!mobileScreen}
+        className="user-picture-choice-component"
+      >
         {hover && <Controller nameOfComponent={t("Picture Choice")} />}
         <div
           className="relative w-full"
