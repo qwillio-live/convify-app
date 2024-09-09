@@ -247,3 +247,10 @@ userContainer > *:hover {
   animation: slideRightToLeft 0.2s ease-out;
   animation-fill-mode: forwards;
 }
+
+#editor-header .progress-comp {
+  width: 100%;
+}
+div[name="Header Screen"] .progress-comp {
+  width: 100%;
+}
