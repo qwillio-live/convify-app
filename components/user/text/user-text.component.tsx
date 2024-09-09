@@ -21,6 +21,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
+import { UserInputSizes } from "../input/user-input.component"
 
 export enum TextContainerSize {
   small = "small",
@@ -174,8 +175,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   border: 1px dashed transparent;
   transition: all 0.2s ease;
   text-align: ${(props) => `${props?.textAlign}`};
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-right: ${(props) => props.paddingRight}px;
 
   &:focus {
     border-color: ${(props) =>
@@ -184,7 +183,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
 
   color: ${(props) => `${props?.color}`};
   overflow: hidden;
-  width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height};
   margin-top: ${(props) => props.marginTop}px;
@@ -196,13 +194,28 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (mobileScreen) {
+      return { width: "calc(100% - 20px)" }
+    } else {
+      if (size === UserInputSizes.small) {
+        return { width: "520px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "650px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "770px" }
+      } else {
+        return { width: "calc(100% - 20px)" }
+      }
+    }
+  }};
+
+  @media (max-width: 520px) {
+    width: calc(100% - 20px);
   }
 `
 
@@ -295,7 +308,7 @@ export const UserTextInputGen = ({
         mobileScreen={false}
         textAlign={textAlign}
         {...props}
-        className="text-[1rem]"
+        className="user-text-comp text-[1rem]"
       >
         <div
           style={{
@@ -560,6 +573,7 @@ export const UserText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          className="user-text-comp"
           {...props}
         >
           <div className="flex flex-col overflow-x-clip">
