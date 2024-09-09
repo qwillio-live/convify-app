@@ -12,6 +12,7 @@ import {
 } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Icons } from "./icons"
+import { Loader2 } from "lucide-react"
 
 const SelectTemplate = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>()
@@ -24,6 +25,7 @@ const SelectTemplate = () => {
   const text = useAppSelector((state) => state.newTheme?.text)
   const templateLink = useAppSelector((state) => state.newTheme?.templateLink)
   const templateId = useAppSelector((state) => state.newTheme?.templateId)
+  const [loadingCardIndex, setLoadingCardIndex] = useState<string>("")
   const [templates, setTemplates] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -32,7 +34,6 @@ const SelectTemplate = () => {
 
   const idParams = useSearchParams()
   const id = idParams?.get("id")
-  const [isLoading, setIsLoading] = useState(false) // S
 
   // Fetch templates from the API
   useEffect(() => {
@@ -65,8 +66,12 @@ const SelectTemplate = () => {
         return acc
       }, {})
 
-      setCategories(Object?.keys(uniqueTags) || [])
-      setSelectedCategory(Object?.keys(uniqueTags)[0])
+      setCategories([
+        "All",
+        ...(uniqueTags ? Object?.keys(uniqueTags) : [] || []),
+        "Start from scratch",
+      ])
+      setSelectedCategory("All")
       setTemplates(templates)
       dispatch(setNewFlowSettings(JSON.parse(templates[0]?.templateSettings)))
       dispatch(setTemplateId(templates[0]?.id))
@@ -74,31 +79,9 @@ const SelectTemplate = () => {
 
     getTemplates()
   }, [])
-  const handleSubmit = async () => {
-    try {
-      setIsLoading(true)
-      const res = await fetch("/api/flows", {
-        method: "POST",
-        body: JSON.stringify({
-          flowSettings: { general, mobileScreen, header, text },
-          templateId,
-          link: templateLink,
-        }),
-      }).then((res) => {
-        // setSuccessMessage(t("Flow created successfully!"))
-        return res
-      })
-
-      const data = await res.json()
-      console.log("result:", data)
-      setIsLoading(false) // Stop loading
-      router.push(`/dashboard/${data.id}/create-flow`)
-    } catch (err) {
-      setIsLoading(false) // Stop loading
-    }
-  }
-  const handleCardClick = (index: string) => {
+  const handleCardClick = async (index: string) => {
     const relativeIndex = templates.findIndex((tem) => tem.id === index)
+    setLoadingCardIndex(index)
     console.log(
       "relativeIndex",
       relativeIndex,
@@ -107,11 +90,40 @@ const SelectTemplate = () => {
     dispatch(setNewFlowSettings(templates[relativeIndex]?.templateSettings))
     dispatch(setTemplateId(index))
     dispatch(setTemplateLink(templates[relativeIndex]?.link))
-  }
-  const filteredCards = templates.filter((card) =>
-    JSON.parse(card.tags).includes(selectedCategory)
-  )
+    console.log("templateId", templateId)
+    try {
+      const res = await fetch("/api/flows", {
+        method: "POST",
+        body: JSON.stringify({
+          flowSettings: templates[relativeIndex]?.templateSettings,
+          templateId: index,
+          link: templates[relativeIndex]?.link,
+        }),
+      }).then((res) => {
+        // setSuccessMessage(t("Flow created successfully!"))
+        return res
+      })
 
+      const data = await res.json()
+      console.log("result:", data)
+      router.push(`/dashboard/${data.id}/create-flow`)
+    } catch (err) {}
+  }
+  const filteredCards =
+    selectedCategory === "All"
+      ? templates
+      : templates.filter((card) =>
+          JSON.parse(card.tags).includes(selectedCategory)
+        ).length > 0
+      ? templates.filter((card) =>
+          JSON.parse(card.tags).includes(selectedCategory)
+        )
+      : templates.filter(
+          (card) =>
+            card.name === "Start from Scratch" &&
+            selectedCategory === "Start from scratch"
+        )
+  console.log("templates", templates)
   return (
     <div>
       <div className="-mx-6 flex items-center gap-2 overflow-x-auto pb-4 min-[960px]:pb-8 lg:mx-0">
@@ -123,7 +135,9 @@ const SelectTemplate = () => {
                   ? "bg-[#4050ff] text-white hover:bg-[#3646ec]"
                   : "bg-[#f2f2f2] text-[#3b3b3b] hover:bg-[#ebebeb]"
               }`}
-              onClick={() => setSelectedCategory(item)}
+              onClick={() =>
+                setSelectedCategory(item === selectedCategory ? "All" : item)
+              }
             >
               {item}
             </Button>
@@ -139,28 +153,20 @@ const SelectTemplate = () => {
           <div
             className="flex flex-col gap-2"
             key={tem.id}
-            onClick={() => handleCardClick(tem.id)}
+            // onClick={() => handleCardClick(tem.id)}
           >
-            <div className="group relative w-full overflow-hidden rounded-[5px] border border-gray-100">
-              <div className="absolute left-0 top-0 flex size-full flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-100">
-                <div className="flex flex-col items-stretch gap-[0.6em]">
-                  <Button
-                    onClick={handleSubmit}
-                    className="h-auto w-full min-w-[150px] rounded-[3px] border border-solid border-[#4050ff] bg-[#4050ff] px-[1em] py-[0.85em] text-[13px] font-semibold leading-none text-white hover:border-[#3646ec] hover:bg-[#3646ec]"
-                    disabled={isLoading} // Disable button while loading
-                  >
-                    Start building
-                    {isLoading && (
-                      <div>
-                        <Icons.spinner className=" z-20 ml-2 h-4 w-4 animate-spin" />
-                      </div>
-                    )}
-                  </Button>
-                  <Button className="h-auto w-full min-w-[150px] rounded-[3px] border border-solid border-[rgb(235,235,235)] bg-[rgb(242,242,242)] px-[1em] py-[0.85em] text-[13px] font-semibold leading-none text-[rgb(59,59,59)] hover:bg-[rgb(235,235,235)] hover:text-[rgb(33,33,33)]">
-                    Preview template
-                  </Button>
+            <div
+              className="group relative w-full overflow-hidden rounded-[5px] border border-gray-100"
+              onClick={() => handleCardClick(tem.id)}
+            >
+              {loadingCardIndex === tem.id && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="loader row flex items-center justify-center text-white">
+                    <Loader2 className="loader-icon mr-2" />
+                    loading
+                  </div>
                 </div>
-              </div>
+              )}
               <Image
                 src={tem.preview}
                 width={300}
