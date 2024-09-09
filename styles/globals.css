@@ -251,6 +251,6 @@ userContainer > *:hover {
 #editor-header .progress-comp {
   width: 100%;
 }
-div[name="Header Screen"] .progress-comp {
+div[containertype="header"] .progress-comp {
   width: 100%;
 }
