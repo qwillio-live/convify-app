@@ -49,8 +49,8 @@ export const ShareDrawerDesktop = ({
       console.log("Error sending email", error)
     }
   }
-  const whatsAppNumber = env.NEXT_PUBLIC_WHATSAPP_PHONE
-  const telegramUser = env.NEXT_PUBLIC_TELEGRAM_USERNAME
+  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE
+  const telegramUser = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || ""
 
   return (
     <Drawer open={desktopDrawerOpen} onOpenChange={setDesktopDrawerOpen}>
