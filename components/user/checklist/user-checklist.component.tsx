@@ -11,20 +11,8 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
 import { debounce } from "lodash"
-
-const ChecklistSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ChecklistMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
+import { UserInputSizes } from "../input/user-input.component"
+import styled from "styled-components"
 
 export const ChecklistGen = ({
   checklistItems,
@@ -66,11 +54,12 @@ export const ChecklistGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <ul
+      <Wrapper
+        size={size}
+        mobileScreen={false}
         className="flex w-full gap-2"
         style={{
           flexDirection: layout,
-          maxWidth: ChecklistMobileSizeValues[size || "medium"],
         }}
       >
         {checklistItems.map((item, index) => (
@@ -96,10 +85,61 @@ export const ChecklistGen = ({
             </span>
           </li>
         ))}
-      </ul>
+      </Wrapper>
     </div>
   )
 }
+
+const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "376px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "800px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "1000px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
 
 export const Checklist = ({
   checklistItems,
@@ -194,13 +234,12 @@ export const Checklist = ({
           paddingRight: `${marginRight}px`,
         }}
       >
-        <ul
-          className="flex w-full gap-2"
+        <Wrapper
+          size={size}
+          mobileScreen={!!mobileScreen}
+          className="user-checklist-comp flex w-full gap-2"
           style={{
             flexDirection: layout,
-            maxWidth: mobileScreen
-              ? ChecklistMobileSizeValues[size || "small"]
-              : ChecklistSizeValues[size || "small"],
           }}
         >
           {checklistItems.map((item, index) => (
@@ -222,7 +261,7 @@ export const Checklist = ({
               }
             />
           ))}
-        </ul>
+        </Wrapper>
       </div>
     </div>
   )

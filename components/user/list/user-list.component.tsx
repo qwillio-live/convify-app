@@ -19,6 +19,7 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { UserInputSizes } from "../input/user-input.component"
 
 const ListSizeValues = {
   small: "400px",
@@ -72,6 +73,8 @@ export const ListGen = ({
       }}
     >
       <StyledListContainer
+        className="user-list-comp"
+        size={size}
         verticalGap={verticalGap}
         columnsDesktop={columnsDesktop}
         columnsMobile={columnsMobile}
@@ -219,6 +222,8 @@ export const List = ({
         }}
       >
         <StyledListContainer
+          className="user-list-comp"
+          size={size}
           verticalGap={verticalGap}
           columnsDesktop={columnsDesktop}
           columnsMobile={columnsMobile}
@@ -370,11 +375,10 @@ type StyledListContainerProps = {
   columnsMobile: number
   mobileScreen: boolean
   maxWidth: string
+  size: UserInputSizes
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
-  width: 100%;
-  max-width: ${({ maxWidth }) => maxWidth};
   display: grid;
   column-gap: 40px;
   row-gap: ${({ verticalGap }) => `${verticalGap}px`};
@@ -389,6 +393,47 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
       ${({ columnsMobile }) => columnsMobile},
       minmax(0, 1fr)
     );
+  }
+
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "376px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "800px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "1000px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 

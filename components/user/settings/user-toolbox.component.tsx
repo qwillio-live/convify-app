@@ -223,7 +223,9 @@ const HoverCardWrapper = styled.div`
   .user-headline-comp,
   .user-text-comp,
   .user-picture-choice-component,
-  .logobar-comp {
+  .logobar-comp,
+  .user-list-comp,
+  .user-checklist-comp {
     width: 100%;
   }
   .heading-text-comp {
