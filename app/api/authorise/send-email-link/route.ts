@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       }
 
       const sendEmail = await transporter.sendMail({
-        from: `<${process.env.SMTP_USER}>`, // Sender address
+        from: `<${template.emailFrom}>`, // Sender address
         to: session.user.email, // List of receivers
         subject: template.subject,
         html: emailHtml, // HTML body
