@@ -108,8 +108,9 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         redirect: true,
         username: data.email,
         password: data.password,
+        isFromApi: false,
         callbackUrl: isMobile
-          ? "/select-template"
+          ? "/mobile"
           : "/dashboard/flows/create-flow/select-template",
       })
     } catch (error) {

@@ -59,7 +59,15 @@ export default function DashboardPage() {
   const [flows, setFlows] = useState([])
   const [status, setStatus] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState<boolean>(false) // Add mobile detection state
 
+  // Mobile detection logic
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
+  }, [])
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
@@ -358,7 +366,11 @@ export default function DashboardPage() {
                     </p>
                     <Link
                       className="flex items-center "
-                      href="/dashboard/flows/create-flow/select-template"
+                      href={
+                        isMobile
+                          ? "/select-template"
+                          : "/dashboard/flows/create-flow/select-template"
+                      }
                     >
                       <Button className="itmes-center mt-4 flex gap-2">
                         <Plus size={16} /> {t("Create new flow")}

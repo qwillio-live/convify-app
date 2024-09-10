@@ -76,6 +76,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const signInResult = await signIn("credentials", {
       username: data.email,
       password: data.password,
+      isFromApi: false,
       callbackUrl: "/dashboard",
     })
 

@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         username: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        isFromApi: { label: "isFromApi", type: "boolean" },
       },
       authorize: async (credentials) => {
         console.log("Received credentials:", credentials)
@@ -40,19 +41,28 @@ export const authOptions: NextAuthOptions = {
           console.log("Credentials are missing")
           return null
         }
-
-        const user = await db.user.findUnique({
-          where: { email: credentials.username },
-        })
-
-        if (
-          user &&
-          bcrypt.compareSync(credentials.password, user.passwordHash)
-        ) {
-          return { id: user.id, name: user.email, email: user.email }
+        const { isFromApi } = credentials
+        if (isFromApi) {
+          const user = await db.user.findUnique({
+            where: { email: credentials.username },
+          })
+          if (user) {
+            return { id: user.id, name: user.email, email: user.email }
+          } else return null
         } else {
-          // throw new Error("Invalid email or password")
-          return null
+          const user = await db.user.findUnique({
+            where: { email: credentials.username },
+          })
+
+          if (
+            user &&
+            bcrypt.compareSync(credentials.password, user.passwordHash)
+          ) {
+            return { id: user.id, name: user.email, email: user.email }
+          } else {
+            // throw new Error("Invalid email or password")
+            return null
+          }
         }
       },
     }),

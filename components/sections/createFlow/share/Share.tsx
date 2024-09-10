@@ -60,8 +60,8 @@ const ShareFlowComponents = ({
     return () => window.removeEventListener("resize", updateView)
   }, [])
   const t = useTranslations("Components")
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
+  const whatsAppNumber = env.NEXT_PUBLIC_WHATSAPP_PHONE
+  const telegramUser = env.NEXT_PUBLIC_TELEGRAM_USERNAME
 
   useEffect(() => {
     if (data) {

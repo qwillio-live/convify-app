@@ -81,6 +81,7 @@
     "framer-motion": "^11.1.7",
     "hexoid": "^1.0.0",
     "html-to-image": "^1.11.11",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.352.0",
     "lzutf8": "^0.6.3",

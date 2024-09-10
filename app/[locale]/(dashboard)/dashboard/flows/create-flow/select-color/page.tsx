@@ -42,7 +42,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
-import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 
 const ColorPicker = ({ color, onChange }) => {
   const t = useTranslations("Components")
@@ -272,8 +271,7 @@ export default function SelectColor() {
   const screens = useAppSelector((state) => state?.screen?.screens)
 
   console.log("templateid", templateSetting?.templateId)
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
+
   return (
     <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
       {!desktopDrawerOpen && (
