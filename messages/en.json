@@ -54,6 +54,7 @@
     "There's not a flow in sight": "There's not a flow in sight",
     "My workspace": "My workspace",
     "Create new flow": "Create new flow",
+    "Create flow": "Create flow",
     "Private": "Private",
     "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started": "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
     "Find workspace or flow": "Find workspace or flow",
@@ -364,8 +365,10 @@
     "Please enter a valid phone number": "Please enter a valid phone number"
   },
   "CreateFlow": {
+    "Dashboard": "Dashboard",
     "Link copied to clipboard": "Link copied to clipboard",
     "My new form": "My new form",
+    "Create flow": "Create flow",
     "Create": "Create",
     "Connect": "Connect",
     "Share": "Share",
