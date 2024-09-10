@@ -10,10 +10,10 @@ import nodemailer from "nodemailer"
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session) {
-      return new Response("Unauthorized", { status: 403 })
-    }
+    // const session = await getServerSession(authOptions)
+    // if (!session) {
+    //   return new Response("Unauthorized", { status: 403 })
+    // }
     const body = await req.json()
     const { send_to, template_id, params } = body
     let transporter = nodemailer.createTransport({
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       }
 
       const sendEmail = await transporter.sendMail({
-        from: `<${process.env.SMTP_USER}>`, // Sender address
+        from: `<${template.emailFrom}>`, // Sender address
         to: send_to, // List of receivers
         subject: template.subject,
         html: emailHtml, // HTML body
