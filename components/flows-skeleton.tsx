@@ -42,6 +42,7 @@ import {
 import { Badge } from "./ui/badge"
 import { useEffect, useState } from "react"
 import { Icons } from "@/components/icons"
+import { Skeleton } from "./ui/skeleton"
 
 function formatDate(isoString: string): string {
     const date = new Date(isoString);
@@ -108,54 +109,17 @@ const SkeletonFlowCard = () => {
 
     // Placeholder skeleton markup
     const skeletonMarkup = (
-        <div className="flex flex-col">
-            {/* Create new flow button skeleton */}
-            <div className="flex items-center justify-start self-start animate-pulse">
-                <Button size="sm" className="my-4 h-8 gap-1 py-2">
-                    <div className="animate-pulse bg-gray-200 h-4 w-4 rounded-full"></div>
-                    <span className="whitespace-nowrap animate-pulse">Loading...</span>
-                </Button>
-            </div>
-
-            {/* Card skeleton */}
-            <Card>
-                <CardHeader>
-                    <CardTitle><div className="animate-pulse bg-gray-200 h-4 w-20 rounded"></div></CardTitle>
-                    <CardDescription><div className="animate-pulse bg-gray-200 h-3 w-64 rounded"></div></CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="overflow-x-auto">
-                        <Table className="min-w-full">
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="hidden w-[144px] sm:table-cell"><span className="sr-only">Image</span></TableHead>
-                                    <TableHead><div className="animate-pulse bg-gray-200 h-4 w-20 rounded"></div></TableHead>
-                                    <TableHead><div className="animate-pulse bg-gray-200 h-4 w-16 rounded"></div></TableHead>
-                                    <TableHead><div className="animate-pulse bg-gray-200 h-4 w-12 rounded"></div></TableHead>
-                                    <TableHead className="hidden md:table-cell"><div className="animate-pulse bg-gray-200 h-4 w-12 rounded"></div></TableHead>
-                                    <TableHead className="hidden md:table-cell"><div className="animate-pulse bg-gray-200 h-4 w-16 rounded"></div></TableHead>
-                                    <TableHead><span className="sr-only">Actions</span></TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {[1, 2, 3, 4].map((item) => (
-                                    <TableRow key={item}>
-                                        <TableCell className="hidden sm:table-cell">
-                                            <div className="animate-pulse bg-gray-200 h-16 w-28 rounded"></div>
-                                        </TableCell>
-                                        <TableCell className="font-bold"><div className="animate-pulse bg-gray-200 h-4 w-20 rounded"></div></TableCell>
-                                        <TableCell><div className="animate-pulse bg-gray-200 h-4 w-12 rounded"></div></TableCell>
-                                        <TableCell><div className="animate-pulse bg-gray-200 h-4 w-8 rounded"></div></TableCell>
-                                        <TableCell className="hidden md:table-cell"><div className="animate-pulse bg-gray-200 h-4 w-12 rounded"></div></TableCell>
-                                        <TableCell className="hidden md:table-cell"><div className="animate-pulse bg-gray-200 h-4 w-16 rounded"></div></TableCell>
-                                        <TableCell><div className="animate-pulse bg-gray-200 h-4 w-12 rounded"></div></TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </CardContent>
-            </Card>
+            <div className="grid w-full gap-10">
+          <div className="flex w-full items-center justify-between">
+            <Skeleton className="h-[38px] w-[90px]" />
+            <Skeleton className="h-[38px] w-[80px]" />
+          </div>
+          <div className="mx-auto w-[800px] space-y-6">
+            <Skeleton className="h-[50px] w-full" />
+            <Skeleton className="h-[20px] w-2/3" />
+            <Skeleton className="h-[20px] w-full" />
+            <Skeleton className="h-[20px] w-full" />
+          </div>
         </div>
     );
 
