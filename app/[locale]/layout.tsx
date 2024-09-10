@@ -57,7 +57,7 @@ export const metadata = {
     creator: "@shadcn",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon_logo_blue.ico",
     shortcut: "/icon_logo_blue.png",
     apple: "/icon_logo_blue.png",
   },
