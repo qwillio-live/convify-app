@@ -27,6 +27,7 @@ import { useTranslations } from "next-intl"
 import { RootState } from "@/lib/state/flows-state/store"
 import Image from "next/image"
 import ContentEditable from "react-contenteditable"
+import { UserInputSizes } from "../input/user-input.component"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -50,31 +51,6 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
   )
 }
 
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1rem",
-  large: "1.2rem",
-}
-const IconSizeValues = {
-  small: 18,
-  medium: 22,
-  large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
-
 const ButtonTextLimit = {
   small: 100,
   // small: 22,
@@ -86,6 +62,52 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "376px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "800px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "1000px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
 
 export const TextImageComponentPreview = ({
   disabled,
@@ -332,16 +354,6 @@ export const TextImageComponentGen = ({
   return (
     <div
       style={{
-        width:
-          size == "small"
-            ? "600px"
-            : size == "medium"
-            ? "800px"
-            : size == "large"
-            ? "1200px"
-            : size == "full"
-            ? "1400px"
-            : "100%",
         display: "flex",
         justifyContent: "center",
       }}
@@ -361,9 +373,10 @@ export const TextImageComponentGen = ({
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
+        <Wrapper
+          size={size}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} border border-transparent`
           )}
         >
           {
@@ -555,7 +568,7 @@ export const TextImageComponentGen = ({
               )}
             </div>
           }
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -1232,10 +1245,12 @@ export const TextImageComponent = ({
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
+        <Wrapper
+          size={size}
+          mobileScreen={mobileScreen}
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} border border-transparent`
           )}
         >
           {
@@ -1277,7 +1292,7 @@ export const TextImageComponent = ({
               {...props}
             />
           }
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
