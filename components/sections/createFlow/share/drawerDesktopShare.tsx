@@ -49,8 +49,9 @@ export const ShareDrawerDesktop = ({
       console.log("Error sending email", error)
     }
   }
-  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE
-  const telegramUser = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || ""
+  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || 380937064139
+  const telegramUser =
+    process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "sofiaai_admin"
 
   return (
     <Drawer open={desktopDrawerOpen} onOpenChange={setDesktopDrawerOpen}>

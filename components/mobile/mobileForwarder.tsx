@@ -68,8 +68,9 @@ const MobileForwarderComponent = () => {
     }
   }
   const userId = userData?.id
-  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE
-  const telegramUser = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME
+  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || 380937064139
+  const telegramUser =
+    process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "sofiaai_admin"
   return (
     <div className="font-sans3  flex min-h-screen flex-col   bg-white text-center md:justify-normal">
       <header className="flex items-center justify-between border-b-2 bg-[#FAFBFC] px-4 py-[7px]">
