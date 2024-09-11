@@ -270,7 +270,7 @@ export const UserInputGen = ({ ...props }) => {
                   "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "transparent",
+                  background: "#ffffff",
                   borderColor: fieldError
                     ? "#cc0000"
                     : isActive
@@ -668,7 +668,7 @@ export const UserInput = ({ ...props }) => {
                   "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
-                  backgroundColor: "transparent",
+                  backgroundColor: "#ffffff",
                   borderColor: props.error
                     ? "#cc0000"
                     : props.isActive
@@ -730,19 +730,19 @@ export const UserInput = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `outline-none
+                `ring-opacity-0/0
+          send-response
+          outline-none
           ring-0
-          ring-opacity-0/0
           transition-all
           duration-200
-          ease-in-out
-          focus-visible:ring-transparent focus-visible:ring-offset-0
-          send-response
+          ease-in-out focus-visible:ring-transparent
+          focus-visible:ring-offset-0
           `
-          // focus-visible:outline-none
-          // focus-visible:ring-0
-          // focus-visible:ring-transparent
-          // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+                // focus-visible:outline-none
+                // focus-visible:ring-0
+                // focus-visible:ring-transparent
+                // focus-visible:ring-offset-0 peer-focus-visible:outline-none`
               )}
               onChange={
                 (e) => {
