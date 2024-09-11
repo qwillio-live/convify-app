@@ -226,7 +226,11 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 )}
                 onClick={() => {
                   setIsGoogleLoading(true)
-                  signIn("google")
+                  signIn("google", {
+                    callbackUrl: isMobile
+                      ? "/mobile"
+                      : "/dashboard/flows/create-flow/select-template",
+                  })
                 }}
                 disabled={isLoading || isGoogleLoading}
                 style={{
@@ -240,7 +244,12 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                   <Icons.spinner className="size-4 animate-spin" />
                 )}
                 <Icons.googleSignup className="h-5 w-5" />
-                <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
+                <span
+                  style={{
+                    marginLeft: "22%",
+                    fontWeight: "600",
+                  }}
+                >
                   {t("Sign Up with Google")}
                 </span>
               </button>

@@ -56,7 +56,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     email: "",
     password: "",
   })
+  const [isMobile, setIsMobile] = React.useState<boolean>(false) // Add mobile detection state
 
+  // Mobile detection logic
+  React.useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
+  }, [])
   React.useEffect(() => {
     // Check if there's stored form data in sessionStorage
     const storedFormData = sessionStorage.getItem("userFormData")
@@ -175,7 +183,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           ""
         )}{" "}
         <Icons.googleSignup className="h-5 w-5" />
-        <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
+        <span
+          style={{
+            marginLeft: "22%",
+            fontWeight: "600",
+          }}
+        >
           {t("Sign In with Google")}
         </span>
       </button>
