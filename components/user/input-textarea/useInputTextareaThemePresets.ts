@@ -32,7 +32,6 @@ const useInputTextareaThemePresets = () => {
   const outlinedPresetTextarea: UserInputTextareaProps = {
     inputValue: t("Text Area"),
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     height: 95,
@@ -109,7 +108,6 @@ const useInputTextareaThemePresets = () => {
   const underlinedPresetTextarea: UserInputTextareaProps = {
     inputValue: t("Text Area"),
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,

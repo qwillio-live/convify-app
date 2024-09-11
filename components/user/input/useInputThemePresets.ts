@@ -22,7 +22,6 @@ const useInputThemePresets = () => {
     fontSize: 16,
     fieldType: "data",
     required: false,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -92,7 +91,7 @@ const useInputThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
 
   const underlinedPreset: UserInputProps = {
@@ -102,7 +101,6 @@ const useInputThemePresets = () => {
     fontSize: 16,
     fieldType: "data",
     required: false,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -168,13 +166,12 @@ const useInputThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
 
   const formPreset: UserInputProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -248,7 +245,7 @@ const useInputThemePresets = () => {
     compId: "",
     parentScreenId: "",
     fieldType: "data",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
 
   return { outlinedPreset, underlinedPreset, formPreset }

@@ -502,7 +502,7 @@ export function CreateFlowComponent({ flowId }) {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto pt-2">
+            <div className="section-body h-[100vh] overflow-y-auto pt-2">
               <SettingsPanel />
             </div>
           </ScrollArea>

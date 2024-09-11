@@ -52,6 +52,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/custom-select"
+import ColorButton from "../color-button"
 
 export const MultipleChoiceSettings = () => {
   const t = useTranslations("Components")
@@ -62,6 +63,7 @@ export const MultipleChoiceSettings = () => {
       fontFamily,
       size,
       required,
+      labelColor,
       fieldName: originalFieldName,
       layout,
       containerBackground,
@@ -311,6 +313,12 @@ export const MultipleChoiceSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Label Color"}
+              styleKey="labelColor"
+              currentValue={labelColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
 
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
@@ -472,6 +480,7 @@ export const MultipleChoiceSettings = () => {
                     marginRight: 8,
                     selections: previewSelections,
                     choices: previewChoices,
+                    labelColor: labelColor,
                   }}
                 />
               </Card>
@@ -500,6 +509,7 @@ export const MultipleChoiceSettings = () => {
                     marginRight: 8,
                     selections: previewSelections,
                     choices: previewChoices,
+                    labelColor: labelColor,
                   }}
                 />
               </Card>
@@ -528,6 +538,7 @@ export const MultipleChoiceSettings = () => {
                     marginRight: 8,
                     selections: previewSelections,
                     choices: previewChoices,
+                    labelColor: labelColor,
                   }}
                 />
               </Card>

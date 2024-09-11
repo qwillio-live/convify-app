@@ -45,7 +45,7 @@ const UserInputMobileSizeValues = {
 export type UserInputCheckboxProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -104,7 +104,7 @@ export type UserInputCheckboxProps = {
 export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -293,6 +293,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   }
   const darkenedBg = getHoverBackgroundForPreset(primaryColor)
 
+  console.log("props.textColor", props.textColor)
   return (
     <div
       ref={itemRefNew}
@@ -384,7 +385,11 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 className={`mb-1 flex text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               >
                 {/* <DefoCheckbox
@@ -539,11 +544,11 @@ export const UserInputCheckbox = ({ ...props }) => {
     }
   }, [parentContainer, props.size, setProp])
 
-  useEffect(() => {
-    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-      setProp((props) => (props.primaryFont.value = primaryFont), 200)
-    }
-  }, [primaryFont, props.primaryFont, setProp])
+  // useEffect(() => {
+  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont, props.primaryFont, setProp])
 
   useEffect(() => {
     if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
@@ -710,7 +715,11 @@ export const UserInputCheckbox = ({ ...props }) => {
                 className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${getTextColor()}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : getTextColor()
+                  }`,
                   zIndex: 10,
                 }}
               />

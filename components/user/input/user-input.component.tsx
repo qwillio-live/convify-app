@@ -93,7 +93,9 @@ export const UserInputGen = ({ ...props }) => {
     }
     return {} // or return null or any default value you prefer
   })
-
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
   const parsedData = Object.keys(fullScreenData)
     .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
     .filter(
@@ -292,6 +294,11 @@ export const UserInputGen = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               >
                 <div dangerouslySetInnerHTML={{ __html: props.label }} />
@@ -321,6 +328,11 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -366,7 +378,7 @@ export const UserInputGen = ({ ...props }) => {
             )}
             <UserInputStyled
               // ref={inputRef}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -535,6 +547,7 @@ export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
+
     parent,
     selected,
     isHovered,
@@ -553,7 +566,9 @@ export const UserInput = ({ ...props }) => {
     query: { node },
   } = useEditor()
   const dispatch = useAppDispatch()
-
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
@@ -733,6 +748,11 @@ export const UserInput = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               />
             </>
@@ -759,6 +779,11 @@ export const UserInput = ({ ...props }) => {
 
       `}
               style={{
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 fontFamily: `var(${props.primaryFont.value})`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
@@ -806,7 +831,7 @@ export const UserInput = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={inputRef}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -907,7 +932,7 @@ export type UserInputProps = {
   fieldType: "data" | "action" | "design"
   required: boolean
   fontSize: number
-  textColor: string
+  textColor?: string
   parentScreenId: string
   fontWeight: string
   marginLeft: number
@@ -971,7 +996,7 @@ export const UserInputDefaultProps: UserInputProps = {
   fieldType: "data",
   required: false,
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,

@@ -54,6 +54,7 @@ import {
   UserInputCheckbox,
   UserInputCheckboxGen,
 } from "./user-input-checkbox.component"
+import ColorButton from "../color-button"
 
 export const UserInputCheckboxSettings = () => {
   const t = useTranslations("Components")
@@ -283,6 +284,12 @@ export const UserInputCheckboxSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Text Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChange}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">

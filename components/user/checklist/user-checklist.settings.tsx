@@ -55,6 +55,7 @@ import {
 } from "./user-checklist.component"
 import useChecklistThemePresets from "./useChecklistThemePresets"
 import { Card } from "@/components/ui/card"
+import ColorButton from "../color-button"
 
 export const ChecklistSettings = () => {
   const t = useTranslations("Components")
@@ -67,6 +68,7 @@ export const ChecklistSettings = () => {
   const {
     actions: { setProp },
     props: {
+      textColor,
       props,
       checklistItems,
       icon,
@@ -247,6 +249,13 @@ export const ChecklistSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+
+            <ColorButton
+              label={"Text Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
 
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label

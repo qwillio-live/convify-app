@@ -103,6 +103,7 @@ import {
 import { Controller } from "../settings/controller.component"
 import useInputPhoneThemePresets from "./useInputPhoneThemePresets"
 import { UserInputPhone, UserInputPhoneGen } from "./user-input-phone.component"
+import ColorButton from "../color-button"
 
 const IconRenderer = ({ iconName, onClick }) => {
   const ref = useRef(null)
@@ -111,7 +112,7 @@ const IconRenderer = ({ iconName, onClick }) => {
     <div className="max-h-[160px]">
       <div
         ref={ref}
-        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center max-h-full max-w-full h-auto w-auto"
+        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex h-auto max-h-full w-auto max-w-full items-center justify-center rounded-md bg-transparent p-4 text-center"
         onClick={() => onClick(iconName)}
       >
         {isInView && (
@@ -119,7 +120,7 @@ const IconRenderer = ({ iconName, onClick }) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
-            className="h-24 w-24 cursor-pointer ml-10 mt-8"
+            className="ml-10 mt-8 h-24 w-24 cursor-pointer"
           />
         )}
       </div>
@@ -182,7 +183,7 @@ export const UserInputPhoneSettings = () => {
       "marginLeft",
       "marginTop",
       "marginRight",
-      "marginBottom"
+      "marginBottom",
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
@@ -295,7 +296,7 @@ export const UserInputPhoneSettings = () => {
             </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-1">
               <Checkbox
                 value={props.inputRequired}
                 checked={props.inputRequired}
@@ -313,7 +314,7 @@ export const UserInputPhoneSettings = () => {
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-1">
               <Checkbox
                 checked={props.floatingLabel}
                 onCheckedChange={(e) => {
@@ -330,7 +331,7 @@ export const UserInputPhoneSettings = () => {
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -349,10 +350,10 @@ export const UserInputPhoneSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Placeholder")}
               </label>
@@ -367,10 +368,10 @@ export const UserInputPhoneSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Field Name")}
               </label>
@@ -390,9 +391,9 @@ export const UserInputPhoneSettings = () => {
             <span className="text-sm font-medium">{tComponents("Design")}</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
+                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={props.enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -458,7 +459,7 @@ export const UserInputPhoneSettings = () => {
                 {t("Icon")}
               </p> */}
                 <Dialog open={open} onOpenChange={setOpen}>
-                  <div className="text-md flex rounded py-2 w-full justify-between pr-4 items-center text-muted-foreground">
+                  <div className="text-md text-muted-foreground flex w-full items-center justify-between rounded py-2 pr-4">
                     <span>{tCreateFlow("PictureChoice.icon")}</span>
                     <DialogTrigger asChild>
                       {
@@ -466,15 +467,15 @@ export const UserInputPhoneSettings = () => {
                           dangerouslySetInnerHTML={{
                             __html: convertToSvg(icons[props.icon]?.body),
                           }}
-                          className="h-10 w-10 cursor-pointer justify-center items-center flex bg-white border border-border rounded-md"
+                          className="border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border bg-white"
                         />
                       }
                     </DialogTrigger>
                   </div>
 
                   {/* icons */}
-                  <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[70%]">
-                    <DialogHeader className="sticky top-0 bg-white py-4 px-2 z-10">
+                  <DialogContent className="h-[70%] overflow-y-auto sm:max-h-[70%] sm:max-w-[80%]">
+                    <DialogHeader className="sticky top-0 z-10 bg-white px-2 py-4">
                       <div className="flex items-center justify-start gap-4">
                         <div>
                           <DialogTitle>
@@ -484,14 +485,14 @@ export const UserInputPhoneSettings = () => {
                             {tCreateFlow("PictureChoice.iconDesc")}
                           </DialogDescription>
                         </div>
-                        <div className="relative ml-auto flex-1 md:grow-0 flex items-center">
-                          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <div className="relative ml-auto flex flex-1 items-center md:grow-0">
+                          <Search className="text-muted-foreground absolute left-2.5 top-2.5 h-4 w-4" />
                           <Input
                             type="search"
                             placeholder={tCreateFlow(
                               "PictureChoice.iconSearch"
                             )}
-                            className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                            className="bg-background w-full rounded-lg pl-8 md:w-[200px] lg:w-[336px]"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
@@ -513,7 +514,7 @@ export const UserInputPhoneSettings = () => {
                           />
                         ))
                       ) : (
-                        <div className="col-span-6 text-center mt-4">
+                        <div className="col-span-6 mt-4 text-center">
                           {tCreateFlow("PictureChoice.iconNotFound")}
                         </div>
                       )}
@@ -522,10 +523,10 @@ export const UserInputPhoneSettings = () => {
                 </Dialog>
               </div>
             )}
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Background Color")}
               </label>
@@ -542,6 +543,12 @@ export const UserInputPhoneSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Label Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChange}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
@@ -564,7 +571,7 @@ export const UserInputPhoneSettings = () => {
                 className="flex-1"
               >
                 <TabsList
-                  className={cn("w-full grid grid-cols-4", {
+                  className={cn("grid w-full grid-cols-4", {
                     "cursor-not-allowed": disableSize,
                   })}
                 >
@@ -583,10 +590,10 @@ export const UserInputPhoneSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginTop}
                 </span>
               </div>
@@ -604,10 +611,10 @@ export const UserInputPhoneSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginBottom}
                 </span>
               </div>
@@ -624,10 +631,10 @@ export const UserInputPhoneSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginRight}
                 </span>
               </div>
@@ -644,10 +651,10 @@ export const UserInputPhoneSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginLeft}
                 </span>
               </div>
@@ -676,11 +683,11 @@ export const UserInputPhoneSettings = () => {
                   addPresetStyles(outlinedPresetPhone)
                 }}
                 className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-blue-500": props.preset === "outlined" }
                 )}
               >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
                 <UserInputPhoneGen
                   {...outlinedPresetPhone}
                   floatingLabel={true}
@@ -697,11 +704,11 @@ export const UserInputPhoneSettings = () => {
                   addPresetStyles(underlinedPresetPhone)
                 }}
                 className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-blue-500": props.preset === "underlined" }
                 )}
               >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
                 <UserInputPhoneGen
                   {...underlinedPresetPhone}
                   floatingLabel={true}

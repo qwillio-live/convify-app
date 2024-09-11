@@ -63,7 +63,7 @@ export const SettingsPanel = () => {
     }
   }, [mobileScreen, selectedComponent])
   return (
-    <Tabs defaultValue="element" className="mb-10 w-full">
+    <Tabs defaultValue="element" className="mb-10 h-[100vh] w-full">
       <TabsList className="w-full rounded-none border-b border-[#c0c0c1] bg-[#fafafa] pb-0">
         <TabsTrigger
           className="h-full rounded-none border-b-4 border-transparent p-4 font-bold data-[state=active]:border-current data-[state=active]:bg-inherit"
@@ -83,7 +83,7 @@ export const SettingsPanel = () => {
           {isEnabled && selected && (
             // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
             <div className="">
-              <div className="flex flex-col gap-0">
+              <div className="flex h-[100vh] flex-col gap-0">
                 <div
                   data-cy="settings-panel"
                   className="settings-panel mb-4 flex-col gap-2"

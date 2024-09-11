@@ -20,6 +20,7 @@ import { Slider } from "@/components/custom-slider"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import hexoid from "hexoid"
+import ColorButton from "../color-button"
 
 export const SelectSettings = () => {
   const t = useTranslations("Components")
@@ -41,6 +42,7 @@ export const SelectSettings = () => {
       paddingTop,
       paddingRight,
       paddingBottom,
+      labelColor,
       border,
       borderColor,
       marginLeft,
@@ -253,6 +255,12 @@ export const SelectSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Label Color"}
+              styleKey="labelColor"
+              currentValue={labelColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
           </AccordionContent>
         </AccordionItem>
 

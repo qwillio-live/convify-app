@@ -80,6 +80,10 @@
     "Are you sure want to delete the Flow": "Tem certeza de que deseja excluir o Fluxo?"
   },
   "Components": {
+    "Label Color": "Cor da etiqueta",
+    "Text Color": "Cor do texto",
+    "Title Color": "Cor do título",
+    "Subtitle Color": "Cor da legenda",
     "Create an account to get started": "Crie uma conta para começar",
     "Login to your account": "Faça login na sua conta",
     "flows": "Fluxos",

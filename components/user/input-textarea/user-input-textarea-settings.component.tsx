@@ -54,6 +54,7 @@ import {
   UserInputTextarea,
   UserInputTextareaGen,
 } from "./user-input-textarea.component"
+import ColorButton from "../color-button"
 
 export const UserInputTextareaSettings = () => {
   const t = useTranslations("Components")
@@ -347,6 +348,12 @@ export const UserInputTextareaSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Label Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChange}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">

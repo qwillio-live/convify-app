@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/custom-select"
+import ColorButton from "../color-button"
 
 export const ListSettings = () => {
   const t = useTranslations("Components")
@@ -44,6 +45,8 @@ export const ListSettings = () => {
   const {
     actions: { setProp },
     props: {
+      textColor,
+      secTextColor,
       titleFontFamily,
       descriptionFontFamily,
       size,
@@ -195,6 +198,18 @@ export const ListSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Title Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
+            <ColorButton
+              label={"Subtitle Color"}
+              styleKey="secTextColor"
+              currentValue={secTextColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
               <div className="flex w-full basis-full flex-row items-center justify-between gap-2">

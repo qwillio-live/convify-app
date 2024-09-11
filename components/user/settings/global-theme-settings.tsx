@@ -30,11 +30,14 @@ import {
 import { applyHeaderPosition } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 import { updateHeaderPosition } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { X } from "lucide-react"
+import { HexColorPicker } from "react-colorful"
+import ColorButton from "../color-button"
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
   const [open, setOpen] = useState(false)
   const [secondaryOpen, setSecondaryOpen] = useState(false)
+  const [isPickerVisible, setPickerVisible] = useState(false)
 
   const dispatch = useAppDispatch()
 
@@ -238,43 +241,11 @@ export const GlobalThemeSettings = (props: Props) => {
                 />
               </div>
 
-              <div className="col-span-2 flex flex-row items-center space-x-2">
-                <label
-                  htmlFor="backgroundcolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("Background Color")}
-                </label>
-                <Input
-                  defaultValue={"white"}
-                  value={backgroundColor}
-                  onChange={(e) => {
-                    // dispatch(setBackgroundColor(e.target.value))
-                    handleStyleChangeDebounced({
-                      general: { backgroundColor: e.target.value },
-                    })
-                    // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
-                  }}
-                  className={` h-6 ${
-                    backgroundColor !== "#ffffff" ? "w-10" : "basis-1us/3"
-                  } border-none p-0`}
-                  type={"color"}
-                  id="backgroundcolor"
-                />
-                {backgroundColor !== "#ffffff" && (
-                  <button
-                    onClick={(e) => {
-                      // dispatch(setBackgroundColor(e.target.value))
-                      handleStyleChangeDebounced({
-                        general: { backgroundColor: "#ffffff" },
-                      })
-                      // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
-                    }}
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-              </div>
+              <ColorButton
+                label={t("Background Color")}
+                styleKey="backgroundColor"
+                currentValue={backgroundColor || ""}
+              />
 
               <div className="col-span-2 flex flex-col items-center space-y-2">
                 <label

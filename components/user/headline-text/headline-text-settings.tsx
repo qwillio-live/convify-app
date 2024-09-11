@@ -58,6 +58,7 @@ import {
   HeadlineTextGen,
 } from "./headline-text.component"
 import useHeadlineThemePresets from "./useHeadlineThemePresets"
+import ColorButton from "../color-button"
 
 export const HeadlineTextSettings = () => {
   const t = useTranslations("Components")
@@ -233,6 +234,12 @@ export const HeadlineTextSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Text Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
 
             {mobileScreen ? (
               <div className="style-control col-span-2 flex w-full flex-col gap-2 pb-4 pt-2">
