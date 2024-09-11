@@ -111,10 +111,8 @@ export const SelectSettings = () => {
         className="mb-10 w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
             <div className="text-muted-foreground">
               {t("Drag to re-arrange click to edit")}
             </div>
@@ -154,13 +152,10 @@ export const SelectSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="general">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("General")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger> {t("General")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={required}
                 onCheckedChange={(e) => {
                   handlePropChange("required", e)
@@ -169,15 +164,14 @@ export const SelectSettings = () => {
               />
               <label
                 htmlFor="required"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Required")}
               </label>
             </div>
 
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={sortAlphabetically}
                 onCheckedChange={(e) => {
                   handlePropChange("sortAlphabetically", e)
@@ -186,7 +180,7 @@ export const SelectSettings = () => {
               />
               <label
                 htmlFor="sortAlphabetically"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Sort Alphabetically")}
               </label>
@@ -231,10 +225,8 @@ export const SelectSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-4">
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
@@ -257,10 +249,8 @@ export const SelectSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs

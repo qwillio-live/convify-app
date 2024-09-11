@@ -306,13 +306,10 @@ export const LoaderSettings = () => {
         className="mb-10 w-full"
       >
         <AccordionItem value="item-2">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("General")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("General")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={enableRedirect}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -322,7 +319,7 @@ export const LoaderSettings = () => {
               />
               <label
                 htmlFor="enableRedirect"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Enable Redirect")}
               </label>
@@ -390,10 +387,8 @@ export const LoaderSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-4">
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
@@ -422,10 +417,8 @@ export const LoaderSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
               <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Top")}</Label>

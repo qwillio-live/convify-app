@@ -236,13 +236,10 @@ export const TelegramShareButtonSettings = () => {
         className="mb-10 w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -252,13 +249,13 @@ export const TelegramShareButtonSettings = () => {
               />
               <label
                 htmlFor="enableIcon"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Enable Icon")}
               </label>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-              {enableIcon && (
+            {enableIcon && (
+              <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
                 <>
                   <p className="text-md text-muted-foreground flex-1">
                     {t("Icon")}
@@ -273,8 +270,8 @@ export const TelegramShareButtonSettings = () => {
                     onChange={handlePictureChange}
                   />
                 </>
-              )}
-            </div>
+              </div>
+            )}
 
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
@@ -313,10 +310,8 @@ export const TelegramShareButtonSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-4">
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
@@ -388,10 +383,8 @@ export const TelegramShareButtonSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs
@@ -501,10 +494,8 @@ export const TelegramShareButtonSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="styles">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionTrigger>{t("Styles")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
               <Card
                 onClick={() => {

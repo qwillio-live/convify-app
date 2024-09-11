@@ -121,10 +121,8 @@ export const LogoBarSettings = () => {
         className="mb-10 w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
             <div className="text-muted-foreground">
               {t("Drag to re-arrange click to edit")}
             </div>
@@ -163,13 +161,10 @@ export const LogoBarSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex flex-row items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={grayscale}
                 onCheckedChange={(e) => {
                   handlePropChange("grayscale", e)
@@ -178,7 +173,7 @@ export const LogoBarSettings = () => {
               />
               <label
                 htmlFor="grayscale"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Grayscale")}
               </label>
@@ -264,9 +259,8 @@ export const LogoBarSettings = () => {
               />
             </div>
 
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+            <div className="flex flex-row items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={alignMobile}
                 onCheckedChange={(e) => {
                   handlePropChange("alignMobile", e)
@@ -275,7 +269,7 @@ export const LogoBarSettings = () => {
               />
               <label
                 htmlFor="alignMobile"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Align on mobile")}
               </label>
@@ -305,10 +299,9 @@ export const LogoBarSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
+          <AccordionTrigger>{t("Spacing")}
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionContent className="grid grid-cols-2 gap-y-2 pt-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs

@@ -111,7 +111,7 @@ const IconRenderer = ({ iconName, onClick }) => {
     <div className="max-h-[160px]">
       <div
         ref={ref}
-        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center max-h-full max-w-full h-auto w-auto"
+        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex h-auto max-h-full w-auto max-w-full items-center justify-center rounded-md bg-transparent p-4 text-center"
         onClick={() => onClick(iconName)}
       >
         {isInView && (
@@ -119,7 +119,7 @@ const IconRenderer = ({ iconName, onClick }) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
-            className="h-24 w-24 cursor-pointer ml-10 mt-8"
+            className="ml-10 mt-8 h-24 w-24 cursor-pointer"
           />
         )}
       </div>
@@ -289,13 +289,9 @@ export const UserInputMailSettings = () => {
         className="w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">
-              {tComponents("Content")}
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+          <AccordionTrigger>{tComponents("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 value={props.inputRequired}
                 checked={props.inputRequired}
@@ -307,13 +303,13 @@ export const UserInputMailSettings = () => {
               />
               <label
                 htmlFor="required"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Required")}
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 checked={props.floatingLabel}
                 onCheckedChange={(e) => {
@@ -324,13 +320,13 @@ export const UserInputMailSettings = () => {
               />
               <label
                 htmlFor="floating-label"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Floating Label")}
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -349,10 +345,10 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Placeholder")}
               </label>
@@ -367,10 +363,10 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Field Name")}
               </label>
@@ -386,13 +382,10 @@ export const UserInputMailSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">{tComponents("Design")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+          <AccordionTrigger>{tComponents("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
                 checked={props.enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -402,7 +395,7 @@ export const UserInputMailSettings = () => {
               />
               <label
                 htmlFor="enableIcon"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Decorator")}
               </label>
@@ -458,7 +451,7 @@ export const UserInputMailSettings = () => {
                 {t("Icon")}
               </p> */}
                 <Dialog open={open} onOpenChange={setOpen}>
-                  <div className="text-md flex rounded py-2 w-full justify-between pr-4 items-center text-muted-foreground">
+                  <div className="text-md text-muted-foreground flex w-full items-center justify-between rounded py-2 pr-4">
                     <span>{tCreateFlow("PictureChoice.icon")}</span>
                     <DialogTrigger asChild>
                       {
@@ -466,15 +459,15 @@ export const UserInputMailSettings = () => {
                           dangerouslySetInnerHTML={{
                             __html: convertToSvg(icons[props.icon]?.body),
                           }}
-                          className="h-10 w-10 cursor-pointer justify-center items-center flex bg-white border border-border rounded-md"
+                          className="border-border flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border bg-white"
                         />
                       }
                     </DialogTrigger>
                   </div>
 
                   {/* icons */}
-                  <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[70%]">
-                    <DialogHeader className="sticky top-0 bg-white py-4 px-2 z-10">
+                  <DialogContent className="h-[70%] overflow-y-auto sm:max-h-[70%] sm:max-w-[80%]">
+                    <DialogHeader className="sticky top-0 z-10 bg-white px-2 py-4">
                       <div className="flex items-center justify-start gap-4">
                         <div>
                           <DialogTitle>
@@ -484,14 +477,14 @@ export const UserInputMailSettings = () => {
                             {tCreateFlow("PictureChoice.iconDesc")}
                           </DialogDescription>
                         </div>
-                        <div className="relative ml-auto flex-1 md:grow-0 flex items-center">
-                          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <div className="relative ml-auto flex flex-1 items-center md:grow-0">
+                          <Search className="text-muted-foreground absolute left-2.5 top-2.5 h-4 w-4" />
                           <Input
                             type="search"
                             placeholder={tCreateFlow(
                               "PictureChoice.iconSearch"
                             )}
-                            className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                            className="bg-background w-full rounded-lg pl-8 md:w-[200px] lg:w-[336px]"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                           />
@@ -513,7 +506,7 @@ export const UserInputMailSettings = () => {
                           />
                         ))
                       ) : (
-                        <div className="col-span-6 text-center mt-4">
+                        <div className="col-span-6 mt-4 text-center">
                           {tCreateFlow("PictureChoice.iconNotFound")}
                         </div>
                       )}
@@ -522,10 +515,10 @@ export const UserInputMailSettings = () => {
                 </Dialog>
               </div>
             )}
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {tComponents("Background Color")}
               </label>
@@ -545,12 +538,8 @@ export const UserInputMailSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">
-              {tComponents("Spacing")}{" "}
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionTrigger>{tComponents("Spacing")} </AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">
                 {tComponents("Width")}
@@ -564,7 +553,7 @@ export const UserInputMailSettings = () => {
                 className="flex-1"
               >
                 <TabsList
-                  className={cn("w-full grid grid-cols-4", {
+                  className={cn("grid w-full grid-cols-4", {
                     "cursor-not-allowed": disableSize,
                   })}
                 >
@@ -583,10 +572,10 @@ export const UserInputMailSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginTop}
                 </span>
               </div>
@@ -604,10 +593,10 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginBottom}
                 </span>
               </div>
@@ -624,10 +613,10 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginRight}
                 </span>
               </div>
@@ -644,10 +633,10 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{tComponents("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginLeft}
                 </span>
               </div>
@@ -666,21 +655,19 @@ export const UserInputMailSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="styles">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{tComponents("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionTrigger>{tComponents("Styles")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
               <Card
                 onClick={() => {
                   addPresetStyles(outlinedPresetMail)
                 }}
                 className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-blue-500": props.preset === "outlined" }
                 )}
               >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
                 <UserInputMailGen
                   {...outlinedPresetMail}
                   floatingLabel={true}
@@ -697,11 +684,11 @@ export const UserInputMailSettings = () => {
                   addPresetStyles(underlinedPresetMail)
                 }}
                 className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-blue-500": props.preset === "underlined" }
                 )}
               >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
                 <UserInputMailGen
                   {...underlinedPresetMail}
                   floatingLabel={true}

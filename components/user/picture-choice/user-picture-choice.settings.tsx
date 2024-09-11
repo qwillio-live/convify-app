@@ -174,13 +174,11 @@ export const PictureChoiceSettings = () => {
         }}
         type="multiple"
         defaultValue={settingTabs || ["content"]}
-        className="font-poppins flex w-full flex-col gap-4 bg-[#f6f6f6] p-5"
+        className="mb-10 w-full"
       >
-        <AccordionItem value="content" className="flex flex-col gap-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0  hover:no-underline">
-            <span className="font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
+        <AccordionItem value="content">
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="w-full space-y-2">
             <div className="flex items-center justify-between gap-2">
               <span>{t("Single")}</span>
               <Switch
@@ -233,16 +231,11 @@ export const PictureChoiceSettings = () => {
             </Button>
           </AccordionContent>
         </AccordionItem>
-        <hr className="w-full" />
-
-        <AccordionItem value="general" className="flex flex-col gap-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0  hover:no-underline">
-            <span className="font-medium">{t("General")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+        <AccordionItem value="general">
+          <AccordionTrigger>{t("General")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={required}
                 onCheckedChange={(e) => {
                   handlePropChange("required", e)
@@ -251,7 +244,7 @@ export const PictureChoiceSettings = () => {
               />
               <label
                 htmlFor="required"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Required")}
               </label>
@@ -276,13 +269,9 @@ export const PictureChoiceSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <hr className="w-full" />
-
-        <AccordionItem value="design" className="flex flex-col gap-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0  hover:no-underline">
-            <span className="font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+        <AccordionItem value="design">
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-4">
             <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
@@ -303,13 +292,9 @@ export const PictureChoiceSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <hr className="w-full" />
-
-        <AccordionItem value="spacing" className="flex flex-col gap-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0  hover:no-underline">
-            <span className="font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="">
+        <AccordionItem value="spacing">
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
             <div className="style-control col-span-2 mb-6 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-xs">{t("Width")}</p>
               <Tabs
@@ -419,13 +404,9 @@ export const PictureChoiceSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <hr className="w-full" />
-
-        <AccordionItem value="styles" className="flex flex-col gap-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0  hover:no-underline">
-            <span className="font-medium">{t("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+        <AccordionItem value="styles">
+          <AccordionTrigger>{t("Styles")}</AccordionTrigger>
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
               <Card
                 onClick={() => {
@@ -511,17 +492,12 @@ export const PictureChoiceSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <hr className="w-full" />
-
-        <AccordionItem value="tracking" className="flex flex-col gap-6">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-0  hover:no-underline">
-            <span className="font-medium">{t("Tracking")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+        <AccordionItem value="tracking">
+          <AccordionTrigger>{t("Tracking")}</AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 id="tracking"
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={tracking}
                 onCheckedChange={(e) => {
                   handlePropChange("tracking", e)
@@ -529,7 +505,7 @@ export const PictureChoiceSettings = () => {
               />
               <label
                 htmlFor="tracking"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Tracking activated")}
               </label>

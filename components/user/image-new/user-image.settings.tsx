@@ -346,7 +346,7 @@ export const ImageSettings = () => {
 
   return (
     <>
-      <Card className="p-2">
+      <Card className="p-2 mt-4">
         <CardHeader className="p-2">
           <CardTitle>{t("Image")}</CardTitle>
         </CardHeader>
@@ -397,10 +397,9 @@ export const ImageSettings = () => {
         defaultValue={['content']}
         className="w-full mb-10">
         <AccordionItem value="item-2">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("General")}</span>
+          <AccordionTrigger >{t("General")}
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex flex-col">
               <p className="text-sm text-muted-foreground">{t("Alt label")}</p>
               <Input
@@ -413,11 +412,10 @@ export const ImageSettings = () => {
               />
             </div>
           </AccordionContent>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+          <AccordionContent className="space-y-4">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
-                checked={enableLink}
+               checked={enableLink}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
                   handlePropChange("enableLink", e);
@@ -426,7 +424,7 @@ export const ImageSettings = () => {
               />
               <label
                 htmlFor="enableLink"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 onClick={(e) => {
                   handlePropChange("enableLink", !enableLink);
                 }}
@@ -475,10 +473,9 @@ export const ImageSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
+          <AccordionTrigger >{t("Design")}
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
+          <AccordionContent className="grid grid-cols-2 gap-y-4">
             <div className="flex flex-row items-center col-span-2 space-x-2">
               <label
                 htmlFor="backgroundcolor"
@@ -577,10 +574,9 @@ export const ImageSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
+          <AccordionTrigger >{t("Spacing")}
           </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
+          <AccordionContent className="grid grid-cols-2 gap-y-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
               <Tabs

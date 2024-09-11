@@ -59,8 +59,8 @@ export const SettingsPanel = () => {
     }
   }, [mobileScreen, selectedComponent])
   return (
-    <Tabs defaultValue="element" className="mb-10 w-full">
-      <TabsList className="w-full rounded-none border-b pb-0">
+    <Tabs defaultValue="element" className="font-poppins mb-10 w-full">
+      <TabsList className="h-12 w-full rounded-none border-b pb-0">
         <TabsTrigger
           className="h-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="element"
@@ -74,7 +74,7 @@ export const SettingsPanel = () => {
           {t("Theme")}
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="element">
+      <TabsContent value="element" className="px-4">
         <ScrollArea>
           {isEnabled && selected && (
             // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
@@ -96,7 +96,7 @@ export const SettingsPanel = () => {
                       }
                     }}
                     variant="destructive"
-                    className="font-poppins mx-5 mb-4 text-base font-medium"
+                    className="font-poppins mb-4 text-base font-medium"
                   >
                     {t("Delete")}
                   </Button>
