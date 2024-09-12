@@ -14,7 +14,15 @@ export async function GET(req: NextRequest) {
     }
 
     // Verify the token
-    const decoded = await verify(token, process.env.JWT_SECRET)
+    const decodedToken = await prisma.token.findUnique({
+      where: {
+        shortToken: token,
+      },
+    })
+    if (!decodedToken) {
+      return NextResponse.json({ msg: "Wrong Token" }, { status: 404 })
+    }
+    const decoded = await verify(decodedToken.longToken, process.env.JWT_SECRET)
 
     // Extract email from the decoded token
     const { email } = decoded

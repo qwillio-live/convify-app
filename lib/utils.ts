@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 
 import crypto from "crypto"
 import { sign } from "jsonwebtoken"
+import prisma from "@/lib/prisma"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,9 +17,28 @@ export function absoluteUrl(url: string) {
   return url
 }
 
-export const generateSignInLink = (userEmail) => {
-  // Generate a short token (up to 10 characters)
-  const shortToken = crypto.randomBytes(5).toString("hex") // Generates a 10-character token
+export const generateSignInLink = async (userEmail) => {
+  let shortToken
+  let isUnique = false
+
+  // Generate a unique short token
+  while (!isUnique) {
+    // Generate a short token (12 characters long)
+    shortToken = crypto.randomBytes(3).toString("hex") // 6-byte hex string (12 characters)
+
+    // Check if the token is unique
+    const existingToken = await prisma.token.findUnique({
+      where: {
+        shortToken: shortToken,
+      },
+    })
+
+    if (!existingToken) {
+      isUnique = true
+    }
+  }
+
+  console.log("Short token generated:", shortToken)
 
   // Generate a JWT token with the user's email and short token
   const jwtToken = sign(
@@ -29,8 +49,22 @@ export const generateSignInLink = (userEmail) => {
     }
   )
 
+  // Create a new entry in the Token table
+  await prisma.token.create({
+    data: {
+      shortToken: shortToken,
+      longToken: jwtToken,
+    },
+  })
+
+  console.log("JWT token:", jwtToken)
+
   // Create a sign-in link using the JWT token
-  const signInLink = `${process.env.NEXT_PUBLIC_DOMAIN_URL}/auth/signin-link?token=${jwtToken}`
+  const signInLink = `${
+    process.env.NEXT_PUBLIC_DOMAIN_URL
+  }/auth/signin-link?token=${encodeURIComponent(shortToken)}`
+
+  console.log("Sign-in link:", signInLink)
 
   return signInLink
 }

@@ -29,6 +29,15 @@ model Account {
   @@map("accounts")
 }
 
+model Token {
+  id         Int      @id @default(autoincrement())
+  shortToken String   @unique
+  longToken  String   @db.VarChar(2048) // Adjust the length as needed
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+
 model EmailTemplate {
   id           Int    @id @default(autoincrement())
   templateName String @db.VarChar(255)

@@ -3,7 +3,7 @@
 import { buttonVariants } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
 import { env } from "@/env.mjs"
-import { cn, generateSignInLink } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { getTranslations } from "next-intl/server"
 import { Loader } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -18,7 +18,6 @@ export default function IndexPage() {
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
-  // const apple = await generateSignInLink("dawooodkhatri@gmail.com")
   useEffect(() => {
     async function verifyLink() {
       const request = await fetch(`/api/authorise/signin-link?token=${token}`, {

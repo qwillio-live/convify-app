@@ -3,7 +3,7 @@ import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
 import { env } from "@/env.mjs"
-import { cn, generateSignInLink } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { getTranslations } from "next-intl/server"
 
 async function getGitHubStars(): Promise<string | null> {
@@ -36,8 +36,6 @@ async function getGitHubStars(): Promise<string | null> {
 export default async function IndexPage() {
   const t = await getTranslations("Landing")
   const stars = await getGitHubStars()
-  const apple = generateSignInLink("dawoodkhatri@gmail.com")
-  console.log("apple", apple)
   return (
     <>
       <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">

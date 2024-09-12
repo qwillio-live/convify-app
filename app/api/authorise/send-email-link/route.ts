@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     if (!session) {
       return new Response("Unauthorized", { status: 403 })
     }
-    const generateNewToken = generateSignInLink(session.user.email)
+    const generateNewToken = await generateSignInLink(session.user.email)
     const body = await req.json()
     const { template_id } = body
     let { params } = body
