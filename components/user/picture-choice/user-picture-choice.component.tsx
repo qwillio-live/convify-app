@@ -34,6 +34,14 @@ const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
   margin-left: auto;
   margin-right: auto;
 
+  .picture-item:nth-child(even) {
+    padding-right: ${({ size }) =>
+      size === UserInputSizes.small ? "0" : "10px"};
+  }
+  .picture-item:last-of-type {
+    padding-right: 0;
+  }
+
   ${({ size, mobileScreen }) => {
     if (mobileScreen) {
       return { width: "calc(100% - 20px)" }
@@ -41,9 +49,9 @@ const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
       if (size === UserInputSizes.small) {
         return { width: "376px" }
       } else if (size === UserInputSizes.medium) {
-        return { width: "800px" }
+        return { width: "calc(100% - 22px)", maxWidth: "800px" }
       } else if (size === UserInputSizes.large) {
-        return { width: "1000px" }
+        return { width: "calc(100% - 22px)", maxWidth: "1000px" }
       } else {
         return { width: "calc(100% - 20px)" }
       }
@@ -702,7 +710,7 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className={` flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}
+      className={`picture-item flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}
       style={{
         flexBasis: `${getFlexBasis(choicesLength)}%`,
       }}
