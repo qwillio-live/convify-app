@@ -86,8 +86,18 @@ export const ButtonChoiceScreen = ({ ...props }) => {
           textColor={"inherit"}
           tagType={"p"}
         />
-        <Element is={MultipleChoice} canvas {...MultipleChoiceDefaultProps} />
-        <Element is={PictureChoice} canvas {...PictureChoiceDefaultProps} />
+        <Element
+          is={MultipleChoice}
+          canvas
+          {...MultipleChoiceDefaultProps}
+          labelColor="#ffffff"
+        />
+        <Element
+          is={PictureChoice}
+          canvas
+          {...PictureChoiceDefaultProps}
+          labelColor="#ffffff"
+        />
       </Element>
       <Element
         is={IconButton}

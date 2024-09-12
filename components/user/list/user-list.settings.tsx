@@ -393,6 +393,8 @@ export const ListSettings = () => {
                 }}
               >
                 <ListGen
+                  textColor={"#ffffff"}
+                  secTextColor={"#ffffff"}
                   {...{
                     ...horizontalPreset,
                     columnsDesktop: 1,
@@ -421,6 +423,8 @@ export const ListSettings = () => {
                 }}
               >
                 <ListGen
+                  textColor={"#ffffff"}
+                  secTextColor={"#ffffff"}
                   {...{
                     ...verticalPreset,
                     columnsDesktop: 1,

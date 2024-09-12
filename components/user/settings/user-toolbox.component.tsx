@@ -367,7 +367,10 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <HeadlineText {...h2Preset} />)
+                    connectors.create(
+                      ref,
+                      <HeadlineText textColor={"#ffffff"} {...h2Preset} />
+                    )
                   }
                   data-cy="toolbox-headline"
                 >
@@ -378,6 +381,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <HeadlineTextGen
+                        textColor={"#ffffff"}
                         {...h2Preset}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
@@ -391,7 +395,10 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <UserText {...parapgraphPreset} />)
+                    connectors.create(
+                      ref,
+                      <UserText textColor={"#ffffff"} {...parapgraphPreset} />
+                    )
                   }
                   data-cy="toolbox-text"
                 >
@@ -402,6 +409,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <UserTextInputGen
+                        textColor={"#ffffff"}
                         {...spanPreset}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
@@ -640,7 +648,11 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <Select {...selectPreset} disabled={false} />
+                        <Select
+                          labelColor={"#ffffff"}
+                          {...selectPreset}
+                          disabled={false}
+                        />
                       )
                     }
                     data-cy="toolbox-text"
@@ -650,6 +662,7 @@ export const UserToolbox = () => {
                       icon={<SquareMousePointer className="mr-2 size-3" />}
                     >
                       <SelectGen
+                        labelColor={"#ffffff"}
                         className="w-full"
                         {...selectPreset}
                         size="small"
@@ -667,7 +680,10 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <MultipleChoice {...multipleChoiceFilledPreset} />
+                        <MultipleChoice
+                          labelColor={"#ffffff"}
+                          {...multipleChoiceFilledPreset}
+                        />
                       )
                     }
                     data-cy="toolbox-text"
@@ -679,6 +695,7 @@ export const UserToolbox = () => {
                       <MultipleChoiceGen
                         {...{
                           ...multipleChoiceFilledPreset,
+                          labelColor: "#ffffff",
                           disabled: true,
                           marginTop: 8,
                           marginBottom: 8,
@@ -698,7 +715,10 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <PictureChoice {...pictureChoiceOutlinedPreset} />
+                        <PictureChoice
+                          labelColor={"#ffffff"}
+                          {...pictureChoiceOutlinedPreset}
+                        />
                       )
                     }
                     data-cy="toolbox-text"
@@ -710,6 +730,7 @@ export const UserToolbox = () => {
                       <PictureChoiceGen
                         {...{
                           ...pictureChoiceOutlinedPreset,
+                          labelColor: "#ffffff",
                           disabled: true,
                           marginTop: 8,
                           marginBottom: 8,
@@ -1288,6 +1309,8 @@ export const UserToolbox = () => {
                         connectors.create(
                           ref,
                           <TextImageComponent
+                            textColor={"#ffffff"}
+                            secTextColor={"#ffffff"}
                             {...TextImageDefaultProps}
                             title={t("Title")}
                             Text={t("Text Here")}
@@ -1305,6 +1328,8 @@ export const UserToolbox = () => {
                         icon={<LayoutList className="mr-2 size-3" />}
                       >
                         <TextImageComponentPreview
+                          textColor={"#ffffff"}
+                          secTextColor={"#ffffff"}
                           {...TextImageDefaultProps}
                           title={t("Title")}
                           Text={"Text here"}
@@ -1341,7 +1366,11 @@ export const UserToolbox = () => {
                         connectors.create(
                           ref,
 
-                          <List {...listHorizontalPreset} />
+                          <List
+                            textColor={"#ffffff"}
+                            secTextColor={"#ffffff"}
+                            {...listHorizontalPreset}
+                          />
                         )
                       }
                       data-cy="toolbox-layout-container"
@@ -1351,6 +1380,8 @@ export const UserToolbox = () => {
                         icon={<ListOrdered className="mr-2 size-3" />}
                       >
                         <ListGen
+                          textColor={"#ffffff"}
+                          secTextColor={"#ffffff"}
                           {...{
                             ...listHorizontalPreset,
                             columnsDesktop: 1,
@@ -1368,7 +1399,10 @@ export const UserToolbox = () => {
                         connectors.create(
                           ref,
 
-                          <Checklist {...checklistNormalPreset} />
+                          <Checklist
+                            textColor={"#ffffff"}
+                            {...checklistNormalPreset}
+                          />
                         )
                       }
                       data-cy="toolbox-layout-container"
@@ -1377,7 +1411,10 @@ export const UserToolbox = () => {
                         title={t("Checklist")}
                         icon={<ListChecks className="mr-2 size-3" />}
                       >
-                        <ChecklistGen {...checklistNormalPreset} />
+                        <ChecklistGen
+                          textColor={"#ffffff"}
+                          {...checklistNormalPreset}
+                        />
                       </HoverCardComponent>
                     </div>
 

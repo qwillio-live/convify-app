@@ -76,6 +76,8 @@ export const Img = ({
   titleFontWeight,
   textFontWeight,
   secondaryFontFamily,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const {
@@ -100,6 +102,7 @@ export const Img = ({
       {
         /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
+          secTextColor={secTextColor}
           fontFamily={fontFamily}
           color={color}
           setProp={setProp}
@@ -133,6 +136,7 @@ export const Img = ({
           width={width}
           height={height}
           src={src}
+          textColor={textColor}
           {...props}
         />
       }
@@ -1043,6 +1047,8 @@ export const DefaultPropsTextImg = {
   textFontSize: 17,
   titleFontWeight: "bold",
   textFontWeight: "normal",
+  textColor: "#ffffff",
+  secTextColor: "#ffffff",
 }
 
 Img.craft = {
