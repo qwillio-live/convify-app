@@ -36,7 +36,7 @@ export const ShareDrawerDesktop = ({
       setIsLoading(true)
       const request = await fetch("/api/authorise/send-email-link", {
         method: "POST",
-        body: JSON.stringify({ template_id: 2 }),
+        body: JSON.stringify({ template_id: 1 }),
       })
       if (!request.ok) {
         setIsLoading(false)
