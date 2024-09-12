@@ -107,10 +107,10 @@ export const InputSettingsIconPicker = ({ className = "", icon, onChange }) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button
-           className={`border-input min-w-[22px] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
+           className={`border-input bg-[#FAFAFA] min-w-[22px] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
           variant="ghost">
             <CloudUpload className="hidden size-4" />
-            <InputIconRenderer iconName={icon} className="size-6" style={{
+            <InputIconRenderer iconName={icon} className="size-4" style={{
               color: '#505051'
              }} />
           </Button>
