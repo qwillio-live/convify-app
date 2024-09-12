@@ -72,7 +72,11 @@ const Wrapper = styled.div<{
 
   ${({ size, mobileScreen }) => {
     if (size === UserInputSizes.small) {
-      return { width: "376px" }
+      if (mobileScreen) {
+        return { width: "360px" }
+      } else {
+        return { width: "376px" }
+      }
     } else if (size === UserInputSizes.medium) {
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
@@ -80,11 +84,7 @@ const Wrapper = styled.div<{
         return { width: "800px" }
       }
     } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "1000px" }
-      }
+      return { width: "calc(100% - 22px)", maxWidth: "1000px" }
     } else {
       return {
         width: "calc(100% - 22px)",
@@ -103,6 +103,14 @@ const Wrapper = styled.div<{
   @media (max-width: 800px) {
     ${({ size }) => {
       if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
         return { width: "calc(100% - 22px)" }
       }
     }}
@@ -273,7 +281,6 @@ export const TextImageComponentGen = ({
   Text,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -344,12 +351,8 @@ export const TextImageComponentGen = ({
     extrabold: 800,
   }
 
-  const mobileVerticalGapStyle = {
-    marginBottom: mobileScreen ? `${verticalGap}px` : "0",
-  }
-
   const adjustedHorizontalGap = Math.min(horizontalGap, 100)
-  const totalGap = adjustedHorizontalGap * (mobileScreen ? 0 : 1)
+  const totalGap = adjustedHorizontalGap
 
   return (
     <div
@@ -382,13 +385,11 @@ export const TextImageComponentGen = ({
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <div
+              className="flex-col md:flex-row"
               style={{
                 display: "flex",
-                flexDirection: "row",
                 width: "100%",
-                gap: !mobileScreen
-                  ? `${adjustedHorizontalGap}px`
-                  : `${verticalGap}px`,
+                gap: `${totalGap}px`,
                 marginLeft: `${Left}px`,
                 marginRight: `${Right}px`,
                 marginTop: `${Top}px`,
@@ -401,12 +402,6 @@ export const TextImageComponentGen = ({
                 <>
                   <div
                     style={{
-                      flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
                       alignSelf: `${bothAlign}`,
                       display: "flex",
                       justifyContent: "center",
@@ -416,7 +411,6 @@ export const TextImageComponentGen = ({
                       alt={alt}
                       src={src}
                       style={{
-                        width: width === "medium" ? "90%" : width,
                         height: height,
                         borderRadius: `${cornerRadius}px`,
                         backgroundColor: background,
@@ -426,12 +420,6 @@ export const TextImageComponentGen = ({
                   <div
                     className={`items-center text-start`}
                     style={{
-                      flex: `0 0 calc(${(textSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      maxWidth: `calc(${(textSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
                       marginTop: bothAlign == "start" ? "20px" : "",
                       alignSelf: `${bothAlign}`,
                     }}
@@ -893,7 +881,6 @@ export const UserLogo = ({
               alt={alt}
               src={src}
               style={{
-                width: width === "medium" ? "85%" : width,
                 height: height,
                 borderRadius: `${cornerRadius}px`,
                 backgroundColor: background,
@@ -904,7 +891,7 @@ export const UserLogo = ({
               }}
             />
           </div>
-          <div className="m-auto w-[85%] items-start self-center text-start">
+          <div className="m-auto items-start self-center text-start">
             {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable
