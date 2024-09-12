@@ -19,12 +19,12 @@ export function ColorInput({
         style={{ backgroundColor: (value as string) ?? "transparent" }}
         className="relative h-[32px] w-[62px] overflow-hidden rounded-sm"
       >
-        {!value ||
-          (!!(value === "transparent") && (
-            <div className="absolute inset-0 z-0 grid place-content-center border text-xs text-[#7B7D80]">
-              Choose
-            </div>
-          ))}
+        {(!value || value === "transparent") && (
+          <div className="absolute inset-0 z-0 grid place-content-center border text-xs text-[#7B7D80]">
+            Choose
+          </div>
+        )}
+
         <Input
           type="color"
           onChange={handleChange}
