@@ -448,9 +448,9 @@ export const ImageSettings = () => {
                   />
                 </div>
                 <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-md flex-1 text-muted-foreground">{t("Open in..")}</p>
+                  <p className="text-md flex-1 text-muted-foreground">{t("Open in")}</p>
                   <Select
-                    defaultValue={icon}
+                    defaultValue={"arrowright"}
                     onValueChange={(e) => {
                       setProp((props) => (props.icon = e), 1000)
                     }}

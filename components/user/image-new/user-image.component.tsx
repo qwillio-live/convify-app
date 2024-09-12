@@ -26,6 +26,7 @@ import {
 import { useTranslations } from "next-intl"
 import { RootState } from "@/lib/state/flows-state/store"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { env } from "@/env.mjs"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -666,7 +667,7 @@ export const ImageDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: "https://convify.io",
+  url: env.NEXT_PUBLIC_APP_URL,
   src: ImagePlaceholder.src,
   radiusCorner: 0,
   disabled: false,

@@ -199,7 +199,7 @@ export const LineSelectorSettings = () => {
       >
         <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
+            <span className="text-sm font-medium">{t("General")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="col-span-2 flex flex-row items-center space-x-2">
