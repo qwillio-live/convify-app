@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect } from "react"
 import { debounce, throttle } from "lodash"
 import {
+  AlignCenter,
   AlignHorizontalJustifyCenter,
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyStart,
   AlignHorizontalSpaceBetween,
+  AlignLeft,
+  AlignRight,
   MoveHorizontal,
   AlignCenter as TextAlignCenter,
   AlignLeft as TextAlignLeft,
@@ -58,6 +61,7 @@ import {
   HeadlineTextGen,
 } from "./headline-text.component"
 import useHeadlineThemePresets from "./useHeadlineThemePresets"
+import { ColorInput } from "@/components/color-input"
 
 export const HeadlineTextSettings = () => {
   const t = useTranslations("Components")
@@ -66,7 +70,9 @@ export const HeadlineTextSettings = () => {
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
 
-  const mobileScreen = useAppSelector((state: RootState) => state.theme?.mobileScreen)
+  const mobileScreen = useAppSelector(
+    (state: RootState) => state.theme?.mobileScreen
+  )
 
   const nextScreenName =
     useAppSelector(
@@ -177,32 +183,28 @@ export const HeadlineTextSettings = () => {
         }}
         type="multiple"
         defaultValue={["design"]}
-        className="w-full mb-10"
       >
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Align")}</p>
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Align")}</Label>
               <Tabs
                 value={justifyContent}
                 defaultValue={justifyContent}
                 onValueChange={(value) => {
                   setProp((props) => (props.justifyContent = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="start">
-                    <AlignHorizontalJustifyStart />
+                <TabsList className="grid w-full grid-cols-3 bg-[#eeeeee]">
+                  <TabsTrigger value="start" className="rounded">
+                    <AlignLeft className="size-4" />
                   </TabsTrigger>
-                  <TabsTrigger value="center">
-                    <AlignHorizontalJustifyCenter />
+                  <TabsTrigger value="center" className="rounded">
+                    <AlignCenter className="size-4" />
                   </TabsTrigger>
-                  <TabsTrigger value="end">
-                    <AlignHorizontalJustifyEnd />
+                  <TabsTrigger value="end" className="rounded">
+                    <AlignRight className="size-4" />
                   </TabsTrigger>
                   {/* <TabsTrigger value="space-between">
                     <AlignHorizontalSpaceBetween />
@@ -211,67 +213,62 @@ export const HeadlineTextSettings = () => {
               </Tabs>
             </div>
 
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={themeBackgroundColor}
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
+                id="backgroundcolor"
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
+                handleRemove={() => debouncedSetProp("containerBackground", "")}
               />
             </div>
 
-              {mobileScreen ?
-            (<div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
-              <div className="flex justify-between items-center">
-                <p className="text-md text-muted-foreground">{t("FontSize")}</p>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {mobileFontSize}
-                </span>
+            {mobileScreen ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>{t("FontSize")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {mobileFontSize}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[mobileFontSize]}
+                  value={[mobileFontSize]}
+                  max={100}
+                  min={12}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("mobileFontSize", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[mobileFontSize]}
-                value={[mobileFontSize]}
-                max={100}
-                min={12}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("mobileFontSize", e)}
-              />
-            </div>)
-              :
-              (
-            <div className="style-control col-span-2 w-full flex flex-col gap-2 pb-4 pt-2">
-              <div className="flex justify-between items-center">
-                <p className="text-md text-muted-foreground">{t("FontSize")}</p>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {fontSize}
-                </span>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("FontSize")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {fontSize}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[fontSize]}
+                  value={[fontSize]}
+                  max={100}
+                  min={12}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("fontSize", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[fontSize]}
-                value={[fontSize]}
-                max={100}
-                min={12}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
-              />
-            </div>
-            )
-            }
+            )}
 
-            <div className="style-control col-span-2 flex flex-col gap-2 pb-4 pt-2">
-              <p className="text-md text-muted-foreground">{t("FontWeight")}</p>
+            <div className="space-y-2">
+              <Label>{t("FontWeight")}</Label>
               <Select
                 value={fontWeight}
                 defaultValue={fontWeight}
@@ -279,7 +276,7 @@ export const HeadlineTextSettings = () => {
                   setProp((props) => (props.fontWeight = value), 1000)
                 }}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className={cn("h-9 text-xs font-bold")}>
                   <SelectValue placeholder={"Type your weight"} />
                 </SelectTrigger>
                 <SelectContent>
@@ -299,110 +296,129 @@ export const HeadlineTextSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Width")}</Label>
               <Tabs
                 value={size}
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
+                <TabsList className="grid w-full grid-cols-4 bg-[#eeeeee]">
+                  <TabsTrigger
+                    value="small"
+                    className="rounded text-base leading-4"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="medium"
+                    className="rounded text-base leading-4"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="large"
+                    className="rounded text-base leading-4"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="full"
+                    className="rounded text-base leading-4"
+                  >
+                    <MoveHorizontal className="size-4" />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginTop}
-                </span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginTop}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[marginTop]}
+                  value={[marginTop]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginTop", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[marginTop]}
-                value={[marginTop]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("marginTop", e)}
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginBottom}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginBottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginBottom]}
+                  value={[marginBottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginBottom = e),200)
+                    // handlePropChange("marginBottom",e)
+                    handlePropChangeDebounced("marginBottom", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginBottom]}
-                value={[marginBottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginBottom = e),200)
-                  // handlePropChange("marginBottom",e)
-                  handlePropChangeDebounced("marginBottom", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginRight}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginRight}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginRight]}
+                  value={[marginRight]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginRight = e),200)
+                    // handlePropChange("marginRight",e)
+                    handlePropChangeDebounced("marginRight", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginRight]}
-                value={[marginRight]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginRight = e),200)
-                  // handlePropChange("marginRight",e)
-                  handlePropChangeDebounced("marginRight", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginLeft}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginLeft}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginLeft]}
+                  value={[marginLeft]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginLeft = e),200)
+                    // handlePropChange("marginLeft",e)
+                    handlePropChangeDebounced("marginLeft", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginLeft]}
-                value={[marginLeft]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginLeft = e),200)
-                  // handlePropChange("marginLeft",e)
-                  handlePropChangeDebounced("marginLeft", e)
-                }
-              />
             </div>
           </AccordionContent>
         </AccordionItem>

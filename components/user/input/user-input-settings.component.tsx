@@ -224,7 +224,7 @@ export const UserInputSettings = () => {
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
+            <div className="space-y-2">
               <label
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -456,8 +456,7 @@ export const UserInputSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="styles">
-          <AccordionTrigger >{t("Styles")}
-          </AccordionTrigger>
+          <AccordionTrigger >{t("Styles")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
               <Card

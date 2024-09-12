@@ -16,6 +16,9 @@ const config = {
       },
     },
     extend: {
+      fontSize: {
+        xs: ["0.75rem", "1.05rem"],
+      },
       fontFamily: {
         geist: ["var(--font-geist)"],
         sans: ["var(--font-sans)"],

@@ -59,16 +59,16 @@ export const SettingsPanel = () => {
     }
   }, [mobileScreen, selectedComponent])
   return (
-    <Tabs defaultValue="element" className="font-poppins mb-10 w-full">
-      <TabsList className="h-12 w-full rounded-none border-b pb-0">
+    <Tabs defaultValue="element" className="font-poppins">
+      <TabsList className="h-15 w-full rounded-none border-b px-5 pb-0">
         <TabsTrigger
-          className="h-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
+          className="size-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="element"
         >
           {t("Element")}
         </TabsTrigger>
         <TabsTrigger
-          className="h-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
+          className="size-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="theme"
         >
           {t("Theme")}
@@ -82,7 +82,7 @@ export const SettingsPanel = () => {
               <div className="flex flex-col gap-0">
                 <div
                   data-cy="settings-panel"
-                  className="settings-panel mb-4 flex-col gap-2"
+                  className="settings-panel mb-3 flex-col gap-2"
                 >
                   {selected.settings && React.createElement(selected.settings)}
                 </div>
@@ -96,7 +96,7 @@ export const SettingsPanel = () => {
                       }
                     }}
                     variant="destructive"
-                    className="font-poppins mb-4 text-base font-medium"
+                    className="font-poppins my-4 text-base font-medium"
                   >
                     {t("Delete")}
                   </Button>
