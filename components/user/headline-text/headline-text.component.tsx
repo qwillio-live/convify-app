@@ -539,6 +539,7 @@ export type HeadlineTextProps = {
   preset: string
   lineHeight: string | number
   mobileFontSize: number
+  textColor?: string
 }
 export enum TextContainerSize {
   small = "small",
