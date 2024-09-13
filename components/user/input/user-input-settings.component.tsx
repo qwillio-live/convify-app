@@ -441,7 +441,7 @@ export const UserInputSettings = () => {
                 addPresetStyles(outlinedPreset)
               }}
               className={cn(
-                "relative px-2 py-4 !text-sm transition-all duration-300 hover:cursor-pointer",
+                "relative p-2 !text-sm transition-all duration-300 hover:cursor-pointer",
                 { "border-blue-500": props.preset === "outlined" }
               )}
             >
@@ -463,7 +463,7 @@ export const UserInputSettings = () => {
                 addPresetStyles(underlinedPreset)
               }}
               className={cn(
-                "relative px-2 py-4 transition-all duration-300 hover:cursor-pointer ",
+                "relative p-2 transition-all duration-300 hover:cursor-pointer ",
                 { "border-blue-500": props.preset === "underlined" }
               )}
             >
