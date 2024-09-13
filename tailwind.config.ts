@@ -21,6 +21,7 @@ const config = {
       },
       height: {
         "8.5": "2.125rem",
+        "9.5": "2.375rem",
       },
       fontFamily: {
         geist: ["var(--font-geist)"],

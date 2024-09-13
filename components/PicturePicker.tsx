@@ -271,7 +271,7 @@ export const PicturePicker = ({
             >
               <div className="flex flex-row flex-wrap items-center gap-3">
                 <Button
-                  className={`border-input !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
+                  className={`border-input bg-[#FAFAFA] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
                   variant="ghost"
                 >
                   <CloudUpload className="hidden size-4" />
