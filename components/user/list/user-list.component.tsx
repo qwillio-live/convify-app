@@ -68,11 +68,12 @@ export const ListGen = ({
         minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
-        paddingLeft: `${marginLeft + 10}px`,
-        paddingRight: `${marginRight + 10}px`,
+        paddingLeft: `${marginLeft}px`,
+        paddingRight: `${marginRight}px`,
       }}
     >
       <StyledListContainer
+        isPreviewScreen={true}
         className="user-list-comp"
         size={size}
         verticalGap={verticalGap}
@@ -217,11 +218,12 @@ export const List = ({
           maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft + 10}px`,
-          paddingRight: `${marginRight + 10}px`,
+          paddingLeft: `${marginLeft}px`,
+          paddingRight: `${marginRight}px`,
         }}
       >
         <StyledListContainer
+          isPreviewScreen={false}
           className="user-list-comp"
           size={size}
           verticalGap={verticalGap}
@@ -376,6 +378,7 @@ type StyledListContainerProps = {
   mobileScreen: boolean
   maxWidth: string
   size: UserInputSizes
+  isPreviewScreen: boolean
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
@@ -398,24 +401,34 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "376px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
+  ${({ size, mobileScreen, isPreviewScreen }) => {
+    if (isPreviewScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
         return { width: "800px" }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
+      } else if (size === UserInputSizes.large) {
         return { width: "1000px" }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     } else {
-      return {
-        width: "calc(100% - 22px)",
+      if (size === UserInputSizes.small) {
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "376px" }
+        }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)", maxWidth: 800 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)", maxWidth: 1000 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     }
   }};
@@ -431,6 +444,14 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   @media (max-width: 800px) {
     ${({ size }) => {
       if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
         return { width: "calc(100% - 22px)" }
       }
     }}
