@@ -66,28 +66,39 @@ const ButtonTextLimit = {
 const Wrapper = styled.div<{
   size: UserInputSizes
   mobileScreen?: boolean
+  isPreviewScreen: boolean
 }>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      if (mobileScreen) {
-        return { width: "360px" }
-      } else {
+  ${({ size, mobileScreen, isPreviewScreen }) => {
+    if (isPreviewScreen) {
+      if (size === UserInputSizes.small) {
         return { width: "376px" }
-      }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
+      } else if (size === UserInputSizes.medium) {
         return { width: "800px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "1000px" }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
-    } else if (size === UserInputSizes.large) {
-      return { width: "calc(100% - 22px)", maxWidth: "1000px" }
     } else {
-      return {
-        width: "calc(100% - 22px)",
+      if (size === UserInputSizes.small) {
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "376px" }
+        }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)", maxWidth: 800 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)", maxWidth: 1000 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     }
   }};
@@ -377,6 +388,7 @@ export const TextImageComponentGen = ({
         }}
       >
         <Wrapper
+          isPreviewScreen={true}
           size={size}
           className={cn(
             `relative flex flex-row justify-${align} border border-transparent`
@@ -405,6 +417,7 @@ export const TextImageComponentGen = ({
                       alignSelf: `${bothAlign}`,
                       display: "flex",
                       justifyContent: "center",
+                      flex: "50%",
                     }}
                   >
                     <img
@@ -420,8 +433,8 @@ export const TextImageComponentGen = ({
                   <div
                     className={`items-center text-start`}
                     style={{
-                      marginTop: bothAlign == "start" ? "20px" : "",
                       alignSelf: `${bothAlign}`,
+                      flex: "50%",
                     }}
                   >
                     {/** @ts-ignore */}
@@ -1233,6 +1246,7 @@ export const TextImageComponent = ({
         }}
       >
         <Wrapper
+          isPreviewScreen={false}
           size={size}
           mobileScreen={mobileScreen}
           ref={(ref: any) => connect(drag(ref))}
