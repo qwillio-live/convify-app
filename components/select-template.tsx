@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
@@ -34,7 +34,46 @@ const SelectTemplate = () => {
 
   const idParams = useSearchParams()
   const id = idParams?.get("id")
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  )
 
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      // Clear the previous timeout if there was one
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+
+      // Show scrollbar
+      scrollContainerRef.current.classList.add("show-scrollbar")
+
+      // Set a timeout to hide scrollbar after scrolling stops
+      const newTimeout = setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.classList.remove("show-scrollbar")
+        }
+      }, 1000) // Adjust delay time as needed
+
+      setScrollTimeout(newTimeout)
+    }
+  }
+  useEffect(() => {
+    // Add scroll event listener
+    const container = scrollContainerRef.current
+    container?.addEventListener("scroll", handleScroll)
+
+    // Cleanup event listener on component unmount
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll)
+      }
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+    }
+  }, [scrollTimeout])
   // Fetch templates from the API
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -109,6 +148,17 @@ const SelectTemplate = () => {
       router.push(`/dashboard/${data.id}/create-flow`)
     } catch (err) {}
   }
+  // useEffect(() => {
+  //   // Add scroll event listener
+  //   const container = scrollContainerRef.current
+  //   container?.addEventListener("scroll", handleScroll)
+
+  //   // Cleanup event listener on component unmount
+  //   return () => {
+  //     container?.removeEventListener("scroll", handleScroll)
+  //   }
+  // }, [])
+
   const filteredCards =
     selectedCategory === "All"
       ? templates
@@ -126,7 +176,10 @@ const SelectTemplate = () => {
   console.log("templates", templates)
   return (
     <div>
-      <div className="-mx-6 flex items-center gap-2 overflow-x-auto pb-4 min-[960px]:pb-8 lg:mx-0">
+      <div
+        ref={scrollContainerRef}
+        className="scroll-container -mx-6 flex items-center gap-2 pb-4 min-[960px]:pb-8 lg:mx-0"
+      >
         {categories.map((item) => (
           <React.Fragment key={item}>
             <Button

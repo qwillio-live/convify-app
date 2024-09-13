@@ -247,3 +247,29 @@ userContainer > *:hover {
   animation: slideRightToLeft 0.2s ease-out;
   animation-fill-mode: forwards;
 }
+
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
+/* Hide scrollbar by default */
+.scroll-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.scroll-container.show-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  height: 5px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
