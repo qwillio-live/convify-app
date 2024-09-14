@@ -52,11 +52,7 @@ import {
 
 import { Card } from "@/components/ui/card"
 
-export const InputIconRenderer = ({
-  iconName,
-  className = "",
-  style = {},
-}) => {
+export const InputIconRenderer = ({ iconName, className = "", style = {} }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -107,12 +103,17 @@ export const InputSettingsIconPicker = ({ className = "", icon, onChange }) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button
-           className={`border-input bg-[#FAFAFA] min-w-[22px] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
-          variant="ghost">
+            className={`border-input !size-8 min-w-[22px] border bg-[#FAFAFA] p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
+            variant="ghost"
+          >
             <CloudUpload className="hidden size-4" />
-            <InputIconRenderer iconName={icon} className="size-4" style={{
-              color: '#505051'
-             }} />
+            <InputIconRenderer
+              iconName={icon}
+              className="size-4"
+              style={{
+                color: "#505051",
+              }}
+            />
           </Button>
         </DialogTrigger>
         <DialogContent className="h-[70%] overflow-y-auto p-0 sm:max-h-[70%] sm:max-w-[80%]">

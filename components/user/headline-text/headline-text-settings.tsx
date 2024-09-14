@@ -221,7 +221,9 @@ export const HeadlineTextSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "")}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
 
@@ -276,7 +278,9 @@ export const HeadlineTextSettings = () => {
                   setProp((props) => (props.fontWeight = value), 1000)
                 }}
               >
-                <SelectTrigger className={cn("h-9 text-xs font-bold bg-[#FAFAFA]")}>
+                <SelectTrigger
+                  className={cn("h-9 bg-[#FAFAFA] text-xs font-bold")}
+                >
                   <SelectValue placeholder={"Type your weight"} />
                 </SelectTrigger>
                 <SelectContent>

@@ -17,10 +17,10 @@ export function ColorInput({
     <div className="flex items-center gap-2">
       <div
         style={{ backgroundColor: (value as string) ?? "transparent" }}
-        className="relative h-[32px] w-[62px] overflow-hidden rounded-sm"
+        className="relative h-[32px] w-[62px] overflow-hidden rounded-md"
       >
-        {(!value || value === "transparent" || value === 'inherit') && (
-          <div className="absolute inset-0 z-0 grid place-content-center border text-xs text-[#7B7D80]">
+        {(!value || value === "transparent" || value === "inherit") && (
+          <div className="absolute inset-0 z-0 grid place-content-center rounded-md border bg-[#FAFAFA] text-xs text-[#7B7D80]">
             Choose
           </div>
         )}
@@ -32,7 +32,7 @@ export function ColorInput({
           {...rest}
         />
       </div>
-      {!!value && !(value === "transparent") && (
+      {!!value && !(value === "transparent" || value === "inherit") && (
         <span onClick={() => handleRemove()}>
           <X size={16} className={"text-muted-foreground cursor-pointer"} />
         </span>

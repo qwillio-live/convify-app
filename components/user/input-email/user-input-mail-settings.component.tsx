@@ -448,7 +448,9 @@ export const UserInputMailSettings = () => {
                 handleChange={(e) => {
                   handlePropChange("backgroundColor", e.target.value)
                 }}
-                handleRemove={() => handlePropChange("backgroundColor", "")}
+                handleRemove={() =>
+                  handlePropChange("backgroundColor", "transparent")
+                }
               />
             </div>
           </AccordionContent>
@@ -586,9 +588,10 @@ export const UserInputMailSettings = () => {
               }}
               className={cn(
                 "relative p-2 transition-all duration-300 hover:cursor-pointer",
-                { "border-blue-500": props.preset === "outlined" }
+                { "border-[#2B3398]": props.preset === "outlined" }
               )}
             >
+              <div className="bg-white-50/0 absolute z-10 size-full"></div>
               <UserInputMailGen
                 {...outlinedPresetMail}
                 floatingLabel={true}
@@ -608,9 +611,10 @@ export const UserInputMailSettings = () => {
               }}
               className={cn(
                 "relative p-2 transition-all duration-300 hover:cursor-pointer",
-                { "border-blue-500": props.preset === "underlined" }
+                { "border-[#2B3398]": props.preset === "underlined" }
               )}
             >
+              <div className="bg-white-50/0 absolute z-10 size-full"></div>
               <UserInputMailGen
                 {...underlinedPresetMail}
                 floatingLabel={true}

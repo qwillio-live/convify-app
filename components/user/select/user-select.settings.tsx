@@ -219,7 +219,7 @@ export const SelectSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "")}
+                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
               />
             </div>
           </AccordionContent>

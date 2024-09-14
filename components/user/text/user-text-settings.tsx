@@ -210,7 +210,7 @@ export const UserTextInputSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "")}
+                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
               />
             </div>
 

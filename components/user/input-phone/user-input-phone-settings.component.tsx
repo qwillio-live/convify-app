@@ -449,7 +449,9 @@ export const UserInputPhoneSettings = () => {
                 handleChange={(e) => {
                   handlePropChange("backgroundColor", e.target.value)
                 }}
-                handleRemove={() => handlePropChange("backgroundColor", "")}
+                handleRemove={() =>
+                  handlePropChange("backgroundColor", "transparent")
+                }
               />
             </div>
           </AccordionContent>
@@ -579,57 +581,54 @@ export const UserInputPhoneSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="styles">
-          <AccordionTrigger>{tComponents("Styles")}
-          </AccordionTrigger>
+          <AccordionTrigger>{tComponents("Styles")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            
-              <Card
-                onClick={() => {
-                  addPresetStyles(outlinedPresetPhone)
-                }}
-                className={cn(
-                  "relative p-2 transition-all duration-300 hover:cursor-pointer",
-                  { "border-blue-500": props.preset === "outlined" }
-                )}
-              >
-            
-                <UserInputPhoneGen
-                  {...outlinedPresetPhone}
-                  floatingLabel={true}
-                  size="full"
-                  enableIcon={true}
-                  marginLeft="0"
-                  marginRight="0"
-                  marginTop='0'
-                  marginBottom='0'
-                  backgroundColor="#fff"
-                  label={tComponents("Label")}
-                />
-              </Card>
-              <Card
-                onClick={() => {
-                  addPresetStyles(underlinedPresetPhone)
-                }}
-                className={cn(
-                  "relative p-2 transition-all duration-300 hover:cursor-pointer",
-                  { "border-blue-500": props.preset === "underlined" }
-                )}
-              >
-                
-                <UserInputPhoneGen
-                  {...underlinedPresetPhone}
-                  floatingLabel={true}
-                  size="full"
-                  enableIcon={true}
-                  marginLeft="0"
-                  marginRight="0"
-                  marginTop='0'
-                  marginBottom='0'
-                  backgroundColor="#fff"
-                  label={tComponents("Label")}
-                />
-              </Card>
-            
+            <Card
+              onClick={() => {
+                addPresetStyles(outlinedPresetPhone)
+              }}
+              className={cn(
+                "relative p-2 transition-all duration-300 hover:cursor-pointer",
+                { "border-[#2B3398]": props.preset === "outlined" }
+              )}
+            >
+              <div className="bg-white-50/0 absolute z-10 size-full"></div>
+              <UserInputPhoneGen
+                {...outlinedPresetPhone}
+                floatingLabel={true}
+                size="full"
+                enableIcon={true}
+                marginLeft="0"
+                marginRight="0"
+                marginTop="0"
+                marginBottom="0"
+                backgroundColor="#fff"
+                label={tComponents("Label")}
+              />
+            </Card>
+            <Card
+              onClick={() => {
+                addPresetStyles(underlinedPresetPhone)
+              }}
+              className={cn(
+                "relative p-2 transition-all duration-300 hover:cursor-pointer",
+                { "border-[#2B3398]": props.preset === "underlined" }
+              )}
+            >
+              <div className="bg-white-50/0 absolute z-10 size-full"></div>
+              <UserInputPhoneGen
+                {...underlinedPresetPhone}
+                floatingLabel={true}
+                size="full"
+                enableIcon={true}
+                marginLeft="0"
+                marginRight="0"
+                marginTop="0"
+                marginBottom="0"
+                backgroundColor="#fff"
+                label={tComponents("Label")}
+              />
+            </Card>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

@@ -252,7 +252,7 @@ export const UserInputCheckboxSettings = () => {
                 handleChange={(e) => {
                   handlePropChange("backgroundColor", e.target.value)
                 }}
-                handleRemove={() => handlePropChange("backgroundColor", "")}
+                handleRemove={() => handlePropChange("backgroundColor", "transparent")}
               />
             </div>
           </AccordionContent>

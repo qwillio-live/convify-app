@@ -266,7 +266,9 @@ export const FormSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("background", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("background", "")}
+                handleRemove={() =>
+                  debouncedSetProp("background", "transparent")
+                }
               />
             </div>
           </AccordionContent>

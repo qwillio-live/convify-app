@@ -304,7 +304,9 @@ export const UserInputSettings = () => {
                 handleChange={(e) => {
                   handlePropChange("backgroundColor", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("backgroundColor", "")}
+                handleRemove={() =>
+                  debouncedSetProp("backgroundColor", "transparent")
+                }
               />
             </div>
           </AccordionContent>
@@ -441,10 +443,11 @@ export const UserInputSettings = () => {
                 addPresetStyles(outlinedPreset)
               }}
               className={cn(
-                "relative p-2 !text-sm transition-all duration-300 hover:cursor-pointer",
-                { "border-blue-500": props.preset === "outlined" }
+                "relative bg-[#FAFAFA] p-2 !text-sm transition-all duration-300 hover:cursor-pointer",
+                { "border-[#2B3398]": props.preset === "outlined" }
               )}
             >
+              <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
               <UserInputGen
                 {...outlinedPreset}
                 floatingLabel={true}
@@ -464,9 +467,10 @@ export const UserInputSettings = () => {
               }}
               className={cn(
                 "relative p-2 transition-all duration-300 hover:cursor-pointer ",
-                { "border-blue-500": props.preset === "underlined" }
+                { "border-[#2B3398]": props.preset === "underlined" }
               )}
             >
+              <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
               <UserInputGen
                 {...underlinedPreset}
                 floatingLabel={true}

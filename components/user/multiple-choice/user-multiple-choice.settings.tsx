@@ -288,11 +288,11 @@ export const MultipleChoiceSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "")}
+                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
               />
             </div>
 
-            <div className="flex flex-row items-center justify-between space-x-2">
+            <div className="space-y-2">
               <Label htmlFor="layout">{t("Layout")}</Label>
               <Tabs
                 value={layout}
