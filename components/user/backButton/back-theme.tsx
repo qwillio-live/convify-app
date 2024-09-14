@@ -25,7 +25,7 @@ const useBackThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "rgba(255,255,255,0)",
+    containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
         "#f3f3f3", // Lighter gray color for filled preset
@@ -106,7 +106,7 @@ const useBackThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "rgba(255,255,255,0)",
+    containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
         "#f3f3f3", // Lighter gray color for filled preset

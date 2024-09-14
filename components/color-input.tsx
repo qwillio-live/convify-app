@@ -28,7 +28,7 @@ export function ColorInput({
         <Input
           type="color"
           onChange={handleChange}
-          className="h-full opacity-0"
+          className="h-8.5 opacity-0"
           {...rest}
         />
       </div>
