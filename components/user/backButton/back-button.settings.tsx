@@ -122,6 +122,7 @@ export const IconButtonSettings = () => {
       text,
       custom,
       icon,
+      iconType,
       paddingLeft,
       paddingTop,
       paddingRight,
@@ -224,7 +225,6 @@ export const IconButtonSettings = () => {
     setProp((props) => (props.icon = picture), 1000)
     setProp((props) => (props.iconType = pictureType), 1000)
   }
-  console.log(icon)
 
   return (
     <>
@@ -265,7 +265,7 @@ export const IconButtonSettings = () => {
                       <Image className="text-muted-foreground size-4" />
                     )
                   }
-                  pictureType={icon ? PictureTypes.ICON : PictureTypes.NULL}
+                  pictureType={iconType}
                   onChange={handlePictureChange}
                 />
               </div>
@@ -563,13 +563,14 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.filled)
                 }}
                 className={cn(
-                  "px-2 py-0 transition-all duration-300 hover:cursor-pointer",
-                  { "border-blue-500": preset === "filled" }
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  { "border-[#15347B]": preset === "filled" }
                 )}
               >
+                <div className="absolute inset-0 z-10" />
                 <BackButtonGen
                   {...backFilledPreset}
-                  size="large"
+                  size="full"
                   buttonSize={"small"}
                   paddingBottom={14}
                   paddingTop={14}
@@ -588,13 +589,14 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.outLine)
                 }}
                 className={cn(
-                  "px-2 py-0 transition-all duration-300 hover:cursor-pointer",
-                  { "border-blue-500": preset === "outline" }
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  { "border-[#15347B]": preset === "outline" }
                 )}
               >
+                <div className="absolute inset-0 z-10" />
                 <BackButtonGen
                   {...backOutLinePreset}
-                  size="large"
+                  size="full"
                   buttonSize={"small"}
                   paddingBottom={14}
                   paddingTop={14}
