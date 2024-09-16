@@ -296,11 +296,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? IconButtonMobileSizeValues[props.size || "medium"]
-      : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
+ 
+  width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
