@@ -252,6 +252,13 @@ userContainer > *:hover {
   overflow-x: auto;
   white-space: nowrap;
   position: relative;
+  margin-bottom: 10px;
+  box-sizing: content-box;
+}
+
+.scroll-container.show-scrollbar {
+  padding-bottom: 5px; /* Adjust for scrollbar size */
+  margin-bottom: 1rem !important;
 }
 
 /* Hide scrollbar by default */
