@@ -317,28 +317,28 @@ export const newScreensSlice = createSlice({
       // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
       state.editorLoad = state.screens[state.selectedScreen].screenData
     },
-    setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = action.payload
+    // setEditorLoad: (state, action: PayloadAction<any>) => {
+    //   state.editorLoad = action.payload
 
-      if (state.headerMode === true) {
-        state.screensHeader = action.payload
-      } else if (state.footerMode === true) {
-        state.screensFooter = action.payload
-      } else {
-        const selectedScreen = state.screens[state.selectedScreen]
+    //   if (state.headerMode === true) {
+    //     state.screensHeader = action.payload
+    //   } else if (state.footerMode === true) {
+    //     state.screensFooter = action.payload
+    //   } else {
+    //     const selectedScreen = state.screens[state.selectedScreen]
 
-        if (!selectedScreen) {
-          // Handle case where selected screen is not found
-          console.error(
-            `Selected screen (${state.selectedScreen}) not found in state.`
-          )
-          return
-        }
+    //     if (!selectedScreen) {
+    //       // Handle case where selected screen is not found
+    //       console.error(
+    //         `Selected screen (${state.selectedScreen}) not found in state.`
+    //       )
+    //       return
+    //     }
 
-        // Update screenData of the selected screen
-        selectedScreen.screenData = action.payload
-      }
-    },
+    //     // Update screenData of the selected screen
+    //     selectedScreen.screenData = action.payload
+    //   }
+    // },
 
     setScreenHeader: (state, action: PayloadAction<any>) => {
       state.screensHeader = JSON.stringify(action.payload)

@@ -249,6 +249,8 @@ export function CreateFlowComponent({ flowId }) {
     [dispatch]
   )
 
+  const selectedScreenIdex =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
   React.useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
@@ -416,6 +418,7 @@ export function CreateFlowComponent({ flowId }) {
                 className="w-full"
                 onValueChange={(value) => {
                   setView(value)
+                  dispatch(setSelectedScreen(selectedScreenIdex))
                   dispatch(setMobileScreen(value === VIEWS.MOBILE))
                 }}
               >
