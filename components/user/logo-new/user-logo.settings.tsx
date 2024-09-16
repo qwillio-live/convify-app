@@ -32,6 +32,7 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { UserLogo } from "./user-logo.component"
 import axios from "axios"
+import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
   alt,
@@ -111,6 +112,7 @@ export const LogoSettings = () => {
   const {
     actions: { setProp },
     props: {
+      windowTarget,
       enableLink,
       src,
       containerBackground,
@@ -259,7 +261,7 @@ export const LogoSettings = () => {
 
   return (
     <>
-      <Card className="mt-4 p-2">
+      <Card className="mb-2 mt-4 p-2">
         <CardHeader className="p-2">
           <CardTitle>{t("Image")}</CardTitle>
         </CardHeader>
@@ -308,15 +310,14 @@ export const LogoSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="mb-10 w-full"
+        className="w-full"
       >
         <AccordionItem value="item-2">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2">
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-muted-foreground text-sm">{t("Alt label")}</p>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Alt label")}</Label>
               <Input
-                className="p-2 text-sm"
                 value={alt}
                 placeholder={alt}
                 onChange={(e) => {
@@ -324,8 +325,6 @@ export const LogoSettings = () => {
                 }}
               />
             </div>
-          </AccordionContent>
-          <AccordionContent className="space-y-4">
             <div className="flex items-center space-x-2">
               <Checkbox
                 checked={enableLink}
@@ -333,26 +332,15 @@ export const LogoSettings = () => {
                   // setProp((props) => (props.enableIcon = e), 1000)
                   handlePropChange("enableLink", e)
                 }}
-                id="enableIcon"
+                id="enableLink"
               />
-              <label
-                htmlFor="enableLink"
-                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                onClick={(e) => {
-                  handlePropChange("enableLink", !enableLink)
-                }}
-              >
-                {t("Enable Link")}
-              </label>
+              <Label htmlFor="enableLink">{t("Enable Link")}</Label>
             </div>
             {enableLink && (
               <>
-                <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-muted-foreground text-sm">
-                    {t("Add URL")}
-                  </p>
+                <div className="space-y-2">
+                  <Label>{t("Add URL")}</Label>
                   <Input
-                    className="p-2 text-sm"
                     value={url}
                     placeholder={"URL"}
                     onChange={(e) => {
@@ -360,25 +348,28 @@ export const LogoSettings = () => {
                     }}
                   />
                 </div>
-                <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-md text-muted-foreground flex-1">
-                    {t("Open in..")}
-                  </p>
+                <div className="space-y-2">
+                  <Label>{t("Open in")}</Label>
                   <Select
-                    defaultValue={icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
+                    defaultValue={"new-window"}
+                    value={windowTarget ? "new-window" : "same-window"}
+                    onValueChange={(e) =>
+                      setProp(
+                        (props) =>
+                          (props.windowTarget =
+                            e === "new-window" ? true : false)
+                      )
+                    }
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                       <SelectValue placeholder="Select Link" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="arrowright">
+                        <SelectItem className="text-xs" value="new-window">
                           <p>{t("New Window")}</p>
                         </SelectItem>
-                        <SelectItem value="aperture">
+                        <SelectItem className="text-xs" value="same-window">
                           <p>{t("Same Window")}</p>
                         </SelectItem>
                       </SelectGroup>
@@ -391,35 +382,29 @@ export const LogoSettings = () => {
         </AccordionItem>
         <AccordionItem value="design">
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4">
-            <div className="flex flex-row items-center space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={themeBackgroundColor}
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="flex flex-row items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
                 id="backgroundcolor"
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Corner Radius")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="corner-radius">{t("Corner Radius")}</Label>
+                <span className="text-muted-foreground text-xs">
                   {borderRad}
                 </span>
               </div>
               <Slider
-                className=""
                 defaultValue={[borderRad]}
                 value={[borderRad]}
                 max={200}
@@ -429,25 +414,24 @@ export const LogoSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Align")}</p>
+            <div className="space-y-2">
+              <Label>{t("Align")}</Label>
               <Tabs
                 value={align}
                 defaultValue={align}
                 onValueChange={(value) => {
                   setProp((props) => (props.align = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="start">
-                    <AlignHorizontalJustifyStart />
+                <TabsList className="grid w-full grid-cols-3 bg-[#EEEEEE]">
+                  <TabsTrigger className="rounded" value="start">
+                    <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="center">
-                    <AlignHorizontalJustifyCenter />
+                  <TabsTrigger className="rounded" value="center">
+                    <AlignHorizontalJustifyCenter size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="end">
-                    <AlignHorizontalJustifyEnd />
+                  <TabsTrigger className="rounded" value="end">
+                    <AlignHorizontalJustifyEnd size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -456,13 +440,11 @@ export const LogoSettings = () => {
         </AccordionItem>
         <AccordionItem value="spacing">
           <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {top}
-                </span>
+                <span className="text-muted-foreground text-xs">{top}</span>
               </div>
               <Slider
                 className=""
@@ -474,12 +456,10 @@ export const LogoSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("top", e)}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {bottom}
-                </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                <span className="text-muted-foreground text-xs">{bottom}</span>
               </div>
               <Slider
                 defaultValue={[bottom]}
@@ -491,12 +471,10 @@ export const LogoSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {right}
-                </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginRight">{t("Right")}</Label>
+                <span className="text-muted-foreground text-xs">{right}</span>
               </div>
               <Slider
                 defaultValue={[right]}
@@ -507,13 +485,11 @@ export const LogoSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("right", e)}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {left}
-                </span>
-              </div>
+            <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">{left}</span>
+                </div>
               <Slider
                 defaultValue={[left]}
                 value={[left]}

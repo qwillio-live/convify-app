@@ -1,26 +1,44 @@
 import React, { useCallback, useEffect } from "react"
-import { MoveHorizontal, AlignHorizontalJustifyStart, AlignHorizontalJustifyEnd, AlignHorizontalJustifyCenter } from "lucide-react"
+import {
+  MoveHorizontal,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyCenter,
+} from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
-import { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
-import { throttle, debounce } from 'lodash';
+import { throttle, debounce } from "lodash"
 import { useNode } from "@/lib/craftjs"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/custom-select"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
 import { Controller } from "../settings/controller.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
+import { cn } from "@/lib/utils"
+import { Icons } from "@/components/icons"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { IconButtonSizes, UserLogo } from "./user-image.component";
-import axios from 'axios'
+import { IconButtonSizes, UserLogo } from "./user-image.component"
+import axios from "axios"
+import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
   alt,
@@ -37,7 +55,7 @@ export const Img = ({
   radiusCorner,
   align,
   maxWidth,
-  width = '85%',
+  width = "85%",
   height,
   src,
   imageSize,
@@ -101,11 +119,12 @@ export const ImageSettings = () => {
   const [showDialog, setShowDialog] = React.useState<boolean>(false)
   const [image, setImage] = React.useState<string>(DefaultPropsImg.src)
   const [imageFile, setImageFile] = React.useState<File>()
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
   const {
     actions: { setProp },
     props: {
+      windowTarget,
       enableLink,
       size,
       imageSize,
@@ -131,32 +150,36 @@ export const ImageSettings = () => {
       picSize,
       uploadedImageUrl,
       uploadedImageMobileUrl,
-      maxWidth
+      maxWidth,
     },
   } = useNode((node) => ({
     props: node.data.props,
   }))
 
-
-
   const throttledSetProp = useCallback(
     throttle((property, value) => {
-      setProp((prop) => { prop[property] = value }, 0);
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
     }, 200), // Throttle to 50ms to 200ms
     [setProp]
-  );
+  )
 
   const handlePropChange = (property, value) => {
-    throttledSetProp(property, value);
-  };
+    throttledSetProp(property, value)
+  }
 
   const debouncedSetProp = useCallback(
     debounce((property, value) => {
-      setProp((prop) => { prop[property] = value }, 0);
-    }), [setProp])
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
+    [setProp]
+  )
 
   const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value);
+    debouncedSetProp(property, value)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,76 +197,96 @@ export const ImageSettings = () => {
 
   const getAspectRatio = (imageSrc) => {
     return new Promise((resolve, reject) => {
-      const img = new Image();
+      const img = new Image()
       img.onload = () => {
-        const width = img.naturalWidth;
-        const height = img.naturalHeight;
-        const aspectRatio = width / height;
-        resolve(aspectRatio);
-      };
+        const width = img.naturalWidth
+        const height = img.naturalHeight
+        const aspectRatio = width / height
+        resolve(aspectRatio)
+      }
       img.onerror = (error) => {
-        reject(error);
-      };
-      img.src = imageSrc;
-    });
-  };
+        reject(error)
+      }
+      img.src = imageSrc
+    })
+  }
 
   const calculateImageDimensions = (aspectRatio, maxWidth) => {
-    const height = maxWidth / aspectRatio;
+    const height = maxWidth / aspectRatio
     return {
       width: maxWidth,
-      height: Math.round(height)
-    };
-  };
+      height: Math.round(height),
+    }
+  }
 
   const uploadToS3 = async (imageData, aspectRatio) => {
-    const maxWidthMobile = 500;
-    const maxWidthDesktop = 1000;
-    const mobileDimensions = calculateImageDimensions(aspectRatio, maxWidthMobile);
-    const desktopDimenstions = calculateImageDimensions(aspectRatio, maxWidthDesktop)
+    const maxWidthMobile = 500
+    const maxWidthDesktop = 1000
+    const mobileDimensions = calculateImageDimensions(
+      aspectRatio,
+      maxWidthMobile
+    )
+    const desktopDimenstions = calculateImageDimensions(
+      aspectRatio,
+      maxWidthDesktop
+    )
 
-    const formData = new FormData();
-    formData.append('image', imageData);
-    formData.append('file', imageData);
-    formData.append('sizes[0]', `${mobileDimensions.width}x${mobileDimensions.height}`);
-    formData.append('sizes[1]', `${desktopDimenstions.width}x${desktopDimenstions.height}`);
-    formData.append('bucket_name', 'convify-images');
+    const formData = new FormData()
+    formData.append("image", imageData)
+    formData.append("file", imageData)
+    formData.append(
+      "sizes[0]",
+      `${mobileDimensions.width}x${mobileDimensions.height}`
+    )
+    formData.append(
+      "sizes[1]",
+      `${desktopDimenstions.width}x${desktopDimenstions.height}`
+    )
+    formData.append("bucket_name", "convify-images")
 
     try {
-      const response = await axios.post('/api/upload', formData);
+      const response = await axios.post("/api/upload", formData)
       return {
         data: response.data,
         mobileSize: `${mobileDimensions.width}x${mobileDimensions.height}`,
-        desktopSize: `${desktopDimenstions.width}x${desktopDimenstions.height}`
-      };
+        desktopSize: `${desktopDimenstions.width}x${desktopDimenstions.height}`,
+      }
     } catch (error) {
-      console.error('Error uploading image to S3:', error);
-      return null;
+      console.error("Error uploading image to S3:", error)
+      return null
     }
-  };
+  }
 
   const handleUploadOriginal = async () => {
     if (image && imageFile) {
-      setProp((props) => (props.src = image));
+      setProp((props) => (props.src = image))
       setShowDialog(false)
-      setIsLoading(true);
-      const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile));
-      const uploadedImage = await uploadToS3(imageFile, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
+      setIsLoading(true)
+      const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile))
+      const uploadedImage = await uploadToS3(imageFile, aspectRatio)
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.desktopSize]
+      ) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
-          props.uploadedImageUrl = uploadedImage.data.data[uploadedImage.desktopSize];
-        }, 1000);
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
+          props.uploadedImageUrl =
+            uploadedImage.data.data[uploadedImage.desktopSize]
+        }, 1000)
       }
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.mobileSize]
+      ) {
         setProp((props) => {
-          props.uploadedImageMobileUrl = uploadedImage.data.data.images[uploadedImage.mobileSize];
-        }, 1000);
+          props.uploadedImageMobileUrl =
+            uploadedImage.data.data.images[uploadedImage.mobileSize]
+        }, 1000)
       }
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-  console.log('src is: ', src)
+  }
+  console.log("src is: ", src)
 
   const cropperRef = React.useRef<ReactCropperElement>(null)
 
@@ -251,34 +294,38 @@ export const ImageSettings = () => {
     const cropper = cropperRef.current?.cropper
   }
 
-  const base64ToBlob = (base64: string, contentType: string = '', sliceSize: number = 512): Blob => {
-    const byteCharacters = atob(base64.split(',')[1]);
-    const byteArrays: Uint8Array[] = [];
+  const base64ToBlob = (
+    base64: string,
+    contentType: string = "",
+    sliceSize: number = 512
+  ): Blob => {
+    const byteCharacters = atob(base64.split(",")[1])
+    const byteArrays: Uint8Array[] = []
 
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-      const byteNumbers = new Array(slice.length);
+      const slice = byteCharacters.slice(offset, offset + sliceSize)
+      const byteNumbers = new Array(slice.length)
 
       for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
+        byteNumbers[i] = slice.charCodeAt(i)
       }
 
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
+      const byteArray = new Uint8Array(byteNumbers)
+      byteArrays.push(byteArray)
     }
 
-    return new Blob(byteArrays, { type: contentType });
-  };
+    return new Blob(byteArrays, { type: contentType })
+  }
 
   const getCropData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
       setProp(
         (props) =>
-        (props.src = cropperRef.current?.cropper
-          .getCroppedCanvas()
-          .toDataURL()),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
       setProp((props) => (props.width = "100%"), 1000)
@@ -287,37 +334,44 @@ export const ImageSettings = () => {
       setActiveAspectRatioBtn("source")
       setProp(
         (props) =>
-        (props.src = cropperRef.current?.cropper
-          .getCroppedCanvas()
-          .toDataURL()),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
-      const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas();
-      const imageData = croppedCanvas.toDataURL('image/jpeg');
-      const blob = base64ToBlob(imageData, 'image/jpeg');
-      const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
-      const aspectRatio = croppedCanvas.width / croppedCanvas.height;
-      const uploadedImage = await uploadToS3(file, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
+      const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
+      const imageData = croppedCanvas.toDataURL("image/jpeg")
+      const blob = base64ToBlob(imageData, "image/jpeg")
+      const file = new File([blob], "cropped-image.jpg", { type: "image/jpeg" })
+      const aspectRatio = croppedCanvas.width / croppedCanvas.height
+      const uploadedImage = await uploadToS3(file, aspectRatio)
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.desktopSize]
+      ) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
-          props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.desktopSize];
-        }, 1000);
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
+          props.uploadedImageUrl =
+            uploadedImage.data.data.images[uploadedImage.desktopSize]
+        }, 1000)
       }
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.mobileSize]
+      ) {
         setProp((props) => {
-          props.uploadedImageMobileUrl = uploadedImage.data.data.images[uploadedImage.mobileSize];
-        }, 1000);
+          props.uploadedImageMobileUrl =
+            uploadedImage.data.data.images[uploadedImage.mobileSize]
+        }, 1000)
       }
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-
+  }
 
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
       cropperRef.current?.cropper.getImageData().width /
-      cropperRef.current?.cropper.getImageData().height
+        cropperRef.current?.cropper.getImageData().height
     )
     setActiveAspectRatioBtn("source")
   }
@@ -342,11 +396,13 @@ export const ImageSettings = () => {
     setActiveAspectRatioBtn("landscapeo")
   }
 
-  const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
+  const themeBackgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
 
   return (
     <>
-      <Card className="p-2 mt-4">
+      <Card className="mb-2 mt-4 p-2">
         <CardHeader className="p-2">
           <CardTitle>{t("Image")}</CardTitle>
         </CardHeader>
@@ -360,9 +416,9 @@ export const ImageSettings = () => {
           />
           <div
             onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-            className="relative flex w-full flex-row justify-center group hover:cursor-pointer"
+            className="group relative flex w-full flex-row justify-center hover:cursor-pointer"
           >
-            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent group-hover:bg-white/[0.85] group-hover:opacity-100 opacity-0 transition-opacity duration-200 ease-in">
+            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent opacity-0 transition-opacity duration-200 ease-in group-hover:bg-white/[0.85] group-hover:opacity-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -380,7 +436,7 @@ export const ImageSettings = () => {
                 <path d="M17 22v-5.5" />
                 <circle cx="9" cy="9" r="2" />
               </svg>
-              <span className="text-sm font-semibold text-black mt-1">
+              <span className="mt-1 text-sm font-semibold text-black">
                 {t("Upload")}
               </span>
             </div>
@@ -394,74 +450,71 @@ export const ImageSettings = () => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
         type="multiple"
-        defaultValue={['content']}
-        className="w-full mb-10">
+        defaultValue={["content"]}
+        className="w-full"
+      >
         <AccordionItem value="item-2">
-          <AccordionTrigger >{t("General")}
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2">
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Alt label")}</p>
+          <AccordionTrigger>{t("General")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="alt-label">{t("Alt label")}</Label>
               <Input
-                className="p-2 text-sm"
+                id="alt-label"
                 value={alt}
                 placeholder={alt}
+                type="text"
                 onChange={(e) => {
                   setProp((props) => (props.alt = e.target.value), 1000)
                 }}
               />
             </div>
-          </AccordionContent>
-          <AccordionContent className="space-y-4">
             <div className="flex items-center space-x-2">
               <Checkbox
-               checked={enableLink}
+                checked={enableLink}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
-                  handlePropChange("enableLink", e);
+                  handlePropChange("enableLink", e)
                 }}
-                id="enableIcon"
+                id="enableLink"
               />
-              <label
-                htmlFor="enableLink"
-                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                onClick={(e) => {
-                  handlePropChange("enableLink", !enableLink);
-                }}
-              >
-                {t("Enable Link")}
-              </label>
+              <Label htmlFor="enableLink">{t("Enable Link")}</Label>
             </div>
             {enableLink && (
               <>
-                <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-sm text-muted-foreground">{t("Add URL")}</p>
+                <div className="space-y-2">
+                  <Label htmlFor="text-url">{t("Add URL")}</Label>
                   <Input
-                    className="p-2 text-sm"
+                    id="text-url"
+                    type="text"
                     value={url}
-                    placeholder={'URL'}
+                    placeholder={"URL"}
                     onChange={(e) => {
                       setProp((props) => (props.url = e.target.value), 1000)
                     }}
                   />
                 </div>
-                <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-md flex-1 text-muted-foreground">{t("Open in..")}</p>
+                <div className="space-y-2">
+                  <Label>{t("Open in")}</Label>
                   <Select
-                    defaultValue={icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
+                    defaultValue={"new-window"}
+                    value={windowTarget ? "new-window" : "same-window"}
+                    onValueChange={(e) =>
+                      setProp(
+                        (props) =>
+                          (props.windowTarget =
+                            e === "new-window" ? true : false)
+                      )
+                    }
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                       <SelectValue placeholder="Select Link" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="arrowright">
+                        <SelectItem value="new-window">
                           <p>{t("New Window")}</p>
                         </SelectItem>
-                        <SelectItem value="aperture">
+                        <SelectItem value="same-window">
                           <p>{t("Same Window")}</p>
                         </SelectItem>
                       </SelectGroup>
@@ -473,37 +526,30 @@ export const ImageSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger >{t("Design")}
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={themeBackgroundColor}
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
+                id="background-color"
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Corner Radius")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="corner-radius">{t("Corner Radius")}</Label>
+                <span className="text-muted-foreground text-xs">
                   {radiusCorner}
                 </span>
               </div>
               <Slider
-                className=""
                 defaultValue={[radiusCorner]}
                 value={[radiusCorner]}
                 max={200}
@@ -515,173 +561,184 @@ export const ImageSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Size")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="size">{t("Size")}</Label>
+                <span className="text-muted-foreground text-xs">
                   {imageSize}
                 </span>
               </div>
               <Slider
-                className=""
                 defaultValue={[imageSize]}
                 value={[imageSize]}
                 max={100}
                 min={0}
                 step={1}
                 onValueChange={(e) => {
-                  const newWidthPercentage = e[0];
-                  const maxWidthPx = parseInt(maxWidth, 10);
-                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx;
-                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10);
-                  const newHeightPx = newWidthPx * aspectRatio;
+                  const newWidthPercentage = e[0]
+                  const maxWidthPx = parseInt(maxWidth, 10)
+                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
+                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
+                  const newHeightPx = newWidthPx * aspectRatio
 
                   // Logging to see the calculated values
-                  console.log('New width percentage:', newWidthPercentage);
-                  console.log('Max width in px:', maxWidthPx);
-                  console.log('New width in px:', newWidthPx);
-                  console.log('Aspect ratio:', aspectRatio);
-                  console.log('New height in px:', newHeightPx);
+                  console.log("New width percentage:", newWidthPercentage)
+                  console.log("Max width in px:", maxWidthPx)
+                  console.log("New width in px:", newWidthPx)
+                  console.log("Aspect ratio:", aspectRatio)
+                  console.log("New height in px:", newHeightPx)
 
-                  handlePropChangeDebounced("imageSize", e);
+                  handlePropChangeDebounced("imageSize", e)
 
                   setProp((props) => {
-                    props.width = `${newWidthPx}px`;
+                    props.width = `${newWidthPx}px`
                     // props.height = `${newHeightPx}px`;
-                    props.imageSize = `${newWidthPercentage}`;
-                  }, 1000);
+                    props.imageSize = `${newWidthPercentage}`
+                  }, 1000)
                 }}
-
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Align")}</p>
+            <div className="space-y-2">
+              <Label>{t("Align")}</Label>
               <Tabs
                 value={align}
                 defaultValue={align}
                 onValueChange={(value) => {
                   setProp((props) => (props.align = value), 1000)
                 }}
-                className="flex-1">
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="start"><AlignHorizontalJustifyStart /></TabsTrigger>
-                  <TabsTrigger value="center"><AlignHorizontalJustifyCenter /></TabsTrigger>
-                  <TabsTrigger value="end"><AlignHorizontalJustifyEnd /></TabsTrigger>
+              >
+                <TabsList className="grid w-full grid-cols-3 bg-[#EEEEEE]">
+                  <TabsTrigger className="rounded" value="start">
+                    <AlignHorizontalJustifyStart size={16} />
+                  </TabsTrigger>
+                  <TabsTrigger className="rounded" value="center">
+                    <AlignHorizontalJustifyCenter size={16} />
+                  </TabsTrigger>
+                  <TabsTrigger className="rounded" value="end">
+                    <AlignHorizontalJustifyEnd size={16} />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger >{t("Spacing")}
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Width")}</Label>
               <Tabs
                 value={picSize}
                 defaultValue={picSize}
                 onValueChange={(value) => {
-                  setProp((props) => (props.picSize = value), 1000);
+                  setProp((props) => (props.picSize = value), 1000)
                   const sizeMap = {
                     small: "400px",
                     medium: "800px",
                     large: "850px",
                     full: "870px",
-                  };
-                  setProp((props) => (props.maxWidth = sizeMap[value]), 1000);
+                  }
+                  setProp((props) => (props.maxWidth = sizeMap[value]), 1000)
                 }}
-                className="flex-1">
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full"><MoveHorizontal /></TabsTrigger>
+              >
+                <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="small"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="medium"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="large"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="full"
+                  >
+                    <MoveHorizontal size={16} />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {Top}
-                </span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">{Top}</span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[Top]}
+                  value={[Top]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Top", e)}
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[Top]}
-                value={[Top]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("Top", e)
-                }
-              />
-            </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {Bottom}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {Bottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[Bottom]}
+                  value={[Bottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Bottom", e)}
+                />
               </div>
-              <Slider
-                defaultValue={[Bottom]}
-                value={[Bottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("Bottom", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {Right}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginRight">{t("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">{Right}</span>
+                </div>
+                <Slider
+                  defaultValue={[Right]}
+                  value={[Right]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Right", e)}
+                />
               </div>
-              <Slider
-                defaultValue={[Right]}
-                value={[Right]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("Right", e)
-                }
-              />
-            </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {Left}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">{Left}</span>
+                </div>
+                <Slider
+                  defaultValue={[Left]}
+                  value={[Left]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Left", e)}
+                />
               </div>
-              <Slider
-                defaultValue={[Left]}
-                value={[Left]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("Left", e)
-                }
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent
-          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[70%] relative flex flex-col gap-4 p-4 sm:p-8"
-          ref={dialogRef}>
+          className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8"
+          ref={dialogRef}
+        >
           <Cropper
             ref={cropperRef}
             style={{
@@ -700,63 +757,69 @@ export const ImageSettings = () => {
             responsive={true}
           />
           <div className="flex items-center justify-between gap-4">
-            <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+            <div className="bg-secondary flex gap-0 rounded-lg p-1">
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "source"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "source"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioSource}
               >
                 {t("Source")}
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "square"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "square"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioSquare}
               >
                 1:1
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portrait"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "portrait"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioPortrait}
               >
                 4:3
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscape"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "landscape"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioLandscape}
               >
                 16:9
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portraito"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "portraito"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioPortraitO}
               >
                 3:4
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscapeo"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "landscapeo"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioLandscape0}
               >
                 9:16
@@ -791,29 +854,28 @@ export const ImageSettings = () => {
   )
 }
 
-
 export const DefaultPropsImg = {
   alt: "Image",
   radiusCorner: 0,
-  size: 'small',
+  size: "small",
   // picSize: IconButtonSizes.small,
-  marginTop: '20px',
-  marginBottom: '20px',
-  marginLeft: '20px',
-  marginRight: '20px',
-  Top: '0px',
-  Bottom: '0px',
-  Left: '0px',
-  Right: '0px',
+  marginTop: "20px",
+  marginBottom: "20px",
+  marginLeft: "20px",
+  marginRight: "20px",
+  Top: "0px",
+  Bottom: "0px",
+  Left: "0px",
+  Right: "0px",
   background: "inherit",
   radius: "none",
   align: "center",
-  width: '90%',
-  height: 'auto',
+  width: "90%",
+  height: "auto",
   enableLink: false,
   imageSize: 100,
-  uploadedImageUrl: '',
-  uploadedImageMobileUrl: '',
+  uploadedImageUrl: "",
+  uploadedImageMobileUrl: "",
   src: ImagePlaceholder.src,
 }
 

@@ -545,7 +545,7 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.filled)
                 }}
                 className={cn(
-                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  "relative bg-[#FAFAFA] px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-[#15347B]": preset === "filled" }
                 )}
               >
@@ -570,7 +570,7 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.outLine)
                 }}
                 className={cn(
-                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  "relative bg-[#FAFAFA] px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-[#15347B]": preset === "outline" }
                 )}
               >

@@ -4,7 +4,7 @@ import { Input } from "./ui/input"
 interface ColorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  handleRemove: () => void
+  handleRemove?: () => void
 }
 
 export function ColorInput({
@@ -13,13 +13,20 @@ export function ColorInput({
   handleRemove,
   ...rest
 }: ColorInputProps) {
+  console.log(value)
+
   return (
     <div className="flex items-center gap-2">
       <div
-        style={{ backgroundColor: (value as string) ?? "transparent" }}
+        style={{
+          backgroundColor:
+            typeof value === "string" && value[0] === "#"
+              ? value
+              : "transparent",
+        }}
         className="relative h-[32px] w-[62px] overflow-hidden rounded-md"
       >
-        {(!value || value === "transparent" || value === "inherit") && (
+        {!(typeof value === "string" && value[0] === "#") && (
           <div className="absolute inset-0 z-0 grid place-content-center rounded-md border bg-[#FAFAFA] text-xs text-[#7B7D80]">
             Choose
           </div>
@@ -32,11 +39,14 @@ export function ColorInput({
           {...rest}
         />
       </div>
-      {!!value && !(value === "transparent" || value === "inherit") && (
-        <span onClick={() => handleRemove()}>
-          <X size={16} className={"text-muted-foreground cursor-pointer"} />
-        </span>
-      )}
+      {!!handleRemove
+        ? typeof value === "string" &&
+          value[0] === "#" && (
+            <span onClick={() => handleRemove()}>
+              <X size={16} className={"text-muted-foreground cursor-pointer"} />
+            </span>
+          )
+        : null}
     </div>
   )
 }

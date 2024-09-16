@@ -317,7 +317,7 @@ export const IconButtonSettings = () => {
                   }
                 }}
               >
-                <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA]">
+                <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                   <SelectValue placeholder="Select screen" />
                 </SelectTrigger>
                 <SelectContent>
@@ -563,7 +563,7 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.filled)
                 }}
                 className={cn(
-                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  "relative bg-[#FAFAFA] px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-[#15347B]": preset === "filled" }
                 )}
               >
@@ -579,7 +579,8 @@ export const IconButtonSettings = () => {
                   marginBottom={8}
                   marginLeft={0}
                   marginRight={0}
-                  iconType={PictureTypes.ICON}
+                  iconType={iconType}
+                  icon={icon}
                   height={34}
                 />
               </Card>
@@ -589,7 +590,7 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.outLine)
                 }}
                 className={cn(
-                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  "relative bg-[#FAFAFA] px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-[#15347B]": preset === "outline" }
                 )}
               >
@@ -605,7 +606,8 @@ export const IconButtonSettings = () => {
                   marginBottom={8}
                   marginLeft={0}
                   marginRight={0}
-                  iconType={PictureTypes.ICON}
+                  iconType={iconType}
+                  icon={icon}
                   height={34}
                 />
               </Card>

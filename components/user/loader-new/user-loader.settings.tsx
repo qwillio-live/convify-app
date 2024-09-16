@@ -32,6 +32,7 @@ import {
 } from "@/lib/state/flows-state/features/screenHooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import axios from "axios"
+import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
   alt,
@@ -303,11 +304,11 @@ export const LoaderSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="mb-10 w-full"
+        className="w-full"
       >
         <AccordionItem value="item-2">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
-          <AccordionContent className="space-y-4 pt-2">
+          <AccordionContent className="space-y-6 pt-2">
             <div className="flex items-center space-x-2">
               <Checkbox
                 checked={enableRedirect}
@@ -317,22 +318,14 @@ export const LoaderSettings = () => {
                 }}
                 id="enableIcon"
               />
-              <label
-                htmlFor="enableRedirect"
-                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Enable Redirect")}
-              </label>
+              <Label htmlFor="enableRedirect">{t("Enable Redirect")}</Label>
             </div>
-            <div className="style-control col-span-2 mt-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="time">{t("Wait Time (seconds)")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {time}
-                </span>
+                <span className="text-muted-foreground text-xs">{time}</span>
               </div>
               <Slider
-                className="flex-grow"
                 defaultValue={[5]}
                 value={[time]}
                 max={10}
@@ -341,13 +334,8 @@ export const LoaderSettings = () => {
                 onValueChange={(e) => handlePropChange("time", e[0])}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-              <label
-                htmlFor="text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Navigation")}
-              </label>
+            <div className="space-y-2">
+              <Label htmlFor="text">{t("Navigation")}</Label>
               <Select
                 defaultValue={
                   buttonAction === "next-screen" ? "next-screen" : nextScreen
@@ -365,17 +353,17 @@ export const LoaderSettings = () => {
                   }
                 }}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                   <SelectValue placeholder="Select screen" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value={"next-screen"}>
+                    <SelectItem className="text-xs" value={"next-screen"}>
                       {t("Next Screen")}
                     </SelectItem>
                     {screenNames?.map((screen, index) => {
                       return (
-                        <SelectItem value={screen.screenId}>
+                        <SelectItem className="text-xs" value={screen.screenId}>
                           {index + 1} : {screen.screenName}
                         </SelectItem>
                       )
@@ -388,43 +376,39 @@ export const LoaderSettings = () => {
         </AccordionItem>
         <AccordionItem value="design">
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={themeBackgroundColor}
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex flex-row items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
                 id="backgroundcolor"
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <CardContent className="flex flex-col gap-2 p-2">
-                <Label htmlFor="picture">{t("Custom Visual")}</Label>
-                <Input id="picture" type="file" onChange={handleInputChange} />
-              </CardContent>
+            <div className="space-y-2">
+              <Label htmlFor="picture">{t("Custom Visual")}</Label>
+              <Input
+                className="h-9 text-xs file:text-xs"
+                id="picture"
+                type="file"
+                onChange={handleInputChange}
+              />
             </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
           <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {top}
-                </span>
+                <span className="text-muted-foreground text-xs">{top}</span>
               </div>
               <Slider
                 className=""
@@ -436,12 +420,10 @@ export const LoaderSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("top", e)}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {bottom}
-                </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                <span className="text-muted-foreground text-xs">{bottom}</span>
               </div>
               <Slider
                 defaultValue={[bottom]}
@@ -453,12 +435,10 @@ export const LoaderSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {right}
-                </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginRight">{t("Right")}</Label>
+                <span className="text-muted-foreground text-xs">{right}</span>
               </div>
               <Slider
                 defaultValue={[right]}
@@ -469,13 +449,13 @@ export const LoaderSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("right", e)}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {left}
-                </span>
-              </div>
+            <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {left}
+                  </span>
+                </div>
               <Slider
                 defaultValue={[left]}
                 value={[left]}
