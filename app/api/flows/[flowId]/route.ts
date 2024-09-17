@@ -24,6 +24,7 @@ const FlowUpdateRequestSchema = z.object({
   steps: z.array(StepSchema).optional(),
 })
 
+export const maxDuration = 60
 export async function GET(
   req: NextRequest,
   { params }: { params: { flowId: string } }
