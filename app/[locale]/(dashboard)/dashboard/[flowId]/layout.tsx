@@ -125,6 +125,7 @@ import {
 } from "../../../fonts"
 import { cn } from "@/lib/utils"
 import { getTranslations } from "next-intl/server"
+import ReactQueryProvider from "@/components/react-query-provider"
 export default async function FlowsLayout({
   children,
   params: { flowId },
@@ -189,9 +190,11 @@ export default async function FlowsLayout({
       )}
     >
       <StoreProvider>
-        <FlowsAutoSaveProvider flowId={flowId}>
-          <div className="font-sans">{children}</div>
-        </FlowsAutoSaveProvider>
+        <ReactQueryProvider>
+          <FlowsAutoSaveProvider flowId={flowId}>
+            <div className="font-sans">{children}</div>
+          </FlowsAutoSaveProvider>
+        </ReactQueryProvider>
       </StoreProvider>
     </main>
   )
