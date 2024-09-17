@@ -208,7 +208,7 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="primarycolor">{t("Primary Color")}</Label>
                 <ColorInput
-                  resetValue={"#4050ff"}
+                  defaultValue={defaultPrimaryColor}
                   value={primaryColor}
                   onColorChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
@@ -225,7 +225,8 @@ export const GlobalThemeSettings = (props: Props) => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="secondarycolor">{t("Secondary Color")}</Label>
                 <ColorInput
-                  value={secondaryColor || defaultSecondaryColor}
+                  defaultValue={defaultSecondaryColor}
+                  value={secondaryColor}
                   onColorChange={(e) => {
                     // handleStyleChange({general: { secondaryColor: e.target.value}})
                     handleStyleChangeDebounced({
@@ -304,6 +305,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   {t("Primary Text Color")}
                 </Label>
                 <ColorInput
+                  defaultValue={defaultPrimaryTextColor}
                   value={primaryTextColor}
                   onColorChange={(e) => {
                     handleStyleChangeDebounced({
@@ -317,12 +319,11 @@ export const GlobalThemeSettings = (props: Props) => {
               </div>
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
-                <Label
-                  htmlFor="primarytextcolor"
-                >
+                <Label htmlFor="primarytextcolor">
                   {t("Secondary Text Color")}
                 </Label>
                 <ColorInput
+                  defaultValue={defaultSecondaryTextColor}
                   value={secondaryTextColor}
                   onColorChange={(e) => {
                     handleStyleChangeDebounced({
@@ -344,20 +345,18 @@ export const GlobalThemeSettings = (props: Props) => {
 
 interface ColorInputProps extends React.HTMLProps<HTMLInputElement> {
   onColorChange?: (color: string | undefined) => void
-  resetValue?: string
 }
 
 export const ColorInput = ({
   value,
   onColorChange,
-  resetValue,
   ...rest
 }: ColorInputProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onColorChange?.(e.target.value)
   }
   const handleRemove = () => {
-    onColorChange?.(resetValue)
+    onColorChange?.(rest.defaultValue as string)
   }
   return (
     <div className="flex items-center gap-2">
@@ -368,7 +367,7 @@ export const ColorInput = ({
         className="relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
       >
         {!value && (
-          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-sm border bg-[#FAFAFA]">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
             <span className="w-full text-center text-xs text-[#7B7D80]">
               Choose
             </span>
@@ -384,7 +383,8 @@ export const ColorInput = ({
         <X
           size={16}
           className={clsx("text-muted-foreground", {
-            "pointer-events-none opacity-0": !value || value === resetValue,
+            "pointer-events-none opacity-0":
+              !value || value === rest.defaultValue,
           })}
         />
       </span>
