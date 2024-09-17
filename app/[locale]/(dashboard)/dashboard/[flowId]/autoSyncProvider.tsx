@@ -2,7 +2,7 @@
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState, useRef } from "react"
 import Loading from "../loading"
 import { useRouter } from "next/navigation"
 import NotFound from "./not-found"
@@ -11,9 +11,9 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 5000
   const [isFlowLoaded, setIsFlowLoaded] = useState<null | Boolean>(null)
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
+  const abortControllerRef = useRef<AbortController | null>(null) // Ref to hold the abort controller
 
   const router = useRouter()
-
   const dispatch = useAppDispatch()
 
   const localFlowData = useAppSelector((state) => state?.screen)
@@ -23,18 +23,25 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     try {
       const response = await fetch(`/api/flows/${flowId}`)
       const flowData = await response.json()
-      console.log("flowData", flowData)
       dispatch(setScreensData(flowData))
       dispatch(setFlowSettings(flowData.flowSettings ?? {}))
 
       setIsFlowLoaded(true)
-      console.log("flowData", flowData)
     } catch (error) {
       setIsFlowLoaded(false)
     }
   }
 
   const updateFlowData = async (updatedFlowData) => {
+    // Abort the previous request if there's one in progress
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    // Create a new abort controller for the new request
+    const abortController = new AbortController()
+    abortControllerRef.current = abortController
+
     try {
       await fetch(`/api/flows/${flowId}`, {
         method: "PUT",
@@ -42,8 +49,15 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedFlowData),
+        signal: abortController.signal, // Attach the abort signal to the request
       })
-    } catch (error) {}
+    } catch (error) {
+      if (error.name === "AbortError") {
+        console.log("Previous PUT request was aborted.")
+      } else {
+        console.error("Error updating flow data:", error)
+      }
+    }
   }
 
   useEffect(() => {
