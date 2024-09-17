@@ -418,7 +418,7 @@ export function CreateFlowComponent({ flowId }) {
                     backgroundPosition: "center",
                   }}
                   className={cn(
-                    "page-container z-20 mx-auto mt-0 box-content min-h-[400px] py-0 font-sans antialiased",
+                    "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-52px+99vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                     footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"

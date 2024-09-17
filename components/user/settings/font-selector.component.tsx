@@ -6,6 +6,7 @@ import {
   CommandItem,
   Command,
 } from "@/components/ui/command"
+import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import {
@@ -34,20 +35,15 @@ export const FontSelector = ({
   setOpen,
   defaultFont,
 }: FontSelectorProps) => (
-  <div className="col-span-2 flex flex-col items-center space-y-2">
-    <label
-      htmlFor={label}
-      className="basis-full self-start text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-    >
-      {label}
-    </label>
+  <div className="space-y-2">
+    <Label htmlFor={label}>{label}</Label>
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="bg-card flex w-full items-center justify-between border-inherit px-3 py-2 text-xs font-normal"
+          className="bg-card flex h-9 w-full items-center justify-between border-inherit px-3 py-2 text-xs font-normal"
         >
           {selectedFont ? (
             <>
@@ -61,7 +57,7 @@ export const FontSelector = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-10 w-[200px] p-0">
+      <PopoverContent className="z-10 p-0">
         <ScrollArea className="h-72 rounded-md border">
           <Command>
             <CommandInput placeholder="Search font..." />

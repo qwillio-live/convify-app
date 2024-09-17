@@ -417,7 +417,7 @@ export const PictureChoiceSettings = () => {
               style={{
                 ...(preset === PictureChoicePresets.outlined
                   ? {
-                      border: `1px solid ${primaryColor}`,
+                      border: `1px solid #2B3398`,
                     }
                   : {}),
               }}
@@ -444,7 +444,7 @@ export const PictureChoiceSettings = () => {
               style={{
                 ...(preset === PictureChoicePresets.semifilled
                   ? {
-                      border: `1px solid ${primaryColor}`,
+                      border: `1px solid #2B3398`,
                     }
                   : {}),
               }}

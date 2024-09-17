@@ -247,7 +247,7 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": headerMode,
+                  "border-[#2B3398]": headerMode,
                   "hover:border-4": !headerMode,
                 }
               )}
@@ -282,7 +282,7 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": headerMode,
+                  "border-[#2B3398]": headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -309,7 +309,7 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": footerMode,
+                  "border-[#2B3398]": footerMode,
                   "hover:border-4": !footerMode,
                 }
               )}
@@ -341,7 +341,7 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": footerMode,
+                  "border-[#2B3398]": footerMode,
                   "hover:border-4": !footerMode,
                 }
               )}
@@ -354,7 +354,7 @@ const ScreensList = ({ flowId }) => {
           </button>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="item-2" className="border-t">
+      <AccordionItem value="item-2" className="border-b-0 border-t">
         <AccordionTrigger
           className=" hover:no-underline"
           onClick={() => dispatch(setHeaderFooterMode(false))}
@@ -396,8 +396,8 @@ const ScreensList = ({ flowId }) => {
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
-                    <div className="flex flex-row items-center justify-between gap-4 px-2">
-                      <span className="font-bold">{index + 1}</span>
+                    <div className="flex flex-row items-center justify-between gap-4">
+                      <span className="text-sm font-bold">{index + 1}</span>
                       <EditScreenName
                         screenId={screen.screenId}
                         screenName={screen.screenName}
@@ -427,7 +427,7 @@ const ScreensList = ({ flowId }) => {
                         className={cn(
                           "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:hidden md:h-32 md:w-[13.5vw]",
                           {
-                            "border-blue-500":
+                            "border-[#2B3398]":
                               selectedScreenIndex === index &&
                               !headerFooterMode,
                             "hover:border-4": selectedScreenIndex !== index,
@@ -473,7 +473,7 @@ const ScreensList = ({ flowId }) => {
                       className={cn(
                         "relative mt-1 hidden h-32 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:flex md:w-[13.5vw]",
                         {
-                          "border-blue-500":
+                          "border-[#2B3398]":
                             selectedScreenIndex === index && !headerFooterMode,
                           "hover:border-4": selectedScreenIndex !== index,
                         }
@@ -599,10 +599,10 @@ const EditScreenName = ({ screenId, screenName }) => {
         </div>
       )}
       {editing && (
-        <div className="flex grow flex-row items-center justify-end gap-2 p-0.5 text-current">
+        <div className="flex grow flex-row items-center justify-end gap-1 text-current">
           <Input
             ref={ref}
-            className="text-right"
+            className="h-6 rounded bg-white text-right text-sm"
             value={name}
             onChange={handleInputChange}
             onBlur={() => handleChange(name)}
@@ -620,7 +620,7 @@ const EditScreenName = ({ screenId, screenName }) => {
 export function HelperInformation({ infoText }: { infoText: string }) {
   return (
     <UiCard className={cn("flex gap-2 rounded-lg border p-3 pr-4")}>
-      <div className="flex flex-row items-start gap-1 text-left">
+      <div className="flex flex-row items-start gap-2 text-left">
         <InfoIcon className="size-4 shrink-0" />
         <p className="text-xs">{infoText}</p>
       </div>
