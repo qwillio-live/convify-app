@@ -2,16 +2,20 @@
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import React, { useCallback, useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import Loading from "../loading"
 import { useRouter } from "next/navigation"
 import NotFound from "./not-found"
 
 export const FlowsAutoSaveProvider = ({ children, flowId }) => {
-  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 5000
+  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 1000
   const [isFlowLoaded, setIsFlowLoaded] = useState<null | Boolean>(null)
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
-  const abortControllerRef = useRef<AbortController | null>(null) // Ref to hold the abort controller
+
+  const [controller, setController] = useState<AbortController | null>(null) // Controller state
+  const signal = useRef<AbortSignal | null>(null) // Signal ref to be used in fetch
+  const [stateRefresh, setStateRefresh] = useState(true) // To trigger re-renders if needed
+  const [cancelReq, setCancelReq] = useState(false) // Optional cancellation trigger
 
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -32,15 +36,10 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     }
   }
 
-  const updateFlowData = async (updatedFlowData) => {
-    // Abort the previous request if there's one in progress
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
-    }
-
-    // Create a new abort controller for the new request
-    const abortController = new AbortController()
-    abortControllerRef.current = abortController
+  const startFetch = async (updatedFlowData) => {
+    let newController = new AbortController()
+    setController(newController)
+    signal.current = newController.signal
 
     try {
       await fetch(`/api/flows/${flowId}`, {
@@ -49,14 +48,28 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedFlowData),
-        signal: abortController.signal, // Attach the abort signal to the request
+        signal: signal.current, // Pass the abort signal
       })
+        .then((response) => {
+          setStateRefresh(!stateRefresh) // Optionally refresh or handle response
+          console.log("PUT request complete", response)
+        })
+        .catch((error) => {
+          if (error.name === "AbortError") {
+            console.log("Request was aborted")
+          } else {
+            console.error("PUT request failed", error)
+          }
+        })
     } catch (error) {
-      if (error.name === "AbortError") {
-        console.log("Previous PUT request was aborted.")
-      } else {
-        console.error("Error updating flow data:", error)
-      }
+      console.error(`Error during fetch: ${error.message}`)
+    }
+  }
+
+  const stopFetch = () => {
+    if (controller) {
+      controller.abort() // Abort ongoing request
+      setCancelReq(true)
     }
   }
 
@@ -67,7 +80,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       interval = setInterval(() => {
         setUpdatedFlowData((updatedFlowData) => {
           if (updatedFlowData) {
-            updateFlowData(updatedFlowData)
+            startFetch(updatedFlowData) // Start the PUT request
             return null
           }
           return updatedFlowData
@@ -75,7 +88,10 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       }, autoSaveTime)
     })
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      stopFetch() // Abort any pending requests on component unmount
+    }
   }, [])
 
   useEffect(() => {
@@ -108,6 +124,4 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
 
   if (isFlowLoaded === null) return <Loading />
   if (isFlowLoaded === false) return <NotFound />
-
-  return children
 }
