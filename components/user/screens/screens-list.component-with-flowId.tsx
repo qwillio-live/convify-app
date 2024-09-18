@@ -112,6 +112,7 @@ const ScreensList = ({ flowId }) => {
   // }, []);
 
   const handleReorder = (data) => {
+    actions.deserialize(editorLoad)
     dispatch(setScreens(data))
   }
 
