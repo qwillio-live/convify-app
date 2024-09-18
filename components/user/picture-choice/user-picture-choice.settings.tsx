@@ -471,7 +471,7 @@ export const PictureChoiceSettings = () => {
               style={{
                 ...(preset === PictureChoicePresets.filled
                   ? {
-                      border: `1px solid ${primaryColor}`,
+                      border: `1px solid #2B3398`,
                     }
                   : {}),
               }}

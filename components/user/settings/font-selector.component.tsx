@@ -13,6 +13,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  PopoverPortal,
 } from "@radix-ui/react-popover"
 import { ChevronsUpDown, Check, ChevronDown } from "lucide-react"
 
@@ -57,37 +58,39 @@ export const FontSelector = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-10 p-0">
-        <ScrollArea className="h-72 rounded-md border">
-          <Command>
-            <CommandInput placeholder="Search font..." />
-            <CommandEmpty>No font found.</CommandEmpty>
-            <CommandGroup>
-              {fontList?.map((font) => (
-                <CommandItem
-                  key={font.variable}
-                  value={font.variable}
-                  onSelect={(currentValue) => {
-                    handleFontChange(currentValue)
-                    setOpen(false)
-                  }}
-                  style={{ fontFamily: `var(${font.variable})` }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 size-4",
-                      selectedFont === font.variable
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                  {font.name}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </Command>
-        </ScrollArea>
-      </PopoverContent>
+      <PopoverPortal>
+        <PopoverContent className="z-10 p-0">
+          <ScrollArea className="h-72 rounded-md border">
+            <Command>
+              <CommandInput placeholder="Search font..." />
+              <CommandEmpty>No font found.</CommandEmpty>
+              <CommandGroup>
+                {fontList?.map((font) => (
+                  <CommandItem
+                    key={font.variable}
+                    value={font.variable}
+                    onSelect={(currentValue) => {
+                      handleFontChange(currentValue)
+                      setOpen(false)
+                    }}
+                    style={{ fontFamily: `var(${font.variable})` }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 size-4",
+                        selectedFont === font.variable
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                    {font.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </Command>
+          </ScrollArea>
+        </PopoverContent>
+      </PopoverPortal>
     </Popover>
   </div>
 )

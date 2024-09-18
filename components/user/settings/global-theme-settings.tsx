@@ -318,8 +318,8 @@ export const GlobalThemeSettings = (props: Props) => {
                 />
               </div>
 
-              <div className="col-span-2 flex flex-row items-center space-x-2">
-                <Label htmlFor="primarytextcolor">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="secondarytextcolor">
                   {t("Secondary Text Color")}
                 </Label>
                 <ColorInput
