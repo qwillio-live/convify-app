@@ -2,82 +2,103 @@
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import React, { useEffect } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import Loading from "../loading"
+import { useRouter } from "next/navigation"
 import NotFound from "./not-found"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-
-// API to fetch flow data
-const fetchFlowData = async (flowId) => {
-  const response = await fetch(`/api/flows/${flowId}`)
-  if (!response.ok) {
-    throw new Error("Failed to fetch flow data")
-  }
-  const data = await response.json()
-  return data
-}
-
-// API to update flow data
-const updateFlowData = async ({ flowId, data }) => {
-  const response = await fetch(`/api/flows/${flowId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-  if (!response.ok) {
-    throw new Error("Failed to update flow data")
-  }
-  const updatedData = await response.json()
-  return updatedData
-}
 
 export const FlowsAutoSaveProvider = ({ children, flowId }) => {
-  console.log("this is latest deployment check")
+  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 8000
+  const [isFlowLoaded, setIsFlowLoaded] = useState<null | Boolean>(null)
+  const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
+
+  const [controller, setController] = useState<AbortController | null>(null) // Controller state
+  const signal = useRef<AbortSignal | null>(null) // Signal ref to be used in fetch
+  const [stateRefresh, setStateRefresh] = useState(true) // To trigger re-renders if needed
+  const [cancelReq, setCancelReq] = useState(false) // Optional cancellation trigger
+
+  const router = useRouter()
   const dispatch = useAppDispatch()
-  const queryClient = useQueryClient()
 
   const localFlowData = useAppSelector((state) => state?.screen)
   const localFlowSettings = useAppSelector((state) => state?.theme)
 
-  // Fetch the flow data using react-query
-  const {
-    data: flowData,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["flowData", flowId],
-    queryFn: () => fetchFlowData(flowId),
-  })
-
-  // Sync fetched data to Redux when fetched data changes
-  useEffect(() => {
-    if (flowData) {
+  const getFlowData = async () => {
+    try {
+      const response = await fetch(`/api/flows/${flowId}`)
+      const flowData = await response.json()
       dispatch(setScreensData(flowData))
       dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+
+      setIsFlowLoaded(true)
+    } catch (error) {
+      setIsFlowLoaded(false)
     }
-  }, [dispatch, flowData])
+  }
 
-  // Mutation for updating flow data
-  const { mutate: saveFlowData } = useMutation({
-    mutationKey: ["lessonResponse"],
-    mutationFn: (newFlowData: any) =>
-      updateFlowData({ flowId, data: newFlowData }),
+  const startFetch = async (updatedFlowData) => {
+    let newController = new AbortController()
+    setController(newController)
+    signal.current = newController.signal
 
-    onSuccess: () => {
-      // Optionally invalidate and refetch the flowData
-      queryClient.invalidateQueries({ queryKey: ["flowData", flowId] })
-      queryClient.refetchQueries({ queryKey: ["flowData", flowId] })
-    },
-  })
+    try {
+      await fetch(`/api/flows/${flowId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFlowData),
+        signal: signal.current, // Pass the abort signal
+      })
+        .then((response) => {
+          setStateRefresh(!stateRefresh) // Optionally refresh or handle response
+          console.log("PUT request complete", response)
+        })
+        .catch((error) => {
+          if (error.name === "AbortError") {
+            console.log("Request was aborted")
+          } else {
+            console.error("PUT request failed", error)
+          }
+        })
+    } catch (error) {
+      console.error(`Error during fetch: ${error.message}`)
+    }
+  }
 
-  // Handle Redux state changes and trigger a save when it changes
+  const stopFetch = () => {
+    if (controller) {
+      controller.abort() // Abort ongoing request
+      setCancelReq(true)
+    }
+  }
+
   useEffect(() => {
-    if (!localFlowData || localFlowData?.screens.length === 0) return
+    let interval
 
-    const steps = localFlowData.screens.map((step, index) => ({
+    getFlowData().then(() => {
+      interval = setInterval(() => {
+        setUpdatedFlowData((updatedFlowData) => {
+          if (updatedFlowData) {
+            startFetch(updatedFlowData) // Start the PUT request
+            return null
+          }
+          return updatedFlowData
+        })
+      }, autoSaveTime)
+    })
+
+    return () => {
+      clearInterval(interval)
+      stopFetch() // Abort any pending requests on component unmount
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isFlowLoaded) return
+    if (localFlowData?.screens.length === 0) return
+
+    const steps = localFlowData?.screens.map((step, index) => ({
       id: step.screenId,
       name: step.screenName,
       content: JSON.parse(step.screenData),
@@ -86,7 +107,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       templateId: step.screenTemplateId,
     }))
 
-    const newFlowData = {
+    const data = {
       steps,
       headerData: localFlowData?.screensHeader,
       footerData: localFlowData?.screensFooter,
@@ -97,13 +118,10 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
         text: localFlowSettings?.text,
       },
     }
-    queryClient.cancelQueries({ queryKey: ["lessonResponse"] })
-    // Trigger save (PUT request) whenever the Redux state changes
-    saveFlowData(newFlowData)
-  }, [localFlowData, localFlowSettings, saveFlowData])
 
-  if (isLoading) return <Loading />
-  if (isError) return <NotFound />
+    setUpdatedFlowData(data)
+  }, [isFlowLoaded, localFlowData, localFlowSettings])
 
-  return children
+  if (isFlowLoaded === null) return <Loading />
+  if (isFlowLoaded === false) return <NotFound />
 }
