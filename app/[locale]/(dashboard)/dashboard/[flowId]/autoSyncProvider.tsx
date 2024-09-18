@@ -2,22 +2,18 @@
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import React, { useEffect, useState, useRef } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Loading from "../loading"
 import { useRouter } from "next/navigation"
 import NotFound from "./not-found"
 
 export const FlowsAutoSaveProvider = ({ children, flowId }) => {
-  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 8000
+  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 5000
   const [isFlowLoaded, setIsFlowLoaded] = useState<null | Boolean>(null)
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
 
-  const [controller, setController] = useState<AbortController | null>(null) // Controller state
-  const signal = useRef<AbortSignal | null>(null) // Signal ref to be used in fetch
-  const [stateRefresh, setStateRefresh] = useState(true) // To trigger re-renders if needed
-  const [cancelReq, setCancelReq] = useState(false) // Optional cancellation trigger
-
   const router = useRouter()
+
   const dispatch = useAppDispatch()
 
   const localFlowData = useAppSelector((state) => state?.screen)
@@ -27,20 +23,18 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     try {
       const response = await fetch(`/api/flows/${flowId}`)
       const flowData = await response.json()
+      console.log("flowData", flowData)
       dispatch(setScreensData(flowData))
       dispatch(setFlowSettings(flowData.flowSettings ?? {}))
 
       setIsFlowLoaded(true)
+      console.log("flowData", flowData)
     } catch (error) {
       setIsFlowLoaded(false)
     }
   }
 
-  const startFetch = async (updatedFlowData) => {
-    let newController = new AbortController()
-    setController(newController)
-    signal.current = newController.signal
-
+  const updateFlowData = async (updatedFlowData) => {
     try {
       await fetch(`/api/flows/${flowId}`, {
         method: "PUT",
@@ -48,29 +42,8 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedFlowData),
-        signal: signal.current, // Pass the abort signal
       })
-        .then((response) => {
-          setStateRefresh(!stateRefresh) // Optionally refresh or handle response
-          console.log("PUT request complete", response)
-        })
-        .catch((error) => {
-          if (error.name === "AbortError") {
-            console.log("Request was aborted")
-          } else {
-            console.error("PUT request failed", error)
-          }
-        })
-    } catch (error) {
-      console.error(`Error during fetch: ${error.message}`)
-    }
-  }
-
-  const stopFetch = () => {
-    if (controller) {
-      controller.abort() // Abort ongoing request
-      setCancelReq(true)
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -80,7 +53,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       interval = setInterval(() => {
         setUpdatedFlowData((updatedFlowData) => {
           if (updatedFlowData) {
-            startFetch(updatedFlowData) // Start the PUT request
+            updateFlowData(updatedFlowData)
             return null
           }
           return updatedFlowData
@@ -88,10 +61,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       }, autoSaveTime)
     })
 
-    return () => {
-      clearInterval(interval)
-      stopFetch() // Abort any pending requests on component unmount
-    }
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -124,4 +94,6 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
 
   if (isFlowLoaded === null) return <Loading />
   if (isFlowLoaded === false) return <NotFound />
+
+  return children
 }
