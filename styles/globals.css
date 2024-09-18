@@ -128,27 +128,40 @@ html {
 }
 
 .react-colorful__last-control {
-  margin-top: 12px;
-  max-height: 16px;
-  border-radius: 3px !important;
+  margin-top: 8px;
+  max-height: 10px;
+  border-radius: 4.6px !important;
 }
 /* .react-colorful__pointer-fill {
   background-color: white !important;
 } */
 .react-colorful__pointer {
-  height: 15px !important;
-  width: 15px !important;
+  height: 10.38px !important;
+  width: 10.38px !important;
 }
 
 .react-colorful {
-  width: 220px !important;
-  height: 166px !important;
+  width: 100% !important;
+  height: 8.125rem !important;
 }
 .react-colorful__saturation {
-  border-radius: 8px !important;
+  border-radius: 4.5px !important;
 }
 .react-colorful__hue .react-colorful__pointer-fill {
   background-color: white !important;
+}
+
+@media only screen and (min-width: 1980px) {
+  .react-colorful {
+    height: 12.375rem !important;
+  }
+  .react-colorful__pointer {
+    height: 15.55px !important;
+    width: 15.55px !important;
+  }
+  .react-colorful__last-control {
+    max-height: 14px;
+  }
 }
 
 userContainer {

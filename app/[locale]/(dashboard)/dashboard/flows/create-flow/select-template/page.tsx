@@ -27,6 +27,7 @@ import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
 import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
+import { cn } from "@/lib/utils"
 
 const cardData = [
   { id: 1, category: "Recruiting", title: "Recruiting Campaign" },
@@ -160,25 +161,25 @@ export default function SelectTemplate() {
   const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
   const telegramUser = env.NEXT_PUBLIC_TL_URL
   return (
-    <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
+    <div className="font-poppins flex h-screen flex-col overflow-hidden tracking-wide">
       {!desktopDrawerOpen && (
-        <div className="flex h-full w-full px-6">
+        <div className="flex size-full">
           <div className="flex w-full">
-            <div className="w-full md:w-6/12">
-              <ScrollArea className="z-20 h-full py-9 pl-6 pr-6">
-                <div className="mb-9">
-                  <h2 className="mb-5 text-4xl font-semibold">
+            <div className="relative w-full bg-[#FAFAFA] md:w-6/12">
+              <ScrollArea className="z-20 h-full px-6 2xl:px-10">
+                <div className="pb-24 pt-10">
+                  <h2 className="mb-6 text-[2rem] font-semibold leading-8">
                     {t("selectTemplateHeader")}
                   </h2>
-                  <Breadcrumb className="mb-6 mt-4 text-base font-normal hover:cursor-pointer">
-                    <BreadcrumbList>
-                      <BreadcrumbItem className="mr-2 text-base">
-                        <BreadcrumbPage className="font-semibold">
+                  <Breadcrumb>
+                    <BreadcrumbList className="text-base sm:gap-4">
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>
                           {t("templateBreadcrumb")}
                         </BreadcrumbPage>
                       </BreadcrumbItem>
                       <BreadcrumbSeparator />
-                      <BreadcrumbItem className="mx-2 text-base">
+                      <BreadcrumbItem>
                         <BreadcrumbLink>
                           <Link
                             href={`/dashboard/flows/create-flow/select-color?allow=${isAllowed}`}
@@ -188,7 +189,7 @@ export default function SelectTemplate() {
                         </BreadcrumbLink>
                       </BreadcrumbItem>
                       <BreadcrumbSeparator />
-                      <BreadcrumbItem className="mx-2 text-base">
+                      <BreadcrumbItem>
                         <BreadcrumbLink>
                           <Link
                             href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
@@ -199,43 +200,29 @@ export default function SelectTemplate() {
                       </BreadcrumbItem>
                     </BreadcrumbList>
                   </Breadcrumb>
-                  <div className=" mb-6 mt-12 flex w-auto flex-wrap gap-3  pr-2">
-                    <Button
-                      className={`grow !px-[0.3rem] font-normal ${
-                        selectedCategory === "all" ? "font-semibold" : ""
-                      } `}
-                      size={"filterIcon"}
-                      variant={`${
-                        selectedCategory === "all" ? "secondary" : "outline"
-                      }`}
-                      onClick={() => handleFilterClick("all")}
-                    >
-                      {t("All")}
-                    </Button>
-                    {categories.map((category, index) => {
-                      return (
-                        <Button
-                          key={index}
-                          className={`grow font-normal ${
-                            selectedCategory === category ? "font-semibold" : ""
-                          }`}
-                          size="filterIcon"
-                          variant={`${
-                            selectedCategory === category
-                              ? "secondary"
-                              : "outline"
-                          }`}
-                          onClick={() => handleFilterClick(category)}
-                        >
-                          {category}
-                        </Button>
-                      )
-                    })}
+                  <div className="mb-6 mt-14 flex items-center justify-between">
+                    <div className="flex space-x-1 rounded-lg bg-[#EEEEEE] p-1">
+                      {categories.map((category, index) => {
+                        return (
+                          <Button
+                            key={index}
+                            className={cn(
+                              "hover:text-foreground h-7 rounded-sm bg-transparent px-2 text-xs font-normal leading-3 text-[#7B7D80] hover:bg-white/70",
+                              {
+                                "text-foreground bg-white":
+                                  selectedCategory === category,
+                              }
+                            )}
+                            onClick={() => handleFilterClick(category)}
+                          >
+                            {category}
+                          </Button>
+                        )
+                      })}
+                    </div>
 
                     <Button
-                      className="grow border-0 bg-white font-semibold"
-                      variant="secondary"
-                      size="filterIcon"
+                      className="text-foreground h-9 border bg-white text-xs font-normal leading-3 hover:bg-white/10"
                       onClick={() => {
                         let scratchTemplate = templates.find(
                           (template) => template.name === "Start from Scratch"
@@ -253,12 +240,12 @@ export default function SelectTemplate() {
 
                   <div className="!z-0 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {filteredCards.map((card, index) => (
-                      <div key={index} className="pr-2">
+                      <div key={index} className="space-y-2">
                         <div
-                          className={`relative h-44 w-full cursor-pointer space-y-3 overflow-hidden rounded-md border xl:h-40 2xl:h-56 ${
+                          className={`relative h-52 w-full cursor-pointer space-y-3 overflow-hidden rounded-lg border shadow-sm min-[1920px]:h-[18.5rem] ${
                             selectedCard - 1 === index
-                              ? "border-black"
-                              : "border-none"
+                              ? "border-[#23262C]"
+                              : "border-transparent"
                           }`} // Adjusted height and rounded border
                           onClick={() => handleCardClick(index)}
                         >
@@ -272,13 +259,13 @@ export default function SelectTemplate() {
                           )}
 
                           <span data-state="closed">
-                            <div className="h-full w-full rounded-md">
+                            <div className="h-full w-full rounded-lg">
                               <img
                                 alt="Thinking Components"
                                 loading="lazy"
                                 decoding="async"
                                 data-nimg="1"
-                                className={`h-full w-full rounded-md object-cover transition-all ${
+                                className={`h-full w-full rounded-md object-cover object-center transition-all ${
                                   loadingCardIndex !== index
                                     ? "hover:scale-105"
                                     : ""
@@ -288,14 +275,14 @@ export default function SelectTemplate() {
                             </div>
                           </span>
                         </div>
-                        <div className="space-y-1">
-                          <h3 className="text-md my-2 font-semibold leading-none">
+                        <div className="space-y-2">
+                          <h3 className="text-base font-semibold leading-4">
                             {card?.name}
                           </h3>
                           {card?.isPopular && (
                             <Badge
                               variant="default"
-                              className="font-sans3 rounded-md bg-black px-2 py-1 font-semibold"
+                              className="rounded-sm border-none leading-none md:h-[15px] md:px-1.5 md:text-[10px] md:font-normal"
                             >
                               {t("popular")}
                             </Badge>
@@ -306,9 +293,33 @@ export default function SelectTemplate() {
                   </div>
                 </div>
               </ScrollArea>
+              <div className="absolute inset-x-0 bottom-0  z-30 flex items-center justify-between bg-white p-6 pt-4 2xl:px-10">
+                <Link href={"/dashboard"}>
+                  <Button
+                    className="w-[7.5rem] rounded-lg text-base font-normal"
+                    variant="outline"
+                  >
+                    {t("exit")}
+                  </Button>
+                </Link>
+                <div className="flex space-x-4">
+                  <Link href={"/dashboard"}>
+                    <Button variant="outline" className="h-9.5 rounded-lg">
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Link
+                    href={`/dashboard/flows/create-flow/select-color?allow=${isAllowed}`}
+                  >
+                    <Button className="w-[7.5rem] rounded-lg text-base font-normal text-white ">
+                      {t("continue")}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
             <Separator orientation="vertical" className="z-40" />
-            <div className=" mx-auto w-full py-6 md:w-6/12">
+            <div className=" mx-auto w-full bg-white p-6 md:w-6/12">
               {selectedCard && (
                 <iframe
                   src={templates[selectedCard - 1]?.content}
@@ -319,35 +330,6 @@ export default function SelectTemplate() {
                   style={{ minHeight: "800px" }}
                 ></iframe>
               )}
-            </div>
-          </div>
-          <div className="fixed bottom-0 left-4 right-5  z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
-            <Link href={"/dashboard"}>
-              <Button variant="secondary" size="icon">
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </Link>
-            <div className="flex hover:cursor-pointer">
-              <Link href={"/dashboard"}>
-                <Button
-                  className="mr-2 w-32 font-bold"
-                  size="lg"
-                  variant="outline"
-                >
-                  {t("exit")}
-                </Button>
-              </Link>
-              <Link
-                href={`/dashboard/flows/create-flow/select-color?allow=${isAllowed}`}
-              >
-                <Button
-                  className="w-32 font-bold text-white hover:cursor-pointer"
-                  size="lg"
-                  variant="default"
-                >
-                  {t("continue")}
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
