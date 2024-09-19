@@ -318,7 +318,7 @@ export default function SelectTemplate() {
                   <Link href={"/dashboard"}>
                     <Button
                       variant="outline"
-                      className="h-9.5 rounded-lg px-[11px]"
+                      className="h-9.5 rounded-lg px-2.5"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
