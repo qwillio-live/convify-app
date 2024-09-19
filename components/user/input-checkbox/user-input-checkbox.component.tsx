@@ -447,7 +447,6 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                         // Toggle isFilled state based on its current value
                         setIsFilled((prevState) => {
                           const newState = !prevState // Toggle the state
-                          dispatch(setUpdateFilledCount(newState ? 1 : -1)) // Update filled count
                           setInputValue(newState ? "true" : "false") // Update inputValue
                           dispatch(
                             setPreviewScreenData({
