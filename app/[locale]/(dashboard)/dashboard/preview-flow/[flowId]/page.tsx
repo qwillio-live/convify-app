@@ -1,4 +1,4 @@
-export const runtime = "edge"
+// export const runtime = "edge"
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import React, { Suspense } from "react"
 
