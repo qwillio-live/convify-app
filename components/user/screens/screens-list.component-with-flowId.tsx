@@ -133,13 +133,17 @@ const ScreensList = ({ flowId }) => {
 
   useEffect(() => {
     async function reset() {
-      if (screens && screens[0] && screens[0].screenData) {
-        dispatch(setSelectedScreen(0))
-        await actions.deserialize(screens[0].screenData || {})
+      if (
+        screens &&
+        typeof selectedScreenIndex !== "undefined" &&
+        screens[selectedScreenIndex] &&
+        screens[selectedScreenIndex].screenData
+      ) {
+        await actions.deserialize(screens[selectedScreenIndex].screenData || {})
       }
     }
     reset()
-  }, [])
+  }, [selectedScreenIndex])
 
   const handleScreenClick = useCallback(
     async (index: number) => {
