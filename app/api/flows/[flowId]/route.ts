@@ -1,4 +1,3 @@
-export const runtime = "edge"
 // @ts-nocheck
 import { getServerSession } from "next-auth"
 import { logError } from "@/lib/utils/logger"
