@@ -4,8 +4,11 @@ import Header from "../constants/headerEls"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import Custom404 from "@/components/sections/createFlow/share/404"
-import { resetScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useAppDispatch } from "@/lib/state/flows-state/hooks"
+import {
+  resetScreen,
+  setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export default function CreateFlowsPage({
   params,
@@ -20,6 +23,8 @@ export default function CreateFlowsPage({
   const [error, setError] = useState(false)
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const selectedScreen =
+    useAppSelector((state) => state.screen?.selectedScreen) || 0
 
   useEffect(() => {
     if (flowId) {
@@ -46,7 +51,7 @@ export default function CreateFlowsPage({
           setError(true)
         })
     }
-    dispatch(resetScreen())
+    dispatch(setSelectedScreen(selectedScreen))
   }, [flowId])
 
   if (error) {
