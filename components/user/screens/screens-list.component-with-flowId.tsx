@@ -132,19 +132,14 @@ const ScreensList = ({ flowId }) => {
   }
 
   useEffect(() => {
-    if (
-      selectedScreenIndex !== undefined &&
-      screens &&
-      selectedScreenIndex >= 0 &&
-      selectedScreenIndex < screens.length
-    ) {
-      actions.deserialize(screens[selectedScreenIndex].screenData)
-    } else {
-      console.error(
-        "selectedScreenIndex or screens is undefined, or selectedScreenIndex is out of bounds"
-      )
+    async function reset() {
+      if (screens && screens[0] && screens[0].screenData) {
+        dispatch(setSelectedScreen(0))
+        await actions.deserialize(screens[0].screenData || {})
+      }
     }
-  }, [selectedScreenIndex, screens])
+    reset()
+  }, [])
 
   const handleScreenClick = useCallback(
     async (index: number) => {
