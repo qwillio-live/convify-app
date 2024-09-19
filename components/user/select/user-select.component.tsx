@@ -1,7 +1,18 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef, useState } from "react"
+import hexoid from "hexoid"
+import { debounce } from "lodash"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
+
 import { useNode } from "@/lib/craftjs"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Select as CustomSelect,
   SelectContent,
@@ -9,19 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
 import { Controller } from "../settings/controller.component"
-import { SelectSettings } from "./user-select.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { useTranslations } from "next-intl"
-import hexoid from "hexoid"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
-import ContentEditable from "react-contenteditable"
-import { debounce } from "lodash"
-import {
-  setPreviewScreenData,
-  setUpdateFilledCount,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { SelectSettings } from "./user-select.settings"
 
 const SelectSizeValues = {
   small: "300px",
@@ -256,10 +259,9 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
       props.borderHoverColor}; /* Change to your desired hover border color */
   }
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+  /* &:focus {
+    border-color: ${(props) => props.borderHoverColor};
+  } */
 
   overflow: hidden;
   max-width: ${(props) =>
