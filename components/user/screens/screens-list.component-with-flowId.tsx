@@ -131,13 +131,20 @@ const ScreensList = ({ flowId }) => {
     }
   }
 
-  // useEffect(() => {
-  //   if (selectedScreenIndex !== undefined && screens && selectedScreenIndex >= 0 && selectedScreenIndex < screens.length) {
-  //     actions.deserialize(screens[selectedScreenIndex]);
-  //   } else {
-  //     console.error('selectedScreenIndex or screens is undefined, or selectedScreenIndex is out of bounds');
-  //   }
-  // }, [selectedScreenIndex, screens]);
+  useEffect(() => {
+    if (
+      selectedScreenIndex !== undefined &&
+      screens &&
+      selectedScreenIndex >= 0 &&
+      selectedScreenIndex < screens.length
+    ) {
+      actions.deserialize(screens[selectedScreenIndex].screenData)
+    } else {
+      console.error(
+        "selectedScreenIndex or screens is undefined, or selectedScreenIndex is out of bounds"
+      )
+    }
+  }, [selectedScreenIndex, screens])
 
   const handleScreenClick = useCallback(
     async (index: number) => {
