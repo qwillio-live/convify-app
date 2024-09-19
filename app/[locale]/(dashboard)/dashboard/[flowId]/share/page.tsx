@@ -4,6 +4,8 @@ import Header from "../constants/headerEls"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import Custom404 from "@/components/sections/createFlow/share/404"
+import { resetScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch } from "@/lib/state/flows-state/hooks"
 
 export default function CreateFlowsPage({
   params,
@@ -17,6 +19,7 @@ export default function CreateFlowsPage({
   const [data, setData] = useState<any>({})
   const [error, setError] = useState(false)
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (flowId) {
@@ -43,6 +46,7 @@ export default function CreateFlowsPage({
           setError(true)
         })
     }
+    dispatch(resetScreen())
   }, [flowId])
 
   if (error) {
