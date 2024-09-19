@@ -59,7 +59,7 @@ export const FontSelector = ({
         </Button>
       </PopoverTrigger>
       <PopoverPortal>
-        <PopoverContent className="z-10 p-0">
+        <PopoverContent className="z-10 w-[--radix-popover-trigger-width] p-0">
           <ScrollArea className="h-72 rounded-md border">
             <Command>
               <CommandInput placeholder="Search font..." />
