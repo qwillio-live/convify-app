@@ -21,6 +21,7 @@ import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 import hexoid from "hexoid"
 import { ColorInput } from "@/components/color-input"
+import { Icons } from "@/components/icons"
 
 export const SelectSettings = () => {
   const t = useTranslations("Components")
@@ -219,7 +220,9 @@ export const SelectSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
           </AccordionContent>
@@ -402,23 +405,23 @@ export const SelectOptionSettings = ({
       transition={{ duration: 0 }}
       id={`select-option-item-${originalOption.id}`}
       style={{ y }}
-      className="flex w-full select-none items-center gap-1 [&>div]:hover:visible [&>svg]:hover:visible"
+      className="flex w-full select-none items-center gap-1"
     >
       <Input
-        className="h-8.5 mr-1 flex-1 text-xs bg-[#FAFAFA]"
+        className="h-8.5 mr-1 flex-1 bg-[#FAFAFA] text-xs"
         value={option.value}
         placeholder={`${t("Option")} ${index + 1}`}
         onChange={(e) => handleOptionEdit(e.target.value)}
       />
-      <Trash
-        className="text-muted-foreground invisible size-4 hover:cursor-pointer"
+      <Icons.Delete
+        className="hover:cursor-pointer"
         onClick={handleOptionDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible hover:cursor-move"
+        className="reorder-handle hover:cursor-move"
       >
-        <GripVertical className="text-muted-foreground size-4" />
+        <Icons.GripVertical />
       </div>
     </Reorder.Item>
   )

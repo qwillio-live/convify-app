@@ -37,6 +37,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import icons from "@/constant/streamline.json"
 import { StepsStyles } from "./user-steps.component"
 import { ColorInput } from "@/components/color-input"
+import { Icons } from "@/components/icons"
 
 export const StepsSettings = () => {
   const t = useTranslations("Components")
@@ -384,7 +385,7 @@ export const StepsItemSettings = ({
       transition={{ duration: 0 }}
       id={`step-${originalStep.id}`}
       style={{ y }}
-      className="flex w-full select-none items-center space-x-2 [&>div>button>div>button>svg]:hover:visible [&>div]:hover:visible [&>svg]:hover:visible"
+      className="flex w-full select-none items-center space-x-2"
     >
       <PicturePicker
         className="transition-all duration-100 ease-in-out"
@@ -436,15 +437,15 @@ export const StepsItemSettings = ({
         onChange={(e) => handleItemTextEdit(e.target.value)}
       />
 
-      <Trash
-        className="text-muted-foreground invisible size-4 hover:cursor-pointer"
+      <Icons.Delete
+        className="text-muted-foreground size-4 hover:cursor-pointer"
         onClick={handleItemDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible !ml-1 hover:cursor-move"
+        className="reorder-handle !ml-1 hover:cursor-move"
       >
-        <GripVertical className="text-muted-foreground size-4" />
+        <Icons.GripVertical />
       </div>
     </Reorder.Item>
   )

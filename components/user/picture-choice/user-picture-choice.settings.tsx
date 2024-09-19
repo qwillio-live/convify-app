@@ -48,6 +48,7 @@ import {
   SelectValue,
 } from "@/components/custom-select"
 import { ColorInput } from "@/components/color-input"
+import { Icons } from "@/components/icons"
 
 export const PictureChoiceSettings = () => {
   const t = useTranslations("Components")
@@ -280,7 +281,9 @@ export const PictureChoiceSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
           </AccordionContent>
@@ -607,7 +610,7 @@ export const PictureChoiceItemSettings = ({
       transition={{ duration: 0 }}
       id={`picture-choice-${originalChoice.id}`}
       style={{ y }}
-      className="flex w-full select-none flex-col gap-1 [&>div>div>button>div>button>svg]:hover:visible [&>div>div]:hover:visible [&>div>svg]:hover:visible"
+      className="flex w-full select-none flex-col gap-1 "
     >
       <div className="flex w-full items-center space-x-2">
         <PicturePicker
@@ -632,15 +635,15 @@ export const PictureChoiceItemSettings = ({
           onChange={(e) => handleChoiceTextEdit(e.target.value)}
         />
 
-        <Trash
-          className="text-muted-foreground invisible size-4 hover:cursor-pointer"
+        <Icons.Delete
+          className="hover:cursor-pointer"
           onClick={handleChoiceDelete}
         />
         <div
           onPointerDown={(e) => controls.start(e)}
-          className="reorder-handle invisible !ml-1 hover:cursor-move"
+          className="reorder-handle !ml-1 hover:cursor-move"
         >
-          <GripVertical className="text-muted-foreground size-4" />
+          <Icons.GripVertical />
         </div>
       </div>
       <div className="pl-10 pr-11">

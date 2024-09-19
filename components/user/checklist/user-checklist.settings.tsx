@@ -57,6 +57,7 @@ import {
 import useChecklistThemePresets from "./useChecklistThemePresets"
 import { Card } from "@/components/ui/card"
 import { ColorInput } from "@/components/color-input"
+import { Icons } from "@/components/icons"
 
 export const ChecklistSettings = () => {
   const t = useTranslations("Components")
@@ -460,7 +461,7 @@ export const ChecklistItemSettings = ({
       transition={{ duration: 0 }}
       id={`checklist-item-${originalItem.id}`}
       style={{ y }}
-      className="flex w-full select-none items-center space-x-2 [&>div]:hover:visible [&>svg]:hover:visible"
+      className="flex w-full select-none items-center space-x-2"
     >
       <Input
         className="h-8.5 flex-1 text-xs"
@@ -471,15 +472,15 @@ export const ChecklistItemSettings = ({
         //   setProp((props) => (props.checklistItems[index] = item), 200)
         // }
       />
-      <Trash
-        className="text-muted-foreground invisible size-4 hover:cursor-pointer"
+      <Icons.Delete
+        className="hover:cursor-pointer"
         onClick={handleItemDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible !ml-1 hover:cursor-move"
+        className="reorder-handle !ml-1 hover:cursor-move"
       >
-        <GripVertical className="text-muted-foreground size-4" />
+        <Icons.GripVertical />
       </div>
     </Reorder.Item>
   )

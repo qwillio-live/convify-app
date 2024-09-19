@@ -302,7 +302,7 @@ export const LogoBarSettings = () => {
                   setProp((props) => (props.size = value), 1000)
                 }}
               >
-               <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
+                <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
                   <TabsTrigger
                     className="rounded text-base leading-4"
                     value="small"
@@ -593,7 +593,7 @@ export const LogoBarItemSettings = ({ item, index }) => {
       transition={{ duration: 0 }}
       id={`logo-bar-item-${item.id}`}
       style={{ y }}
-      className="flex w-full select-none items-center space-x-2 [&>div>svg]:hover:visible [&>svg]:hover:visible"
+      className="flex w-full select-none items-center space-x-2"
     >
       <input
         className="h-8.5 hidden"
@@ -622,15 +622,15 @@ export const LogoBarItemSettings = ({ item, index }) => {
           />
         </picture>
       </Button>
-      <Trash
-        className="text-muted-foreground invisible size-4 hover:cursor-pointer"
+      <Icons.Delete
+        className="hover:cursor-pointer"
         onClick={handleItemDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible !ml-1 hover:cursor-move"
+        className="reorder-handle !ml-1 hover:cursor-move"
       >
-        <GripVertical className="text-muted-foreground size-4" />
+        <Icons.GripVertical />
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8">
