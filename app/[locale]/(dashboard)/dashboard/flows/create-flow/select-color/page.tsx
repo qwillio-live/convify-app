@@ -304,7 +304,10 @@ export default function SelectColor() {
                   <Link
                     href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
                   >
-                    <Button variant="outline" className="h-9.5 rounded-lg">
+                    <Button
+                      variant="outline"
+                      className="h-9.5 rounded-lg px-[11px]"
+                    >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                   </Link>

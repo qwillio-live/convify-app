@@ -157,7 +157,7 @@ export default function SelectColor() {
                 </label>
                 <div className="space-y-2">
                   <Input
-                    className="h-14 w-full px-4 text-base placeholder:text-base placeholder:font-normal"
+                    className="h-14 w-full bg-white px-4 text-base placeholder:text-base placeholder:font-normal"
                     placeholder={t("Enter a title for your new convify")}
                     value={name}
                     onChange={handleInputChange}
@@ -178,14 +178,15 @@ export default function SelectColor() {
                   <Link
                     href={`/dashboard/flows/create-flow/select-color?allow=${isAllowed}`}
                   >
-                    <Button variant="outline" className="h-9.5 rounded-lg">
+                    <Button
+                      variant="outline"
+                      className="h-9.5 rounded-lg px-[11px]"
+                    >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                   </Link>
                   <Button
-                    className="w-32 font-bold text-white"
-                    size="lg"
-                    variant="default"
+                    className="w-[7.5rem] rounded-lg text-base font-normal text-white"
                     onClick={handleSubmit}
                     disabled={isLoading} // Disable button while loading
                   >

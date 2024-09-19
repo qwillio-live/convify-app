@@ -200,8 +200,20 @@ export default function SelectTemplate() {
                       </BreadcrumbItem>
                     </BreadcrumbList>
                   </Breadcrumb>
-                  <div className="mb-6 mt-14 flex items-center justify-between">
-                    <div className="flex space-x-1 rounded-lg bg-[#EEEEEE] p-1">
+                  <div className="mb-6 mt-14 flex items-center justify-between gap-1">
+                    <div className="flex space-x-0.5 rounded-lg bg-[#EEEEEE] p-1">
+                      <Button
+                        className={cn(
+                          "hover:text-foreground h-7 rounded-sm bg-transparent px-2 text-xs font-normal leading-3 text-[#7B7D80] hover:bg-white/70",
+                          {
+                            "text-foreground bg-white":
+                              selectedCategory === "all",
+                          }
+                        )}
+                        onClick={() => handleFilterClick("all")}
+                      >
+                        {t("All")}
+                      </Button>
                       {categories.map((category, index) => {
                         return (
                           <Button
@@ -304,7 +316,10 @@ export default function SelectTemplate() {
                 </Link>
                 <div className="flex space-x-4">
                   <Link href={"/dashboard"}>
-                    <Button variant="outline" className="h-9.5 rounded-lg">
+                    <Button
+                      variant="outline"
+                      className="h-9.5 rounded-lg px-[11px]"
+                    >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                   </Link>
