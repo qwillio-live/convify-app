@@ -455,6 +455,7 @@ export const UserInputMailGen = ({ ...props }) => {
               </div>
             )}
             <UserInputMailStyled
+              data-label={props?.fieldName || ""}
               // ref={inputRef}
               value={inputValue}
               textColor={"#000"}

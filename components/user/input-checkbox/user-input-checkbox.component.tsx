@@ -342,6 +342,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
             }}
           >
             <UserInputCheckboxStyled
+              data-label={props?.fieldName || ""}
               ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}

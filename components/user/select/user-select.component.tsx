@@ -190,6 +190,7 @@ export const SelectGen = ({
           <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         <StyledCustomSelectTrigger
+          data-label={props?.fieldName || ""}
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
           } ${alarm && isRequired && !isFilled && "!border-red-600"}`}

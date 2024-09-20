@@ -306,6 +306,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
 
           <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputTextareaStyled
+              data-label={props?.fieldName || ""}
               value={inputValue}
               textColor={"#000"}
               backgroundColor={props.backgroundColor}

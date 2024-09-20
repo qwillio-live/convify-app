@@ -454,6 +454,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
               </div>
             )}
             <UserInputPhoneStyled
+              data-label={props?.fieldName || ""}
               value={inputValue}
               textColor={"9CA3AF"}
               backgroundColor={props.backgroundColor}

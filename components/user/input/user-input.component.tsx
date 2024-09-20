@@ -377,6 +377,7 @@ export const UserInputGen = ({ ...props }) => {
               </div>
             )}
             <UserInputStyled
+              data-label={props?.fieldName || ""}
               // ref={inputRef}
               textColor={"#000"}
               backgroundColor={props.backgroundColor}

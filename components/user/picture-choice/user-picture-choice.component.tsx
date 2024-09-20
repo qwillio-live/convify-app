@@ -476,6 +476,7 @@ export const PictureChoice = ({
           />
         </div>
         <ul
+          data-label={props?.fieldName || ""}
           className="flex w-full flex-wrap justify-center"
           style={{
             fontFamily: `var(${fontFamily?.value})`,

@@ -487,6 +487,7 @@ export const MultipleChoice = ({
           />
         </div>
         <ul
+          data-label={props?.fieldName || ""}
           className="flex w-full flex-col items-center justify-center"
           style={{
             gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
