@@ -157,6 +157,7 @@ export const PictureChoiceGen = ({
         <div dangerouslySetInnerHTML={{ __html: label }} />
       </div>
       <ul
+        data-label={props?.fieldName || ""}
         // className="flex w-full flex-wrap justify-center"
         ref={itemRef}
         className={`flex w-full flex-wrap justify-center`}

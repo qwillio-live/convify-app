@@ -154,6 +154,7 @@ export const MultipleChoiceGen = ({
       }}
     >
       <ul
+        data-label={props?.fieldName || ""}
         ref={itemRef}
         className="flex w-full flex-col items-center justify-center"
         style={{
