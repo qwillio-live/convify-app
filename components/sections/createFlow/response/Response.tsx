@@ -15,6 +15,7 @@ import {
 import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { LoadingEl } from "./ResponseLoading"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 interface Response {
   id?: string
   content?: Object
@@ -167,7 +168,7 @@ function tableMap(elementsOfLabels: Array<Object>, labels: Set<string>) {
   return rows
 }
 
-function convertTimestamp(timestamp: string): string {
+function convertTimestamp(timestamp: string) {
   const date = new Date(timestamp)
 
   const dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
@@ -192,12 +193,12 @@ function convertTimestamp(timestamp: string): string {
   const hours = date.getUTCHours()
   const minutes = date.getUTCMinutes()
 
-  // Formatting the output
-  const formattedDate = `${dayOfWeek}, ${month} ${dayOfMonth} ${hours
-    .toString()
-    .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`
-
-  return formattedDate
+  return {
+    date: `${dayOfWeek}, ${month} ${dayOfMonth}`,
+    time: `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`,
+  }
 }
 
 const ResponseFlowComponents = () => {
@@ -299,66 +300,87 @@ const ResponseFlowComponents = () => {
     })
   }
 
-  console.log(responses)
-
   return (
-    <div className="mx-auto min-h-screen flex-1 items-center justify-center px-0 pb-36 pt-4 lg:px-8">
+    <>
       {loading ? (
         <LoadingEl />
       ) : responses.length > 0 ? (
-        <div className="mb-20 h-full overflow-x-auto rounded-[12px] border border-[#E9E9E9] bg-white px-6 py-5 lg:rounded-[20px]">
-          <Table className="h-full text-sm">
-            <TableHeader>
-              <TableRow>
-                <TableHead
-                  className="flex items-center gap-0.5 whitespace-nowrap text-[#9B9A99] font-normal"
-                  style={{ cursor: "pointer" }}
-                  onClick={handleSort} // Use handleSort
-                >
-                  {t("Submission time")}{" "}
-                  {isAscending ? (
-                    <ArrowUp className="h-4 w-4" />
-                  ) : (
-                    <ArrowDown className="h-4 w-4" />
-                  )}
-                </TableHead>
-                {uniqueLabelsArray.length > 0 &&
-                  uniqueLabelsArray.map((label: string) => (
-                    <TableHead
-                      className="whitespace-nowrap text-[#9B9A99] font-normal"
-                      key={label as React.Key}
-                    >
-                      {label !== "Submission time" &&
-                        label !== "label" &&
-                        label.charAt(0).toUpperCase() +
-                          label.slice(1).toLowerCase()}
-                    </TableHead>
-                  ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody className="h-full">
-              {rows.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    {convertTimestamp(row["Submission time"])}{" "}
-                    <span className="text-gray-500"></span>
-                  </TableCell>
-                  {uniqueLabelsArray.map((label: string) => (
-                    <TableCell key={label as React.Key}>
-                      {label !== "Submission time" &&
-                        label !== "label" &&
-                        row[label]}
-                    </TableCell>
-                  ))}
+        <div className="flex min-h-full overflow-x-hidden rounded-[12px] border border-[#E9E9E9] bg-white px-5 py-4 lg:rounded-[20px] lg:px-6 lg:py-5">
+          <ScrollArea type="always" className="basis-full whitespace-nowrap">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead
+                    className="w-[6.75rem] min-w-[6.75rem] shrink-0 border-r px-2 py-4 font-normal text-[#9B9A99] lg:w-40 lg:min-w-40"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleSort} // Use handleSort
+                  >
+                    <div className="sp-x-1 flex items-center justify-between">
+                      <span className="text-wrap text-xs lg:text-sm">
+                        {t("Submission time")}
+                      </span>
+                      {isAscending ? (
+                        <ArrowUp className="h-4 w-4" />
+                      ) : (
+                        <ArrowDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </TableHead>
+                  {uniqueLabelsArray.length > 0 &&
+                    uniqueLabelsArray.map((label: string) => (
+                      <>
+                        {label !== "Submission time" && label !== "label" && (
+                          <TableHead
+                            className="min-w-40 whitespace-nowrap px-2 py-4 text-xs font-normal text-[#9B9A99] lg:text-sm 2xl:min-w-[12.5rem]"
+                            key={label as React.Key}
+                          >
+                            {label.charAt(0).toUpperCase() +
+                              label.slice(1).toLowerCase()}
+                          </TableHead>
+                        )}
+                      </>
+                    ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {rows.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="border-r px-2 lg:pr-4">
+                      <div className="flex flex-col gap-1 lg:flex-row lg:items-center lg:justify-between">
+                        <span className="text-xs leading-none lg:text-sm">
+                          {convertTimestamp(row["Submission time"]).date}
+                        </span>
+                        <span className="text-xs leading-none text-[#9B9A99] lg:text-sm">
+                          {convertTimestamp(row["Submission time"]).time}
+                        </span>
+                      </div>
+                    </TableCell>
+                    {uniqueLabelsArray.map((label: string) => (
+                      <>
+                        {label !== "Submission time" && label !== "label" && (
+                          <TableCell
+                            key={label as React.Key}
+                            className="px-2 text-xs lg:text-sm"
+                          >
+                            {row[label]}
+                          </TableCell>
+                        )}
+                      </>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <ScrollBar
+              orientation="horizontal"
+              className="h-2 flex-col [&>div]:bg-[#9B9A99]"
+            />
+          </ScrollArea>
         </div>
       ) : (
         <EmptyResponse />
       )}
-    </div>
+    </>
   )
 }
 
