@@ -293,19 +293,18 @@ export default function DashboardPage() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/dashboard")
-                  }}
-                >
-                  {t("Dashboard")}
+                <DropdownMenuItem asChild>
+                  <Link className="cursor-pointer" href={"/dashboard"}>
+                    {t("Dashboard")}
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/dashboard/flows/create-flow/select-template")
-                  }}
-                >
-                  {t("Create flow")}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/dashboard/flows/create-flow/select-template"
+                    className="cursor-pointer"
+                  >
+                    {t("Create flow")}
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
