@@ -36,7 +36,6 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
 
   const RESPONSE_EXPIRY_MINUTES = 30 // 3
   let storage = {}
-  console.log("entered setter", flowData, screen, index)
 
   async function sendResponseEvent(
     stepId,
@@ -51,18 +50,16 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       : `/api/flows/${flowData.id}/responses`
     const data = {
       ...storage,
-      content,
+      ...content,
     }
-    console.log("entered sendResponseEvent", method, url, data)
+    console.log("entered sendResponseEvent", method, url, "data", data)
     storage = data
     await fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        content: data,
-      }),
+      body: JSON.stringify({ content: data }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -178,7 +175,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       handleStepVisit(stepId)
     }
     dispatch(getAllFilledAnswers(true))
-    if (index === screenNames.length - 1) handleSendResponse(state, stepId)
+    if (index === screenNames.length - 1) handleSendResponse(stepId, state)
   }, [screen])
 
   return null // This component does not need to render anything

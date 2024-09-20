@@ -69,7 +69,7 @@ export interface ScreensState {
   scrollY: number
   hasComponentBeforeAvatar: boolean
   avatarBackgroundColor: string | undefined
-  filledContent: string
+  filledContent: []
 }
 
 const initialState: ScreensState = {
@@ -131,7 +131,7 @@ const initialState: ScreensState = {
   editorLoad: {},
   screenRoller: "",
   scrollY: 0,
-  filledContent: "",
+  filledContent: [],
 }
 
 export const screensSlice = createSlice({
@@ -265,42 +265,63 @@ export const screensSlice = createSlice({
     },
     getAllFilledAnswers: (state, action: PayloadAction<boolean>) => {
       // Initialize an array to hold the filled data for each screen
-      let totalFilled: Array<any[]> = [] // Adjust type as needed
+      let totalFilled: any = [] // Adjust type as needed
 
       state.screens.forEach((screen) => {
         // Deep clone screen and parse screenData
         let eachScreen = JSON.parse(JSON.stringify(screen))
         let screenData = JSON.parse(eachScreen.screenData)
-
         Object.values(screenData).forEach((node: any) => {
+          const dataLabel =
+            node.props?.fieldName ||
+            node.props?.label ||
+            node?.displayName ||
+            node.props?.id
+          const dataId = node.props?.id || node?.displayName
+          console.log("node", node)
           if (
             node.type !== "UserContainer" &&
-            (node.props?.required === true ||
-              node.props?.inputRequired === true) &&
             ((node.props?.selections && node.props?.selections.length > 0) ||
               (node.props?.inputValue &&
-                node.props.inputValue.trim() !== "" &&
                 node.props.inputValue !== "Components.Text Area") ||
-              (node.props?.selectedOptionId &&
-                node.props.selectedOptionId.trim() !== "") ||
               (node.props?.input && node.props.input.trim() !== ""))
           ) {
             // Extract one of the values that meet the conditions
             if (node.props?.selections && node.props.selections.length > 0) {
-              totalFilled.push(node.props.selections)
+              //node.props.fieldName || node.props.label node.displayName || node.props.id
+              const options = node.props?.choices
+              //
+              const result = options
+                .filter((choice) => node.props?.selections?.includes(choice.id))
+                .map((choice) => ({ id: choice.id, value: choice.value }))
+              totalFilled[dataId] = {
+                label: dataLabel,
+                value: result,
+                type:
+                  node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
+              }
             } else if (
               node.props?.inputValue &&
               node.props.inputValue.trim() !== "" &&
               node.props.inputValue !== "Components.Text Area"
             ) {
-              totalFilled.push(node.props.inputValue)
+              totalFilled[dataId] = {
+                label: dataLabel,
+                value: node.props.inputValue,
+              }
             } else if (
               node.props?.selectedOptionId &&
               node.props.selectedOptionId.trim() !== ""
             ) {
-              totalFilled.push(node.props.selectedOptionId)
+              totalFilled[dataId] = {
+                label: dataLabel,
+                value: node.props.selectedOptionId,
+              }
             } else if (node.props?.input && node.props.input.trim() !== "") {
-              totalFilled.push(node.props.input)
+              totalFilled[dataId] = {
+                label: dataLabel,
+                value: node.props.input,
+              }
             }
           }
         })
@@ -310,12 +331,8 @@ export const screensSlice = createSlice({
       const totalFilledJson = JSON.stringify(totalFilled)
 
       // For demonstration purposes, log the totalFilled array
-      console.log(
-        "Total Filled Answers by Screen:",
-        totalFilled,
-        JSON.stringify(totalFilled)
-      )
-      state.filledContent = JSON.stringify(totalFilled)
+      console.log("Total Filled Answers by Screen:", totalFilled)
+      state.filledContent = totalFilled
       // Optionally, update the state with the totalFilled array if needed
       // state.filledAnswers = totalFilled; // Adjust according to your state shape
     },
