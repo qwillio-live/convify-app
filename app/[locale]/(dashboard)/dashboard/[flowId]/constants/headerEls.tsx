@@ -237,7 +237,11 @@ const Header = ({ flowId }) => {
               <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link className="cursor-pointer" href={"/dashboard"}>
+                <Link
+                  className="cursor-pointer"
+                  href={"/dashboard"}
+                  prefetch={false}
+                >
                   {t("Dashboard")}
                 </Link>
               </DropdownMenuItem>
@@ -245,6 +249,7 @@ const Header = ({ flowId }) => {
                 <Link
                   href="/dashboard/flows/create-flow/select-template"
                   className="cursor-pointer"
+                  prefetch={false}
                 >
                   {t("Create flow")}
                 </Link>
