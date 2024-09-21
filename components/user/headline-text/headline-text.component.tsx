@@ -1,14 +1,18 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
+import { isMobile } from "react-device-detect"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
+import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { HeadlineTextSettings } from "./headline-text-settings"
@@ -16,7 +20,6 @@ import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useHeadlineThemePresets"
-import { UserInputSizes } from "../input/user-input.component"
 
 const headlineFontSize = {
   mobile: 24,
@@ -141,10 +144,13 @@ export const HeadlineTextGen = ({
   textAlign,
   borderColor,
   borderHoverColor,
+  mobileFontSize,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const t = useTranslations("Components")
+
+  const mobileScreen = useMediaQuery("(max-width: 640px)")
 
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
@@ -158,7 +164,6 @@ export const HeadlineTextGen = ({
     .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
     .replace(/<br>/g, "\n") // Replace <br> tags with new lines
 
-  console.log("container | bg", containerBackground, borderColor)
   return (
     <div
       className="heading-text-comp relative mt-7 w-full"
@@ -202,7 +207,7 @@ export const HeadlineTextGen = ({
         paddingRight={paddingRight}
         paddingBottom={paddingBottom}
         alignItems={alignItems}
-        mobileScreen={false}
+        mobileScreen={isMobile}
         text={t("HeadlineDescription")}
         {...props}
         className={`user-headline-comp items-center`}
@@ -218,6 +223,7 @@ export const HeadlineTextGen = ({
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
+            fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
           }}
         >
           {processedText.split("\n").map((line, index) => (
