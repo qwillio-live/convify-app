@@ -157,7 +157,7 @@ export const PictureChoiceGen = ({
   }, [counttt, alarm, isRequired]) // Depend on alarm state
   return (
     <div
-      className="relative w-full"
+      className="relative w-full m-choice"
       style={{
         pointerEvents: disabled ? "none" : "auto",
         width: "100%",
