@@ -186,7 +186,7 @@ export const PictureChoiceGen = ({
         <ul
           // className="flex w-full flex-wrap justify-center"
           ref={itemRef}
-          className={`flex w-full flex-wrap justify-center`}
+          className={`flex w-full flex-wrap justify-center gap-[10px]`}
           style={{
             fontFamily: `var(${fontFamily?.value})`,
           }}
