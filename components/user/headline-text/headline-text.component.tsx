@@ -150,7 +150,7 @@ export const HeadlineTextGen = ({
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
   const t = useTranslations("Components")
 
-  const mobileScreen = useMediaQuery("(max-width: 640px)")
+  const mobileScreen = useMediaQuery("(max-width: 800px)")
 
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
