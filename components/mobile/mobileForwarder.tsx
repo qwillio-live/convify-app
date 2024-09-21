@@ -1,13 +1,18 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { useTranslations } from "next-intl"
+
+import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { signOut } from "next-auth/react"
-import { isBrowser, isMobile } from "react-device-detect"
 import Illustration from "@/assets/images/mobile-forwarder.png"
-import Image from "next/image"
+import { getServerSession } from "next-auth"
+import { signOut } from "next-auth/react"
+import { useTranslations } from "next-intl"
+import { isBrowser, isMobile } from "react-device-detect"
+
+import { env } from "@/env.mjs"
+import { authOptions } from "@/lib/auth"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +22,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
-import { env } from "@/env.mjs"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
 
 interface User {
   name: string
@@ -32,6 +34,7 @@ const MobileForwarderComponent = () => {
   const [userData, setUserData] = useState<User>()
   const router = useRouter()
   const t = useTranslations("Components")
+  const t2 = useTranslations("Dashboard")
 
   useEffect(() => {
     fetch("/api/users")
@@ -149,8 +152,19 @@ const MobileForwarderComponent = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
-            <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard" className="cursor-pointer">
+                {t2("Dashboard")}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                href="/dashboard/flows/create-flow/select-template"
+                className="cursor-pointer"
+              >
+                {t2("Create flow")}
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               {t("Logout")}
