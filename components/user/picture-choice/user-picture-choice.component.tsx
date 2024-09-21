@@ -1,26 +1,15 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useNode } from "@/lib/craftjs"
-import { Controller } from "../settings/controller.component"
-import { PictureChoiceSettings } from "./user-picture-choice.settings"
-import { StyleProperty } from "../types/style.types"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import hexoid from "hexoid"
+import { debounce } from "lodash"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
-import styled from "styled-components"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import hexoid from "hexoid"
-import {
-  ImagePictureTypes,
-  PictureTypes,
-  SvgRenderer,
-} from "@/components/PicturePicker"
-import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { usePathname, useSearchParams } from "next/navigation"
-import { useRouter } from "next/navigation"
+import styled from "styled-components"
+
+import { useNode } from "@/lib/craftjs"
 import {
   setPreviewScreenData,
   setSelectedData,
@@ -28,19 +17,33 @@ import {
   setUpdateFilledCount,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
+
 import { UserInputSizes } from "../input/user-input.component"
+import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
+import { PictureChoiceSettings } from "./user-picture-choice.settings"
 
 const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
   margin-left: auto;
   margin-right: auto;
 
-  .picture-item:nth-child(even) {
+  /* .picture-item:nth-child(even) {
     padding-right: ${({ size }) =>
-      size === UserInputSizes.small ? "0" : "10px"};
-  }
-  .picture-item:last-of-type {
+    size === UserInputSizes.small ? "0" : "10px"};
+  } */
+  /* .picture-item:last-of-type {
     padding-right: 0;
-  }
+  } */
 
   ${({ size, mobileScreen }) => {
     if (mobileScreen) {
@@ -506,7 +509,7 @@ export const PictureChoice = ({
             />
           </div>
           <ul
-            className="flex w-full flex-wrap justify-center"
+            className="flex w-full flex-wrap justify-center gap-[10px]"
             style={{
               fontFamily: `var(${fontFamily?.value})`,
             }}
@@ -610,6 +613,12 @@ const PictureChoiceItem = ({
     if (n === 2) {
       return 50
     }
+
+    // in case check for responsive flex basis
+    if (n % 2 == 0) {
+      return 50
+    }
+
     if ((n - 4) % 2 === 0 && n !== 6) {
       return 25
     }
@@ -620,6 +629,7 @@ const PictureChoiceItem = ({
       return 33.33
     }
   }
+
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -710,9 +720,11 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className={`picture-item flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}
+      className={cn(
+        `picture-item flex min-w-[0] max-w-[190px] flex-[1] grow-0 justify-center`
+      )}
       style={{
-        flexBasis: `${getFlexBasis(choicesLength)}%`,
+        flexBasis: `calc(${getFlexBasis(choicesLength)}% - 10px)`,
       }}
       onClick={() => {
         if (forGen) {

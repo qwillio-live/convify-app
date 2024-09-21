@@ -1,7 +1,8 @@
+import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { withAuth } from "next-auth/middleware"
 import createMiddleware from "next-intl/middleware"
-import { NextRequest, NextResponse } from "next/server"
+
 import { defaultLocale, locales } from "./constant"
 
 const intlMiddleware = createMiddleware({
@@ -20,7 +21,7 @@ const authMiddleware = withAuth(
 
     if (isAuthPage && isAuth) {
       // Redirect to dashboard if user is authenticated and trying to access auth pages
-      return NextResponse.redirect(new URL("/dashboard", req.url))
+      // return NextResponse.redirect(new URL("/dashboard", req.url))
     }
 
     if (!isAuth) {
