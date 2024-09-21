@@ -1,7 +1,7 @@
 import EmptyResponse from "@/components/sections/createFlow/empty/Empty"
 
 import { ArrowDown, ArrowUp } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 
 import { Card } from "@/components/ui/card"
 import {
@@ -168,41 +168,9 @@ function tableMap(elementsOfLabels: Array<Object>, labels: Set<string>) {
   return rows
 }
 
-function convertTimestamp(timestamp: string) {
-  const date = new Date(timestamp)
-
-  const dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
-    date.getUTCDay()
-  ]
-  const monthNames = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC",
-  ]
-  const month = monthNames[date.getUTCMonth()]
-  const dayOfMonth = date.getUTCDate()
-  const hours = date.getUTCHours()
-  const minutes = date.getUTCMinutes()
-
-  return {
-    date: `${dayOfWeek}, ${month} ${dayOfMonth}`,
-    time: `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`,
-  }
-}
-
 const ResponseFlowComponents = () => {
   const t = useTranslations("CreateFlow.ResultsPage")
+  const format = useFormatter()
   const [flowId, setFlowId] = useState<string | null>(null)
   const currentPath = usePathname()
 
@@ -285,6 +253,27 @@ const ResponseFlowComponents = () => {
   const uniqueLabelsArray = Array.from(
     normalizeNamesWithRegex(new Set(rows.flatMap(Object.keys)))
   )
+
+  function convertTimestamp(timestamp: string) {
+    const dateTime = new Date(timestamp)
+
+    const date = format.dateTime(dateTime, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    })
+
+    const time = format.dateTime(dateTime, {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    })
+
+    return {
+      date,
+      time,
+    }
+  }
 
   const handleSort = () => {
     setIsAscending(!isAscending)
