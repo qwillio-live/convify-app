@@ -55,10 +55,7 @@ export const SettingsPanel = () => {
 
   useEffect(() => {
     if (selected || selectedComponent) {
-      const nodeId = selectedComponent || "ROOT"
-      if (query?.node(nodeId) && query?.node(nodeId)?.isCanvas()) {
-        actions.selectNode(nodeId)
-      }
+      actions.selectNode(selectedComponent || "ROOT")
     }
   }, [mobileScreen, selectedComponent])
   return (
