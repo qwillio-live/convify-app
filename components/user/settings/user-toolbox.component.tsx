@@ -21,6 +21,7 @@ import {
   Image as ImageIcon,
   ImagePlus,
   Images,
+  LayoutList,
   Link,
   Linkedin,
   ListChecks,
@@ -28,6 +29,7 @@ import {
   Loader as LoaderIcon,
   LucidePaintbrush,
   Mail,
+  MessageCircleMoreIcon,
   Navigation,
   NotebookPen,
   Paintbrush,
@@ -36,6 +38,7 @@ import {
   Phone,
   RectangleEllipsis,
   Rocket,
+  Send,
   SeparatorHorizontal,
   SkipBack,
   SquareCheckIcon,
@@ -46,12 +49,10 @@ import {
   TextCursorInput,
   Trophy,
   Type,
-  LayoutList,
-  MessageCircleMoreIcon,
-  Send,
   User,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import styled from "styled-components"
 
 import { useEditor } from "@/lib/craftjs"
 import { useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
@@ -104,7 +105,10 @@ import {
   IconButton,
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
-import { ImageComponent } from "../image-new/user-image.component"
+import {
+  ImageComponent,
+  ImageDefaultProps,
+} from "../image-new/user-image.component"
 import { Img, ImgDefaultProps } from "../image/user-image-component"
 import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
 import {
@@ -165,8 +169,18 @@ import {
 } from "../progress/user-progress.component"
 import useSelectThemePresets from "../select/useSelectThemePresets"
 import { Select, SelectGen } from "../select/user-select.component"
+import {
+  SocialShareButton,
+  SocialShareButtonGen,
+} from "../socialShareButton/share-component"
+import useShareButtonTheme from "../socialShareButton/share-theme"
 import useStepsThemePresets from "../steps/useStepsThemePresets"
 import { Steps, StepsGen } from "../steps/user-steps.component"
+import {
+  TelegramShareButton,
+  TelegramShareButtonGen,
+} from "../telegramShareButton/telegram-component"
+import useTelegramButtonTheme from "../telegramShareButton/telegram-theme"
 import useTextThemePresets from "../text/useTextThemePresets"
 import {
   TextImageComponent,
@@ -174,18 +188,6 @@ import {
   TextImageComponentPreview,
   TextImageDefaultProps,
 } from "../textImage/user-textImage.component"
-import { ImageDefaultProps } from "../image-new/user-image.component"
-import useShareButtonTheme from "../socialShareButton/share-theme"
-import useTelegramButtonTheme from "../telegramShareButton/telegram-theme"
-import {
-  SocialShareButton,
-  SocialShareButtonGen,
-} from "../socialShareButton/share-component"
-import {
-  TelegramShareButton,
-  TelegramShareButtonGen,
-} from "../telegramShareButton/telegram-component"
-import styled from "styled-components"
 
 function HelperInformation() {
   return (
@@ -248,7 +250,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
         onMouseOver={() => setOpenCard(true)}
         onMouseLeave={() => setOpenCard(false)}
         onMouseDown={() => setOpenCard(!openCard)}
-        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-move"
+        className="flex w-full flex-row items-center justify-between text-lg cursor-move "
       >
         <span className="flex flex-row items-center gap-2 text-sm">
           {icon} {title}

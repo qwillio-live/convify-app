@@ -97,52 +97,28 @@ export const ChecklistGen = ({
 const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
   margin-left: auto;
   margin-right: auto;
-
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "376px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "800px" }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "1000px" }
-      }
-    } else {
-      return {
-        width: "calc(100% - 22px)",
-      }
-    }
-  }};
+  max-width: 100%;
 
   @media (max-width: 1000px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    ${({ size }) => ({ width: "calc(100% - 22px)" })}
   }
 
-  @media (max-width: 800px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
+  ${({ size, mobileScreen }) => {
+    if (mobileScreen) {
+      return { width: "calc(100% - 22px)" }
+    }
 
-  @media (max-width: 376px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.small) {
+    switch (size) {
+      case UserInputSizes.small:
+        return { width: "376px" } // Assuming small size width
+      case UserInputSizes.medium:
+        return { width: "800px" }
+      case UserInputSizes.large:
+        return { width: "1000px" }
+      default:
         return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
+    }
+  }};
 `
 
 export const Checklist = ({

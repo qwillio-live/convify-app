@@ -1,38 +1,46 @@
 import React, { useEffect } from "react"
 import { Layers } from "@craftjs/layers/"
+import { useTranslations } from "next-intl"
 
 import { useEditor } from "@/lib/craftjs"
+import {
+  removeField,
+  setSelectedComponent,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {GlobalThemeSettings} from "./global-theme-settings"
-import { useTranslations } from "next-intl"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+
+import { GlobalThemeSettings } from "./global-theme-settings"
 
 export const SettingsPanel = () => {
-  const t= useTranslations("Components")
+  const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
-  const { actions, selected, isEnabled,query } = useEditor((state, query) => {
-    const currentNodeId = selectedComponent ? selectedComponent : query.getEvent("selected").last()
+  const selectedComponent = useAppSelector(
+    (state) => state?.screen?.selectedComponent
+  )
+  const { actions, selected, isEnabled, query } = useEditor((state, query) => {
+    const currentNodeId = selectedComponent
+      ? selectedComponent
+      : query.getEvent("selected").last()
     let selected
 
     if (currentNodeId && state.nodes[currentNodeId]) {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
-        fieldType: state.nodes[currentNodeId]?.data?.props.fieldType || 'design',
+        fieldType:
+          state.nodes[currentNodeId]?.data?.props.fieldType || "design",
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
@@ -47,9 +55,12 @@ export const SettingsPanel = () => {
 
   useEffect(() => {
     if (selected || selectedComponent) {
-      actions.selectNode(selectedComponent || "ROOT");
+      const nodeId = selectedComponent || "ROOT"
+      if (query?.node(nodeId) && query?.node(nodeId)?.isCanvas()) {
+        actions.selectNode(nodeId)
+      }
     }
-  }, [mobileScreen, selectedComponent]);
+  }, [mobileScreen, selectedComponent])
   return (
     <Tabs defaultValue="element" className="mb-10 w-full">
       <TabsList className="w-full rounded-none border-b border-[#c0c0c1] pb-0 bg-[#fafafa]">
@@ -82,8 +93,8 @@ export const SettingsPanel = () => {
                   <Button
                     onClick={() => {
                       actions.delete(selected.id),
-                      dispatch(setSelectedComponent("ROOT"));
-                      if(selected.fieldType === 'data'){
+                        dispatch(setSelectedComponent("ROOT"))
+                      if (selected.fieldType === "data") {
                         dispatch(removeField(selected.id))
                       }
                     }}
