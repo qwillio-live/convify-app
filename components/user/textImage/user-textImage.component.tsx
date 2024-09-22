@@ -1,6 +1,9 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef } from "react"
+import Image from "next/image"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
+import { debounce, throttle } from "lodash"
 import {
   Activity,
   Anchor,
@@ -10,24 +13,24 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-import { throttle, debounce } from "lodash"
+
 import { useEditor, useNode } from "@/lib/craftjs"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import { Button as CustomButton } from "@/components/ui/button"
+
+import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
-import { TextImageSettings } from "./user-textImage.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useTextImageThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import Image from "next/image"
-import ContentEditable from "react-contenteditable"
-import { UserInputSizes } from "../input/user-input.component"
+import { TextImageSettings } from "./user-textImage.settings"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -904,7 +907,7 @@ export const UserLogo = ({
               }}
             />
           </div>
-          <div className="m-auto items-start self-center text-start">
+          <div className="w-full m-auto items-start self-center text-start">
             {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable
