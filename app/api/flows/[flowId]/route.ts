@@ -159,6 +159,7 @@ export async function PUT(
           where: {
             id: step.id,
             flowId: String(flowId),
+            name: step.name,
           },
         })
 

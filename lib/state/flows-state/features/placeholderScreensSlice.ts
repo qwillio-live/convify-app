@@ -144,16 +144,25 @@ export const screensSlice = createSlice({
       state.firstScreenName = action.payload.steps[0]?.name
       state.currentScreenName = action.payload.steps[0]?.name
       const screensFieldsList = {}
+      const screenNames: string[] = []
 
-      action.payload.steps.forEach((screen: any) => {
-        screensFieldsList[screen.id] = {}
+      // Step 1: Build screensFieldsList and check for unique screen names
+      const uniqueSteps = action.payload.steps.filter((screen: any) => {
+        if (screenNames.includes(screen.name)) {
+          console.warn(`Duplicate screen name detected: ${screen.name}`)
+          return false // Skip duplicate screen
+        }
+        screenNames.push(screen.name) // Track this name
+        screensFieldsList[screen.id] = {} // Add to the fields list
+        return true
       })
 
+      // Step 2: Set the rest of the state using the unique steps
       state.screensFieldsList = screensFieldsList
       state.screensHeader = action.payload.headerData ?? state.screensHeader
       state.screensFooter = action.payload.footerData ?? state.screensFooter
       state.selectedScreen = 0
-      state.screens = action.payload.steps.map((screen: any) => ({
+      state.screens = uniqueSteps.map((screen: any) => ({
         screenId: screen.id,
         screenName: screen.name,
         screenData: JSON.stringify(screen.content),
@@ -166,10 +175,16 @@ export const screensSlice = createSlice({
         errorCount: 0,
         isVisible: false,
       }))
-      if (state.screens[state.selectedScreen]?.isVisible)
+
+      // Set the first screen to visible if applicable
+      if (state.screens[state.selectedScreen]?.isVisible) {
         state.screens[state.selectedScreen].isVisible = true
+      }
+
+      // Load the editor with the selected screen's data
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
+
     setSelectedData: (state, action: PayloadAction<string[]>) => {
       const screens = JSON.parse(JSON.stringify(state.screens[0]))
       console.log(

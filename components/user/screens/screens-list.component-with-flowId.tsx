@@ -133,13 +133,20 @@ const ScreensList = ({ flowId }) => {
 
   useEffect(() => {
     async function reset() {
-      if (
-        screens &&
-        typeof selectedScreenIndex !== "undefined" &&
-        screens[selectedScreenIndex] &&
-        screens[selectedScreenIndex].screenData
-      ) {
-        await actions.deserialize(screens[selectedScreenIndex].screenData || {})
+      try {
+        if (
+          screens &&
+          typeof selectedScreenIndex !== "undefined" &&
+          screens[selectedScreenIndex] &&
+          screens[selectedScreenIndex].screenData
+        ) {
+          await actions.deserialize(
+            screens[selectedScreenIndex].screenData || {}
+          )
+        }
+      } catch (error) {
+        console.error("Error during deserialization:", error)
+        // Optionally, handle the error here (e.g., show a notification, log it, etc.)
       }
     }
     reset()
