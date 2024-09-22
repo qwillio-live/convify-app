@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
-import { isMobile } from "react-device-detect"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
@@ -207,7 +206,7 @@ export const HeadlineTextGen = ({
         paddingRight={paddingRight}
         paddingBottom={paddingBottom}
         alignItems={alignItems}
-        mobileScreen={isMobile}
+        mobileScreen={false}
         text={t("HeadlineDescription")}
         {...props}
         className={`user-headline-comp items-center`}
