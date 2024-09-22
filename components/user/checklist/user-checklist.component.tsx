@@ -1,18 +1,22 @@
 "use client"
+
 import React, { useCallback, useEffect, useState } from "react"
+import { debounce } from "lodash"
+import { Check } from "lucide-react"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
+import styled from "styled-components"
+
 import { useNode } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+
+import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
 import {
   ChecklistIconRenderer,
   ChecklistSettings,
 } from "./user-checklist.settings"
-import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { useTranslations } from "next-intl"
-import ContentEditable from "react-contenteditable"
-import { debounce } from "lodash"
-import { UserInputSizes } from "../input/user-input.component"
-import styled from "styled-components"
 
 export const ChecklistGen = ({
   checklistItems,
@@ -165,6 +169,7 @@ export const Checklist = ({
   paddingBottom,
   ...props
 }) => {
+  console.log("ChecklistProps", size)
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -280,6 +285,7 @@ const ChecklistItemSettings = ({
   onValueChange,
 }) => {
   const [itemValue, setItemValue] = useState(item.value)
+  console.log("ChecklistProps inside")
 
   useEffect(() => {
     setItemValue(item.value)
@@ -381,7 +387,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   iconColor: "green",
   width: ChecklistSizes.small,
   height: "auto",
-  size: ChecklistSizes.small,
+  size: ChecklistSizes.medium,
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,

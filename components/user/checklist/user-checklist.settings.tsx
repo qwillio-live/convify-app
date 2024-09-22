@@ -1,36 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import {
-  MoveHorizontal,
-  GripVertical,
-  Trash2,
-  Plus,
-  Search,
-  X as IconX,
-  StretchHorizontal,
-  StretchVertical,
-} from "lucide-react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
-import { useTranslations } from "next-intl"
-
-import { throttle, debounce } from "lodash"
-import { useNode } from "@/lib/craftjs"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/custom-slider"
-
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import {
-  useScreenNames,
-  useScreensLength,
-} from "@/lib/state/flows-state/features/screenHooks"
-import { RootState } from "@/lib/state/flows-state/store"
+import icons from "@/constant/streamline.json"
 import {
   Reorder,
   useDragControls,
@@ -38,7 +7,34 @@ import {
   useMotionValue,
 } from "framer-motion"
 import hexoid from "hexoid"
-import icons from "@/constant/streamline.json"
+import { debounce, throttle } from "lodash"
+import {
+  GripVertical,
+  X as IconX,
+  MoveHorizontal,
+  Plus,
+  Search,
+  StretchHorizontal,
+  StretchVertical,
+  Trash2,
+} from "lucide-react"
+import { useTranslations } from "next-intl"
+
+import { useNode } from "@/lib/craftjs"
+import {
+  useScreenNames,
+  useScreensLength,
+} from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import {
   Dialog,
   DialogClose,
@@ -48,13 +44,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/custom-slider"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
+
+import useChecklistThemePresets from "./useChecklistThemePresets"
 import {
   ChecklistGen,
   ChecklistLayouts,
   ChecklistPresets,
 } from "./user-checklist.component"
-import useChecklistThemePresets from "./useChecklistThemePresets"
-import { Card } from "@/components/ui/card"
 
 export const ChecklistSettings = () => {
   const t = useTranslations("Components")
@@ -281,6 +281,7 @@ export const ChecklistSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
+              {size ? size : "mmms"}
               <Tabs
                 value={size}
                 defaultValue={size}
