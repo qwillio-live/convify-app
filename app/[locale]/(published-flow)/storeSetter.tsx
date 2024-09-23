@@ -44,40 +44,52 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     state
   ) {
     console.log("entered sendResponseEvent")
+
+    // Set the delay in milliseconds
+    const delay = 3000 // 2 seconds
+
+    // Create a promise that resolves after the specified delay
+    await new Promise((resolve) => setTimeout(resolve, delay))
+
     const method = responseId ? "PUT" : "POST"
     const url = responseId
       ? `/api/flows/${flowData.id}/responses/${responseId}`
       : `/api/flows/${flowData.id}/responses`
+
     const data = {
       ...storage,
       ...content,
     }
+
     console.log("entered sendResponseEvent", method, url, "data", data)
     storage = data
-    await fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content: data }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response event sent:", data)
-        if (!responseId) {
-          localStorage.setItem(
-            `${RESPONSE_BUTTON_CLASS}${flowData.id}`,
-            JSON.stringify({
-              responseId: data.id,
-              expiry: Date.now() + RESPONSE_EXPIRY_MINUTES * 60 * 1000,
-            })
-          ) // 30 minutes
-        }
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: data }),
       })
-      .catch((error) => {
-        console.error("Error sending response event:", error)
-      })
+
+      const responseData = await response.json()
+      console.log("Response event sent:", responseData)
+
+      if (!responseId) {
+        localStorage.setItem(
+          `${RESPONSE_BUTTON_CLASS}${flowData.id}`,
+          JSON.stringify({
+            responseId: responseData.id,
+            expiry: Date.now() + RESPONSE_EXPIRY_MINUTES * 60 * 1000,
+          })
+        ) // 30 minutes
+      }
+    } catch (error) {
+      console.error("Error sending response event:", error)
+    }
   }
+
   async function sendVisitEvent(stepId) {
     console.log("entered sendVisitEvent", stepId, flowData.id)
     await fetch(`/api/flows/${flowData.id}/visits`, {
