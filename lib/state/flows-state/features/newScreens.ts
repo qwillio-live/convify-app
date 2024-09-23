@@ -168,30 +168,7 @@ export const newScreensSlice = createSlice({
       // state.screensHeader = JSON.stringify(headerSlice);
       return
     },
-    addField: (state, action: PayloadAction<ScreenFieldType>) => {
-      const selectedScreen = state.selectedScreen
-      const selectedScreenObj = state.screens[selectedScreen]
-      const field = action.payload
 
-      if (!selectedScreenObj) {
-        // Handle case where selected screen is not found
-        console.error(`Selected screen (${selectedScreen}) not found in state.`)
-        return
-      }
-
-      // Clone the existing screenFields to avoid mutating state directly
-      const screenFields = { ...selectedScreenObj.screenFields }
-
-      // Update the screenFields with the new field
-      screenFields[field.fieldId] = field
-
-      // Update state with the modified screenFields
-      state.screens[selectedScreen].screenFields = screenFields
-
-      // Update screensFieldsList with the modified screenFields
-      const selectedId = selectedScreenObj.screenId
-      state.screensFieldsList[selectedId] = screenFields
-    },
     removeFields: (state, action: PayloadAction<string>) => {
       const selectedScreen = state.selectedScreen
       const selectedScreenId = state.screens[selectedScreen]?.screenId
