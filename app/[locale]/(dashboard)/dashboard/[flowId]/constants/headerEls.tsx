@@ -136,15 +136,15 @@ const Header = ({ flowId }) => {
       </div>
       <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
-          <Link
+          <span
             className={linkClasses("/dashboard/flows/create-flow")}
-            href={`/dashboard/${flowId}/create-flow`}
+            onClick={() => router.push(`/dashboard/${flowId}/create-flow`)}
             style={{
               paddingLeft: isSmallScreen ? "0.625rem" : "1rem",
             }}
           >
             {t("Create")}
-          </Link>
+          </span>
           <Link
             className={linkClasses("/dashboard/flows/connect")}
             href={`/dashboard/${flowId}/connect`}

@@ -140,6 +140,7 @@ const ScreensList = ({ flowId }) => {
           screens[selectedScreenIndex] &&
           screens[selectedScreenIndex].screenData
         ) {
+          console.log("screen to deserialise", selectedScreenIndex)
           await actions.deserialize(
             screens[selectedScreenIndex].screenData || {}
           )
@@ -149,6 +150,7 @@ const ScreensList = ({ flowId }) => {
         // Optionally, handle the error here (e.g., show a notification, log it, etc.)
       }
     }
+    console.log("entering useEffect")
     reset()
   }, [selectedScreenIndex])
 
