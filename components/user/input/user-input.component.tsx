@@ -126,7 +126,7 @@ export const UserInputGen = ({ ...props }) => {
   console.log("user input", screenData, props)
   useEffect(() => {
     if (screenData?.length > 0) {
-      console.log("udpating impiut", screendata)
+      console.log("udpating impiut", screenData)
       setIsFilled(true)
       setInputValue(screenData)
       if (inputRef.current) {
