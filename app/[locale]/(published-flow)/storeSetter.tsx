@@ -37,11 +37,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const RESPONSE_EXPIRY_MINUTES = 30 // 3
   let storage = {}
 
-  async function sendResponseEvent(
-    stepId,
-    content,
-    responseId: string | null = null
-  ) {
+  async function sendResponseEvent(stepId, responseId: string | null = null) {
     console.log("entered sendResponseEvent")
 
     setTimeout(async () => {
@@ -52,7 +48,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
 
       const data = {
         ...storage,
-        ...content,
+        ...totalFilled,
       }
 
       console.log("entered sendResponseEvent", method, url, "data", data)
@@ -160,7 +156,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       localStorage.removeItem(name) // Remove item if parsing fails
     }
 
-    sendResponseEvent(stepId, totalFilled, responseId)
+    sendResponseEvent(stepId, responseId)
   }
 
   useEffect(() => {
