@@ -332,7 +332,7 @@ export const UserToolbox = () => {
     useInputTextareaThemePrests()
   const { h2Preset } = useHeadlineThemePresets()
   const { parapgraphPreset, spanPreset } = useTextThemePresets()
-  const { formPreset } = useInputThemePresets()
+  const { formPreset, formPresets } = useInputThemePresets()
   {
     /**
      * isHeaderFooterMode: flag is used to determine if the header or footer mode is active
@@ -449,7 +449,7 @@ export const UserToolbox = () => {
                         <div className="flex w-full max-w-[376px] gap-1">
                           <UserInputGen
                             {...formPreset}
-                            id={`input-${hexoid(6)()}`}
+                            id={`input-789000`}
                             label={t("FirstName")}
                             placeholder={t("FirstName")}
                             floatingLabel={true}
@@ -459,8 +459,8 @@ export const UserToolbox = () => {
                             width={"100%"}
                           />
                           <UserInputGen
-                            {...formPreset}
-                            id={`input-${hexoid(6)()}`}
+                            {...formPresets}
+                            id={`input-000987`}
                             label={t("LastName")}
                             placeholder={t("LasttName")}
                             floatingLabel={true}
