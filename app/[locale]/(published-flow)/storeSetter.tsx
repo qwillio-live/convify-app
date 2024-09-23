@@ -40,54 +40,49 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   async function sendResponseEvent(
     stepId,
     content,
-    responseId: string | null = null,
-    state
+    responseId: string | null = null
   ) {
     console.log("entered sendResponseEvent")
 
-    // Set the delay in milliseconds
-    const delay = 3000 // 2 seconds
+    setTimeout(async () => {
+      const method = responseId ? "PUT" : "POST"
+      const url = responseId
+        ? `/api/flows/${flowData.id}/responses/${responseId}`
+        : `/api/flows/${flowData.id}/responses`
 
-    // Create a promise that resolves after the specified delay
-    await new Promise((resolve) => setTimeout(resolve, delay))
-
-    const method = responseId ? "PUT" : "POST"
-    const url = responseId
-      ? `/api/flows/${flowData.id}/responses/${responseId}`
-      : `/api/flows/${flowData.id}/responses`
-
-    const data = {
-      ...storage,
-      ...content,
-    }
-
-    console.log("entered sendResponseEvent", method, url, "data", data)
-    storage = data
-
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content: data }),
-      })
-
-      const responseData = await response.json()
-      console.log("Response event sent:", responseData)
-
-      if (!responseId) {
-        localStorage.setItem(
-          `${RESPONSE_BUTTON_CLASS}${flowData.id}`,
-          JSON.stringify({
-            responseId: responseData.id,
-            expiry: Date.now() + RESPONSE_EXPIRY_MINUTES * 60 * 1000,
-          })
-        ) // 30 minutes
+      const data = {
+        ...storage,
+        ...content,
       }
-    } catch (error) {
-      console.error("Error sending response event:", error)
-    }
+
+      console.log("entered sendResponseEvent", method, url, "data", data)
+      storage = data
+
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: data }),
+        })
+
+        const responseData = await response.json()
+        console.log("Response event sent:", responseData)
+
+        if (!responseId) {
+          localStorage.setItem(
+            `${RESPONSE_BUTTON_CLASS}${flowData.id}`,
+            JSON.stringify({
+              responseId: responseData.id,
+              expiry: Date.now() + RESPONSE_EXPIRY_MINUTES * 60 * 1000,
+            })
+          ) // 30 minutes
+        }
+      } catch (error) {
+        console.error("Error sending response event:", error)
+      }
+    }, 3000)
   }
 
   async function sendVisitEvent(stepId) {
@@ -140,7 +135,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       ) // 1440 minutes = 24 hours
     }
   }
-  function handleSendResponse(stepId, state) {
+  function handleSendResponse(stepId) {
     console.log("entered handleSendResponse", stepId)
 
     const name = `${RESPONSES_STORAGE_PREFIX}${flowData.id}`
@@ -165,7 +160,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       localStorage.removeItem(name) // Remove item if parsing fails
     }
 
-    sendResponseEvent(stepId, totalFilled, responseId, state)
+    sendResponseEvent(stepId, totalFilled, responseId)
   }
 
   useEffect(() => {
@@ -187,7 +182,10 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       handleStepVisit(stepId)
     }
     dispatch(getAllFilledAnswers(true))
-    if (index === screenNames.length - 1) handleSendResponse(stepId, state)
+    if (index === screenNames.length - 1) {
+      dispatch(getAllFilledAnswers(true))
+      handleSendResponse(stepId)
+    }
   }, [screen])
 
   return null // This component does not need to render anything
