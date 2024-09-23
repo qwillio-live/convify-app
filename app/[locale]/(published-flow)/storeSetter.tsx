@@ -60,7 +60,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ content: data }),
+          body: JSON.stringify({ content: totalFilled }),
         })
 
         const responseData = await response.json()

@@ -98,8 +98,14 @@ export const UserInputGen = ({ ...props }) => {
   )
   const parsedData = Object.keys(fullScreenData)
     .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
-    .filter((screen) => screen?.props?.id === props?.id)
+    .filter((screen) => screen?.props?.compId === props?.compId)
+  const fullScreenDatatry = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
 
+  const screenDatatry = fullScreenData[props.nodeId]?.props?.inputValue
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -124,7 +130,9 @@ export const UserInputGen = ({ ...props }) => {
     "props",
     props,
     "fullScreenData",
-    fullScreenData
+    fullScreenData,
+    "screenDatatry",
+    screenDatatry
   )
   useEffect(() => {
     setInputValue(screenData)
