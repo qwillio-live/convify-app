@@ -286,20 +286,20 @@ export const screensSlice = createSlice({
         // Deep clone screen and parse screenData
         let eachScreen = JSON.parse(JSON.stringify(screen))
         let screenData = JSON.parse(eachScreen.screenData)
-        Object.values(screenData).forEach((node: any) => {
+        Object.entries(screenData).forEach(([key, node]: [string, any]) => {
           const dataLabel =
             node.props?.fieldName ||
             node.props?.label ||
             node?.displayName ||
             node.props?.id
-          const dataId = node.props?.id || node?.displayName
-          console.log("node", node)
+          const dataId = node.props?.id || key || node?.displayName
+          console.log("node", node, "data-label", dataLabel, "key", key)
           if (
             node.type !== "UserContainer" &&
             ((node.props?.selections && node.props?.selections.length > 0) ||
               (node.props?.inputValue &&
                 node.props.inputValue !== "Components.Text Area") ||
-              (node.props?.input && node.props.input.trim() !== ""))
+              node.props?.input)
           ) {
             // Extract one of the values that meet the conditions
             if (node.props?.selections && node.props.selections.length > 0) {
@@ -317,22 +317,18 @@ export const screensSlice = createSlice({
               }
             } else if (
               node.props?.inputValue &&
-              node.props.inputValue.trim() !== "" &&
               node.props.inputValue !== "Components.Text Area"
             ) {
               totalFilled[dataId] = {
                 label: dataLabel,
                 value: node.props.inputValue,
               }
-            } else if (
-              node.props?.selectedOptionId &&
-              node.props.selectedOptionId.trim() !== ""
-            ) {
+            } else if (node.props?.selectedOptionId) {
               totalFilled[dataId] = {
                 label: dataLabel,
                 value: node.props.selectedOptionId,
               }
-            } else if (node.props?.input && node.props.input.trim() !== "") {
+            } else if (node.props?.input) {
               totalFilled[dataId] = {
                 label: dataLabel,
                 value: node.props.input,

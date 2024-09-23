@@ -85,6 +85,12 @@ export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
+  const screenData = fullScreenData[props.nodeId]?.props.inputValue
   // const fullScreenData = useAppSelector((state) => {
   //   const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
 
@@ -113,26 +119,19 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
-  const fullScreenData = useAppSelector((state) => {
-    const screenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
-    return screenData ? JSON.parse(screenData) : {}
-  })
-
-  // Access inputValue safely
-  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
   // const screenData =
   //   parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   // const nodeId = parsedData.length > 0 && parsedData[0].props.compId
   const nodeId = screenData?.props?.compId || ""
   console.log("user input", screenData, props)
   useEffect(() => {
-    setInputValue(screenData)
-    if (inputRef.current) {
-      inputRef.current.value = screenData
-    }
     if (screenData?.length > 0) {
+      console.log("udpating impiut", screendata)
       setIsFilled(true)
+      setInputValue(screenData)
+      if (inputRef.current) {
+        inputRef.current.value = screenData
+      }
     }
     dispatch(
       setFieldProp({
@@ -148,6 +147,14 @@ export const UserInputGen = ({ ...props }) => {
         fieldId: props.compId,
         fieldName: "fieldRequired",
         fieldValue: props.inputRequired,
+      })
+    )
+    dispatch(
+      setPreviewScreenData({
+        nodeId,
+        isArray: false,
+        entity: "inputValue",
+        newSelections: [e.target.value],
       })
     )
   }, [])
