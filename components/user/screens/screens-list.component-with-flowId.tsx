@@ -132,26 +132,21 @@ const ScreensList = ({ flowId }) => {
   }
 
   useEffect(() => {
-    async function reset() {
-      try {
-        if (
-          screens &&
-          typeof selectedScreenIndex !== "undefined" &&
-          screens[selectedScreenIndex] &&
-          screens[selectedScreenIndex].screenData
-        ) {
-          console.log("screen to deserialise", selectedScreenIndex)
-          await actions.deserialize(
-            screens[selectedScreenIndex].screenData || {}
-          )
-        }
-      } catch (error) {
-        console.error("Error during deserialization:", error)
-        // Optionally, handle the error here (e.g., show a notification, log it, etc.)
-      }
-    }
     console.log("entering useEffect")
-    reset()
+    try {
+      if (
+        screens &&
+        typeof selectedScreenIndex !== "undefined" &&
+        screens[selectedScreenIndex] &&
+        screens[selectedScreenIndex].screenData
+      ) {
+        console.log("screen to deserialise", selectedScreenIndex)
+        actions.deserialize(screens[selectedScreenIndex].screenData || {})
+      }
+    } catch (error) {
+      console.error("Error during deserialization:", error)
+      // Optionally, handle the error here (e.g., show a notification, log it, etc.)
+    }
   }, [selectedScreenIndex])
 
   const handleScreenClick = useCallback(

@@ -116,7 +116,9 @@ const Header = ({ flowId }) => {
       console.error("Publishing flow failed:", err)
     }
   }
-
+  function onClick() {
+    window.location.href = `/dashboard/${flowId}/create-flow`
+  }
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
@@ -138,9 +140,10 @@ const Header = ({ flowId }) => {
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
           <span
             className={linkClasses("/dashboard/flows/create-flow")}
-            onClick={() => router.push(`/dashboard/${flowId}/create-flow`)}
+            onClick={onClick}
             style={{
               paddingLeft: isSmallScreen ? "0.625rem" : "1rem",
+              cursor: "pointer",
             }}
           >
             {t("Create")}
