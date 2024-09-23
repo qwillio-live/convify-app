@@ -85,27 +85,18 @@ export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
-  const fullScreenData = useAppSelector((state) => {
-    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
 
-    if (selectedScreen && selectedScreen.screenData) {
-      return JSON.parse(selectedScreen.screenData)
-    }
-    return {} // or return null or any default value you prefer
-  })
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
-  const parsedData = Object.keys(fullScreenData)
-    .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
-    .filter((screen) => screen?.props?.compId === props?.compId)
-  const fullScreenDatatry = useAppSelector((state) => {
+
+  const fullScreenData = useAppSelector((state) => {
     const screenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
     return screenData ? JSON.parse(screenData) : {}
   })
 
-  const screenDatatry = fullScreenData[props.nodeId]?.props?.inputValue
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -116,23 +107,21 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
-  const screenData =
-    parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
-  const nodeId = parsedData.length > 0 && parsedData[0].props.compId
+
   console.log(
     "user input",
     "screenData",
     screenData,
     "nodeId",
-    nodeId,
+    props.nodeId,
     "parsedData",
-    parsedData,
+    // parsedData,
     "props",
     props,
     "fullScreenData",
     fullScreenData,
-    "screenDatatry",
-    screenDatatry
+    "screenDatatry"
+    // screenDatatry
   )
   useEffect(() => {
     setInputValue(screenData)
@@ -458,7 +447,7 @@ export const UserInputGen = ({ ...props }) => {
                         }),
                         dispatch(
                           setPreviewScreenData({
-                            nodeId,
+                            nodeId: props.nodeId,
                             isArray: false,
                             entity: "inputValue",
                             newSelections: [e.target.value],
