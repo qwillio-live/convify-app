@@ -438,6 +438,7 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             size={"full"}
             enableIcon={false}
+            id={`input-${hexoid(6)()}`}
             style={{ overflow: "visible" }}
           />
           <Element
@@ -456,6 +457,7 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             enableIcon={false}
             size={"full"}
+            id={`input-${hexoid(6)()}`}
             style={{ overflow: "visible" }}
           />
         </Element>
