@@ -150,7 +150,7 @@ const ScreensList = ({ flowId }) => {
       }
     }
     reset()
-  }, [])
+  }, [selectedScreenIndex])
 
   const handleScreenClick = useCallback(
     async (index: number) => {

@@ -95,21 +95,23 @@ const Header = ({ flowId }) => {
     try {
       setIsLoading(true)
 
-      const response = await fetch(`/api/flows/published/${flowId}`, {
-        method: "POST",
-      })
-      if (response.ok) {
-        // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
-        //   method: "GET",
-        // })
-        // if (res.ok) {
-        revalidateFlow({ tag: "publishedFlow" })
-        setTimeout(() => {
-          setIsLoading(false)
+      // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
+      //   method: "GET",
+      // })
+      // if (res.ok) {
+
+      setTimeout(async () => {
+        const response = await fetch(`/api/flows/published/${flowId}`, {
+          method: "POST",
+        })
+        if (response.ok) {
+          revalidateFlow({ tag: "publishedFlow" })
           router.push(`./share`)
-        }, 3000)
-        // }
-      }
+        }
+        setIsLoading(false)
+        router.push(`./share`)
+      }, 6000)
+      // }
     } catch (err) {
       console.error("Publishing flow failed:", err)
     }
