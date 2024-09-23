@@ -343,7 +343,11 @@ export const screensSlice = createSlice({
       const totalFilledJson = JSON.stringify(totalFilled)
 
       // For demonstration purposes, log the totalFilled array
-      console.log("Total Filled Answers by Screen:", totalFilled)
+      console.log(
+        "Total Filled Answers by Screen:",
+        totalFilled,
+        totalFilled.length
+      )
       state.filledContent = totalFilled
       // Optionally, update the state with the totalFilled array if needed
       // state.filledAnswers = totalFilled; // Adjust according to your state shape

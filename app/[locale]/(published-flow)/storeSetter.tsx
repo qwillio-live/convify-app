@@ -60,7 +60,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ content: totalFilled }),
+          body: JSON.stringify({ content: { ...totalFilled } }),
         })
 
         const responseData = await response.json()
@@ -179,7 +179,6 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     }
     dispatch(getAllFilledAnswers(true))
     if (index === screenNames.length - 1) {
-      dispatch(getAllFilledAnswers(true))
       handleSendResponse(stepId)
     }
   }, [screen])
