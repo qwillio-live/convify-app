@@ -299,7 +299,8 @@ export const screensSlice = createSlice({
             ((node.props?.selections && node.props?.selections.length > 0) ||
               (node.props?.inputValue &&
                 node.props.inputValue !== "Components.Text Area") ||
-              node.props?.input)
+              node.props?.input ||
+              node.props?.selectedOptionId)
           ) {
             // Extract one of the values that meet the conditions
             if (node.props?.selections && node.props.selections.length > 0) {
@@ -311,7 +312,7 @@ export const screensSlice = createSlice({
                 .map((choice) => ({ id: choice.id, value: choice.value }))
               totalFilled[dataId] = {
                 label: dataLabel,
-                value: result,
+                value: node.props?.selections?.length > 1 ? result : result[0],
                 type:
                   node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
               }
