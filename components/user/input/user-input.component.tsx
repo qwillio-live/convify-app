@@ -85,14 +85,14 @@ export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
-  const fullScreenData = useAppSelector((state) => {
-    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
+  // const fullScreenData = useAppSelector((state) => {
+  //   const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
 
-    if (selectedScreen && selectedScreen.screenData) {
-      return JSON.parse(selectedScreen.screenData)
-    }
-    return {} // or return null or any default value you prefer
-  })
+  //   if (selectedScreen && selectedScreen.screenData) {
+  //     return JSON.parse(selectedScreen.screenData)
+  //   }
+  //   return {} // or return null or any default value you prefer
+  // })
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
@@ -113,8 +113,16 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
-  const screenData =
-    parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
+
+  // Access inputValue safely
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
+  // const screenData =
+  //   parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
   console.log("user input", screenData, nodeId, parsedData, props)
   useEffect(() => {
