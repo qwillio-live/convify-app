@@ -132,6 +132,14 @@ export const UserInputGen = ({ ...props }) => {
       if (inputRef.current) {
         inputRef.current.value = screenData
       }
+      dispatch(
+        setPreviewScreenData({
+          nodeId,
+          isArray: false,
+          entity: "inputValue",
+          newSelections: [screenData],
+        })
+      )
     }
     dispatch(
       setFieldProp({
@@ -147,14 +155,6 @@ export const UserInputGen = ({ ...props }) => {
         fieldId: props.compId,
         fieldName: "fieldRequired",
         fieldValue: props.inputRequired,
-      })
-    )
-    dispatch(
-      setPreviewScreenData({
-        nodeId,
-        isArray: false,
-        entity: "inputValue",
-        newSelections: [e.target.value],
       })
     )
   }, [])
