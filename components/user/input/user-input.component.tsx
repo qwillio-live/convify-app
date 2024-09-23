@@ -96,12 +96,12 @@ export const UserInputGen = ({ ...props }) => {
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
-  const parsedData = Object.keys(fullScreenData)
-    .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
-    .filter(
-      (screen) =>
-        screen?.props?.id === props?.id && screen?.props?.inputRequired
-    )
+  // const parsedData = Object.keys(fullScreenData)
+  //   .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
+  //   .filter(
+  //     (screen) =>
+  //       screen?.props?.id === props?.id && screen?.props?.inputRequired
+  //   )
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
@@ -123,8 +123,9 @@ export const UserInputGen = ({ ...props }) => {
   const screenData = fullScreenData[props.nodeId]?.props?.inputValue
   // const screenData =
   //   parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
-  const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  console.log("user input", screenData, nodeId, parsedData, props)
+  // const nodeId = parsedData.length > 0 && parsedData[0].props.compId
+  const nodeId = screenData?.props?.compId || ""
+  console.log("user input", screenData, props)
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {
@@ -441,12 +442,12 @@ export const UserInputGen = ({ ...props }) => {
                     if (!isFilled) dispatch(setUpdateFilledCount(1))
                     setInputValue(e.target.value),
                       dispatch(
-                        setFieldProp({
-                          screenId: props.parentScreenId,
-                          fieldId: props.nodeId,
-                          fieldName: "fieldValue",
-                          fieldValue: e.target.value,
-                        }),
+                        // setFieldProp({
+                        //   screenId: props.parentScreenId,
+                        //   fieldId: props.nodeId,
+                        //   fieldName: "fieldValue",
+                        //   fieldValue: e.target.value,
+                        // }),
                         dispatch(
                           setPreviewScreenData({
                             nodeId,
@@ -461,12 +462,12 @@ export const UserInputGen = ({ ...props }) => {
                 } else {
                   setInputValue(e.target.value),
                     dispatch(
-                      setFieldProp({
-                        screenId: props.parentScreenId,
-                        fieldId: props.nodeId,
-                        fieldName: "fieldValue",
-                        fieldValue: e.target.value,
-                      }),
+                      // setFieldProp({
+                      //   screenId: props.parentScreenId,
+                      //   fieldId: props.nodeId,
+                      //   fieldName: "fieldValue",
+                      //   fieldValue: e.target.value,
+                      // }),
                       dispatch(
                         setPreviewScreenData({
                           nodeId,
