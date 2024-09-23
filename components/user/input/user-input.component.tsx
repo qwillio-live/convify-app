@@ -86,28 +86,22 @@ export const UserInputGen = ({ ...props }) => {
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
   const fullScreenData = useAppSelector((state) => {
-    const screenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
-    return screenData ? JSON.parse(screenData) : {}
-  })
-  const screenData = fullScreenData[props.nodeId]?.props.inputValue
-  // const fullScreenData = useAppSelector((state) => {
-  //   const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
+    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
 
-  //   if (selectedScreen && selectedScreen.screenData) {
-  //     return JSON.parse(selectedScreen.screenData)
-  //   }
-  //   return {} // or return null or any default value you prefer
-  // })
+    if (selectedScreen && selectedScreen.screenData) {
+      return JSON.parse(selectedScreen.screenData)
+    }
+    return {} // or return null or any default value you prefer
+  })
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
   )
-  // const parsedData = Object.keys(fullScreenData)
-  //   .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
-  //   .filter(
-  //     (screen) =>
-  //       screen?.props?.id === props?.id && screen?.props?.inputRequired
-  //   )
+  const parsedData = Object.keys(fullScreenData)
+    .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
+    .filter(
+      (screen) =>
+        screen?.props?.id === props?.id && screen?.props?.inputRequired
+    )
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
@@ -119,27 +113,27 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
-  // const screenData =
-  //   parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
-  // const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  const nodeId = screenData?.props?.compId || ""
-  console.log("user input", screenData, props)
+  const screenData =
+    parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
+  const nodeId = parsedData.length > 0 && parsedData[0].props.compId
+  console.log(
+    "user input",
+    "screenData",
+    screenData,
+    "nodeId",
+    nodeId,
+    "parsedData",
+    parsedData,
+    "props",
+    props
+  )
   useEffect(() => {
+    setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
     if (screenData?.length > 0) {
-      console.log("udpating impiut", screenData)
       setIsFilled(true)
-      setInputValue(screenData)
-      if (inputRef.current) {
-        inputRef.current.value = screenData
-      }
-      dispatch(
-        setPreviewScreenData({
-          nodeId,
-          isArray: false,
-          entity: "inputValue",
-          newSelections: [screenData],
-        })
-      )
     }
     dispatch(
       setFieldProp({
@@ -155,6 +149,14 @@ export const UserInputGen = ({ ...props }) => {
         fieldId: props.compId,
         fieldName: "fieldRequired",
         fieldValue: props.inputRequired,
+      })
+    )
+    dispatch(
+      setPreviewScreenData({
+        nodeId,
+        isArray: false,
+        entity: "inputValue",
+        newSelections: [screenData],
       })
     )
   }, [])
@@ -449,12 +451,12 @@ export const UserInputGen = ({ ...props }) => {
                     if (!isFilled) dispatch(setUpdateFilledCount(1))
                     setInputValue(e.target.value),
                       dispatch(
-                        // setFieldProp({
-                        //   screenId: props.parentScreenId,
-                        //   fieldId: props.nodeId,
-                        //   fieldName: "fieldValue",
-                        //   fieldValue: e.target.value,
-                        // }),
+                        setFieldProp({
+                          screenId: props.parentScreenId,
+                          fieldId: props.nodeId,
+                          fieldName: "fieldValue",
+                          fieldValue: e.target.value,
+                        }),
                         dispatch(
                           setPreviewScreenData({
                             nodeId,
@@ -469,12 +471,12 @@ export const UserInputGen = ({ ...props }) => {
                 } else {
                   setInputValue(e.target.value),
                     dispatch(
-                      // setFieldProp({
-                      //   screenId: props.parentScreenId,
-                      //   fieldId: props.nodeId,
-                      //   fieldName: "fieldValue",
-                      //   fieldValue: e.target.value,
-                      // }),
+                      setFieldProp({
+                        screenId: props.parentScreenId,
+                        fieldId: props.nodeId,
+                        fieldName: "fieldValue",
+                        fieldValue: e.target.value,
+                      }),
                       dispatch(
                         setPreviewScreenData({
                           nodeId,
