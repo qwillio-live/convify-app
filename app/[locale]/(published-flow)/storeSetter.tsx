@@ -179,10 +179,13 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       handleStepVisit(stepId)
     }
     dispatch(getAllFilledAnswers(true))
+  }, [screen])
+  useEffect(() => {
+    const stepId = screen
     if (index === screenNames.length - 1) {
       handleSendResponse(stepId)
     }
-  }, [screen, totalFilled])
+  }, [totalFilled])
 
   return null // This component does not need to render anything
 }
