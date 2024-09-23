@@ -75,7 +75,7 @@ export const MultipleChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState([])
+  const [selectedChoices, setSelectedChoices] = useState<string[]>([])
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
