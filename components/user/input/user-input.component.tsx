@@ -98,10 +98,7 @@ export const UserInputGen = ({ ...props }) => {
   )
   const parsedData = Object.keys(fullScreenData)
     .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
-    .filter(
-      (screen) =>
-        screen?.props?.id === props?.id && screen?.props?.inputRequired
-    )
+    .filter((screen) => screen?.props?.id === props?.id)
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
@@ -125,7 +122,9 @@ export const UserInputGen = ({ ...props }) => {
     "parsedData",
     parsedData,
     "props",
-    props
+    props,
+    "fullScreenData",
+    fullScreenData
   )
   useEffect(() => {
     setInputValue(screenData)
@@ -149,14 +148,6 @@ export const UserInputGen = ({ ...props }) => {
         fieldId: props.compId,
         fieldName: "fieldRequired",
         fieldValue: props.inputRequired,
-      })
-    )
-    dispatch(
-      setPreviewScreenData({
-        nodeId,
-        isArray: false,
-        entity: "inputValue",
-        newSelections: [screenData],
       })
     )
   }, [])
@@ -479,7 +470,7 @@ export const UserInputGen = ({ ...props }) => {
                       }),
                       dispatch(
                         setPreviewScreenData({
-                          nodeId,
+                          nodeId: props.nodeId,
                           isArray: false,
                           entity: "inputValue",
                           newSelections: [e.target.value],
