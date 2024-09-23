@@ -1,5 +1,9 @@
 "use client"
 
+import { clear } from "console"
+import React, { useCallback, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
+import { debounce, throttle } from "lodash"
 import {
   ArrowRight,
   Check,
@@ -8,33 +12,33 @@ import {
   Github,
   Globe,
   Image,
-  Linkedin,
-  Smartphone,
   Laptop,
+  Linkedin,
   PlusCircle,
+  Smartphone,
 } from "lucide-react"
-import React, { useCallback, useEffect, useRef } from "react"
-import { throttle, debounce } from "lodash"
-import { Card, CardContent } from "../user/card/user-card.component"
+import { useTranslations } from "next-intl"
+
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
+  addScreen,
+  setComponentBeforeAvatar,
   setCurrentScreenName,
   setEditorLoad,
-  setScrollY,
-  setComponentBeforeAvatar,
   setFirstScreenName,
+  setScrollY,
   setSelectedComponent,
-  setValidateScreen,
-  addScreen,
   setSelectedScreen,
+  setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
 // import { ProgressBar } from "../progress-bar.component"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import ScreensList from "@/components/user/screens/screens-list.component-with-flowId"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
@@ -43,24 +47,33 @@ import { UserText } from "@/components/user/text/user-text.component"
 import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
+import { AvatarComponent } from "../user/avatar-new/user-avatar.component"
+import { BackButton } from "../user/backButton/back-component"
 import { Button as UserButton } from "../user/button/user-button.component"
+import { Card, CardContent } from "../user/card/user-card.component"
+import { Checklist } from "../user/checklist/user-checklist.component"
 import {
   Container,
   UserContainer,
 } from "../user/container/user-container.component"
-import { UserInputTextarea } from "../user/input-textarea/user-input-textarea.component"
+import { Form, FormContent } from "../user/form/user-form.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
 import { ImageComponent } from "../user/image-new/user-image.component"
-import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
-import { Form, FormContent } from "../user/form/user-form.component"
 import { UserInputCheckbox } from "../user/input-checkbox/user-input-checkbox.component"
 import { UserInputMail } from "../user/input-email/user-input-mail.component"
 import { UserInputPhone } from "../user/input-phone/user-input-phone.component"
+import { UserInputTextarea } from "../user/input-textarea/user-input-textarea.component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
+import { LineSelector } from "../user/lineSeperator/line-seperator-component"
+import { LinkButton } from "../user/link/link-component"
+import { List } from "../user/list/user-list.component"
+import { LoaderComponent } from "../user/loader-new/user-loader.component"
 import { Loader } from "../user/loader/user-loader.component"
+import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
+import { LogoComponent } from "../user/logo-new/user-logo.component"
 import { Logo } from "../user/logo/user-logo.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { PictureChoice } from "../user/picture-choice/user-picture-choice.component"
@@ -71,27 +84,14 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
+import { Select } from "../user/select/user-select.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
-import { LoaderComponent } from "../user/loader-new/user-loader.component"
-import { Checklist } from "../user/checklist/user-checklist.component"
-import { List } from "../user/list/user-list.component"
-import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
-import { Steps } from "../user/steps/user-steps.component"
-import { useRouter } from "next/navigation"
-import { useTranslations } from "next-intl"
-import emptyScreenData from "@/components/user/screens/empty-screen.json"
-import { LogoComponent } from "../user/logo-new/user-logo.component"
-import { AvatarComponent } from "../user/avatar-new/user-avatar.component"
-import { TextImageComponent } from "../user/textImage/user-textImage.component"
-import { RootState } from "@/lib/state/flows-state/store"
-import { clear } from "console"
-import { LineSelector } from "../user/lineSeperator/line-seperator-component"
-import { BackButton } from "../user/backButton/back-component"
-import { LinkButton } from "../user/link/link-component"
 import { SocialShareButton } from "../user/socialShareButton/share-component"
+import { Steps } from "../user/steps/user-steps.component"
 import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
+import { TextImageComponent } from "../user/textImage/user-textImage.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -398,7 +398,8 @@ export function CreateFlowComponent({ flowId }) {
             className="hidden max-h-[calc(-52px+99vh)] basis-[55%] overflow-y-auto border-r md:block"
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
-            <div className="section-body">
+
+            <div className="section-body max-w-[calc(55vw-10px)]">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
                 className="w-full"

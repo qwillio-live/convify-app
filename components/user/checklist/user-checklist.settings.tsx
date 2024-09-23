@@ -281,7 +281,6 @@ export const ChecklistSettings = () => {
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <p className="text-md text-muted-foreground">{t("Width")}</p>
-              {size ? size : "mmms"}
               <Tabs
                 value={size}
                 defaultValue={size}
