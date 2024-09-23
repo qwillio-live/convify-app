@@ -51,7 +51,7 @@ export default function CreateFlowsPage({
           setError(true)
         })
     }
-    dispatch(setSelectedScreen(selectedScreen))
+    // dispatch(setSelectedScreen(selectedScreen))
   }, [flowId])
 
   if (error) {
