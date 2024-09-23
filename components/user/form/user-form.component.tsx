@@ -21,11 +21,13 @@ import {
 import formPresetPhone from "../input-phone/useInputPhoneThemePresets"
 import { UserInputPhone } from "../input-phone/user-input-phone.component"
 import formPreset from "../input/useInputThemePresets"
-import { UserInput } from "../input/user-input.component"
+import { UserInput, UserInputGen } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { FormSettings } from "./user-form-settings"
 import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
+import useInputThemePresets from "../input/useInputThemePresets"
+import useBackThemePresets from "../backButton/back-theme"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -366,7 +368,8 @@ export const Form = ({ children, ...props }) => {
   const t = useTranslations("Components")
   const { outlinedPresetMail, underlinedPresetMail } =
     useInputMailThemePresets()
-  const { outLinePreset, filledPreset, formPreset } = useButtonThemePresets()
+  const { formPresets } = useInputThemePresets()
+  const { formPreset } = useButtonThemePresets()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   const adjustWidth = props.size
@@ -426,7 +429,7 @@ export const Form = ({ children, ...props }) => {
           <Element
             canvas
             is={UserInput}
-            {...formPreset}
+            {...formPresets}
             label={t("FirstName")}
             placeholder="Enter your first name"
             floatingLabel={true}
@@ -438,14 +441,14 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             size={"full"}
             enableIcon={false}
-            id={`input-${hexoid(6)()}`}
+            id={`input-010101`}
             style={{ overflow: "visible" }}
           />
           <Element
             canvas
             is={UserInput}
+            {...formPresets}
             floatingLabel={true}
-            {...formPreset}
             label={t("LastName")}
             placeholder="Enter your last name"
             backgroundColor={"transparent"}
@@ -457,7 +460,7 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             enableIcon={false}
             size={"full"}
-            id={`input-${hexoid(6)()}`}
+            id={`input-000111`}
             style={{ overflow: "visible" }}
           />
         </Element>

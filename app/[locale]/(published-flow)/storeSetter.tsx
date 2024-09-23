@@ -46,12 +46,13 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
         ? `/api/flows/${flowData.id}/responses/${responseId}`
         : `/api/flows/${flowData.id}/responses`
 
+      // Use the updated totalFilled from Redux state
       const data = {
         ...storage,
-        ...totalFilled,
+        ...totalFilled, // Use the latest value of totalFilled
       }
 
-      console.log("entered sendResponseEvent", method, url, "data", data)
+      console.log("Sending response event", method, url, "data", data)
       storage = data
 
       try {
@@ -181,7 +182,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     if (index === screenNames.length - 1) {
       handleSendResponse(stepId)
     }
-  }, [screen])
+  }, [screen, totalFilled])
 
   return null // This component does not need to render anything
 }

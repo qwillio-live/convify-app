@@ -185,6 +185,7 @@ import {
   TelegramShareButton,
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
+import hexoid from "hexoid"
 
 function HelperInformation() {
   return (
@@ -448,6 +449,7 @@ export const UserToolbox = () => {
                         <div className="flex w-full max-w-[376px] gap-1">
                           <UserInputGen
                             {...formPreset}
+                            id={`input-${hexoid(6)()}`}
                             label={t("FirstName")}
                             placeholder={t("FirstName")}
                             floatingLabel={true}
@@ -458,6 +460,7 @@ export const UserToolbox = () => {
                           />
                           <UserInputGen
                             {...formPreset}
+                            id={`input-${hexoid(6)()}`}
                             label={t("LastName")}
                             placeholder={t("LasttName")}
                             floatingLabel={true}
