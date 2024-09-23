@@ -462,17 +462,17 @@ export const UserToolbox = () => {
                             marginTop={0}
                             width={"100%"}
                           />
-                          {/* <UserInputGen
-                              {...formPresets}
-                              id={`input-000987`}
-                              label={t("LastName")}
-                              placeholder={t("LasttName")}
-                              floatingLabel={true}
-                              marginBottom={0}
-                              marginRight={0}
-                              marginTop={0}
-                              width={"100%"}
-                            /> */}
+                          <UserInputGen
+                            {...formPresets}
+                            id={`input-000987`}
+                            label={t("LastName")}
+                            placeholder={t("LasttName")}
+                            floatingLabel={true}
+                            marginBottom={0}
+                            marginRight={0}
+                            marginTop={0}
+                            width={"100%"}
+                          />
                         </div>
                         <UserInputMailGen
                           {...outlinedPresetMail}

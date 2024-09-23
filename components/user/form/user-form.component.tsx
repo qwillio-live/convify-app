@@ -429,7 +429,7 @@ export const Form = ({ children, ...props }) => {
           <Element
             canvas
             is={UserInput}
-            {...formPresets}
+            {...formPreset}
             label={t("FirstName")}
             placeholder="Enter your first name"
             floatingLabel={true}
