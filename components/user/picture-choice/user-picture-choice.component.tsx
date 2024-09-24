@@ -65,7 +65,7 @@ export const PictureChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [selectedChoices, setSelectedChoices] = useState<string[]>([])
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
@@ -125,6 +125,9 @@ export const PictureChoiceGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   return (
     <div
       className="relative w-full"
@@ -146,14 +149,15 @@ export const PictureChoiceGen = ({
       <div
         className="w-full p-1 text-center"
         style={{
-          color: labelColor,
+          color: `${labelColor !== "#ffffff" ? labelColor : primaryTextColor}`,
           fontFamily: `var(${fontFamily?.value})`,
           maxWidth: PictureChoiceSizeValues[size || "small"],
         }}
       >
-        <label>{label}</label>
+        <div dangerouslySetInnerHTML={{ __html: label }} />
       </div>
       <ul
+        data-label={props?.fieldName || ""}
         // className="flex w-full flex-wrap justify-center"
         ref={itemRef}
         className={`flex w-full flex-wrap justify-center`}
@@ -417,10 +421,6 @@ export const PictureChoice = ({
     }, 200)
   }, [primaryColor])
 
-  useEffect(() => {
-    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -468,13 +468,16 @@ export const PictureChoice = ({
               handlePropChangeDebounced("label", e.target.value)
             }}
             style={{
-              color: labelColor,
+              color: `${
+                labelColor !== "#ffffff" ? labelColor : primaryTextColor
+              }`,
               outlineColor: labelBorderColor,
               borderRadius: "4px",
             }}
           />
         </div>
         <ul
+          data-label={props?.fieldName || ""}
           className="flex w-full flex-wrap justify-center"
           style={{
             fontFamily: `var(${fontFamily?.value})`,
@@ -961,7 +964,7 @@ export type PictureChoiceProps = {
   label: string
   required: boolean
   fieldName: string
-  labelColor: string
+  labelColor?: string
   labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
@@ -1033,7 +1036,7 @@ export const PictureChoiceDefaultProps: PictureChoiceProps = {
   required: false,
   label: "Please select an option",
   fieldName: "",
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",

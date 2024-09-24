@@ -66,6 +66,7 @@ import {
 } from "./useButtonThemePresets"
 import { IconButtonSettings } from "./user-icon-button.settings"
 import { useSearchParams } from "next/navigation"
+import hexoid from "hexoid"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -329,7 +330,7 @@ export const IconButtonGen = ({
             textOverflow: "ellipsis",
           }}
         >
-          {text}
+          <div dangerouslySetInnerHTML={{ __html: text }} />
         </div>
         {enableIcon && icon.pictureType !== PictureTypes.NULL && (
           <div
@@ -901,6 +902,7 @@ export enum IconButtonSizes {
 }
 
 export type IconButtonProps = {
+  id: string
   fontFamily: StyleProperty
   disabled: boolean
   enableIcon: boolean
@@ -1022,6 +1024,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
     screenName: "",
   },
   buttonAction: "next-screen",
+  id: `input-${hexoid(6)()}`,
 }
 
 IconButton.craft = {

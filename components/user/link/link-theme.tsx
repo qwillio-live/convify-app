@@ -8,6 +8,8 @@ import hexoid from "hexoid"
 import { PictureTypes } from "@/components/PicturePicker"
 
 const useLinkThemePresets = () => {
+  const APP_URL =
+    process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid"
   const t = useTranslations("Components")
   const theme = useAppSelector((state) => state.theme)
   const darkenedPrimaryColor = darken(
@@ -97,6 +99,7 @@ const useLinkThemePresets = () => {
       screenName: "",
     },
     buttonAction: "redirect",
+    href: APP_URL,
     // iconType: PictureTypes.ICON,
   }
 
@@ -179,6 +182,7 @@ const useLinkThemePresets = () => {
       screenName: "",
     },
     buttonAction: "redirect",
+    href: APP_URL,
     // iconType: PictureTypes.ICON,
   }
 

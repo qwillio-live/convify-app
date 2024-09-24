@@ -85,22 +85,18 @@ export const UserInputGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
-  const fullScreenData = useAppSelector((state) => {
-    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
 
-    if (selectedScreen && selectedScreen.screenData) {
-      return JSON.parse(selectedScreen.screenData)
-    }
-    return {} // or return null or any default value you prefer
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
+
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
   })
 
-  const parsedData = Object.keys(fullScreenData)
-    .map((key) => fullScreenData[key]) // Map keys to their corresponding objects
-    .filter(
-      (screen) =>
-        screen?.props?.id === props?.id && screen?.props?.inputRequired
-    )
-
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -111,10 +107,22 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
-  const screenData =
-    parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
-  const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  console.log("user input", screenData, nodeId, parsedData, props)
+
+  console.log(
+    "user input",
+    "screenData",
+    screenData,
+    "nodeId",
+    props.nodeId,
+    "parsedData",
+    // parsedData,
+    "props",
+    props,
+    "fullScreenData",
+    fullScreenData,
+    "screenDatatry"
+    // screenDatatry
+  )
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {
@@ -292,9 +300,14 @@ export const UserInputGen = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}
@@ -321,6 +334,11 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -329,7 +347,7 @@ export const UserInputGen = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row  gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(
@@ -365,8 +383,10 @@ export const UserInputGen = ({ ...props }) => {
               </div>
             )}
             <UserInputStyled
+              value={inputValue}
+              data-label={props?.fieldName || ""}
               // ref={inputRef}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -428,7 +448,7 @@ export const UserInputGen = ({ ...props }) => {
                         }),
                         dispatch(
                           setPreviewScreenData({
-                            nodeId,
+                            nodeId: props.nodeId,
                             isArray: false,
                             entity: "inputValue",
                             newSelections: [e.target.value],
@@ -448,7 +468,7 @@ export const UserInputGen = ({ ...props }) => {
                       }),
                       dispatch(
                         setPreviewScreenData({
-                          nodeId,
+                          nodeId: props.nodeId,
                           isArray: false,
                           entity: "inputValue",
                           newSelections: [e.target.value],
@@ -535,6 +555,7 @@ export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
+
     parent,
     selected,
     isHovered,
@@ -553,7 +574,9 @@ export const UserInput = ({ ...props }) => {
     query: { node },
   } = useEditor()
   const dispatch = useAppDispatch()
-
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
@@ -733,6 +756,11 @@ export const UserInput = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               />
             </>
@@ -759,6 +787,11 @@ export const UserInput = ({ ...props }) => {
 
       `}
               style={{
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 fontFamily: `var(${props.primaryFont.value})`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
@@ -806,7 +839,7 @@ export const UserInput = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={inputRef}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -907,7 +940,7 @@ export type UserInputProps = {
   fieldType: "data" | "action" | "design"
   required: boolean
   fontSize: number
-  textColor: string
+  textColor?: string
   parentScreenId: string
   fontWeight: string
   marginLeft: number
@@ -971,7 +1004,7 @@ export const UserInputDefaultProps: UserInputProps = {
   fieldType: "data",
   required: false,
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,

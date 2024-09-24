@@ -19,7 +19,6 @@ const useSelectThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    labelColor: theme?.text?.primaryColor || "#000000",
     containerBackground: "transparent",
     borderColor: {
       value: "#eaeaeb",

@@ -29,6 +29,40 @@ model Account {
   @@map("accounts")
 }
 
+model Token {
+  id         Int      @id @default(autoincrement())
+  shortToken String   @unique
+  longToken  String   @db.VarChar(2048) // Adjust the length as needed
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+
+model EmailTemplate {
+  id           Int    @id @default(autoincrement())
+  templateName String @db.VarChar(255)
+  subject      String @db.VarChar(255)
+  emailFrom    String @db.VarChar(255)
+  emailHtml    String @db.Text
+
+  emailLogs EmailLog[]
+
+  @@map("emailTemplates")
+}
+
+model EmailLog {
+  id         Int      @id @default(autoincrement())
+  templateId Int
+  sendTo     String   @db.VarChar(255)
+  subject    String   @db.VarChar(255)
+  emailHtml  String   @db.Text
+  sentAt     DateTime @db.DateTime(6)
+
+  emailTemplate EmailTemplate @relation(fields: [templateId], references: [id])
+
+  @@map("emailLogs")
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique

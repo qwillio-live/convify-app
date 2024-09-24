@@ -247,3 +247,36 @@ userContainer > *:hover {
   animation: slideRightToLeft 0.2s ease-out;
   animation-fill-mode: forwards;
 }
+
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative;
+  margin-bottom: 10px;
+  box-sizing: content-box;
+}
+
+.scroll-container.show-scrollbar {
+  padding-bottom: 5px; /* Adjust for scrollbar size */
+  margin-bottom: 1rem !important;
+}
+
+/* Hide scrollbar by default */
+.scroll-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.scroll-container.show-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  height: 5px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}

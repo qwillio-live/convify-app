@@ -107,7 +107,6 @@ const ResolvedComponentsFromCraftState = ({
 
         const parse = (nodeId: string, parentNodeId?: string) => {
           if (parsedNodes[nodeId]) return parsedNodes[nodeId]
-          console.log(`Parsing node: ${parsedNodes[nodeId]}`)
 
           const nodeData = craftState[nodeId]
           if (!nodeData) return null

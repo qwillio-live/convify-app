@@ -23,10 +23,10 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().min(1),
-    NEXT_PUBLIC_WA_NUMBER: z.string().min(1),
-    NEXT_PUBLIC_TL_URL: z.string().min(1),
-    NEXT_PUBLIC_FLOW_DOMAIN: z.string().min(1),
-    NEXT_PUBLIC_APP_NAME: z.string().min(1),
+    // NEXT_PUBLIC_WHATSAPP_PHONE: z.string().min(1),
+    // NEXT_PUBLIC_TELEGRAM_USERNAME: z.string().min(1),
+    // NEXT_PUBLIC_FLOW_DOMAIN: z.string().min(1),
+    // NEXT_PUBLIC_APP_NAME: z.string().min(1),
   },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -45,9 +45,9 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     LOG_URL: process.env.LOG_URL,
     LOG_APP_KEY: process.env.LOG_APP_KEY,
-    NEXT_PUBLIC_WA_NUMBER: process.env.NEXT_PUBLIC_WA_NUMBER,
-    NEXT_PUBLIC_TL_URL: process.env.NEXT_PUBLIC_TL_URL,
-    NEXT_PUBLIC_FLOW_DOMAIN: process.env.NEXT_PUBLIC_FLOW_DOMAIN,
-    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    // NEXT_PUBLIC_WHATSAPP_PHONE: process.env.NEXT_PUBLIC_WHATSAPP_PHONE,
+    // NEXT_PUBLIC_TELEGRAM_USERNAME: process.env.NEXT_PUBLIC_TELEGRAM_USERNAME,
+    // NEXT_PUBLIC_FLOW_DOMAIN: process.env.NEXT_PUBLIC_FLOW_DOMAIN,
+    // NEXT_PUBLIC_APP_NAME: process.process.env.APP_NAME,
   },
 })

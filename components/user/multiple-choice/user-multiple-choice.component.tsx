@@ -75,7 +75,7 @@ export const MultipleChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [selectedChoices, setSelectedChoices] = useState<string[]>([])
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
@@ -87,7 +87,9 @@ export const MultipleChoiceGen = ({
     }
     return []
   })
-
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -152,6 +154,7 @@ export const MultipleChoiceGen = ({
       }}
     >
       <ul
+        data-label={props?.fieldName || ""}
         ref={itemRef}
         className="flex w-full flex-col items-center justify-center"
         style={{
@@ -163,12 +166,14 @@ export const MultipleChoiceGen = ({
         <div
           className="w-full p-1 text-center"
           style={{
-            color: labelColor,
+            color: `${
+              labelColor !== "#ffffff" ? labelColor : primaryTextColor
+            }`,
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: MultipleChoiceSizeValues[size || "small"],
           }}
         >
-          <label>{label}</label>
+          <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem
@@ -425,10 +430,6 @@ export const MultipleChoice = ({
     }, 200)
   }, [primaryColor])
 
-  useEffect(() => {
-    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -478,13 +479,16 @@ export const MultipleChoice = ({
               handlePropChangeDebounced("label", e.target.value)
             }}
             style={{
-              color: labelColor,
+              color: `${
+                labelColor !== "#ffffff" ? labelColor : primaryTextColor
+              }`,
               outlineColor: labelBorderColor,
               borderRadius: "4px",
             }}
           />
         </div>
         <ul
+          data-label={props?.fieldName || ""}
           className="flex w-full flex-col items-center justify-center"
           style={{
             gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
@@ -930,7 +934,7 @@ export type MultipleChoiceProps = {
   required: boolean
   fieldName: string
   layout: MultipleChoiceLayouts
-  labelColor: string
+  labelColor?: string
   labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
@@ -998,7 +1002,7 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
   required: false,
   fieldName: "",
   layout: MultipleChoiceLayouts.collapsed,
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",

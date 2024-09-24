@@ -88,6 +88,7 @@ export type TextInputProps = {
   color: StyleProperty
   colorHover: StyleProperty
   text: string
+  textColor?: string
   paddingLeft: string | number
   paddingTop: string | number
   paddingRight: string | number
@@ -197,7 +198,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   }
 
   color: ${(props) => `${props?.color}`};
-  overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
       ? MobileContainerWidthValues[props.size || "medium"]
@@ -230,6 +230,7 @@ export const UserTextInputGen = ({
   buttonSize,
   color,
   text,
+  textColor,
   marginLeft,
   width: width,
   height: height,
@@ -320,10 +321,13 @@ export const UserTextInputGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${secondaryTextColor}`,
+            color: `${
+              textColor !== "#ffffff" ? textColor : secondaryTextColor
+            }`,
+            lineHeight: "1.5",
           }}
         >
-          {text}
+          <div dangerouslySetInnerHTML={{ __html: text }} />
         </div>
       </StyledCustomTextInput>
     </div>
@@ -360,6 +364,7 @@ export const UserText = ({
   justifyContent,
   border,
   borderColor,
+  textColor,
   ...props
 }) => {
   const {
@@ -587,7 +592,9 @@ export const UserText = ({
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${secondaryTextColor}`,
+                color: `${
+                  textColor !== "#ffffff" ? textColor : secondaryTextColor
+                }`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}

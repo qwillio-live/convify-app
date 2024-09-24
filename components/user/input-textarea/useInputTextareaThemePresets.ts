@@ -8,9 +8,9 @@ import {
   UserInputSizes,
   UserInputTextareaProps,
 } from "./user-input-textarea.component"
+
 export const produceRandomLetters = (length: number) => {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789"
   let result = ""
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length))
@@ -32,7 +32,6 @@ const useInputTextareaThemePresets = () => {
   const outlinedPresetTextarea: UserInputTextareaProps = {
     inputValue: t("Text Area"),
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     height: 95,
@@ -109,7 +108,6 @@ const useInputTextareaThemePresets = () => {
   const underlinedPresetTextarea: UserInputTextareaProps = {
     inputValue: t("Text Area"),
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,

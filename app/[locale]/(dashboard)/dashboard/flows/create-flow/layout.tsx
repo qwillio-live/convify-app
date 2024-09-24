@@ -5,9 +5,16 @@ interface FlowsLayoutProps {
   children?: React.ReactNode
 }
 import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
 
-export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Create",
+const APP_NAME = process.env.APP_NAME
+
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${APP_NAME} - ${t("Create")}`, // Use translations for title
+  }
 }
 export default async function FlowsLayout({ children }: FlowsLayoutProps) {
   return <>{children}</>

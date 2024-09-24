@@ -108,8 +108,13 @@ export function FlowsList({ flows, setStatus, status }) {
   const [windowSize, setWindowSize] = useState(window.innerWidth)
   const currentPath = usePathname()
   const router = useRouter()
+  const [isMobile, setIsMobile] = useState<boolean>(false) // Add mobile detection state
 
   useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
     const handleResize = () => {
       setWindowSize(window.innerWidth)
     }
@@ -207,7 +212,11 @@ export function FlowsList({ flows, setStatus, status }) {
         <div className="flex flex-col">
           <Link
             className="flex items-center justify-start self-start"
-            href="/dashboard/flows/create-flow/select-template"
+            href={
+              isMobile
+                ? "/select-template"
+                : "/dashboard/flows/create-flow/select-template"
+            }
           >
             <Button size="sm" className="my-4 h-8 gap-1 py-2">
               <Plus className="size-3.5" />

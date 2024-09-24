@@ -40,6 +40,7 @@ const maxLength = 850
 
 interface StyledCustomHeadlineInput {
   fontFamily?: string
+  textColor?: string
   color?: string
   background?: string
   backgroundHover?: string
@@ -88,7 +89,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   }
 
   color: ${(props) => `var(${props?.color})`};
-  overflow: hidden;
+
   max-width: ${(props) =>
     props.mobileScreen
       ? MobileContainerWidthValues[props.size || "medium"]
@@ -142,6 +143,7 @@ export const HeadlineTextGen = ({
   border,
   borderColor,
   borderHoverColor,
+  textColor,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -215,15 +217,16 @@ export const HeadlineTextGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${primaryTextColor}`,
+            color: `${textColor !== "#ffffff" ? textColor : primaryTextColor}`,
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
+            lineHeight: "1.5",
           }}
         >
           {processedText.split("\n").map((line, index) => (
             <span key={index}>
-              {line}
+              <div dangerouslySetInnerHTML={{ __html: line }} />
               <br />
             </span>
           ))}
@@ -235,6 +238,7 @@ export const HeadlineTextGen = ({
 
 export const HeadlineText = ({
   fontFamily,
+  textColor,
   borderHoverColor,
   size,
   buttonSize,
@@ -483,7 +487,9 @@ export const HeadlineText = ({
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${primaryTextColor}`,
+                color: `${
+                  textColor !== "#ffffff" ? textColor : primaryTextColor
+                }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
@@ -533,6 +539,7 @@ export type HeadlineTextProps = {
   preset: string
   lineHeight: string | number
   mobileFontSize: number
+  textColor?: string
 }
 export enum TextContainerSize {
   small = "small",
@@ -602,6 +609,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   tagType: "h1",
   preset: "h2",
   mobileFontSize: 24,
+  textColor: "#ffffff",
 }
 
 HeadlineText.craft = {

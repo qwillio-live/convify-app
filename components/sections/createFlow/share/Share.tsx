@@ -60,9 +60,9 @@ const ShareFlowComponents = ({
     return () => window.removeEventListener("resize", updateView)
   }, [])
   const t = useTranslations("Components")
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
-
+  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || 380937064139
+  const telegramUser =
+    process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "sofiaai_admin"
   useEffect(() => {
     if (data) {
       setLink(data.link)
@@ -131,7 +131,7 @@ const ShareFlowComponents = ({
                             aria-label="copy link input"
                             className={`m-0 block w-full border-0 bg-transparent px-[11px] py-[5px] text-sm outline-none`}
                             value={
-                              isPublished
+                              link !== ""
                                 ? link
                                 : "https://convify.app/your-link-here"
                             }
@@ -141,7 +141,6 @@ const ShareFlowComponents = ({
                     </div>
                     <button
                       type="button"
-                      disabled={!isPublished}
                       onClick={() => {
                         navigator.clipboard.writeText(link)
                         toast({

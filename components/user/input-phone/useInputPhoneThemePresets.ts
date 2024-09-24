@@ -25,7 +25,6 @@ const useInputPhoneThemePresets = () => {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#9CA3AF",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -95,15 +94,13 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-
+    id: `input-${hexoid(6)()}`,
   }
 
   const underlinedPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -169,15 +166,13 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-
+    id: `input-${hexoid(6)()}`,
   }
 
   const formPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -243,7 +238,7 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
   return { outlinedPresetPhone, underlinedPresetPhone, formPresetPhone }
 }

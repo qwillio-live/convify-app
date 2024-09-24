@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 
 import {
   UserInputCheckboxProps,
@@ -24,7 +25,6 @@ const useInputCheckboxThemePresets = () => {
   const outlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -76,7 +76,7 @@ const useInputCheckboxThemePresets = () => {
     fullWidth: true,
     size: UserInputSizes.medium,
     label: t("CheckboxPlaceholder"),
-    fieldName: t("CheckboxFieldName"),
+    fieldName: t("checkbox") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
@@ -100,7 +100,6 @@ const useInputCheckboxThemePresets = () => {
   const underlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -149,7 +148,7 @@ const useInputCheckboxThemePresets = () => {
     size: UserInputSizes.medium,
     label:
       "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
-    fieldName: "Agreement",
+    fieldName: t("checkbox") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",

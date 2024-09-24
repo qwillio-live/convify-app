@@ -19,6 +19,7 @@ import {
   setPreviewScreenData,
   setUpdateFilledCount,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 
 export enum UserInputSizes {
   small = "small",
@@ -29,7 +30,7 @@ export enum UserInputSizes {
 
 const UserInputSizeValues = {
   small: "260px",
-  medium: "376px",
+  medium: "366px",
   large: "576px",
   full: "100%",
 }
@@ -37,14 +38,14 @@ const UserInputSizeValues = {
 const UserInputMobileSizeValues = {
   small: "300px",
   medium: "354px",
-  large: "376px",
+  large: "366px",
   full: "100%",
 }
 
 export type UserInputCheckboxProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -103,7 +104,7 @@ export type UserInputCheckboxProps = {
 export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -152,7 +153,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   size: UserInputSizes.medium,
   label:
     "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
-  fieldName: "Agreement",
+  fieldName: "checkbox-" + produceRandomLetters(6),
   floatingLabel: false,
   enableIcon: true,
   icon: "arrowright",
@@ -175,7 +176,7 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
 
 interface StyledUserInputCheckboxProps {
   textColor: string
-  width: number
+  width?: number
   backgroundColor: string
   borderColor: string
   borderWidth: number
@@ -197,7 +198,6 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 39.44px;
-  width: ${(props) => props.width}px;
   background-color: "#fff";
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
@@ -213,11 +213,14 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   border-right-width: ${(props) => props.borderRightWidth}px;
   align-self: center;
 `
-
+// width: ${(props) => props.width}px;
 export const UserInputCheckboxGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
+  const [checkmarkColor, setCheckmarkColor] = useState("#748BA7")
+  const [checkmarkBorder, setCheckmarkBorder] = useState("#dfdfdf")
+  const [containerHover, setContainerHover] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [isFilled, setIsFilled] = useState(false)
   const dispatch = useAppDispatch()
@@ -274,11 +277,27 @@ export const UserInputCheckboxGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
+  const primaryColor = useAppSelector(
+    (state) => state?.theme?.general?.primaryColor
+  )
+  useEffect(() => {
+    setCheckmarkColor(primaryTextColor || "#748BA7") // update color when primaryTextColor changes, default to gray if undefined
+  }, [primaryTextColor])
 
+  useEffect(() => {
+    setCheckmarkBorder(primaryColor || "#748BA7") // update color when primaryColor changes, default to gray if undefined
+  }, [primaryColor])
+
+  const getHoverBackgroundForPreset = (color) => {
+    return rgba(color, 0.1)
+  }
+  const darkenedBg = getHoverBackgroundForPreset(primaryColor)
+
+  console.log("props.textColor", props.textColor)
   return (
     <div
       ref={itemRefNew}
-      className="relative focus-visible:ring-0 focus-visible:ring-transparent"
+      className="relative hover:border-lime-300 focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: "100%",
         display: "flex",
@@ -290,9 +309,6 @@ export const UserInputCheckboxGen = ({ ...props }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          backgroundColor: `${
-            props.backgroundImage ? "transparent" : props.backgroundColor
-          }`,
           minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
@@ -304,17 +320,34 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
             width: `${UserInputSizeValues[props.size]}`,
+            // backgroundColor: containerHover
+            //   ? darkenedBg
+            //   : props.backgroundColor,
+          }}
+          onMouseEnter={(e) => {
+            e.stopPropagation()
+            setContainerHover(true)
+          }}
+          onMouseLeave={(e) => {
+            e.stopPropagation()
+            setContainerHover(false)
           }}
         >
           <div
             className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
+            style={{
+              backgroundColor: containerHover
+                ? darkenedBg
+                : props.backgroundColor,
+            }}
           >
             <UserInputCheckboxStyled
+              data-label={props?.fieldName || ""}
               ref={inputRef}
               textColor={props.textColor}
               backgroundColor={props.backgroundColor}
               borderColor={
-                props.isActive
+                containerHover || isFilled
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
@@ -326,14 +359,15 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               borderLeftWidth={props.borderLeftWidth}
               borderRightWidth={props.borderRightWidth}
               borderRadius={props.borderRadius}
-              topLeftRadius={props.enableIcon ? 0 : props.topLeftRadius}
+              topLeftRadius={props.topLeftRadius}
               topRightRadius={props.topRightRadius}
-              bottomLeftRadius={props.enableIcon ? 0 : props.bottomLeftRadius}
+              bottomLeftRadius={props.bottomLeftRadius}
               bottomRightRadius={props.bottomRightRadius}
-              width={props.width}
+              // width={props.width}
               size={props.size}
               className={cn(
-                `ring-opacity-0/0 px-3 py-2 text-base font-normal outline-none
+                `ring-opacity-0/0 w-full px-3 py-2 text-base font-normal
+                outline-none
                 ring-0
                 transition-all
                 duration-200
@@ -349,13 +383,17 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               )}
             >
               <div
-                className={`relative mb-1 text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`mb-1 flex text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               >
-                <DefoCheckbox
+                {/* <DefoCheckbox
                   checked={inputValue === "true"}
                   className={cn(
                     `z-50 mr-2 h-4 w-4 rounded-[5px] bg-white ${
@@ -364,51 +402,76 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                   )}
                   checkmarkColor={primaryTextColor}
                   style={{
-                    borderColor: "#dfdfdf",
+                    borderColor: containerHover
+                      ? props.activeBorderColor.value
+                      : props.borderColor.value,
                   }}
-                  onClick={() => {
-                    if (isRequired) {
-                      if (isFilled) {
-                        // If the checkbox is already filled, uncheck it
-                        dispatch(setUpdateFilledCount(-1)) // Decrease filled count
-                        setIsFilled(false) // Update isFilled state
-                        setInputValue("false") // Set inputValue to false
-                        dispatch(
-                          setPreviewScreenData({
-                            nodeId: props.nodeId,
-                            isArray: false,
-                            entity: "inputValue",
-                            newSelections: ["false"],
-                          })
-                        )
+                /> */}
+                {props.label.length === 0 ? null : (
+                  <Checkbox
+                    className={cn(
+                      ` top-[11px] z-50 mr-[3px] mt-[3px] h-[18px] w-[18px] rounded-[5px] bg-white`
+                    )}
+                    isActive={props.isActive}
+                    isHovered={containerHover}
+                    isChecked={isFilled}
+                    onCheckedChange={() => {
+                      if (isRequired) {
+                        if (isFilled) {
+                          // If the checkbox is already filled, uncheck it
+                          dispatch(setUpdateFilledCount(-1)) // Decrease filled count
+                          setIsFilled(false) // Update isFilled state
+                          setInputValue("false") // Set inputValue to false
+                          dispatch(
+                            setPreviewScreenData({
+                              nodeId: props.nodeId,
+                              isArray: false,
+                              entity: "inputValue",
+                              newSelections: ["false"],
+                            })
+                          )
+                        } else {
+                          // If the checkbox is not filled, check it
+                          dispatch(setUpdateFilledCount(1)) // Increase filled count
+                          setIsFilled(true) // Update isFilled state
+                          setInputValue("true") // Set inputValue to true
+                          dispatch(
+                            setPreviewScreenData({
+                              nodeId: props.nodeId,
+                              isArray: false,
+                              entity: "inputValue",
+                              newSelections: ["true"],
+                            })
+                          )
+                        }
                       } else {
-                        // If the checkbox is not filled, check it
-                        dispatch(setUpdateFilledCount(1)) // Increase filled count
-                        setIsFilled(true) // Update isFilled state
-                        setInputValue("true") // Set inputValue to true
-                        dispatch(
-                          setPreviewScreenData({
-                            nodeId: props.nodeId,
-                            isArray: false,
-                            entity: "inputValue",
-                            newSelections: ["true"],
-                          })
-                        )
-                      }
-                    } else {
-                      dispatch(
-                        setPreviewScreenData({
-                          nodeId: props.nodeId,
-                          isArray: false,
-                          entity: "inputValue",
-                          newSelections: ["true"],
+                        // Toggle isFilled state based on its current value
+                        setIsFilled((prevState) => {
+                          const newState = !prevState // Toggle the state
+                          setInputValue(newState ? "true" : "false") // Update inputValue
+                          dispatch(
+                            setPreviewScreenData({
+                              nodeId: props.nodeId,
+                              isArray: false,
+                              entity: "inputValue",
+                              newSelections: [newState ? "true" : "false"],
+                            })
+                          )
+                          return newState // Return the new state value
                         })
-                      )
-                    }
-                  }}
-                />
-
-                {props.label}
+                      }
+                    }}
+                    checkmarkColor={checkmarkColor}
+                    checkmarkBorder={checkmarkBorder}
+                    style={{
+                      zIndex: 10,
+                    }}
+                    data-answer={props.label}
+                    data-value={isFilled}
+                    id={props.id}
+                  />
+                )}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </UserInputCheckboxStyled>
           </div>
@@ -481,11 +544,11 @@ export const UserInputCheckbox = ({ ...props }) => {
     }
   }, [parentContainer, props.size, setProp])
 
-  useEffect(() => {
-    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-      setProp((props) => (props.primaryFont.value = primaryFont), 200)
-    }
-  }, [primaryFont, props.primaryFont, setProp])
+  // useEffect(() => {
+  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont, props.primaryFont, setProp])
 
   useEffect(() => {
     if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
@@ -652,7 +715,11 @@ export const UserInputCheckbox = ({ ...props }) => {
                 className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${getTextColor()}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : getTextColor()
+                  }`,
                   zIndex: 10,
                 }}
               />

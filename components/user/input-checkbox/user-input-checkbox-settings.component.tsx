@@ -54,6 +54,7 @@ import {
   UserInputCheckbox,
   UserInputCheckboxGen,
 } from "./user-input-checkbox.component"
+import ColorButton from "../color-button"
 
 export const UserInputCheckboxSettings = () => {
   const t = useTranslations("Components")
@@ -144,20 +145,20 @@ export const UserInputCheckboxSettings = () => {
   return (
     <>
       <Accordion
-        value={props.settingsTab || "content"}
+        value={props.settingsTab || "general"}
         onValueChange={(value) => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
         type="multiple"
-        defaultValue={["content"]}
+        defaultValue={["general"]}
         className="w-full"
       >
-        <AccordionItem value="content">
+        <AccordionItem value="general">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
+            <span className="text-sm font-medium">{t("General")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-1">
               <Checkbox
                 value={props.inputRequired}
                 checked={props.inputRequired}
@@ -174,7 +175,6 @@ export const UserInputCheckboxSettings = () => {
                 {t("Required")}
               </label>
             </div>
-
 
             {/* <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
               <label
@@ -196,10 +196,10 @@ export const UserInputCheckboxSettings = () => {
             </div>
  */}
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Field Name")}
               </label>
@@ -222,7 +222,7 @@ export const UserInputCheckboxSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
               {props.enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">
+                  <p className="text-md text-muted-foreground flex-1">
                     {t("Icon")}
                   </p>
                   <Select
@@ -264,10 +264,10 @@ export const UserInputCheckboxSettings = () => {
               )}
             </div>
 
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Background Color")}
               </label>
@@ -284,6 +284,12 @@ export const UserInputCheckboxSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Text Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChange}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
@@ -302,7 +308,7 @@ export const UserInputCheckboxSettings = () => {
                 className="flex-1"
               >
                 <TabsList
-                  className={cn("w-full grid grid-cols-4", {
+                  className={cn("grid w-full grid-cols-4", {
                     "cursor-not-allowed": disableSize,
                   })}
                 >
@@ -321,10 +327,10 @@ export const UserInputCheckboxSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginTop}
                 </span>
               </div>
@@ -342,10 +348,10 @@ export const UserInputCheckboxSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginBottom}
                 </span>
               </div>
@@ -362,10 +368,10 @@ export const UserInputCheckboxSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginRight}
                 </span>
               </div>
@@ -382,10 +388,10 @@ export const UserInputCheckboxSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginLeft}
                 </span>
               </div>

@@ -16,6 +16,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useTranslations } from "next-intl"
+
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userSignInSchema>
@@ -25,7 +26,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-    setValue, // Access setValue from useForm to set form field values
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(userSignInSchema),
   })
@@ -48,7 +49,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
   }, [error])
 
-  // State to temporarily store form data
   const [formData, setFormData] = React.useState<{
     email: string
     password: string
@@ -57,13 +57,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     password: "",
   })
 
+  const [isMobile, setIsMobile] = React.useState<boolean>(false)
+
   React.useEffect(() => {
-    // Check if there's stored form data in sessionStorage
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
+  }, [])
+
+  React.useEffect(() => {
     const storedFormData = sessionStorage.getItem("userFormData")
     if (storedFormData) {
       const { email, password } = JSON.parse(storedFormData)
       setFormData({ email, password })
-      // Pre-fill form fields with stored data
       setValue("email", email)
       setValue("password", password)
     }
@@ -76,6 +83,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const signInResult = await signIn("credentials", {
       username: data.email,
       password: data.password,
+      isFromApi: false,
       callbackUrl: "/dashboard",
     })
 
@@ -83,7 +91,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     if (!signInResult?.ok) {
       toast({
         title: t("Something went wrong"),
-        description: t("Your sign in request failed Please try again"),
+        description: t("Your sign in request failed. Please try again."),
         variant: "destructive",
       })
       return
@@ -94,6 +102,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       description: "You are being redirected...",
     })
   }
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -133,51 +142,64 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </p>
             )}
           </div>
-          <button
-            className={cn(buttonVariants())}
-            disabled={isLoading}
-            style={{ fontWeight: "600" }}
-          >
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {t("Sign In with Email")}
-          </button>
+          <div className="flex flex-col items-center">
+            <button
+              className={cn(buttonVariants(), "w-full")}
+              disabled={isLoading}
+              style={{ fontWeight: "600" }}
+            >
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span className="ml-3"> {t("Sign In with Email")}</span>
+            </button>
+            <div className="relative mt-4">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background text-muted-foreground px-2">
+                  Or
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+              onClick={() => {
+                setIsGoogleLoading(true)
+                signIn("google")
+              }}
+              disabled={isLoading || isGoogleLoading}
+              style={{
+                display: "flex",
+                alignItems: "center", // Center items vertically
+                justifyContent: "center", // Center items horizontally
+                borderColor: "black",
+                marginTop: "1rem", // Margin top to space from the email button
+                padding: "0.5rem 1rem", // Adjust padding as needed
+              }}
+            >
+              {isGoogleLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              <div style={{ flex: "0 0 auto" }}>
+                <Icons.googleSignup className="h-5 w-5" />
+              </div>
+              <span
+                style={{
+                  flex: "1 1 auto",
+                  textAlign: "center", // Center text
+                  fontWeight: "600",
+                }}
+              >
+                {t("Sign In with Google")}
+              </span>
+            </button>
+          </div>
         </div>
       </form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background text-muted-foreground px-2">Or</span>
-        </div>
-      </div>
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGoogleLoading(true)
-          signIn("google")
-        }}
-        disabled={isLoading || isGoogleLoading}
-        style={{
-          flexDirection: "row",
-          gap: "0.5rem",
-          justifyContent: "flex-start",
-          borderColor: "black",
-        }}
-      >
-        {isGoogleLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          ""
-        )}{" "}
-        <Icons.googleSignup className="h-5 w-5" />
-        <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
-          {t("Sign In with Google")}
-        </span>
-      </button>
+
       {error && (
         <Alert
           variant="destructive"
@@ -193,7 +215,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           }}
         >
           <div>
-            {/* <AlertTitle>{t("Something went wrong")}</AlertTitle> */}
             <AlertDescription>
               {t(
                 "Your password is incorrect or this email address is not registered with Convify"

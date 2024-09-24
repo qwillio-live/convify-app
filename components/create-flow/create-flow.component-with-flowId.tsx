@@ -27,6 +27,7 @@ import {
   setValidateScreen,
   addScreen,
   setSelectedScreen,
+  setEditorSelectedComponent,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
@@ -228,18 +229,28 @@ export function CreateFlowComponent({ flowId }) {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  const selectedScreenIndex = useAppSelector(
-    (state) => state?.screen?.selectedScreen
-  )
+  const screens =
+    useAppSelector((state: RootState) => state?.screen?.screens) || []
+  const selectedScreenIndex =
+    useAppSelector((state) => state?.screen?.currentScreenName) || 0
 
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
+      console.log("jsonnnnn", json)
       dispatch(setEditorLoad(JSON.stringify(json)))
-    }, 1200),
+    }, 300),
     [dispatch]
   )
 
+  const debouncedSetSelectedComponent = useCallback(
+    (json) => {
+      dispatch(setEditorSelectedComponent(json))
+    },
+    [dispatch]
+  )
+
+  const selectedScreenIdex =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
   React.useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
@@ -314,6 +325,9 @@ export function CreateFlowComponent({ flowId }) {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
+          // dispatch(setEditorSelectedComponent(json))
+          // dispatch(setEditorLoad(JSON.stringify(json)))
+          debouncedSetSelectedComponent(json)
           debouncedSetEditorLoad(json)
 
           // }else{
@@ -404,6 +418,7 @@ export function CreateFlowComponent({ flowId }) {
                 className="w-full"
                 onValueChange={(value) => {
                   setView(value)
+                  dispatch(setSelectedScreen(selectedScreenIdex))
                   dispatch(setMobileScreen(value === VIEWS.MOBILE))
                 }}
               >
@@ -490,7 +505,7 @@ export function CreateFlowComponent({ flowId }) {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto pt-2">
+            <div className="section-body h-[100vh] overflow-y-auto pt-2">
               <SettingsPanel />
             </div>
           </ScrollArea>

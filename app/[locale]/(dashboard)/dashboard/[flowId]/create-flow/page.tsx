@@ -81,9 +81,6 @@ export default function CreateFlowsPage({
   console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [customCss, setCustomCsss] = useState("")
-  const [link, setLink] = useState(
-    "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
-  )
 
   const dispatch = useAppDispatch()
   const firstScreenName =

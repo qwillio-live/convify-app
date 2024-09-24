@@ -44,7 +44,15 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const [error, setError] = React.useState<string | null>(
     searchParams?.get("error") ?? null
   )
+  const [isMobile, setIsMobile] = React.useState<boolean>(false) // Add mobile detection state
 
+  // Mobile detection logic
+  React.useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
+  }, [])
   React.useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -100,7 +108,10 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
         redirect: true,
         username: data.email,
         password: data.password,
-        // callbackUrl: "/dashboard/flows/create-flow/select-template",
+        isFromApi: false,
+        callbackUrl: isMobile
+          ? "/mobile"
+          : "/dashboard/flows/create-flow/select-template",
       })
     } catch (error) {
       setIsLoading(false) // Stop loading on error
@@ -215,24 +226,38 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                 )}
                 onClick={() => {
                   setIsGoogleLoading(true)
-                  signIn("google")
+                  signIn("google", {
+                    callbackUrl: isMobile
+                      ? "/mobile"
+                      : "/dashboard/flows/create-flow/select-template",
+                  })
                 }}
                 disabled={isLoading || isGoogleLoading}
                 style={{
-                  flexDirection: "row",
-                  gap: "0.5rem",
-                  justifyContent: "flex-start",
                   borderColor: "black",
+                  padding: "0.5rem 1rem", // Adjust padding as needed
+                  display: "flex",
+                  alignItems: "center", // Center items vertically
+                  justifyContent: "center", // Center items horizontally
                 }}
               >
                 {isGoogleLoading && (
-                  <Icons.spinner className="size-4 animate-spin" />
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                <Icons.googleSignup className="h-5 w-5" />
-                <span style={{ marginLeft: "4rem", fontWeight: "600" }}>
+                <div style={{ flex: "0 0 auto" }}>
+                  <Icons.googleSignup className="h-5 w-5" />
+                </div>
+                <span
+                  style={{
+                    flex: "1 1 auto",
+                    textAlign: "center", // Center text
+                    fontWeight: "600",
+                  }}
+                >
                   {t("Sign Up with Google")}
                 </span>
               </button>
+
               <div className="relative">
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background text-muted-foreground px-2 text-sm">
@@ -243,7 +268,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
               <button
                 className={cn(
                   buttonVariants(),
-                  "flex items-center justify-center"
+                  "flex items-center justify-center "
                 )}
                 style={{ fontWeight: "600" }}
                 disabled={isLoading}
@@ -255,7 +280,7 @@ export function UserRegForm({ className, ...props }: UserAuthFormProps) {
                   }, 1000)
                 }}
               >
-                {t("Sign Up with Email")}
+                <span className="ml-3"> {t("Sign Up with Email")}</span>
               </button>
             </>
           )}

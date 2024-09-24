@@ -54,6 +54,7 @@ import {
 import { Controller } from "../settings/controller.component"
 import useTextThemePresets from "./useTextThemePresets"
 import { TextInputDefaultProps, UserTextInputGen } from "./user-text.component"
+import ColorButton from "../color-button"
 
 export const UserTextInputSettings = () => {
   const t = useTranslations("Components")
@@ -222,7 +223,12 @@ export const UserTextInputSettings = () => {
                 id="backgroundcolor"
               />
             </div>
-
+            <ColorButton
+              label={"Text Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
             <div className="style-control col-span-2 flex w-full flex-col gap-2 pb-4 pt-2">
               <div className="flex items-center justify-between">
                 <p className="text-md text-muted-foreground">{t("FontSize")}</p>

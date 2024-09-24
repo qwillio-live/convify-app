@@ -92,7 +92,11 @@ import useBackThemePresets from "../backButton/back-theme"
 import { Card, CardContentDefaultProps } from "../card/user-card.component"
 import useChecklistThemePresets from "../checklist/useChecklistThemePresets"
 import { Checklist, ChecklistGen } from "../checklist/user-checklist.component"
-import { Form, FormContentDefaultProps } from "../form/user-form.component"
+import {
+  Form,
+  FormContentDefaultProps,
+  FormGen,
+} from "../form/user-form.component"
 import {
   HeadlineText,
   HeadlineTextDefaultProps,
@@ -185,6 +189,7 @@ import {
   TelegramShareButton,
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
+import hexoid from "hexoid"
 
 function HelperInformation() {
   return (
@@ -211,19 +216,45 @@ function HelperInformation() {
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
+  const [isDragging, setIsDragging] = React.useState(false)
   const themeBackgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
   const themeBackgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
   )
+  // Handle mouse over event
+  const handleMouseEnter = () => {
+    // if (!isDragging) {
+    setOpenCard(true)
+    // }
+  }
 
+  // Handle mouse leave event
+  const handleMouseLeave = () => {
+    // if (!isDragging) {
+    setOpenCard(false)
+    // }
+  }
+
+  // Handle mouse down event
+  const handleMouseDown = () => {
+    setIsDragging(true)
+    setOpenCard(false)
+  }
+
+  // Handle mouse up event
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+  console.log("opencard", openCard, isDragging)
   return (
     <>
       <div
-        onMouseOver={() => setOpenCard(true)}
-        onMouseLeave={() => setOpenCard(false)}
-        onMouseDown={() => setOpenCard(!openCard)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         className="flex w-full flex-row items-center justify-between text-lg hover:cursor-move"
       >
         <span className="flex flex-row items-center gap-2 text-sm">
@@ -238,7 +269,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
             className="w-full"
           ></HoverCardTrigger>
           <HoverCardContent
-            className="flex min-w-[382px] flex-row items-center justify-center px-10"
+            className="flex w-full min-w-[382px] flex-row items-center justify-center px-10"
             forceMount={true}
             style={{
               background: themeBackgroundColor,
@@ -261,6 +292,8 @@ const HoverCardComponent = ({ title, icon, children }) => {
 
 export const UserToolbox = () => {
   const t = useTranslations("Components")
+  const APP_URL =
+    process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid"
   const { connectors } = useEditor()
   const { filledPreset, outLinePreset } = useButtonThemePresets()
   const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
@@ -303,7 +336,7 @@ export const UserToolbox = () => {
     useInputTextareaThemePrests()
   const { h2Preset } = useHeadlineThemePresets()
   const { parapgraphPreset, spanPreset } = useTextThemePresets()
-  const { formPreset } = useInputThemePresets()
+  const { formPreset, formPresets } = useInputThemePresets()
   {
     /**
      * isHeaderFooterMode: flag is used to determine if the header or footer mode is active
@@ -324,7 +357,7 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center space-y-1">
         <HelperInformation />
 
-        <ScrollArea className="w-full overflow-y-auto  pb-24 md:pb-0 pt-4">
+        <ScrollArea className="w-full overflow-y-auto  pb-24 pt-4 md:pb-0">
           <Accordion
             type="multiple"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
@@ -339,7 +372,10 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <HeadlineText {...h2Preset} />)
+                    connectors.create(
+                      ref,
+                      <HeadlineText textColor={"#ffffff"} {...h2Preset} />
+                    )
                   }
                   data-cy="toolbox-headline"
                 >
@@ -350,6 +386,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <HeadlineTextGen
+                        textColor={"#ffffff"}
                         {...h2Preset}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
@@ -363,7 +400,10 @@ export const UserToolbox = () => {
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
-                    connectors.create(ref, <UserText {...parapgraphPreset} />)
+                    connectors.create(
+                      ref,
+                      <UserText textColor={"#ffffff"} {...parapgraphPreset} />
+                    )
                   }
                   data-cy="toolbox-text"
                 >
@@ -374,6 +414,7 @@ export const UserToolbox = () => {
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
                       <UserTextInputGen
+                        textColor={"#ffffff"}
                         {...spanPreset}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
@@ -395,6 +436,7 @@ export const UserToolbox = () => {
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       //@ts-ignore
+                      ref &&
                       connectors.create(
                         ref,
                         //@ts-ignore
@@ -407,10 +449,11 @@ export const UserToolbox = () => {
                       title="Form"
                       icon={<NotebookPen size={12} className="mr-2 size-3" />}
                     >
-                      <div className="flex max-w-[350px] flex-col items-center justify-start ">
-                        <div className="flex max-w-[376px] gap-1">
+                      <div className="flex w-full  max-w-[376px] flex-col items-center justify-start ">
+                        <div className="flex w-full max-w-[376px] gap-1">
                           <UserInputGen
                             {...formPreset}
+                            id={`input-789000`}
                             label={t("FirstName")}
                             placeholder={t("FirstName")}
                             floatingLabel={true}
@@ -420,7 +463,8 @@ export const UserToolbox = () => {
                             width={"100%"}
                           />
                           <UserInputGen
-                            {...formPreset}
+                            {...formPresets}
+                            id={`input-000987`}
                             label={t("LastName")}
                             placeholder={t("LasttName")}
                             floatingLabel={true}
@@ -453,6 +497,7 @@ export const UserToolbox = () => {
                           placeholder={t("CheckboxPlaceholder")}
                           marginTop={5}
                           marginBottom={0}
+                          size={"full"}
                         />
                         <IconButtonGen
                           {...filledPreset}
@@ -507,11 +552,19 @@ export const UserToolbox = () => {
                         <SquareCheckIcon size={12} className="mr-2 size-3" />
                       }
                     >
-                      <UserInputCheckboxGen
-                        {...outlinedPresetChecbox}
-                        label={t("CheckboxPlaceholder")}
-                        placeholder={t("CheckboxPlaceholder")}
-                      />
+                      <div className="flex w-full  max-w-[376px] flex-col items-center justify-start ">
+                        <UserInputCheckboxGen
+                          {...outlinedPresetChecbox}
+                          label={t("CheckboxPlaceholder")}
+                          placeholder={t("CheckboxPlaceholder")}
+                          size={"large"}
+                          width={"50%"}
+                          paddingTop={0}
+                          paddingBottom={0}
+                          paddingLeft={0}
+                          paddingRight={0}
+                        />
+                      </div>
                     </HoverCardComponent>
                   </div>
 
@@ -602,7 +655,11 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <Select {...selectPreset} disabled={false} />
+                        <Select
+                          labelColor={"#ffffff"}
+                          {...selectPreset}
+                          disabled={false}
+                        />
                       )
                     }
                     data-cy="toolbox-text"
@@ -612,6 +669,7 @@ export const UserToolbox = () => {
                       icon={<SquareMousePointer className="mr-2 size-3" />}
                     >
                       <SelectGen
+                        labelColor={"#ffffff"}
                         className="w-full"
                         {...selectPreset}
                         size="small"
@@ -629,7 +687,10 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <MultipleChoice {...multipleChoiceFilledPreset} />
+                        <MultipleChoice
+                          labelColor={"#ffffff"}
+                          {...multipleChoiceFilledPreset}
+                        />
                       )
                     }
                     data-cy="toolbox-text"
@@ -641,6 +702,7 @@ export const UserToolbox = () => {
                       <MultipleChoiceGen
                         {...{
                           ...multipleChoiceFilledPreset,
+                          labelColor: "#ffffff",
                           disabled: true,
                           marginTop: 8,
                           marginBottom: 8,
@@ -660,7 +722,10 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <PictureChoice {...pictureChoiceOutlinedPreset} />
+                        <PictureChoice
+                          labelColor={"#ffffff"}
+                          {...pictureChoiceOutlinedPreset}
+                        />
                       )
                     }
                     data-cy="toolbox-text"
@@ -672,6 +737,7 @@ export const UserToolbox = () => {
                       <PictureChoiceGen
                         {...{
                           ...pictureChoiceOutlinedPreset,
+                          labelColor: "#ffffff",
                           disabled: true,
                           marginTop: 8,
                           marginBottom: 8,
@@ -886,6 +952,7 @@ export const UserToolbox = () => {
                         marginBottom={20}
                         // marginLeft={20}
                         // marginRight={20}
+                        href={APP_URL}
                         justifyContent={"center"}
                         enableIcon={false}
                         text={t("Link")}
@@ -904,6 +971,7 @@ export const UserToolbox = () => {
                       // alignItems={"center"}
                       {...linkOutLinePreset}
                       size="small"
+                      href={APP_URL}
                       text={t("Link")}
                       enableIcon={false}
                       justifyContent={"center"}
@@ -1091,6 +1159,7 @@ export const UserToolbox = () => {
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
                           //@ts-ignore
@@ -1247,6 +1316,8 @@ export const UserToolbox = () => {
                         connectors.create(
                           ref,
                           <TextImageComponent
+                            textColor={"#ffffff"}
+                            secTextColor={"#ffffff"}
                             {...TextImageDefaultProps}
                             title={t("Title")}
                             Text={t("Text Here")}
@@ -1264,6 +1335,8 @@ export const UserToolbox = () => {
                         icon={<LayoutList className="mr-2 size-3" />}
                       >
                         <TextImageComponentPreview
+                          textColor={"#ffffff"}
+                          secTextColor={"#ffffff"}
                           {...TextImageDefaultProps}
                           title={t("Title")}
                           Text={"Text here"}
@@ -1275,10 +1348,10 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
+
                           <Steps {...stepsDefaultPreset} />
                         )
                       }
@@ -1296,11 +1369,15 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
-                          <List {...listHorizontalPreset} />
+
+                          <List
+                            textColor={"#ffffff"}
+                            secTextColor={"#ffffff"}
+                            {...listHorizontalPreset}
+                          />
                         )
                       }
                       data-cy="toolbox-layout-container"
@@ -1310,6 +1387,8 @@ export const UserToolbox = () => {
                         icon={<ListOrdered className="mr-2 size-3" />}
                       >
                         <ListGen
+                          textColor={"#ffffff"}
+                          secTextColor={"#ffffff"}
                           {...{
                             ...listHorizontalPreset,
                             columnsDesktop: 1,
@@ -1323,11 +1402,14 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
-                          <Checklist {...checklistNormalPreset} />
+
+                          <Checklist
+                            textColor={"#ffffff"}
+                            {...checklistNormalPreset}
+                          />
                         )
                       }
                       data-cy="toolbox-layout-container"
@@ -1336,7 +1418,10 @@ export const UserToolbox = () => {
                         title={t("Checklist")}
                         icon={<ListChecks className="mr-2 size-3" />}
                       >
-                        <ChecklistGen {...checklistNormalPreset} />
+                        <ChecklistGen
+                          textColor={"#ffffff"}
+                          {...checklistNormalPreset}
+                        />
                       </HoverCardComponent>
                     </div>
 
@@ -1344,10 +1429,10 @@ export const UserToolbox = () => {
                       className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
-                        //@ts-ignore
+                        ref &&
                         connectors.create(
                           ref,
-                          //@ts-ignore
+
                           <LogoBar {...logoBarDefaultPreset} />
                         )
                       }

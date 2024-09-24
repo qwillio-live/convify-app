@@ -14,25 +14,33 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {GlobalThemeSettings} from "./global-theme-settings"
+import { GlobalThemeSettings } from "./global-theme-settings"
 import { useTranslations } from "next-intl"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { removeField, setSelectedComponent } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  removeField,
+  setSelectedComponent,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const SettingsPanel = () => {
-  const t= useTranslations("Components")
+  const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const selectedComponent = useAppSelector((state) => state?.screen?.selectedComponent)
-  const { actions, selected, isEnabled,query } = useEditor((state, query) => {
-    const currentNodeId = selectedComponent ? selectedComponent : query.getEvent("selected").last()
+  const selectedComponent = useAppSelector(
+    (state) => state?.screen?.selectedComponent
+  )
+  const { actions, selected, isEnabled, query } = useEditor((state, query) => {
+    const currentNodeId = selectedComponent
+      ? selectedComponent
+      : query.getEvent("selected").last()
     let selected
 
     if (currentNodeId && state.nodes[currentNodeId]) {
       selected = {
         id: currentNodeId,
         name: state.nodes[currentNodeId].data.name,
-        fieldType: state.nodes[currentNodeId]?.data?.props.fieldType || 'design',
+        fieldType:
+          state.nodes[currentNodeId]?.data?.props.fieldType || "design",
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
@@ -46,21 +54,25 @@ export const SettingsPanel = () => {
   })
 
   useEffect(() => {
-    if (selected || selectedComponent) {
-      actions.selectNode(selectedComponent || "ROOT");
+    try {
+      if (selected || selectedComponent) {
+        actions.selectNode(selectedComponent || "ROOT")
+      }
+    } catch (e) {
+      console.log("error in user settings", e)
     }
-  }, [mobileScreen, selectedComponent]);
+  }, [mobileScreen, selectedComponent])
   return (
-    <Tabs defaultValue="element" className="mb-10 w-full">
-      <TabsList className="w-full rounded-none border-b border-[#c0c0c1] pb-0 bg-[#fafafa]">
+    <Tabs defaultValue="element" className="mb-10 h-[100vh] w-full">
+      <TabsList className="w-full rounded-none border-b border-[#c0c0c1] bg-[#fafafa] pb-0">
         <TabsTrigger
-          className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit font-bold"
+          className="h-full rounded-none border-b-4 border-transparent p-4 font-bold data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="element"
         >
           {t("Element")}
         </TabsTrigger>
         <TabsTrigger
-          className="h-full p-4 rounded-none border-b-4 border-transparent data-[state=active]:border-current data-[state=active]:bg-inherit font-bold"
+          className="h-full rounded-none border-b-4 border-transparent p-4 font-bold data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="theme"
         >
           {t("Theme")}
@@ -71,7 +83,7 @@ export const SettingsPanel = () => {
           {isEnabled && selected && (
             // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
             <div className="">
-              <div className="flex flex-col gap-0">
+              <div className="flex h-[100vh] flex-col gap-0">
                 <div
                   data-cy="settings-panel"
                   className="settings-panel mb-4 flex-col gap-2"
@@ -82,8 +94,8 @@ export const SettingsPanel = () => {
                   <Button
                     onClick={() => {
                       actions.delete(selected.id),
-                      dispatch(setSelectedComponent("ROOT"));
-                      if(selected.fieldType === 'data'){
+                        dispatch(setSelectedComponent("ROOT"))
+                      if (selected.fieldType === "data") {
                         dispatch(removeField(selected.id))
                       }
                     }}

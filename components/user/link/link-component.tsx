@@ -127,7 +127,6 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
-const APP_URL = env.NEXT_PUBLIC_APP_URL
 export const LinkButtonGen = ({
   disabled,
   // windowTarget,
@@ -167,19 +166,13 @@ export const LinkButtonGen = ({
   ...props
 }) => {
   const pathname = usePathname()
+
   const searchParams = useSearchParams()
-  const { replace } = useRouter()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
-  function handleSearch(term: string) {
-    const params = new URLSearchParams(searchParams || undefined)
-    if (term) {
-      params.set("screen", term)
-    }
-    console.log("new path", `${pathname}?${params.toString()}`)
-    replace(`${pathname}?${params.toString()}`)
-  }
+
   const handleNavigateToContent = () => {
     dispatch(
       validateScreen({
@@ -187,14 +180,19 @@ export const LinkButtonGen = ({
         next: nextScreen.screenName,
       })
     )
-    // if(screenValidated){
-    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
-    //   router.push(`${pathName}#${nextScreen?.screenName}`);
-    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
-    // }else{
-    //   console.log("SCREEN NOT VALIDATED", screenValidated)
-    // }
+    const params = new URLSearchParams(searchParams || undefined)
+    params.set("screen", nextScreen.screenName)
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
   }
+  // if(screenValidated){
+  //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+  //   router.push(`${pathName}#${nextScreen?.screenName}`);
+  //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+  // }else{
+  //   console.log("SCREEN NOT VALIDATED", screenValidated)
+  // }
+
   return (
     <div
       className="relative w-full"
@@ -213,12 +211,15 @@ export const LinkButtonGen = ({
       <Link
         href={`${
           buttonAction === "redirect"
-            ? props?.href?.includes("https://")
+            ? props?.href?.includes("https://") ||
+              props?.href?.includes("http://")
               ? props.href
               : "https://" + props.href
-            : pathname + "#" + nextScreen?.screenName
+            : pathname + "?screen=" + nextScreen?.screenName
         }`}
-        target={`${props.windowTarget ? "_blank" : ""}`}
+        target={`${
+          props.windowTarget && buttonAction === "redirect" ? "_blank" : ""
+        }`}
         className="contents"
       >
         <StyledCustomButton
@@ -779,7 +780,7 @@ export type IconButtonProps = {
     screenId: string
     screenName: string
   }
-  href?: string
+  href: string
   windowTarget?: boolean
   iconType?: PictureTypes
 }
@@ -858,8 +859,8 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   buttonAction: "next-screen",
   windowTarget: true,
-  href: APP_URL,
   iconType: PictureTypes.NULL,
+  href: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
 }
 
 LinkButton.craft = {

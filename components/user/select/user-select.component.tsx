@@ -80,6 +80,9 @@ export const SelectGen = ({
     }
     return []
   })
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
@@ -177,14 +180,17 @@ export const SelectGen = ({
         <div
           className={`w-full p-1 `}
           style={{
-            color: labelColor,
+            color: `${
+              labelColor !== "#ffffff" ? labelColor : primaryTextColor
+            }`,
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: SelectSizeValues[size || "medium"],
           }}
         >
-          <label>{label}</label>
+          <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         <StyledCustomSelectTrigger
+          data-label={props?.fieldName || ""}
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
           } ${alarm && isRequired && !isFilled && "!border-red-600"}`}
@@ -377,12 +383,6 @@ export const Select = ({
     }
   }, [primaryColor])
 
-  useEffect(() => {
-    if (primaryTextColor) {
-      setProp((props) => (props.labelColor = primaryTextColor), 200)
-    }
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -449,7 +449,9 @@ export const Select = ({
                 handlePropChangeDebounced("label", e.target.value)
               }}
               style={{
-                color: labelColor,
+                color: `${
+                  labelColor !== "#ffffff" ? labelColor : primaryTextColor
+                }`,
                 outlineColor: borderHoverColor.value,
                 borderRadius: "4px",
               }}
@@ -513,7 +515,7 @@ export type SelectProps = {
   selectOptions: object[]
   selectedOptionId: string | undefined
   fontFamily: StyleProperty
-  labelColor: string
+  labelColor?: string
   containerBackground: string
   disabled: boolean
   required: boolean
@@ -555,7 +557,7 @@ export const SelectDefaultProps: SelectProps = {
     globalStyled: true,
     isCustomized: false,
   },
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   containerBackground: "transparent",
   borderColor: {
     value: "inherit",

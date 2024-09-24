@@ -44,7 +44,7 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
-  const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
+  // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
   )
@@ -95,26 +95,30 @@ const Header = ({ flowId }) => {
     try {
       setIsLoading(true)
 
-      const response = await fetch(`/api/flows/published/${flowId}`, {
-        method: "POST",
-      })
-      if (response.ok) {
-        // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
-        //   method: "GET",
-        // })
-        // if (res.ok) {
-        revalidateFlow({ tag: "publishedFlow" })
-        setTimeout(() => {
-          setIsLoading(false)
+      // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
+      //   method: "GET",
+      // })
+      // if (res.ok) {
+
+      setTimeout(async () => {
+        const response = await fetch(`/api/flows/published/${flowId}`, {
+          method: "POST",
+        })
+        if (response.ok) {
+          revalidateFlow({ tag: "publishedFlow" })
           router.push(`./share`)
-        }, 3000)
-        // }
-      }
+        }
+        setIsLoading(false)
+        router.push(`./share`)
+      }, 6000)
+      // }
     } catch (err) {
       console.error("Publishing flow failed:", err)
     }
   }
-
+  function onClick() {
+    window.location.href = `/dashboard/${flowId}/create-flow`
+  }
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
@@ -134,15 +138,16 @@ const Header = ({ flowId }) => {
       </div>
       <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
-          <Link
+          <span
             className={linkClasses("/dashboard/flows/create-flow")}
-            href={`/dashboard/${flowId}/create-flow`}
+            onClick={onClick}
             style={{
               paddingLeft: isSmallScreen ? "0.625rem" : "1rem",
+              cursor: "pointer",
             }}
           >
             {t("Create")}
-          </Link>
+          </span>
           <Link
             className={linkClasses("/dashboard/flows/connect")}
             href={`/dashboard/${flowId}/connect`}

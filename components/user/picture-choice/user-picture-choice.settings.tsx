@@ -40,6 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/custom-select"
+import ColorButton from "../color-button"
 
 export const PictureChoiceSettings = () => {
   const t = useTranslations("Components")
@@ -66,6 +67,7 @@ export const PictureChoiceSettings = () => {
       contentReversed,
       preset,
       defaultStyles,
+      labelColor,
       hoverStyles,
       selectedStyles,
       selections,
@@ -299,6 +301,12 @@ export const PictureChoiceSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Label Color"}
+              styleKey="labelColor"
+              currentValue={labelColor || ""}
+              setProp={handlePropChangeDebounced}
+            />
           </AccordionContent>
         </AccordionItem>
 
@@ -433,6 +441,7 @@ export const PictureChoiceSettings = () => {
                     marginBottom: 16,
                     marginLeft: 16,
                     marginRight: 6,
+                    labelColor: labelColor,
                     selections: defaultSelections,
                     choices: defaultChoices.slice(0, 2),
                   }}
@@ -460,6 +469,7 @@ export const PictureChoiceSettings = () => {
                     marginBottom: 16,
                     marginLeft: 16,
                     marginRight: 6,
+                    labelColor: labelColor,
                     selections: defaultSelections,
                     choices: defaultChoices.slice(0, 2),
                   }}
@@ -487,6 +497,7 @@ export const PictureChoiceSettings = () => {
                     marginBottom: 16,
                     marginLeft: 16,
                     marginRight: 6,
+                    labelColor: labelColor,
                     selections: defaultSelections,
                     choices: defaultChoices.slice(0, 2),
                   }}

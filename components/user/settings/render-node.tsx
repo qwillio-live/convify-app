@@ -149,7 +149,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       const child = document.getElementById(selectedComponent)
       child?.scrollIntoView({
         behavior: "instant" as ScrollBehavior,
-        block: "center",
+        block: "nearest",
         inline: "center",
       })
     }

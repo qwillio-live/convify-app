@@ -56,6 +56,7 @@ import { Controller } from "../settings/controller.component"
 import useInputThemePresets from "./useInputThemePresets"
 import { UserInput, UserInputGen } from "./user-input.component"
 import { InputSettingsIconPicker } from "./user-input-icon-picker"
+import ColorButton from "../color-button"
 
 export const UserInputSettings = () => {
   const t = useTranslations("Components")
@@ -67,10 +68,11 @@ export const UserInputSettings = () => {
     marginRight,
     marginTop,
     marginBottom,
-    textColor,
+
     width,
     props,
     parent,
+    textColor,
     props: { enableIcon, icon },
   } = useNode((node) => ({
     parent: node.data.parent,
@@ -183,7 +185,7 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">{t("Content")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-1">
               <Checkbox
                 value={props.inputRequired}
                 checked={props.inputRequired}
@@ -209,7 +211,7 @@ export const UserInputSettings = () => {
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-1">
               <Checkbox
                 checked={props.floatingLabel}
                 onCheckedChange={(e) => {
@@ -226,7 +228,7 @@ export const UserInputSettings = () => {
               </label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="label-text"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -245,10 +247,10 @@ export const UserInputSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Placeholder")}
               </label>
@@ -263,10 +265,10 @@ export const UserInputSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
               <label
                 htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
+                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Field Name")}
               </label>
@@ -286,9 +288,9 @@ export const UserInputSettings = () => {
             <span className="text-sm font-medium">{t("Design")}</span>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
+                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={props.enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -307,26 +309,26 @@ export const UserInputSettings = () => {
             <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
               {enableIcon && (
                 <>
-                  <p className="text-md flex-1 text-muted-foreground">
+                  <p className="text-md text-muted-foreground flex-1">
                     {t("Icon")}
                   </p>
                   <div className="flex w-full items-center gap-2">
-                  <InputSettingsIconPicker
-                className="w-auto"
-                icon={icon}
-                onChange={(icon) => {
-                  debouncedSetProp("icon", icon)
-                }}
-              />
+                    <InputSettingsIconPicker
+                      className="w-auto"
+                      icon={icon}
+                      onChange={(icon) => {
+                        debouncedSetProp("icon", icon)
+                      }}
+                    />
                   </div>
                 </>
               )}
             </div>
 
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <label
                 htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
+                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {t("Background Color")}
               </label>
@@ -343,6 +345,12 @@ export const UserInputSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <ColorButton
+              label={"Label Color"}
+              styleKey="textColor"
+              currentValue={textColor || ""}
+              setProp={handlePropChange}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
@@ -361,7 +369,7 @@ export const UserInputSettings = () => {
                 className="flex-1"
               >
                 <TabsList
-                  className={cn("w-full grid grid-cols-4", {
+                  className={cn("grid w-full grid-cols-4", {
                     "cursor-not-allowed": disableSize,
                   })}
                 >
@@ -380,10 +388,10 @@ export const UserInputSettings = () => {
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginTop}
                 </span>
               </div>
@@ -401,10 +409,10 @@ export const UserInputSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginBottom}
                 </span>
               </div>
@@ -421,10 +429,10 @@ export const UserInputSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginRight}
                 </span>
               </div>
@@ -441,10 +449,10 @@ export const UserInputSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {marginLeft}
                 </span>
               </div>
@@ -473,11 +481,11 @@ export const UserInputSettings = () => {
                   addPresetStyles(outlinedPreset)
                 }}
                 className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-blue-500": props.preset === "outlined" }
                 )}
               >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
                 <UserInputGen
                   {...outlinedPreset}
                   floatingLabel={true}
@@ -494,11 +502,11 @@ export const UserInputSettings = () => {
                   addPresetStyles(underlinedPreset)
                 }}
                 className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
+                  "relative px-2 py-0 transition-all duration-300 hover:cursor-pointer",
                   { "border-blue-500": props.preset === "underlined" }
                 )}
               >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
+                <div className="bg-white-50/0 absolute z-10 h-full w-full"></div>
                 <UserInputGen
                   {...underlinedPreset}
                   floatingLabel={true}
