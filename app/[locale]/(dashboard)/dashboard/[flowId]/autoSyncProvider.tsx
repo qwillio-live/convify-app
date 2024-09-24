@@ -2,7 +2,7 @@
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import Loading from "../loading"
 import { useRouter } from "next/navigation"
 import NotFound from "./not-found"
@@ -13,11 +13,13 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
 
   const router = useRouter()
-
   const dispatch = useAppDispatch()
 
   const localFlowData = useAppSelector((state) => state?.screen)
   const localFlowSettings = useAppSelector((state) => state?.theme)
+
+  // Reference to hold the AbortController for request cancellation
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   const getFlowData = async () => {
     try {
@@ -34,17 +36,36 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     }
   }
 
-  const updateFlowData = async (updatedFlowData) => {
-    try {
-      await fetch(`/api/flows/${flowId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedFlowData),
-      })
-    } catch (error) {}
-  }
+  const updateFlowData = useCallback(
+    async (updatedFlowData) => {
+      // Cancel the previous request if it exists
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+
+      // Create a new AbortController for the new request
+      const abortController = new AbortController()
+      abortControllerRef.current = abortController
+
+      try {
+        await fetch(`/api/flows/${flowId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlowData),
+          signal: abortController.signal, // Attach the signal to the request
+        })
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Previous request canceled")
+        } else {
+          console.error("Update flow error:", error)
+        }
+      }
+    },
+    [flowId]
+  )
 
   useEffect(() => {
     let interval
@@ -61,8 +82,14 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       }, autoSaveTime)
     })
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => {
+      clearInterval(interval)
+      // Cancel any pending request when the component unmounts
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
+  }, [autoSaveTime, updateFlowData])
 
   useEffect(() => {
     if (!isFlowLoaded) return
