@@ -198,8 +198,9 @@ export const Checklist = ({
       onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={t("Checklist")} />}
+
       <div
-        className="relative w-full"
+        className="relative w-full max-w-[calc(100%-22px)]"
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
@@ -207,8 +208,6 @@ export const Checklist = ({
           justifyContent: "center",
           alignItems: "center",
           boxSizing: "border-box",
-          minWidth: "100%",
-          maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
           paddingLeft: `${marginLeft}px`,
@@ -218,7 +217,7 @@ export const Checklist = ({
         <Wrapper
           size={size}
           mobileScreen={!!mobileScreen}
-          className="user-checklist-comp flex w-full gap-2"
+          className="user-checklist-comp flex w-full gap-2 "
           style={{
             flexDirection: layout,
           }}
