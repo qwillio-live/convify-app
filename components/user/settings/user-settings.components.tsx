@@ -54,12 +54,8 @@ export const SettingsPanel = () => {
   })
 
   useEffect(() => {
-    try {
-      if (selected || selectedComponent) {
-        actions.selectNode(selectedComponent || "ROOT")
-      }
-    } catch (e) {
-      console.log("error in user settings", e)
+    if (selected || selectedComponent) {
+      actions.selectNode(selectedComponent || "ROOT")
     }
   }, [mobileScreen, selectedComponent])
   return (
@@ -83,7 +79,7 @@ export const SettingsPanel = () => {
           {isEnabled && selected && (
             // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
             <div className="">
-              <div className="flex h-[100vh] flex-col gap-0">
+              <div className="flex flex-col gap-0">
                 <div
                   data-cy="settings-panel"
                   className="settings-panel mb-3 flex-col gap-2"

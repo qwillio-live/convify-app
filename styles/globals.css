@@ -226,9 +226,6 @@ userContainer > *:hover {
 .body {
   font-family: "Poppins";
 }
-.font-poppins {
-  font-family: "Poppins";
-}
 
 /* Add this CSS to your styles */
 @keyframes shake {

@@ -402,7 +402,7 @@ export function CreateFlowComponent({ flowId }) {
         onRender={RenderNode}
       >
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)]  flex-row justify-between gap-0 md:flex">
-          <ScrollArea className="max-h-screen overflow-y-auto border-r  md:basis-[15%]  ">
+          <ScrollArea className="max-h-screen min-w-fit overflow-y-auto  border-r  ">
             <div className="section-body p-5">
               <ScreensList flowId={flowId} />
             </div>
@@ -480,14 +480,16 @@ export function CreateFlowComponent({ flowId }) {
                     <ResolvedComponentsFromCraftState screen={screensFooter} />
                   )}
                 </TabsContent>
-                <TabsList className="w-100 absolute bottom-0  z-20 ">
+                <TabsList className="w-100 absolute bottom-2 left-2 z-20 bg-transparent">
                   <AddScreenButton />
-                  <TabsTrigger value={VIEWS.MOBILE} className="mx-2">
-                    <Smartphone className="size-4" />
-                  </TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}>
-                    <Laptop className="size-4" />
-                  </TabsTrigger>
+                  <div className="ml-2 rounded-md bg-[#EEEEEE] p-1">
+                    <TabsTrigger value={VIEWS.MOBILE}>
+                      <Smartphone className="size-4" />
+                    </TabsTrigger>
+                    <TabsTrigger value={VIEWS.DESKTOP}>
+                      <MonitorIcon className="size-4" />
+                    </TabsTrigger>
+                  </div>
                 </TabsList>
               </Tabs>
 
