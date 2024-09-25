@@ -166,7 +166,7 @@ export const ImageComponentGen = ({
             <UserLogo
               alt={alt}
               marginTop={marginTop}
-              maxWidth={maxWidth}
+              maxWidth={"100%"}
               marginBottom={marginBottom}
               marginLeft={marginLeft}
               marginRight={marginRight}
@@ -329,7 +329,8 @@ export const ImageComponent = ({
       } else if (picSize == "medium") {
         setProp(
           (props) => (
-            (props.width = "376px"), (props.picSize = "medium")
+            (props.width = mobileScreen ? "360px" : "376px"),
+            (props.picSize = "medium")
             // (props.width = `${props.imageSize}%`)
           ),
           1000
