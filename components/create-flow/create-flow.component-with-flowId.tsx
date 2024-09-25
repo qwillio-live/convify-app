@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from "lodash"
-
+import { Card, CardContent } from "../user/card/user-card.component"
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
   setCurrentScreenName,
@@ -29,6 +29,7 @@ import {
   setValidateScreen,
   addScreen,
   setSelectedScreen,
+  setEditorSelectedComponent,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
@@ -46,7 +47,6 @@ import { Input } from "../ui/input"
 import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
-import { CardContent } from "../user/card/user-card.component"
 import {
   Container,
   UserContainer,
@@ -238,11 +238,21 @@ export function CreateFlowComponent({ flowId }) {
 
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
+      console.log("jsonnnnn", json)
       dispatch(setEditorLoad(JSON.stringify(json)))
-    }, 1200),
+    }, 300),
     [dispatch]
   )
 
+  const debouncedSetSelectedComponent = useCallback(
+    (json) => {
+      dispatch(setEditorSelectedComponent(json))
+    },
+    [dispatch]
+  )
+
+  const selectedScreenIdex =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
   React.useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
@@ -317,6 +327,9 @@ export function CreateFlowComponent({ flowId }) {
         // Save the updated JSON whenever the Nodes has been changed
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
+          // dispatch(setEditorSelectedComponent(json))
+          // dispatch(setEditorLoad(JSON.stringify(json)))
+          debouncedSetSelectedComponent(json)
           debouncedSetEditorLoad(json)
 
           // }else{
@@ -362,7 +375,7 @@ export function CreateFlowComponent({ flowId }) {
           Globe,
           Linkedin,
           Container,
-          // Card,
+          Card,
           CardContent,
           UserContainer,
           IconButton,
@@ -389,7 +402,7 @@ export function CreateFlowComponent({ flowId }) {
         onRender={RenderNode}
       >
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)]  flex-row justify-between gap-0 md:flex">
-          <ScrollArea className="max-h-screen min-w-fit overflow-y-auto border-r">
+          <ScrollArea className="max-h-screen overflow-y-auto border-r  md:basis-[15%]  ">
             <div className="section-body p-5">
               <ScreensList flowId={flowId} />
             </div>
@@ -406,6 +419,7 @@ export function CreateFlowComponent({ flowId }) {
                 className="w-full"
                 onValueChange={(value) => {
                   setView(value)
+                  dispatch(setSelectedScreen(selectedScreenIdex))
                   dispatch(setMobileScreen(value === VIEWS.MOBILE))
                 }}
               >
@@ -466,31 +480,14 @@ export function CreateFlowComponent({ flowId }) {
                     <ResolvedComponentsFromCraftState screen={screensFooter} />
                   )}
                 </TabsContent>
-                <TabsList className="w-100 absolute bottom-2 left-2 z-20 flex gap-2 bg-transparent">
+                <TabsList className="w-100 absolute bottom-0  z-20 ">
                   <AddScreenButton />
-                  <div className="rounded-md bg-[#EEEEEE] p-1">
-                    <TabsTrigger value={VIEWS.MOBILE}>
-                      <svg
-                        className="size-4"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M7 4H9M10.8573 2H5.14267C4.512 2 4 2.53733 4 3.2V12.8C4 13.4627 4.512 14 5.14267 14H10.8573C11.4887 14 12 13.4627 12 12.8V3.2C12 2.53733 11.4887 2 10.8573 2Z"
-                          stroke="currentColor"
-                          stroke-width="1.2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </TabsTrigger>
-                    <TabsTrigger value={VIEWS.DESKTOP}>
-                      <MonitorIcon className="size-4" />
-                    </TabsTrigger>
-                  </div>
+                  <TabsTrigger value={VIEWS.MOBILE} className="mx-2">
+                    <Smartphone className="size-4" />
+                  </TabsTrigger>
+                  <TabsTrigger value={VIEWS.DESKTOP}>
+                    <Laptop className="size-4" />
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
 

@@ -252,7 +252,9 @@ export const UserInputCheckboxSettings = () => {
                 handleChange={(e) => {
                   handlePropChange("backgroundColor", e.target.value)
                 }}
-                handleRemove={() => handlePropChange("backgroundColor", "transparent")}
+                handleRemove={() =>
+                  handlePropChange("backgroundColor", "transparent")
+                }
               />
             </div>
           </AccordionContent>
@@ -298,8 +300,8 @@ export const UserInputCheckboxSettings = () => {
               </Tabs>
             </div>
 
-           <div className="space-y-4">
-           <div className="space-y-3">
+            <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="marginTop">{t("Top")}</Label>
                   <span className="text-muted-foreground text-xs">
@@ -379,7 +381,7 @@ export const UserInputCheckboxSettings = () => {
                   }
                 />
               </div>
-           </div>
+            </div>
           </AccordionContent>
         </AccordionItem>
         {/* <AccordionItem value="styles">

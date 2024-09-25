@@ -177,10 +177,10 @@ export function CreateFlowComponent() {
     (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
   )
   const startScreen = useAppSelector(
-    (state) => state?.screen?.screens[0]?.screenData || ""
+    (state) => state?.screen?.screens[0].screenData || ""
   )
   const startScreenName = useAppSelector(
-    (state) => state?.screen?.screens[0]?.screenName || ""
+    (state) => state?.screen?.screens[0].screenName || ""
   )
   const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
@@ -261,7 +261,7 @@ export function CreateFlowComponent() {
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
           debouncedSetEditorLoad(json)
-
+          // dispatch(setSelectedComponent("ROOT"))
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -284,6 +284,7 @@ export function CreateFlowComponent() {
           ScreensList,
           ScreenOneChoice,
           // UserProgressBar,
+          Card,
           ScreenOneInput,
           Input,
           Button,
@@ -295,7 +296,6 @@ export function CreateFlowComponent() {
           Globe,
           Linkedin,
           Container,
-          Card,
           CardContent,
           UserContainer,
           IconButton,
@@ -410,7 +410,7 @@ export function CreateFlowComponent() {
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-5 md:block">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-2 py-6 md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
@@ -418,7 +418,7 @@ export function CreateFlowComponent() {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r bg-[#f6f6f6]  md:block">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r bg-[#fafafa] py-6 md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>

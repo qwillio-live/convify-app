@@ -53,6 +53,8 @@ export const ListSettings = () => {
   const {
     actions: { setProp },
     props: {
+      textColor,
+      secTextColor,
       titleFontFamily,
       descriptionFontFamily,
       size,
@@ -392,6 +394,8 @@ export const ListSettings = () => {
                 }}
               >
                 <ListGen
+                  textColor={"#ffffff"}
+                  secTextColor={"#ffffff"}
                   {...{
                     ...horizontalPreset,
                     columnsDesktop: 1,
@@ -420,6 +424,8 @@ export const ListSettings = () => {
                 }}
               >
                 <ListGen
+                  textColor={"#ffffff"}
+                  secTextColor={"#ffffff"}
                   {...{
                     ...verticalPreset,
                     columnsDesktop: 1,

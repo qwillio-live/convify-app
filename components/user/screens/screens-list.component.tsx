@@ -102,8 +102,24 @@ const ScreensList = () => {
   // }
   // }, []);
 
-  const handleReorder = (data) => {
+  const handleReorder = async (data) => {
+    // Dispatch the new order of screens
     dispatch(setScreens(data))
+
+    // Get the currently selected screen's index
+    const newIndex = selectedScreen
+      ? data.findIndex((screen) => screen.screenId === selectedScreen.screenId)
+      : -1
+
+    // If a valid screen is selected and its data exists, deserialize the new screen data
+    if (newIndex !== -1 && data[newIndex]?.screenData) {
+      await actions.deserialize(data[newIndex].screenData)
+      dispatch(setSelectedScreen(newIndex)) // Update the selected screen index if needed
+    } else if (data.length > 0) {
+      // If no valid screen is selected, fall back to the first screen
+      await actions.deserialize(data[0].screenData)
+      dispatch(setSelectedScreen(0))
+    }
   }
 
   // useEffect(() => {
@@ -144,7 +160,8 @@ const ScreensList = () => {
     async (index: number) => {
       if (screens) {
         dispatch(duplicateScreen(index))
-        await actions.deserialize(editorLoad)
+        await actions.deserialize(screens[index].screenData)
+        // })
       }
     },
     [dispatch, screens]
@@ -427,7 +444,7 @@ const EditScreenName = ({ screenId, screenName }) => {
         </div>
       )}
       {editing && (
-        <div className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-2 p-0.5 text-current">
+        <div className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-2 p-2 text-current">
           <Input
             ref={ref}
             className="text-right"
@@ -440,6 +457,29 @@ const EditScreenName = ({ screenId, screenName }) => {
       )}
       {/* <Toaster position="bottom-right" /> */}
     </>
+  )
+}
+
+function HelperInformation() {
+  const t = useTranslations("Components")
+  return (
+    <Card
+      className={cn(
+        "hidden w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer md:flex"
+      )}
+    >
+      <div className="flex flex-row items-start gap-1 text-left">
+        <MousePointer />
+        <div>
+          <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
+            {t("Right-Click")}
+          </h2>
+          <p className="text-sm font-light">
+            {t("Click on a screen to edit it")}
+          </p>
+        </div>
+      </div>
+    </Card>
   )
 }
 

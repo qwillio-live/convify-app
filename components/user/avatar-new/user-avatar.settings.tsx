@@ -1,28 +1,45 @@
 import React, { useCallback, useEffect } from "react"
-import { MoveHorizontal, AlignHorizontalJustifyStart, AlignHorizontalJustifyEnd, AlignHorizontalJustifyCenter } from "lucide-react"
+import {
+  MoveHorizontal,
+  AlignHorizontalJustifyStart,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyCenter,
+} from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
-import { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
-import { throttle, debounce } from 'lodash';
+import { throttle, debounce } from "lodash"
 import { useNode } from "@/lib/craftjs"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/custom-select"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
 import { Controller } from "../settings/controller.component"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
+import { cn } from "@/lib/utils"
+import { Icons } from "@/components/icons"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { UserLogo } from './user-avatar.component'
-import AvatarPlaceholder from '@/assets/images/default-avatar.webp'
-import axios from "axios";
-import { setAvatarBackgroundColor } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { UserLogo } from "./user-avatar.component"
+import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
+import axios from "axios"
+import { setAvatarBackgroundColor } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const Img = ({
   alt,
@@ -37,7 +54,7 @@ export const Img = ({
   left,
   radius,
   align,
-  width = '85%',
+  width = "85%",
   height,
   src,
   w,
@@ -125,7 +142,7 @@ export const AvatarSettings = () => {
       align,
       uploadedImageUrl,
       uploadedImageMobileUrl,
-      cornRad
+      cornRad,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -135,22 +152,28 @@ export const AvatarSettings = () => {
 
   const throttledSetProp = useCallback(
     throttle((property, value) => {
-      setProp((prop) => { prop[property] = value }, 0);
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
     }, 200), // Throttle to 50ms to 200ms
     [setProp]
-  );
+  )
 
   const handlePropChange = (property, value) => {
-    throttledSetProp(property, value);
-  };
+    throttledSetProp(property, value)
+  }
 
   const debouncedSetProp = useCallback(
     debounce((property, value) => {
-      setProp((prop) => { prop[property] = value }, 0);
-    }), [setProp])
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
+    [setProp]
+  )
 
   const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value);
+    debouncedSetProp(property, value)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,75 +191,89 @@ export const AvatarSettings = () => {
 
   const getAspectRatio = (imageSrc) => {
     return new Promise((resolve, reject) => {
-      const img = new Image();
+      const img = new Image()
       img.onload = () => {
-        const width = img.naturalWidth;
-        const height = img.naturalHeight;
-        const aspectRatio = width / height;
-        resolve(aspectRatio);
-      };
+        const width = img.naturalWidth
+        const height = img.naturalHeight
+        const aspectRatio = width / height
+        resolve(aspectRatio)
+      }
       img.onerror = (error) => {
-        reject(error);
-      };
-      img.src = imageSrc;
-    });
-  };
+        reject(error)
+      }
+      img.src = imageSrc
+    })
+  }
 
   const calculateImageDimensions = (aspectRatio, maxWidth) => {
-    const height = maxWidth / aspectRatio;
+    const height = maxWidth / aspectRatio
     return {
       width: maxWidth,
-      height: Math.round(height)
-    };
-  };
+      height: Math.round(height),
+    }
+  }
 
   const uploadToS3 = async (imageData, aspectRatio) => {
-    const maxWidthMobile = 60;
-    const maxWidthDesktop = 90;
-    const mobileDimensions = calculateImageDimensions(aspectRatio, maxWidthMobile);
-    const desktopDimenstions = calculateImageDimensions(aspectRatio, maxWidthDesktop)
+    const maxWidthMobile = 60
+    const maxWidthDesktop = 90
+    const mobileDimensions = calculateImageDimensions(
+      aspectRatio,
+      maxWidthMobile
+    )
+    const desktopDimenstions = calculateImageDimensions(
+      aspectRatio,
+      maxWidthDesktop
+    )
 
-    const formData = new FormData();
-    formData.append('image', imageData);
-    formData.append('file', imageData);
-    formData.append('sizes[0]', `60x60`);
-    formData.append('sizes[1]', `100x100`);
-    formData.append('bucket_name', 'convify-images');
+    const formData = new FormData()
+    formData.append("image", imageData)
+    formData.append("file", imageData)
+    formData.append("sizes[0]", `60x60`)
+    formData.append("sizes[1]", `100x100`)
+    formData.append("bucket_name", "convify-images")
 
     try {
-      const response = await axios.post('/api/upload', formData);
+      const response = await axios.post("/api/upload", formData)
       return {
         data: response.data,
         mobileSize: `60x60`,
         desktopSize: `100x100`,
-      };
+      }
     } catch (error) {
-      console.error('Error uploading image to S3:', error);
-      return null;
+      console.error("Error uploading image to S3:", error)
+      return null
     }
-  };
+  }
 
   const handleUploadOriginal = async () => {
     if (image && imageFile) {
-      setProp((props) => (props.src = image));
+      setProp((props) => (props.src = image))
       setShowDialog(false)
-      setIsLoading(true);
-      const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile));
-      const uploadedImage = await uploadToS3(imageFile, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
+      setIsLoading(true)
+      const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile))
+      const uploadedImage = await uploadToS3(imageFile, aspectRatio)
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.desktopSize]
+      ) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
-          props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.desktopSize];
-        }, 1000);
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
+          props.uploadedImageUrl =
+            uploadedImage.data.data.images[uploadedImage.desktopSize]
+        }, 1000)
       }
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.mobileSize]
+      ) {
         setProp((props) => {
-          props.uploadedImageMobileUrl = uploadedImage.data.data.images[uploadedImage.mobileSize];
-        }, 1000);
+          props.uploadedImageMobileUrl =
+            uploadedImage.data.data.images[uploadedImage.mobileSize]
+        }, 1000)
       }
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const cropperRef = React.useRef<ReactCropperElement>(null)
 
@@ -244,34 +281,38 @@ export const AvatarSettings = () => {
     const cropper = cropperRef.current?.cropper
   }
 
-  const base64ToBlob = (base64: string, contentType: string = '', sliceSize: number = 512): Blob => {
-    const byteCharacters = atob(base64.split(',')[1]);
-    const byteArrays: Uint8Array[] = [];
+  const base64ToBlob = (
+    base64: string,
+    contentType: string = "",
+    sliceSize: number = 512
+  ): Blob => {
+    const byteCharacters = atob(base64.split(",")[1])
+    const byteArrays: Uint8Array[] = []
 
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-      const byteNumbers = new Array(slice.length);
+      const slice = byteCharacters.slice(offset, offset + sliceSize)
+      const byteNumbers = new Array(slice.length)
 
       for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
+        byteNumbers[i] = slice.charCodeAt(i)
       }
 
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
+      const byteArray = new Uint8Array(byteNumbers)
+      byteArrays.push(byteArray)
     }
 
-    return new Blob(byteArrays, { type: contentType });
-  };
+    return new Blob(byteArrays, { type: contentType })
+  }
 
   const getCropData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
       setProp(
         (props) =>
-        (props.src = cropperRef.current?.cropper
-          .getCroppedCanvas()
-          .toDataURL()),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
       setProp((props) => (props.width = "85%"), 1000)
@@ -280,37 +321,44 @@ export const AvatarSettings = () => {
       setActiveAspectRatioBtn("source")
       setProp(
         (props) =>
-        (props.src = cropperRef.current?.cropper
-          .getCroppedCanvas()
-          .toDataURL()),
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
         1000
       )
-      const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas();
-      const imageData = croppedCanvas.toDataURL('image/jpeg');
-      const blob = base64ToBlob(imageData, 'image/jpeg');
-      const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
-      const aspectRatio = croppedCanvas.width / croppedCanvas.height;
-      const uploadedImage = await uploadToS3(file, aspectRatio);
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.desktopSize]) {
+      const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
+      const imageData = croppedCanvas.toDataURL("image/jpeg")
+      const blob = base64ToBlob(imageData, "image/jpeg")
+      const file = new File([blob], "cropped-image.jpg", { type: "image/jpeg" })
+      const aspectRatio = croppedCanvas.width / croppedCanvas.height
+      const uploadedImage = await uploadToS3(file, aspectRatio)
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.desktopSize]
+      ) {
         setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize];
-          props.uploadedImageUrl = uploadedImage.data.data.images[uploadedImage.desktopSize];
-        }, 1000);
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
+          props.uploadedImageUrl =
+            uploadedImage.data.data.images[uploadedImage.desktopSize]
+        }, 1000)
       }
-      if (uploadedImage && uploadedImage.data.data.images[uploadedImage.mobileSize]) {
+      if (
+        uploadedImage &&
+        uploadedImage.data.data.images[uploadedImage.mobileSize]
+      ) {
         setProp((props) => {
-          props.uploadedImageMobileUrl = uploadedImage.data.data.images[uploadedImage.mobileSize];
-        }, 1000);
+          props.uploadedImageMobileUrl =
+            uploadedImage.data.data.images[uploadedImage.mobileSize]
+        }, 1000)
       }
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-
+  }
 
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
       cropperRef.current?.cropper.getImageData().width /
-      cropperRef.current?.cropper.getImageData().height
+        cropperRef.current?.cropper.getImageData().height
     )
     setActiveAspectRatioBtn("source")
   }
@@ -335,8 +383,12 @@ export const AvatarSettings = () => {
     setActiveAspectRatioBtn("landscapeo")
   }
 
-  const themeBackgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const avatarBackgroundColor = useAppSelector((state)=> state?.screen?.avatarBackgroundColor)
+  const themeBackgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
 
   return (
     <>
@@ -354,9 +406,9 @@ export const AvatarSettings = () => {
           />
           <div
             onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-            className="relative flex w-full flex-row justify-center group hover:cursor-pointer"
+            className="group relative flex w-full flex-row justify-center hover:cursor-pointer"
           >
-            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent group-hover:bg-white/[0.85] group-hover:opacity-100 opacity-0 transition-opacity duration-200 ease-in">
+            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent opacity-0 transition-opacity duration-200 ease-in group-hover:bg-white/[0.85] group-hover:opacity-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -374,7 +426,7 @@ export const AvatarSettings = () => {
                 <path d="M17 22v-5.5" />
                 <circle cx="9" cy="9" r="2" />
               </svg>
-              <span className="text-sm font-semibold text-black mt-1">
+              <span className="mt-1 text-sm font-semibold text-black">
                 {t("Upload")}
               </span>
             </div>
@@ -388,15 +440,16 @@ export const AvatarSettings = () => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
         type="multiple"
-        defaultValue={['content']}
-        className="w-full mb-10">
+        defaultValue={["content"]}
+        className="mb-10 w-full"
+      >
         <AccordionItem value="item-2">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("General")}</span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
             <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Alt label")}</p>
+              <p className="text-muted-foreground text-sm">{t("Alt label")}</p>
               <Input
                 className="p-2 text-sm"
                 value={alt}
@@ -408,13 +461,13 @@ export const AvatarSettings = () => {
             </div>
           </AccordionContent>
           <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="col-span-2 flex flex-row items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
+                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={enableLink}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
-                  handlePropChange("enableLink", e);
+                  handlePropChange("enableLink", e)
                 }}
                 id="enableIcon"
               />
@@ -422,7 +475,7 @@ export const AvatarSettings = () => {
                 htmlFor="enableLink"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 onClick={(e) => {
-                  handlePropChange("enableLink", !enableLink);
+                  handlePropChange("enableLink", !enableLink)
                 }}
               >
                 {t("Enable Link")}
@@ -431,18 +484,22 @@ export const AvatarSettings = () => {
             {enableLink && (
               <>
                 <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-sm text-muted-foreground">{t("Add URL")}</p>
+                  <p className="text-muted-foreground text-sm">
+                    {t("Add URL")}
+                  </p>
                   <Input
                     className="p-2 text-sm"
                     value={url}
-                    placeholder={'URL'}
+                    placeholder={"URL"}
                     onChange={(e) => {
                       setProp((props) => (props.url = e.target.value), 1000)
                     }}
                   />
                 </div>
                 <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-md flex-1 text-muted-foreground">{t("Open in..")}</p>
+                  <p className="text-md text-muted-foreground flex-1">
+                    {t("Open in..")}
+                  </p>
                   <Select
                     defaultValue={icon}
                     onValueChange={(e) => {
@@ -473,29 +530,10 @@ export const AvatarSettings = () => {
             <span className="text-sm font-medium">{t("Design")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={avatarBackgroundColor}
-                value={avatarBackgroundColor}
-                onChange={(e) => {
-                  dispatch(setAvatarBackgroundColor(e.target.value));
-                }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
-              />
-            </div>
-
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-            <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Corner Radius")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
                   {cornRad}
                 </span>
               </div>
@@ -506,9 +544,7 @@ export const AvatarSettings = () => {
                 max={200}
                 min={0}
                 step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("cornRad", e)
-                }
+                onValueChange={(e) => handlePropChangeDebounced("cornRad", e)}
               />
             </div>
           </AccordionContent>
@@ -516,8 +552,9 @@ export const AvatarSettings = () => {
       </Accordion>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent
-          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[70%] relative flex flex-col gap-4 p-4 sm:p-8"
-          ref={dialogRef}>
+          className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8"
+          ref={dialogRef}
+        >
           <Cropper
             ref={cropperRef}
             style={{
@@ -536,63 +573,69 @@ export const AvatarSettings = () => {
             responsive={true}
           />
           <div className="flex items-center justify-between gap-4">
-            <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+            <div className="bg-secondary flex gap-0 rounded-lg p-1">
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "source"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "source"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioSource}
               >
                 {t("Source")}
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "square"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "square"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioSquare}
               >
                 1:1
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portrait"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "portrait"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioPortrait}
               >
                 4:3
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscape"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "landscape"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioLandscape}
               >
                 16:9
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "portraito"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "portraito"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioPortraitO}
               >
                 3:4
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${activeAspectRatioBtn === "landscapeo"
-                  ? "bg-white border-input shadow font-medium hover:bg-white"
-                  : "bg-transparent border-transparent hover:bg-transparent"
-                  }`}
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
+                  activeAspectRatioBtn === "landscapeo"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
+                }`}
                 onClick={aspectRatioLandscape0}
               >
                 9:16
@@ -627,30 +670,29 @@ export const AvatarSettings = () => {
   )
 }
 
-
 export const DefaultPropsAvatar = {
   alt: "Image",
-  marginTop: '20px',
-  marginBottom: '20px',
-  marginLeft: '20px',
-  marginRight: '20px',
-  top: '0px',
-  bottom: '0px',
-  left: '0px',
-  right: '0px',
+  marginTop: "20px",
+  marginBottom: "20px",
+  marginLeft: "20px",
+  marginRight: "20px",
+  top: "0px",
+  bottom: "0px",
+  left: "0px",
+  right: "0px",
   background: "inherit",
   radius: "none",
   align: "center",
-  width: '85%',
-  w: 'auto',
-  h: '60px',
+  width: "85%",
+  w: "auto",
+  h: "60px",
   cornRad: 50,
-  height: 'auto',
+  height: "auto",
   enableLink: false,
   imageSize: 100,
   src: `${AvatarPlaceholder.src}`,
-  uploadedImageUrl: '',
-  uploadedImageMobileUrl: '',
+  uploadedImageUrl: "",
+  uploadedImageMobileUrl: "",
 }
 
 Img.craft = {

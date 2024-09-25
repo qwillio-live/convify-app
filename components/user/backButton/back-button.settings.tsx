@@ -97,8 +97,9 @@ export const IconButtonSettings = () => {
   const prevScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[selectedScreen - 1 >= 0 ? selectedScreen - 1 : 0]
-          ?.screenName
+        state?.screen?.screens[
+          selectedScreen - 1 >= 0 ? selectedScreen - 1 : selectedScreen
+        ]?.screenName
     ) || ""
 
   const prevScreenId =
@@ -274,6 +275,12 @@ export const IconButtonSettings = () => {
             <div className="space-y-2">
               <Label htmlFor="navigation-select">Navigation</Label>
               <Select
+                defaultValue="back-screen"
+                value={
+                  buttonAction === "custom-action"
+                    ? nextScreen.screenId
+                    : buttonAction
+                }
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))

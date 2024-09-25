@@ -18,7 +18,6 @@ export default function FlowPreview() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-
   const search = searchParams?.get("screen") || ""
   useEffect(() => {
     const screens = document.querySelectorAll(".new-screens")
@@ -69,7 +68,7 @@ export default function FlowPreview() {
   const screenFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const headerMode =
     useAppSelector((state) => state?.screen?.headerMode) || false
-
+  const sf = useAppSelector((state) => state?.screen)
   useEffect(() => {
     dispatch(
       setValidateScreen({
@@ -100,7 +99,7 @@ export default function FlowPreview() {
       setHeaderHeight(height)
     }
   }, [headerMode, headerHeight, headerPosition])
-
+  console.log("Screnssssss", screens, sf)
   return (
     <>
       <div

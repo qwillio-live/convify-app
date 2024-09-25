@@ -18,15 +18,13 @@ const authMiddleware = withAuth(
       req.nextUrl.pathname.startsWith("/login") ||
       req.nextUrl.pathname.startsWith("/register")
 
-    if (isAuthPage) {
-      if (isAuth) {
-        return NextResponse.redirect(new URL("/dashboard", req.url))
-      }
-
-      return null
+    if (isAuthPage && isAuth) {
+      // Redirect to dashboard if user is authenticated and trying to access auth pages
+      return NextResponse.redirect(new URL("/dashboard", req.url))
     }
 
     if (!isAuth) {
+      // Redirect to login page if the user is not authenticated and trying to access protected pages
       let from = req.nextUrl.pathname
       if (req.nextUrl.search) {
         from += req.nextUrl.search
@@ -37,27 +35,29 @@ const authMiddleware = withAuth(
       )
     }
 
+    // Proceed with internationalization middleware
     return intlMiddleware(req)
   },
   {
     callbacks: {
       async authorized() {
-        // This is a work-around for handling redirect on auth pages.
-        // We return true here so that the middleware function above
-        // is always called.
+        // Return true to ensure middleware function is always called
         return true
       },
     },
   }
 )
 
-export default function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
   const excludePattern =
-    "^(/(" + locales.join("|") + "))?/(dashboard|editor|mobile)/?.*?$"
+    "^(/(" +
+    locales.join("|") +
+    "))?/(dashboard|editor|mobile|select-template)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
   const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
-
-  if (isPublicPage) {
+  console.log("isPublicPage", isPublicPage)
+  const token = await getToken({ req })
+  if (isPublicPage && !token) {
     return intlMiddleware(req)
   } else {
     return (authMiddleware as any)(req)

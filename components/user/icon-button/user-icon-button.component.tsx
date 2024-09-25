@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -20,7 +21,10 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
   navigateToScreen,
+  setAlarm,
   setCurrentScreenName,
+  setErrorCount,
+  setSelectedScreen,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
@@ -61,6 +65,8 @@ import {
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
 import { IconButtonSettings } from "./user-icon-button.settings"
+import { useSearchParams } from "next/navigation"
+import hexoid from "hexoid"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -159,26 +165,97 @@ export const IconButtonGen = ({
   const pathName = usePathname()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const alarm = useAppSelector(
+    (state) =>
+      state?.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
+  const currentScreenTotal =
+    useAppSelector(
+      (state) =>
+        state?.screen?.screens[state.screen.selectedScreen]?.totalRequired
+    ) || ""
+  const currentScreenFilled =
+    useAppSelector(
+      (state) =>
+        state?.screen?.screens[state.screen.selectedScreen]?.totalFilled
+    ) || ""
+  const AllScreens = useAppSelector((state) => state?.screen?.screens)
   const selectedScreen = useAppSelector(
     (state) =>
       state?.screen?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-  //  const currentScreenName = useAppSelector((state) => state?.screen?.currentScreenName) || "";
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
   const screenValidated =
     useAppSelector(
       (state: RootState) =>
         state.screen?.screens[selectedScreen]?.screenValidated
     ) || false
-
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
+  }
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 < sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    "back-screen":
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    none: "none",
+  }
+  const newsc = nextScreen.screenName
+  const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
+  const index = sc.findIndex(
+    (screen) => screen.screenName === updatedScreenName
+  )
+  console.log(
+    "next-screen to navigatte",
+    newsc,
+    updatedScreenName,
+    props.buttonAction,
+    selectedScreen,
+    selectedScreen + 1,
+    sc.length,
+    selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
+    sc
+  )
   const handleNavigateToContent = () => {
-    dispatch(
-      validateScreen({
-        current: currentScreenName,
-        next: nextScreen.screenName,
-      })
+    console.log(
+      "btn navigating",
+      "currentScreenFilled",
+      currentScreenFilled,
+      "currentScreenTotal",
+      currentScreenTotal,
+      "index",
+      index
     )
+    if (index !== -1) {
+      if (currentScreenFilled === currentScreenTotal) {
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: updatedScreenName,
+          })
+        )
+        dispatch(setSelectedScreen(index))
+        handleSearch(updatedScreenName)
+      } else {
+        console.log("alarm called")
+        dispatch(setAlarm(true))
+        dispatch(setErrorCount((sc[selectedScreen]?.errorCount || 0) + 1))
+      }
+    }
     // if(screenValidated){
     //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
     //   router.push(`${pathName}#${nextScreen?.screenName}`);
@@ -187,6 +264,17 @@ export const IconButtonGen = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
+  console.log(
+    "screenssssss",
+    "currentScreenTotal",
+    currentScreenTotal,
+    "currentScreenFilled",
+    currentScreenFilled,
+    " sc[selectedScreen]",
+    sc[selectedScreen],
+    "currentScreenName",
+    currentScreenName
+  )
   return (
     <div
       className="relative w-full"
@@ -242,7 +330,7 @@ export const IconButtonGen = ({
             textOverflow: "ellipsis",
           }}
         >
-          {text}
+          <div dangerouslySetInnerHTML={{ __html: text }} />
         </div>
         {enableIcon && icon.pictureType !== PictureTypes.NULL && (
           <div
@@ -637,10 +725,13 @@ export const IconButton = ({
   const handlePropChangeThrottled = (property, value) => {
     throttledSetProp(property, value)
   }
+
   const handleNavigateToScreen = async () => {
+    console.log("entered validating")
     dispatch(
       validateScreen({ current: selectedScreen, next: nextScreen.screenName })
     )
+
     // dispatch(navigateToScreen(nextScreen));
     // if(screens){
     //   const screen = screens.find(screen => screen.screenName === nextScreen);
@@ -723,6 +814,7 @@ export const IconButton = ({
           onClick={() => handleNavigateToScreen()}
         >
           <div className="relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip">
+            {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
@@ -810,6 +902,7 @@ export enum IconButtonSizes {
 }
 
 export type IconButtonProps = {
+  id: string
   fontFamily: StyleProperty
   disabled: boolean
   enableIcon: boolean
@@ -931,9 +1024,8 @@ export const IconButtonDefaultProps: IconButtonProps = {
     screenName: "",
   },
   buttonAction: "next-screen",
+  id: `input-${hexoid(6)()}`,
 }
-
-
 
 IconButton.craft = {
   props: IconButtonDefaultProps,

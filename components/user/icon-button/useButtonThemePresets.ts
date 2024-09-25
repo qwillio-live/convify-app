@@ -102,6 +102,7 @@ const useButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
+    id: `input-${hexoid(6)()}`,
   }
 
   const outLinePreset: IconButtonProps = {
@@ -186,6 +187,7 @@ const useButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
+    id: `input-${hexoid(6)()}`,
   }
   const formPreset: IconButtonProps = {
     fontFamily: {
@@ -269,6 +271,7 @@ const useButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
+    id: `input-${hexoid(6)()}`,
   }
 
   return { filledPreset, outLinePreset, formPreset }

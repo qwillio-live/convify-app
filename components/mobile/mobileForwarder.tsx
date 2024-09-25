@@ -8,6 +8,7 @@ import { signOut } from "next-auth/react"
 import { isBrowser, isMobile } from "react-device-detect"
 import Illustration from "@/assets/images/mobile-forwarder.png"
 import Image from "next/image"
+import { MailCheck } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +21,7 @@ import { Separator } from "@/components/ui/separator"
 import { env } from "@/env.mjs"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { Icons } from "../icons"
 
 interface User {
   name: string
@@ -30,6 +32,8 @@ interface User {
 
 const MobileForwarderComponent = () => {
   const [userData, setUserData] = useState<User>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [emailSent, setEmailSent] = useState<boolean>(false)
   const router = useRouter()
   const t = useTranslations("Components")
 
@@ -44,9 +48,29 @@ const MobileForwarderComponent = () => {
     await signOut({ redirect: false })
     router.push("/login")
   }
+
+  const handleEmailSend = async () => {
+    try {
+      setIsLoading(true)
+      const request = await fetch("/api/authorise/send-email-link", {
+        method: "POST",
+        body: JSON.stringify({ template_id: 1 }),
+      })
+      if (!request.ok) {
+        setIsLoading(false)
+        return
+      } else {
+        setIsLoading(false)
+        setEmailSent(true)
+      }
+    } catch (error) {
+      console.log("Error sending email", error)
+    }
+  }
   const userId = userData?.id
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
+  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || 380937064139
+  const telegramUser =
+    process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "sofiaai_admin"
   return (
     <div className="font-sans3  flex min-h-screen flex-col   bg-white text-center md:justify-normal">
       <header className="flex items-center justify-between border-b-2 bg-[#FAFBFC] px-4 py-[7px]">
@@ -178,24 +202,41 @@ const MobileForwarderComponent = () => {
           </p>
         </div>
         <div className="font-sans3 mt-6 flex flex-col items-center justify-center space-y-2 md:space-y-4">
-          <Button variant={"default"} size={"mobileForwarder"}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="-1 -1 16 16"
-              width="1.5em"
-              height="1.2em"
-            >
-              <g fill="none" stroke="currentColor">
-                <rect width="13" height="10.5" x=".5" y="1.75" rx="1"></rect>
-                <path d="m.5 3l5.86 5a1 1 0 0 0 1.28 0l5.86-5"></path>
-              </g>
-            </svg>
-            <span className="ml-2">{t("Send to my inbox")}</span>
+          <Button
+            variant={"default"}
+            size={"mobileForwarder"}
+            onClick={() => (!emailSent ? handleEmailSend() : "")}
+            disabled={isLoading}
+          >
+            {emailSent ? (
+              <MailCheck size={20} className="mr-1" />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="-1 -1 16 16"
+                width="1.5em"
+                height="1.2em"
+              >
+                <g fill="none" stroke="currentColor">
+                  <rect width="13" height="10.5" x=".5" y="1.75" rx="1"></rect>
+                  <path d="m.5 3l5.86 5a1 1 0 0 0 1.28 0l5.86-5"></path>
+                </g>
+              </svg>
+            )}
+            <span className="ml-2 flex flex-row">
+              {!emailSent ? t("Send to my inbox") : t("Email was sent")}
+              {isLoading && (
+                <div>
+                  <Icons.spinner className=" z-20 ml-2  h-6 w-4 animate-spin" />
+                </div>
+              )}
+            </span>
           </Button>
           <Link
             href={`https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(
-              `${t("I would like to receive link for my account")}=${userId}`
+              `${"I would like to receive link for my account"}=${userId}`
             )}`}
+            target="_blank"
             className="flex w-full justify-center"
           >
             <Button variant={"green"} size={"mobileForwarder"}>
@@ -215,11 +256,12 @@ const MobileForwarderComponent = () => {
             </Button>
           </Link>
           <Link
-            href={`https://telegram.me/share/url?url=${encodeURIComponent(
-              telegramUser
-            )}&text=${encodeURIComponent(
-              `${t("I would like to receive link for my account")}=${userId}`
+            href={`https://t.me/${encodeURIComponent(
+              telegramUser as string
+            )}?text=${encodeURIComponent(
+              `${"I would like to receive link for my account"}=${userId}`
             )}`}
+            target="_blank"
             className="flex w-full justify-center"
           >
             <Button variant={"lightBlue"} size={"mobileForwarder"}>
@@ -244,9 +286,7 @@ const MobileForwarderComponent = () => {
       </main>
       <footer
         className="font-sans3 p-4 text-base font-semibold text-[#64748B] hover:cursor-pointer"
-        onClick={() =>
-          router.push("/dashboard/flows/create-flow/select-template?allow=true")
-        }
+        onClick={() => router.push("/select-template")}
       >
         {t("Continue on mobile device")}
       </footer>

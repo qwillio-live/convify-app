@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
@@ -39,6 +40,7 @@ const maxLength = 850
 
 interface StyledCustomHeadlineInput {
   fontFamily?: string
+  textColor?: string
   color?: string
   background?: string
   backgroundHover?: string
@@ -76,18 +78,10 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   display: flex;
   flex-direction: row;
   position: relative;
-  font-size: 42;
-  font-weight: 700;
+  font-size: ${(props) => `${props?.fontSize}`}px;
+  font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
   transition: all 0.2s ease;
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
 
   &:focus {
     border-color: ${(props) =>
@@ -95,7 +89,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   }
 
   color: ${(props) => `var(${props?.color})`};
-  overflow: hidden;
+
   max-width: ${(props) =>
     props.mobileScreen
       ? MobileContainerWidthValues[props.size || "medium"]
@@ -149,6 +143,7 @@ export const HeadlineTextGen = ({
   border,
   borderColor,
   borderHoverColor,
+  textColor,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -166,9 +161,10 @@ export const HeadlineTextGen = ({
     .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
     .replace(/<br>/g, "\n") // Replace <br> tags with new lines
 
+  console.log("container | bg", containerBackground, borderColor)
   return (
     <div
-      className="relative w-full"
+      className="relative mt-7 w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -185,15 +181,15 @@ export const HeadlineTextGen = ({
       <StyledCustomHeadlineInput
         fontFamily={primaryFont}
         color={color?.value}
-        background={background?.value}
+        background={containerBackground}
         backgroundHover={backgroundHover?.value}
         borderHoverColor={borderHoverColor?.value}
         colorHover={colorHover?.value}
         flexDirection={flexDirection}
-        fontSize={fontSize?.value}
-        fontWeight={fontWeight?.value}
+        fontSize={fontSize}
+        fontWeight={fontWeight}
         // textAlign={textAlign?.value}
-        // justifyContent={justifyContent}
+        justifyContent={justifyContent}
         borderColor={primarycolor}
         border={border}
         marginLeft={marginLeft}
@@ -212,7 +208,7 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         text={t("HeadlineDescription")}
         {...props}
-        className="text-[1rem]"
+        className={`!text-[24px] md:text-[${fontSize}px] items-center`}
         onClick={() => console.log(text)}
       >
         <h1
@@ -221,15 +217,16 @@ export const HeadlineTextGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${primaryTextColor}`,
+            color: `${textColor !== "#ffffff" ? textColor : primaryTextColor}`,
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
+            lineHeight: "1.5",
           }}
         >
           {processedText.split("\n").map((line, index) => (
             <span key={index}>
-              {line}
+              <div dangerouslySetInnerHTML={{ __html: line }} />
               <br />
             </span>
           ))}
@@ -241,6 +238,7 @@ export const HeadlineTextGen = ({
 
 export const HeadlineText = ({
   fontFamily,
+  textColor,
   borderHoverColor,
   size,
   buttonSize,
@@ -480,6 +478,7 @@ export const HeadlineText = ({
           text={t("HeadlineDescription")}
         >
           <div className="flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-x-clip">
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
@@ -488,7 +487,9 @@ export const HeadlineText = ({
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${primaryTextColor}`,
+                color: `${
+                  textColor !== "#ffffff" ? textColor : primaryTextColor
+                }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
@@ -538,6 +539,7 @@ export type HeadlineTextProps = {
   preset: string
   lineHeight: string | number
   mobileFontSize: number
+  textColor?: string
 }
 export enum TextContainerSize {
   small = "small",
@@ -607,6 +609,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   tagType: "h1",
   preset: "h2",
   mobileFontSize: 24,
+  textColor: "#ffffff",
 }
 
 HeadlineText.craft = {

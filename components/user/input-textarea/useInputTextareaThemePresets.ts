@@ -9,6 +9,15 @@ import {
   UserInputTextareaProps,
 } from "./user-input-textarea.component"
 
+export const produceRandomLetters = (length: number) => {
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789"
+  let result = ""
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return result
+}
+
 const useInputTextareaThemePresets = () => {
   const t = useTranslations("Components")
   const theme = useAppSelector((state) => state.theme)
@@ -23,7 +32,6 @@ const useInputTextareaThemePresets = () => {
   const outlinedPresetTextarea: UserInputTextareaProps = {
     inputValue: t("Text Area"),
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     height: 95,
@@ -76,7 +84,7 @@ const useInputTextareaThemePresets = () => {
     fullWidth: true,
     size: UserInputSizes.medium,
     label: t("Label"),
-    fieldName: t("Field Name"),
+    fieldName: t("textarea") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
@@ -100,7 +108,6 @@ const useInputTextareaThemePresets = () => {
   const underlinedPresetTextarea: UserInputTextareaProps = {
     inputValue: t("Text Area"),
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -148,7 +155,7 @@ const useInputTextareaThemePresets = () => {
     fullWidth: true,
     size: UserInputSizes.medium,
     label: t("Label"),
-    fieldName: t("Field Name"),
+    fieldName: t("textarea") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",

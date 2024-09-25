@@ -130,7 +130,7 @@ export const newScreensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
-    resetScreens: () => initialState,
+    resetScreens: (state) => initialState,
     setNewScreensData: (state, action: PayloadAction<any>) => {
       state.flowName = action.payload.name
       state.firstScreenName = action.payload.steps[0].name
@@ -143,7 +143,8 @@ export const newScreensSlice = createSlice({
       })
 
       state.screensFieldsList = screensFieldsList
-
+      state.screensHeader = action.payload.headerData ?? state.screensHeader
+      state.screensFooter = action.payload.footerData ?? state.screensFooter
       state.selectedScreen = 0
       state.screens = action.payload.steps.map((screen: any) => ({
         screenId: screen.id,
@@ -167,33 +168,10 @@ export const newScreensSlice = createSlice({
       // state.screensHeader = JSON.stringify(headerSlice);
       return
     },
-    addField: (state, action: PayloadAction<ScreenFieldType>) => {
+
+    removeFields: (state, action: PayloadAction<string>) => {
       const selectedScreen = state.selectedScreen
-      const selectedScreenObj = state.screens[selectedScreen]
-      const field = action.payload
-
-      if (!selectedScreenObj) {
-        // Handle case where selected screen is not found
-        console.error(`Selected screen (${selectedScreen}) not found in state.`)
-        return
-      }
-
-      // Clone the existing screenFields to avoid mutating state directly
-      const screenFields = { ...selectedScreenObj.screenFields }
-
-      // Update the screenFields with the new field
-      screenFields[field.fieldId] = field
-
-      // Update state with the modified screenFields
-      state.screens[selectedScreen].screenFields = screenFields
-
-      // Update screensFieldsList with the modified screenFields
-      const selectedId = selectedScreenObj.screenId
-      state.screensFieldsList[selectedId] = screenFields
-    },
-    removeField: (state, action: PayloadAction<string>) => {
-      const selectedScreen = state.selectedScreen
-      const selectedScreenId = state.screens[selectedScreen].screenId
+      const selectedScreenId = state.screens[selectedScreen]?.screenId
       const fieldId = action.payload
       const screenFields = state.screens[selectedScreen]?.screenFields
 
@@ -240,55 +218,55 @@ export const newScreensSlice = createSlice({
       }
       state.screensFieldsList = screenFieldsList
     },
-    validateScreen: (
-      state,
-      action: PayloadAction<{ current: number | string; next: string }>
-    ) => {
-      // const screenName = state.screens[action.payload];
-      console.log("SCREEN NAMES ENTRY: ", action.payload)
-      let screenName = ""
-      if (typeof action.payload.current === "number") {
-        screenName = state.screens[action.payload.current].screenName
-      } else {
-        screenName = action.payload.current
-      }
+    // validateScreens: (
+    //   state,
+    //   action: PayloadAction<{ current: number | string; next: string }>
+    // ) => {
+    //   // const screenName = state.screens[action.payload];
+    //   console.log("SCREEN NAMES ENTRY: ", action.payload)
+    //   let screenName = ""
+    //   if (typeof action.payload.current === "number") {
+    //     screenName = state.screens[action.payload.current].screenName
+    //   } else {
+    //     screenName = action.payload.current
+    //   }
 
-      let screenId = ""
-      let screenIndex = 0
-      state.screens.map((screen, index) => {
-        console.log("SCREEN NAMES ARE: ", screen.screenName)
-        if (screen.screenName === screenName) {
-          screenId = screen.screenId
-          screenIndex = index
-        }
-      })
-      console.log("SCREEN ID GOT: ", screenId)
-      // const screenFields = screen.screenFields as ScreenFieldsObject;
-      const screenFields = state.screensFieldsList[screenId]
+    //   let screenId = ""
+    //   let screenIndex = 0
+    //   state.screens.map((screen, index) => {
+    //     console.log("SCREEN NAMES ARE: ", screen.screenName)
+    //     if (screen.screenName === screenName) {
+    //       screenId = screen.screenId
+    //       screenIndex = index
+    //     }
+    //   })
+    //   console.log("SCREEN ID GOT: ", screenId)
+    //   // const screenFields = screen.screenFields as ScreenFieldsObject;
+    //   const screenFields = state.screensFieldsList[screenId]
 
-      let errors = false
-      Object.values(screenFields).forEach((field: ScreenFieldType) => {
-        if (field.fieldRequired && !field.fieldValue) {
-          field.toggleError = true
-          state.screens[screenIndex].screenValidated = true
-          errors = true
-        } else {
-          field.toggleError = false
-          state.screens[screenIndex].screenValidated = true
-          // state.screens[screenIndex].screenToggleError = false;
-        }
-      })
-      state.screens[screenIndex].screenToggleError = errors
-      if (
-        errors === false &&
-        action.payload.next !== state.currentScreenName &&
-        action.payload.next
-      ) {
-        state.currentScreenName = action.payload.next
-      }
-      state.screens[screenIndex].screenFields = screenFields
-      state.screensFieldsList[screenId] = screenFields
-    },
+    //   let errors = false
+    //   Object.values(screenFields).forEach((field: ScreenFieldType) => {
+    //     if (field.fieldRequired && !field.fieldValue) {
+    //       field.toggleError = true
+    //       state.screens[screenIndex].screenValidated = true
+    //       errors = true
+    //     } else {
+    //       field.toggleError = false
+    //       state.screens[screenIndex].screenValidated = true
+    //       // state.screens[screenIndex].screenToggleError = false;
+    //     }
+    //   })
+    //   state.screens[screenIndex].screenToggleError = errors
+    //   if (
+    //     errors === false &&
+    //     action.payload.next !== state.currentScreenName &&
+    //     action.payload.next
+    //   ) {
+    //     state.currentScreenName = action.payload.next
+    //   }
+    //   state.screens[screenIndex].screenFields = screenFields
+    //   state.screensFieldsList[screenId] = screenFields
+    // },
     setNewValidateScreen: (
       state,
       action: PayloadAction<{
@@ -306,7 +284,7 @@ export const newScreensSlice = createSlice({
         screen.screenToggleError = screenToggleError
       }
     },
-    resetScreensState: (state) => {
+    resetScreensStates: (state) => {
       state.selectedScreen = 0
       state.headerId = ""
       state.headerMode = false
@@ -316,28 +294,28 @@ export const newScreensSlice = createSlice({
       // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
       state.editorLoad = state.screens[state.selectedScreen].screenData
     },
-    setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = action.payload
+    // setEditorLoad: (state, action: PayloadAction<any>) => {
+    //   state.editorLoad = action.payload
 
-      if (state.headerMode === true) {
-        state.screensHeader = action.payload
-      } else if (state.footerMode === true) {
-        state.screensFooter = action.payload
-      } else {
-        const selectedScreen = state.screens[state.selectedScreen]
+    //   if (state.headerMode === true) {
+    //     state.screensHeader = action.payload
+    //   } else if (state.footerMode === true) {
+    //     state.screensFooter = action.payload
+    //   } else {
+    //     const selectedScreen = state.screens[state.selectedScreen]
 
-        if (!selectedScreen) {
-          // Handle case where selected screen is not found
-          console.error(
-            `Selected screen (${state.selectedScreen}) not found in state.`
-          )
-          return
-        }
+    //     if (!selectedScreen) {
+    //       // Handle case where selected screen is not found
+    //       console.error(
+    //         `Selected screen (${state.selectedScreen}) not found in state.`
+    //       )
+    //       return
+    //     }
 
-        // Update screenData of the selected screen
-        selectedScreen.screenData = action.payload
-      }
-    },
+    //     // Update screenData of the selected screen
+    //     selectedScreen.screenData = action.payload
+    //   }
+    // },
 
     setScreenHeader: (state, action: PayloadAction<any>) => {
       state.screensHeader = JSON.stringify(action.payload)
@@ -522,7 +500,9 @@ export const newScreensSlice = createSlice({
       } else if (screen) {
         screen.screenName = screenName
       }
-state.firstScreenName = state.screens[0]? state.screens[0].screenName: ''
+      state.firstScreenName = state.screens[0]
+        ? state.screens[0].screenName
+        : ""
     },
     setRenamingScreen: (state, action: PayloadAction<boolean>) => {
       state.renamingScreen = action.payload

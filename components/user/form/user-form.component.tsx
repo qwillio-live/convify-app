@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import { transform } from "next/dist/build/swc"
 import hexoid from "hexoid"
@@ -20,10 +21,13 @@ import {
 import formPresetPhone from "../input-phone/useInputPhoneThemePresets"
 import { UserInputPhone } from "../input-phone/user-input-phone.component"
 import formPreset from "../input/useInputThemePresets"
-import { UserInput } from "../input/user-input.component"
+import { UserInput, UserInputGen } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { FormSettings } from "./user-form-settings"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
+import useInputThemePresets from "../input/useInputThemePresets"
+import useBackThemePresets from "../backButton/back-theme"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -197,8 +201,8 @@ export const FormContent = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
       className={cn(
-        `border border-transparent relative`,
-        isHovered ? "border border-blue-500 border-dotted" : ""
+        `relative border border-transparent`,
+        isHovered ? "border border-dotted border-blue-500" : ""
       )}
     >
       <FormContentGen
@@ -364,7 +368,8 @@ export const Form = ({ children, ...props }) => {
   const t = useTranslations("Components")
   const { outlinedPresetMail, underlinedPresetMail } =
     useInputMailThemePresets()
-  const { outLinePreset, filledPreset, formPreset } = useButtonThemePresets()
+  const { formPresets } = useInputThemePresets()
+  const { formPreset } = useButtonThemePresets()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   const adjustWidth = props.size
@@ -372,7 +377,7 @@ export const Form = ({ children, ...props }) => {
   return (
     <FormContainer
       background={props.background}
-      className="card-container relative shrink-0 overflow-visible basis-full min-w-full flex justify-center items-center flex-col w-[800px]"
+      className="card-container relative flex w-[800px] min-w-full shrink-0 basis-full flex-col items-center justify-center overflow-visible"
       ref={(ref: any) => connect(drag(ref))}
       onMouseEnter={(e) => {
         e.stopPropagation()
@@ -398,8 +403,8 @@ export const Form = ({ children, ...props }) => {
         ref={(ref: any) => connect(drag(ref))}
         style={{ width: "100%", height: "100%" }}
         className={`${
-          isHovered ? "border border-blue-500 border-dotted" : ""
-        } border border-transparent relative`}
+          isHovered ? "border border-dotted border-blue-500" : ""
+        } relative border border-transparent`}
       >
         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element
@@ -436,13 +441,14 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             size={"full"}
             enableIcon={false}
+            id={`input-010101`}
             style={{ overflow: "visible" }}
           />
           <Element
             canvas
             is={UserInput}
+            {...formPresets}
             floatingLabel={true}
-            {...formPreset}
             label={t("LastName")}
             placeholder="Enter your last name"
             backgroundColor={"transparent"}
@@ -454,6 +460,7 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             enableIcon={false}
             size={"full"}
+            id={`input-000111`}
             style={{ overflow: "visible" }}
           />
         </Element>
@@ -488,7 +495,7 @@ export const Form = ({ children, ...props }) => {
           marginTop={0}
           marginBottom={0}
           label={t("CheckboxPlaceholder")}
-          fieldName={t("CheckboxFieldName")}
+          fieldName={t("checkbox") + "-" + produceRandomLetters(6)}
           inputRequired={false}
           size={"full"}
         />

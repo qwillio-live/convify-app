@@ -65,6 +65,7 @@ export const MultipleChoiceSettings = () => {
       fontFamily,
       size,
       required,
+      labelColor,
       fieldName: originalFieldName,
       layout,
       containerBackground,
@@ -289,7 +290,9 @@ export const MultipleChoiceSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
 
@@ -462,6 +465,7 @@ export const MultipleChoiceSettings = () => {
                   marginRight: 8,
                   selections: previewSelections,
                   choices: previewChoices,
+                  labelColor: labelColor,
                 }}
               />
             </Card>
@@ -490,6 +494,7 @@ export const MultipleChoiceSettings = () => {
                   marginRight: 8,
                   selections: previewSelections,
                   choices: previewChoices,
+                  labelColor: labelColor,
                 }}
               />
             </Card>
@@ -518,6 +523,7 @@ export const MultipleChoiceSettings = () => {
                   marginRight: 8,
                   selections: previewSelections,
                   choices: previewChoices,
+                  labelColor: labelColor,
                 }}
               />
             </Card>
@@ -705,13 +711,15 @@ const MultipleChoiceItemNavigationSettings = ({
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
 
   useEffect(() => {
     if (!nextScreen) {
-      onChange("next-screen", nextScreenName)
+      onChange("nextScreen", nextScreenName)
     }
   }, [onChange])
 
@@ -772,7 +780,9 @@ const MultipleChoiceItemTrackingSettings = ({
 
   return (
     <div className="flex items-center space-x-2">
-      <Label className="w-14 shrink-0" htmlFor="label-event">{`${t("Option")} ${index + 1}`}</Label>
+      <Label className="w-14 shrink-0" htmlFor="label-event">{`${t("Option")} ${
+        index + 1
+      }`}</Label>
       <Input
         value={choice.trackingEvent ?? ""}
         defaultValue={choice.trackingEvent ?? ""}

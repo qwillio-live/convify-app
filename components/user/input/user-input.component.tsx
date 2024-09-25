@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
@@ -19,6 +20,8 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
   setFieldProp,
+  setPreviewScreenData,
+  setUpdateFilledCount,
   setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -80,8 +83,54 @@ export const UserInputGen = ({ ...props }) => {
   const icon = props.icon
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
+  const t = useTranslations("Components")
+  const [isFilled, setIsFilled] = useState(false)
+
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
+
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
+
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.inputRequired
+    }
+    return false
+  })
+
+  console.log(
+    "user input",
+    "screenData",
+    screenData,
+    "nodeId",
+    props.nodeId,
+    "parsedData",
+    // parsedData,
+    "props",
+    props,
+    "fullScreenData",
+    fullScreenData,
+    "screenDatatry"
+    // screenDatatry
+  )
   useEffect(() => {
-    setInputValue(fieldValue)
+    setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
+    if (screenData?.length > 0) {
+      setIsFilled(true)
+    }
     dispatch(
       setFieldProp({
         screenId: props.parentScreenId,
@@ -152,7 +201,10 @@ export const UserInputGen = ({ ...props }) => {
       fieldInScreen &&
       toggleError) ||
     false
-
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -169,7 +221,28 @@ export const UserInputGen = ({ ...props }) => {
       inputRef.current.focus()
     }
   }
-
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
   // useEffect(() => {
   //   if(inputField){
   //     if(inputField.fieldValue==0){
@@ -183,6 +256,7 @@ export const UserInputGen = ({ ...props }) => {
 
   return (
     <div
+      ref={itemRefNew}
       className={cn(
         "relative focus-visible:ring-0 focus-visible:ring-transparent"
       )}
@@ -226,9 +300,14 @@ export const UserInputGen = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}
@@ -255,6 +334,11 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -263,7 +347,7 @@ export const UserInputGen = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row  gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(
@@ -297,8 +381,10 @@ export const UserInputGen = ({ ...props }) => {
               </div>
             )}
             <UserInputStyled
+              value={inputValue}
+              data-label={props?.fieldName || ""}
               // ref={inputRef}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -306,7 +392,7 @@ export const UserInputGen = ({ ...props }) => {
                   : props.borderColor.value
               }
               // error={props.error}
-              error={fieldError}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -338,18 +424,56 @@ export const UserInputGen = ({ ...props }) => {
           focus-visible:outline-none
           focus-visible:ring-0
           focus-visible:ring-transparent
-          focus-visible:ring-offset-0 peer-focus-visible:outline-none`
+          focus-visible:ring-offset-0 peer-focus-visible:outline-none
+          ${!isFilled && alarm && isRequired && " !border-red-600"}
+          `
               )}
               onChange={(e) => {
-                setInputValue(e.target.value),
-                  dispatch(
-                    setFieldProp({
-                      screenId: props.parentScreenId,
-                      fieldId: props.nodeId,
-                      fieldName: "fieldValue",
-                      fieldValue: e.target.value,
-                    })
-                  )
+                if (isRequired) {
+                  if (isFilled && e.target.value === "") {
+                    dispatch(setUpdateFilledCount(-1))
+                    setIsFilled(false)
+                    setInputValue(e.target.value)
+                  } else {
+                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    setInputValue(e.target.value),
+                      dispatch(
+                        setFieldProp({
+                          screenId: props.parentScreenId,
+                          fieldId: props.nodeId,
+                          fieldName: "fieldValue",
+                          fieldValue: e.target.value,
+                        }),
+                        dispatch(
+                          setPreviewScreenData({
+                            nodeId: props.nodeId,
+                            isArray: false,
+                            entity: "inputValue",
+                            newSelections: [e.target.value],
+                          })
+                        ),
+                        setIsFilled(true)
+                      )
+                  }
+                } else {
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setFieldProp({
+                        screenId: props.parentScreenId,
+                        fieldId: props.nodeId,
+                        fieldName: "fieldValue",
+                        fieldValue: e.target.value,
+                      }),
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: [e.target.value],
+                        })
+                      )
+                    )
+                }
               }}
               onBlur={() => {
                 setIsActive(false)
@@ -360,9 +484,9 @@ export const UserInputGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {fieldError && (
+          {!isFilled && isRequired && alarm && (
             <div
-              className="error-container mt-0 flex flex-row items-center gap-0 border"
+              className={`error-container mt-0 flex flex-row items-center gap-0 border text-red-600`}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -376,7 +500,7 @@ export const UserInputGen = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}
@@ -408,7 +532,7 @@ const UserInputStyled = styled(Input)<{
   color: ${(props) => props.textColor};
   max-width: 100%;
   min-height: 50px;
-  background-color: "transparent";
+  background: #ffffff;
   font-family: ${(props) => `var(${props?.primaryFont})`};
   border-top-right-radius: ${(props) => props.topRightRadius}px;
   border-top-left-radius: ${(props) => props.topLeftRadius}px;
@@ -429,6 +553,7 @@ export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
+
     parent,
     selected,
     isHovered,
@@ -447,7 +572,9 @@ export const UserInput = ({ ...props }) => {
     query: { node },
   } = useEditor()
   const dispatch = useAppDispatch()
-
+  const primaryTextColor = useAppSelector(
+    (state) => state?.theme?.text?.primaryColor
+  )
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
@@ -607,6 +734,7 @@ export const UserInput = ({ ...props }) => {
           {!props.floatingLabel && (
             <>
               {/** @ts-ignore */}
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}
@@ -626,6 +754,11 @@ export const UserInput = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               />
             </>
@@ -641,7 +774,7 @@ export const UserInput = ({ ...props }) => {
               }}
               className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (props.isActive && props.floatingLabel) ||
-                (props.inputValue.length > 0 && props.floatingLabel)
+                (props.inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
                   : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${
@@ -652,6 +785,11 @@ export const UserInput = ({ ...props }) => {
 
       `}
               style={{
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 fontFamily: `var(${props.primaryFont.value})`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
@@ -699,7 +837,7 @@ export const UserInput = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={inputRef}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -800,7 +938,7 @@ export type UserInputProps = {
   fieldType: "data" | "action" | "design"
   required: boolean
   fontSize: number
-  textColor: string
+  textColor?: string
   parentScreenId: string
   fontWeight: string
   marginLeft: number
@@ -864,7 +1002,7 @@ export const UserInputDefaultProps: UserInputProps = {
   fieldType: "data",
   required: false,
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,

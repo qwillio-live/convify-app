@@ -80,6 +80,19 @@
     "Are you sure want to delete the Flow": "Are you sure want to delete the Flow?"
   },
   "Components": {
+    "Text Color": "Text Color",
+    "Label Color": "Label Color",
+    "Title Color": "Title Color",
+    "Subtitle Color": "Subtitle Color",
+    "Login to your account": "Login to your account",
+    "Create an account to get started": "Create an account to get started",
+    "flows": "Flows",
+    "Preview": "Preview",
+    "Select template": "Select template",
+    "Sign up for free": "Sign up for free",
+    "Log in": "Log in",
+    "checkbox": "checkbox",
+    "textarea": "textarea",
     "InputMail": "Email",
     "FontSize": "Font Size",
     "FontWeight": "Font Weight",
@@ -350,6 +363,7 @@
     "Send on Telegram": "Send on Telegram",
     "Send on WhatsApp": "Send on WhatsApp",
     "Send to my inbox": "Send to my inbox",
+    "Email was sent": "Email was sent",
     "Click the button below to send a link to your inbox and continue your journey with Convify on another device": "Click the button below to send a link to your inbox and continue your journey with Convify on another device",
     "Convify is best experienced on a bigger screen": "Convify is best experienced on a bigger screen",
     "Toggle user menu": "Toggle user menu",
@@ -365,6 +379,8 @@
     "I would like to get link for my flow": "I would like to get link for my flow",
     "Edit the link and let people know what your flow is about": "Edit the link and let people know what your flow is about.",
     "I would like to receive link for my account": "I would like to receive link for my account",
+    "Please enter a valid email address": "Please enter a valid email address",
+    "Please enter a valid phone number": "Please enter a valid phone number",
     "Helper Information": "Click and hold a block from list, move it to the panel to the left and release it above the drop zone to add it."
   },
   "CreateFlow": {
@@ -381,6 +397,8 @@
     "Support": "Support",
     "Logout": "Logout",
     "My workspace": "My workspace",
+    "Flow published successfully!": "Flow published successfully!",
+    "Error publishing flow": "Error publishing flow",
     "ResultsPage": {
       "Pick a date": "Pick a date",
       "This flow doesnt have any responses yet": "This flow doesn’t have any responses.",

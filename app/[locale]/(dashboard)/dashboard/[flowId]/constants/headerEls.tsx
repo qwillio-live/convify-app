@@ -5,7 +5,6 @@ import { useRouter, usePathname } from "next/navigation"
 import { Eye, Plus } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
-
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -18,6 +17,16 @@ import {
 import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId"
 import { useEffect, useState } from "react"
 import { User } from "../../page"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import {
+  setResetTotalFilled,
+  setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { revalidateFlow } from "@/actions/flow/revalidateFlow"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Icons } from "@/components/icons"
+import { env } from "@/env.mjs"
+
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
     const key = localStorage.key(i)
@@ -28,13 +37,20 @@ const clearFlowNamesFromLocalStorage = () => {
 }
 
 const Header = ({ flowId }) => {
-  const t = useTranslations("CreateFlow") // Initialize your translation hook
+  const t = useTranslations("CreateFlow")
   const router = useRouter()
   const currentPath = usePathname()
-
+  const dispatch = useAppDispatch()
   const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
-  console.log("flowId in header", flowId)
+  // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
+  const screeenName = useAppSelector(
+    (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
+  )
+  const selectedScreen =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
@@ -47,11 +63,11 @@ const Header = ({ flowId }) => {
       setIsSmallScreen(window.innerWidth <= 370)
     }
 
-    handleResize() // Check screen size on component mount
-    window.addEventListener("resize", handleResize) // Add resize event listener
+    handleResize()
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize) // Clean up event listener on component unmount
+      window.removeEventListener("resize", handleResize)
     }
   }, [])
 
@@ -64,15 +80,41 @@ const Header = ({ flowId }) => {
     await signOut({ redirect: false })
     router.push("/login")
   }
+
   const linkClasses = (path) =>
     `h-full rounded-none border-b-2 md:border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm md:text-base ${
       isSmallScreen ? "px-2.5" : "px-3"
     } ${
       currentPath?.split("/").at(-1) === path.split("/").at(-1) ||
       currentPath === "/pt" + path
-        ? "text-[#23262C] border-current"
-        : "text-[#9B9A99] border-transparent"
+        ? "text-foreground border-current"
+        : "text-muted-foreground border-transparent"
     }`
+    const publishFlow = async () => {
+      try {
+        setIsLoading(true)
+  
+        // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
+        //   method: "GET",
+        // })
+        // if (res.ok) {
+  
+        setTimeout(async () => {
+          const response = await fetch(`/api/flows/published/${flowId}`, {
+            method: "POST",
+          })
+          if (response.ok) {
+            revalidateFlow({ tag: "publishedFlow" })
+            router.push(`./share`)
+          }
+          setIsLoading(false)
+          router.push(`./share`)
+        }, 6000)
+        // }
+      } catch (err) {
+        console.error("Publishing flow failed:", err)
+      }
+    }
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#F6F6F6] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6 font-poppins">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
@@ -93,7 +135,7 @@ const Header = ({ flowId }) => {
 
       <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
-          <Link
+        <Link
             className={linkClasses("/dashboard/flows/create-flow")}
             href={`/dashboard/${flowId}/create-flow`}
             style={{
@@ -123,16 +165,36 @@ const Header = ({ flowId }) => {
         </div>
       </div>
 
-      <div className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full">
-        <Link href="/dashboard/flows/preview-flow" target="_blank">
+      <div
+        className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full"
+        onClick={() => {
+          dispatch(setResetTotalFilled(true))
+          dispatch(setSelectedScreen(selectedScreen))
+          revalidateFlow({ tag: "previewFlow" })
+        }}
+      >
+        <Link
+          href={`/dashboard/preview-flow/${flowId}?screen=${screeenName}`}
+          target="_blank"
+        >
           <Button variant="outline" size="sm" className="h-8 md:h-10 gap-2 md:px-4 px-2 border border-[#E6E2DD]">
             <Eye className="size-4 text-[#23262C]" />
             <div className="md:block hidden font-normal text-sm md:text-base ">{t("Preview")}</div>
           </Button>
         </Link>
         <div className="">
-          <Button size="sm" className="h-8 md:h-10  md:px-4 px-3 gap-1 py-2 text-sm md:text-base">
+          <Button
+            size="sm"
+            className="h-8 md:h-10  md:px-4 px-3 gap-1 py-2 text-sm md:text-base"
+            onClick={publishFlow}
+            disabled={isLoading ? true : false}
+          >
             <span className="font-normal">{t("Publish")}</span>
+            {isLoading && (
+              <div>
+                <Icons.spinner className=" z-20  size-4 animate-spin" />
+              </div>
+            )}
           </Button>
         </div>
 

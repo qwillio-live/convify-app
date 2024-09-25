@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
@@ -343,6 +344,7 @@ const StepItem = ({
         </div>
       </div>
       <div className="w-full max-w-[200px]">
+        {/** @ts-ignore */}
         {/** @ts-ignore */}
         <ContentEditable
           className="text-enter w-full text-center text-lg"

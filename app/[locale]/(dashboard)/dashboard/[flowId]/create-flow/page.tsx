@@ -22,13 +22,65 @@ export default function CreateFlowsPage({
 }: {
   params: { flowId: string; en: string }
 }) {
+  const fontMappings: Record<string, string> = {
+    "--font-roboto": "Roboto:wght@100;300;400;500;700;900",
+    "--font-inter": "Inter:wght@100;300;400;500;600;700;800;900",
+    "--font-roboto-mono": "Roboto+Mono:wght@100;300;400;500;700",
+    "--font-open-sans": "Open+Sans:wght@300;400;600;700",
+    "--font-montserrat": "Montserrat:wght@100;300;400;500;600;700;800;900",
+    "--font-lato": "Lato:wght@100;300;400;700;900",
+    "--font-oswald": "Oswald:wght@400;700",
+    "--font-raleway": "Raleway:wght@100;300;400;500;600;700;800;900",
+    "--font-pt-sans": "PT+Sans:wght@400",
+    "--font-merriweather": "Merriweather:wght@300;400;700;900",
+    "--font-nunito": "Nunito:wght@200;300;400;600;700;800;900",
+    "--font-playfair-display": "Playfair+Display:wght@400;700",
+    "--font-poppins": "Poppins:wght@100;300;400;500;600;700;800;900",
+    "--font-ubuntu": "Ubuntu:wght@300;400;500;700",
+    "--font-mukta": "Mukta:wght@200;300;400;500;600;700",
+    "--font-rubik": "Rubik:wght@300;400;500;600;700;900",
+    "--font-work-sans": "Work+Sans:wght@100;300;400;500;600;700;800;900",
+    "--font-roboto-condensed": "Roboto+Condensed:wght@300;400;700",
+    "--font-noto-sans": "Noto+Sans:wght@100;300;400;500;700",
+    "--font-fira-sans": "Fira+Sans:wght@100;300;400;500;700;900",
+    "--font-quicksand": "Quicksand:wght@300;400;500;600;700",
+    "--font-karla": "Karla:wght@300;400;500;600;700",
+    "--font-cabin": "Cabin:wght@400;500;600;700",
+    "--font-barlow": "Barlow:wght@100;300;400;500;600;700;900",
+    "--font-arimo": "Arimo:wght@400;500;600;700",
+    "--font-teko": "Teko:wght@300;400;500;600;700",
+    "--font-catamaran": "Catamaran:wght@100;300;400;500;700;900",
+    "--font-libre-franklin":
+      "Libre+Franklin:wght@100;300;400;500;600;700;800;900",
+    "--font-oxygen": "Oxygen:wght@300;400;700",
+    "--font-heebo": "Heebo:wght@100;300;400;500;700;900",
+    "--font-asap": "Asap:wght@100;300;400;500;700;900",
+    "--font-bitter": "Bitter:wght@100;300;400;500;700;900",
+    "--font-ibm-plex-sans": "IBM+Plex+Sans:wght@100;300;400;500;600;700",
+    "--font-exo-2": "Exo+2:wght@100;300;400;500;600;700;800;900",
+    "--font-dosis": "Dosis:wght@300;400;500;600;700",
+    "--font-pt-serif": "PT+Serif:wght@400;700",
+    "--font-overpass": "Overpass:wght@100;300;400;500;600;700;900",
+    "--font-varela-round": "Varela+Round:wght@400",
+    "--font-questrial": "Questrial:wght@400",
+    "--font-inconsolata": "Inconsolata:wght@200;300;400;500;600;700;900",
+    "--font-rokkitt": "Rokkitt:wght@100;300;400;500;700;900",
+    "--font-red-hat-display": "Red+Hat+Display:wght@300;400;500;700;900",
+    "--font-cairo": "Cairo:wght@200;300;400;500;600;700;900",
+    "--font-lora": "Lora:wght@400;500;600;700",
+    "--font-titillium-web": "Titillium+Web:wght@200;300;400;600;700;900",
+    "--font-bebas-neue": "Bebas+Neue:wght@400",
+    "--font-anton": "Anton:wght@400",
+    "--font-zilla-slab": "Zilla+Slab:wght@300;400;500;600;700",
+    "--font-nunito-sans": "Nunito+Sans:wght@200;300;400;500;600;700;900",
+    "--font-roboto-slab": "Roboto+Slab:wght@100;300;400;500;600;700;900",
+    "--font-sans3": "Source+Sans+3:wght@200;300;400;500;600;700;800;900",
+  }
   const router = useRouter()
   const flowId = params?.flowId
   console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
-  const [link, setLink] = useState(
-    "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
-  )
+  const [customCss, setCustomCsss] = useState("")
 
   const dispatch = useAppDispatch()
   const firstScreenName =
@@ -43,6 +95,7 @@ export default function CreateFlowsPage({
     setTab(value)
     // router.replace(`/dashboard/flows/${value}`);
   }
+
   useEffect(() => {
     const getFlowData = async () => {
       try {
@@ -51,6 +104,30 @@ export default function CreateFlowsPage({
         console.log("flowData", flowData)
         dispatch(setScreensData(flowData))
         dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+        const primaryFontKey =
+          flowData?.flowSettings?.text?.primaryFont || "--font-roboto"
+
+        const getFontImport = (fontKeys: string[]) => {
+          const fontQueries = fontKeys
+            .map((fontKey) => fontMappings[fontKey])
+            .filter(Boolean)
+            .join("&family=")
+
+          return fontQueries
+            ? `@import url('https://fonts.googleapis.com/css2?family=${fontQueries}&display=swap');`
+            : ""
+        }
+
+        const primaryFontImport = getFontImport([primaryFontKey])
+        setCustomCsss(`
+        :root {
+          ${flowData?.flowSettings?.text?.primaryFont}: ${fontMappings[
+          flowData?.flowSettings?.text?.primaryFont
+        ]
+          .split(":")[0]
+          .replace(/\+/g, " ")};
+        }
+        }`)
       } catch (error) {
         console.error("Error fetching flow data:", error) // Handle the error
       }
@@ -65,27 +142,33 @@ export default function CreateFlowsPage({
   }, []) // Add flowId as a dependency if it can change
 
   return (
-    <div className="fixed min-h-screen w-full">
-      <Tabs
-        defaultValue="create"
-        onValueChange={onTabChange}
-        className="flex min-h-screen flex-col"
-      >
-        <div className="sticky top-0 z-[60]">
-          <Header flowId={flowId} />
-        </div>
-        <main
-          className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#F6F6F6] ${
-            tab === "results" ? "" : tab === "share" ? "" : ""
-          }`}
+    <>
+      <style>
+        {`
+            ${customCss}
+          `}
+      </style>
+      <div className="fixed min-h-screen w-full">
+        <Tabs
+          defaultValue="create"
+          onValueChange={onTabChange}
+          className="flex min-h-screen flex-col"
         >
-          {/* --New Commit-- */}
-          <div className="tabs-content">
-            <TabsContent className="mt-0" value="create">
-              <CreateFlowComponent flowId={flowId} />
-            </TabsContent>
+          <div className="sticky top-0 z-[60]">
+            <Header flowId={flowId} />
+          </div>
+          <main
+            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#F6F6F6] ${
+              tab === "results" ? "" : tab === "share" ? "" : ""
+            }`}
+          >
+            {/* --New Commit-- */}
+            <div className="tabs-content">
+              <TabsContent className="mt-0" value="create">
+                <CreateFlowComponent flowId={flowId} />
+              </TabsContent>
 
-            {/* <TabsContent className="mt-0" value="connect">
+              {/* <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />
             </TabsContent>
             <TabsContent className="mt-0" value="share">
@@ -167,10 +250,10 @@ export default function CreateFlowsPage({
         <TabsContent className="mt-0" value="results">
           <ResultFlowComponents />
         </TabsContent> */}
-          </div>
-        </main>
-      </Tabs>
-      {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
+            </div>
+          </main>
+        </Tabs>
+        {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
         <button className="relative size-8 cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
           <div className="flex size-auto cursor-pointer items-center justify-center">
             <span className="SVGInline">
@@ -193,88 +276,89 @@ export default function CreateFlowsPage({
           </div>
         </button>
       </div> */}
-      {isCustomLinkOpen && (
-        <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
-          <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
-            <div className="z-[1] flex w-[512px] flex-col items-center p-8">
-              <div className="min-h-0 min-w-0 shrink-0 pb-6">
-                <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
-                  {t("CUSTOM LINK")}
-                </span>
-              </div>
-              <div className="min-h-0 min-w-0 shrink-0 pb-2">
-                <span className="block text-center text-4xl font-light">
-                  {t("Create a custom link")}
-                </span>
-              </div>
-              <div className="min-h-0 min-w-0 shrink-0">
-                <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                  {t(
-                    "Edit the link and let people know what your flow is about"
-                  )}
-                </span>
-              </div>
-              <div className="mb-10"></div>
-              <div className="min-h-0 min-w-0 shrink-0 pb-6">
-                <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
-                  {t("Available on these plans: Plus, Business, Enterprise")}
-                </span>
-              </div>
-              <div className="flex size-full items-center justify-center">
-                <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
-                  <div className="flex">
-                    <span className="block flex-[0_0_auto]">
-                      {t("Upgrade my plan")}
-                    </span>
-                  </div>
-                </button>
+        {isCustomLinkOpen && (
+          <div className="fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
+            <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
+              <div className="z-[1] flex w-[512px] flex-col items-center p-8">
+                <div className="min-h-0 min-w-0 shrink-0 pb-6">
+                  <span className="text-center text-xs font-bold uppercase text-[rgb(38,38,39)]">
+                    {t("CUSTOM LINK")}
+                  </span>
+                </div>
+                <div className="min-h-0 min-w-0 shrink-0 pb-2">
+                  <span className="block text-center text-4xl font-light">
+                    {t("Create a custom link")}
+                  </span>
+                </div>
+                <div className="min-h-0 min-w-0 shrink-0">
+                  <span className="block text-center text-xl text-[rgb(115,115,115)]">
+                    {t(
+                      "Edit the link and let people know what your flow is about"
+                    )}
+                  </span>
+                </div>
+                <div className="mb-10"></div>
+                <div className="min-h-0 min-w-0 shrink-0 pb-6">
+                  <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
+                    {t("Available on these plans: Plus, Business, Enterprise")}
+                  </span>
+                </div>
+                <div className="flex size-full items-center justify-center">
+                  <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
+                    <div className="flex">
+                      <span className="block flex-[0_0_auto]">
+                        {t("Upgrade my plan")}
+                      </span>
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <button
-            aria-label="Close dialog"
-            color="#737373"
-            data-qa="upgrade-nag-screen-close-button"
-            style={{
-              marginTop: "60px",
-            }}
-            className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
-          >
-            <div className="flex size-auto items-center justify-center ">
-              <span
-                onClick={() => setIsCustomLinkOpen(false)}
-                className="cursor-pointer"
-              >
-                {" "}
-                <svg
-                  width="28px"
-                  height="28px"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#000000"
+            <button
+              aria-label="Close dialog"
+              color="#737373"
+              data-qa="upgrade-nag-screen-close-button"
+              style={{
+                marginTop: "60px",
+              }}
+              className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+            >
+              <div className="flex size-auto items-center justify-center ">
+                <span
+                  onClick={() => setIsCustomLinkOpen(false)}
+                  className="cursor-pointer"
                 >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
-                  />
-                </svg>
-              </span>
-            </div>
-          </button>
-        </div>
-        // <Dialog open={isCustomLinkOpen} onOpenChange={setIsCustomLinkOpen}>
-        //   <DialogContent className=" sm:max-w-md">
-        //     <DialogHeader>
-        //       <DialogTitle className="">CUSTOM LINK</DialogTitle>
-        //       <DialogTitle>Create a custom link</DialogTitle>
-        //       <DialogDescription>
-        //         Edit the link and let people know what your flow is about.
-        //       </DialogDescription>
-        //     </DialogHeader>
-        //   </DialogContent>
-        // </Dialog>
-      )}
-    </div>
+                  {" "}
+                  <svg
+                    width="28px"
+                    height="28px"
+                    viewBox="0 0 16 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#000000"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </button>
+          </div>
+          // <Dialog open={isCustomLinkOpen} onOpenChange={setIsCustomLinkOpen}>
+          //   <DialogContent className=" sm:max-w-md">
+          //     <DialogHeader>
+          //       <DialogTitle className="">CUSTOM LINK</DialogTitle>
+          //       <DialogTitle>Create a custom link</DialogTitle>
+          //       <DialogDescription>
+          //         Edit the link and let people know what your flow is about.
+          //       </DialogDescription>
+          //     </DialogHeader>
+          //   </DialogContent>
+          // </Dialog>
+        )}
+      </div>
+    </>
   )
 }

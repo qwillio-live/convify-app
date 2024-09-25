@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import {
   Activity,
@@ -47,7 +48,10 @@ import {
 import { useTranslations } from "next-intl"
 import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  navigateToScreen,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
@@ -57,6 +61,8 @@ import {
   PictureTypes,
   SvgRenderer,
 } from "@/components/PicturePicker"
+import { useSearchParams } from "next/navigation"
+import { env } from "@/env.mjs"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -159,11 +165,34 @@ export const LinkButtonGen = ({
   iconType,
   ...props
 }) => {
+  const pathname = usePathname()
+
+  const searchParams = useSearchParams()
   const router = useRouter()
-  const pathName = usePathname()
+  const dispatch = useAppDispatch()
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+
   const handleNavigateToContent = () => {
-    // router.push(currentUrlWithHash);
+    dispatch(
+      validateScreen({
+        current: currentScreenName,
+        next: nextScreen.screenName,
+      })
+    )
+    const params = new URLSearchParams(searchParams || undefined)
+    params.set("screen", nextScreen.screenName)
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
   }
+  // if(screenValidated){
+  //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+  //   router.push(`${pathName}#${nextScreen?.screenName}`);
+  //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+  // }else{
+  //   console.log("SCREEN NOT VALIDATED", screenValidated)
+  // }
+
   return (
     <div
       className="relative w-full"
@@ -182,10 +211,15 @@ export const LinkButtonGen = ({
       <Link
         href={`${
           buttonAction === "redirect"
-            ? "https://" + props.href
-            : pathName + "#" + nextScreen?.screenName
+            ? props?.href?.includes("https://") ||
+              props?.href?.includes("http://")
+              ? props.href
+              : "https://" + props.href
+            : pathname + "?screen=" + nextScreen?.screenName
         }`}
-        target={`${props.windowTarget ? "_blank" : ""}`}
+        target={`${
+          props.windowTarget && buttonAction === "redirect" ? "_blank" : ""
+        }`}
         className="contents"
       >
         <StyledCustomButton
@@ -217,6 +251,7 @@ export const LinkButtonGen = ({
           mobileScreen={false}
           {...props}
           className="text-[1rem]"
+          onClick={() => handleNavigateToContent()}
         >
           <div
             style={{
@@ -646,6 +681,7 @@ export const LinkButton = ({
             }`}
           >
             {/** @ts-ignore */}
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}
@@ -744,7 +780,7 @@ export type IconButtonProps = {
     screenId: string
     screenName: string
   }
-  href?: string
+  href: string
   windowTarget?: boolean
   iconType?: PictureTypes
 }
@@ -823,8 +859,8 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   buttonAction: "next-screen",
   windowTarget: true,
-  href: "",
   iconType: PictureTypes.NULL,
+  href: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
 }
 
 LinkButton.craft = {

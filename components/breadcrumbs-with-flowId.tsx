@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/breadcrumb"
 
 import { Button } from "./ui/button"
+import { useAppDispatch } from "@/lib/state/flows-state/hooks"
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
 
 const extractFlowIdFromUrl = (currentPath) => {
   const url = currentPath
@@ -114,17 +116,20 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
     fontSize: "13px",
     ...smallScreenTruncateStyle,
   }
-
+  const dispatch = useAppDispatch()
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard" className="flex items-center -mr-4 lg:mr-0">
+          <BreadcrumbLink
+            href="/dashboard"
+            className="-mr-4 flex items-center lg:mr-0"
+          >
             <span className="hidden text-[16px] text-[#9B9A99] lg:inline-block">
               {t("My workspace")}
             </span>
             <button className="text-[#AAAAAA] lg:hidden">
-              <ChevronLeft className="h-4"/>
+              <ChevronLeft className="h-4" />
             </button>
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -140,7 +145,7 @@ export function BreadCrumbs({ flowId }: { flowId: string }) {
                 ? smallScreenTruncateStyle
                 : truncateStyle
             }
-            className="text-[#23262C] text-sm md:text-base"
+            className="text-sm text-[#23262C] md:text-base"
           >
             {loading
               ? "..."

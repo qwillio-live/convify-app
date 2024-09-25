@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react"
 import icons from "@/constant/streamline.json"
 import hexoid from "hexoid"
@@ -19,13 +20,17 @@ import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { UserInputPhoneSettings } from "./user-input-phone-settings.component"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -64,14 +69,11 @@ const UserInputMobileSizeValues = {
   full: "100%",
 }
 
-
-
-
 export type UserInputPhoneProps = {
   inputValue: string
   fontSize: number
   color: string
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -131,7 +133,7 @@ export const UserInputPhoneDefaultProps: UserInputPhoneProps = {
   inputValue: "",
   fontSize: 16,
   color: "#000000",
-  textColor: "#000000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -251,17 +253,48 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations("Components")
   const [error, setError] = useState(props.error)
   const [uniqueId, setUniqueId] = useState("")
   const [svgIcon, setSvgIcon] = useState("")
+  const [isFilled, setIsFilled] = useState(false)
+  const dispatch = useAppDispatch()
+  const fullScreenData = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData ? JSON.parse(screenData) : {}
+  })
 
+  const alarm = useAppSelector(
+    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
+  )
+
+  // Access inputValue safely
+  const screenData = fullScreenData[props.nodeId]?.props?.inputValue
+
+  // Check if inputRequired is present and parse it safely
+  const isRequired = useAppSelector((state) => {
+    const screenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    return screenData
+      ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
+      : false
+  })
+
+  console.log("iin user phone", typeof screenData, screenData)
   useEffect(() => {
     const generateUniqueId = () => {
       return Math.random().toString(36).substring(7)
     }
-
+    setInputValue(screenData)
+    if (inputRef.current) {
+      inputRef.current.value = screenData
+    }
+    if (screenData?.length > 0) {
+      setIsFilled(true)
+    }
     setUniqueId(generateUniqueId())
-  }, [])
+  }, [screenData])
 
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
@@ -273,16 +306,32 @@ export const UserInputPhoneGen = ({ ...props }) => {
     }
   }
 
-  // const memoizedConvertToSvg = useCallback(() => {
-  //   return convertToSvg(icons[icon]?.body);
-  // }, [icon]);
-
-  // useEffect(() => {
-  //   setSvgIcon(memoizedConvertToSvg());
-  // }, [memoizedConvertToSvg]);
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
 
   return (
     <div
+      ref={itemRefNew}
       className="relative focus-visible:ring-0 focus-visible:ring-transparent"
       style={{
         width: "100%",
@@ -314,15 +363,19 @@ export const UserInputPhoneGen = ({ ...props }) => {
           {!props.floatingLabel && (
             <>
               <div
-                className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}
@@ -335,11 +388,11 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   focusInput() // Focus the input when placeholder is clicked
                 }
               }}
-              className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+              className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
-                (inputValue.length > 0 && props.floatingLabel)
-                  ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-                  : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+                (inputValue?.length > 0 && props.floatingLabel)
+                  ? "top-0 pl-3 pt-1 text-sm text-gray-400"
+                  : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${
                 props.floatingLabel &&
                 props.enableIcon &&
@@ -349,7 +402,11 @@ export const UserInputPhoneGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `#9CA3AF`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -358,20 +415,26 @@ export const UserInputPhoneGen = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row  gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(
-                  "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
+                  `flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200
+                  ${!isFilled && alarm && isRequired && " !border-red-600"}
+                  `
                 )}
                 style={{
                   backgroundColor: "#fff",
-                  borderColor: error
-                    ? "#cc0000"
-                    : isActive
-                    ? props.activeBorderColor.value
-                    : props.borderColor.value,
-                  borderBottomLeftRadius: error ? 0 : props.bottomLeftRadius,
+                  borderColor:
+                    !isFilled && alarm && isRequired
+                      ? "#cc0000"
+                      : isActive
+                      ? props.activeBorderColor.value
+                      : props.borderColor.value,
+                  borderBottomLeftRadius:
+                    !isFilled && alarm && isRequired
+                      ? 0
+                      : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
                   borderTopWidth: props.borderTopWidth,
                   borderBottomWidth: props.borderBottomWidth,
@@ -391,15 +454,16 @@ export const UserInputPhoneGen = ({ ...props }) => {
               </div>
             )}
             <UserInputPhoneStyled
-              ref={inputRef}
-              textColor={props.textColor}
+              data-label={props?.fieldName || ""}
+              value={inputValue}
+              textColor={"9CA3AF"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
                   ? props.activeBorderColor.value
                   : props.borderColor.value
               }
-              error={props.error}
+              error={!isFilled && alarm && isRequired}
               primaryFont={props.primaryFont.value}
               placeholder={!props.floatingLabel && props.placeholder}
               borderWidth={props.borderWidth}
@@ -417,26 +481,65 @@ export const UserInputPhoneGen = ({ ...props }) => {
               onFocus={() => setIsActive(true)}
               className={cn(
                 {
-                  "font-semibold pt-8 px-3 pb-4 text-base placeholder:text-gray-400 placeholder:font-light":
+                  "px-3 pb-4 pt-8 text-base font-semibold placeholder:font-light placeholder:text-gray-400":
                     props.floatingLabel,
-                  "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
+                  "px-3 py-6 text-base font-semibold placeholder:font-light placeholder:text-gray-400":
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `ring-0
-                outline-none
-                focus-visible:outline-none
-                peer-focus-visible:outline-none
-                focus-visible:ring-0
-                ring-opacity-0/0
+                `ring-opacity-0/0
+                send-response
                 bg-white
+                outline-none
+                ring-0
                 transition-all
                 duration-200
                 ease-in-out
+                focus-visible:outline-none
+                focus-visible:ring-0
                 focus-visible:ring-transparent focus-visible:ring-offset-0
-                send-response`
+                peer-focus-visible:outline-none
+                ${!isFilled && alarm && isRequired && " !border-red-600"}
+                `
               )}
-              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={(e) => {
+                const charCode = e.charCode
+                // Allow only digits
+                if (charCode < 48 || charCode > 57) {
+                  e.preventDefault()
+                }
+              }}
+              onChange={(e) => {
+                if (isRequired) {
+                  if (isFilled && e.target.value === "") {
+                    dispatch(setUpdateFilledCount(-1))
+                    setIsFilled(false)
+                    setInputValue(e.target.value)
+                  } else {
+                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    setInputValue(e.target.value),
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          isArray: false,
+                          entity: "inputValue",
+                          newSelections: [e.target.value],
+                        })
+                      ),
+                      setIsFilled(true)
+                  }
+                } else {
+                  setInputValue(e.target.value),
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        isArray: false,
+                        entity: "inputValue",
+                        newSelections: [e.target.value],
+                      })
+                    )
+                }
+              }}
               onBlur={() => setIsActive(false)}
               autoFocus={isFocused}
             />
@@ -444,9 +547,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
           {/** End field container */}
 
           {/** Error container */}
-          {props.error && (
+          {alarm && !isFilled && isRequired && (
             <div
-              className="error-container border flex flex-row items-center gap-0 mt-0"
+              className={`error-container mt-0 flex flex-row items-center gap-0 border `}
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -460,7 +563,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">
+                {t("Please enter a valid phone number")}
+              </div>
             </div>
           )}
           {/** End error container */}
@@ -540,12 +645,6 @@ export const UserInputPhone = ({ ...props }) => {
     }
   }, [primaryColor, props.activeBorderColor, setProp])
 
-  useEffect(() => {
-    if (props.textColor.globalStyled && !props.textColor.isCustomized) {
-      setProp((props) => (props.textColor.value = primaryTextColor), 200)
-    }
-  }, [primaryTextColor, props.textColor, setProp])
-
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
@@ -615,11 +714,16 @@ export const UserInputPhone = ({ ...props }) => {
         <div
           className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
           style={{
-            width: `${mobileScreen ? UserInputMobileSizeValues[props.size] : UserInputSizeValues[props.size]}`,
+            width: `${
+              mobileScreen
+                ? UserInputMobileSizeValues[props.size]
+                : UserInputSizeValues[props.size]
+            }`,
           }}
         >
           {!props.floatingLabel && (
             <>
+              {/** @ts-ignore */}
               <ContentEditable
                 html={props.label}
                 disabled={false}
@@ -634,12 +738,16 @@ export const UserInputPhone = ({ ...props }) => {
                     500
                   )
                 }
-                className={`mb-1 relative transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               />
             </>
@@ -653,11 +761,11 @@ export const UserInputPhone = ({ ...props }) => {
                     focusInput() // Focus the input when placeholder is clicked
                 }
               }}
-              className={`line-clamp-1 text-ellipsis  hover:cursor-text absolute transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent ${
+              className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (props.isActive && props.floatingLabel) ||
-                (props.inputValue.length > 0 && props.floatingLabel)
-                  ? "top-0 text-sm pl-3 pt-1 text-gray-400"
-                  : "top-1 left-0 pt-3 px-3 pb-1 text-sm text-gray-400"
+                (props?.inputValue?.length > 0 && props.floatingLabel)
+                  ? "top-0 pl-3 pt-1 text-sm text-gray-400"
+                  : "left-0 top-1 px-3 pb-1 pt-3 text-sm text-gray-400"
               } ${
                 props.floatingLabel &&
                 props.enableIcon &&
@@ -667,7 +775,11 @@ export const UserInputPhone = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `#9CA3AF`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -676,11 +788,11 @@ export const UserInputPhone = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex flex-row gap-0 items-center w-auto transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(
-                  "rounded-l-md shrink-0 flex items-center shadow-none justify-center bg-inherit min-h-[50px] min-w-[49px] transition-all duration-200"
+                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#fff",
@@ -721,7 +833,7 @@ export const UserInputPhone = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={inputRef}
-              textColor={`${primaryTextColor}`}
+              textColor={`#9CA3AF`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -746,23 +858,23 @@ export const UserInputPhone = ({ ...props }) => {
               onFocus={() => setProp((props) => (props.isActive = true))}
               className={cn(
                 {
-                  "font-semibold pt-8 px-3 pb-4 text-base": props.floatingLabel,
-                  "font-semibold px-3 py-6 text-base placeholder:text-gray-400 placeholder:font-light":
+                  "px-3 pb-4 pt-8 text-base font-semibold": props.floatingLabel,
+                  "px-3 py-6 text-base font-semibold placeholder:font-light placeholder:text-gray-400":
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `ring-0
-                  outline-none
-                  focus-visible:outline-none
-                  peer-focus-visible:outline-none
-                  focus-visible:ring-0
-                  ring-opacity-0/0
+                `ring-opacity-0/0
+                  send-response
                   bg-white
+                  outline-none
+                  ring-0
                   transition-all
                   duration-200
                   ease-in-out
+                  focus-visible:outline-none
+                  focus-visible:ring-0
                   focus-visible:ring-transparent focus-visible:ring-offset-0
-                  send-response
+                  peer-focus-visible:outline-none
                   `
               )}
               onChange={(e) => {
@@ -788,7 +900,7 @@ export const UserInputPhone = ({ ...props }) => {
           {/** Error container */}
           {props.error && (
             <div
-              className="error-container border flex flex-row items-center gap-0 mt-0"
+              className="error-container mt-0 flex flex-row items-center gap-0 border"
               style={{
                 fontFamily: `var(${props.secondaryFont.value})`,
                 borderColor: props.errorStyles.borderColor,
@@ -802,7 +914,7 @@ export const UserInputPhone = ({ ...props }) => {
               }}
             >
               <div className="p-2">{IconsList[props.errorIcon]}</div>
-              <div className="p-2">{props.errorText}</div>
+              <div className="p-2">{t(props.errorText)}</div>
             </div>
           )}
           {/** End error container */}

@@ -7,12 +7,18 @@ import { UserAuthForm } from "@/components/user-auth-form"
 import convifyLogo from "@/assets/convify_logo_black.svg"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
+import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-  title: "Login",
-  description: "Login to your account",
+export async function generateMetadata() {
+  const APP_NAME = process.env.APP_NAME
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${t("Log in")} | ${APP_NAME}`, // Use translations for title
+    description: t("Login to your account"),
+  }
 }
-
 export default function LoginPage() {
   const t = useTranslations("Login")
 

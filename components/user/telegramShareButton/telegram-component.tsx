@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useRef } from "react"
 import {
   Activity,
@@ -244,7 +245,10 @@ export const TelegramShareButtonGen = ({
                 )}
               </div>
             )}
-            <span className="text-md ml-2">{text}</span>
+            <span className="text-md ml-2">
+              {" "}
+              <div dangerouslySetInnerHTML={{ __html: text }} />
+            </span>
           </StyledCustomButton>
         </Link>
       ) : (
@@ -672,6 +676,7 @@ export const TelegramShareButton = ({
               enableIcon && (icon !== "" || null) ? "ml-1" : ""
             }`}
           >
+            {/** @ts-ignore */}
             <ContentEditable
               html={text.substring(0, maxLength)} // innerHTML of the editable div
               innerRef={ref}

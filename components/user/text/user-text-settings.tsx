@@ -69,7 +69,9 @@ export const UserTextInputSettings = () => {
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
 
@@ -210,7 +212,9 @@ export const UserTextInputSettings = () => {
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                handleRemove={() => debouncedSetProp("containerBackground", "transparent")}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
 

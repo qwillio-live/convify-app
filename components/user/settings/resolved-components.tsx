@@ -50,7 +50,7 @@ import { TextImageComponentGen } from "../textImage/user-textImage.component"
 import { SocialShareButtonGen } from "../socialShareButton/share-component"
 import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
 
-const CraftJsUserComponents = {
+export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
   [CRAFT_ELEMENTS.LOGO]: UserLogo,
   [CRAFT_ELEMENTS.CARD]: CardGen,
@@ -107,7 +107,6 @@ const ResolvedComponentsFromCraftState = ({
 
         const parse = (nodeId: string, parentNodeId?: string) => {
           if (parsedNodes[nodeId]) return parsedNodes[nodeId]
-          console.log(`Parsing node: ${parsedNodes[nodeId]}`)
 
           const nodeData = craftState[nodeId]
           if (!nodeData) return null

@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
@@ -48,6 +49,9 @@ export const ChecklistGen = ({
   paddingBottom,
   ...props
 }) => {
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   return (
     <div
       className="relative w-full"
@@ -85,13 +89,13 @@ export const ChecklistGen = ({
             <span
               className="flex-1"
               style={{
-                color: textColor,
+                color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                 fontFamily: `var(${fontFamily?.value})`,
                 fontWeight: fontWeight,
                 fontSize: `${fontSize}px`,
               }}
             >
-              {item.value}
+              <div dangerouslySetInnerHTML={{ __html: item.value }} />
             </span>
           </li>
         ))}
@@ -157,12 +161,6 @@ export const Checklist = ({
     }
   }, [primaryColor])
 
-  useEffect(() => {
-    if (primaryTextColor) {
-      setProp((props) => (props.textColor = primaryTextColor), 200)
-    }
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -209,7 +207,7 @@ export const Checklist = ({
               fontFamily={fontFamily}
               fontWeight={fontWeight}
               iconColor={iconColor}
-              textColor={textColor}
+              textColor={textColor !== "#ffffff" ? textColor : primaryTextColor}
               borderColor={borderColor}
               icon={icon}
               item={item}
@@ -256,6 +254,7 @@ const ChecklistItemSettings = ({
         }}
       />
       <div className="flex-1">
+        {/** @ts-ignore */}
         {/** @ts-ignore */}
         <ContentEditable
           className="w-full px-1"
@@ -308,7 +307,7 @@ export type ChecklistProps = {
   paddingBottom: string | number
   icon: string
   iconColor: string
-  textColor: string
+  textColor?: string
   borderColor: string
   containerBackground: string
   layout: string
@@ -334,7 +333,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fontSize: 16,
   icon: "interface-validation-check-circle-checkmark-addition-circle-success-check-validation-add-form",
   layout: ChecklistLayouts.column,
-  textColor: "#000000",
+  textColor: "#ffffff",
   borderColor: "#3182ce",
   containerBackground: "transparent",
   iconColor: "green",

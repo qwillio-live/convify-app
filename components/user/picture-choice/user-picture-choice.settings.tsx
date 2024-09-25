@@ -75,6 +75,7 @@ export const PictureChoiceSettings = () => {
       contentReversed,
       preset,
       defaultStyles,
+      labelColor,
       hoverStyles,
       selectedStyles,
       selections,
@@ -434,6 +435,7 @@ export const PictureChoiceSettings = () => {
                   marginBottom: 16,
                   marginLeft: 16,
                   marginRight: 6,
+                  labelColor: labelColor,
                   selections: defaultSelections,
                   choices: defaultChoices.slice(0, 2),
                 }}
@@ -461,6 +463,7 @@ export const PictureChoiceSettings = () => {
                   marginBottom: 16,
                   marginLeft: 16,
                   marginRight: 6,
+                  labelColor: labelColor,
                   selections: defaultSelections,
                   choices: defaultChoices.slice(0, 2),
                 }}
@@ -488,6 +491,7 @@ export const PictureChoiceSettings = () => {
                   marginBottom: 16,
                   marginLeft: 16,
                   marginRight: 6,
+                  labelColor: labelColor,
                   selections: defaultSelections,
                   choices: defaultChoices.slice(0, 2),
                 }}
@@ -601,7 +605,7 @@ export const PictureChoiceItemSettings = ({
       ...choices.slice(index + 1),
     ])
   }
-  console.log("choicessssssss:", choices)
+  console.log("choicessssssss:", choices, selections)
   return (
     <Reorder.Item
       dragListener={false}
@@ -677,13 +681,15 @@ const PictureChoiceItemNavigationSettings = ({
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
 
   useEffect(() => {
     if (!nextScreen) {
-      onChange("next-screen", nextScreenName)
+      onChange("nextScreen", nextScreenName)
     }
   }, [onChange])
   console.log("button action", buttonAction, nextScreen)

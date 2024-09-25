@@ -109,7 +109,9 @@ export const LoaderSettings = () => {
     useAppSelector(
       (state: RootState) =>
         state?.screen?.screens[
-          selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
+          selectedScreen + 1 < (screensLength || 0)
+            ? selectedScreen + 1
+            : selectedScreen
         ]?.screenName
     ) || ""
   const {
@@ -337,16 +339,22 @@ export const LoaderSettings = () => {
             <div className="space-y-2">
               <Label htmlFor="text">{t("Navigation")}</Label>
               <Select
-                defaultValue={
-                  buttonAction === "next-screen" ? "next-screen" : nextScreen
-                }
+                defaultValue={"Do Nothing"}
                 value={
-                  buttonAction === "next-screen" ? "next-screen" : nextScreen
+                  buttonAction === "next-screen"
+                    ? "next-screen"
+                    : buttonAction === "custom-action" && nextScreen === ""
+                    ? "Do Nothing"
+                    : nextScreen
                 }
                 onValueChange={(e) => {
                   if (e === "next-screen") {
                     setProp((props) => (props.buttonAction = "next-screen"))
                     setProp((props) => (props.nextScreen = nextScreenName))
+                  } else if (e === "Do Nothing") {
+                    console.log("custom action value in loader", e)
+                    setProp((props) => (props.buttonAction = "custom-action"))
+                    setProp((props) => (props.nextScreen = ""))
                   } else {
                     setProp((props) => (props.buttonAction = "custom-action"))
                     setProp((props) => (props.nextScreen = e))
@@ -450,12 +458,10 @@ export const LoaderSettings = () => {
               />
             </div>
             <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="marginLeft">{t("Left")}</Label>
-                  <span className="text-muted-foreground text-xs">
-                    {left}
-                  </span>
-                </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginLeft">{t("Left")}</Label>
+                <span className="text-muted-foreground text-xs">{left}</span>
+              </div>
               <Slider
                 defaultValue={[left]}
                 value={[left]}

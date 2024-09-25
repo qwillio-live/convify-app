@@ -43,6 +43,7 @@ type Props = {}
 export const GlobalThemeSettings = (props: Props) => {
   const [open, setOpen] = useState(false)
   const [secondaryOpen, setSecondaryOpen] = useState(false)
+  const [isPickerVisible, setPickerVisible] = useState(false)
 
   const dispatch = useAppDispatch()
 

@@ -72,9 +72,9 @@ const ShareFlowComponents = ({
     return () => window.removeEventListener("resize", updateView)
   }, [])
   const t = useTranslations("Components")
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
-
+  const whatsAppNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || 380937064139
+  const telegramUser =
+    process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "sofiaai_admin"
   useEffect(() => {
     if (data) {
       setLink(data.link)

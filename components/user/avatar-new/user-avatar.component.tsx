@@ -1,19 +1,31 @@
+"use client"
 import React, { useEffect, useRef } from "react"
-import { Activity, Anchor, Aperture, ArrowRight, Disc, DollarSign, Mountain } from "lucide-react"
+import {
+  Activity,
+  Anchor,
+  Aperture,
+  ArrowRight,
+  Disc,
+  DollarSign,
+  Mountain,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { Button as CustomButton } from "@/components/ui/button"
 import { Controller } from "../settings/controller.component"
-import { AvatarSettings } from './user-avatar.settings'
+import { AvatarSettings } from "./user-avatar.settings"
 import { StyleProperty } from "../types/style.types"
 import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
-import { getBackgroundForPreset, getHoverBackgroundForPreset } from "./useAvatarThemePresets"
-import { useTranslations } from "next-intl";
-import { RootState } from "@/lib/state/flows-state/store";
-import AvatarPlaceholder from '@/assets/images/default-avatar.webp'
-import classNames from 'classnames';
-import './styles.css';
+import {
+  getBackgroundForPreset,
+  getHoverBackgroundForPreset,
+} from "./useAvatarThemePresets"
+import { useTranslations } from "next-intl"
+import { RootState } from "@/lib/state/flows-state/store"
+import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
+import classNames from "classnames"
+import "./styles.css"
 
 const ButtonTextLimit = {
   small: 100,
@@ -70,23 +82,29 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY || 0);
-  const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
-  const avatarRef = useRef(null);
-  const baseSize = 90; // Initial base size of the avatar
-  const minimumSize = 48; // Minimum size of the avatar
-  const sizeReductionFactor = 0.5; // Control the rate of size reduction
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const hasComponentBeforeAvatar = useAppSelector(
+    (state) => state?.screen?.hasComponentBeforeAvatar
+  )
+  const avatarRef = useRef(null)
+  const baseSize = 90 // Initial base size of the avatar
+  const minimumSize = 48 // Minimum size of the avatar
+  const sizeReductionFactor = 0.5 // Control the rate of size reduction
   const mobileBaseSize = 60
 
-  let mobileDynamicSize = Math.max(mobileBaseSize - (scrollY * sizeReductionFactor), minimumSize);
   // Calculate dynamic size
-  let dynamicSize = Math.max(baseSize - (scrollY * sizeReductionFactor), minimumSize);
-  let translateYPercent = Math.max(0, 35 - (scrollY));
-  const translateY = mobileScreen ? `calc(${translateYPercent}%)` : '0px';
-  const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (!mobileScreen && (scrollY && scrollY > 50) ? 'avatar-none-scrolled' : mobileScreen && scrollY ? `transition-transform ease-in-out duration-300` : mobileScreen ? 'avatar-none-mobile' : 'avatar-none')}`;
-  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
+  // let dynamicSize = Math.max(
+  //   baseSize - scrollY * sizeReductionFactor,
+  //   minimumSize
+  // )
+  // let translateYPercent = Math.max(0, 35 - scrollY)
+  // const translateY = mobileScreen ? `calc(${translateYPercent}%)` : "0px"
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
 
   return (
     <div
@@ -95,18 +113,18 @@ export const AvatarComponentGen = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        height: hasComponentBeforeAvatar ? '' : '50px',
+        // height: "50px",
       }}
     >
       <div
         className="relative w-full"
         style={{
-          background: `${avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor}`,
+          background: `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
-          boxSizing: 'border-box',
-          minWidth: '100%',
-          maxWidth: '100%',
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
         }}
       >
         <div
@@ -115,30 +133,37 @@ export const AvatarComponentGen = ({
           <div
             ref={avatarRef}
             id="avatar-component"
-            className={classNames(
-              avatarClass,
-              hasComponentBeforeAvatar ? 'absolute transition-transform translate-y-[-50%] ease-in-out duration-300' : ''
-            )}
-            style={{
-              transform: mobileScreen ? `translateY(${translateY})` : '',
-            }}
+            // className={classNames(
+            //   avatarClass,
+            //   hasComponentBeforeAvatar
+            //     ? "absolute translate-y-[-50%] transition-transform duration-300 ease-in-out"
+            //     : ""
+            // )}
+            // style={{
+            //   transform: mobileScreen ? `translateY(${translateY})` : "",
+            // }}
           >
             <img
               alt={alt}
               src={src}
               style={{
-                width: mobileScreen ? `${mobileDynamicSize}px` : `${dynamicSize}px`,
-                height: mobileScreen ? `${mobileDynamicSize}px` : `${dynamicSize}px`,
+                height: "80px",
+                width: "80px",
+                //   ? `${mobileDynamicSize}px`
+                //   : `${dynamicSize}px`,
+                // height: mobileScreen
+                //   ? `${mobileDynamicSize}px`
+                //   : `${dynamicSize}px`,
                 borderRadius: `${cornRad}px`,
-                backgroundColor: background,
+                backgroundColor: "transparent",
               }}
             />
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const UserLogo = ({
   alt,
@@ -161,33 +186,48 @@ export const UserLogo = ({
   right,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen);
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY);
-  const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const hasComponentBeforeAvatar = useAppSelector(
+    (state) => state?.screen?.hasComponentBeforeAvatar
+  )
 
-  const avatarRef = useRef(null);
+  const avatarRef = useRef(null)
 
-  const avatarClass = `${hasComponentBeforeAvatar ? (scrollY && scrollY > 50 ? 'avatar-top' : 'avatar-half') : (scrollY && scrollY > 50 ? 'avatar-none-scrolled' : mobileScreen ? 'avatar-none-mobile' : 'avatar-none')}`;
+  // const avatarClass = `${
+  //   // hasComponentBeforeAvatar
+  //   //   ? scrollY && scrollY > 50
+  //   //     ? "avatar-top"
+  //   //     : "avatar-half"
+  //   //   : scrollY && scrollY > 50
+  //   //   ? "avatar-none-scrolled"
+  //   //   : mobileScreen
+  //   //   ? "avatar-none-mobile"
+  //   //   : "avatar-none"
+  // }`
   return (
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={classNames(
-        avatarClass,
-        hasComponentBeforeAvatar ? 'absolute transition-transform translate-y-[-50%] ease-in-out duration-300' : ''
-      )}
+      className={
+        classNames()
+        // avatarClass
+        // hasComponentBeforeAvatar
+        //   ? "transition-transform duration-300 ease-in-out"
+        //   : ""
+      }
     >
       <img
         alt={alt}
         src={src}
         // className="rounded-full"
         style={{
-          width: mobileScreen ? '60px' : (hasComponentBeforeAvatar && (scrollY && scrollY > 50) ? '80px' : (scrollY && scrollY > 50 ? '48px' : '90px')),
-          height: mobileScreen ? '60px' : (hasComponentBeforeAvatar && (scrollY && scrollY > 50) ? '80px' : (scrollY && scrollY > 50 ? '48px' : '90px')),
+          width: "80px",
+          height: "80px",
           borderRadius: `${cornRad}px`,
-          backgroundColor: background,
-          objectFit: 'cover',
-          transform: `translateY(${top}px)`,
+          backgroundColor: "transparent",
+          objectFit: "cover",
+          // transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
         }}
@@ -195,7 +235,6 @@ export const UserLogo = ({
     </div>
   )
 }
-
 
 export const AvatarComponent = ({
   alt,
@@ -257,24 +296,48 @@ export const AvatarComponent = ({
     enabled: state.options.enabled,
   }))
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch();
-  const ref = useRef<HTMLDivElement>(null);
-  const [displayController, setDisplayController] = React.useState(false);
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full");
-  const primaryTextColor = useAppSelector((state) => state.theme?.text?.primaryColor)
-  const secondaryTextColor = useAppSelector((state) => state.theme?.text?.secondaryColor)
-  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont);
-  const primaryColor = useAppSelector((state) => state.theme?.general?.primaryColor);
-  const secondaryColor = useAppSelector((state) => state.theme?.general?.secondaryColor);
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen);
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens);
-  const screensLength = useAppSelector((state: RootState) => state?.screen?.screens?.length ?? 0);
-  const selectedScreen = useAppSelector((state: RootState) => state.screen?.selectedScreen ?? 0)
+  const dispatch = useAppDispatch()
+  const ref = useRef<HTMLDivElement>(null)
+  const [displayController, setDisplayController] = React.useState(false)
+  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full")
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
+  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  const primaryColor = useAppSelector(
+    (state) => state.theme?.general?.primaryColor
+  )
+  const secondaryColor = useAppSelector(
+    (state) => state.theme?.general?.secondaryColor
+  )
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screensLength = useAppSelector(
+    (state: RootState) => state?.screen?.screens?.length ?? 0
+  )
+  const selectedScreen = useAppSelector(
+    (state: RootState) => state.screen?.selectedScreen ?? 0
+  )
 
-  const hasComponentBeforeAvatar = useAppSelector((state) => state?.screen?.hasComponentBeforeAvatar)
-  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
-  const backgroundColor = useAppSelector((state) => state?.theme?.general?.backgroundColor)
-  const nextScreenName = useAppSelector((state: RootState) => state?.screen?.screens[((selectedScreen + 1 < screensLength) ? selectedScreen + 1 : 0)]?.screenName) || "";
+  const hasComponentBeforeAvatar = useAppSelector(
+    (state) => state?.screen?.hasComponentBeforeAvatar
+  )
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
+  const backgroundColor = useAppSelector(
+    (state) => state?.theme?.general?.backgroundColor
+  )
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || ""
 
   useEffect(() => {
     if (buttonAction === "next-screen") {
@@ -284,10 +347,9 @@ export const AvatarComponent = ({
 
   useEffect(() => {
     if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => props.fontFamily.value = primaryFont, 200);
+      setProp((props) => (props.fontFamily.value = primaryFont), 200)
     }
-  },
-    [primaryFont])
+  }, [primaryFont])
 
   useEffect(() => {
     if (mobileScreen && uploadedImageMobileUrl) {
@@ -298,69 +360,77 @@ export const AvatarComponent = ({
   }, [mobileScreen])
 
   useEffect(() => {
-
     if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(primaryColor, props.preset);
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(primaryColor, props.preset);
+      const backgroundPrimaryColor = getBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
+      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+        primaryColor,
+        props.preset
+      )
 
       if (background.globalStyled && !background.isCustomized) {
-        setProp((props) => props.background.value = backgroundPrimaryColor, 200)
+        setProp(
+          (props) => (props.background.value = backgroundPrimaryColor),
+          200
+        )
       }
       if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => props.color.value = primaryColor, 200)
+        setProp((props) => (props.color.value = primaryColor), 200)
       }
       if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => props.borderColor.value = primaryColor, 200)
+        setProp((props) => (props.borderColor.value = primaryColor), 200)
       }
 
       // hover colors
 
       if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp((props) => props.backgroundHover.value = hoverBackgroundPrimaryColor, 200)
+        setProp(
+          (props) =>
+            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+          200
+        )
       }
       if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => props.borderHoverColor.value = primaryColor, 200)
+        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
       }
       if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => props.colorHover.value = primaryColor, 200)
+        setProp((props) => (props.colorHover.value = primaryColor), 200)
       }
     }
-
   }, [primaryColor])
-  const maxLength = ButtonTextLimit[size];
+  const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
-
-    const value = e.target.innerText;
+    const value = e.target.innerText
     if (value.length <= maxLength) {
-      setProp((props) => props.text = value);
+      setProp((props) => (props.text = value))
       // handlePropChangeDebounced('text',value);
       // handlePropChangeThrottled('text',value)
     } else {
       if (ref.current) {
-        e.target.innerText = text || ''; // Restore the previous text
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(ref.current);
-        range.collapse(false); // Move cursor to the end
-        selection?.removeAllRanges();
-        selection?.addRange(range);
+        e.target.innerText = text || "" // Restore the previous text
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(ref.current)
+        range.collapse(false) // Move cursor to the end
+        selection?.removeAllRanges()
+        selection?.addRange(range)
       }
     }
-  };
+  }
 
   useEffect(() => {
-
-    const currentRef = ref.current;
+    const currentRef = ref.current
     if (currentRef) {
-      currentRef.addEventListener('input', handleTextChange);
+      currentRef.addEventListener("input", handleTextChange)
     }
     return () => {
       if (currentRef) {
-        currentRef.removeEventListener('input', handleTextChange);
+        currentRef.removeEventListener("input", handleTextChange)
       }
-    };
-
-  }, [text, maxLength]);
+    }
+  }, [text, maxLength])
 
   return (
     <div
@@ -369,22 +439,23 @@ export const AvatarComponent = ({
       style={{
         width: "100%",
         display: "flex",
-        height: hasComponentBeforeAvatar ? '' : '50px',
         justifyContent: "center",
       }}
       onMouseOver={() => setDisplayController(true)}
       onMouseOut={() => setDisplayController(false)}
     >
       {displayController && <Controller nameOfComponent={t("Avatar")} />}
-      <div className="relative w-full"
+      <div
+        className="relative w-full"
         style={{
-          background: `${avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor}`,
+          background: `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
-          boxSizing: 'border-box',
-          minWidth: '100%',
-          maxWidth: '100%',
-        }}>
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
+        }}
+      >
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
@@ -421,15 +492,12 @@ export const AvatarComponent = ({
   )
 }
 
-
 export enum IconButtonSizes {
   small = "small",
   medium = "medium",
   large = "large",
   full = "full",
 }
-
-
 
 export type IconButtonProps = {
   alt: string
@@ -512,7 +580,6 @@ export const AvatarDefaultProps: IconButtonProps = {
     value: "#ffffff",
     globalStyled: false,
     isCustomized: false,
-
   },
   radius: {
     value: "0",
@@ -532,12 +599,12 @@ export const AvatarDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: 'https://convify.io',
+  url: "https://convify.io",
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
   enableLink: false,
-  w: 'auto',
-  h: '60px',
+  w: "auto",
+  h: "60px",
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,
@@ -563,15 +630,15 @@ export const AvatarDefaultProps: IconButtonProps = {
   gap: 4,
   border: 0,
   fullWidth: true,
-  preset: 'filled',
-  settingsTab: 'content',
+  preset: "filled",
+  settingsTab: "content",
   tracking: false,
-  trackingEvent: 'button_clicked',
-  nextScreen: '',
+  trackingEvent: "button_clicked",
+  nextScreen: "",
   buttonAction: "next-screen",
   cornRad: 50,
-  uploadedImageUrl: '',
-  uploadedImageMobileUrl: ''
+  uploadedImageUrl: "",
+  uploadedImageMobileUrl: "",
 }
 
 AvatarComponent.craft = {

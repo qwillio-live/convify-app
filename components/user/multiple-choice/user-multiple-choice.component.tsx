@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react"
+"use client"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { MultipleChoiceSettings } from "./user-multiple-choice.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import styled from "styled-components"
@@ -18,6 +19,16 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { usePathname } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
+import {
+  setPreviewScreenData,
+  setSelectedData,
+  setSelectedScreen,
+  setUpdateFilledCount,
+  validateScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const MultipleChoiceSizeValues = {
   small: "300px",
@@ -64,8 +75,66 @@ export const MultipleChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState(selections)
-
+  const [selectedChoices, setSelectedChoices] = useState<string[]>([])
+  const [isCountUpdated, setIsCountUpdated] = useState(false)
+  const screenData = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.selections
+    }
+    return []
+  })
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.required
+    }
+    return false
+  })
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    setSelectedChoices(screenData)
+    if (screenData?.length > 0) {
+      setIsCountUpdated(true)
+    }
+  }, [])
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRef = useRef<HTMLUListElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRef.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    console.log("shaking again ", alarm, isRequired, screenData?.length)
+    if (alarm && isRequired && screenData?.length === 0) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt, alarm, isRequired]) // Depend on alarm state
+  console.log("of mc props", choices)
   return (
     <div
       className="relative w-full"
@@ -85,6 +154,8 @@ export const MultipleChoiceGen = ({
       }}
     >
       <ul
+        data-label={props?.fieldName || ""}
+        ref={itemRef}
         className="flex w-full flex-col items-center justify-center"
         style={{
           gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
@@ -95,20 +166,25 @@ export const MultipleChoiceGen = ({
         <div
           className="w-full p-1 text-center"
           style={{
-            color: labelColor,
+            color: `${
+              labelColor !== "#ffffff" ? labelColor : primaryTextColor
+            }`,
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: MultipleChoiceSizeValues[size || "small"],
           }}
         >
-          <label>{label}</label>
+          <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         {choices.map((choice, index) => (
           <MultipleChoiceItem
+            buttonAction={choice.buttonAction}
+            isRequired={isRequired}
+            forGen={true}
             key={index}
             isFirst={index === 0}
             isLast={index === choices.length - 1}
             isCollapsed={layout === MultipleChoiceLayouts.collapsed}
-            isSelected={selectedChoices.includes(choice.id)}
+            isSelected={selectedChoices?.includes(choice.id) || false}
             isPreviousSelected={
               index > 0 && selections.includes(choices[index - 1].id)
             }
@@ -123,20 +199,100 @@ export const MultipleChoiceGen = ({
             hoverStyles={hoverStyles}
             selectedStyles={selectedStyles}
             onValueChange={null}
+            selections={selectedChoices}
             onSelectChange={() => {
               if (multiSelect) {
                 setSelectedChoices((prev) => {
-                  if (prev.includes(choice.id)) {
-                    return prev.filter(
+                  if (prev?.includes(choice.id)) {
+                    // Remove choice from selection
+                    const updatedChoices = prev.filter(
                       (selectionId) => selectionId !== choice.id
                     )
+                    if (isRequired) {
+                      if (updatedChoices.length > 0 && !isCountUpdated) {
+                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                        setIsCountUpdated(true) // Set count updated flag
+                      } else if (
+                        updatedChoices.length === 0 &&
+                        isCountUpdated
+                      ) {
+                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                        setIsCountUpdated(false) // Reset count updated flag
+                      }
+                    }
+
+                    // Dispatch action for removing choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+
+                    return updatedChoices
                   } else {
-                    return [...prev, choice.id]
+                    // Add choice to selection
+                    const updatedChoices = prev
+                      ? [...prev, choice.id]
+                      : [choice.id]
+                    if (isRequired) {
+                      if (updatedChoices.length > 0 && !isCountUpdated) {
+                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                        setIsCountUpdated(true) // Set count updated flag
+                      } else if (
+                        updatedChoices.length === 0 &&
+                        isCountUpdated
+                      ) {
+                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                        setIsCountUpdated(false) // Reset count updated flag
+                      }
+                    }
+                    // Dispatch action for adding choice
+                    dispatch(
+                      setPreviewScreenData({
+                        nodeId: props.nodeId,
+                        newSelections: updatedChoices,
+                        entity: "selections",
+                        isArray: true,
+                      })
+                    )
+                    return updatedChoices
                   }
                 })
               } else {
+                console.log("entered else")
+                const newSelection = selectedChoices?.includes(choice.id)
+                  ? []
+                  : [choice.id]
+
+                dispatch(
+                  setSelectedData(
+                    selectedChoices?.includes(choice.id) ? [] : [choice.id]
+                  )
+                )
+                dispatch(
+                  setPreviewScreenData({
+                    nodeId: props.nodeId,
+                    newSelections: selectedChoices?.includes(choice.id)
+                      ? []
+                      : [choice.id],
+                    entity: "selections",
+                    isArray: true,
+                  })
+                )
+                if (isRequired) {
+                  if (newSelection.length > 0 && !isCountUpdated) {
+                    dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                    setIsCountUpdated(true) // Set count updated flag
+                  } else if (newSelection.length === 0 && isCountUpdated) {
+                    dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                    setIsCountUpdated(false) // Reset count updated flag
+                  }
+                }
                 setSelectedChoices(
-                  selectedChoices.includes(choice.id) ? [] : [choice.id]
+                  selectedChoices?.includes(choice.id) ? [] : [choice.id]
                 )
               }
             }}
@@ -274,10 +430,6 @@ export const MultipleChoice = ({
     }, 200)
   }, [primaryColor])
 
-  useEffect(() => {
-    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -318,6 +470,7 @@ export const MultipleChoice = ({
           }}
         >
           {/** @ts-ignore */}
+          {/** @ts-ignore */}
           <ContentEditable
             className="px-1"
             html={label}
@@ -326,13 +479,16 @@ export const MultipleChoice = ({
               handlePropChangeDebounced("label", e.target.value)
             }}
             style={{
-              color: labelColor,
+              color: `${
+                labelColor !== "#ffffff" ? labelColor : primaryTextColor
+              }`,
               outlineColor: labelBorderColor,
               borderRadius: "4px",
             }}
           />
         </div>
         <ul
+          data-label={props?.fieldName || ""}
           className="flex w-full flex-col items-center justify-center"
           style={{
             gap: layout === MultipleChoiceLayouts.collapsed ? "0" : "8px",
@@ -344,6 +500,9 @@ export const MultipleChoice = ({
         >
           {choices.map((choice, index) => (
             <MultipleChoiceItem
+              buttonAction={choice.buttonAction}
+              forGen={false}
+              isRequired={false}
               key={index}
               isFirst={index === 0}
               isLast={index === choices.length - 1}
@@ -362,6 +521,7 @@ export const MultipleChoice = ({
               defaultStyles={defaultStyles}
               hoverStyles={hoverStyles}
               selectedStyles={selectedStyles}
+              selections={selections}
               onValueChange={(updatedValue) => {
                 setProp((props) => {
                   props.choices[index].value = updatedValue
@@ -399,6 +559,7 @@ export const MultipleChoice = ({
 
 const MultipleChoiceItem = ({
   isFirst,
+  isRequired,
   isLast,
   isCollapsed,
   isSelected,
@@ -415,16 +576,104 @@ const MultipleChoiceItem = ({
   selectedStyles,
   onValueChange,
   onSelectChange,
+  forGen,
+  selections,
+  buttonAction,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
-
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
   useEffect(() => {
     setChoiceValue(choice.value)
   }, [choice.value])
-
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const currentScreenName =
+    useAppSelector((state) => state?.screen?.currentScreenName) || ""
+  const selectedScreen = useAppSelector(
+    (state) =>
+      state?.screen?.screens.findIndex(
+        (screen) => screen.screenName === currentScreenName
+      ) || 0
+  )
+  function handleSearch(term: string) {
+    const params = new URLSearchParams(searchParams || undefined)
+    if (term) {
+      params.set("screen", term)
+    }
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
+  }
+  const newScreensMapper = {
+    "next-screen":
+      selectedScreen + 1 < sc.length
+        ? sc[selectedScreen + 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    "back-screen":
+      selectedScreen - 1 >= 0
+        ? sc[selectedScreen - 1]?.screenName
+        : sc[selectedScreen]?.screenName,
+    none: "none",
+  }
+  const newsc = choice.nextScreen
+  const updatedScreenName = newScreensMapper[buttonAction] || newsc
+  const index = sc.findIndex(
+    (screen) => screen.screenName === updatedScreenName
+  )
+  const handleNavigateToContent = () => {
+    if (index !== -1) {
+      if (
+        buttonAction === "next-screen" ||
+        (buttonAction === "custom-action" && newsc !== "none")
+      ) {
+        console.log(
+          "navigating mc if.....",
+          buttonAction,
+          updatedScreenName,
+          newsc
+        )
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: updatedScreenName,
+          })
+        )
+        handleSearch(updatedScreenName)
+        dispatch(setSelectedScreen(index))
+      } else if (newsc !== "none") {
+        console.log(
+          "navigating mc else.....",
+          buttonAction,
+          updatedScreenName,
+          newsc
+        )
+        dispatch(
+          validateScreen({
+            current: currentScreenName,
+            next: newsc,
+          })
+        )
+        handleSearch(newsc)
+        const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
+        dispatch(setSelectedScreen(index))
+      }
+    }
+  }
   return (
-    <li className="w-full">
+    <li
+      className="w-full"
+      onClick={() => {
+        if (forGen) {
+          handleNavigateToContent()
+        }
+      }}
+    >
       <StyledMultipleChoiceItem
         isFirst={isFirst}
         isLast={isLast}
@@ -456,14 +705,24 @@ const MultipleChoiceItem = ({
             (multiSelect ? (
               checkboxVisible && (
                 <Checkbox
-                  className="!size-5 [&>span>svg]:!size-4"
+                  className={`!size-5 [&>span>svg]:!size-4 ${
+                    alarm &&
+                    isRequired &&
+                    selections.length === 0 &&
+                    " !border-2 !border-red-600"
+                  }`}
                   checked={true}
                 />
               )
             ) : (
               <RadioGroup value="checked">
                 <RadioGroupItem
-                  className="!size-5 [&>span>svg]:!size-3.5"
+                  className={`!size-5 [&>span>svg]:!size-3.5 ${
+                    alarm &&
+                    isRequired &&
+                    selections.length === 0 &&
+                    " !border-2 !border-red-600"
+                  }`}
                   value="checked"
                 />
               </RadioGroup>
@@ -501,6 +760,7 @@ const MultipleChoiceItem = ({
             </span>
           ) : (
             <>
+              {/** @ts-ignore */}
               {/** @ts-ignore */}
               <ContentEditable
                 className="w-fit max-w-full whitespace-break-spaces p-1"
@@ -674,7 +934,7 @@ export type MultipleChoiceProps = {
   required: boolean
   fieldName: string
   layout: MultipleChoiceLayouts
-  labelColor: string
+  labelColor?: string
   labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
@@ -742,7 +1002,7 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
   required: false,
   fieldName: "",
   layout: MultipleChoiceLayouts.collapsed,
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",

@@ -79,6 +79,8 @@ export const Img = ({
   titleFontWeight,
   textFontWeight,
   secondaryFontFamily,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const {
@@ -103,6 +105,7 @@ export const Img = ({
       {
         /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
+          secTextColor={secTextColor}
           fontFamily={fontFamily}
           color={color}
           setProp={setProp}
@@ -136,6 +139,7 @@ export const Img = ({
           width={width}
           height={height}
           src={src}
+          textColor={textColor}
           {...props}
         />
       }
@@ -159,6 +163,8 @@ export const TextImageSettings = () => {
   const {
     actions: { setProp },
     props: {
+      textColor,
+      secTextColor,
       enableLink,
       size,
       imageSize,
@@ -803,64 +809,66 @@ export const TextImageSettings = () => {
               </Tabs>
             </div>
             <div className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="text-muted-foreground text-xs">{Top}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">{Top}</span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[Top]}
+                  value={[Top]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Top", e)}
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[Top]}
-                value={[Top]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("Top", e)}
-              />
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="marginBottom">{t("Bottom")}</Label>
-                <span className="text-muted-foreground text-xs">{Bottom}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {Bottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[Bottom]}
+                  value={[Bottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Bottom", e)}
+                />
               </div>
-              <Slider
-                defaultValue={[Bottom]}
-                value={[Bottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("Bottom", e)}
-              />
-            </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="marginRight">{t("Right")}</Label>
-                <span className="text-muted-foreground text-xs">{Right}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginRight">{t("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">{Right}</span>
+                </div>
+                <Slider
+                  defaultValue={[Right]}
+                  value={[Right]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Right", e)}
+                />
               </div>
-              <Slider
-                defaultValue={[Right]}
-                value={[Right]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("Right", e)}
-              />
-            </div>
-            <div className="space-y-3">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="marginLeft">{t("Left")}</Label>
                   <span className="text-muted-foreground text-xs">{Left}</span>
                 </div>
-              <Slider
-                defaultValue={[Left]}
-                value={[Left]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("Left", e)}
-              />
-            </div>
+                <Slider
+                  defaultValue={[Left]}
+                  value={[Left]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) => handlePropChangeDebounced("Left", e)}
+                />
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -1033,6 +1041,8 @@ export const DefaultPropsTextImg = {
   textFontSize: 17,
   titleFontWeight: "bold",
   textFontWeight: "normal",
+  textColor: "#ffffff",
+  secTextColor: "#ffffff",
 }
 
 Img.craft = {

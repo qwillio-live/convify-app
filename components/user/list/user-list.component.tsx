@@ -1,3 +1,4 @@
+"use client"
 import React, { useCallback, useEffect, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
@@ -51,8 +52,13 @@ export const ListGen = ({
   settingTabs,
   preset,
   items,
+  textColor,
+  secTextColor,
   ...props
 }) => {
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   return (
     <div
       className="relative w-full"
@@ -85,8 +91,10 @@ export const ListGen = ({
             descriptionFontFamily={descriptionFontFamily}
             iconColor={iconColor}
             textAlign={textAlign}
-            titleColor={titleColor}
-            descriptionColor={descriptionColor}
+            titleColor={textColor !== "#ffffff" ? textColor : titleColor}
+            descriptionColor={
+              secTextColor !== "#ffffff" ? secTextColor : descriptionColor
+            }
             flexDirection={flexDirection}
             item={item}
           />
@@ -121,6 +129,8 @@ export const List = ({
   settingTabs,
   preset,
   items,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const {
@@ -173,17 +183,6 @@ export const List = ({
   }, [secondaryFont])
 
   useEffect(() => {
-    setProp((props) => (props.titleColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
-
-  useEffect(() => {
-    setProp(
-      (props) => (props.descriptionColor = secondaryTextColor || "#5a5a5a"),
-      200
-    )
-  }, [secondaryTextColor])
-
-  useEffect(() => {
     setProp((props) => (props.iconColor = primaryColor || "#3182ce"), 200)
   }, [primaryColor])
 
@@ -231,8 +230,10 @@ export const List = ({
               descriptionFontFamily={descriptionFontFamily}
               iconColor={iconColor}
               textAlign={textAlign}
-              titleColor={titleColor}
-              descriptionColor={descriptionColor}
+              titleColor={textColor !== "#ffffff" ? textColor : titleColor}
+              descriptionColor={
+                secTextColor !== "#ffffff" ? secTextColor : descriptionColor
+              }
               flexDirection={flexDirection}
               item={item}
               onTitleChange={(updatedTitle) => {
@@ -261,6 +262,7 @@ const ListItem = ({
   textAlign,
   titleColor,
   descriptionColor,
+
   flexDirection,
   item,
   onTitleChange = () => {},
@@ -274,6 +276,7 @@ const ListItem = ({
   titleColor: string
   descriptionColor: string
   flexDirection: string
+
   item: {
     id: string
     picture: ImagePictureTypes | string | null
@@ -335,6 +338,7 @@ const ListItem = ({
       </div>
       <div className="flex flex-1 flex-col justify-center gap-1">
         {/** @ts-ignore */}
+        {/** @ts-ignore */}
         <ContentEditable
           className="w-fit max-w-full whitespace-break-spaces px-1 font-bold"
           style={{ wordBreak: "break-word" }}
@@ -345,6 +349,7 @@ const ListItem = ({
             onTitleChange(e.target.value)
           }}
         />
+        {/** @ts-ignore */}
         {/** @ts-ignore */}
         <ContentEditable
           className="w-fit max-w-full gap-x-0 whitespace-break-spaces px-1 text-sm"
@@ -444,6 +449,8 @@ export enum ListPresets {
 }
 
 export type ListProps = {
+  textColor?: string
+  secTextColor?: string
   titleFontFamily: string
   descriptionFontFamily: string
   textAlign: string
@@ -477,6 +484,8 @@ export type ListProps = {
 }
 
 export const ListDefaultProps: ListProps = {
+  textColor: "#ffffff",
+  secTextColor: "#ffffff",
   titleFontFamily: "inherit",
   descriptionFontFamily: "inherit",
   textAlign: "start",

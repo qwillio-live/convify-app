@@ -22,21 +22,13 @@ import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   setNewFlowSettings,
   setTemplateId,
+  setTemplateLink,
 } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
 import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import { cn } from "@/lib/utils"
-
-const cardData = [
-  { id: 1, category: "Recruiting", title: "Recruiting Campaign" },
-  { id: 2, category: "b2cLeadGen", title: "B2C Lead Gen Campaign 1" },
-  { id: 3, category: "b2cLeadGen", title: "B2C Lead Gen Campaign 2" },
-  { id: 4, category: "customerFeedback", title: "Customer Feedback Campaign" },
-  { id: 5, category: "other", title: "Other Campaign" },
-  { id: 6, category: "b2bLeadGenMarketing", title: "B2B Lead Gen Marketing" },
-]
 
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
@@ -60,6 +52,7 @@ export default function SelectTemplate() {
     setSelectedCard(index + 1)
     dispatch(setNewFlowSettings(JSON.parse(templates[index]?.templateSettings)))
     dispatch(setTemplateId(templates[index]?.id))
+    dispatch(setTemplateLink(templates[index]?.link))
     setTimeout(() => {
       setLoadingCardIndex(null)
       // Perform your action here after loading
@@ -145,7 +138,7 @@ export default function SelectTemplate() {
       setView("mobile")
       setInnerView("mobile")
       if (isAllowed) setDesktopDrawerOpen(false)
-      else router.push("/mobile")
+      else router.push("/select-template")
     }
   }
 
@@ -158,8 +151,6 @@ export default function SelectTemplate() {
     // state
   )
 
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
   return (
     <div className="font-poppins flex h-screen flex-col overflow-hidden tracking-wide">
       {!desktopDrawerOpen && (

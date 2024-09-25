@@ -24,7 +24,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
-import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import { Icons } from "@/components/icons"
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
@@ -44,6 +43,7 @@ export default function SelectColor() {
   const header = useAppSelector((state) => state.newTheme?.header)
   const text = useAppSelector((state) => state.newTheme?.text)
   const templateId = useAppSelector((state) => state.newTheme?.templateId)
+  const templateLink = useAppSelector((state) => state.newTheme?.templateLink)
   const [name, setName] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false) // State for loading state
@@ -88,6 +88,7 @@ export default function SelectColor() {
           flowSettings: { general, mobileScreen, header, text },
           templateId,
           name,
+          link: templateLink,
         }),
       }).then((res) => {
         setSuccessMessage(t("Flow created successfully!"))
@@ -113,8 +114,7 @@ export default function SelectColor() {
     window.addEventListener("resize", updateView)
     return () => window.removeEventListener("resize", updateView)
   }, [])
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
+
   return (
     <div className="font-poppins flex h-screen flex-col overflow-hidden tracking-wide">
       {!desktopDrawerOpen && (

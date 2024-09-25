@@ -43,6 +43,7 @@ export const SelectSettings = () => {
       paddingTop,
       paddingRight,
       paddingBottom,
+      labelColor,
       border,
       borderColor,
       marginLeft,

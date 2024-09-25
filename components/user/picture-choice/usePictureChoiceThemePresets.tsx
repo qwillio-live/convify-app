@@ -69,7 +69,6 @@ const usePictureChoiceThemePresets = () => {
     fieldName: `${t("Picture Choice")
       .replaceAll(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
-    labelColor: "#000000",
     labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
@@ -135,7 +134,6 @@ const usePictureChoiceThemePresets = () => {
     fieldName: `${t("Picture Choice")
       .replaceAll(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
-    labelColor: "#000000",
     labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",

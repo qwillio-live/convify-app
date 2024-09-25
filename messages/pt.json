@@ -81,6 +81,19 @@
     "Are you sure want to delete the Flow": "Tem certeza de que deseja excluir o Fluxo?"
   },
   "Components": {
+    "Label Color": "Cor da etiqueta",
+    "Text Color": "Cor do texto",
+    "Title Color": "Cor do título",
+    "Subtitle Color": "Cor da legenda",
+    "Create an account to get started": "Crie uma conta para começar",
+    "Login to your account": "Faça login na sua conta",
+    "flows": "Fluxos",
+    "Preview": "Visualização",
+    "Select template": "Selecione o modelo",
+    "Sign up for free": "Cadastre-se gratuitamente",
+    "Log in": "Conecte-se",
+    "checkbox": "caixa de seleção",
+    "textarea": "área de texto",
     "InputMail": "Email",
     "FontSize": "Tamanho da Fonte",
     "InputPhone": "Telefone",
@@ -346,6 +359,7 @@
     "Send on Telegram": "Enviar no Telegram",
     "Send on WhatsApp": "Enviar no WhatsApp",
     "Send to my inbox": "Alternar menu do usuário",
+    "Email was sent": "O e-mail foi enviado",
     "Click the button below to send a link to your inbox and continue your journey with Convify on another device": "Clique no botão abaixo para enviar um link para sua caixa de entrada e continuar sua jornada com o Convify em outro dispositivo",
     "Convify is best experienced on a bigger screen": "O Convify é melhor experimentado em uma tela maior",
     "Toggle user menu": "Alternar menu do usuário",
@@ -361,7 +375,9 @@
     "Don't miss the full power of convify on desktop and embed directly on your site": "Não perca o poder total do convify no desktop e incorpore diretamente em seu site",
     "I would like to get link for my flow": "Gostaria de obter link para meu fluxo",
     "I would like to receive link for my account": "Gostaria de receber link para minha conta",
-    "Helper Information": "Clique e segure um bloco da lista, mova-o para o painel à esquerda e solte-o acima da zona de soltura para adicioná-lo."
+    "Helper Information": "Clique e segure um bloco da lista, mova-o para o painel à esquerda e solte-o acima da zona de soltura para adicioná-lo.",
+    "Please enter a valid email address": "Por favor insira um endereço de e-mail válido",
+    "Please enter a valid phone number": "Por favor insira um número de telefone válido"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",
@@ -376,6 +392,8 @@
     "Support": "Suporte",
     "Logout": "Sair",
     "My workspace": "Meu espaço de trabalho",
+    "Flow published successfully!": "Fluxo publicado com sucesso!",
+    "Error publishing flow": "Erro ao publicar fluxo",
     "ResultsPage": {
       "Pick a date": "Escolha uma data",
       "This flow doesnt have any responses yet": "Este typeform ainda não tem respostas.",

@@ -157,12 +157,12 @@ export const UserInputTextareaSettings = () => {
   return (
     <>
       <Accordion
-        value={props.settingsTab || "content"}
+        value={props.settingsTab || "general"}
         onValueChange={(value) => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
         type="multiple"
-        defaultValue={["content"]}
+        defaultValue={["general"]}
         className="w-full"
       >
         <AccordionItem value="content">

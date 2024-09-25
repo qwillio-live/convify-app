@@ -1,10 +1,23 @@
 import { Montserrat, Open_Sans } from "next/font/google"
 
 import { cn } from "@/lib/utils"
+import StoreProvider from "@/lib/state/flows-state/store-provider"
 
 interface SelectTemplateLayoutProps {
   children: React.ReactNode
   params: { locale: string }
+}
+import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
+
+const APP_NAME = process.env.APP_NAME
+
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${APP_NAME} - ${t("Select template")}`, // Use translations for title
+  }
 }
 
 const fontSans = Montserrat({
@@ -31,12 +44,15 @@ export default async function SelectTemplateLayout({
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-[#f9f9fb] font-sans antialiased text-[#1c212c]",
-          fontSans.variable,
-          fontHeading.variable
+          "min-h-screen bg-[#f9f9fb] font-sans text-[#1c212c] antialiased",
+          fontSans.className,
+          fontHeading.className
         )}
       >
-        <main>{children}</main>
+        <main>
+          {" "}
+          <StoreProvider>{children}</StoreProvider>
+        </main>
       </body>
     </html>
   )

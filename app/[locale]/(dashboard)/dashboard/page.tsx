@@ -60,7 +60,15 @@ export default function DashboardPage() {
   const [flows, setFlows] = useState([])
   const [status, setStatus] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState<boolean>(false) // Add mobile detection state
 
+  // Mobile detection logic
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
+    if (/android|iphone|ipad|ipod/i.test(userAgent)) {
+      setIsMobile(true)
+    }
+  }, [])
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
@@ -259,7 +267,11 @@ export default function DashboardPage() {
         </div>
 
         <div className="overflow-x-hidden pt-4 md:pt-0">
-          <div className={`md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0 ${openCreateFlow? 'h-[88px]':"md:h-[88px] h-6"}`}>
+          <div
+            className={`md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0 ${
+              openCreateFlow ? "h-[88px]" : "h-6 md:h-[88px]"
+            }`}
+          >
             <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
               <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
                 {t("My workspace")}
@@ -277,7 +289,13 @@ export default function DashboardPage() {
               </Link>
             </div>
           </div>
-          <main className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8 ${openCreateFlow ? "h-[calc(100%-88px)]":"md:h-[calc(100%-88px)] h-[calc(100%-24px)]"}`}>
+          <main
+            className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8 ${
+              openCreateFlow
+                ? "h-[calc(100%-88px)]"
+                : "h-[calc(100%-24px)] md:h-[calc(100%-88px)]"
+            }`}
+          >
             {loading ? (
               <div
                 className={`flex flex-1 items-center justify-center rounded-lg border-none`}

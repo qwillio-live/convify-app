@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react"
+"use client"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { useNode } from "@/lib/craftjs"
 import {
@@ -11,12 +12,16 @@ import {
 import { Controller } from "../settings/controller.component"
 import { SelectSettings } from "./user-select.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
 import hexoid from "hexoid"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
 import ContentEditable from "react-contenteditable"
 import { debounce } from "lodash"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 const SelectSizeValues = {
   small: "300px",
@@ -64,9 +69,80 @@ export const SelectGen = ({
   const [selectedOptionId, setSelectedOptionId] = React.useState<
     string | undefined
   >()
+  const [isFilled, setIsFiiled] = useState(false)
+  const screenData = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen?.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen?.selectedScreen].screenData
+      )[props.nodeId]?.props.selectedOptionId
+    }
+    return []
+  })
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
 
+  const isRequired = useAppSelector((state) => {
+    const selectedScreenData =
+      state.screen?.screens[state.screen.selectedScreen]?.screenData
+    if (typeof selectedScreenData === "string") {
+      return JSON.parse(
+        state.screen?.screens[state.screen.selectedScreen].screenData
+      )[props.nodeId]?.props?.required
+    }
+    return false
+  })
+  useEffect(() => {
+    console.log("setting filled true", screenData)
+    if (screenData !== undefined) {
+      console.log("setting filled true", screenData)
+      setIsFiiled(true)
+    }
+    if (screenData?.length > 0) setSelectedOptionId(screenData)
+  }, [])
+  const alarm = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  )
+  const dispatch = useAppDispatch()
+  const counttt = useAppSelector(
+    (state) =>
+      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+  )
+  const itemRefNew = useRef<HTMLDivElement | null>(null)
+  const shakeItem = () => {
+    const currentItem = itemRefNew.current // Store the current reference for null check
+    if (currentItem) {
+      currentItem.classList.add("shake")
+      // Remove the class after animation ends
+      const removeShake = () => {
+        currentItem.classList.remove("shake")
+        currentItem.removeEventListener("animationend", removeShake)
+      }
+      currentItem.addEventListener("animationend", removeShake)
+    }
+  }
+  useEffect(() => {
+    if (alarm && !isFilled && isRequired) {
+      shakeItem() // Call shake function when alarm is updated
+    }
+  }, [counttt]) // Depend on alarm state
+  console.log(
+    "in sselect",
+    screenData,
+    selectedOptionId,
+    isFilled,
+    isRequired,
+    "placeGolder",
+    placeholder,
+    "fontfamily",
+    fontFamily
+  )
   return (
     <div
+      ref={itemRefNew}
       className="relative w-full"
       style={{
         width: "100%",
@@ -84,22 +160,40 @@ export const SelectGen = ({
     >
       <CustomSelect
         value={selectedOptionId}
-        onValueChange={(value) => setSelectedOptionId(value)}
+        onValueChange={(value) => {
+          dispatch(
+            setPreviewScreenData({
+              nodeId: props.nodeId,
+              isArray: false,
+              newSelections: [value],
+              entity: "selectedOptionId",
+            })
+          )
+          if (!isFilled && isRequired) {
+            console.log("diispathving", isFilled)
+            dispatch(setUpdateFilledCount(1))
+            setIsFiiled(true)
+          }
+          setSelectedOptionId(value)
+        }}
       >
         <div
-          className="w-full p-1"
+          className={`w-full p-1 `}
           style={{
-            color: labelColor,
+            color: `${
+              labelColor !== "#ffffff" ? labelColor : primaryTextColor
+            }`,
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: SelectSizeValues[size || "medium"],
           }}
         >
-          <label>{label}</label>
+          <div dangerouslySetInnerHTML={{ __html: label }} />
         </div>
         <StyledCustomSelectTrigger
+          data-label={props?.fieldName || ""}
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
-          }`}
+          } ${alarm && isRequired && !isFilled && "!border-red-600"}`}
           fontFamily={fontFamily?.value}
           borderHoverColor={borderHoverColor?.value}
           borderColor={borderColor.value}
@@ -114,7 +208,7 @@ export const SelectGen = ({
           mobileScreen={false}
           {...props}
         >
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={"Please select an option"} />
         </StyledCustomSelectTrigger>
         <SelectContent>
           {getSortedSelectOptions(selectOptions, sortAlphabetically).map(
@@ -156,10 +250,10 @@ interface StyledSelectProps {
   mobileScreen: boolean
 }
 const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
+  font-family: ${(props) => `var(${props?.fontFamily})`} !important;
   font-weight: 400;
   font-size: 16px;
-  border: 1px dashed transparent;
+  border: ${(props) => props.border};
   transition: all 0.2s ease;
 
   &:hover {
@@ -289,12 +383,6 @@ export const Select = ({
     }
   }, [primaryColor])
 
-  useEffect(() => {
-    if (primaryTextColor) {
-      setProp((props) => (props.labelColor = primaryTextColor), 200)
-    }
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -312,6 +400,7 @@ export const Select = ({
         className="relative w-full"
         style={{
           background: `${containerBackground}`,
+          fontFamily: `var(${fontFamily?.value})`,
           display: "inline-flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -351,6 +440,7 @@ export const Select = ({
             }}
           >
             {/** @ts-ignore */}
+            {/** @ts-ignore */}
             <ContentEditable
               className="px-1"
               html={label}
@@ -359,7 +449,9 @@ export const Select = ({
                 handlePropChangeDebounced("label", e.target.value)
               }}
               style={{
-                color: labelColor,
+                color: `${
+                  labelColor !== "#ffffff" ? labelColor : primaryTextColor
+                }`,
                 outlineColor: borderHoverColor.value,
                 borderRadius: "4px",
               }}
@@ -423,7 +515,7 @@ export type SelectProps = {
   selectOptions: object[]
   selectedOptionId: string | undefined
   fontFamily: StyleProperty
-  labelColor: string
+  labelColor?: string
   containerBackground: string
   disabled: boolean
   required: boolean
@@ -465,7 +557,7 @@ export const SelectDefaultProps: SelectProps = {
     globalStyled: true,
     isCustomized: false,
   },
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   containerBackground: "transparent",
   borderColor: {
     value: "inherit",
