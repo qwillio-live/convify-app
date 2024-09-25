@@ -158,7 +158,7 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
           )}
         >
           {
@@ -492,10 +492,7 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`,
-            {
-              "px-1": mobileScreen,
-            }
+            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
           )}
         >
           {
