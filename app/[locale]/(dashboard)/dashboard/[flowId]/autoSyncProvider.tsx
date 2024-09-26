@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 import NotFound from "./not-found"
 
 export const FlowsAutoSaveProvider = ({ children, flowId }) => {
-  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 5000
+  const autoSaveTime = Number(process.env.NEXT_PUBLIC_AUTOSAVE_TIME) || 1000
   const [isFlowLoaded, setIsFlowLoaded] = useState<null | Boolean>(null)
   const [updatedFlowData, setUpdatedFlowData] = useState<null | object>(null)
 

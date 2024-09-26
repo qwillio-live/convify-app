@@ -136,7 +136,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   function handleSendResponse(stepId) {
     console.log("entered handleSendResponse", stepId)
 
-    const name = `${RESPONSES_STORAGE_PREFIX}${flowData.id}`
+    const name = `${RESPONSE_BUTTON_CLASS}${flowData.id}`
     console.log("entered handleSendResponse", totalFilled, name)
     // Get the responseLocal item from local storage
     const responseLocal = getLocalStorageItem(name)
