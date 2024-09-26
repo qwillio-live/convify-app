@@ -182,14 +182,9 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     }
   }, [screen])
   useEffect(() => {
-    console.log(
-      "entered in send response",
-      totalFilled,
-      typeof totalFilled,
-      totalFilled.length
-    )
+    console.log("entered in send response", totalFilled, typeof totalFilled)
     const stepId = screen
-    if (totalFilled.length > 0) {
+    if (Object.keys(totalFilled).length > 0) {
       console.log("enreteing handlesendresponse")
       handleSendResponse(stepId)
     }
