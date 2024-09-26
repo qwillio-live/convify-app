@@ -115,17 +115,43 @@ const ScreensList = ({ flowId }) => {
   // }
   // }, []);
 
-  const handleReorder = (data) => {
+  const handleReorder = async (data) => {
+    // Dispatch the new order of screens
     dispatch(setScreens(data))
+
+    // Get the currently selected screen's index
+    const newIndex = selectedScreen
+      ? data.findIndex((screen) => screen.screenId === selectedScreen.screenId)
+      : -1
+
+    // If a valid screen is selected and its data exists, deserialize the new screen data
+    if (newIndex !== -1 && data[newIndex]?.screenData) {
+      await actions.deserialize(data[newIndex].screenData)
+      dispatch(setSelectedScreen(newIndex)) // Update the selected screen index if needed
+    } else if (data.length > 0) {
+      // If no valid screen is selected, fall back to the first screen
+      await actions.deserialize(data[0].screenData)
+      dispatch(setSelectedScreen(0))
+    }
   }
 
-  // useEffect(() => {
-  //   if (selectedScreenIndex !== undefined && screens && selectedScreenIndex >= 0 && selectedScreenIndex < screens.length) {
-  //     actions.deserialize(screens[selectedScreenIndex]);
-  //   } else {
-  //     console.error('selectedScreenIndex or screens is undefined, or selectedScreenIndex is out of bounds');
-  //   }
-  // }, [selectedScreenIndex, screens]);
+  useEffect(() => {
+    console.log("entering useEffect")
+    try {
+      if (
+        screens &&
+        typeof selectedScreenIndex !== "undefined" &&
+        screens[selectedScreenIndex] &&
+        screens[selectedScreenIndex].screenData
+      ) {
+        console.log("screen to deserialise", selectedScreenIndex)
+        actions.deserialize(screens[selectedScreenIndex].screenData || {})
+      }
+    } catch (error) {
+      console.error("Error during deserialization:", error)
+      // Optionally, handle the error here (e.g., show a notification, log it, etc.)
+    }
+  }, [selectedScreenIndex])
 
   const handleScreenClick = useCallback(
     async (index: number) => {
@@ -435,7 +461,15 @@ const ScreensList = ({ flowId }) => {
                         )}
                       >
                         {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
-                        <div className="text-muted-foreground relative scale-[.20] text-xs">
+                        <div
+                          className="text-muted-foreground relative w-full text-xs"
+                          style={{
+                            overflow: "hidden", // Hide content that overflows
+                            transform: "scale(1,1)", // Zoom out vertically
+                            zoom: "35%",
+                            pointerEvents: "none",
+                          }}
+                        >
                           <div
                             style={{
                               background:
@@ -481,7 +515,15 @@ const ScreensList = ({ flowId }) => {
                       onClick={() => handleScreenClick(index)}
                     >
                       {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
-                      <div className="text-muted-foreground relative scale-[.20] text-xs">
+                      <div
+                        className="text-muted-foreground relative text-xs"
+                        style={{
+                          overflow: "hidden", // Hide content that overflows
+                          transform: "scale(1,1)", // Zoom out vertically
+                          zoom: "25%",
+                          pointerEvents: "none",
+                        }}
+                      >
                         <div
                           style={{
                             background:

@@ -366,6 +366,9 @@ export const LoaderSettings = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
+                    <SelectItem className="text-xs" value={"Do Nothing"}>
+                      {t("Do Nothing")}
+                    </SelectItem>
                     <SelectItem className="text-xs" value={"next-screen"}>
                       {t("Next Screen")}
                     </SelectItem>

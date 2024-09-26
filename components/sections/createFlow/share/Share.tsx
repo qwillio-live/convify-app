@@ -102,7 +102,7 @@ const ShareFlowComponents = ({
                     maxWidth: view === "desktop" ? "100%" : "360px",
                   }}
                 >
-                  {!isPublished ? (
+                  {!!isPublished ? (
                     <iframe
                       src={link ? link : "https://convify.io/survey"}
                       frameBorder="0"
@@ -110,8 +110,8 @@ const ShareFlowComponents = ({
                       style={{ background: "#e21af3 !important" }}
                     ></iframe>
                   ) : (
-                    <div className="flex h-full flex-col justify-center items-center bg-white rounded-[20px] border border-[#E9E9E9]">
-                      <div className="absolute top-8 z-100 flex h-[46px] flex-nowrap items-center whitespace-nowrap rounded-full bg-[#E37400] pl-6 pr-8 text-sm text-white">
+                    <div className="flex h-full flex-col items-center justify-center rounded-[20px] border border-[#E9E9E9] bg-white">
+                      <div className="z-100 absolute top-8 flex h-[46px] flex-nowrap items-center whitespace-nowrap rounded-full bg-[#E37400] pl-6 pr-8 text-sm text-white">
                         <span className="flex flex-nowrap items-center gap-1.5">
                           <TriangleAlert className="-mr-1.5 -mt-0.5 h-3.5" />{" "}
                           {t("This flow is not published yet")}{" "}
