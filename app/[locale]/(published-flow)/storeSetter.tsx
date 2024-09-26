@@ -38,8 +38,8 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const RESPONSE_EXPIRY_MINUTES = 30 // 3
   let storage = {}
 
-  async function sendResponseEvent(stepId, responseId: string | null = null) {
-    console.log("entered sendResponseEvent")
+  async function sendResponseEvent(stepId, responseId) {
+    console.log("entered sendResponseEvent", responseId)
 
     setTimeout(async () => {
       const method = responseId ? "PUT" : "POST"
@@ -157,7 +157,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     } catch (e) {
       localStorage.removeItem(name) // Remove item if parsing fails
     }
-
+    console.log("responseId", responseId)
     sendResponseEvent(stepId, responseId)
   }
 
