@@ -134,7 +134,14 @@ export const MultipleChoiceGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
-  console.log("of mc props", choices)
+  console.log(
+    "of mc props",
+    choices,
+    "screenData",
+    screenData,
+    "selections",
+    selections
+  )
   return (
     <div
       className="relative w-full"
