@@ -94,7 +94,52 @@ const Header = ({ flowId }) => {
   const publishFlow = async () => {
     try {
       setIsLoading(true)
+      const localFlowData = useAppSelector((state) => state?.screen)
+      const localFlowSettings = useAppSelector((state) => state?.theme)
+      const steps = localFlowData?.screens
+        ? Array.from(
+            new Set(localFlowData.screens.map((step) => step.screenName))
+          ).map((name) => {
+            const step = localFlowData.screens.find(
+              (s) => s.screenName === name
+            )
+            return {
+              id: step?.screenId,
+              name: step?.screenName,
+              content: JSON.parse(step?.screenData),
+              link: step?.screenLink,
+              order: step ? localFlowData.screens.indexOf(step) : 0,
+              templateId: step?.screenTemplateId,
+            }
+          })
+        : [] // Return an empty array if localFlowData or screens is undefined
 
+      const data = {
+        steps,
+        headerData: localFlowData?.screensHeader,
+        footerData: localFlowData?.screensFooter,
+        flowSettings: {
+          mobileScreen: localFlowSettings?.mobileScreen,
+          header: localFlowSettings?.header,
+          general: localFlowSettings?.general,
+          text: localFlowSettings?.text,
+        },
+      }
+      try {
+        await fetch(`/api/flows/${flowId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Previous request canceled")
+        } else {
+          console.error("Update flow error:", error)
+        }
+      }
       // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
       //   method: "GET",
       // })
