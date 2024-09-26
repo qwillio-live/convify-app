@@ -102,8 +102,8 @@ export const MultipleChoiceGen = ({
   })
   const dispatch = useAppDispatch()
   useEffect(() => {
-    setSelectedChoices(selections)
-    if (selections?.length > 0) {
+    setSelectedChoices(screenData)
+    if (screenData?.length > 0) {
       setIsCountUpdated(true)
     }
   }, [])
@@ -535,27 +535,27 @@ export const MultipleChoice = ({
                   return props
                 }, 200)
               }}
-              onSelectChange={() => {
-                if (multiSelect) {
-                  setProp((props) => {
-                    if (props.selections.includes(choice.id)) {
-                      props.selections = props.selections.filter(
-                        (selectionId) => selectionId !== choice.id
-                      )
-                    } else {
-                      props.selections.push(choice.id)
-                    }
-                    return props
-                  }, 200)
-                } else {
-                  setProp((props) => {
-                    props.selections = selections.includes(choice.id)
-                      ? []
-                      : [choice.id]
-                    return props
-                  }, 200)
-                }
-              }}
+              // onSelectChange={() => {
+              //   if (multiSelect) {
+              //     setProp((props) => {
+              //       if (props.selections.includes(choice.id)) {
+              //         props.selections = props.selections.filter(
+              //           (selectionId) => selectionId !== choice.id
+              //         )
+              //       } else {
+              //         props.selections.push(choice.id)
+              //       }
+              //       return props
+              //     }, 200)
+              //   } else {
+              //     setProp((props) => {
+              //       props.selections = selections.includes(choice.id)
+              //         ? []
+              //         : [choice.id]
+              //       return props
+              //     }, 200)
+              //   }
+              // }}
             />
           ))}
         </ul>
