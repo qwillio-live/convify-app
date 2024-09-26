@@ -102,8 +102,8 @@ export const MultipleChoiceGen = ({
   })
   const dispatch = useAppDispatch()
   useEffect(() => {
-    setSelectedChoices(screenData)
-    if (screenData?.length > 0) {
+    setSelectedChoices(selections)
+    if (selections?.length > 0) {
       setIsCountUpdated(true)
     }
   }, [])
