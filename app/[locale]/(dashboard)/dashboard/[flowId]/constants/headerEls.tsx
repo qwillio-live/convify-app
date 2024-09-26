@@ -110,7 +110,7 @@ const Header = ({ flowId }) => {
         }
         setIsLoading(false)
         router.push(`./share`)
-      }, 6000)
+      }, 9000)
       // }
     } catch (err) {
       console.error("Publishing flow failed:", err)
