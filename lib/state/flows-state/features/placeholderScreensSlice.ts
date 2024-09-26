@@ -282,61 +282,62 @@ export const screensSlice = createSlice({
       // Initialize an array to hold the filled data for each screen
       let totalFilled: any = [] // Adjust type as needed
 
-      state.screens.forEach((screen) => {
-        // Deep clone screen and parse screenData
-        let eachScreen = JSON.parse(JSON.stringify(screen))
-        let screenData = JSON.parse(eachScreen.screenData)
-        Object.entries(screenData).forEach(([key, node]: [string, any]) => {
-          const dataLabel =
-            node.props?.fieldName ||
-            node.props?.label ||
-            node?.displayName ||
-            node.props?.id
-          const dataId = node.props?.id || key || node?.displayName
-          console.log("node", node, "data-label", dataLabel, "key", key)
-          if (
-            node.type !== "UserContainer" &&
-            ((node.props?.selections && node.props?.selections.length > 0) ||
-              (node.props?.inputValue &&
-                node.props.inputValue !== "Components.Text Area") ||
-              node.props?.input ||
-              node.props?.selectedOptionId)
+      // Deep clone screen and parse screenData
+      const screen = state.screens[state.selectedScreen]
+      console.log("curret screen while getting answers", state.selectedScreen)
+      let eachScreen = JSON.parse(JSON.stringify(screen))
+      let screenData = JSON.parse(eachScreen.screenData)
+      state.filledContent = []
+      Object.entries(screenData).forEach(([key, node]: [string, any]) => {
+        const dataLabel =
+          node.props?.fieldName ||
+          node.props?.label ||
+          node?.displayName ||
+          node.props?.id
+        const dataId = node.props?.id || key || node?.displayName
+        console.log("node", node, "data-label", dataLabel, "key", key)
+        if (
+          node.type !== "UserContainer" &&
+          ((node.props?.selections && node.props?.selections.length > 0) ||
+            (node.props?.inputValue &&
+              node.props.inputValue !== "Components.Text Area") ||
+            node.props?.input ||
+            node.props?.selectedOptionId)
+        ) {
+          // Extract one of the values that meet the conditions
+          if (node.props?.selections && node.props.selections.length > 0) {
+            //node.props.fieldName || node.props.label node.displayName || node.props.id
+            const options = node.props?.choices
+            //
+            const result = options
+              .filter((choice) => node.props?.selections?.includes(choice.id))
+              .map((choice) => ({ id: choice.id, value: choice.value }))
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props?.selections?.length > 1 ? result : result[0],
+              type:
+                node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
+            }
+          } else if (
+            node.props?.inputValue &&
+            node.props.inputValue !== "Components.Text Area"
           ) {
-            // Extract one of the values that meet the conditions
-            if (node.props?.selections && node.props.selections.length > 0) {
-              //node.props.fieldName || node.props.label node.displayName || node.props.id
-              const options = node.props?.choices
-              //
-              const result = options
-                .filter((choice) => node.props?.selections?.includes(choice.id))
-                .map((choice) => ({ id: choice.id, value: choice.value }))
-              totalFilled[dataId] = {
-                label: dataLabel,
-                value: node.props?.selections?.length > 1 ? result : result[0],
-                type:
-                  node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
-              }
-            } else if (
-              node.props?.inputValue &&
-              node.props.inputValue !== "Components.Text Area"
-            ) {
-              totalFilled[dataId] = {
-                label: dataLabel,
-                value: node.props.inputValue,
-              }
-            } else if (node.props?.selectedOptionId) {
-              totalFilled[dataId] = {
-                label: dataLabel,
-                value: node.props.selectedOptionId,
-              }
-            } else if (node.props?.input) {
-              totalFilled[dataId] = {
-                label: dataLabel,
-                value: node.props.input,
-              }
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props.inputValue,
+            }
+          } else if (node.props?.selectedOptionId) {
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props.selectedOptionId,
+            }
+          } else if (node.props?.input) {
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props.input,
             }
           }
-        })
+        }
       })
 
       // Convert totalFilled to a JSON string

@@ -28,7 +28,8 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const screen = searchParams?.get("screen") || ""
   const dispatch = useAppDispatch()
   const state = useAppSelector((state) => state.screen)
-  const totalFilled = useAppSelector((state) => state.screen?.filledContent)
+  const totalFilled =
+    useAppSelector((state) => state.screen?.filledContent) || []
   const index = screenNames.findIndex((screenn) => screenn === screen)
   const VISITED_STORAGE_PREFIX = "visited-"
   const RESPONSE_BUTTON_CLASS = "send-response"
@@ -172,17 +173,17 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   }, []) // Add dependencies
   useEffect(() => {
     console.log("Selected screen called", index !== -1 ? index : 1)
+
     dispatch(setSelectedScreen(index))
     const stepId = screen
     console.log("StepIDddd", stepId)
     if (stepId) {
       handleStepVisit(stepId)
     }
-    dispatch(getAllFilledAnswers(true))
   }, [screen])
   useEffect(() => {
     const stepId = screen
-    if (index === screenNames.length - 1) {
+    if (totalFilled?.length > 0) {
       handleSendResponse(stepId)
     }
   }, [totalFilled])
