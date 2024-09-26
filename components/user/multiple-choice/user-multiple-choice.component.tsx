@@ -23,6 +23,7 @@ import { usePathname } from "next/navigation"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import {
+  getAllFilledAnswers,
   setPreviewScreenData,
   setSelectedData,
   setSelectedScreen,
@@ -652,6 +653,7 @@ const MultipleChoiceItem = ({
           })
         )
         handleSearch(updatedScreenName)
+        dispatch(getAllFilledAnswers(true))
         dispatch(setSelectedScreen(index))
       } else if (newsc !== "none") {
         console.log(
@@ -667,6 +669,7 @@ const MultipleChoiceItem = ({
           })
         )
         handleSearch(newsc)
+        dispatch(getAllFilledAnswers(true))
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
         dispatch(setSelectedScreen(index))
       }
