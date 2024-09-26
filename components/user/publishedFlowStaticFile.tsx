@@ -195,7 +195,6 @@ export default function StaticPublishedFile({
         style={{
           backgroundColor:
             data?.flowSettings?.general?.backgroundColor || "transparent",
-          minHeight: "100vh",
         }}
       >
         {filteredStep && (
