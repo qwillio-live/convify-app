@@ -105,7 +105,7 @@ const Header = ({ flowId }) => {
           method: "POST",
         })
         if (response.ok) {
-          revalidateFlow({ tag: "publishedFlow" })
+          // revalidateFlow({ tag: "publishedFlow" })
           router.push(`./share`)
         }
         setIsLoading(false)
