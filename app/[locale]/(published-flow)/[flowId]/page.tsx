@@ -1,4 +1,4 @@
-export const revalidate = 0
+export const dynamic = "force-dynamic"
 import React from "react"
 import FlowStateSetter from "../storeSetter"
 import { unstable_setRequestLocale } from "next-intl/server"
