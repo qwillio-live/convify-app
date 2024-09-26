@@ -460,29 +460,6 @@ const EditScreenName = ({ screenId, screenName }) => {
   )
 }
 
-function HelperInformation() {
-  const t = useTranslations("Components")
-  return (
-    <Card
-      className={cn(
-        "hidden w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer md:flex"
-      )}
-    >
-      <div className="flex flex-row items-start gap-1 text-left">
-        <MousePointer />
-        <div>
-          <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
-            {t("Right-Click")}
-          </h2>
-          <p className="text-sm font-light">
-            {t("Click on a screen to edit it")}
-          </p>
-        </div>
-      </div>
-    </Card>
-  )
-}
-
 function DisplayEditor() {
   const screens = useAppSelector((state) => state?.screen?.screens)
 
