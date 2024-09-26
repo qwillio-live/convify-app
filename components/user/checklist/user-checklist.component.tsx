@@ -43,7 +43,7 @@ export const ChecklistGen = ({
 }) => {
   return (
     <div
-      className="relative w-full"
+      className="relative w-full max-w-[calc(100%-22px)]"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -51,7 +51,7 @@ export const ChecklistGen = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        minWidth: "100%",
+        // minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
         paddingLeft: `${marginLeft}px`,
@@ -99,9 +99,9 @@ const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
   margin-right: auto;
   max-width: 100%;
 
-  @media (max-width: 1000px) {
+  /* @media (max-width: 1000px) {
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
-  }
+  } */
 
   ${({ size, mobileScreen }) => {
     if (mobileScreen) {
@@ -116,7 +116,7 @@ const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
       case UserInputSizes.large:
         return { width: "1000px" }
       default:
-        return { width: "calc(100% - 22px)" }
+        return { width: "100%" }
     }
   }};
 `
