@@ -54,8 +54,12 @@ export const SettingsPanel = () => {
   })
 
   useEffect(() => {
-    if (selected || selectedComponent) {
-      actions.selectNode(selectedComponent || "ROOT")
+    try {
+      if (selected || selectedComponent) {
+        actions.selectNode(selectedComponent || "ROOT")
+      }
+    } catch (e) {
+      console.log("error in user settings", e)
     }
   }, [mobileScreen, selectedComponent])
   return (
