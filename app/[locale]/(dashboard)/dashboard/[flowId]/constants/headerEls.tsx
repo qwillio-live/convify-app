@@ -44,6 +44,8 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
+  const localFlowData = useAppSelector((state) => state?.screen)
+  const localFlowSettings = useAppSelector((state) => state?.theme)
   // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
@@ -94,8 +96,6 @@ const Header = ({ flowId }) => {
   const publishFlow = async () => {
     try {
       setIsLoading(true)
-      const localFlowData = useAppSelector((state) => state?.screen)
-      const localFlowSettings = useAppSelector((state) => state?.theme)
       const steps = localFlowData?.screens
         ? Array.from(
             new Set(localFlowData.screens.map((step) => step.screenName))
