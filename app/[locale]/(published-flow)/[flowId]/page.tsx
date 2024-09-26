@@ -1,3 +1,4 @@
+export const revalidate = 0
 import React from "react"
 import FlowStateSetter from "../storeSetter"
 import { unstable_setRequestLocale } from "next-intl/server"
