@@ -6,7 +6,8 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
   try {
-    revalidateFlow({ tag: "publishedFlow" })
+    // revalidateFlow({ tag: "publishedFlow" })
+    revalidateTag("publishedFlow")
     return NextResponse.json({ revalidated: true })
   } catch (error) {
     console.error(error)
