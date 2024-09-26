@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic"
 import React from "react"
 import FlowStateSetter from "../storeSetter"
 import { unstable_setRequestLocale } from "next-intl/server"
@@ -93,7 +92,7 @@ export default async function PublishedFlows({
 
   const response = await fetch(`${flowDomain}/api/flows/published/${flowId}`, {
     method: "GET",
-    cache: "no-cache",
+    cache: "force-cache",
     next: { tags: ["publishedFlow"] },
   })
   const data = await response.json()
