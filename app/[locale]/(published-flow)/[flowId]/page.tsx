@@ -92,7 +92,7 @@ export default async function PublishedFlows({
 
   const response = await fetch(`${flowDomain}/api/flows/published/${flowId}`, {
     method: "GET",
-    cache: "only-if-cached",
+    cache: "default",
     next: { tags: ["publishedFlow"] },
   })
   const data = await response.json()
