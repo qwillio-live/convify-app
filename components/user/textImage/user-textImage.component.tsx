@@ -400,7 +400,7 @@ export const TextImageComponentGen = ({
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <div
-              className="flex-col md:flex-row"
+              className="flex-col md:flex-row max-w-[calc(100vw-2px)]"
               style={{
                 display: "flex",
                 width: "100%",
