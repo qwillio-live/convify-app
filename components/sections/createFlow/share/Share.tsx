@@ -351,7 +351,7 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
           type="text"
           aria-label="copy link input"
           className="h-10 w-full rounded-lg border border-[#E6E2DD] pl-4 text-base text-[#23262C] outline-none"
-          value={isPublished ? link : "https://convify.app/your-link-here"}
+          value={link !== "" ? link : "https://convify.app/your-link-here"}
         />
         <Button
           onClick={() => {

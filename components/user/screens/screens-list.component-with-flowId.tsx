@@ -505,18 +505,20 @@ const ScreensList = ({ flowId }) => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "relative mt-1 hidden h-32 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:flex md:w-[13.5vw]",
+                        "relative mt-1 hidden h-32 w-[94vw] flex-col overflow-hidden  border p-[3px] hover:cursor-pointer hover:p-0 md:flex md:w-[13.5vw]",
                         {
-                          "border-[#2B3398]":
+                          "border-blue-500 p-0":
                             selectedScreenIndex === index && !headerFooterMode,
                           "hover:border-4": selectedScreenIndex !== index,
                         }
                       )}
-                      onClick={() => handleScreenClick(index)}
+                      onClick={() => {
+                        handleScreenClick(index)
+                      }}
                     >
                       {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                       <div
-                        className="text-muted-foreground relative text-xs"
+                        className="text-muted-foreground relative   text-xs"
                         style={{
                           overflow: "hidden", // Hide content that overflows
                           transform: "scale(1,1)", // Zoom out vertically
@@ -530,20 +532,31 @@ const ScreensList = ({ flowId }) => {
                               avatarBackgroundColor !== "rgba(255,255,255,.1)"
                                 ? avatarBackgroundColor
                                 : backgroundColor,
+
+                            // overflow: "auto", // Make content scrollable within the 30% area
                           }}
                         >
                           <ResolvedComponentsFromCraftState
                             screen={screensHeader}
                           />
                         </div>
+
                         <div style={{ paddingTop: "50px" }}>
-                          <ResolvedComponentsFromCraftState
-                            screen={screen.screenData ? screen.screenData : {}}
-                          />
+                          {JSON.parse(screen.screenData)["ROOT"].nodes.length >
+                          0 ? (
+                            <ResolvedComponentsFromCraftState
+                              screen={
+                                screen.screenData ? screen.screenData : {}
+                              }
+                            />
+                          ) : (
+                            <div style={{ paddingTop: "15%" }}>
+                              <ResolvedComponentsFromCraftState
+                                screen={screensFooter}
+                              />
+                            </div>
+                          )}
                         </div>
-                        <ResolvedComponentsFromCraftState
-                          screen={screensFooter}
-                        />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
