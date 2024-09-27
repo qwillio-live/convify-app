@@ -1193,8 +1193,8 @@ export const UserToolbox = () => {
                         <Image
                           src={ImagePlaceholder.src}
                           alt="Image component"
-                          width={360}
-                          height={203}
+                          width={250}
+                          height={140}
                           className="size-full"
                         />
                       </HoverCardComponent>
