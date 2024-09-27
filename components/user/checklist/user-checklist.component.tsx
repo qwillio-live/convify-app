@@ -9,6 +9,7 @@ import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
 
 import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
@@ -200,7 +201,9 @@ export const Checklist = ({
       {hover && <Controller nameOfComponent={t("Checklist")} />}
 
       <div
-        className="relative w-full max-w-[calc(100%-22px)]"
+        className={cn("relative w-full", {
+          "max-w-[calc(100%-22px)]": !mobileScreen,
+        })}
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
