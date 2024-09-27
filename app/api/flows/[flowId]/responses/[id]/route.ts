@@ -69,16 +69,22 @@ export async function PUT(
       )
       return response
     }
-    const oldResponse = await prisma.response.findUnique({
+    let oldResponse = await prisma.response.findUnique({
       where: {
         id: String(id),
       },
     })
-    data = { ...oldResponse, ...data }
+    // Merge the old content with the new data
+    const updatedContent = {
+      ...oldResponse.content,
+      ...data.content, // Assuming data.content holds the new fields to be merged
+    }
 
     const response = await prisma.response.update({
       where: { id: String(id) },
-      data,
+      data: {
+        content: updatedContent,
+      },
     })
 
     const jsonResponse = NextResponse.json(response)
