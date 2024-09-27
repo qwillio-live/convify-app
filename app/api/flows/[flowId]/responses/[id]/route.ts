@@ -69,7 +69,7 @@ export async function PUT(
       )
       return response
     }
-    const oldResponse = await prisma.response.findOne({
+    const oldResponse = await prisma.response.findUnique({
       where: {
         id: String(id),
       },
