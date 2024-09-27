@@ -69,19 +69,24 @@ export async function PUT(
       )
       return response
     }
+
     let oldResponse = await prisma.response.findUnique({
       where: {
         id: String(id),
       },
     })
+
     console.log("oldresponse", oldResponse)
-    let oldContent = {}
-    if (oldResponse) {
-      oldContent = oldResponse?.content
-    }
+
+    // Ensure oldResponse.content is treated as an object
+    const oldContent =
+      oldResponse?.content && typeof oldResponse.content === "object"
+        ? oldResponse.content
+        : {}
+
     // Merge the old content with the new data
     const updatedContent = {
-      ...oldResponse,
+      ...oldContent,
       ...data.content, // Assuming data.content holds the new fields to be merged
     }
 
@@ -89,6 +94,7 @@ export async function PUT(
       where: { id: String(id) },
       data: {
         content: updatedContent,
+        updatedAt: new Date().toISOString(), // Optionally update the timestamp
       },
     })
 
@@ -102,7 +108,7 @@ export async function PUT(
       "Access-Control-Allow-Headers",
       "Content-Type, Authorization"
     )
-    return NextResponse.json(jsonResponse)
+    return jsonResponse
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"
