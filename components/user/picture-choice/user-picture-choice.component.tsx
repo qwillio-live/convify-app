@@ -509,7 +509,10 @@ export const PictureChoice = ({
             />
           </div>
           <ul
-            className="flex w-full flex-wrap justify-center gap-[10px]"
+            className={cn("flex w-full justify-center gap-[10px]", {
+              "flex-nowrap": !mobileScreen,
+              "flex-wrap": mobileScreen,
+            })}
             style={{
               fontFamily: `var(${fontFamily?.value})`,
             }}
