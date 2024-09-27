@@ -74,9 +74,14 @@ export async function PUT(
         id: String(id),
       },
     })
+    console.log("oldresponse", oldResponse)
+    let oldContent = {}
+    if (oldResponse) {
+      oldContent = oldResponse?.content
+    }
     // Merge the old content with the new data
     const updatedContent = {
-      ...oldResponse.content,
+      ...oldResponse,
       ...data.content, // Assuming data.content holds the new fields to be merged
     }
 
@@ -97,7 +102,7 @@ export async function PUT(
       "Access-Control-Allow-Headers",
       "Content-Type, Authorization"
     )
-    return jsonResponse
+    return NextResponse.json(jsonResponse)
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"
