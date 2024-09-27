@@ -247,7 +247,7 @@ const ScreensList = ({ flowId }) => {
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-      className="font-poppins relative w-[95vw] overflow-x-hidden md:w-[13.5vw]"
+      className="font-poppins relative w-[94vw] overflow-x-hidden pb-24 md:pb-0 md:w-[13.5vw]"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
