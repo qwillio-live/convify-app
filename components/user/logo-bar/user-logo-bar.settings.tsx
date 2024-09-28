@@ -8,6 +8,7 @@ import {
   AlignHorizontalJustifyCenter,
   AlignHorizontalJustifyEnd,
   AlignHorizontalSpaceBetween,
+  Trash,
 } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
@@ -36,6 +37,7 @@ import { Cropper, ReactCropperElement } from "react-cropper"
 import { Icons } from "@/components/icons"
 import axios from "axios"
 import { ImagePictureTypes } from "@/components/PicturePicker"
+import { ColorInput } from "@/components/color-input"
 
 export const LogoBarSettings = () => {
   const t = useTranslations("Components")
@@ -118,14 +120,12 @@ export const LogoBarSettings = () => {
         }}
         type="multiple"
         defaultValue={settingTabs || ["content"]}
-        className="mb-10 w-full"
+        className="w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
-            <div className="text-muted-foreground">
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="text-muted-foreground text-xs">
               {t("Drag to re-arrange click to edit")}
             </div>
 
@@ -144,8 +144,7 @@ export const LogoBarSettings = () => {
               ))}
             </Reorder.Group>
             <Button
-              className="w-full"
-              variant="secondary"
+              className="h-9.5 w-full bg-[#23262C] text-white"
               size="sm"
               onClick={() =>
                 handlePropChange("items", [
@@ -163,79 +162,75 @@ export const LogoBarSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex flex-row items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={grayscale}
                 onCheckedChange={(e) => {
                   handlePropChange("grayscale", e)
                 }}
                 id="grayscale"
               />
-              <label
-                htmlFor="grayscale"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Grayscale")}
-              </label>
+              <Label htmlFor="grayscale">{t("Grayscale")}</Label>
             </div>
 
-            <div className="col-span-2 flex flex-row items-center space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={containerBackground}
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
+                handleRemove={() => {
+                  debouncedSetProp("containerBackground", "transparent")
+                }}
                 id="backgroundcolor"
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Align")}</p>
+            <div className="space-y-2">
+              <Label>{t("Align")}</Label>
               <Tabs
                 value={align}
                 defaultValue={align}
                 onValueChange={(value) => {
                   setProp((props) => (props.align = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value={LogoBarAlignments.start}>
-                    <AlignHorizontalJustifyStart />
+                <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
+                  <TabsTrigger
+                    className="rounded"
+                    value={LogoBarAlignments.start}
+                  >
+                    <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value={LogoBarAlignments.center}>
-                    <AlignHorizontalJustifyCenter />
+                  <TabsTrigger
+                    className="rounded"
+                    value={LogoBarAlignments.center}
+                  >
+                    <AlignHorizontalJustifyCenter size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value={LogoBarAlignments.end}>
-                    <AlignHorizontalJustifyEnd />
+                  <TabsTrigger
+                    className="rounded"
+                    value={LogoBarAlignments.end}
+                  >
+                    <AlignHorizontalJustifyEnd size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value={LogoBarAlignments.spaceBetween}>
-                    <AlignHorizontalSpaceBetween />
+                  <TabsTrigger
+                    className="rounded"
+                    value={LogoBarAlignments.spaceBetween}
+                  >
+                    <AlignHorizontalSpaceBetween size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="height">{t("Height")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {height}
-                </span>
+                <span className="text-muted-foreground text-xs">{height}</span>
               </div>
               <Slider
                 defaultValue={[height]}
@@ -247,12 +242,10 @@ export const LogoBarSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="gap">{t("Gap")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {gap}
-                </span>
+                <span className="text-muted-foreground text-xs">{gap}</span>
               </div>
               <Slider
                 defaultValue={[gap]}
@@ -264,28 +257,22 @@ export const LogoBarSettings = () => {
               />
             </div>
 
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+            <div className="flex flex-row items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={alignMobile}
                 onCheckedChange={(e) => {
                   handlePropChange("alignMobile", e)
                 }}
                 id="alignMobile"
               />
-              <label
-                htmlFor="alignMobile"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Align on mobile")}
-              </label>
+              <Label htmlFor="alignMobile">{t("Align on mobile")}</Label>
             </div>
 
             {alignMobile && (
-              <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-                <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
                   <Label htmlFor="mobileRowItems">{t("Items per row")}</Label>
-                  <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
+                  <span className="text-muted-foreground text-xs">
                     {mobileRowItems}
                   </span>
                 </div>
@@ -305,104 +292,120 @@ export const LogoBarSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
               <Tabs
                 value={size}
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
+                <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="small"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="medium"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="large"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="full"
+                  >
+                    <MoveHorizontal size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginTop}
-                </span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginTop}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[marginTop]}
+                  value={[marginTop]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginTop", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[marginTop]}
-                value={[marginTop]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("marginTop", e)}
-              />
-            </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginBottom}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginBottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginBottom]}
+                  value={[marginBottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginBottom", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginBottom]}
-                value={[marginBottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("marginBottom", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginRight}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginRight}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginRight]}
+                  value={[marginRight]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginRight", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginRight]}
-                value={[marginRight]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("marginRight", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginLeft}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginLeft}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginLeft]}
+                  value={[marginLeft]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginLeft", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginLeft]}
-                value={[marginLeft]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("marginLeft", e)
-                }
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -590,10 +593,10 @@ export const LogoBarItemSettings = ({ item, index }) => {
       transition={{ duration: 0 }}
       id={`logo-bar-item-${item.id}`}
       style={{ y }}
-      className="flex w-full select-none items-center gap-2 [&>div>svg]:hover:visible [&>svg]:hover:visible"
+      className="flex w-full select-none items-center space-x-2"
     >
       <input
-        className="hidden"
+        className="h-8.5 hidden"
         ref={inputRef}
         type="file"
         accept="image/*"
@@ -601,30 +604,33 @@ export const LogoBarItemSettings = ({ item, index }) => {
       />
       <Button
         variant="outline"
-        className="flex-1"
+        className="h-8.5 !ml-0 flex-1 bg-[#FAFAFA]"
         onClick={() => inputRef.current?.click()}
       >
-        <picture key={(item.src as ImagePictureTypes).desktop}>
+        <picture
+          className="h-full"
+          key={(item.src as ImagePictureTypes).desktop}
+        >
           <source
             media="(min-width:560px)"
             srcSet={(item.src as ImagePictureTypes).mobile}
           />
           <img
             src={(item.src as ImagePictureTypes).desktop}
-            className="h-6 w-full object-contain"
+            className="h-full w-full object-contain"
             loading="lazy"
           />
         </picture>
       </Button>
-      <Trash2
-        className="text-muted-foreground invisible size-3 hover:cursor-pointer"
+      <Icons.Delete
+        className="hover:cursor-pointer"
         onClick={handleItemDelete}
       />
       <div
         onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle invisible hover:cursor-move"
+        className="reorder-handle !ml-1 hover:cursor-move"
       >
-        <GripVertical className="text-muted-foreground size-4" />
+        <Icons.GripVertical />
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8">

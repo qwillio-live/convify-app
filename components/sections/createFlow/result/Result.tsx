@@ -9,19 +9,19 @@ const ResultFlowComponents = () => {
   const t = useTranslations("CreateFlow.ResultsPage")
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="font-poppins w-full">
       <Tabs defaultValue="insights">
-        <header className="flex h-14 items-center justify-center gap-4 border-b bg-muted/20 px-4 lg:h-[60px] bg-white">
-          <div className="tabs-list-container flex size-full sm:w-3/5 items-center justify-center sm:justify-start">
-            <TabsList className="flex h-full bg-inherit py-0">
+        <header className="bg-muted/20 flex h-14 items-center justify-center gap-4 border-b bg-white px-4 lg:h-[88px] lg:px-12">
+          <div className="tabs-list-container flex size-full items-center justify-center sm:justify-start">
+            <TabsList className="flex h-full w-full bg-inherit py-0 md:w-fit">
               <TabsTrigger
-                className="h-full rounded-none border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
+                className="h-full w-full rounded-none border-b-2 border-transparent px-3 text-base font-medium uppercase text-[#9B9A99] data-[state=active]:border-current data-[state=active]:bg-inherit data-[state=active]:font-semibold data-[state=active]:text-[#23262C] md:border-b-4 md:text-xl"
                 value="insights"
               >
                 {t("insights")}
               </TabsTrigger>
               <TabsTrigger
-                className="h-full rounded-none  border-b-4 border-transparent uppercase data-[state=active]:border-current data-[state=active]:bg-inherit px-3"
+                className="h-full w-full rounded-none  border-b-2 border-transparent px-3 text-base font-medium uppercase text-[#9B9A99] data-[state=active]:border-current data-[state=active]:bg-inherit data-[state=active]:font-semibold data-[state=active]:text-[#23262C] md:border-b-4 md:text-xl"
                 value="responses"
               >
                 {t("responses")}
@@ -29,21 +29,19 @@ const ResultFlowComponents = () => {
             </TabsList>
           </div>
         </header>
-        <main className="content relative z-50 flex  items-start justify-center bg-[#FAFAFA] px-4 lg:px-6 overflow-y-auto h-[99vh] sm:h-[calc(100vh-120px)]  md:h-[calc(100vh-120px)]  lg:h-[calc(100vh-120px)] xl:h-[calc(100vh+45px)]">
-          <div className="tabs-content flex w-full items-center">
-            <TabsContent
-              className="mt-0 w-full sm:mt-[10px]"
-              value="insights"
-            >
-              <InsightsFlowComponents />
-            </TabsContent>
-            <TabsContent
-              className="mt-0 size-full"
-              value="responses"
-            >
-              <ResponseFlowComponents />
-            </TabsContent>
-          </div>
+        <main className="content relative z-50 h-[calc(100vh-168px)] bg-[#FAFAFA] lg:h-[calc(100vh-144px)]">
+          <TabsContent
+            className="mt-0 size-full overflow-y-auto px-4 sm:pt-[10px] lg:px-6"
+            value="insights"
+          >
+            <InsightsFlowComponents />
+          </TabsContent>
+          <TabsContent
+            className="my-0 size-full overflow-y-auto p-4 lg:p-8"
+            value="responses"
+          >
+            <ResponseFlowComponents />
+          </TabsContent>
         </main>
       </Tabs>
     </div>

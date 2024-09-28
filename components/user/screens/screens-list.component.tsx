@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Reorder } from "framer-motion"
 import {
   ClipboardCopy,
+  Edit3Icon,
   MousePointer,
   Pencil,
   PlusCircle,
@@ -48,6 +49,7 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { useTranslations } from "next-intl"
+import { HelperInformation } from "./screens-list.component-with-flowId"
 
 const ScreensList = () => {
   const t = useTranslations("Components")
@@ -194,15 +196,15 @@ const ScreensList = () => {
   return (
     <Accordion
       type="multiple"
-      className="small:w-[98vw]  w-[94vw] overflow-x-hidden pb-32 pt-12 md:max-w-[13.5vw] md:pt-0"
+      className="font-poppins small:w-[98vw] w-[94vw] overflow-x-hidden md:w-[13.5vw] md:pt-0"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
-        <AccordionTrigger className="uppercase hover:no-underline">
+        <AccordionTrigger className="pt-0 hover:no-underline">
           {t("Header & Footer")}
         </AccordionTrigger>
-        <AccordionContent className="w-full">
-          <div className="mt-4">{t("Header")}</div>
+        <AccordionContent className="w-full ">
+          <div className="">{t("Header")}</div>
 
           <Card
             style={{
@@ -216,6 +218,7 @@ const ScreensList = () => {
               "relative mt-1 flex h-12 w-[13.5vw] flex-col items-center justify-center overflow-hidden border p-4 hover:cursor-pointer",
               {
                 "border-blue-500": headerMode,
+                "hover:border-4": !headerMode,
               }
             )}
             onClick={() => handleHeaderScreenClick()}
@@ -226,7 +229,7 @@ const ScreensList = () => {
             <div className="absolute left-0 top-0 z-10 size-full bg-transparent"></div>
           </Card>
           <Separator className="my-4" />
-          <p className="text-muted-foreground text-sm">{t("Footer")}</p>
+          <p className="text-sm">{t("Footer")}</p>
 
           <Card
             style={{
@@ -240,6 +243,7 @@ const ScreensList = () => {
               "relative mt-1 flex h-12 w-[13.5vw] flex-col items-center justify-center overflow-hidden border p-4 hover:cursor-pointer",
               {
                 "border-blue-500": footerMode,
+                "hover:border-4": !footerMode,
               }
             )}
             onClick={() => handleFooterScreenClick()}
@@ -251,15 +255,15 @@ const ScreensList = () => {
           </Card>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="item-2">
+      <AccordionItem value="item-2" className="border-t">
         <AccordionTrigger
-          className="uppercase hover:no-underline"
+          className="hover:no-underline"
           onClick={() => dispatch(setHeaderFooterMode(false))}
         >
           {t("Screens")}
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
-          <HelperInformation />
+          <HelperInformation infoText={t("Click on a screen to edit it")} />
           {/* <div className="section-header flex items-center justify-end">
             <Button
               variant={"secondary"}
@@ -273,6 +277,7 @@ const ScreensList = () => {
           {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
           <Reorder.Group
             axis="y"
+            className="mt-4 flex flex-col gap-4"
             onReorder={handleReorder}
             values={screens || []}
             // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
@@ -434,8 +439,8 @@ const EditScreenName = ({ screenId, screenName }) => {
           onClick={() => setEditing(true)}
           className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-1 border border-transparent text-current hover:cursor-text"
         >
-          <Pencil size={16} className="shrink-0" />
           <div className="truncate">{screenName}</div>
+          <Edit3Icon size={16} className="shrink-0 text-[#7B7D80]" />
         </div>
       )}
       {editing && (
@@ -452,29 +457,6 @@ const EditScreenName = ({ screenId, screenName }) => {
       )}
       {/* <Toaster position="bottom-right" /> */}
     </>
-  )
-}
-
-function HelperInformation() {
-  const t = useTranslations("Components")
-  return (
-    <Card
-      className={cn(
-        "hidden w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer md:flex"
-      )}
-    >
-      <div className="flex flex-row items-start gap-1 text-left">
-        <MousePointer />
-        <div>
-          <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
-            {t("Right-Click")}
-          </h2>
-          <p className="text-sm font-light">
-            {t("Click on a screen to edit it")}
-          </p>
-        </div>
-      </div>
-    </Card>
   )
 }
 

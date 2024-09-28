@@ -148,7 +148,7 @@ export default function CreateFlowsPage({
             ${customCss}
           `}
       </style>
-      <div className="fixed min-h-screen w-full font-sans">
+      <div className="fixed min-h-screen w-full">
         <Tabs
           defaultValue="create"
           onValueChange={onTabChange}
@@ -158,7 +158,7 @@ export default function CreateFlowsPage({
             <Header flowId={flowId} />
           </div>
           <main
-            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${
+            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#F6F6F6] ${
               tab === "results" ? "" : tab === "share" ? "" : ""
             }`}
           >

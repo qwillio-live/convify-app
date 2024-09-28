@@ -26,7 +26,7 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "rgba(255,255,255,0)",
+    containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
         theme?.general?.primaryColor || "#3182ce",
@@ -195,7 +195,7 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "rgba(255,255,255,0)",
+    containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
         theme?.general?.primaryColor || "#3182ce",

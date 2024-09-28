@@ -136,9 +136,9 @@ export function FlowsList({ flows, setStatus, status }) {
         setPaddingScreen("0.35rem")
       }
     } else if (windowSize <= 400) {
-      setPaddingScreen("0.75rem")
+      setPaddingScreen("0.5rem")
     } else if (windowSize <= 500) {
-      setPaddingScreen("0.85rem")
+      setPaddingScreen("0.5rem")
     }
   }, [windowSize])
 
@@ -207,10 +207,10 @@ export function FlowsList({ flows, setStatus, status }) {
     return null
   }
   return (
-    <div className="flex  w-full flex-col">
+    <div className="flex w-full flex-col">
       <main className="sm:py-0 md:gap-8">
         <div className="flex flex-col">
-          <Link
+          {/* <Link
             className="flex items-center justify-start self-start"
             href={
               isMobile
@@ -222,16 +222,20 @@ export function FlowsList({ flows, setStatus, status }) {
               <Plus className="size-3.5" />
               <span className="whitespace-nowrap">{t("Create new flow")}</span>
             </Button>
-          </Link>
+          </Link> */}
 
-          <Card>
+          <Card className="rounded-[12px] border border-[#E9E9E9] p-2 md:rounded-[20px] md:p-4">
             <CardHeader
-              style={{
-                padding: paddingScreen !== "inherit" ? "1rem" : "1rem",
-              }}
+              className={
+                paddingScreen !== "inherit"
+                  ? "p-[0.5rem] md:p-[1rem]"
+                  : "p-[0.5rem] md:p-[1rem]"
+              }
             >
-              <CardTitle>{t("My flows")}</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base text-[#23262C] md:text-xl">
+                {t("My flows")}
+              </CardTitle>
+              <CardDescription className="text-sm text-[#505050] md:text-base">
                 {t("Manage your flows and view their performance")}
               </CardDescription>
             </CardHeader>
@@ -240,12 +244,12 @@ export function FlowsList({ flows, setStatus, status }) {
                 padding: paddingScreen !== "inherit" ? paddingScreen : "1rem",
               }}
             >
-              <div>
-                <Table className="min-w-full">
+              <div className="overflow-x-auto">
+                <Table className="w-full">
                   <TableHeader>
-                    <TableRow>
+                    <TableRow className="border-b border-[#F2F0EE]">
                       <TableHead
-                        className=" hidden w-[144px] sm:table-cell"
+                        className="hidden w-[144px] text-xs font-normal text-[#9B9A99] md:table-cell md:text-base"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -253,7 +257,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               : "1rem",
                         }}
                       >
-                        <span className="sr-only">Image</span>
+                        <span className="">{t("Name")}</span>
                       </TableHead>
                       <TableHead
                         style={{
@@ -262,7 +266,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className=" w-[384px]"
+                        className="table-cell min-w-[136px] md:min-w-[256px] text-left text-xs font-normal text-[#9B9A99] md:sr-only md:text-base"
                       >
                         {t("Name")}
                       </TableHead>
@@ -273,11 +277,12 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
+                        className="text-xs font-normal text-[#9B9A99] md:text-base"
                       >
                         {t("Status")}
                       </TableHead>
                       <TableHead
-                        className="hidden lg:table-cell"
+                        className="hidden text-xs font-normal text-[#9B9A99] md:text-base lg:table-cell"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -294,11 +299,12 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
+                        className="text-xs font-normal text-[#9B9A99] md:text-base"
                       >
                         {t("Responses")}
                       </TableHead>
                       <TableHead
-                        className="hidden lg:table-cell"
+                        className="hidden text-xs font-normal text-[#9B9A99] md:text-base lg:table-cell"
                         style={{
                           padding:
                             paddingScreen !== "inherit"
@@ -315,6 +321,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
+                        className="text-xs font-normal text-[#9B9A99] md:text-base"
                       >
                         <span className="sr-only">{t("Actions")}</span>
                       </TableHead>
@@ -324,7 +331,10 @@ export function FlowsList({ flows, setStatus, status }) {
                     {flows.length > 0 &&
                       flows.map((flow) => {
                         return (
-                          <TableRow key={flow.id}>
+                          <TableRow
+                            key={flow.id}
+                            className="border-b border-t border-b-[#F2F0EE] border-t-[#F2F0EE]"
+                          >
                             <TableCell
                               onClick={() =>
                                 router.push(`/dashboard/${flow.id}/create-flow`)
@@ -339,7 +349,7 @@ export function FlowsList({ flows, setStatus, status }) {
                             >
                               <Image
                                 alt="Product image"
-                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover "
+                                className="aspect-video rounded-[8px] border border-[#F2F0EE] object-cover xl:h-[48px] xl:w-[72px] 2xl:h-[72px] 2xl:w-[120px]"
                                 height="64"
                                 width="113"
                                 src={
@@ -358,7 +368,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                   | LegacyRef<HTMLTableCellElement>
                                   | undefined
                               }
-                              className="font-bold hover:cursor-pointer"
+                              className="min-w-[136px] md:min-w-[256px] text-xs text-[#23262C] hover:cursor-pointer md:text-base"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -378,10 +388,16 @@ export function FlowsList({ flows, setStatus, status }) {
                                     : "1rem",
                               }}
                             >
-                              <Badge variant="outline">{t(flow.status)}</Badge>
+                              <Badge
+                                variant={
+                                  flow.status === "active" ? "active" : "draft"
+                                }
+                              >
+                                {t(flow.status)}
+                              </Badge>
                             </TableCell>
                             <TableCell
-                              className="hidden lg:table-cell"
+                              className="hidden text-xs text-[#23262C] md:text-base lg:table-cell"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -398,13 +414,14 @@ export function FlowsList({ flows, setStatus, status }) {
                                     ? paddingScreen
                                     : "1rem",
                               }}
+                              className="text-xs text-[#23262C] md:text-base"
                             >
                               {flow.numberOfResponses
                                 ? flow.numberOfResponses
                                 : 0}
                             </TableCell>
                             <TableCell
-                              className="hidden lg:table-cell"
+                              className="hidden text-xs text-[#23262C] md:text-base lg:table-cell"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"
@@ -421,6 +438,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                     ? paddingScreen
                                     : "1rem",
                               }}
+                              className="text-right text-xs text-[#23262C] md:text-base"
                             >
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -429,7 +447,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                     size="icon"
                                     variant="ghost"
                                   >
-                                    <MoreHorizontal className="size-4" />
+                                    <MoreHorizontal className="size-4 text-[#9B9A99]" />
                                     <span className="sr-only">Toggle menu</span>
                                   </Button>
                                 </DropdownMenuTrigger>

@@ -57,10 +57,10 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: #23262c;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: #fafafa;
+    --card-foreground: #23262c;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
@@ -72,15 +72,15 @@
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: #9b9a99;
 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: #cf2b24;
+    --destructive-foreground: #ffffff;
 
-    --border: 214.3 31.8% 91.4%;
+    --border: 33 15% 88%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
@@ -178,27 +178,40 @@ html {
 }
 
 .react-colorful__last-control {
-  margin-top: 12px;
-  max-height: 16px;
-  border-radius: 3px !important;
+  margin-top: 8px;
+  max-height: 10px;
+  border-radius: 4.6px !important;
 }
 /* .react-colorful__pointer-fill {
   background-color: white !important;
 } */
 .react-colorful__pointer {
-  height: 15px !important;
-  width: 15px !important;
+  height: 10.38px !important;
+  width: 10.38px !important;
 }
 
 .react-colorful {
-  width: 220px !important;
-  height: 166px !important;
+  width: 100% !important;
+  height: 8.125rem !important;
 }
 .react-colorful__saturation {
-  border-radius: 8px !important;
+  border-radius: 4.5px !important;
 }
 .react-colorful__hue .react-colorful__pointer-fill {
   background-color: white !important;
+}
+
+@media only screen and (min-width: 1980px) {
+  .react-colorful {
+    height: 12.375rem !important;
+  }
+  .react-colorful__pointer {
+    height: 15.55px !important;
+    width: 15.55px !important;
+  }
+  .react-colorful__last-control {
+    max-height: 14px;
+  }
 }
 
 userContainer {
@@ -207,6 +220,11 @@ userContainer {
 
 userContainer > *:hover {
   border: 1px dotted #60a5fa !important; /* Apply border to all children of userContainer */
+}
+
+/* fonts */
+.body {
+  font-family: "Poppins";
 }
 
 /* Add this CSS to your styles */

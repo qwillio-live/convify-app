@@ -65,6 +65,7 @@ import {
   IconButtonDefaultProps,
   IconButtonGen,
 } from "./user-icon-button.component"
+import { ColorInput } from "@/components/color-input"
 
 export const IconButtonSettings = () => {
   const t = useTranslations("Components")
@@ -221,16 +222,13 @@ export const IconButtonSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="mb-10 w-full"
+        className="w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -238,46 +236,31 @@ export const IconButtonSettings = () => {
                 }}
                 id="enableIcon"
               />
-              <label
-                htmlFor="enableIcon"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Enable Icon")}
-              </label>
+              <Label htmlFor="enableIcon">{t("Enable Icon")}</Label>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-              {enableIcon && (
-                <>
-                  <p className="text-md text-muted-foreground flex-1">
-                    {t("Icon")}
-                  </p>
-                  <div className="flex w-full items-center gap-2">
-                    <PicturePicker
-                      className="transition-all duration-100 ease-in-out"
-                      picture={
-                        icon.pictureType === PictureTypes.NULL ? (
-                          <Image className="text-muted-foreground size-4" />
-                        ) : (
-                          icon.picture
-                        )
-                      }
-                      pictureType={icon.pictureType}
-                      maxWidthMobile={50}
-                      maxWidthDesktop={80}
-                      onChange={handlePictureChange}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
+            {enableIcon && (
+              <div className="flex items-center justify-between">
+                <Label>{t("Icon")}</Label>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-2/4 flex-row items-center gap-2">
-              <label
-                htmlFor="text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Navigation
-              </label>
+                <PicturePicker
+                  className="transition-all duration-100 ease-in-out"
+                  picture={
+                    icon.pictureType === PictureTypes.NULL ? (
+                      <Image className="text-muted-foreground size-4" />
+                    ) : (
+                      icon.picture
+                    )
+                  }
+                  pictureType={icon.pictureType}
+                  maxWidthMobile={50}
+                  maxWidthDesktop={80}
+                  onChange={handlePictureChange}
+                />
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="navigation-select">Navigation</Label>
               <Select
                 defaultValue={
                   buttonAction === "next-screen"
@@ -322,18 +305,20 @@ export const IconButtonSettings = () => {
                   }
                 }}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                   <SelectValue placeholder="Select screen" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value={"next-screen"}>
+                    <SelectItem className="text-xs" value={"next-screen"}>
                       {t("Next Screen")}
                     </SelectItem>
-                    <SelectItem value={"none"}>{t("Do Nothing")}</SelectItem>
+                    <SelectItem className="text-xs" value={"none"}>
+                      {t("Do Nothing")}
+                    </SelectItem>
                     {screenNames?.map((screen, index) => {
                       return (
-                        <SelectItem value={screen.screenId}>
+                        <SelectItem className="text-xs" value={screen.screenId}>
                           {index + 1} : {screen.screenName}
                         </SelectItem>
                       )
@@ -346,73 +331,75 @@ export const IconButtonSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={"#fff"}
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
+                id="backgroundcolor"
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">
-                {t("Button Size")}
-              </p>
+            <div className="space-y-2">
+              <Label>{t("Button Size")}</Label>
               <Tabs
                 value={buttonSize}
                 defaultValue={buttonSize}
                 onValueChange={(value) => {
                   setProp((props) => (props.buttonSize = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 bg-[#eeeeee]">
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="small"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="medium"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="large"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">
-                {t("Content Align")}
-              </p>
+            <div className="space-y-2">
+              <Label>{t("Content Align")}</Label>
               <Tabs
                 value={justifyContent}
                 defaultValue={justifyContent}
                 onValueChange={(value) => {
                   setProp((props) => (props.justifyContent = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-4 bg-[#eeeeee]">
                   <TabsTrigger value="start">
-                    <AlignHorizontalJustifyStart />
+                    <AlignHorizontalJustifyStart className="size-4 rounded" />
                   </TabsTrigger>
                   <TabsTrigger value="center">
-                    <AlignHorizontalJustifyCenter />
+                    <AlignHorizontalJustifyCenter className="size-4 rounded" />
                   </TabsTrigger>
                   <TabsTrigger value="end">
-                    <AlignHorizontalJustifyEnd />
+                    <AlignHorizontalJustifyEnd className="size-4 rounded" />
                   </TabsTrigger>
                   <TabsTrigger value="space-between">
-                    <AlignHorizontalSpaceBetween />
+                    <AlignHorizontalSpaceBetween className="size-4 rounded" />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -421,144 +408,161 @@ export const IconButtonSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Width")}</Label>
               <Tabs
                 value={size}
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
+                <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="small"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="medium"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="large"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="full"
+                  >
+                    <MoveHorizontal className="size-4" />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginTop}
-                </span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginTop}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[marginTop]}
+                  value={[marginTop]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginTop = e),200)
+                    // handlePropChange("marginTop",e)
+                    handlePropChangeDebounced("marginTop", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[marginTop]}
-                value={[marginTop]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginTop = e),200)
-                  // handlePropChange("marginTop",e)
-                  handlePropChangeDebounced("marginTop", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginBottom}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginBottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginBottom]}
+                  value={[marginBottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginBottom = e),200)
+                    // handlePropChange("marginBottom",e)
+                    handlePropChangeDebounced("marginBottom", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginBottom]}
-                value={[marginBottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginBottom = e),200)
-                  // handlePropChange("marginBottom",e)
-                  handlePropChangeDebounced("marginBottom", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginRight}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginRight">{t("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginRight}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginRight]}
+                  value={[marginRight]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginRight = e),200)
+                    // handlePropChange("marginRight",e)
+                    handlePropChangeDebounced("marginRight", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginRight]}
-                value={[marginRight]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginRight = e),200)
-                  // handlePropChange("marginRight",e)
-                  handlePropChangeDebounced("marginRight", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginLeft}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginLeft}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginLeft]}
+                  value={[marginLeft]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginLeft = e),200)
+                    // handlePropChange("marginLeft",e)
+                    handlePropChangeDebounced("marginLeft", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginLeft]}
-                value={[marginLeft]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginLeft = e),200)
-                  // handlePropChange("marginLeft",e)
-                  handlePropChangeDebounced("marginLeft", e)
-                }
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="styles">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
+          <AccordionTrigger>{t("Styles")}</AccordionTrigger>
+          <AccordionContent className="pt-2">
+            <div className="space-y-6">
               <Card
                 onClick={() => {
                   addPresetStyles(filledPreset)
                   setSelectedPresets(PRESETNAMES.filled)
                 }}
                 className={cn(
-                  "px-2 py-0 transition-all duration-300 hover:cursor-pointer",
-                  { "border-blue-500": preset === "filled" }
+                  "relative bg-[#FAFAFA] px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  { "border-[#15347B]": preset === "filled" }
                 )}
               >
+                <div className="absolute inset-0 z-10"></div>
                 <IconButtonGen
                   {...filledPreset}
                   size="full"
                   paddingBottom={14}
                   paddingTop={14}
                   width={"266px"}
-                  marginTop={12}
-                  marginBottom={12}
+                  marginTop={8}
+                  marginBottom={8}
                   marginLeft={0}
                   marginRight={0}
+                  buttonSize={"small"}
+                  height={34}
                 />
               </Card>
               <Card
@@ -567,20 +571,23 @@ export const IconButtonSettings = () => {
                   setSelectedPresets(PRESETNAMES.outLine)
                 }}
                 className={cn(
-                  "px-2 py-0 transition-all duration-300 hover:cursor-pointer",
-                  { "border-blue-500": preset === "outline" }
+                  "relative bg-[#FAFAFA] px-2 py-0 transition-all duration-300 hover:cursor-pointer",
+                  { "border-[#15347B]": preset === "outline" }
                 )}
               >
+                <div className="absolute inset-0 z-10"></div>
                 <IconButtonGen
                   {...outLinePreset}
                   size="full"
                   paddingBottom={14}
                   paddingTop={14}
                   width={"266px"}
-                  marginTop={12}
-                  marginBottom={12}
+                  marginTop={8}
+                  marginBottom={8}
                   marginLeft={0}
                   marginRight={0}
+                  buttonSize={"small"}
+                  height={34}
                 />
               </Card>
             </div>
@@ -588,13 +595,10 @@ export const IconButtonSettings = () => {
         </AccordionItem>
 
         <AccordionItem value="tracking">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Tracking")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("Tracking")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={tracking}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -602,22 +606,13 @@ export const IconButtonSettings = () => {
                 }}
                 id="enableTracking"
               />
-              <label
-                htmlFor="enableIcon"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Tracking activated")}
-              </label>
+              <Label htmlFor="enableTracking">{t("Tracking activated")}</Label>
             </div>
             {tracking && (
-              <div className="style-control col-span-2 mt-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
-                <label
-                  htmlFor="label-event"
-                  className="shrink-0 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("Event Name")}
-                </label>
+              <div className="space-y-2">
+                <Label htmlFor="event-name">{t("Event Name")}</Label>
                 <Input
+                  id="event-name"
                   value={trackingEvent}
                   defaultValue={trackingEvent}
                   onChange={(e) => {
