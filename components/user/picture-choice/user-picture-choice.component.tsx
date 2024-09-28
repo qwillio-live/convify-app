@@ -50,7 +50,7 @@ const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
       return { width: "calc(100% - 20px)" }
     } else {
       if (size === UserInputSizes.small) {
-        return { width: "376px" }
+        return { width: "376px", maxWidth: "400px" }
       } else if (size === UserInputSizes.medium) {
         return { width: "calc(100% - 22px)", maxWidth: "800px" }
       } else if (size === UserInputSizes.large) {
@@ -189,6 +189,7 @@ export const PictureChoiceGen = ({
           className={`flex w-full flex-wrap justify-center gap-[10px]`}
           style={{
             fontFamily: `var(${fontFamily?.value})`,
+            // maxWidth:
           }}
         >
           {choices?.map((choice, index) => (
@@ -509,10 +510,10 @@ export const PictureChoice = ({
             />
           </div>
           <ul
-            className={cn("flex w-full justify-center gap-[10px]", {
-              "flex-nowrap": !mobileScreen,
-              "flex-wrap": mobileScreen,
-            })}
+            className={cn(
+              "flex w-full justify-center gap-[10px]  flex-wrap",
+              {}
+            )}
             style={{
               fontFamily: `var(${fontFamily?.value})`,
             }}
@@ -599,6 +600,8 @@ const PictureChoiceItem = ({
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
 
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
   useEffect(() => {
     setChoiceValue(choice.value)
   }, [choice.value])
@@ -613,8 +616,13 @@ const PictureChoiceItem = ({
     if (n === 7 || n == 11) {
       return 25
     }
+
     if (n === 2) {
       return 50
+    }
+
+    if (n % 4 === 0 && !mobileScreen) {
+      return 25
     }
 
     // in case check for responsive flex basis
@@ -881,10 +889,8 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   justify-content: center;
   position: relative;
   border-radius: 15px;
-
   transition: transform 0.1s ease-in-out;
   transform: translateY(${({ isSelected }) => (isSelected ? -2 : 0)}px);
-
   border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor};
   color: ${({ defaultStyles }) => defaultStyles.textColor};
   background-color: ${({ defaultStyles }) => defaultStyles.backgroundColor};
