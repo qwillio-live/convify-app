@@ -40,6 +40,7 @@ const clearFlowNamesFromLocalStorage = () => {
 
 const Header = ({ flowId }) => {
   const t = useTranslations("CreateFlow")
+  const t1 = useTranslations("Dashboard")
   const router = useRouter()
   const currentPath = usePathname()
   const dispatch = useAppDispatch()
@@ -242,7 +243,7 @@ const Header = ({ flowId }) => {
                   href={"/dashboard"}
                   prefetch={false}
                 >
-                  {t("Dashboard")}
+                  {t1("Dashboard")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -251,7 +252,7 @@ const Header = ({ flowId }) => {
                   className="cursor-pointer"
                   prefetch={false}
                 >
-                  {t("Create flow")}
+                  {t1("Create flow")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
