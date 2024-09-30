@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     let requiredEntities =
       requiredEntitiess.length > 0 ? requiredEntitiess[0] : null
     // Function to fetch links from /api/cron and take screenshots
-    let updatedFlow = null
+    let updatedFlow: any = null
     const fetchLinksAndTakeScreenshots = async () => {
       try {
         if (requiredEntities) {
@@ -123,7 +123,7 @@ export async function GET(req: NextRequest) {
     await fetchLinksAndTakeScreenshots()
 
     return NextResponse.json({
-      flows: updatedFlow ? updatedFlow : requiredEntities.name ?? "false",
+      flows: updatedFlow ? updatedFlow : requiredEntities?.name ?? "false",
     })
   } catch (error) {
     console.error("Error fetching flows:", error)
