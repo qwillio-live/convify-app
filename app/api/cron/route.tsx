@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
               `Upload successful for ${requiredEntities.name}:`,
               response.data.data.images
             )
-            if (flowId)
+            if (flowId && response.data.data?.images?.original)
               updatedFlow = await prisma.flow.update({
                 where: {
                   id: flowId,
