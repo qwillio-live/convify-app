@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import hexoid from "hexoid"
 import { debounce } from "lodash"
+import { Pi } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
@@ -36,14 +37,6 @@ import { PictureChoiceSettings } from "./user-picture-choice.settings"
 const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
   margin-left: auto;
   margin-right: auto;
-
-  /* .picture-item:nth-child(even) {
-    padding-right: ${({ size }) =>
-    size === UserInputSizes.small ? "0" : "10px"};
-  } */
-  /* .picture-item:last-of-type {
-    padding-right: 0;
-  } */
 
   ${({ size, mobileScreen }) => {
     if (mobileScreen) {
@@ -607,29 +600,27 @@ const PictureChoiceItem = ({
   }, [choice.value])
 
   const getFlexBasis = (n) => {
+    // for only desktop
     if (size === PictureChoiceSizes.small) {
       return 50
     }
     if (n === 1) {
       return 100
     }
+    if (mobileScreen) {
+      if (n % 3 === 0) {
+        return 33.33
+      } else {
+        return 50
+      }
+    }
+
     if (n === 7 || n == 11) {
       return 25
     }
-
     if (n === 2) {
       return 50
     }
-
-    if (n % 4 === 0 && !mobileScreen) {
-      return 25
-    }
-
-    // in case check for responsive flex basis
-    if (n % 2 == 0) {
-      return 50
-    }
-
     if ((n - 4) % 2 === 0 && n !== 6) {
       return 25
     }
@@ -639,6 +630,38 @@ const PictureChoiceItem = ({
     if (n % 3 === 0) {
       return 33.33
     }
+
+    // if (size === PictureChoiceSizes.small) {
+    //   return 50
+    // }
+    // if (n === 1) {
+    //   return 100
+    // }
+    // if (n === 7 || n == 11) {
+    //   return 25
+    // }
+    // if (n === 2) {
+    //   return 50
+    // }
+    // if (n % 3 === 0 && !mobileScreen) {
+    //   return 25
+    // }
+    // // in case check for responsive flex basis
+    // if (n % 2 == 0) {
+    //   return 50
+    // }
+    // if ((n - 4) % 2 === 0 && n !== 6) {
+    //   if (!mobileScreen && size == PictureChoiceSizes.medium) {
+    //     return 33.33
+    //   }
+    //   return 25
+    // }
+    // if ((n - 3) % 2 === 0) {
+    //   return 33.33
+    // }
+    // if (n % 3 === 0) {
+    //   return 33.33
+    // }
   }
 
   const pathname = usePathname()
@@ -731,9 +754,7 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className={cn(
-        `picture-item flex min-w-[0] max-w-[190px] flex-[1] grow-0 justify-center`
-      )}
+      className={cn(`picture-item flex max-w-[191px] grow-1 justify-center`)}
       style={{
         flexBasis: `calc(${getFlexBasis(choicesLength)}% - 10px)`,
       }}
