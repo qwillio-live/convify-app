@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       where: {
         isDeleted: false,
         order: 0,
-        flowId: flowId,
+        flowId: flowId ? flowId : "",
       },
     })
     let requiredEntities =
