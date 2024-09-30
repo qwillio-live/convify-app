@@ -96,15 +96,16 @@ export async function GET(req: NextRequest) {
               `Upload successful for ${requiredEntities.name}:`,
               response.data.data.images
             )
-            updatedFlow = await prisma.flow.update({
-              where: {
-                id: flowId,
-              },
-              data: {
-                thumbnail_updatedAt: new Date(),
-                previewImage: response.data.data?.images?.original,
-              },
-            })
+            if (flowId)
+              updatedFlow = await prisma.flow.update({
+                where: {
+                  id: flowId,
+                },
+                data: {
+                  thumbnail_updatedAt: new Date(),
+                  previewImage: response.data.data?.images?.original,
+                },
+              })
           } catch (uploadError) {
             console.error(
               `Failed to upload screenshot for ${requiredEntities.name}:`,

@@ -339,8 +339,8 @@ export function FlowsList({ flows, setStatus, status }) {
                             >
                               <Image
                                 alt="Product image"
-                                className="aspect-video !min-h-16 !w-auto min-w-[113px] rounded-md object-cover "
-                                height="64"
+                                className="aspect-video !min-h-16 !w-full min-w-[113px] rounded-md object-contain "
+                                height="120"
                                 width="113"
                                 src={
                                   flow.previewImage
