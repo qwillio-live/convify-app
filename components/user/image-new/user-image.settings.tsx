@@ -866,8 +866,8 @@ export const ImageSettings = () => {
 export const DefaultPropsImg = {
   alt: "Image",
   radiusCorner: 0,
-  size: "small",
-  // picSize: IconButtonSizes.small,
+  size: "medium",
+  // picSize: IconButtonSizes.medium,
   marginTop: "20px",
   marginBottom: "20px",
   marginLeft: "20px",
