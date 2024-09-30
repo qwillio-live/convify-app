@@ -175,6 +175,7 @@ export async function PUT(
               order: step.order,
               name: step.name || "",
               templateId: step.templateId || "",
+              updatedAt: new Date(),
             },
           })
         } else {
@@ -187,6 +188,7 @@ export async function PUT(
               order: step.order,
               templateId: step.templateId || "",
               isDeleted: false,
+              updatedAt: new Date(),
             },
           })
         }

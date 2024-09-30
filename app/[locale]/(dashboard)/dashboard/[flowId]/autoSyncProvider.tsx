@@ -121,6 +121,7 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
         general: localFlowSettings?.general,
         text: localFlowSettings?.text,
       },
+      updatedAt: new Date(),
     }
 
     setUpdatedFlowData(data)

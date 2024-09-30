@@ -12,6 +12,7 @@ const nextConfig = {
       "avatars.githubusercontent.com",
       "s3.eu-central-2.wasabisys.com",
       "s3.ap-southeast-1.wasabisys.com",
+      "img-uploads.b-cdn.net",
     ],
   },
   experimental: {
