@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useState, useRef  } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Reorder } from "framer-motion"
 import {
@@ -10,6 +10,7 @@ import {
   PlusCircle,
   Trash2,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 
 import { Frame, useEditor } from "@/lib/craftjs"
@@ -36,7 +37,6 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -45,13 +45,13 @@ import {
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/input-custom-for-screen-list"
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
-import { useTranslations } from "next-intl"
 
 const ScreensList = ({ flowId }) => {
-  const t = useTranslations("Components");
+  const t = useTranslations("Components")
 
   console.log("flowId in screens-list.component is", flowId)
 
@@ -64,7 +64,9 @@ const ScreensList = ({ flowId }) => {
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
-  const avatarBackgroundColor = useAppSelector((state) => state?.screen?.avatarBackgroundColor)
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
 
   const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)
   const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
@@ -107,7 +109,6 @@ const ScreensList = ({ flowId }) => {
   // setCompareLoad(lz.encodeBase64(lz.compress(JSON.stringify(editorLoad))));
   // }
   // }, []);
-
 
   const handleReorder = (data) => {
     dispatch(setScreens(data))
@@ -183,38 +184,33 @@ const ScreensList = ({ flowId }) => {
     await actions.deserialize(screensHeader)
   }
 
-
-
-  const divRef = useRef<HTMLDivElement | null>(null);
+  const divRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setDesktopDrawerOpen(true);
+            setDesktopDrawerOpen(true)
             console.log("------scrolled------")
           } else {
-            setDesktopDrawerOpen(false);
+            setDesktopDrawerOpen(false)
           }
-        });
+        })
       },
       { threshold: 0.1 } // Adjust this value to trigger when a small portion is visible
-    );
+    )
 
     if (divRef.current) {
-      observer.observe(divRef.current);
+      observer.observe(divRef.current)
     }
 
     return () => {
       if (divRef.current) {
-        observer.unobserve(divRef.current);
+        observer.unobserve(divRef.current)
       }
-    };
-  }, []);
-
-
-
+    }
+  }, [])
 
   return (
     <Accordion
@@ -232,9 +228,12 @@ const ScreensList = ({ flowId }) => {
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
           <div className="  hidden md:block">
-          <Card
+            <Card
               style={{
-                backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+                backgroundColor:
+                  avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                    ? avatarBackgroundColor
+                    : backgroundColor,
                 backgroundImage: backgroundImage,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
@@ -244,20 +243,19 @@ const ScreensList = ({ flowId }) => {
                 "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                 {
                   "border-blue-500": headerMode,
+                  "hover:border-4": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
             >
-              <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
-
+              <div className="text-xs text-muted-foreground scale-[.30]  w-[40vw] h-auto top-0 bottom-[70%]">
                 <ResolvedComponentsFromCraftState screen={screensHeader} />
-
               </div>
               <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
             </Card>
-            </div>
-            
-                      {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
+          </div>
+
+          {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
           <button
             className="md:hidden"
             onClick={() => {
@@ -267,7 +265,10 @@ const ScreensList = ({ flowId }) => {
           >
             <Card
               style={{
-                backgroundColor: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor,
+                backgroundColor:
+                  avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                    ? avatarBackgroundColor
+                    : backgroundColor,
                 backgroundImage: backgroundImage,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
@@ -282,19 +283,17 @@ const ScreensList = ({ flowId }) => {
               onClick={() => handleHeaderScreenClick()}
             >
               <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto top-0 bottom-[70%]">
-
                 <ResolvedComponentsFromCraftState screen={screensHeader} />
-
               </div>
               <div className="absolute size-full z-10 bg-transparent top-0 left-0"></div>
             </Card>
           </button>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">{t("Footer")}</p>
-          
-                      {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
+
+          {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
           <div className="  hidden md:block">
-          <Card
+            <Card
               style={{
                 backgroundColor: backgroundColor,
                 backgroundImage: backgroundImage,
@@ -306,18 +305,19 @@ const ScreensList = ({ flowId }) => {
                 "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                 {
                   "border-blue-500": footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
               onClick={() => handleFooterScreenClick()}
             >
-              <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div>
-              <div className="text-xs text-muted-foreground scale-[.30] absolute w-[40vw] h-auto bottom-0 top-[-130%]">
+              {/* <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div> */}
+              <div className="text-xs text-muted-foreground scale-[.30] w-[40vw] h-auto bottom-0 top-[-130%]">
                 <ResolvedComponentsFromCraftState screen={screensFooter} />
               </div>
             </Card>
-            </div>
-            
-                      {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
+          </div>
+
+          {/*  ------- Mobile View CARD with Share Redirect Linking ------- */}
           <button
             className="md:hidden"
             onClick={() => {
@@ -337,6 +337,7 @@ const ScreensList = ({ flowId }) => {
                 "h-12 w-[94vw] md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                 {
                   "border-blue-500": footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
             >
@@ -372,9 +373,9 @@ const ScreensList = ({ flowId }) => {
             axis="y"
             onReorder={handleReorder}
             values={screens || []}
-          // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
-          // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
-          // layoutScroll
+            // style={{ overflowY: "scroll", maxHeight: "calc(100vh - 500px)"}}
+            // style={{ height: 600, border: "1px solid black", overflowY: "auto" }}
+            // layoutScroll
           >
             {screens?.map((screen: any, index) => (
               <Reorder.Item
@@ -385,7 +386,7 @@ const ScreensList = ({ flowId }) => {
                   dispatch(setSelectedComponent("ROOT")),
                     dispatch(setHeaderFooterMode(false))
                 }}
-              // className="relative"
+                // className="relative"
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
@@ -420,22 +421,37 @@ const ScreensList = ({ flowId }) => {
                         className={cn(
                           "md:h-32 h-52 w-[94vw] md:hidden md:w-[13.5vw] mt-1 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                           {
-                            "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
-                            "hover:border-4": (selectedScreenIndex !== index),
+                            "border-blue-500":
+                              selectedScreenIndex === index &&
+                              !headerFooterMode,
+                            "hover:border-4": selectedScreenIndex !== index,
                           }
                         )}
                       >
                         {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                         <div className="text-xs text-muted-foreground scale-[.20] relative">
-                          <div style={{ background: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor }}>
-                            <ResolvedComponentsFromCraftState screen={screensHeader} />
-                          </div>
-                          <div style={{ paddingTop: '50px' }}>
+                          <div
+                            style={{
+                              background:
+                                avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                                  ? avatarBackgroundColor
+                                  : backgroundColor,
+                            }}
+                          >
                             <ResolvedComponentsFromCraftState
-                              screen={screen.screenData ? screen.screenData : {}}
+                              screen={screensHeader}
                             />
                           </div>
-                          <ResolvedComponentsFromCraftState screen={screensFooter} />
+                          <div style={{ paddingTop: "50px" }}>
+                            <ResolvedComponentsFromCraftState
+                              screen={
+                                screen.screenData ? screen.screenData : {}
+                              }
+                            />
+                          </div>
+                          <ResolvedComponentsFromCraftState
+                            screen={screensFooter}
+                          />
                         </div>
                       </Card>
                     </button>
@@ -451,23 +467,35 @@ const ScreensList = ({ flowId }) => {
                       className={cn(
                         "hidden h-32 w-[94vw] md:w-[13.5vw] mt-1 md:flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
                         {
-                          "border-blue-500": (selectedScreenIndex === index && !headerFooterMode),
-                          "hover:border-4": (selectedScreenIndex !== index),
+                          "border-blue-500":
+                            selectedScreenIndex === index && !headerFooterMode,
+                          "hover:border-4": selectedScreenIndex !== index,
                         }
                       )}
                       onClick={() => handleScreenClick(index)}
                     >
                       {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                       <div className="text-xs text-muted-foreground scale-[.20] relative">
-                        <div style={{ background: avatarBackgroundColor !== 'rgba(255,255,255,.1)' ? avatarBackgroundColor : backgroundColor }}>
-                          <ResolvedComponentsFromCraftState screen={screensHeader} />
+                        <div
+                          style={{
+                            background:
+                              avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                                ? avatarBackgroundColor
+                                : backgroundColor,
+                          }}
+                        >
+                          <ResolvedComponentsFromCraftState
+                            screen={screensHeader}
+                          />
                         </div>
-                        <div style={{ paddingTop: '50px' }}>
+                        <div style={{ paddingTop: "50px" }}>
                           <ResolvedComponentsFromCraftState
                             screen={screen.screenData ? screen.screenData : {}}
                           />
                         </div>
-                        <ResolvedComponentsFromCraftState screen={screensFooter} />
+                        <ResolvedComponentsFromCraftState
+                          screen={screensFooter}
+                        />
                       </div>
                     </Card>
                   </ContextMenuTrigger>
@@ -491,7 +519,7 @@ const ScreensList = ({ flowId }) => {
                       onClick={() => handleDeleteScreen(index)}
                     >
                       <Trash2 size={18} />
-                      <span>{("Delete")}</span>
+                      <span>{"Delete"}</span>
                     </ContextMenuItem>
                   </ContextMenuContent>
                 </ContextMenu>
@@ -501,9 +529,9 @@ const ScreensList = ({ flowId }) => {
           {/* </ScrollArea> */}
         </AccordionContent>
       </AccordionItem>
-        
-        <div  ref={divRef} className="md:hidden w-full h-2 "></div>
-      
+
+      <div ref={divRef} className="md:hidden w-full h-2 "></div>
+
       <ShareDrawerDesktop
         desktopDrawerOpen={desktopDrawerOpen}
         setDesktopDrawerOpen={setDesktopDrawerOpen}
@@ -533,10 +561,10 @@ const EditScreenName = ({ screenId, screenName }) => {
   }
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleChange(name);
+    if (e.key === "Enter") {
+      handleChange(name)
     }
-  };
+  }
 
   const checkDuplicateName = (inputName) => {
     const screenNames = screens
@@ -556,15 +584,12 @@ const EditScreenName = ({ screenId, screenName }) => {
   return (
     <>
       {!editing && (
-        <div className="flex items-center "
-        onClick={() => setEditing(true)}>
-        <div
-          className="flex flex-row gap-1 items-center border border-transparent text-current bg-slate-gray-200 grow justify-end hover:cursor-text"
-        >
-          <div className="truncate">{screenName}</div>
-        </div>
-        
-        <Pencil size={16} className="shrink-0 ml-2 cursor-pointer" />
+        <div className="flex items-center " onClick={() => setEditing(true)}>
+          <div className="flex flex-row gap-1 items-center border border-transparent text-current bg-slate-gray-200 grow justify-end hover:cursor-text">
+            <div className="truncate">{screenName}</div>
+          </div>
+
+          <Pencil size={16} className="shrink-0 ml-2 cursor-pointer" />
         </div>
       )}
       {editing && (
@@ -578,7 +603,23 @@ const EditScreenName = ({ screenId, screenName }) => {
             onKeyDown={handleKeyDown}
             autoFocus
           />
-            <svg onClick={() => handleChange(name)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-save  cursor-pointer"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>
+          <svg
+            onClick={() => handleChange(name)}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="lucide lucide-save  cursor-pointer"
+          >
+            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+            <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+            <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+          </svg>
         </div>
       )}
       {/* <Toaster position="bottom-right" /> */}
@@ -587,7 +628,7 @@ const EditScreenName = ({ screenId, screenName }) => {
 }
 
 function HelperInformation() {
-  const t = useTranslations("Components");
+  const t = useTranslations("Components")
   return (
     <Card
       className={cn(
@@ -600,7 +641,9 @@ function HelperInformation() {
           <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
             {t("Right-Click")}
           </h2>
-          <p className="text-sm font-light">{t("Click on a screen to edit it")}</p>
+          <p className="text-sm font-light">
+            {t("Click on a screen to edit it")}
+          </p>
         </div>
       </div>
     </Card>
