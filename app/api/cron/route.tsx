@@ -7,7 +7,7 @@ import axios from "axios"
 import FormData from "form-data" // Import FormData to handle file upload
 import { Buffer } from "buffer" // Import Buffer to work with screenshot data
 import { revalidateFlow } from "@/actions/flow/revalidateFlow"
-import chrome from "chrome-aws-lambda"
+import chromium from "@sparticuz/chromium-min"
 import puppeteer from "puppeteer-core"
 export async function GET(req: NextRequest) {
   console.log("Entered cron")
@@ -37,10 +37,9 @@ export async function GET(req: NextRequest) {
         if (requiredEntities) {
           revalidateFlow({ tag: "previewFlow" })
           const browser = await puppeteer.launch({
-            args: chrome.args,
-            executablePath:
-              (await chrome.executablePath) || puppeteer.executablePath(),
-            headless: chrome.headless,
+            args: chromium.args,
+            executablePath: await chromium.executablePath(),
+            headless: true,
           })
 
           const page = await browser.newPage()
