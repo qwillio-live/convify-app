@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef } from "react"
 import Image from "next/image"
-import ImagePlaceholder from "@/assets/images/default-image.webp"
+import { DefaultImagePlaceholder } from "@/constant"
 import { debounce, throttle } from "lodash"
 import {
   Activity,
@@ -198,7 +198,7 @@ export const TextImageComponentPreview = ({
   return (
     <div className="flex w-full flex-col items-center justify-between ">
       <Image
-        src={ImagePlaceholder.src}
+        src={DefaultImagePlaceholder}
         alt="Text+Image component"
         width={300}
         height={200}
@@ -1423,7 +1423,7 @@ export const TextImageDefaultProps: IconButtonProps = {
   alt: "Image",
   align: "center",
   url: "https://convify.io",
-  src: ImagePlaceholder.src,
+  src: DefaultImagePlaceholder,
   disabled: false,
   enableLink: false,
   width: "90%",

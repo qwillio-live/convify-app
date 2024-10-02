@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useCallback, useEffect, useRef } from "react"
-import ImagePlaceholder from "@/assets/images/default-image.webp"
+import Image from "next/image"
+import { DefaultImagePlaceholder } from "@/constant"
 import { debounce, throttle } from "lodash"
 import {
   Activity,
@@ -213,9 +214,12 @@ export const UserLogo = ({
   console.log("max width in the image is: ", maxWidth, width)
   return (
     <>
-      <img
+      <Image
         alt={alt}
         src={src}
+        width={parseFloat(width) ?? 346}
+        height={parseFloat(height) || 212}
+        objectFit="cover"
         style={{
           width: width,
           maxWidth: maxWidth,
@@ -632,7 +636,7 @@ export const ImageDefaultProps: IconButtonProps = {
   alt: "Image",
   align: "center",
   url: env.NEXT_PUBLIC_APP_URL,
-  src: ImagePlaceholder.src,
+  src: DefaultImagePlaceholder,
   radiusCorner: 0,
   disabled: false,
   enableLink: false,

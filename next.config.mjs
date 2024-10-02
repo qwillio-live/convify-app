@@ -1,5 +1,6 @@
 import { withContentlayer } from "next-contentlayer"
 import createNextIntlPlugin from "next-intl/plugin"
+
 import "./env.mjs"
 
 const withNextIntl = createNextIntlPlugin()
@@ -12,6 +13,7 @@ const nextConfig = {
       "avatars.githubusercontent.com",
       "s3.eu-central-2.wasabisys.com",
       "s3.ap-southeast-1.wasabisys.com",
+      "siteimages.b-cdn.net",
     ],
   },
   experimental: {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react"
-import ImagePlaceholder from "@/assets/images/default-image.webp"
+import { DefaultImagePlaceholder } from "@/constant"
 import axios from "axios"
 import { debounce, throttle } from "lodash"
 import {
@@ -885,7 +885,7 @@ export const DefaultPropsImg = {
   imageSize: 100,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
-  src: ImagePlaceholder.src,
+  src: DefaultImagePlaceholder,
 }
 
 Img.craft = {
