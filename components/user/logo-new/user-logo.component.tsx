@@ -1,18 +1,22 @@
 "use client"
+
 import React, { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import ConvifyLogo from "@/assets/convify_logo_black.png"
+import { useTranslations } from "next-intl"
+
+import { env } from "@/env.mjs"
 import { useNode } from "@/lib/craftjs"
-import { Controller } from "../settings/controller.component"
-import { LogoSettings } from "./user-logo.settings"
-import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
+
+import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useLogoThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import ConvifyLogo from "@/assets/convify_logo_black.png"
+import { LogoSettings } from "./user-logo.settings"
 
 const ButtonTextLimit = {
   small: 100,
@@ -501,7 +505,7 @@ export const LogoDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: "https://convify.io",
+  url: env.NEXT_PUBLIC_APP_URL,
   src: `${ConvifyLogo.src}`,
   disabled: false,
   enableLink: false,
@@ -515,8 +519,8 @@ export const LogoDefaultProps: IconButtonProps = {
   buttonSize: "medium",
   time: 2,
   text: "Get quote",
-  top: 0,
-  bottom: 0,
+  top: 10,
+  bottom: 10,
   left: 0,
   right: 0,
   marginLeft: 0,

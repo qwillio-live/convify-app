@@ -1,5 +1,8 @@
 "use client"
+
 import React, { useEffect, useRef } from "react"
+import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
+import classNames from "classnames"
 import {
   Activity,
   Anchor,
@@ -9,23 +12,24 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 import styled from "styled-components"
+
 import { useEditor, useNode } from "@/lib/craftjs"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import { Button as CustomButton } from "@/components/ui/button"
+
 import { Controller } from "../settings/controller.component"
-import { AvatarSettings } from "./user-avatar.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useAvatarThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
-import classNames from "classnames"
+import { AvatarSettings } from "./user-avatar.settings"
 import "./styles.css"
+import { env } from "@/env.mjs"
 
 const ButtonTextLimit = {
   small: 100,
@@ -599,7 +603,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: "https://convify.io",
+  url: env.NEXT_PUBLIC_APP_URL,
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
   enableLink: false,
@@ -620,7 +624,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  icon: "arrowright",
+  icon: "aperture",
   paddingLeft: "16",
   paddingTop: "26",
   paddingRight: "16",

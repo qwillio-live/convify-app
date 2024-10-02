@@ -1,16 +1,21 @@
 import React, { useCallback, useEffect } from "react"
-import {
-  MoveHorizontal,
-  AlignHorizontalJustifyStart,
-  AlignHorizontalJustifyEnd,
-  AlignHorizontalJustifyCenter,
-} from "lucide-react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
+import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
+import axios from "axios"
+import { debounce, throttle } from "lodash"
+import {
+  AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyStart,
+  MoveHorizontal,
+} from "lucide-react"
 import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
-import { throttle, debounce } from "lodash"
+
 import { useNode } from "@/lib/craftjs"
+import { setAvatarBackgroundColor } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -19,9 +24,10 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/custom-checkbox"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/custom-checkbox"
 import {
   Select,
   SelectContent,
@@ -31,15 +37,11 @@ import {
   SelectValue,
 } from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
-import { Controller } from "../settings/controller.component"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { Icons } from "@/components/icons"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+
+import { Controller } from "../settings/controller.component"
 import { UserLogo } from "./user-avatar.component"
-import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
-import axios from "axios"
-import { setAvatarBackgroundColor } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 
 export const Img = ({
   alt,
@@ -498,10 +500,13 @@ export const AvatarSettings = () => {
                 </div>
                 <div className="style-control col-span-2 flex flex-col">
                   <p className="text-md text-muted-foreground flex-1">
-                    {t("Open in..")}
+                    {t("Open in")}
                   </p>
                   <Select
-                    defaultValue={icon}
+                    defaultValue={"aperture"}
+                    value={
+                      icon && icon === "arrowright" ? "arrowright" : "aperture"
+                    }
                     onValueChange={(e) => {
                       setProp((props) => (props.icon = e), 1000)
                     }}
