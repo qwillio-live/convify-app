@@ -28,6 +28,15 @@ const nextConfig = {
       },
     ]
   },
+  webpack: (config) => {
+    // Ignore source map files
+    config.module.rules.push({
+      test: /\.map$/,
+      use: "ignore-loader",
+    })
+
+    return config
+  },
 }
 
 export default withContentlayer(withNextIntl(nextConfig))
