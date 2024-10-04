@@ -19,6 +19,7 @@ import { useEffect, useState } from "react"
 import { User } from "../../page"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
+  setIsUpdating,
   setResetTotalFilled,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -50,6 +51,8 @@ const Header = ({ flowId }) => {
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
   )
+  const isUpdating =
+    useAppSelector((state) => state?.screen?.isUpdating) || false
   const selectedScreen =
     useAppSelector((state) => state?.screen?.selectedScreen) || 0
 
@@ -96,6 +99,7 @@ const Header = ({ flowId }) => {
   const publishFlow = async () => {
     try {
       setIsLoading(true)
+      dispatch(setIsUpdating(true))
       const steps = localFlowData?.screens
         ? Array.from(
             new Set(localFlowData.screens.map((step) => step.screenName))
@@ -154,8 +158,9 @@ const Header = ({ flowId }) => {
           router.push(`./share`)
         }
         setIsLoading(false)
+        dispatch(setIsUpdating(false))
         router.push(`./share`)
-      }, 9000)
+      }, 15000)
       // }
     } catch (err) {
       console.error("Publishing flow failed:", err)

@@ -1,5 +1,8 @@
 "use client"
-import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setIsUpdating,
+  setScreensData,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import React, { useCallback, useEffect, useRef, useState } from "react"
@@ -20,7 +23,8 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
 
   // Reference to hold the AbortController for request cancellation
   const abortControllerRef = useRef<AbortController | null>(null)
-
+  const isUpdating =
+    useAppSelector((state) => state?.screen?.isUpdating) || false
   const getFlowData = async () => {
     try {
       const response = await fetch(`/api/flows/${flowId}`)
@@ -46,23 +50,23 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
       // Create a new AbortController for the new request
       const abortController = new AbortController()
       abortControllerRef.current = abortController
-
-      try {
-        await fetch(`/api/flows/${flowId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedFlowData),
-          signal: abortController.signal, // Attach the signal to the request
-        })
-      } catch (error) {
-        if (error.name === "AbortError") {
-          console.log("Previous request canceled")
-        } else {
-          console.error("Update flow error:", error)
+      if (!isUpdating)
+        try {
+          await fetch(`/api/flows/${flowId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedFlowData),
+            signal: abortController.signal, // Attach the signal to the request
+          })
+        } catch (error) {
+          if (error.name === "AbortError") {
+            console.log("Previous request canceled")
+          } else {
+            console.error("Update flow error:", error)
+          }
         }
-      }
     },
     [flowId]
   )

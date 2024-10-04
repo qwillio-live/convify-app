@@ -70,6 +70,7 @@ export interface ScreensState {
   hasComponentBeforeAvatar: boolean
   avatarBackgroundColor: string | undefined
   filledContent: []
+  isUpdating?: boolean
 }
 
 const initialState: ScreensState = {
@@ -132,6 +133,7 @@ const initialState: ScreensState = {
   screenRoller: "",
   scrollY: 0,
   filledContent: [],
+  isUpdating: false,
 }
 
 export const screensSlice = createSlice({
@@ -184,7 +186,9 @@ export const screensSlice = createSlice({
       // Load the editor with the selected screen's data
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
-
+    setIsUpdating: (state, action: PayloadAction<boolean>) => {
+      state.isUpdating = action.payload
+    },
     setSelectedData: (state, action: PayloadAction<string[]>) => {
       const screens = JSON.parse(JSON.stringify(state.screens[0]))
       console.log(
@@ -902,6 +906,7 @@ export const {
   resetScreen,
   getAllFilledAnswers,
   setEditorSelectedComponent,
+  setIsUpdating,
 } = screensSlice.actions
 
 export default screensSlice.reducer
