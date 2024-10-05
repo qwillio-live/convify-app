@@ -1,4 +1,5 @@
 "use client"
+
 import React from "react"
 import { transform } from "next/dist/build/swc"
 import hexoid from "hexoid"
@@ -201,8 +202,8 @@ export const FormContent = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
       className={cn(
-        `relative border border-transparent`,
-        isHovered ? "border border-dotted border-blue-500" : ""
+        `relative border border-transparent`
+        // isHovered ? "border border-dotted border-blue-500" : ""
       )}
     >
       <FormContentGen
@@ -440,9 +441,7 @@ export const Form = ({ children, ...props }) => {
         gap="5"
         ref={(ref: any) => connect(drag(ref))}
         style={{ width: "100%", height: "100%" }}
-        className={`${
-          isHovered ? "border border-dotted border-blue-500" : ""
-        } relative border border-transparent`}
+        className={` relative border border-transparent`}
       >
         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element
