@@ -31,6 +31,8 @@ import "./styles.css"
 import Image from "next/image"
 
 import { env } from "@/env.mjs"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import useScrollPosition from "@/hooks/use-scroll-position"
 
 const ButtonTextLimit = {
   small: 100,
@@ -154,6 +156,7 @@ export const AvatarComponentGen = ({
             w={w}
             h={h}
             src={src}
+            isPreview={false}
             {...props}
           />
         </div>
@@ -181,10 +184,13 @@ export const UserLogo = ({
   cornRad,
   bottom,
   right,
+  isPreview,
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const isMobileScreen = useMediaQuery("(max-width: 640px)")
+  const bodyScrollY = useScrollPosition()
   const hasComponentBeforeAvatar = useAppSelector(
     (state) => state?.screen?.hasComponentBeforeAvatar
   )
@@ -193,12 +199,12 @@ export const UserLogo = ({
 
   const avatarClass = `${
     hasComponentBeforeAvatar
-      ? scrollY && scrollY > 50
+      ? (isPreview ? bodyScrollY > 50 : scrollY && scrollY > 50)
         ? "avatar-top"
         : "avatar-half"
       : scrollY && scrollY > 50
       ? "avatar-none-scrolled"
-      : mobileScreen
+      : mobileScreen || isMobileScreen
       ? "avatar-none-mobile"
       : "avatar-none"
   }`
@@ -489,6 +495,7 @@ export const AvatarComponent = ({
             height={height}
             w={w}
             h={h}
+            isPreview
             src={src}
             {...props}
           />
