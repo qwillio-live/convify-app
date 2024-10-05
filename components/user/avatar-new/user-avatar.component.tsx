@@ -1,8 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
-import classNames from "classnames"
 import {
   Activity,
   Anchor,
@@ -29,6 +28,8 @@ import {
 } from "./useAvatarThemePresets"
 import { AvatarSettings } from "./user-avatar.settings"
 import "./styles.css"
+import Image from "next/image"
+
 import { env } from "@/env.mjs"
 
 const ButtonTextLimit = {
@@ -134,35 +135,27 @@ export const AvatarComponentGen = ({
         <div
           className={`relative flex flex-row justify-${align} w-full border border-transparent`}
         >
-          <div
-            ref={avatarRef}
-            id="avatar-component"
-            // className={classNames(
-            //   avatarClass,
-            //   hasComponentBeforeAvatar
-            //     ? "absolute translate-y-[-50%] transition-transform duration-300 ease-in-out"
-            //     : ""
-            // )}
-            // style={{
-            //   transform: mobileScreen ? `translateY(${translateY})` : "",
-            // }}
-          >
-            <img
-              alt={alt}
-              src={src}
-              style={{
-                height: "80px",
-                width: "80px",
-                //   ? `${mobileDynamicSize}px`
-                //   : `${dynamicSize}px`,
-                // height: mobileScreen
-                //   ? `${mobileDynamicSize}px`
-                //   : `${dynamicSize}px`,
-                borderRadius: `${cornRad}px`,
-                backgroundColor: "transparent",
-              }}
-            />
-          </div>
+          <UserLogo
+            alt={alt}
+            marginTop={marginTop}
+            marginBottom={marginBottom}
+            cornRad={cornRad}
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            top={top}
+            bottom={bottom}
+            left={left}
+            right={right}
+            background={background}
+            radius={radius}
+            align={align}
+            width={width}
+            height={height}
+            w={w}
+            h={h}
+            src={src}
+            {...props}
+          />
         </div>
       </div>
     </div>
@@ -198,42 +191,53 @@ export const UserLogo = ({
 
   const avatarRef = useRef(null)
 
-  // const avatarClass = `${
-  //   // hasComponentBeforeAvatar
-  //   //   ? scrollY && scrollY > 50
-  //   //     ? "avatar-top"
-  //   //     : "avatar-half"
-  //   //   : scrollY && scrollY > 50
-  //   //   ? "avatar-none-scrolled"
-  //   //   : mobileScreen
-  //   //   ? "avatar-none-mobile"
-  //   //   : "avatar-none"
-  // }`
+  const avatarClass = `${
+    hasComponentBeforeAvatar
+      ? scrollY && scrollY > 50
+        ? "avatar-top"
+        : "avatar-half"
+      : scrollY && scrollY > 50
+      ? "avatar-none-scrolled"
+      : mobileScreen
+      ? "avatar-none-mobile"
+      : "avatar-none"
+  }`
+
+  // const animaton = useMemo(() => {
+  //   let translateYPercent = Math.max(0, 35 - (scrollY || 35))
+  //   let box = Math.max(50, 80 - (scrollY || 0))
+  //   console.log("scroll", scrollY)
+  //   return {
+  //     y: !mobileScreen ? `calc(${translateYPercent}%)` : "0px",
+  //     box: `${box}px`,
+  //   }
+  // }, [scrollY, mobileScreen])
+
   return (
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={
-        classNames()
-        // avatarClass
-        // hasComponentBeforeAvatar
-        //   ? "transition-transform duration-300 ease-in-out"
-        //   : ""
-      }
+      className={cn(avatarClass, {
+        "transition-transform duration-300 ease-in-out":
+          hasComponentBeforeAvatar,
+      })}
     >
-      <img
+      <Image
         alt={alt}
         src={src}
+        height={80}
+        width={80}
         // className="rounded-full"
         style={{
-          width: "80px",
-          height: "80px",
+          width: 80,
+          height: 80,
           borderRadius: `${cornRad}px`,
           backgroundColor: "transparent",
           objectFit: "cover",
-          // transform: `translateY(${top}px)`,
+          transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
+          transition: "all 0.1s linear",
         }}
       />
     </div>
@@ -335,6 +339,7 @@ export const AvatarComponent = ({
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
@@ -466,30 +471,27 @@ export const AvatarComponent = ({
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
         >
-          {
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <UserLogo
-              alt={alt}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              cornRad={cornRad}
-              marginLeft={marginLeft}
-              marginRight={marginRight}
-              top={top}
-              bottom={bottom}
-              left={left}
-              right={right}
-              background={background}
-              radius={radius}
-              align={align}
-              width={width}
-              height={height}
-              w={w}
-              h={h}
-              src={src}
-              {...props}
-            />
-          }
+          <UserLogo
+            alt={alt}
+            marginTop={marginTop}
+            marginBottom={marginBottom}
+            cornRad={cornRad}
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            top={top}
+            bottom={bottom}
+            left={left}
+            right={right}
+            background={background}
+            radius={radius}
+            align={align}
+            width={width}
+            height={height}
+            w={w}
+            h={h}
+            src={src}
+            {...props}
+          />
         </div>
       </div>
     </div>

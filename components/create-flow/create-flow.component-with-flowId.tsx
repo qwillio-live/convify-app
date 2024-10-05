@@ -396,6 +396,7 @@ export function CreateFlowComponent({ flowId }) {
             ref={containerRef}
             id="scroll-container"
             className="hidden max-h-[calc(-52px+99vh)] basis-[55%] overflow-y-auto border-r md:block"
+            onScroll={handleScroll}
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
 
