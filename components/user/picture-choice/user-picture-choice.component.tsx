@@ -621,13 +621,16 @@ const PictureChoiceItem = ({
     if (n === 2) {
       return 50
     }
-    if ((n - 4) % 2 === 0 && n !== 6) {
+
+    // if ((n - 3) % 2 === 0) {
+    //   return 33.33
+    // }
+
+    if (n % 3 == 1 || n % 4 == 0) {
       return 25
     }
-    if ((n - 3) % 2 === 0) {
-      return 33.33
-    }
-    if (n % 3 === 0) {
+
+    if (n % 3 == 0 || n % 3 == 2) {
       return 33.33
     }
 
@@ -754,7 +757,7 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className={cn(`picture-item flex max-w-[191px] grow-1 justify-center`)}
+      className={cn(`picture-item flex max-w-[193px] grow-1 justify-center`)}
       style={{
         flexBasis: `calc(${getFlexBasis(choicesLength)}% - 10px)`,
       }}
