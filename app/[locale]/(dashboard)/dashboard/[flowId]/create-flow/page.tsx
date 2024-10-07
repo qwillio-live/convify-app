@@ -7,7 +7,10 @@ import { useTranslations } from "next-intl"
 
 import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
 import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import {
+  setFlowSettings,
+  setMobileScreen,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -109,6 +112,7 @@ export default function CreateFlowsPage({
         console.log("flowData", flowData)
         dispatch(setScreensData(flowData))
         dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+        dispatch(setMobileScreen(false))
         const primaryFontKey =
           flowData?.flowSettings?.text?.primaryFont || "--font-roboto"
 
