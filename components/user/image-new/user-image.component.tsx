@@ -214,12 +214,12 @@ export const UserLogo = ({
   console.log("max width in the image is: ", maxWidth, width)
   return (
     <>
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         alt={alt}
         src={src}
         width={parseFloat(width) ?? 346}
         height={parseFloat(height) || 212}
-        objectFit="cover"
         style={{
           width: width,
           maxWidth: maxWidth,

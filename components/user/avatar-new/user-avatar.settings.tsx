@@ -86,7 +86,6 @@ export const Img = ({
     >
       {isHovered && <Controller nameOfComponent={"Avatar"} />}
       {
-        /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
           alt={alt}
           marginTop={top}
@@ -107,6 +106,7 @@ export const Img = ({
           height={height}
           src={src}
           {...props}
+          isPreview={true}
         />
       }
     </div>

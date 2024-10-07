@@ -240,6 +240,8 @@ export function CreateFlowComponent({ flowId }) {
     [dispatch]
   )
 
+  console.log("mobileScreen: ", mobileScreen)
+
   React.useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
@@ -251,6 +253,9 @@ export function CreateFlowComponent({ flowId }) {
     )
     dispatch(setFirstScreenName(startScreenName))
     dispatch(setCurrentScreenName(startScreenName))
+    return () => {
+      dispatch(setMobileScreen(false))
+    }
   }, [])
 
   useEffect(() => {

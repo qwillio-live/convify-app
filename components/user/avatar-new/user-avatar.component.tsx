@@ -228,12 +228,10 @@ export const UserLogo = ({
           hasComponentBeforeAvatar,
       })}
     >
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element*/}
+      <img
         alt={alt}
         src={src}
-        height={80}
-        width={80}
-        // className="rounded-full"
         style={{
           width: 80,
           height: 80,
