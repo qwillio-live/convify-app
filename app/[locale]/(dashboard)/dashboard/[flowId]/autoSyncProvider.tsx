@@ -102,17 +102,36 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     const steps = localFlowData?.screens
       ? Array.from(
           new Set(localFlowData.screens.map((step) => step.screenName))
-        ).map((name) => {
-          const step = localFlowData.screens.find((s) => s.screenName === name)
-          return {
-            id: step?.screenId,
-            name: step?.screenName,
-            content: JSON.parse(step?.screenData),
-            link: step?.screenLink,
-            order: step ? localFlowData.screens.indexOf(step) : 0,
-            templateId: step?.screenTemplateId,
-          }
-        })
+        )
+          .map((name) => {
+            const step = localFlowData.screens.find(
+              (s) => s.screenName === name
+            )
+            const parsedContent = JSON.parse(step?.screenData)
+
+            // Create a Set to keep track of unique content
+            if (!step) return null // Skip if step is not found
+
+            // Initialize a unique content Set
+            const uniqueContentSet = new Set()
+
+            // Check if the content is unique
+            if (!uniqueContentSet.has(JSON.stringify(parsedContent))) {
+              uniqueContentSet.add(JSON.stringify(parsedContent)) // Add content to the Set
+              return {
+                id: step.screenId,
+                name: step.screenName,
+                content: parsedContent,
+                link: step.screenLink,
+                order: localFlowData.screens.indexOf(step),
+                templateId: step.screenTemplateId,
+              }
+            }
+
+            // Return null if content is not unique (to be filtered out later)
+            return null
+          })
+          .filter(Boolean) // Filter out null values
       : [] // Return an empty array if localFlowData or screens is undefined
 
     const data = {
