@@ -30,23 +30,11 @@ export async function GET(
   { params }: { params: { flowId: string } }
 ) {
   const { flowId } = params
-  const data = await getServerSession(authOptions)
 
-  if (!data) {
-    const statusCode = 401
-    const errorMessage = "User is not authenticated"
-    const userId = 0
-    const requestUrl = req.url
-    await logError({ statusCode, errorMessage, userId, requestUrl })
-    return NextResponse.json({ error: errorMessage }, { status: statusCode })
-  }
-
-  const userId = data.user.id
   try {
     const flow = await prisma.flow.findFirst({
       where: {
         id: String(flowId),
-        userId,
         isDeleted: false,
       },
       include: {
@@ -68,7 +56,7 @@ export async function GET(
       },
     })
     flow.steps = flowSteps.sort((a, b) => a.order - b.order)
-
+    console.log("returning flow", flow)
     return NextResponse.json(flow)
   } catch (error) {
     const statusCode = 500
@@ -131,6 +119,7 @@ export async function PUT(
     }
 
     if (data.steps) {
+      console.log("data.steps", data.steps)
       const existingSteps = await prisma.FlowStep.findMany({
         where: {
           flowId: String(flowId),
@@ -138,7 +127,7 @@ export async function PUT(
         },
       })
       const newStepIds = new Set(data.steps.map((step) => step.id))
-
+      console.log("existig.steps,newStepIds", existingSteps, newStepIds)
       // Mark missing steps as isDeleted: true
       for (const step of existingSteps) {
         if (!newStepIds.has(step.id)) {
@@ -159,11 +148,11 @@ export async function PUT(
           where: {
             id: step.id,
             flowId: String(flowId),
-            name: step.name,
           },
         })
-
+        console.log("existingStep", existingStep)
         if (existingStep) {
+          console.log(`Updating ${existingStep}`)
           await prisma.FlowStep.update({
             where: {
               id: step.id,
@@ -179,6 +168,7 @@ export async function PUT(
             },
           })
         } else {
+          console.log(`creating new `)
           await prisma.FlowStep.create({
             data: {
               name: step.name || "",
