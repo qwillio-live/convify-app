@@ -168,7 +168,7 @@ const Header = ({ flowId }) => {
   }
   router.prefetch(`/dashboard/${flowId}/create-flow`)
   function onClick() {
-    router.push(`/dashboard/${flowId}/create-flow`)
+    window.location.href = `/dashboard/${flowId}/create-flow`
   }
   return (
     <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">

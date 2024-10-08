@@ -316,6 +316,7 @@ export const screensSlice = createSlice({
             const result = options
               .filter((choice) => node.props?.selections?.includes(choice.id))
               .map((choice) => ({ id: choice.id, value: choice.value }))
+
             totalFilled[dataId] = {
               label: dataLabel,
               value: node.props?.selections?.length > 1 ? result : result[0],
@@ -331,9 +332,13 @@ export const screensSlice = createSlice({
               value: node.props.inputValue,
             }
           } else if (node.props?.selectedOptionId) {
+            const selectResult = node.props?.selectOptions?.find(
+              (option) => option.id === node.props?.selectedOptionId
+            )
+            const matchedValue = selectResult ? selectResult.value : null
             totalFilled[dataId] = {
               label: dataLabel,
-              value: node.props.selectedOptionId,
+              value: matchedValue,
             }
           } else if (node.props?.input) {
             totalFilled[dataId] = {
