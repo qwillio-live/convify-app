@@ -373,6 +373,7 @@ export const TextImageComponentGen = ({
       style={{
         display: "flex",
         justifyContent: "center",
+        width: "100%",
       }}
     >
       <div
@@ -394,13 +395,13 @@ export const TextImageComponentGen = ({
           isPreviewScreen={true}
           size={size}
           className={cn(
-            `relative flex flex-row justify-${align} border border-transparent`
+            `relative flex flex-row justify-${align} border border-transparent max-w-[calc(100vw-22px)]`
           )}
         >
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <div
-              className="flex-col md:flex-row max-w-[calc(100vw-22px)]"
+              className="flex-col md:flex-row "
               style={{
                 display: "flex",
                 width: "100%",
