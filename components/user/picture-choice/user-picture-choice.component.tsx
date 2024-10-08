@@ -608,11 +608,11 @@ const PictureChoiceItem = ({
       return 100
     }
     if (mobileScreen) {
-      if (n % 3 === 0) {
-        return 33.33
-      } else {
-        return 50
-      }
+      // if (n % 3 === 0) {
+      //   return 33.33
+      // } else {
+      return 50
+      // }
     }
 
     if (n === 7 || n == 11) {
