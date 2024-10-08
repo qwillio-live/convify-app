@@ -90,7 +90,7 @@ const Wrapper = styled.div<{
     } else {
       if (size === UserInputSizes.small) {
         if (mobileScreen) {
-          return { width: "360px" }
+          return { width: "360px", maxWidth: "calc(100% - 22px)" }
         } else {
           return { width: "376px" }
         }
@@ -400,7 +400,7 @@ export const TextImageComponentGen = ({
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <div
-              className="flex-col md:flex-row max-w-[calc(100vw-2px)]"
+              className="flex-col md:flex-row max-w-[calc(100vw-22px)]"
               style={{
                 display: "flex",
                 width: "100%",
