@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import {
   Bell,
   ChevronDown,
+  FolderClosed,
   FolderOpen,
   Home,
   LineChart,
@@ -101,287 +102,262 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="fixed grid h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="bg-muted/40 hidden border-r md:block">
-        <div className="fixed flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <div className="flex items-center gap-2 font-semibold">
-              <svg
-                className="h-6 w-6 md:h-7 md:w-7"
-                viewBox="0 0 720 524"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+    <div className="font-poppins flex h-screen flex-col">
+      <div className="flex h-[56px] w-full items-center justify-between border-b border-[#E6E2DD] bg-[#F6F6F6] px-6 md:h-[60px]">
+        {/* logo */}
+        <div>
+          <div className="flex items-center gap-2 font-semibold">
+            <svg
+              className="h-6 w-6 md:h-7 md:w-7"
+              viewBox="0 0 720 524"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="mask0_2503_36160"
+                style={{ maskType: "alpha" }}
+                maskUnits="userSpaceOnUse"
+                x="65"
+                y="65"
+                width="590"
+                height="394"
               >
-                <mask
-                  id="mask0_2503_36160"
-                  style={{ maskType: "alpha" }}
-                  maskUnits="userSpaceOnUse"
-                  x="65"
-                  y="65"
-                  width="590"
-                  height="394"
-                >
-                  <rect
-                    x="65.4551"
-                    y="65.4551"
-                    width="589.091"
-                    height="392.727"
-                    fill="#D9D9D9"
-                  />
-                </mask>
-                <g mask="url(#mask0_2503_36160)">
-                  <path
-                    d="M114.547 507.273L286.365 261.819L114.547 16.3643"
-                    stroke="white"
-                    strokeWidth="98.1818"
-                  />
-                  <path
-                    d="M114.547 507.273L286.365 261.819L114.547 16.3643"
-                    stroke="black"
-                    strokeWidth="98.1818"
-                  />
-                  <path
-                    d="M261.818 507.273L433.637 261.819L261.818 16.3643"
-                    stroke="white"
-                    strokeWidth="98.1818"
-                  />
-                  <path
-                    d="M261.818 507.273L433.637 261.819L261.818 16.3643"
-                    stroke="black"
-                    strokeOpacity="0.6"
-                    strokeWidth="98.1818"
-                  />
-                  <path
-                    d="M409.092 507.273L580.91 261.819L409.092 16.3643"
-                    stroke="white"
-                    strokeWidth="98.1818"
-                  />
-                  <path
-                    d="M409.092 507.273L580.91 261.819L409.092 16.3643"
-                    stroke="black"
-                    strokeOpacity="0.2"
-                    strokeWidth="98.1818"
-                  />
-                </g>
-              </svg>
-              <span className="text-base md:text-lg">Convify</span>
-            </div>
-
-            <Button variant="outline" size="icon" className="ml-auto size-8">
-              <Bell className="size-4" />
-              <span className="sr-only">Toggle notifications</span>
-            </Button>
+                <rect
+                  x="65.4551"
+                  y="65.4551"
+                  width="589.091"
+                  height="392.727"
+                  fill="#D9D9D9"
+                />
+              </mask>
+              <g mask="url(#mask0_2503_36160)">
+                <path
+                  d="M114.547 507.273L286.365 261.819L114.547 16.3643"
+                  stroke="white"
+                  strokeWidth="98.1818"
+                />
+                <path
+                  d="M114.547 507.273L286.365 261.819L114.547 16.3643"
+                  stroke="black"
+                  strokeWidth="98.1818"
+                />
+                <path
+                  d="M261.818 507.273L433.637 261.819L261.818 16.3643"
+                  stroke="white"
+                  strokeWidth="98.1818"
+                />
+                <path
+                  d="M261.818 507.273L433.637 261.819L261.818 16.3643"
+                  stroke="black"
+                  strokeOpacity="0.6"
+                  strokeWidth="98.1818"
+                />
+                <path
+                  d="M409.092 507.273L580.91 261.819L409.092 16.3643"
+                  stroke="white"
+                  strokeWidth="98.1818"
+                />
+                <path
+                  d="M409.092 507.273L580.91 261.819L409.092 16.3643"
+                  stroke="black"
+                  strokeOpacity="0.2"
+                  strokeWidth="98.1818"
+                />
+              </g>
+            </svg>
+            <span className="text-base md:text-lg">Convify</span>
           </div>
-          <div className="flex-1 overflow-x-hidden">
-            <nav className="grid items-start px-2 pt-2 text-sm font-medium lg:px-4">
-              <form>
-                <div className="relative">
-                  <Search className="text-muted-foreground absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
+        </div>
+        {/* notification and account menu */}
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-[6px] border border-[#EAEAEC]"
+          >
+            <Bell className="size-4" />
+            <span className="sr-only">Toggle notifications</span>
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-semibold uppercase hover:bg-[#eaeaec]"
+                style={{ width: "40px", height: "40px" }} // Adjust the size as needed
+              >
+                {userData ? (
+                  userData?.name ? (
+                    userData?.name?.charAt(0).toUpperCase()
+                  ) : (
+                    userData?.email?.charAt(0).toUpperCase()
+                  )
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-circle-user"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                  </svg>
+                )}
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                {t("Logout")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      <div className="grid h-full w-full flex-1 overflow-y-auto md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <div className="sticky top-0 hidden h-[calc(100vh-60px)] border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
+          <div className="flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
+            <div className="h-[88px] md:border-b md:border-b-[#E6E2DD]">
+              <form className="flex h-full items-center px-2 lg:px-6">
+                <div className="relative w-full">
+                  <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-[#23262C]" />
                   <Input
                     type="search"
                     placeholder={t("Find workspace or flow")}
-                    className="bg-background w-full appearance-none pl-8 shadow-none "
+                    className="bg-background w-full appearance-none border border-[#E6E2DD] pl-8 shadow-none  placeholder:text-[#9B9A99]"
                   />
                 </div>
               </form>
-              <Separator className="my-4" />
-              <div className="text-muted-foreground flex items-center gap-3 rounded-lg px-3 py-2 uppercase">
-                <ChevronDown className="size-4" />
-                {t("Private")}
-              </div>
-              <div
-                onClick={() => setOpenCreatedFlow(true)}
-                // href="/dashboard/flows"
-                className="bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:cursor-pointer"
-              >
-                {/* <Package className="size-4" /> */}
-                <FolderOpen className="size-4" />
-                {t("My workspace")}{" "}
-                <Badge className="ml-auto flex size-6 shrink-0 items-center justify-center rounded-full bg-transparent text-black hover:bg-transparent hover:text-black">
-                  1
-                </Badge>
-              </div>
-            </nav>
+            </div>
+            <div className="flex-1 overflow-x-hidden">
+              <nav className="mt-4 grid items-start px-2 text-base lg:px-6">
+                <div className="flex items-center gap-2 rounded-lg px-4 py-3 text-[#9B9A99]">
+                  <ChevronDown className="size-5" />
+                  {t("Private")}
+                </div>
+                <div
+                  onClick={() => setOpenCreatedFlow(true)}
+                  // href="/dashboard/flows"
+                  className="bg-muted text-primary hover:text-primary flex items-center gap-3 rounded-lg border border-[#E6E2DD] py-2 transition-all hover:cursor-pointer md:px-4"
+                >
+                  {/* <Package className="size-4" /> */}
+                  <FolderClosed className="size-5" />
+                  {t("My workspace")}{" "}
+                  <span className="ml-auto text-[#9B9A99]">
+                    {flows?.length || 0}
+                  </span>
+                </div>
+              </nav>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="flex h-full flex-col overflow-hidden">
-        <div className="sticky top-0 z-20">
-          <header className="flex h-14 items-center gap-4 border-b bg-[#fafbfc] px-4 lg:h-[60px] lg:px-6">
-            <Sheet>
-              {/* <SheetTrigger asChild> */}
-              <Button
-                variant="link"
-                size="icon"
-                className="w-auto shrink-0 px-2 hover:no-underline md:hidden"
-              >
-                <svg
-                  width="25"
-                  viewBox="0 0 22 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-7"
-                >
-                  <mask
-                    id="mask0_2486_36154"
-                    style={{ maskType: "alpha" }}
-                    maskUnits="userSpaceOnUse"
-                    x="0"
-                    y="0"
-                    width="22"
-                    height="12"
-                  >
-                    <rect width="22" height="12" fill="#D9D9D9" />
-                  </mask>
-                  <g mask="url(#mask0_2486_36154)">
-                    <path d="M2 14L7 6L2 -2" stroke="white" stroke-width="4" />
-                    <path d="M2 14L7 6L2 -2" stroke="black" stroke-width="4" />
-                    <path d="M8 14L13 6L8 -2" stroke="white" stroke-width="4" />
-                    <path
-                      d="M8 14L13 6L8 -2"
-                      stroke="black"
-                      stroke-opacity="0.6"
-                      stroke-width="4"
-                    />
-                    <path
-                      d="M14 14L19 6L14 -2"
-                      stroke="white"
-                      stroke-width="4"
-                    />
-                    <path
-                      d="M14 14L19 6L14 -2"
-                      stroke="black"
-                      stroke-opacity="0.2"
-                      stroke-width="4"
-                    />
-                  </g>
-                </svg>
-                <span className="pl-1 text-base font-semibold md:text-lg ">
-                  Convify
-                </span>
-                {/* <span className="sr-only">Toggle navigation menu</span> */}
-              </Button>
-            </Sheet>
-            <div className="w-full flex-1"></div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
-                  style={{ width: "40px", height: "40px" }} // Adjust the size as needed
-                >
-                  {userData ? (
-                    userData?.name ? (
-                      userData?.name?.charAt(0).toUpperCase()
-                    ) : (
-                      userData?.email?.charAt(0).toUpperCase()
-                    )
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-circle-user"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                    </svg>
-                  )}
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
-                <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  {t("Logout")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </header>
         </div>
 
-        <main className="flex h-full flex-1 flex-col overflow-y-auto p-4 lg:p-6">
-          <div className="mb-4 flex items-center">
-            <h1 className="text-lg font-semibold md:text-lg">
-              {t("My workspace")}
-            </h1>
-          </div>
-          {loading ? (
-            <div
-              className={`flex flex-1 items-center justify-center rounded-lg border-none shadow-sm`}
-              x-chunk="dashboard-02-chunk-1"
-            >
-              <SkeletonFlowCard />
+        <div className="overflow-x-hidden pt-4 md:pt-0">
+          <div
+            className={`md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0 ${
+              openCreateFlow ? "h-[88px]" : "h-6 md:h-[88px]"
+            }`}
+          >
+            <div className="flex h-full flex-col items-start gap-4 px-4 md:flex-row md:items-center md:justify-between md:px-8 ">
+              <h1 className="text-base font-semibold text-[#23262C] md:text-2xl">
+                {t("My workspace")}
+              </h1>
+
+              <Link
+                className={`flex w-full items-center md:w-fit ${
+                  openCreateFlow ? "block" : "hidden md:block"
+                }`}
+                href="/dashboard/flows/create-flow/select-template"
+              >
+                <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-4 py-2 text-sm font-normal text-white md:text-base">
+                  <Plus size={16} /> {t("Create new flow")}
+                </Button>
+              </Link>
             </div>
-          ) : (
-            <>
-              {openCreateFlow ? (
-                <div
-                  className={`flex flex-1  justify-center rounded-lg shadow-sm ${
-                    openCreateFlow ? "border-none" : "border"
-                  }`}
-                  x-chunk="dashboard-02-chunk-1"
-                >
-                  <FlowsList
-                    flows={flows}
-                    setStatus={setStatus}
-                    status={status}
-                  />
-                </div>
-              ) : (
-                <div
-                  className={`flex flex-1 items-center  justify-center rounded-lg shadow-sm ${
-                    openCreateFlow ? "border-none" : "border"
-                  }`}
-                  x-chunk="dashboard-02-chunk-1"
-                >
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <img
-                      src="/images/character.svg"
-                      alt=""
-                      className="mb-4 h-[104px]"
+          </div>
+          <main
+            className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8 ${
+              openCreateFlow
+                ? "h-[calc(100%-88px)]"
+                : "h-[calc(100%-24px)] md:h-[calc(100%-88px)]"
+            }`}
+          >
+            {loading ? (
+              <div
+                className={`flex flex-1 items-center justify-center rounded-lg border-none`}
+                x-chunk="dashboard-02-chunk-1"
+              >
+                <SkeletonFlowCard />
+              </div>
+            ) : (
+              <>
+                {openCreateFlow ? (
+                  <div
+                    className={`flex flex-1 justify-center rounded-lg ${
+                      openCreateFlow ? "border-none" : "border"
+                    }`}
+                    x-chunk="dashboard-02-chunk-1"
+                  >
+                    <FlowsList
+                      flows={flows}
+                      setStatus={setStatus}
+                      status={status}
                     />
-                    <h3 className="text-2xl font-bold tracking-tight">
-                      {t("There's not a flow in sight")}
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      {t.rich(
-                        "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
-                        {
-                          br: () => <br />,
-                        }
-                      )}
-                    </p>
-                    <Link
-                      className="flex items-center "
-                      href={
-                        isMobile
-                          ? "/select-template"
-                          : "/dashboard/flows/create-flow/select-template"
-                      }
-                    >
-                      <Button className="itmes-center mt-4 flex gap-2">
-                        <Plus size={16} /> {t("Create new flow")}
-                      </Button>
-                    </Link>
                   </div>
-                </div>
-              )}
-            </>
-          )}
-        </main>
+                ) : (
+                  <div
+                    className={`flex h-full items-center justify-center rounded-[12px] border border-[#E9E9E9] bg-white p-2 md:rounded-[20px] md:p-4`}
+                    x-chunk="dashboard-02-chunk-1"
+                  >
+                    <div className="flex flex-col items-center gap-1 text-center">
+                      <img
+                        src="/images/character.svg"
+                        alt=""
+                        className="mb-4 h-[240px]"
+                      />
+                      <h3 className="text-base font-semibold text-[#23262C] md:text-xl">
+                        {t("You have no flows")}
+                      </h3>
+                      <p className="text-sm text-[#505050] md:text-base">
+                        {t("Start by creating by creating a new flow")}
+                      </p>
+                      <Link
+                        className="mt-8 flex w-full items-center md:w-fit"
+                        href="/dashboard/flows/create-flow/select-template"
+                      >
+                        <Button className="itmes-center flex w-full gap-2 rounded-lg bg-[#23262C] px-[31px] py-2 text-sm font-normal text-white md:px-4 md:text-base">
+                          <Plus size={16} /> {t("Create new flow")}
+                        </Button>
+                      </Link>
+                      {/* <p className="text-[#505050] text-sm md:text-base">
+                        {t.rich(
+                          "Click on 'Create new flow' or use one of flow <br></br> suggestions above to get started",
+                          {
+                            br: () => <br />,
+                          }
+                        )}
+                      </p> */}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   )

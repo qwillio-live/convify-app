@@ -63,30 +63,30 @@ export const SettingsPanel = () => {
     }
   }, [mobileScreen, selectedComponent])
   return (
-    <Tabs defaultValue="element" className="mb-10 h-[100vh] w-full">
-      <TabsList className="w-full rounded-none border-b border-[#c0c0c1] bg-[#fafafa] pb-0">
+    <Tabs defaultValue="element" className="font-poppins">
+      <TabsList className="h-15 w-full rounded-none border-b px-5 pb-0">
         <TabsTrigger
-          className="h-full rounded-none border-b-4 border-transparent p-4 font-bold data-[state=active]:border-current data-[state=active]:bg-inherit"
+          className="size-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="element"
         >
           {t("Element")}
         </TabsTrigger>
         <TabsTrigger
-          className="h-full rounded-none border-b-4 border-transparent p-4 font-bold data-[state=active]:border-current data-[state=active]:bg-inherit"
+          className="size-full rounded-none border-b-2 border-transparent p-4 uppercase data-[state=active]:border-current data-[state=active]:bg-inherit"
           value="theme"
         >
           {t("Theme")}
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="element">
+      <TabsContent value="element" className="px-4">
         <ScrollArea>
           {isEnabled && selected && (
             // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
             <div className="">
-              <div className="flex h-[100vh] flex-col gap-0">
+              <div className="flex flex-col gap-0">
                 <div
                   data-cy="settings-panel"
-                  className="settings-panel mb-4 flex-col gap-2"
+                  className="settings-panel mb-3 flex-col gap-2"
                 >
                   {selected.settings && React.createElement(selected.settings)}
                 </div>
@@ -100,7 +100,7 @@ export const SettingsPanel = () => {
                       }
                     }}
                     variant="destructive"
-                    className="mb-4"
+                    className="font-poppins my-4 text-base font-medium"
                   >
                     {t("Delete")}
                   </Button>

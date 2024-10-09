@@ -317,7 +317,7 @@ export function CreateFlowComponent() {
       >
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0 md:flex">
           <ScrollArea className="max-h-screen overflow-y-auto border-r px-2 py-6 md:basis-[15%]">
-            <div className="section-body">
+            <div className="section-body p-5">
               <ScreensList />
             </div>
           </ScrollArea>
@@ -414,7 +414,7 @@ export function CreateFlowComponent() {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body">
+            <div className="section-body py-6">
               <UserToolbox />
             </div>
           </ScrollArea>
@@ -422,7 +422,7 @@ export function CreateFlowComponent() {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto">
+            <div className="section-body overflow-y-auto bg-[#f6f6f6]">
               <SettingsPanel />
             </div>
           </ScrollArea>

@@ -7,49 +7,30 @@ import cn from "classnames"
 import { is } from "date-fns/locale"
 import {
   Box,
-  Chrome,
-  CircleSlashed,
   Columns,
-  Copy,
-  Dice2,
-  Ellipsis,
-  Facebook,
-  Globe,
   GripVertical,
-  Hand,
-  HeartHandshake,
   Image as ImageIcon,
-  ImagePlus,
-  Images,
   Link,
-  Linkedin,
-  ListChecks,
-  ListOrdered,
   Loader as LoaderIcon,
-  LucidePaintbrush,
   Mail,
-  Navigation,
-  NotebookPen,
-  Paintbrush,
-  Paintbrush2,
-  Pencil,
   Phone,
   RectangleEllipsis,
-  Rocket,
-  SeparatorHorizontal,
-  SkipBack,
-  SquareCheckIcon,
-  SquareMousePointer,
   SquarePen,
   SwatchBook,
-  Target,
   TextCursorInput,
-  Trophy,
-  Type,
   LayoutList,
-  MessageCircleMoreIcon,
   Send,
   User,
+  InfoIcon,
+  HeadingIcon,
+  TypeIcon,
+  CheckSquare,
+  MousePointer,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  MinusIcon,
+  ListIcon,
+  ServerIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -191,24 +172,12 @@ import {
 } from "../telegramShareButton/telegram-component"
 import hexoid from "hexoid"
 
-function HelperInformation() {
+function HelperInformation({ infoText }: { infoText: string }) {
   return (
-    <UiCard
-      className={cn(
-        "flex flex-col items-center justify-center border border-gray-500 px-2 py-3"
-      )}
-    >
+    <UiCard className={cn("flex gap-2 rounded-lg border p-3 pr-4")}>
       <div className="flex flex-row items-start gap-1 text-left">
-        <Hand className="shrink-0" />
-        <div>
-          <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
-            Drag and drop
-          </h2>
-          <p className="text-justify text-sm font-light">
-            Click and hold a block from list, move it to the panel to the left
-            and release it above the drop zone to add it.
-          </p>
-        </div>
+        <InfoIcon className="size-4 shrink-0" />
+        <p className="text-xs">{infoText}</p>
       </div>
     </UiCard>
   )
@@ -257,10 +226,10 @@ const HoverCardComponent = ({ title, icon, children }) => {
         onMouseUp={handleMouseUp}
         className="flex w-full flex-row items-center justify-between text-lg hover:cursor-move"
       >
-        <span className="flex flex-row items-center gap-2 text-sm">
+        <span className="flex flex-row items-center gap-2 text-xs">
           {icon} {title}
         </span>{" "}
-        <GripVertical className="right-4 shrink-0" />
+        <GripVertical className="right-4 size-4 shrink-0 text-[#7B7D80]" />
       </div>
       {openCard && (
         <HoverCard openDelay={0}>
@@ -353,22 +322,23 @@ export const UserToolbox = () => {
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
   return (
-    <div className="p-y" draggable={false}>
-      <div className="flex flex-col items-center justify-center space-y-1">
-        <HelperInformation />
+    <div className="text-card-foreground font-poppins" draggable={false}>
+      <div className="flex flex-col items-center justify-center gap-6">
+        <HelperInformation infoText={t("Helper Information")} />
 
-        <ScrollArea className="w-full overflow-y-auto  pb-24 pt-4 md:pb-0">
+        <ScrollArea className="w-full overflow-y-auto">
           <Accordion
             type="multiple"
+            className="flex flex-col gap-6"
             defaultValue={["item-1", "item-2", "item-3", "item-4", "item-5"]}
           >
-            <AccordionItem value="item-1">
-              <AccordionTrigger className="uppercase hover:no-underline">
+            <AccordionItem value="item-1" className="border-b-0">
+              <AccordionTrigger className="pt-0 hover:no-underline">
                 Text
               </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
+              <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -381,7 +351,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Headline")}
-                    icon={<Type size={12} className="mr-2 size-3" />}
+                    icon={<HeadingIcon size={12} className="size-4" />}
                     data-cy="toolbox-text"
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
@@ -396,7 +366,7 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -409,7 +379,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Text")}
-                    icon={<Pencil size={12} className="mr-2 size-3" />}
+                    icon={<TypeIcon size={12} className="size-4" />}
                     data-cy="toolbox-text"
                   >
                     <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
@@ -426,13 +396,13 @@ export const UserToolbox = () => {
             </AccordionItem>
 
             {!isHeaderFooterMode && (
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="uppercase hover:no-underline">
+              <AccordionItem value="item-2" className="border-b-0">
+                <AccordionTrigger className="pt-0 hover:no-underline">
                   {t("Input")}
                 </AccordionTrigger>
-                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       //@ts-ignore
@@ -447,7 +417,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title="Form"
-                      icon={<NotebookPen size={12} className="mr-2 size-3" />}
+                      icon={<ServerIcon size={12} className="size-4" />}
                     >
                       <div className="flex w-full  max-w-[376px] flex-col items-center justify-start ">
                         <div className="flex w-full max-w-[376px] gap-1">
@@ -514,7 +484,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -524,7 +494,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Input Field")}
-                      icon={<TextCursorInput className="mr-2 size-3" />}
+                      icon={<TextCursorInput className="size-4" />}
                     >
                       <UserInputGen
                         {...outlinedPreset}
@@ -535,7 +505,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -548,9 +518,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Checkbox")}
-                      icon={
-                        <SquareCheckIcon size={12} className="mr-2 size-3" />
-                      }
+                      icon={<CheckSquare size={12} className="size-4" />}
                     >
                       <div className="flex w-full  max-w-[376px] flex-col items-center justify-start ">
                         <UserInputCheckboxGen
@@ -569,7 +537,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -582,7 +550,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("InputMail")}
-                      icon={<Mail size={12} className="mr-2 size-3" />}
+                      icon={<Mail size={12} className="size-4" />}
                     >
                       <UserInputMailGen
                         {...outlinedPresetMail}
@@ -595,7 +563,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -608,7 +576,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("InputPhone")}
-                      icon={<Phone size={12} className="mr-2 size-3" />}
+                      icon={<Phone size={12} className="size-4" />}
                     >
                       <UserInputPhoneGen
                         {...outlinedPresetPhone}
@@ -621,7 +589,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -634,7 +602,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("TextArea")}
-                      icon={<SquarePen size={12} className="mr-2 size-3" />}
+                      icon={<SquarePen size={12} className="size-4" />}
                     >
                       <UserInputTextareaGen
                         {...outlinedPresetTextarea}
@@ -649,7 +617,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -666,7 +634,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Select")}
-                      icon={<SquareMousePointer className="mr-2 size-3" />}
+                      icon={<MousePointer className="size-4" />}
                     >
                       <SelectGen
                         labelColor={"#ffffff"}
@@ -681,7 +649,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -697,7 +665,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Multiple Choice")}
-                      icon={<LayoutList className="mr-2 size-3" />}
+                      icon={<LayoutList className="size-4" />}
                     >
                       <MultipleChoiceGen
                         {...{
@@ -716,7 +684,7 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -732,7 +700,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Picture Choice")}
-                      icon={<Images className="mr-2 size-3" />}
+                      icon={<ImageIcon className="size-4" />}
                     >
                       <PictureChoiceGen
                         {...{
@@ -754,13 +722,13 @@ export const UserToolbox = () => {
               </AccordionItem>
             )}
 
-            <AccordionItem value="item-3">
-              <AccordionTrigger className="uppercase hover:no-underline">
+            <AccordionItem value="item-3" className="border-b-0">
+              <AccordionTrigger className="pt-0 hover:no-underline">
                 {t("Button")}
               </AccordionTrigger>
-              <AccordionContent className="flex w-full basis-full flex-col gap-2">
+              <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -779,7 +747,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Continue Button")}
-                    icon={<Navigation className="mr-2 size-3" />}
+                    icon={<ArrowRightIcon className="size-4" />}
                   >
                     <IconButtonGen
                       className="w-full"
@@ -796,7 +764,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -822,7 +790,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Back Button")}
-                    icon={<SkipBack className="mr-2 size-3" />}
+                    icon={<ArrowLeftIcon className="size-4" />}
                   >
                     <BackButtonGen
                       className="w-full"
@@ -840,7 +808,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -868,7 +836,28 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("WhatsApp Button")}
-                    icon={<MessageCircleMoreIcon className="mr-2 size-3" />}
+                    icon={
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        className="size-4"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_322_555)">
+                          <path
+                            d="M20.4015 3.48908C19.3014 2.37833 17.9911 1.49775 16.5471 0.898724C15.1031 0.299696 13.5543 -0.00579123 11.991 8.31376e-05C5.4405 8.31376e-05 0.102 5.33708 0.096 11.8891C0.096 13.9876 0.645 16.0291 1.6815 17.8366L0 24.0001L6.306 22.3471C8.04973 23.2984 10.0046 23.7962 11.991 23.7946H11.997C18.549 23.7946 23.886 18.4576 23.892 11.8996C23.8933 10.3367 23.5855 8.78894 22.9862 7.3455C22.3869 5.90206 21.5094 4.59143 20.4015 3.48908ZM11.991 21.7816C10.2198 21.7802 8.48134 21.3036 6.957 20.4016L6.597 20.1856L2.856 21.1666L3.855 17.5171L3.621 17.1406C2.63071 15.5661 2.10697 13.7431 2.1105 11.8831C2.1105 6.44408 6.546 2.00708 11.997 2.00708C13.2956 2.00475 14.5818 2.25949 15.7815 2.75662C16.9812 3.25375 18.0707 3.98342 18.987 4.90358C19.9063 5.82031 20.6352 6.9099 21.1315 8.10957C21.6279 9.30925 21.8819 10.5953 21.879 11.8936C21.873 17.3521 17.4375 21.7816 11.991 21.7816ZM17.4135 14.3806C17.118 14.2321 15.6585 13.5136 15.384 13.4116C15.111 13.3141 14.9115 13.2631 14.7165 13.5601C14.517 13.8556 13.947 14.5291 13.776 14.7226C13.605 14.9221 13.428 14.9446 13.131 14.7976C12.8355 14.6476 11.877 14.3356 10.743 13.3201C9.858 12.5326 9.2655 11.5576 9.0885 11.2621C8.9175 10.9651 9.072 10.8061 9.2205 10.6576C9.351 10.5256 9.516 10.3096 9.6645 10.1386C9.8145 9.96758 9.864 9.84158 9.9615 9.64358C10.059 9.44258 10.0125 9.27158 9.939 9.12308C9.864 8.97458 9.2715 7.50908 9.021 6.91808C8.781 6.33458 8.5365 6.41558 8.3535 6.40808C8.1825 6.39758 7.983 6.39758 7.7835 6.39758C7.63286 6.40142 7.48464 6.4363 7.3481 6.50005C7.21156 6.56381 7.08965 6.65505 6.99 6.76808C6.717 7.06508 5.9535 7.78358 5.9535 9.24908C5.9535 10.7146 7.0185 12.1231 7.1685 12.3226C7.3155 12.5221 9.2595 15.5206 12.243 16.8106C12.948 17.1181 13.503 17.2996 13.9365 17.4376C14.649 17.6656 15.2925 17.6311 15.8055 17.5576C16.3755 17.4706 17.562 16.8376 17.8125 16.1431C18.0585 15.4471 18.0585 14.8531 17.9835 14.7286C17.91 14.6026 17.7105 14.5291 17.4135 14.3806Z"
+                            fill="black"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_322_555">
+                            <rect width="24" height="24" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    }
                   >
                     <SocialShareButtonGen
                       className="w-full"
@@ -888,7 +877,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -916,7 +905,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Telegram Button")}
-                    icon={<Send className="mr-2 size-3" />}
+                    icon={<Send className="size-4" />}
                   >
                     <TelegramShareButtonGen
                       className="w-full"
@@ -936,7 +925,7 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -964,7 +953,7 @@ export const UserToolbox = () => {
                 >
                   <HoverCardComponent
                     title={t("Link Button")}
-                    icon={<Link className="mr-2 size-3" />}
+                    icon={<Link className="size-4" />}
                   >
                     <LinkButtonGen
                       className="w-full"
@@ -983,12 +972,12 @@ export const UserToolbox = () => {
             </AccordionItem>
             {isHeaderFooterMode && (
               <AccordionItem value="item-4">
-                <AccordionTrigger className="uppercase hover:no-underline">
+                <AccordionTrigger className="pt-0 hover:no-underline">
                   Display
                 </AccordionTrigger>
-                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -1007,7 +996,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Avatar")}
-                      icon={<User className="mr-2 size-3" />}
+                      icon={<User className="mr-2 size-4" />}
                     >
                       <div className="m-auto items-center">
                         <Image
@@ -1021,7 +1010,7 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -1040,7 +1029,38 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Logo")}
-                      icon={<Columns className="mr-2 size-3" />}
+                      icon={
+                        <svg
+                          className="size-4"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5.33333 6.66667L8 2L10.6667 6.66667H5.33333Z"
+                            stroke="#23262C"
+                            stroke-width="1.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M6.66667 11.6667C6.66667 12.9553 5.622 14 4.33333 14C3.04467 14 2 12.9553 2 11.6667C2 10.378 3.04467 9.33333 4.33333 9.33333C5.622 9.33333 6.66667 10.378 6.66667 11.6667Z"
+                            stroke="#23262C"
+                            stroke-width="1.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M9.33333 9.33333H14V14H9.33333V9.33333Z"
+                            stroke="#23262C"
+                            stroke-width="1.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      }
                     >
                       <div className="flex w-[160px] flex-row items-center justify-between p-4">
                         <Image
@@ -1054,7 +1074,7 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
                   <div
-                    className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -1099,7 +1119,7 @@ export const UserToolbox = () => {
                   >
                     <HoverCardComponent
                       title={t("Progress Bar")}
-                      icon={<RectangleEllipsis className="mr-2 size-3" />}
+                      icon={<RectangleEllipsis className="mr-2 size-4" />}
                     >
                       <div className="flex w-[360px] flex-row items-center justify-between  p-4">
                         <ProgressBarGen
@@ -1148,14 +1168,14 @@ export const UserToolbox = () => {
 
             {!isHeaderFooterMode && (
               <AccordionItem value="item-4">
-                <AccordionTrigger className="uppercase hover:no-underline">
+                <AccordionTrigger className="pt-0 hover:no-underline">
                   Display
                 </AccordionTrigger>
 
-                <AccordionContent className="flex w-full basis-full flex-col gap-2">
+                <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                   <>
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         //@ts-ignore
@@ -1170,13 +1190,30 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title="Container"
-                        icon={<Box className="mr-2 size-3" />}
+                        icon={
+                          <svg
+                            className="mr-2 size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M2 6H14M6 6L6 14M5.2 2H10.8C11.9201 2 12.4802 2 12.908 2.21799C13.2843 2.40973 13.5903 2.71569 13.782 3.09202C14 3.51984 14 4.0799 14 5.2V10.8C14 11.9201 14 12.4802 13.782 12.908C13.5903 13.2843 13.2843 13.5903 12.908 13.782C12.4802 14 11.9201 14 10.8 14H5.2C4.07989 14 3.51984 14 3.09202 13.782C2.71569 13.5903 2.40973 13.2843 2.21799 12.908C2 12.4802 2 11.9201 2 10.8V5.2C2 4.07989 2 3.51984 2.21799 3.09202C2.40973 2.71569 2.71569 2.40973 3.09202 2.21799C3.51984 2 4.0799 2 5.2 2Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        }
                       >
                         <Box width={120} height={42} />
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1196,7 +1233,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Separator")}
-                        icon={<SeparatorHorizontal className="mr-2 size-3" />}
+                        icon={<MinusIcon className="size-4" />}
                       >
                         <IconLineSeperator
                           className="w-full"
@@ -1210,7 +1247,7 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1229,7 +1266,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Image")}
-                        icon={<ImageIcon className="mr-2 size-3" />}
+                        icon={<ImageIcon className="size-4" />}
                       >
                         <Image
                           src={ImagePlaceholder.src}
@@ -1241,7 +1278,7 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1262,7 +1299,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Loader")}
-                        icon={<LoaderIcon className="mr-2 size-3" />}
+                        icon={<LoaderIcon className=" size-4" />}
                       >
                         <div className="flex w-[260px] flex-row items-center justify-center">
                           <div className="relative">
@@ -1276,7 +1313,7 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1295,7 +1332,38 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Logo")}
-                        icon={<Columns className="mr-2 size-3" />}
+                        icon={
+                          <svg
+                            className="size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M5.33333 6.66667L8 2L10.6667 6.66667H5.33333Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M6.66667 11.6667C6.66667 12.9553 5.622 14 4.33333 14C3.04467 14 2 12.9553 2 11.6667C2 10.378 3.04467 9.33333 4.33333 9.33333C5.622 9.33333 6.66667 10.378 6.66667 11.6667Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M9.33333 9.33333H14V14H9.33333V9.33333Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        }
                       >
                         <div className="flex w-[160px] flex-row items-center justify-between p-4">
                           <Image
@@ -1309,7 +1377,7 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1332,7 +1400,39 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Text & Image")}
-                        icon={<LayoutList className="mr-2 size-3" />}
+                        icon={
+                          <svg
+                            className="size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6 2V14M5.2 2H10.8C11.9201 2 12.4802 2 12.908 2.21799C13.2843 2.40973 13.5903 2.71569 13.782 3.09202C14 3.51984 14 4.0799 14 5.2V10.8C14 11.9201 14 12.4802 13.782 12.908C13.5903 13.2843 13.2843 13.5903 12.908 13.782C12.4802 14 11.9201 14 10.8 14H5.2C4.07989 14 3.51984 14 3.09202 13.782C2.71569 13.5903 2.40973 13.2843 2.21799 12.908C2 12.4802 2 11.9201 2 10.8V5.2C2 4.07989 2 3.51984 2.21799 3.09202C2.40973 2.71569 2.71569 2.40973 3.09202 2.21799C3.51984 2 4.0799 2 5.2 2Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M8 6H12"
+                              stroke="#23262C"
+                              stroke-linecap="round"
+                            />
+                            <path
+                              d="M8 8H12"
+                              stroke="#23262C"
+                              stroke-linecap="round"
+                            />
+                            <path
+                              d="M8 10H12"
+                              stroke="#23262C"
+                              stroke-linecap="round"
+                            />
+                          </svg>
+                        }
                       >
                         <TextImageComponentPreview
                           textColor={"#ffffff"}
@@ -1345,7 +1445,7 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1359,14 +1459,45 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Steps")}
-                        icon={<Ellipsis className="mr-2 size-3" />}
+                        icon={
+                          <svg
+                            className="size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M9.33333 7.99935C9.33333 8.73573 8.73638 9.33268 8 9.33268C7.26362 9.33268 6.66667 8.73573 6.66667 7.99935C6.66667 7.26297 7.26362 6.66602 8 6.66602C8.73638 6.66602 9.33333 7.26297 9.33333 7.99935Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M14 7.99935C14 8.73573 13.403 9.33268 12.6667 9.33268C11.9303 9.33268 11.3333 8.73573 11.3333 7.99935C11.3333 7.26297 11.9303 6.66602 12.6667 6.66602C13.403 6.66602 14 7.26297 14 7.99935Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M4.66667 7.99935C4.66667 8.73573 4.06971 9.33268 3.33333 9.33268C2.59695 9.33268 2 8.73573 2 7.99935C2 7.26297 2.59695 6.66602 3.33333 6.66602C4.06971 6.66602 4.66667 7.26297 4.66667 7.99935Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        }
                       >
                         <StepsGen {...stepsDefaultPreset} />
                       </HoverCardComponent>
                     </div>
 
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1384,7 +1515,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("List")}
-                        icon={<ListOrdered className="mr-2 size-3" />}
+                        icon={<ListIcon className="size-4" />}
                       >
                         <ListGen
                           textColor={"#ffffff"}
@@ -1399,7 +1530,7 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1416,7 +1547,59 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Checklist")}
-                        icon={<ListChecks className="mr-2 size-3" />}
+                        icon={
+                          <svg
+                            className="size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6.66699 4H14.0003"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M6.66699 8H14.0003"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M6.66699 12H14.0003"
+                              stroke="#23262C"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M2 4.00065L2.66667 4.66732L4 3.33398"
+                              stroke="#23262C"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M2 8.00065L2.66667 8.66732L4 7.33398"
+                              stroke="#23262C"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M2 12.0007L2.66667 12.6673L4 11.334"
+                              stroke="#23262C"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        }
                       >
                         <ChecklistGen
                           textColor={"#ffffff"}
@@ -1426,7 +1609,7 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1440,13 +1623,13 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Logo Bar")}
-                        icon={<SwatchBook className="mr-2 size-3" />}
+                        icon={<SwatchBook className="size-4" />}
                       >
                         <LogoBarGen {...logoBarDefaultPreset} />
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1491,7 +1674,24 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Progress Bar")}
-                        icon={<RectangleEllipsis className="mr-2 size-3" />}
+                        icon={
+                          <svg
+                            className="size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M10 6.33008V9.66341M3.06667 9.66341H12.9333C13.3067 9.66341 13.4934 9.66341 13.636 9.59075C13.7614 9.52683 13.8634 9.42485 13.9273 9.2994C14 9.1568 14 8.97011 14 8.59674V7.39674C14 7.02338 14 6.83669 13.9273 6.69408C13.8634 6.56864 13.7614 6.46666 13.636 6.40274C13.4934 6.33008 13.3067 6.33008 12.9333 6.33008H3.06667C2.6933 6.33008 2.50661 6.33008 2.36401 6.40274C2.23856 6.46666 2.13658 6.56864 2.07266 6.69408C2 6.83669 2 7.02338 2 7.39674V8.59674C2 8.97011 2 9.1568 2.07266 9.2994C2.13658 9.42485 2.23856 9.52683 2.36401 9.59075C2.50661 9.66341 2.6933 9.66341 3.06667 9.66341Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        }
                       >
                         <div className="flex w-[360px] flex-row items-center justify-between  p-4">
                           <ProgressBarGen
@@ -1539,12 +1739,12 @@ export const UserToolbox = () => {
               </AccordionItem>
             )}
             {/* <AccordionItem value="item-5">
-              <AccordionTrigger className="uppercase hover:no-underline">
+              <AccordionTrigger className="font-poppins hover:no-underline">
                 Navigation
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2">
                 <div
-                  className="rounded-md border p-2 hover:bg-inherit hover:text-inherit"
+                  className="rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit bg-card"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -1559,7 +1759,7 @@ export const UserToolbox = () => {
                         className="flex w-full flex-row items-center justify-between text-lg hover:cursor-grab hover:no-underline"
                       >
                         <span className="flex flex-row items-center text-sm">
-                          <LoaderIcon className="mr-2 size-3" />
+                          <LoaderIcon className="mr-2 size-4" />
                           Loader{" "}
                         </span>{" "}
                         <GripVertical />

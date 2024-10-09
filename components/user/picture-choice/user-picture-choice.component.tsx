@@ -66,8 +66,12 @@ export const PictureChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState<string[]>([])
+  const [selectedChoices, setSelectedChoices] = useState<string[]>(selections)
   const [isCountUpdated, setIsCountUpdated] = useState(false)
+  useEffect(() => {
+    setSelectedChoices(selections)
+  }, [selections])
+
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData

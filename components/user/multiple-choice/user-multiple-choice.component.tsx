@@ -76,7 +76,8 @@ export const MultipleChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState<string[]>([])
+  const [selectedChoices, setSelectedChoices] = useState<string[]>(selections)
+
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
@@ -102,12 +103,12 @@ export const MultipleChoiceGen = ({
     return false
   })
   const dispatch = useAppDispatch()
-  useEffect(() => {
-    setSelectedChoices(screenData)
-    if (screenData?.length > 0) {
-      setIsCountUpdated(true)
-    }
-  }, [])
+  // useEffect(() => {
+  //   setSelectedChoices(screenData)
+  //   if (screenData?.length > 0) {
+  //     setIsCountUpdated(true)
+  //   }
+  // }, [])
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false

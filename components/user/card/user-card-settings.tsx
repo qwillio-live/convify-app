@@ -39,6 +39,7 @@ import { ScreenFooter } from "../screens/screen-footer.component"
 import { Controller } from "../settings/controller.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { ColorInput } from "@/components/color-input"
 
 export const CardContainerSettings = () => {
   const {
@@ -91,134 +92,146 @@ export const CardContainerSettings = () => {
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-  const mobileScreen = useAppSelector((state:RootState) => state.theme?.mobileScreen);
+  const mobileScreen = useAppSelector(
+    (state: RootState) => state.theme?.mobileScreen
+  )
   return (
     <>
       <Accordion
-            value={settingsTab || "layout"}
-            onValueChange={(value) => {
-              setProp((props) => (props.settingsTab = value), 200)
-            }}
-            type="multiple"
-            defaultValue={['layout']}
-        className="w-full">
+        value={settingsTab || "layout"}
+        onValueChange={(value) => {
+          setProp((props) => (props.settingsTab = value), 200)
+        }}
+        type="multiple"
+        defaultValue={["layout"]}
+        className="w-full"
+      >
         <AccordionItem value="layout">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Layout")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
-              <Label className="text-md text-muted-foreground col-span-1">
-                {t("Desktop")}
-              </Label>
+          <AccordionTrigger>{t("Layout")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Desktop")}</Label>
               <Tabs
                 value={flexDirection}
                 defaultValue={flexDirection}
                 onValueChange={(value) => {
                   setProp((props) => (props.flexDirection = value), 200)
                 }}
-                className="flex-1 col-span-1"
               >
-                <TabsList className="flex-initial flex flex-row shrink-0">
-                <TabsTrigger value="column">
+                <TabsList className="grid grid-cols-2 bg-[#EEEEEE]">
+                  <TabsTrigger className="rounded" value="column">
                     <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
-                <TabsTrigger value="row">
+                  <TabsTrigger className="rounded" value="row">
                     <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
-              <Label className="col-span-1 text-md text-muted-foreground">
-                {t("Mobile")}
-              </Label>
+            <div className="space-y-2">
+              <Label>{t("Mobile")}</Label>
               <Tabs
                 value={mobileFlexDirection}
                 defaultValue={mobileFlexDirection}
                 onValueChange={(value) => {
                   setProp((props) => (props.mobileFlexDirection = value), 200)
                 }}
-                className="flex-1 col-span-1"
               >
-                <TabsList className="flex-initial flex flex-row shrink-0">
-                <TabsTrigger value="column">
+                <TabsList className="grid grid-cols-2 bg-[#EEEEEE]">
+                  <TabsTrigger className="rounded" value="column">
                     <AlignVerticalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="row">
+                  <TabsTrigger className="rounded" value="row">
                     <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <Label className="text-md text-muted-foreground">
-                {t("Align Horizontal")}
-              </Label>
+            <div className="space-y-2">
+              <Label>{t("Align Horizontal")}</Label>
               <Tabs
-                value={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent : flexDirection === "column" ? alignItems: justifyContent}
-                defaultValue={mobileScreen ? mobileFlexDirection === "column" ? mobileAlignItems: mobileJustifyContent: flexDirection === "column" ? alignItems: justifyContent}
+                value={
+                  mobileScreen
+                    ? mobileFlexDirection === "column"
+                      ? mobileAlignItems
+                      : mobileJustifyContent
+                    : flexDirection === "column"
+                    ? alignItems
+                    : justifyContent
+                }
+                defaultValue={
+                  mobileScreen
+                    ? mobileFlexDirection === "column"
+                      ? mobileAlignItems
+                      : mobileJustifyContent
+                    : flexDirection === "column"
+                    ? alignItems
+                    : justifyContent
+                }
                 onValueChange={(value) => {
-                  if(mobileScreen){
-                    mobileFlexDirection === "column" ? setProp((props) => (props.mobileAlignItems = value), 200) : setProp((props) => (props.mobileJustifyContent = value), 200)
-                  }else{
-                    flexDirection === "column" ? setProp((props) => (props.alignItems = value), 200) : setProp((props) => (props.justifyContent = value), 200)
+                  if (mobileScreen) {
+                    mobileFlexDirection === "column"
+                      ? setProp(
+                          (props) => (props.mobileAlignItems = value),
+                          200
+                        )
+                      : setProp(
+                          (props) => (props.mobileJustifyContent = value),
+                          200
+                        )
+                  } else {
+                    flexDirection === "column"
+                      ? setProp((props) => (props.alignItems = value), 200)
+                      : setProp((props) => (props.justifyContent = value), 200)
                   }
                 }}
-                className="flex-1"
               >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="flex-start">
+                <TabsList className="grid w-full grid-cols-3 bg-[#EEEEEE]">
+                  <TabsTrigger className="rounded" value="flex-start">
                     <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="center" >
+                  <TabsTrigger className="rounded" value="center">
                     <AlignHorizontalJustifyCenter size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="flex-end">
+                  <TabsTrigger className="rounded" value="flex-end">
                     <AlignHorizontalJustifyEnd size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-{
-  ((mobileScreen && mobileFlexDirection === "row") || (!mobileScreen && flexDirection === "row")) && (
-    <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-    <Label className="text-md text-muted-foreground">
-      {t("Align Vertical")}
-    </Label>
-    <Tabs
-      value={mobileScreen ? mobileAlignItems: alignItems}
-      defaultValue={mobileScreen ? mobileAlignItems: alignItems}
-      onValueChange={(value) => {
-        if(mobileScreen){
-          setProp((props) => (props.mobileAlignItems = value), 200)
-        }else{
-          setProp((props) => (props.alignItems = value), 200)
-        }
-      }}
-      className="flex-1"
-    >
-      <TabsList className="w-full grid grid-cols-3">
-        <TabsTrigger value="flex-start">
-          <AlignVerticalJustifyStart  size={16} />
-        </TabsTrigger>
-        <TabsTrigger value="center" >
-          <AlignVerticalJustifyCenter size={16} />
-        </TabsTrigger>
-        <TabsTrigger value="flex-end">
-          <AlignVerticalJustifyEnd size={16} />
-        </TabsTrigger>
-      </TabsList>
-    </Tabs>
-  </div>
-  )
-}
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+            {((mobileScreen && mobileFlexDirection === "row") ||
+              (!mobileScreen && flexDirection === "row")) && (
+              <div className="space-y-2">
+                <Label>{t("Align Vertical")}</Label>
+                <Tabs
+                  value={mobileScreen ? mobileAlignItems : alignItems}
+                  defaultValue={mobileScreen ? mobileAlignItems : alignItems}
+                  onValueChange={(value) => {
+                    if (mobileScreen) {
+                      setProp((props) => (props.mobileAlignItems = value), 200)
+                    } else {
+                      setProp((props) => (props.alignItems = value), 200)
+                    }
+                  }}
+                >
+                  <TabsList className="grid w-full grid-cols-3 bg-[#EEEEEE]">
+                    <TabsTrigger className="rounded" value="flex-start">
+                      <AlignVerticalJustifyStart size={16} />
+                    </TabsTrigger>
+                    <TabsTrigger className="rounded" value="center">
+                      <AlignVerticalJustifyCenter size={16} />
+                    </TabsTrigger>
+                    <TabsTrigger className="rounded" value="flex-end">
+                      <AlignVerticalJustifyEnd size={16} />
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            )}
+            <div className="space-y-2 pt-2">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="marginTop">{t("Gap")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {gap}
-                </span>
+                <span className="text-xs">{gap}</span>
               </div>
               <Slider
                 className=""
@@ -237,62 +250,68 @@ export const CardContainerSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={"rgba(0,0,0,0)"}
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
                 value={backgroundColor}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("backgroundColor", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
+                handleRemove={() =>
+                  debouncedSetProp("backgroundColor", "transparent")
+                }
                 id="backgroundcolor"
               />
             </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <Label className="text-md text-muted-foreground">
-                {t("Width")}
-              </Label>
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Width")}</Label>
               <Tabs
                 value={size}
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
+                <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="small"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="medium"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="large"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className="rounded text-base leading-4"
+                    value="full"
+                  >
+                    <MoveHorizontal size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+<div className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+                <span className="text-muted-foreground text-xs">
                   {marginTop}
                 </span>
               </div>
@@ -311,10 +330,10 @@ export const CardContainerSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                <span className="text-muted-foreground text-xs">
                   {marginBottom}
                 </span>
               </div>
@@ -332,10 +351,10 @@ export const CardContainerSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginRight">{t("Right")}</Label>
+                <span className="text-muted-foreground text-xs">
                   {marginRight}
                 </span>
               </div>
@@ -353,13 +372,13 @@ export const CardContainerSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginLeft}
-                </span>
-              </div>
+            <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginLeft}
+                  </span>
+                </div>
               <Slider
                 defaultValue={[marginLeft]}
                 value={[marginLeft]}
@@ -372,6 +391,7 @@ export const CardContainerSettings = () => {
                   handlePropChangeDebounced("marginLeft", e)
                 }
               />
+            </div>
             </div>
           </AccordionContent>
         </AccordionItem>

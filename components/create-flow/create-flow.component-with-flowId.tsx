@@ -12,6 +12,8 @@ import {
   Smartphone,
   Laptop,
   PlusCircle,
+  PlusIcon,
+  MonitorIcon,
 } from "lucide-react"
 import React, { useCallback, useEffect, useRef } from "react"
 import { throttle, debounce } from "lodash"
@@ -147,10 +149,10 @@ const AddScreenButton = () => {
     <Button
       variant="outline"
       size="sm"
-      className="bg-[#f4f4f5]"
+      className="font-poppins border border-inherit bg-white text-[#23262C]"
       onClick={() => handleAddScreen(selectedScreenIndex || 0)}
     >
-      <PlusCircle className="mr-2 size-4" />
+      <PlusIcon className="mr-2 size-4" />
       {t("Add Screen")}
     </Button>
   )
@@ -229,10 +231,10 @@ export function CreateFlowComponent({ flowId }) {
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
-  const screens =
-    useAppSelector((state: RootState) => state?.screen?.screens) || []
-  const selectedScreenIndex =
-    useAppSelector((state) => state?.screen?.currentScreenName) || 0
+  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const selectedScreenIndex = useAppSelector(
+    (state) => state?.screen?.selectedScreen
+  )
 
   const debouncedSetEditorLoad = useCallback(
     debounce((json) => {
@@ -399,17 +401,16 @@ export function CreateFlowComponent({ flowId }) {
         }}
         onRender={RenderNode}
       >
-        {/* <div className="md:flex h-[calc(-52px+99vh)]  max-h-[calc(-52px+99vh)] flex-row justify-between gap-0"> */}
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)]  flex-row justify-between gap-0 md:flex">
-          <ScrollArea className="max-h-screen overflow-y-auto border-r px-2 md:basis-[15%] ">
-            <div className="section-body py-6">
+          <ScrollArea className="max-h-screen min-w-fit overflow-y-auto border-r px-[3vw]  md:px-5  ">
+            <div className="section-body py-5">
               <ScreensList flowId={flowId} />
             </div>
           </ScrollArea>
           <ScrollArea
             ref={containerRef}
             id="scroll-container"
-            className="hidden max-h-[calc(-52px+99vh)] basis-[55%] overflow-y-auto border-r md:block"
+            className="hidden max-h-[calc(-52px+99vh)] basis-[52.5%] overflow-y-auto border-r md:block"
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div className="section-body">
@@ -431,7 +432,7 @@ export function CreateFlowComponent({ flowId }) {
                     backgroundPosition: "center",
                   }}
                   className={cn(
-                    "page-container z-20 mx-auto mt-0 box-content min-h-[400px] py-0 font-sans antialiased",
+                    "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-52px+99vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                     footerMode ? "flex items-end justify-center" : "",
                     view == VIEWS.DESKTOP
                       ? "shahid w-full border-0"
@@ -479,33 +480,35 @@ export function CreateFlowComponent({ flowId }) {
                     <ResolvedComponentsFromCraftState screen={screensFooter} />
                   )}
                 </TabsContent>
-                <TabsList className="w-100 absolute bottom-0  z-20 ">
+                <TabsList className="w-100 absolute bottom-2 left-2 z-20 bg-transparent">
                   <AddScreenButton />
-                  <TabsTrigger value={VIEWS.MOBILE} className="mx-1">
-                    <Smartphone className="size-5" />
-                  </TabsTrigger>
-                  <TabsTrigger value={VIEWS.DESKTOP}>
-                    <Laptop className="size-5" />
-                  </TabsTrigger>
+                  <div className="ml-2 rounded-md bg-[#EEEEEE] p-1">
+                    <TabsTrigger value={VIEWS.MOBILE}>
+                      <Smartphone className="size-4" />
+                    </TabsTrigger>
+                    <TabsTrigger value={VIEWS.DESKTOP}>
+                      <MonitorIcon className="size-4" />
+                    </TabsTrigger>
+                  </div>
                 </TabsList>
               </Tabs>
 
               {/* {<SaveButton />} */}
             </div>
           </ScrollArea>
-          <ScrollArea className=" hidden  h-full max-h-[calc(-52px+99vh)] basis-[15%] overflow-y-auto border-r px-2 md:block ">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[15%] overflow-y-auto border-r px-5 md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body pt-4 ">
+            <div className="section-body py-6">
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="  hidden h-full max-h-[calc(-52px+99vh)] basis-[15%] overflow-y-auto border-r bg-[#fafafa]  md:block">
+          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[17.5%] overflow-y-auto border-r bg-[#f6f6f6]  md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body h-[100vh] overflow-y-auto pt-2">
+            <div className="section-body overflow-y-auto bg-[#f6f6f6]">
               <SettingsPanel />
             </div>
           </ScrollArea>

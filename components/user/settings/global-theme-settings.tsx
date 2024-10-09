@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState } from "react"
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 
@@ -30,8 +36,8 @@ import {
 import { applyHeaderPosition } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
 import { updateHeaderPosition } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { X } from "lucide-react"
-import { HexColorPicker } from "react-colorful"
-import ColorButton from "../color-button"
+import clsx from "clsx"
+import { Label } from "@/components/ui/label"
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
@@ -166,16 +172,18 @@ export const GlobalThemeSettings = (props: Props) => {
   return (
     <>
       <ScrollArea>
-        <Accordion type="multiple" defaultValue={["item-1"]} className="w-full">
+        <Accordion
+          type="multiple"
+          defaultValue={["item-1"]}
+          className="font-poppins bg-[#f6f6f6] p-4 pt-0"
+        >
           <AccordionItem value="item-1">
-            <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">{t("General")} </span>
-            </AccordionTrigger>
-            <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-              <div className="col-span-2 flex flex-row items-center space-x-2">
+            <AccordionTrigger>{t("General")}</AccordionTrigger>
+            <AccordionContent className="space-y-4 pt-2">
+              {/* <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="headerscroll"
-                  className="basis-2/3 whitespace-nowrap text-nowrap font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="basis-2/3 whitespace-nowrap text-nowrap text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   {t("Header Scroll")}
                 </label>
@@ -197,63 +205,58 @@ export const GlobalThemeSettings = (props: Props) => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-              </div>
-              <div className="col-span-2 flex flex-row items-center space-x-2">
-                <label
-                  htmlFor="primarycolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("Primary Color")}
-                </label>
-                <Input
-                  value={primaryColor || defaultPrimaryColor}
-                  onChange={(e) => {
+              </div> */}
+              <div className="flex items-center justify-between">
+                <Label htmlFor="primarycolor">{t("Primary Color")}</Label>
+                <ColorInput
+                  defaultValue={defaultPrimaryColor}
+                  value={primaryColor}
+                  onColorChange={(e) => {
                     // dispatch(setPartialStyles({general: { primaryColor: e.target.value}}))
                     // handleColorChange(e)
                     handleStyleChangeDebounced({
-                      general: { primaryColor: e.target.value },
+                      general: { primaryColor: e },
                     })
                   }}
-                  className=" basis-1/3"
                   type={"color"}
                   id="primarycolor"
                 />
               </div>
 
-              <div className="col-span-2 flex flex-row items-center space-x-2">
-                <label
-                  htmlFor="secondarycolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("Secondary Color")}
-                </label>
-                <Input
-                  value={secondaryColor || defaultSecondaryColor}
-                  onChange={(e) => {
+              <div className="flex items-center justify-between">
+                <Label htmlFor="secondarycolor">{t("Secondary Color")}</Label>
+                <ColorInput
+                  defaultValue={defaultSecondaryColor}
+                  value={secondaryColor}
+                  onColorChange={(e) => {
                     // handleStyleChange({general: { secondaryColor: e.target.value}})
                     handleStyleChangeDebounced({
-                      general: { secondaryColor: e.target.value },
+                      general: { secondaryColor: e },
                     })
                   }}
-                  className=" basis-1/3"
                   type={"color"}
                   id="secondarycolor"
                 />
               </div>
 
-              <ColorButton
-                label={t("Background Color")}
-                styleKey="backgroundColor"
-                currentValue={backgroundColor || ""}
-              />
+              <div className="flex items-center justify-between">
+                <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+                <ColorInput
+                  value={backgroundColor}
+                  onColorChange={(e) => {
+                    // dispatch(setBackgroundColor(e.target.value))
+                    handleStyleChangeDebounced({
+                      general: { backgroundColor: e },
+                    })
+                    // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
+                  }}
+                  type={"color"}
+                  id="backgroundcolor"
+                />
+              </div>
 
-              <div className="col-span-2 flex flex-col items-center space-y-2">
-                <label
-                  htmlFor="backgroundimage"
-                  className="basis-full self-start text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {t("Background Image")}ca
-                </label>
+              <div className="space-y-2 pt-2">
+                <Label htmlFor="backgroundimage">{t("Background Image")}</Label>
                 {/* <Input
                   onChange={handleFileChange}
                   multiple={false}
@@ -271,12 +274,9 @@ export const GlobalThemeSettings = (props: Props) => {
               </div>
             </AccordionContent>
           </AccordionItem>
-
           <AccordionItem value="item-2">
-            <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-              <span className="text-sm font-medium">{t("Text")} </span>
-            </AccordionTrigger>
-            <AccordionContent className="grid grid-cols-2 gap-4 p-2">
+            <AccordionTrigger>{t("Text")}</AccordionTrigger>
+            <AccordionContent className="space-y-4 pt-2">
               <FontSelector
                 fontList={primaryFonts}
                 selectedFont={primaryFont}
@@ -301,43 +301,37 @@ export const GlobalThemeSettings = (props: Props) => {
                 setOpen={setSecondaryOpen}
               />
 
-              <div className="col-span-2 flex flex-row items-center space-x-2">
-                <label
-                  htmlFor="primarytextcolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
+              <div className="flex items-center justify-between pt-2">
+                <Label htmlFor="primarytextcolor">
                   {t("Primary Text Color")}
-                </label>
-                <Input
-                  value={primaryTextColor || defaultPrimaryTextColor}
-                  onChange={(e) => {
+                </Label>
+                <ColorInput
+                  defaultValue={defaultPrimaryTextColor}
+                  value={primaryTextColor}
+                  onColorChange={(e) => {
                     handleStyleChangeDebounced({
-                      text: { primaryColor: e.target.value },
+                      text: { primaryColor: e },
                     })
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }}
-                  className=" basis-1/3"
                   type={"color"}
                   id="primarytextcolor"
                 />
               </div>
 
-              <div className="col-span-2 flex flex-row items-center space-x-2">
-                <label
-                  htmlFor="primarytextcolor"
-                  className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
+              <div className="flex items-center justify-between">
+                <Label htmlFor="secondarytextcolor">
                   {t("Secondary Text Color")}
-                </label>
-                <Input
-                  value={secondaryTextColor || defaultSecondaryTextColor}
-                  onChange={(e) => {
+                </Label>
+                <ColorInput
+                  defaultValue={defaultSecondaryTextColor}
+                  value={secondaryTextColor}
+                  onColorChange={(e) => {
                     handleStyleChangeDebounced({
-                      text: { secondaryColor: e.target.value },
+                      text: { secondaryColor: e },
                     })
                     // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }}
-                  className=" basis-1/3"
                   type={"color"}
                   id="secondarytextcolor"
                 />
@@ -347,5 +341,54 @@ export const GlobalThemeSettings = (props: Props) => {
         </Accordion>
       </ScrollArea>
     </>
+  )
+}
+
+interface ColorInputProps extends React.HTMLProps<HTMLInputElement> {
+  onColorChange?: (color: string | undefined) => void
+}
+
+export const ColorInput = ({
+  value,
+  onColorChange,
+  ...rest
+}: ColorInputProps) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onColorChange?.(e.target.value)
+  }
+  const handleRemove = () => {
+    onColorChange?.(rest.defaultValue as string)
+  }
+  return (
+    <div className="flex items-center gap-2">
+      <div
+        style={{
+          backgroundColor: (value as string) ?? "transparent",
+        }}
+        className="relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
+      >
+        {!value && (
+          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
+            <span className="w-full text-center text-xs text-[#7B7D80]">
+              Choose
+            </span>
+          </div>
+        )}
+        <Input
+          {...rest}
+          onChange={(e) => handleChange(e)}
+          className="opacity-0"
+        />
+      </div>
+      <span onClick={() => handleRemove()}>
+        <X
+          size={16}
+          className={clsx("text-muted-foreground", {
+            "pointer-events-none opacity-0":
+              !value || value === rest.defaultValue,
+          })}
+        />
+      </span>
+    </div>
   )
 }

@@ -358,7 +358,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-
+ 
   width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;

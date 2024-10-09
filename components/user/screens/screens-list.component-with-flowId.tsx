@@ -4,7 +4,11 @@ import React, { useCallback, useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { Reorder } from "framer-motion"
 import {
+  CheckIcon,
   ClipboardCopy,
+  Edit3Icon,
+  EditIcon,
+  InfoIcon,
   MousePointer,
   Pencil,
   PlusCircle,
@@ -44,12 +48,12 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/input-custom-for-screen-list"
+import { Input } from "@/components/input-custom"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { useTranslations } from "next-intl"
-import { ScreenFooter } from "./screen-footer.component"
+import { Card as UiCard } from "@/components/ui/card"
 
 const ScreensList = ({ flowId }) => {
   const t = useTranslations("Components")
@@ -243,15 +247,15 @@ const ScreensList = ({ flowId }) => {
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-      className="relative w-[95vw] overflow-x-hidden pb-24 pt-0 md:max-w-[13.5vw] md:pb-0"
+      className="font-poppins relative w-[94vw] overflow-x-hidden pb-24 md:pb-0 md:w-[13.5vw]"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
-        <AccordionTrigger className="uppercase hover:no-underline">
+        <AccordionTrigger className="pt-0 hover:no-underline">
           {t("Header & Footer")}
         </AccordionTrigger>
         <AccordionContent className="w-full">
-          <div className="mt-4">{t("Header")}</div>
+          <div className="">{t("Header")}</div>
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
           <div className="  hidden md:block">
@@ -269,7 +273,8 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": headerMode,
+                  "border-[#2B3398]": headerMode,
+                  "hover:border-4": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -303,7 +308,7 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": headerMode,
+                  "border-[#2B3398]": headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -315,7 +320,7 @@ const ScreensList = ({ flowId }) => {
             </Card>
           </button>
           <Separator className="my-4" />
-          <p className="text-muted-foreground text-sm">{t("Footer")}</p>
+          <p className="text-sm">{t("Footer")}</p>
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
           <div className="  hidden md:block">
@@ -330,7 +335,8 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": footerMode,
+                  "border-[#2B3398]": footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
               onClick={() => handleFooterScreenClick()}
@@ -361,7 +367,8 @@ const ScreensList = ({ flowId }) => {
               className={cn(
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
-                  "border-blue-500": footerMode,
+                  "border-[#2B3398]": footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
             >
@@ -373,15 +380,15 @@ const ScreensList = ({ flowId }) => {
           </button>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="item-2">
+      <AccordionItem value="item-2" className="border-b-0 border-t">
         <AccordionTrigger
-          className="uppercase hover:no-underline"
+          className=" hover:no-underline"
           onClick={() => dispatch(setHeaderFooterMode(false))}
         >
           {t("Screens")}
         </AccordionTrigger>
         <AccordionContent className="flex flex-col gap-2">
-          <HelperInformation />
+          <HelperInformation infoText={t("Click on a screen to edit it")} />
           {/* <div className="section-header flex items-center justify-end">
             <Button
               variant={"secondary"}
@@ -394,6 +401,7 @@ const ScreensList = ({ flowId }) => {
           </div> */}
           {/* <ScrollArea className="max-h-[calc(60vh)] overflow-y-auto"> */}
           <Reorder.Group
+            className="mt-4 flex flex-col gap-4"
             axis="y"
             onReorder={handleReorder}
             values={screens || []}
@@ -414,8 +422,8 @@ const ScreensList = ({ flowId }) => {
               >
                 <ContextMenu>
                   <ContextMenuTrigger>
-                    <div className=" mt-5 flex flex-row items-center justify-between gap-4 px-2">
-                      <span className="font-bold">{index + 1}</span>
+                    <div className="flex flex-row items-center justify-between gap-4">
+                      <span className="text-sm font-bold">{index + 1}</span>
                       <EditScreenName
                         screenId={screen.screenId}
                         screenName={screen.screenName}
@@ -445,7 +453,7 @@ const ScreensList = ({ flowId }) => {
                         className={cn(
                           "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:hidden md:h-32 md:w-[13.5vw]",
                           {
-                            "border-blue-500":
+                            "border-[#2B3398]":
                               selectedScreenIndex === index &&
                               !headerFooterMode,
                             "hover:border-4": selectedScreenIndex !== index,
@@ -475,21 +483,15 @@ const ScreensList = ({ flowId }) => {
                             />
                           </div>
                           <div style={{ paddingTop: "50px" }}>
-                            {JSON.parse(screen.screenData)["ROOT"].nodes
-                              .length > 0 ? (
-                              <ResolvedComponentsFromCraftState
-                                screen={
-                                  screen.screenData ? screen.screenData : {}
-                                }
-                              />
-                            ) : (
-                              <div style={{ paddingTop: "15%" }}>
-                                <ResolvedComponentsFromCraftState
-                                  screen={screensFooter}
-                                />
-                              </div>
-                            )}
+                            <ResolvedComponentsFromCraftState
+                              screen={
+                                screen.screenData ? screen.screenData : {}
+                              }
+                            />
                           </div>
+                          <ResolvedComponentsFromCraftState
+                            screen={screensFooter}
+                          />
                         </div>
                       </Card>
                     </button>
@@ -514,6 +516,7 @@ const ScreensList = ({ flowId }) => {
                         handleScreenClick(index)
                       }}
                     >
+                      {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                       <div
                         className="text-muted-foreground relative   text-xs"
                         style={{
@@ -610,7 +613,7 @@ const EditScreenName = ({ screenId, screenName }) => {
     if (!checkDuplicateName(inputName)) {
       dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
       setName(inputName)
-      // toast.success("Screen name changed successfully")
+      toast.success("Screen name changed successfully")
       setEditing(false)
     } else {
       toast.error("Screen name already exists")
@@ -642,42 +645,26 @@ const EditScreenName = ({ screenId, screenName }) => {
   return (
     <>
       {!editing && (
-        <div className="flex items-center " onClick={() => setEditing(true)}>
-          <div className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-1 border border-transparent text-current hover:cursor-text">
-            <div className="truncate">{screenName}</div>
-          </div>
-
-          <Pencil size={16} className="ml-2 shrink-0 cursor-pointer" />
+        <div
+          onClick={() => setEditing(true)}
+          className="bg-slate-gray-200 flex grow flex-row items-center justify-end gap-1 border border-transparent text-current hover:cursor-text"
+        >
+          <div className="truncate">{screenName}</div>
+          <Edit3Icon size={16} className="shrink-0 text-[#7B7D80]" />
         </div>
       )}
       {editing && (
-        <div className="bg-slate-gray-200 flex grow flex-row items-center justify-end  gap-2 text-current">
+        <div className="flex grow flex-row items-center justify-end gap-1 text-current">
           <Input
             ref={ref}
-            className="text-right"
+            className="h-6 rounded bg-white text-right text-sm"
             value={name}
             onChange={handleInputChange}
             onBlur={() => handleChange(name)}
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          <svg
-            onClick={() => handleChange(name)}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            className="lucide lucide-save  cursor-pointer"
-          >
-            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-            <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-            <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-          </svg>
+          <CheckIcon size={16} className="shrink-0 text-[#7B7D80]" />
         </div>
       )}
       {/* <Toaster position="bottom-right" /> */}
@@ -685,29 +672,16 @@ const EditScreenName = ({ screenId, screenName }) => {
   )
 }
 
-function HelperInformation() {
-  const t = useTranslations("Components")
+export function HelperInformation({ infoText }: { infoText: string }) {
   return (
-    <Card
-      className={cn(
-        "hidden w-full flex-col items-center justify-center border border-gray-500 px-2 py-3 hover:cursor-pointer md:flex"
-      )}
-    >
-      <div className="flex flex-row items-start gap-1 text-left">
-        <MousePointer />
-        <div>
-          <h2 className="mb-1 text-base font-semibold uppercase text-gray-950 dark:text-slate-50">
-            {t("Right-Click")}
-          </h2>
-          <p className="text-sm font-light">
-            {t("Click on a screen to edit it")}
-          </p>
-        </div>
+    <UiCard className={cn("flex gap-2 rounded-lg border p-3 pr-4")}>
+      <div className="flex flex-row items-start gap-2 text-left">
+        <InfoIcon className="size-4 shrink-0" />
+        <p className="text-xs">{infoText}</p>
       </div>
-    </Card>
+    </UiCard>
   )
 }
-
 function DisplayEditor() {
   const screens = useAppSelector((state) => state?.screen?.screens)
 
