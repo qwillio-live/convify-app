@@ -30,11 +30,23 @@ export async function GET(
   { params }: { params: { flowId: string } }
 ) {
   const { flowId } = params
+  // const data = await getServerSession(authOptions)
 
+  // if (!data) {
+  //   const statusCode = 401
+  //   const errorMessage = "User is not authenticated"
+  //   const userId = 0
+  //   const requestUrl = req.url
+  //   await logError({ statusCode, errorMessage, userId, requestUrl })
+  //   return NextResponse.json({ error: errorMessage }, { status: statusCode })
+  // }
+
+  // const userId = data.user.id
   try {
     const flow = await prisma.flow.findFirst({
       where: {
         id: String(flowId),
+        // userId,
         isDeleted: false,
       },
       include: {
