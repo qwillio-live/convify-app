@@ -30,25 +30,20 @@ interface Response {
 
 type Content = Record<string, any>
 
-function extractLabels(content: Content): Set<string> {
-  const labels = new Set<string>()
-  function traverse(obj: Content) {
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const value = obj[key]
-        if (typeof value === "object" && value !== null) {
-          traverse(value)
-        } else if (key !== "value") {
-          if (key === "label") {
-            labels.add(obj[key])
-          } else {
-            labels.add(key)
-          }
-        }
-      }
+const extractLabels = (content: Content) => {
+  const labels: string[] = []
+  const seenLabels = new Set<string>()
+
+  Object.entries(content).forEach(([key, value]) => {
+    let label = value.label || key
+    if (seenLabels.has(label)) {
+      label = `${label} (${key})`
+    } else {
+      seenLabels.add(label)
     }
-  }
-  traverse(content)
+    labels.push(label)
+  })
+
   return labels
 }
 
@@ -87,31 +82,21 @@ function normalizeNamesWithRegex(set) {
   return normalizedSet
 }
 
-function extractValuesOfLabels(content: Content): Object {
-  const hashTable = {}
+const extractValuesOfLabels = (content: Content) => {
+  const valuesWithLabels: { [key: string]: any } = {}
+  const seenLabels = new Set<string>()
 
-  function traverse(obj: Content) {
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const val = obj[key]
-        if (
-          typeof val === "object" &&
-          val !== null &&
-          "label" in val &&
-          "value" in val
-        ) {
-          hashTable[val.label] = val.value
-        } else if (typeof val === "object" && val !== null) {
-          traverse(val)
-        } else {
-          hashTable[key] = val
-        }
-      }
+  Object.entries(content).forEach(([key, value]) => {
+    let label = value.label || key
+    if (seenLabels.has(label)) {
+      label = `${label} (${key})`
+    } else {
+      seenLabels.add(label)
     }
-  }
+    valuesWithLabels[label] = value.value
+  })
 
-  traverse(content)
-  return hashTable
+  return valuesWithLabels
 }
 
 function tableMap(elementsOfLabels: Array<Object>, labels: Set<string>) {
@@ -316,8 +301,10 @@ const ResponseFlowComponents = () => {
                     >
                       {label !== "Submission time" &&
                         label !== "label" &&
-                        label.charAt(0).toUpperCase() +
-                          label.slice(1).toLowerCase()}
+                        (label.includes("(")
+                          ? label // If it's a repeated label with key, use as is
+                          : label.charAt(0).toUpperCase() +
+                            label.slice(1).toLowerCase())}
                     </TableHead>
                   ))}
               </TableRow>
