@@ -1,18 +1,20 @@
-import { useNode, useEditor } from "@craftjs/core"
-import React, { useEffect, useRef, useCallback } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
+import { useEditor, useNode } from "@craftjs/core"
+import { ArrowUp, GripHorizontal, Move, Trash2 } from "lucide-react"
 import ReactDOM from "react-dom"
-import { Move, ArrowUp, Trash2, GripHorizontal } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { Controller } from "./controller.component"
 import styled from "styled-components"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+
 import {
   addAvatarComponentId,
   addField,
   setSelectedComponent,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useRouter } from "next/navigation"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+
+import { Controller } from "./controller.component"
 
 interface StyledNodeDivProps {
   borderColor: string
@@ -65,6 +67,10 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
       : "transparent"
   }};
   z-index: 10;
+  &:hover {
+    border-color: transparent;
+    border-style: dotted;
+  }
 `
 
 export default StyledNodeDiv

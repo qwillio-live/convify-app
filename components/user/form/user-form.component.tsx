@@ -202,7 +202,7 @@ export const FormContent = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
       className={cn(
-        `relative border border-transparent`
+        `relative`
         // isHovered ? "border border-dotted border-blue-500" : ""
       )}
     >
@@ -426,7 +426,7 @@ export const Form = ({ children, ...props }) => {
         e.stopPropagation()
         setHover(false)
       }}
-      style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)" }}
+      style={{ minWidth: "100%", height: "100%" }}
       id={props.id}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
