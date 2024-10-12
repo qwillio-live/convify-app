@@ -188,37 +188,45 @@ const ResponseFlowComponents = () => {
   }, [])
   // const flow_id = 'clxtcj8dm0005mokca440ysv4'
   const [responses, setResponses] = useState<Response[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [isAscending, setIsAscending] = useState<boolean>(false)
   const [rows, setRows] = useState<Object[]>([]) // Add state for rows
 
   useEffect(() => {
     const getResponses = async () => {
-      const storedResponses = localStorage.getItem("responses")
-      const flowIdStorage = JSON.parse(localStorage.getItem("flowId") || "{}")
-      if (storedResponses && flowIdStorage === `${flowId}`) {
-        setResponses(JSON.parse(storedResponses))
-      } else if (flowId) {
-        setLoading(true)
+      setLoading(true)
+      try{
         const response = await fetch(`/api/flows/${flowId}/responses/`)
         const dataRes = await response.json()
-        setResponses(dataRes)
+        console.log("response", dataRes)
         localStorage.setItem("responses", JSON.stringify(dataRes))
         localStorage.setItem("flowId", JSON.stringify(flowId))
+        setResponses(dataRes)
+      }finally{
         setLoading(false)
       }
-    }
-    getResponses()
-  }, [flowId])
-  useEffect(() => {
-    // Parse analytics from local storage when component mounts or updates
-    const dataRes = localStorage.getItem("responses")
-    if (dataRes) {
-      setResponses(JSON.parse(dataRes))
-    }
-  }, [])
 
-  console.log("response", responses)
+      // const storedResponses = localStorage.getItem("responses")
+      // const flowIdStorage = JSON.parse(localStorage.getItem("flowId") || "{}")
+      // if (dataRes && flowIdStorage === `${flowId}`) {
+      //   setResponses(storedResponses))
+      // } 
+    }
+    if(flowId){
+    getResponses()
+    }
+  }, [flowId])
+
+  // useEffect(() => {
+  //   // Parse analytics from local storage when component mounts or updates
+  //   const dataRes = localStorage.getItem("responses")
+  //   if (dataRes) {
+  //     setResponses(JSON.parse(dataRes))
+  //   }
+  // }, [])
+
+  // console.log("response", responses)
+  
   useEffect(() => {
     const uniqueLabels = new Set<string>()
     responses.length > 0 &&
