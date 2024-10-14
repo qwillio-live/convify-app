@@ -190,50 +190,48 @@ export default async function PreviewFlows({
 
   return (
     <>
-      <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
-        style={{
-          backgroundColor: data?.flowSettings?.general?.backgroundColor,
-        }}
-      >
-        {data?.headerData &&
-          resolveComponents(JSON.parse(data?.headerData || {}))}
-      </div>
-      <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] min-h-[71vh]`}
-        style={{
-          backgroundColor: data?.flowSettings?.general?.backgroundColor,
-        }}
-      >
-        {filteredStep && (
-          <div
-            key={`${filteredStep.name}`}
-            id={filteredStep.name}
-            style={{
-              backgroundColor: data?.flowSettings?.general?.backgroundColor,
-            }}
-            className="
-            animate-flow
-relative
-min-w-full
-shrink-0
-basis-full
-"
-          >
-            {resolveComponents(filteredStep.content)}
-          </div>
-        )}
-      </div>
-      {data?.footerData && (
+      <div className="flex h-screen flex-col">
         <div
-          className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+          className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
           style={{
             backgroundColor: data?.flowSettings?.general?.backgroundColor,
           }}
         >
-          {resolveComponents(JSON.parse(data?.footerData || {}))}
+          {data?.headerData &&
+            resolveComponents(JSON.parse(data?.headerData || {}))}
         </div>
-      )}
+
+        <div
+          className={`flex w-full flex-grow flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+          style={{
+            backgroundColor: data?.flowSettings?.general?.backgroundColor,
+          }}
+        >
+          {filteredStep && (
+            <div
+              key={`${filteredStep.name}`}
+              id={filteredStep.name}
+              style={{
+                backgroundColor: data?.flowSettings?.general?.backgroundColor,
+              }}
+              className="animate-flow relative min-w-full"
+            >
+              {resolveComponents(filteredStep.content)}
+            </div>
+          )}
+        </div>
+
+        {data?.footerData && (
+          <div
+            className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+            style={{
+              backgroundColor: data?.flowSettings?.general?.backgroundColor,
+            }}
+          >
+            {resolveComponents(JSON.parse(data?.footerData || {}))}
+          </div>
+        )}
+      </div>
     </>
   )
 }

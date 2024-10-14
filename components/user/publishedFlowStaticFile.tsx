@@ -181,7 +181,7 @@ export default function StaticPublishedFile({
   console.log("filtered step: ", screenName, allScreens[0])
   return (
     <div
-      className={`flex w-full flex-col`}
+      className={`flex h-screen w-full flex-col`}
       style={{
         backgroundColor:
           data?.flowSettings?.general?.backgroundColor || "transparent",
@@ -191,7 +191,7 @@ export default function StaticPublishedFile({
         resolveComponents(JSON.parse(data?.headerData || {}))}
 
       <div
-        className={`flex min-h-[71vh] w-full flex-col`}
+        className={`flex min-h-[71vh] w-full flex-grow flex-col`}
         style={{
           backgroundColor:
             data?.flowSettings?.general?.backgroundColor || "transparent",
@@ -206,12 +206,12 @@ export default function StaticPublishedFile({
                 data?.flowSettings?.general?.backgroundColor || "transparent",
             }}
             className={`
-                animate-flow
-                relative
-                min-w-full
-                shrink-0
-                basis-full
-              `}
+              animate-flow
+              relative
+              min-w-full
+              shrink-0
+              basis-full
+            `}
           >
             {resolveComponents(filteredStep.content)}
           </div>

@@ -149,7 +149,7 @@ export default async function DashboardLayout({
       <ScreenshotsProvider>
         <div
           className={cn(
-            "flex h-screen flex-col space-y-6 bg-[#F6F6F6]",
+            "flex h-screen flex-col space-y-6 bg-white",
             roboto.variable,
             fontSans.variable,
             fontHeading.variable,
