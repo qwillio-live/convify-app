@@ -49,6 +49,7 @@ import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/te
 // import lz from "lzutf8";
 import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { cn } from "@/lib/utils"
 
 export default async function PreviewFlows({
   params,
@@ -57,6 +58,8 @@ export default async function PreviewFlows({
   params: { flowId: string; en: string }
   searchParams: { screen: string }
 }) {
+
+
   const CraftJsUserComponents = {
     [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
     [CRAFT_ELEMENTS.LOGO]: UserLogo,
@@ -114,6 +117,9 @@ export default async function PreviewFlows({
   const filteredStep = data.steps?.find((screen) => screen.name === screenName)
     ? data.steps?.find((screen) => screen.name === screenName)
     : data?.steps?.[0]
+
+  
+
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
 
@@ -185,10 +191,15 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
+  console.log("anjit", data?.flowSettings?.header)
+
+
   return (
     <>
       <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+        className={cn(`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] z-20`,{
+          "fixed": data?.flowSettings?.header?.headerPosition === "absolute"
+        })}
         style={{
           backgroundColor: data?.flowSettings?.general?.backgroundColor,
         }}

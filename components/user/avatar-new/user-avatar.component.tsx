@@ -197,51 +197,51 @@ export const UserLogo = ({
 
   const avatarRef = useRef(null)
 
-  const avatarClass = `${
-    hasComponentBeforeAvatar
-      ? (isPreview ? bodyScrollY > 50 : scrollY && scrollY > 50)
-        ? "avatar-top"
-        : "avatar-half"
-      : scrollY && scrollY > 50
-      ? "avatar-none-scrolled"
-      : mobileScreen || isMobileScreen
-      ? "avatar-none-mobile"
-      : "avatar-none"
-  }`
+  // const avatarClass = `${
+  //   hasComponentBeforeAvatar
+  //     ? (isPreview ? bodyScrollY > 50 : scrollY && scrollY > 50)
+  //       ? "avatar-top"
+  //       : "avatar-half"
+  //     : scrollY && scrollY > 50
+  //     ? "avatar-none-scrolled"
+  //     : mobileScreen || isMobileScreen
+  //     ? "avatar-none-mobile"
+  //     : "avatar-none"
+  // }`
 
-  // const animaton = useMemo(() => {
-  //   let translateYPercent = Math.max(0, 35 - (scrollY || 35))
-  //   let box = Math.max(50, 80 - (scrollY || 0))
-  //   console.log("scroll", scrollY)
-  //   return {
-  //     y: !mobileScreen ? `calc(${translateYPercent}%)` : "0px",
-  //     box: `${box}px`,
-  //   }
-  // }, [scrollY, mobileScreen])
+  const animation = useMemo(() => {
+    // 130
+    let translateYPercent = Math.min(130,  50 + (scrollY || bodyScrollY || 0))
+    let box = Math.max(49, 80 - (scrollY  || bodyScrollY || 0 ))
+    return {
+      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
+      box: hasComponentBeforeAvatar ? `${box}px` : '80px',
+    }
+  }, [scrollY, bodyScrollY, hasComponentBeforeAvatar])
 
   return (
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={cn(avatarClass, {
-        "transition-transform duration-300 ease-in-out":
-          hasComponentBeforeAvatar,
-      })}
+      className={cn("")}
+      style={{
+        transform : `translateY(${animation.y})`
+
+      }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element*/}
       <img
         alt={alt}
         src={src}
         style={{
-          width: 80,
-          height: 80,
+          width: animation.box,
+          height: animation.box,
           borderRadius: `${cornRad}px`,
           backgroundColor: "transparent",
           objectFit: "cover",
           transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
-          transition: "all 0.1s linear",
         }}
       />
     </div>
@@ -413,6 +413,7 @@ export const AvatarComponent = ({
       }
     }
   }, [primaryColor])
+  
   const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
     const value = e.target.innerText
