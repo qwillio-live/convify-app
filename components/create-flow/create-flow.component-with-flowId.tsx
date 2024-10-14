@@ -405,7 +405,7 @@ export function CreateFlowComponent({ flowId }) {
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
 
-            <div className="section-body max-w-[calc(55vw-10px)]">
+            <div className="section-body max-w-[55vw]">
               <Tabs
                 defaultValue={VIEWS.DESKTOP}
                 className="w-full"
