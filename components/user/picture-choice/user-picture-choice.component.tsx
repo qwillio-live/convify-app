@@ -33,6 +33,7 @@ import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { PictureChoiceSettings } from "./user-picture-choice.settings"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
   margin-left: auto;
@@ -594,6 +595,7 @@ const PictureChoiceItem = ({
   const [isEditing, setIsEditing] = useState(false)
 
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+  const isMobileScreen = useMediaQuery("(max-width: 640px)")
 
   useEffect(() => {
     setChoiceValue(choice.value)
@@ -607,7 +609,7 @@ const PictureChoiceItem = ({
     if (n === 1) {
       return 100
     }
-    if (mobileScreen) {
+    if (mobileScreen || isMobileScreen) {
       // if (n % 3 === 0) {
       //   return 33.33
       // } else {
