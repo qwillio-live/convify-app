@@ -59,6 +59,9 @@ export const ListGen = ({
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
   return (
     <div
       className="relative w-full"
@@ -91,9 +94,9 @@ export const ListGen = ({
             descriptionFontFamily={descriptionFontFamily}
             iconColor={iconColor}
             textAlign={textAlign}
-            titleColor={textColor !== "#ffffff" ? textColor : titleColor}
+            titleColor={textColor !== "#ffffff" ? textColor : primaryTextColor}
             descriptionColor={
-              secTextColor !== "#ffffff" ? secTextColor : descriptionColor
+              secTextColor !== "#ffffff" ? secTextColor : secondaryTextColor
             }
             flexDirection={flexDirection}
             item={item}
@@ -230,9 +233,11 @@ export const List = ({
               descriptionFontFamily={descriptionFontFamily}
               iconColor={iconColor}
               textAlign={textAlign}
-              titleColor={textColor !== "#ffffff" ? textColor : titleColor}
+              titleColor={
+                textColor !== "#ffffff" ? textColor : primaryTextColor
+              }
               descriptionColor={
-                secTextColor !== "#ffffff" ? secTextColor : descriptionColor
+                secTextColor !== "#ffffff" ? secTextColor : secondaryTextColor
               }
               flexDirection={flexDirection}
               item={item}

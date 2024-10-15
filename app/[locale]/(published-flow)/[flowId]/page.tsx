@@ -92,8 +92,8 @@ export default async function PublishedFlows({
 
   const response = await fetch(`${flowDomain}/api/flows/published/${flowId}`, {
     method: "GET",
-    cache: "force-cache",
-    next: { tags: ["publishedFlow"] },
+    cache: "default",
+    next: { tags: ["publishedFlow"], revalidate: 0 },
   })
   const data = await response.json()
   const redirect_url = process.env.NOT_PUBLISHED_REDIRECT || ""

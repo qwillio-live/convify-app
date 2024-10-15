@@ -295,7 +295,17 @@ export const MultipleChoiceSettings = () => {
                 }
               />
             </div>
-
+            <div className="flex items-center justify-between">
+              <Label htmlFor="labelColor">{t("Label Color")}</Label>
+              <ColorInput
+                id="labelColor"
+                value={labelColor === "#ffffff" ? null : labelColor}
+                handleChange={(e) => {
+                  handlePropChange("labelColor", e.target.value)
+                }}
+                handleRemove={() => handlePropChange("labelColor", "#ffffff")}
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="layout">{t("Layout")}</Label>
               <Tabs

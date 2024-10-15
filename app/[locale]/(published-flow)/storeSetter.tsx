@@ -28,7 +28,8 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const screen = searchParams?.get("screen") || ""
   const dispatch = useAppDispatch()
   const state = useAppSelector((state) => state.screen)
-  const totalFilled = useAppSelector((state) => state.screen?.filledContent)
+  const totalFilled =
+    useAppSelector((state) => state.screen?.filledContent) || []
   const index = screenNames.findIndex((screenn) => screenn === screen)
   const VISITED_STORAGE_PREFIX = "visited-"
   const RESPONSE_BUTTON_CLASS = "send-response"
@@ -37,8 +38,8 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const RESPONSE_EXPIRY_MINUTES = 30 // 3
   let storage = {}
 
-  async function sendResponseEvent(stepId, responseId: string | null = null) {
-    console.log("entered sendResponseEvent")
+  async function sendResponseEvent(stepId, responseId) {
+    console.log("entered sendResponseEvent", responseId)
 
     setTimeout(async () => {
       const method = responseId ? "PUT" : "POST"
@@ -135,7 +136,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   function handleSendResponse(stepId) {
     console.log("entered handleSendResponse", stepId)
 
-    const name = `${RESPONSES_STORAGE_PREFIX}${flowData.id}`
+    const name = `${RESPONSE_BUTTON_CLASS}${flowData.id}`
     console.log("entered handleSendResponse", totalFilled, name)
     // Get the responseLocal item from local storage
     const responseLocal = getLocalStorageItem(name)
@@ -156,7 +157,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     } catch (e) {
       localStorage.removeItem(name) // Remove item if parsing fails
     }
-
+    console.log("responseId", responseId)
     sendResponseEvent(stepId, responseId)
   }
 
@@ -172,17 +173,19 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   }, []) // Add dependencies
   useEffect(() => {
     console.log("Selected screen called", index !== -1 ? index : 1)
+
     dispatch(setSelectedScreen(index))
     const stepId = screen
     console.log("StepIDddd", stepId)
     if (stepId) {
       handleStepVisit(stepId)
     }
-    dispatch(getAllFilledAnswers(true))
   }, [screen])
   useEffect(() => {
+    console.log("entered in send response", totalFilled, typeof totalFilled)
     const stepId = screen
-    if (index === screenNames.length - 1) {
+    if (Object.keys(totalFilled).length > 0) {
+      console.log("enreteing handlesendresponse")
       handleSendResponse(stepId)
     }
   }, [totalFilled])

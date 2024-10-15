@@ -19,6 +19,7 @@ import { useEffect, useState } from "react"
 import { User } from "../../page"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
+  setIsUpdating,
   setResetTotalFilled,
   setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
@@ -44,10 +45,14 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
+  const localFlowData = useAppSelector((state) => state?.screen)
+  const localFlowSettings = useAppSelector((state) => state?.theme)
   // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
   )
+  const isUpdating =
+    useAppSelector((state) => state?.screen?.isUpdating) || false
   const selectedScreen =
     useAppSelector((state) => state?.screen?.selectedScreen) || 0
 
@@ -90,33 +95,83 @@ const Header = ({ flowId }) => {
         ? "text-foreground border-current"
         : "text-muted-foreground border-transparent"
     }`
-    const publishFlow = async () => {
-      try {
-        setIsLoading(true)
-  
-        // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
-        //   method: "GET",
-        // })
-        // if (res.ok) {
-  
-        setTimeout(async () => {
-          const response = await fetch(`/api/flows/published/${flowId}`, {
-            method: "POST",
+
+  const publishFlow = async () => {
+    try {
+      setIsLoading(true)
+      dispatch(setIsUpdating(true))
+      const steps = localFlowData?.screens
+        ? Array.from(
+            new Set(localFlowData.screens.map((step) => step.screenName))
+          ).map((name) => {
+            const step = localFlowData.screens.find(
+              (s) => s.screenName === name
+            )
+            return {
+              id: step?.screenId,
+              name: step?.screenName,
+              content: JSON.parse(step?.screenData),
+              link: step?.screenLink,
+              order: step ? localFlowData.screens.indexOf(step) : 0,
+              templateId: step?.screenTemplateId,
+            }
           })
-          if (response.ok) {
-            revalidateFlow({ tag: "publishedFlow" })
-            router.push(`./share`)
-          }
-          setIsLoading(false)
-          router.push(`./share`)
-        }, 6000)
-        // }
-      } catch (err) {
-        console.error("Publishing flow failed:", err)
+        : [] // Return an empty array if localFlowData or screens is undefined
+
+      const data = {
+        steps,
+        headerData: localFlowData?.screensHeader,
+        footerData: localFlowData?.screensFooter,
+        flowSettings: {
+          mobileScreen: localFlowSettings?.mobileScreen,
+          header: localFlowSettings?.header,
+          general: localFlowSettings?.general,
+          text: localFlowSettings?.text,
+        },
       }
+      try {
+        await fetch(`/api/flows/${flowId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Previous request canceled")
+        } else {
+          console.error("Update flow error:", error)
+        }
+      }
+      // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
+      //   method: "GET",
+      // })
+      // if (res.ok) {
+
+      setTimeout(async () => {
+        const response = await fetch(`/api/flows/published/${flowId}`, {
+          method: "POST",
+        })
+        if (response.ok) {
+          // revalidateFlow({ tag: "publishedFlow" })
+          router.push(`./share`)
+        }
+        setIsLoading(false)
+        dispatch(setIsUpdating(false))
+        router.push(`./share`)
+      }, 6000)
+      // }
+    } catch (err) {
+      console.error("Publishing flow failed:", err)
     }
+  }
+  router.prefetch(`/dashboard/${flowId}/create-flow`)
+  function onClick() {
+    window.location.href = `/dashboard/${flowId}/create-flow`
+  }
   return (
-    <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#F6F6F6] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6 font-poppins">
+    <header className="font-poppins flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#F6F6F6] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
         <div className="flex h-14 items-center lg:h-[60px]">
           <BreadCrumbs flowId={flowId} />
@@ -135,15 +190,16 @@ const Header = ({ flowId }) => {
 
       <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
-        <Link
+          <div
             className={linkClasses("/dashboard/flows/create-flow")}
-            href={`/dashboard/${flowId}/create-flow`}
+            onClick={onClick}
             style={{
               paddingLeft: isSmallScreen ? "0.625rem" : "1rem",
+              cursor: "pointer",
             }}
           >
             {t("Create")}
-          </Link>
+          </div>
           <Link
             className={linkClasses("/dashboard/flows/connect")}
             href={`/dashboard/${flowId}/connect`}
@@ -177,15 +233,21 @@ const Header = ({ flowId }) => {
           href={`/dashboard/preview-flow/${flowId}?screen=${screeenName}`}
           target="_blank"
         >
-          <Button variant="outline" size="sm" className="h-8 md:h-10 gap-2 md:px-4 px-2 border border-[#E6E2DD]">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-2 border border-[#E6E2DD] px-2 md:h-10 md:px-4"
+          >
             <Eye className="size-4 text-[#23262C]" />
-            <div className="md:block hidden font-normal text-sm md:text-base ">{t("Preview")}</div>
+            <div className="hidden text-sm font-normal md:block md:text-base ">
+              {t("Preview")}
+            </div>
           </Button>
         </Link>
         <div className="">
           <Button
             size="sm"
-            className="h-8 md:h-10  md:px-4 px-3 gap-1 py-2 text-sm md:text-base"
+            className="h-8 gap-1  px-3 py-2 text-sm md:h-10 md:px-4 md:text-base"
             onClick={publishFlow}
             disabled={isLoading ? true : false}
           >

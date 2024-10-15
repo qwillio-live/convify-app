@@ -1,4 +1,5 @@
 // export const runtime = "edge"
+// "use client"
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import React, { Suspense } from "react"
 
@@ -50,7 +51,7 @@ import { getServerSession } from "next-auth"
 import { cookies } from "next/headers"
 import { useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
-import FlowLayout from "@/components/flow-preview/flow-preview-server"
+
 import { env } from "@/env.mjs"
 
 export default async function PreviewFlows({
@@ -98,22 +99,26 @@ export default async function PreviewFlows({
   }
 
   const screenName = searchParams?.screen || ""
-  const cookieString = cookies()
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join("; ")
+  // const cookieString = cookies()
+  //   .getAll()
+  //   .map((cookie) => `${cookie.name}=${cookie.value}`)
+  //   .join("; ")
 
   const flowId = params?.flowId
   const appUrl = env.NEXT_PUBLIC_APP_URL
   const response = await fetch(`${appUrl}/api/flows/${flowId}`, {
     method: "GET",
-    headers: {
-      Cookie: cookieString,
-    },
+    // headers: {
+    //   Cookie: cookieString,
+    // },
     cache: "force-cache",
     next: { tags: ["previewFlow"] },
   })
   const data = await response.json()
+  if (!response.ok) {
+    throw new Error(`Error fetching flow data: ${response.statusText}`)
+  }
+  console.log("data in preview", data)
   const filteredStep = data.steps.find((screen) => screen.name === screenName)
     ? data.steps.find((screen) => screen.name === screenName)
     : data.steps[0]
@@ -190,48 +195,50 @@ export default async function PreviewFlows({
 
   return (
     <>
-      <div className="flex h-screen flex-col">
-        <div
-          className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
-          style={{
-            backgroundColor: data?.flowSettings?.general?.backgroundColor,
-          }}
-        >
-          {data?.headerData &&
-            resolveComponents(JSON.parse(data?.headerData || {}))}
-        </div>
-
-        <div
-          className={`flex w-full flex-grow flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
-          style={{
-            backgroundColor: data?.flowSettings?.general?.backgroundColor,
-          }}
-        >
-          {filteredStep && (
-            <div
-              key={`${filteredStep.name}`}
-              id={filteredStep.name}
-              style={{
-                backgroundColor: data?.flowSettings?.general?.backgroundColor,
-              }}
-              className="animate-flow relative min-w-full"
-            >
-              {resolveComponents(filteredStep.content)}
-            </div>
-          )}
-        </div>
-
-        {data?.footerData && (
+      <div
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+        style={{
+          backgroundColor: data?.flowSettings?.general?.backgroundColor,
+        }}
+      >
+        {data?.headerData &&
+          resolveComponents(JSON.parse(data?.headerData || {}))}
+      </div>
+      <div
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] min-h-[71vh]`}
+        style={{
+          backgroundColor: data?.flowSettings?.general?.backgroundColor,
+        }}
+      >
+        {filteredStep && (
           <div
-            className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+            key={`${filteredStep.name}`}
+            id={filteredStep.name}
             style={{
               backgroundColor: data?.flowSettings?.general?.backgroundColor,
             }}
+            className="
+                animate-flow
+    relative
+    min-w-full
+    shrink-0
+    basis-full
+    "
           >
-            {resolveComponents(JSON.parse(data?.footerData || {}))}
+            {resolveComponents(filteredStep.content)}
           </div>
         )}
       </div>
+      {data?.footerData && (
+        <div
+          className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+          style={{
+            backgroundColor: data?.flowSettings?.general?.backgroundColor,
+          }}
+        >
+          {resolveComponents(JSON.parse(data?.footerData || {}))}
+        </div>
+      )}
     </>
   )
 }

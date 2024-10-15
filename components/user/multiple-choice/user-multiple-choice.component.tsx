@@ -23,6 +23,7 @@ import { usePathname } from "next/navigation"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import {
+  getAllFilledAnswers,
   setPreviewScreenData,
   setSelectedData,
   setSelectedScreen,
@@ -135,7 +136,14 @@ export const MultipleChoiceGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
-  console.log("of mc props", choices)
+  console.log(
+    "of mc props",
+    choices,
+    "screenData",
+    screenData,
+    "selections",
+    selections
+  )
   return (
     <div
       className="relative w-full"
@@ -530,25 +538,25 @@ export const MultipleChoice = ({
                 }, 200)
               }}
               onSelectChange={() => {
-                if (multiSelect) {
-                  setProp((props) => {
-                    if (props.selections.includes(choice.id)) {
-                      props.selections = props.selections.filter(
-                        (selectionId) => selectionId !== choice.id
-                      )
-                    } else {
-                      props.selections.push(choice.id)
-                    }
-                    return props
-                  }, 200)
-                } else {
-                  setProp((props) => {
-                    props.selections = selections.includes(choice.id)
-                      ? []
-                      : [choice.id]
-                    return props
-                  }, 200)
-                }
+                //   if (multiSelect) {
+                //     setProp((props) => {
+                //       if (props.selections.includes(choice.id)) {
+                //         props.selections = props.selections.filter(
+                //           (selectionId) => selectionId !== choice.id
+                //         )
+                //       } else {
+                //         props.selections.push(choice.id)
+                //       }
+                //       return props
+                //     }, 200)
+                //   } else {
+                //     setProp((props) => {
+                //       props.selections = selections.includes(choice.id)
+                //         ? []
+                //         : [choice.id]
+                //       return props
+                //     }, 200)
+                //   }
               }}
             />
           ))}
@@ -646,6 +654,7 @@ const MultipleChoiceItem = ({
           })
         )
         handleSearch(updatedScreenName)
+        dispatch(getAllFilledAnswers(true))
         dispatch(setSelectedScreen(index))
       } else if (newsc !== "none") {
         console.log(
@@ -661,6 +670,7 @@ const MultipleChoiceItem = ({
           })
         )
         handleSearch(newsc)
+        dispatch(getAllFilledAnswers(true))
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
         dispatch(setSelectedScreen(index))
       }

@@ -217,7 +217,17 @@ export const UserTextInputSettings = () => {
                 }
               />
             </div>
-
+            <div className="flex items-center justify-between">
+              <Label htmlFor="textColor">{t("Text Color")}</Label>
+              <ColorInput
+                id="textColor"
+                value={textColor === "#ffffff" ? null : textColor}
+                handleChange={(e) => {
+                  debouncedSetProp("textColor", e.target.value)
+                }}
+                handleRemove={() => debouncedSetProp("textColor", "#ffffff")}
+              />
+            </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label>{t("FontSize")}</Label>

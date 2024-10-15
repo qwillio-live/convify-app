@@ -22,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import {
+  getAllFilledAnswers,
   setPreviewScreenData,
   setSelectedData,
   setSelectedScreen,
@@ -516,25 +517,25 @@ export const PictureChoice = ({
                 }, 200)
               }}
               onSelectChange={() => {
-                if (multiSelect) {
-                  setProp((props) => {
-                    if (props.selections.includes(choice.id)) {
-                      props.selections = props.selections.filter(
-                        (selectionId) => selectionId !== choice.id
-                      )
-                    } else {
-                      props.selections.push(choice.id)
-                    }
-                    return props
-                  }, 200)
-                } else {
-                  setProp((props) => {
-                    props.selections = selections.includes(choice.id)
-                      ? []
-                      : [choice.id]
-                    return props
-                  }, 200)
-                }
+                // if (multiSelect) {
+                //   setProp((props) => {
+                //     if (props.selections.includes(choice.id)) {
+                //       props.selections = props.selections.filter(
+                //         (selectionId) => selectionId !== choice.id
+                //       )
+                //     } else {
+                //       props.selections.push(choice.id)
+                //     }
+                //     return props
+                //   }, 200)
+                // } else {
+                //   setProp((props) => {
+                //     props.selections = selections.includes(choice.id)
+                //       ? []
+                //       : [choice.id]
+                //     return props
+                //   }, 200)
+                // }
               }}
             />
           ))}
@@ -664,6 +665,7 @@ const PictureChoiceItem = ({
           })
         )
         handleSearch(updatedScreenName)
+        dispatch(getAllFilledAnswers(true))
         dispatch(setSelectedScreen(index))
       } else if (newsc !== "none") {
         console.log(
@@ -678,6 +680,7 @@ const PictureChoiceItem = ({
             next: newsc,
           })
         )
+        dispatch(getAllFilledAnswers(true))
         handleSearch(newsc)
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
         dispatch(setSelectedScreen(index))

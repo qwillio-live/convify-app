@@ -89,6 +89,7 @@ export const ChecklistSettings = () => {
       height,
       settingTabs,
       preset,
+      textColor,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -227,7 +228,17 @@ export const ChecklistSettings = () => {
                 id="backgroundcolor"
               />
             </div>
-
+            <div className="flex items-center justify-between">
+              <Label htmlFor="textColor">{t("Text Color")}</Label>
+              <ColorInput
+                id="textColor"
+                value={textColor === "#ffffff" ? null : textColor}
+                handleChange={(e) => {
+                  handlePropChange("textColor", e.target.value)
+                }}
+                handleRemove={() => handlePropChange("textColor", "#ffffff")}
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="layout">{t("Layout")}</Label>
               <Tabs

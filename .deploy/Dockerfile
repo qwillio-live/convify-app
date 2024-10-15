@@ -1,5 +1,7 @@
 FROM node:20-alpine
 
+RUN apk add --no-cache  chromium
+
 # create destination directory
 RUN mkdir -p /usr/src/convify-app && chmod -R 777 /usr/src/convify-app
 WORKDIR /usr/src/convify-app

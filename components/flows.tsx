@@ -266,7 +266,7 @@ export function FlowsList({ flows, setStatus, status }) {
                               ? paddingScreen
                               : "1rem",
                         }}
-                        className="table-cell min-w-[136px] md:min-w-[256px] text-left text-xs font-normal text-[#9B9A99] md:sr-only md:text-base"
+                        className="table-cell min-w-[136px] text-left text-xs font-normal text-[#9B9A99] md:sr-only md:min-w-[256px] md:text-base"
                       >
                         {t("Name")}
                       </TableHead>
@@ -349,8 +349,8 @@ export function FlowsList({ flows, setStatus, status }) {
                             >
                               <Image
                                 alt="Product image"
-                                className="aspect-video rounded-[8px] border border-[#F2F0EE] object-cover xl:h-[48px] xl:w-[72px] 2xl:h-[72px] 2xl:w-[120px]"
-                                height="64"
+                                className="aspect-video !min-h-16 !w-full min-w-[113px] rounded-md object-contain "
+                                height="120"
                                 width="113"
                                 src={
                                   flow.previewImage
@@ -368,7 +368,7 @@ export function FlowsList({ flows, setStatus, status }) {
                                   | LegacyRef<HTMLTableCellElement>
                                   | undefined
                               }
-                              className="min-w-[136px] md:min-w-[256px] text-xs text-[#23262C] hover:cursor-pointer md:text-base"
+                              className="min-w-[136px] text-xs text-[#23262C] hover:cursor-pointer md:min-w-[256px] md:text-base"
                               style={{
                                 padding:
                                   paddingScreen !== "inherit"

@@ -635,6 +635,28 @@ export const TextImageSettings = () => {
                 id="backgroundcolor"
               />
             </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="textColor">{t("Title Color")}</Label>
+              <ColorInput
+                id="textColor"
+                value={textColor === "#ffffff" ? null : textColor}
+                handleChange={(e) => {
+                  handlePropChange("textColor", e.target.value)
+                }}
+                handleRemove={() => handlePropChange("textColor", "#ffffff")}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="secTextColor">{t("Subtitle Color")}</Label>
+              <ColorInput
+                id="secTextColor"
+                value={secTextColor === "#ffffff" ? null : secTextColor}
+                handleChange={(e) => {
+                  handlePropChange("secTextColor", e.target.value)
+                }}
+                handleRemove={() => handlePropChange("secTextColor", "#ffffff")}
+              />
+            </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="corner-radius">{t("Corner Radius")}</Label>
