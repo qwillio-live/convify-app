@@ -111,8 +111,10 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   }
   @media (max-width: 660px) {
     width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
+    max-width: calc(100% - 20px);
   }
+
+  
 `
 
 export const HeadlineTextGen = ({
