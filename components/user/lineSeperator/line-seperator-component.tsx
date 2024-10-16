@@ -20,7 +20,13 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { usePathname, useRouter } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "./line-seperator-settings"
-import { UserInputSizes } from "../input/user-input.component"
+
+const IconButtonSizeValues = {
+  small: "300px",
+  medium: "376px",
+  large: "576px",
+  full: "100%",
+}
 
 const ButtonSizeValues = {
   small: ".8rem",
@@ -31,6 +37,13 @@ const IconSizeValues = {
   small: 18,
   medium: 22,
   large: 26,
+}
+
+const IconButtonMobileSizeValues = {
+  small: "300px",
+  medium: "330px",
+  large: "360px",
+  full: "100%",
 }
 
 const ButtonTextLimit = {
@@ -100,13 +113,20 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
+  max-width: ${(props) =>
+    props.mobileScreen
+      ? IconButtonMobileSizeValues[props.size || "medium"]
+      : IconButtonSizeValues[props.size || "medium"]};
+  width: 100%;
   cursor: default;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
+  padding-left: ${(props) => props.paddingLeft}px;
   padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-right: ${(props) => props.paddingRight}px;
   padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
@@ -114,43 +134,13 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "250px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "376px" }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "576px" }
-      }
-    } else {
-      return {
-        width: "calc(100% - 22px)",
-      }
-    }
-  }};
-
-  @media (max-width: 600px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+  @media (max-width: 760px) {
+    width: 100%; /* Make the button take the full width on smaller screens */
+    max-width: 600px;
   }
-
-  @media (max-width: 390px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+  @media (max-width: 660px) {
+    width: 100%; /* Make the button take the full width on smaller screens */
+    max-width: 400px;
   }
 `
 
@@ -259,9 +249,9 @@ export const IconButtonDefaultProps: IconButtonProps = {
   marginRight: 0,
   marginBottom: 0,
   icon: "arrowright",
-  paddingLeft: "0",
+  paddingLeft: "16",
   paddingTop: "26",
-  paddingRight: "0",
+  paddingRight: "16",
   paddingBottom: "26",
   flexDirection: "row",
   alignItems: "center",
@@ -313,7 +303,12 @@ export const IconLineSeperator = ({
   nextScreen,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const router = useRouter()
+  const pathName = usePathname()
+
+  const handleNavigateToContent = () => {
+    // router.push(currentUrlWithHash);
+  }
 
   return (
     <div
@@ -326,10 +321,12 @@ export const IconLineSeperator = ({
         minWidth: "100%",
         paddingTop: `${props.marginTop}px`,
         paddingBottom: `${props.marginBottom}px`,
+        paddingLeft: `${props.marginLeft}px`,
+        paddingRight: `${props.marginRight}px`,
       }}
     >
       <div
-        className="relative"
+        className="relative w-full"
         style={{
           background: `${containerBackground}`,
           display: "flex",
@@ -338,6 +335,8 @@ export const IconLineSeperator = ({
           width: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
+          paddingLeft: `${props.marginLeft}px`,
+          paddingRight: `${props.marginRight}px`,
         }}
       >
         <StyledCustomButton
@@ -364,9 +363,9 @@ export const IconLineSeperator = ({
           paddingBottom={paddingBottom}
           alignItems={alignItems}
           gap={gap}
-          mobileScreen={!!mobileScreen}
+          mobileScreen={false}
           {...props}
-          className="separator-comp text-[1rem]"
+          className="text-[1rem]"
         >
           {enableLine && (
             <hr
@@ -438,7 +437,6 @@ export const LineSelector = ({
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
-  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   const screensLength = useAppSelector(
     (state: RootState) => state?.screen?.screens?.length ?? 0
@@ -604,7 +602,7 @@ export const LineSelector = ({
     >
       {hover && <Controller nameOfComponent={t("Separator")} />}
       <div
-        className="relative"
+        className="relative w-full"
         style={{
           background: `${containerBackground}`,
           display: "flex",
@@ -613,6 +611,8 @@ export const LineSelector = ({
           width: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
+          paddingLeft: `${props.marginLeft}px`,
+          paddingRight: `${props.marginRight}px`,
         }}
       >
         <StyledCustomButton
@@ -639,9 +639,9 @@ export const LineSelector = ({
           paddingBottom={paddingBottom}
           alignItems={alignItems}
           gap={gap}
-          mobileScreen={!!mobileScreen}
+          mobileScreen={false}
           {...props}
-          className="separator-comp text-[1rem]"
+          className="text-[1rem]"
         >
           {enableLine && (
             <hr

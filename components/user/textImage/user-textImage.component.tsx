@@ -444,9 +444,9 @@ export const TextImageComponentGen = ({
                     style={{
                       alignSelf: `${bothAlign}`,
                       flex: "50%",
+                      marginTop: bothAlign == "start" ? "20px" : "",
                     }}
                   >
-                    {/** @ts-ignore */}
                     {/** @ts-ignore */}
                     <ContentEditable
                       html={title}
@@ -470,7 +470,6 @@ export const TextImageComponentGen = ({
                       }}
                       tagName="h1"
                     />
-                    {/** @ts-ignore */}
                     {/** @ts-ignore */}
                     <ContentEditable
                       html={Text}
