@@ -103,6 +103,8 @@ import {
 import { Controller } from "../settings/controller.component"
 import useInputMailThemePresets from "./useInputMailThemePresets"
 import { UserInputMail, UserInputMailGen } from "./user-input-mail.component"
+import { InputSettingsIconPicker } from "../input/user-input-icon-picker"
+import { ColorInput } from "@/components/color-input"
 
 const IconRenderer = ({ iconName, onClick }) => {
   const ref = useRef(null)
@@ -111,7 +113,7 @@ const IconRenderer = ({ iconName, onClick }) => {
     <div className="max-h-[160px]">
       <div
         ref={ref}
-        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex items-center justify-center rounded-md bg-transparent p-4 text-center max-h-full max-w-full h-auto w-auto"
+        className="border-muted hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex h-auto max-h-full w-auto max-w-full items-center justify-center rounded-md bg-transparent p-4 text-center"
         onClick={() => onClick(iconName)}
       >
         {isInView && (
@@ -119,7 +121,7 @@ const IconRenderer = ({ iconName, onClick }) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             dangerouslySetInnerHTML={{ __html: icons[iconName]?.body || "" }}
-            className="h-24 w-24 cursor-pointer ml-10 mt-8"
+            className="ml-10 mt-8 h-24 w-24 cursor-pointer"
           />
         )}
       </div>
@@ -286,16 +288,11 @@ export const UserInputMailSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">
-              {tComponents("Content")}
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+          <AccordionTrigger>{tComponents("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 value={props.inputRequired}
                 checked={props.inputRequired}
@@ -305,15 +302,10 @@ export const UserInputMailSettings = () => {
                 }}
                 id="required"
               />
-              <label
-                htmlFor="required"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {tComponents("Required")}
-              </label>
+              <Label htmlFor="required">{tComponents("Required")}</Label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row gap-1 items-center">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 checked={props.floatingLabel}
                 onCheckedChange={(e) => {
@@ -322,22 +314,15 @@ export const UserInputMailSettings = () => {
                 }}
                 id="floating-label"
               />
-              <label
-                htmlFor="floating-label"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+              <Label htmlFor="floating-label">
                 {tComponents("Floating Label")}
-              </label>
+              </Label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
-              <label
-                htmlFor="label-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {tComponents("Label")}
-              </label>
+            <div className="space-y-2">
+              <Label htmlFor="label-text">{tComponents("Label")}</Label>
               <Input
+                id="label-text"
                 value={props.label}
                 defaultValue={props.label}
                 onChange={(e) => {
@@ -349,14 +334,12 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
-              <label
-                htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
-              >
+            <div className="space-y-2">
+              <Label htmlFor="placeholder-text">
                 {tComponents("Placeholder")}
-              </label>
+              </Label>
               <Input
+                id="placeholder-text"
                 value={props.placeholder}
                 onChange={(e) => {
                   setProp((props) => (props.placeholder = e.target.value), 0)
@@ -367,14 +350,10 @@ export const UserInputMailSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-1 items-start">
-              <label
-                htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 no-underline decoration-dotted"
-              >
-                {tComponents("Field Name")}
-              </label>
+            <div className="space-y-2">
+              <Label htmlFor="field-name">{tComponents("Field Name")}</Label>
               <Input
+                id="field-name"
                 value={props.fieldName}
                 onChange={(e) =>
                   setProp((props) => (props.fieldName = e.target.value), 1000)
@@ -386,13 +365,10 @@ export const UserInputMailSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
-            <span className="text-sm font-medium">{tComponents("Design")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+          <AccordionTrigger>{tComponents("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
                 checked={props.enableIcon}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
@@ -400,16 +376,20 @@ export const UserInputMailSettings = () => {
                 }}
                 id="enableIcon"
               />
-              <label
-                htmlFor="enableIcon"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {tComponents("Decorator")}
-              </label>
+              <Label htmlFor="enableIcon">{tComponents("Decorator")}</Label>
             </div>
             {props.enableIcon && (
-              <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
-                {/* {props.enableIcon && (
+              <div className="flex items-center justify-between">
+                <Label>{tComponents("Select Icons")}</Label>
+                <InputSettingsIconPicker
+                  className="w-auto"
+                  icon={props.icon}
+                  onChange={(icon) => {
+                    handlePropChange("icon", icon)
+                  }}
+                />
+              </div>
+              /* {props.enableIcon && (
                 <>
                   <p className="text-md flex-1 text-muted-foreground">
                     {t("Icon")}
@@ -453,267 +433,201 @@ export const UserInputMailSettings = () => {
                     </SelectContent>
                   </Select>
                 </>
-              )} */}
-                {/* <p className="text-md flex-1 text-muted-foreground">
+              )} */
+              /* <p className="text-md flex-1 text-muted-foreground">
                 {t("Icon")}
-              </p> */}
-                <Dialog open={open} onOpenChange={setOpen}>
-                  <div className="text-md flex rounded py-2 w-full justify-between pr-4 items-center text-muted-foreground">
-                    <span>{tCreateFlow("PictureChoice.icon")}</span>
-                    <DialogTrigger asChild>
-                      {
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: convertToSvg(icons[props.icon]?.body),
-                          }}
-                          className="h-10 w-10 cursor-pointer justify-center items-center flex bg-white border border-border rounded-md"
-                        />
-                      }
-                    </DialogTrigger>
-                  </div>
-
-                  {/* icons */}
-                  <DialogContent className="overflow-y-auto sm:max-h-[70%] sm:max-w-[80%] h-[70%]">
-                    <DialogHeader className="sticky top-0 bg-white py-4 px-2 z-10">
-                      <div className="flex items-center justify-start gap-4">
-                        <div>
-                          <DialogTitle>
-                            {tCreateFlow("PictureChoice.icon")}
-                          </DialogTitle>
-                          <DialogDescription>
-                            {tCreateFlow("PictureChoice.iconDesc")}
-                          </DialogDescription>
-                        </div>
-                        <div className="relative ml-auto flex-1 md:grow-0 flex items-center">
-                          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            type="search"
-                            placeholder={tCreateFlow(
-                              "PictureChoice.iconSearch"
-                            )}
-                            className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                          />
-                        </div>
-                        <DialogClose asChild>
-                          <Button variant="ghost">
-                            <IconX className="size-5 shrink-0" />
-                          </Button>
-                        </DialogClose>
-                      </div>
-                    </DialogHeader>
-                    <div className="ml-4 mt-4 grid grid-cols-6 gap-4">
-                      {filteredIcons.length > 0 ? (
-                        filteredIcons.map((iconName) => (
-                          <IconRenderer
-                            key={iconName}
-                            iconName={iconName}
-                            onClick={handleSVGChange}
-                          />
-                        ))
-                      ) : (
-                        <div className="col-span-6 text-center mt-4">
-                          {tCreateFlow("PictureChoice.iconNotFound")}
-                        </div>
-                      )}
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
+              </p> */
             )}
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">
                 {tComponents("Background Color")}
-              </label>
-              <Input
-                // defaultValue={themeBackgroundColor}
-                // value={containerBackground}
+              </Label>
+              <ColorInput
+                id="backgroundcolor"
                 value={props.backgroundColor}
-                onChange={(e) => {
-                  // debouncedSetProp("containerBackground",e.target.value)
+                handleChange={(e) => {
                   handlePropChange("backgroundColor", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
+                handleRemove={() =>
+                  handlePropChange("backgroundColor", "transparent")
+                }
               />
             </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">
-              {tComponents("Spacing")}{" "}
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">
-                {tComponents("Width")}
-              </p>
+          <AccordionTrigger>{tComponents("Spacing")} </AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{tComponents("Width")}</Label>
               <Tabs
                 defaultValue={props.size}
                 value={props.size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList
-                  className={cn("w-full grid grid-cols-4", {
-                    "cursor-not-allowed": disableSize,
-                  })}
-                >
-                  <TabsTrigger disabled={disableSize} value="small">
+                <TabsList className="grid w-full grid-cols-4 bg-[#eeeeee]">
+                  <TabsTrigger
+                    value="small"
+                    className="rounded text-base leading-4"
+                  >
                     {tComponents("S")}
                   </TabsTrigger>
-                  <TabsTrigger disabled={disableSize} value="medium">
+                  <TabsTrigger
+                    value="medium"
+                    className="rounded text-base leading-4"
+                  >
                     {tComponents("M")}
                   </TabsTrigger>
-                  <TabsTrigger disabled={disableSize} value="large">
+                  <TabsTrigger
+                    value="large"
+                    className="rounded text-base leading-4"
+                  >
                     {tComponents("L")}
                   </TabsTrigger>
-                  <TabsTrigger disabled={disableSize} value="full">
-                    <MoveHorizontal />
+                  <TabsTrigger
+                    value="full"
+                    className="rounded text-base leading-4"
+                  >
+                    <MoveHorizontal className="size-4" />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{tComponents("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginTop}
-                </span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{tComponents("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginTop}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[marginTop]}
+                  value={[marginTop]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginTop = e),200)
+                    handlePropChange("marginTop", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[marginTop]}
-                value={[marginTop]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginTop = e),200)
-                  handlePropChange("marginTop", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{tComponents("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginBottom}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{tComponents("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginBottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginBottom]}
+                  value={[marginBottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginBottom = e),200)
+                    handlePropChange("marginBottom", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginBottom]}
-                value={[marginBottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginBottom = e),200)
-                  handlePropChange("marginBottom", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{tComponents("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginRight}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{tComponents("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginRight}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginRight]}
+                  value={[marginRight]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginRight = e),200)
+                    handlePropChange("marginRight", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginRight]}
-                value={[marginRight]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginRight = e),200)
-                  handlePropChange("marginRight", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{tComponents("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {marginLeft}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{tComponents("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginLeft}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginLeft]}
+                  value={[marginLeft]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    // setProp((props) => (props.marginLeft = e),200)
+                    handlePropChange("marginLeft", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginLeft]}
-                value={[marginLeft]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  // setProp((props) => (props.marginLeft = e),200)
-                  handlePropChange("marginLeft", e)
-                }
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="styles">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{tComponents("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
-              <Card
-                onClick={() => {
-                  addPresetStyles(outlinedPresetMail)
-                }}
-                className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
-                  { "border-blue-500": props.preset === "outlined" }
-                )}
-              >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
-                <UserInputMailGen
-                  {...outlinedPresetMail}
-                  floatingLabel={true}
-                  size="full"
-                  enableIcon={true}
-                  marginLeft="0"
-                  marginRight="0"
-                  backgroundColor="#fff"
-                  label={tComponents("Label")}
-                />
-              </Card>
-              <Card
-                onClick={() => {
-                  addPresetStyles(underlinedPresetMail)
-                }}
-                className={cn(
-                  "relative px-2 py-0 hover:cursor-pointer transition-all duration-300",
-                  { "border-blue-500": props.preset === "underlined" }
-                )}
-              >
-                <div className="absolute w-full h-full bg-white-50/0 z-10"></div>
-                <UserInputMailGen
-                  {...underlinedPresetMail}
-                  floatingLabel={true}
-                  size="full"
-                  enableIcon={true}
-                  marginLeft="0"
-                  marginRight="0"
-                  backgroundColor="#fff"
-                  label={tComponents("Label")}
-                />
-              </Card>
-            </div>
+          <AccordionTrigger>{tComponents("Styles")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <Card
+              onClick={() => {
+                addPresetStyles(outlinedPresetMail)
+              }}
+              className={cn(
+                "relative p-2 transition-all duration-300 hover:cursor-pointer",
+                { "border-[#2B3398]": props.preset === "outlined" }
+              )}
+            >
+              <div className="bg-white-50/0 absolute z-10 size-full"></div>
+              <UserInputMailGen
+                {...outlinedPresetMail}
+                floatingLabel={true}
+                size="full"
+                enableIcon={true}
+                marginLeft="0"
+                marginRight="0"
+                marginTop="0"
+                marginBottom="0"
+                backgroundColor="#fff"
+                label={tComponents("Label")}
+              />
+            </Card>
+            <Card
+              onClick={() => {
+                addPresetStyles(underlinedPresetMail)
+              }}
+              className={cn(
+                "relative p-2 transition-all duration-300 hover:cursor-pointer",
+                { "border-[#2B3398]": props.preset === "underlined" }
+              )}
+            >
+              <div className="bg-white-50/0 absolute z-10 size-full"></div>
+              <UserInputMailGen
+                {...underlinedPresetMail}
+                floatingLabel={true}
+                size="full"
+                enableIcon={true}
+                marginLeft="0"
+                marginRight="0"
+                marginTop="0"
+                marginBottom="0"
+                backgroundColor="#fff"
+                label={tComponents("Label")}
+              />
+            </Card>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

@@ -47,7 +47,7 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
-  const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
+  // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
     (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
   )
@@ -85,7 +85,7 @@ const Header = ({ flowId }) => {
   }
 
   const linkClasses = (path) =>
-    `h-full rounded-none border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm ${
+    `h-full rounded-none border-b-2 md:border-b-4 flex-1 lg:flex-auto flex justify-center items-center text-sm md:text-base ${
       isSmallScreen ? "px-2.5" : "px-3"
     } ${
       currentPath?.split("/").at(-1) === path.split("/").at(-1) ||
@@ -93,33 +93,33 @@ const Header = ({ flowId }) => {
         ? "text-foreground border-current"
         : "text-muted-foreground border-transparent"
     }`
-
-  const publishFlow = async () => {
-    try {
-      setIsLoading(true)
-
-      const response = await fetch(`/api/flows/published/${flowId}`, {
-        method: "POST",
-      })
-      if (response.ok) {
+    const publishFlow = async () => {
+      try {
+        setIsLoading(true)
+  
         // const res = await fetch(`${flowDomain}/api/flows/revalidate`, {
         //   method: "GET",
         // })
         // if (res.ok) {
-        revalidateFlow({ tag: "publishedFlow" })
-        setTimeout(() => {
+  
+        setTimeout(async () => {
+          const response = await fetch(`/api/flows/published/${flowId}`, {
+            method: "POST",
+          })
+          if (response.ok) {
+            revalidateFlow({ tag: "publishedFlow" })
+            router.push(`./share`)
+          }
           setIsLoading(false)
           router.push(`./share`)
-        }, 3000)
+        }, 6000)
         // }
+      } catch (err) {
+        console.error("Publishing flow failed:", err)
       }
-    } catch (err) {
-      console.error("Publishing flow failed:", err)
     }
-  }
-
   return (
-    <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#fcfdfe] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6">
+    <header className="flex h-28 flex-wrap items-center justify-between gap-x-4 bg-[#F6F6F6] px-4 lg:h-[60px] lg:flex-nowrap lg:gap-4 lg:px-6 font-poppins">
       <div className="bread-crumbs flex h-1/2 max-h-screen flex-col items-center lg:h-full">
         <div className="flex h-14 items-center lg:h-[60px]">
           <BreadCrumbs flowId={flowId} />
@@ -135,9 +135,10 @@ const Header = ({ flowId }) => {
           </div>
         </div>
       </div>
+
       <div className="order-last flex h-1/2 w-full basis-full shadow-[rgba(0,0,0,0.07)_0px_1px_inset] lg:order-[unset] lg:h-full lg:w-auto lg:basis-auto">
         <div className="flex size-full bg-inherit py-0 lg:w-auto lg:justify-center">
-          <Link
+        <Link
             className={linkClasses("/dashboard/flows/create-flow")}
             href={`/dashboard/${flowId}/create-flow`}
             style={{
@@ -166,8 +167,9 @@ const Header = ({ flowId }) => {
           </Link>
         </div>
       </div>
+
       <div
-        className="account-settings flex h-1/2 flex-row items-center justify-between gap-4 lg:h-full"
+        className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full"
         onClick={() => {
           dispatch(setResetTotalFilled(true))
           dispatch(setSelectedScreen(selectedScreen))
@@ -178,34 +180,35 @@ const Header = ({ flowId }) => {
           href={`/dashboard/preview-flow/${flowId}?screen=${screeenName}`}
           target="_blank"
         >
-          <Button variant="outline" size="sm" className="my-4 h-8 gap-1 p-2">
-            <Eye className="size-3.5" />
+          <Button variant="outline" size="sm" className="h-8 md:h-10 gap-2 md:px-4 px-2 border border-[#E6E2DD]">
+            <Eye className="size-4 text-[#23262C]" />
+            <div className="md:block hidden font-normal text-sm md:text-base ">{t("Preview")}</div>
           </Button>
         </Link>
         <div className="">
           <Button
             size="sm"
-            className="my-4 h-8 gap-1 py-2"
+            className="h-8 md:h-10  md:px-4 px-3 gap-1 py-2 text-sm md:text-base"
             onClick={publishFlow}
             disabled={isLoading ? true : false}
           >
-            {t("Publish")}
+            <span className="font-normal">{t("Publish")}</span>
             {isLoading && (
               <div>
-                <Icons.spinner className=" z-20  h-6 w-4 animate-spin" />
+                <Icons.spinner className=" z-20  size-4 animate-spin" />
               </div>
             )}
           </Button>
         </div>
 
-        <div className="">
+        <div className="hidden md:block">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="secondary"
                 size="sm"
-                className="flex items-center justify-center rounded-full bg-[#eaeaec] p-0 text-base font-bold uppercase hover:bg-[#eaeaec]"
-                style={{ width: "40px", height: "40px" }}
+                className="flex items-center justify-center rounded-full bg-[#EAEAEC] p-0 text-base font-semibold uppercase hover:bg-[#eaeaec]"
+                style={{ width: "40px", height: "40px" }} // Adjust the size as needed
               >
                 {userData ? (
                   userData?.name ? (

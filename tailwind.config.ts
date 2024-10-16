@@ -16,6 +16,13 @@ const config = {
       },
     },
     extend: {
+      fontSize: {
+        xs: ["0.75rem", "1.05rem"],
+      },
+      height: {
+        "8.5": "2.125rem",
+        "9.5": "2.375rem",
+      },
       fontFamily: {
         geist: ["var(--font-geist)"],
         sans: ["var(--font-sans)"],
@@ -77,7 +84,7 @@ const config = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        foreground: "var(--foreground)",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -87,12 +94,12 @@ const config = {
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          foreground: "var(--muted-foreground)",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
@@ -103,8 +110,8 @@ const config = {
           foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
         },
       },
       borderRadius: {
@@ -143,9 +150,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/line-clamp"),],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/line-clamp")],
 }
 // satisfies Config
 

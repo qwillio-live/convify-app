@@ -16,7 +16,7 @@ export default function CreateFlowsPage({
         <div className="top-0  z-[60] overflow-hidden">
           <Header flowId={flowId} />
         </div>
-        <main className="content z-50 h-full max-h-[94vh] flex-1 overflow-auto  border-t bg-[#FAFAFA]">
+        <main className="content z-50 h-full max-h-[94vh] flex-1 overflow-auto border-t border-t-[#E6E2DD] bg-[#FAFAFA]">
           <ConnectFlowComponents />
         </main>
       </div>

@@ -86,9 +86,6 @@ export default function CreateFlowsPage({
   console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [customCss, setCustomCsss] = useState("")
-  const [link, setLink] = useState(
-    "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
-  )
 
   const dispatch = useAppDispatch()
   const firstScreenName =
@@ -157,7 +154,7 @@ export default function CreateFlowsPage({
             ${customCss}
           `}
       </style>
-      <div className="fixed min-h-screen w-full font-sans">
+      <div className="fixed min-h-screen w-full">
         <Tabs
           defaultValue="create"
           onValueChange={onTabChange}
@@ -167,7 +164,7 @@ export default function CreateFlowsPage({
             <Header flowId={flowId} />
           </div>
           <main
-            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${
+            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#F6F6F6] ${
               tab === "results" ? "" : tab === "share" ? "" : ""
             }`}
           >

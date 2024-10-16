@@ -17,7 +17,7 @@ interface RootLayoutProps {
   children: React.ReactNode
   params: { locale: string }
 }
-const APP_NAME = env.NEXT_PUBLIC_APP_NAME
+const APP_NAME = process.env.APP_NAME
 export const metadata = {
   title: {
     default: APP_NAME,
@@ -57,9 +57,9 @@ export const metadata = {
     creator: "@shadcn",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon_logo_blue.ico",
     shortcut: "/icon_logo_blue.png",
-    apple: "/apple-touch-icon.png",
+    apple: "/icon_logo_blue.png",
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
 }

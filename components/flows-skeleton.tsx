@@ -129,7 +129,7 @@ const SkeletonFlowCard = () => {
             <main className="sm:py-0 md:gap-8">
                 {isLoading ? skeletonMarkup : (
                     <div className="flex flex-col">
-                        <Link
+                        {/* <Link
                             className="flex items-center justify-start self-start"
                             href="/create-flow"
                         >
@@ -137,7 +137,7 @@ const SkeletonFlowCard = () => {
                                 <Plus className="size-3.5" />
                                 <span className="whitespace-nowrap">Create new flow</span>
                             </Button>
-                        </Link>
+                        </Link> */}
 
                         <Card>
                             <CardHeader>

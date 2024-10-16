@@ -6,6 +6,7 @@ import StaticPublishedFile from "@/components/user/publishedFlowStaticFile"
 import { env } from "@/env.mjs"
 import Head from "next/head"
 import localFont from "next/font/local"
+import { redirect } from "next/navigation"
 
 interface PageProps {
   params: {
@@ -86,7 +87,7 @@ export default async function PublishedFlows({
   searchParams,
 }: PageProps) {
   unstable_setRequestLocale(params.locale)
-  const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
+  const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN || ""
   const flowId = params?.flowId
 
   const response = await fetch(`${flowDomain}/api/flows/published/${flowId}`, {
@@ -95,6 +96,8 @@ export default async function PublishedFlows({
     next: { tags: ["publishedFlow"] },
   })
   const data = await response.json()
+  const redirect_url = process.env.NOT_PUBLISHED_REDIRECT || ""
+  if (data.length === 0) redirect(redirect_url)
   const screenNames = data?.steps?.map((screen) => screen.name)
   const screenName = searchParams?.screen || screenNames[0]
 

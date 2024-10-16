@@ -108,7 +108,8 @@ export const MultipleChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [selectedChoices, setSelectedChoices] = useState<string[]>(selections)
+
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
@@ -120,7 +121,9 @@ export const MultipleChoiceGen = ({
     }
     return []
   })
-
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -132,12 +135,12 @@ export const MultipleChoiceGen = ({
     return false
   })
   const dispatch = useAppDispatch()
-  useEffect(() => {
-    setSelectedChoices(screenData)
-    if (screenData?.length > 0) {
-      setIsCountUpdated(true)
-    }
-  }, [])
+  // useEffect(() => {
+  //   setSelectedChoices(screenData)
+  //   if (screenData?.length > 0) {
+  //     setIsCountUpdated(true)
+  //   }
+  // }, [])
   const alarm = useAppSelector(
     (state) =>
       state.screen?.screens[state.screen.selectedScreen]?.alarm || false
@@ -457,10 +460,6 @@ export const MultipleChoice = ({
     }, 200)
   }, [primaryColor])
 
-  useEffect(() => {
-    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -502,7 +501,7 @@ export const MultipleChoice = ({
               fontFamily: `var(${fontFamily?.value})`,
             }}
           >
-            {/** @ts-ignore */}
+            
             {/** @ts-ignore */}
             <ContentEditable
               className="px-1"
@@ -962,7 +961,7 @@ export type MultipleChoiceProps = {
   required: boolean
   fieldName: string
   layout: MultipleChoiceLayouts
-  labelColor: string
+  labelColor?: string
   labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
@@ -1030,7 +1029,7 @@ export const MultipleChoiceDefaultProps: MultipleChoiceProps = {
   required: false,
   fieldName: "",
   layout: MultipleChoiceLayouts.collapsed,
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",

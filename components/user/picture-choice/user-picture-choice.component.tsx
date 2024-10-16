@@ -89,8 +89,12 @@ export const PictureChoiceGen = ({
   tracking,
   ...props
 }) => {
-  const [selectedChoices, setSelectedChoices] = useState(selections)
+  const [selectedChoices, setSelectedChoices] = useState<string[]>(selections)
   const [isCountUpdated, setIsCountUpdated] = useState(false)
+  useEffect(() => {
+    setSelectedChoices(selections)
+  }, [selections])
+
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
       state.screen?.screens[state.screen.selectedScreen]?.screenData
@@ -149,6 +153,9 @@ export const PictureChoiceGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
   return (
     <div
       className="relative w-full m-choice"
@@ -441,10 +448,6 @@ export const PictureChoice = ({
       return props
     }, 200)
   }, [primaryColor])
-
-  useEffect(() => {
-    setProp((props) => (props.labelColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
 
   return (
     <div
@@ -1039,7 +1042,7 @@ export type PictureChoiceProps = {
   label: string
   required: boolean
   fieldName: string
-  labelColor: string
+  labelColor?: string
   labelBorderColor: string
   containerBackground: string
   paddingLeft: string | number
@@ -1111,7 +1114,7 @@ export const PictureChoiceDefaultProps: PictureChoiceProps = {
   required: false,
   label: "Please select an option",
   fieldName: "",
-  labelColor: "#000000",
+  labelColor: "#ffffff",
   labelBorderColor: "#3182ce",
   containerBackground: "transparent",
   paddingLeft: "16",

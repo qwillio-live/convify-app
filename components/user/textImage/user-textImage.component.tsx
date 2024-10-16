@@ -169,6 +169,8 @@ export const TextImageComponentPreview = ({
   titleFontSize,
   textFontSize,
   title,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const t = useTranslations("Components")
@@ -211,7 +213,7 @@ export const TextImageComponentPreview = ({
             maxWidth: "100%",
             fontWeight: `${fontWeightMap[titleFontWeight]} !important`,
             fontFamily: `var(${primaryFont})`,
-            color: primaryTextColor,
+            color: textColor !== "#ffffff" ? textColor : primaryTextColor,
             fontSize: `${titleFontSize}px`,
             transitionProperty: "all",
             overflowX: "clip",
@@ -225,7 +227,8 @@ export const TextImageComponentPreview = ({
           style={{
             maxWidth: "100%",
             fontWeight: fontWeightMap[textFontWeight],
-            color: secondaryTextColor,
+            color:
+              secTextColor !== "#ffffff" ? secTextColor : secondaryTextColor,
             fontFamily: `var(${secondaryFont})`,
             fontSize: `${textFontSize}px`,
             transitionProperty: "all",
@@ -293,6 +296,8 @@ export const TextImageComponentGen = ({
   alt,
   setProp,
   Text,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -451,7 +456,10 @@ export const TextImageComponentGen = ({
                         maxWidth: "100%",
                         fontWeight: `${fontWeightMap[titleFontWeight]}`,
                         fontFamily: `var(${fontFamily.value})`,
-                        color: primaryTextColor,
+                        color:
+                          textColor !== "#ffffff"
+                            ? textColor
+                            : primaryTextColor,
                         fontSize: `${titleFontSize}px`,
                         transitionProperty: "all",
                         overflowX: "clip",
@@ -471,7 +479,10 @@ export const TextImageComponentGen = ({
                       style={{
                         maxWidth: "100%",
                         fontWeight: fontWeightMap[textFontWeight],
-                        color: secondaryTextColor,
+                        color:
+                          secTextColor !== "#ffffff"
+                            ? secTextColor
+                            : secondaryTextColor,
                         marginTop: "15px",
                         fontFamily: `var(${secondaryFontFamily.value})`,
                         fontSize: `${textFontSize}px`,
@@ -511,7 +522,10 @@ export const TextImageComponentGen = ({
                         maxWidth: "100%",
                         fontWeight: `${fontWeightMap[titleFontWeight]}`,
                         fontFamily: `var(${fontFamily.value})`,
-                        color: primaryTextColor,
+                        color:
+                          textColor !== "#ffffff"
+                            ? textColor
+                            : primaryTextColor,
                         fontSize: `${titleFontSize}px`,
                         transitionProperty: "all",
                         overflowX: "clip",
@@ -533,7 +547,10 @@ export const TextImageComponentGen = ({
                         transitionProperty: "all",
                         marginTop: "15px",
                         fontSize: `${textFontSize}px`,
-                        color: secondaryTextColor,
+                        color:
+                          secTextColor !== "#ffffff"
+                            ? secTextColor
+                            : secondaryTextColor,
                         fontWeight: fontWeightMap[textFontWeight],
                         fontFamily: `var(${secondaryFontFamily.value})`,
                         overflowX: "clip",
@@ -613,6 +630,8 @@ export const UserLogo = ({
   titleFontWeight,
   textFontWeight,
   secondaryFontFamily,
+  secTextColor,
+  textColor,
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
@@ -774,7 +793,7 @@ export const UserLogo = ({
                   maxWidth: "100%",
                   fontWeight: `${fontWeightMap[titleFontWeight]}`,
                   fontFamily: `var(${fontFamily.value})`,
-                  color: primaryTextColor,
+                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                   fontSize: `${titleFontSize}px`,
                   transitionProperty: "all",
                   overflowX: "clip",
@@ -794,7 +813,10 @@ export const UserLogo = ({
                 style={{
                   maxWidth: "100%",
                   fontWeight: fontWeightMap[textFontWeight],
-                  color: secondaryTextColor,
+                  color:
+                    secTextColor !== "#ffffff"
+                      ? secTextColor
+                      : secondaryTextColor,
                   fontFamily: `var(${secondaryFontFamily.value})`,
                   fontSize: `${textFontSize}px`,
                   transitionProperty: "all",
@@ -832,7 +854,7 @@ export const UserLogo = ({
                   maxWidth: "100%",
                   fontWeight: `${fontWeightMap[titleFontWeight]}`,
                   fontFamily: `var(${fontFamily.value})`,
-                  color: primaryTextColor,
+                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                   fontSize: `${titleFontSize}px`,
                   transitionProperty: "all",
                   overflowX: "clip",
@@ -853,7 +875,10 @@ export const UserLogo = ({
                   maxWidth: "100%",
                   transitionProperty: "all",
                   fontSize: `${textFontSize}px`,
-                  color: secondaryTextColor,
+                  color:
+                    secTextColor !== "#ffffff"
+                      ? secTextColor
+                      : secondaryTextColor,
                   fontWeight: fontWeightMap[textFontWeight],
                   fontFamily: `var(${secondaryFontFamily.value})`,
                   overflowX: "clip",
@@ -1013,6 +1038,8 @@ export const TextImageComponent = ({
   uploadedImageUrl,
   uploadedImageMobileUrl,
   secondaryFontFamily,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const {
@@ -1294,6 +1321,8 @@ export const TextImageComponent = ({
               height={height}
               position={position}
               src={src}
+              textColor={textColor}
+              secTextColor={secTextColor}
               {...props}
             />
           }
@@ -1371,6 +1400,8 @@ export type IconButtonProps = {
   textFontSize: number
   uploadedImageUrl: string
   uploadedImageMobileUrl: string
+  textColor?: string
+  secTextColor?: string
 }
 
 export const TextImageDefaultProps: IconButtonProps = {
@@ -1470,6 +1501,8 @@ export const TextImageDefaultProps: IconButtonProps = {
   textFontSize: 17,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
+  textColor: "#ffffff",
+  secTextColor: "#ffffff",
 }
 
 TextImageComponent.craft = {

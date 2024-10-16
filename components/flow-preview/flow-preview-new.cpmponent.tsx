@@ -127,7 +127,7 @@ export default function NewFlowPreview() {
             backgroundColor,
             color: primaryColor,
           }}
-          className={`min-w-full shrink-0 basis-full pt-14 !color-[${primaryColor}]`}
+          className={`min-w-full shrink-0 basis-full px-6 pt-14 2xl:px-10 !color-[${primaryColor}]`}
         >
           <ResolvedNewComponentsFromCraftState
             key={index}

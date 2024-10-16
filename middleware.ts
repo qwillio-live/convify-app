@@ -51,7 +51,9 @@ const authMiddleware = withAuth(
 
 export default async function middleware(req: NextRequest) {
   const excludePattern =
-    "^(/(" + locales.join("|") + "))?/(dashboard|editor|mobile)/?.*?$"
+    "^(/(" +
+    locales.join("|") +
+    "))?/(dashboard|editor|mobile|select-template)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
   const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
   console.log("isPublicPage", isPublicPage)

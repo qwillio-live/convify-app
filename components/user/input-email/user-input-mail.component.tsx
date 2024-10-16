@@ -65,7 +65,7 @@ const UserInputSizeValues = {
 export type UserInputMailProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -124,7 +124,7 @@ export type UserInputMailProps = {
 export const UserInputMailDefaultProps: UserInputMailProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -405,12 +405,16 @@ export const UserInputMailGen = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}
@@ -437,7 +441,11 @@ export const UserInputMailGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `#9CA3AF`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -446,7 +454,7 @@ export const UserInputMailGen = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(
@@ -484,9 +492,10 @@ export const UserInputMailGen = ({ ...props }) => {
               </div>
             )}
             <UserInputMailStyled
+              data-label={props?.fieldName || ""}
               // ref={inputRef}
               value={inputValue}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -728,12 +737,6 @@ export const UserInputMail = ({ ...props }) => {
     }
   }, [primaryColor, props.activeBorderColor, setProp])
 
-  useEffect(() => {
-    if (props.textColor.globalStyled && !props.textColor.isCustomized) {
-      setProp((props) => (props.textColor.value = primaryTextColor), 200)
-    }
-  }, [primaryTextColor, props.textColor, setProp])
-
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
@@ -797,7 +800,11 @@ export const UserInputMail = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff"
+                      ? props.textColor
+                      : primaryTextColor
+                  }`,
                 }}
               />
             </>
@@ -825,7 +832,11 @@ export const UserInputMail = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `#9CA3AF`,
+                color: `${
+                  props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                }`,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -872,7 +883,7 @@ export const UserInputMail = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={inputRef}
-              textColor={`${primaryTextColor}`}
+              textColor={`#000`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive

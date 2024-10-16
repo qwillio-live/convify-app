@@ -36,51 +36,52 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
 
   const RESPONSE_EXPIRY_MINUTES = 30 // 3
   let storage = {}
-  console.log("entered setter", flowData, screen, index)
 
-  async function sendResponseEvent(
-    stepId,
-    content,
-    responseId: string | null = null,
-    state
-  ) {
+  async function sendResponseEvent(stepId, responseId: string | null = null) {
     console.log("entered sendResponseEvent")
-    const method = responseId ? "PUT" : "POST"
-    const url = responseId
-      ? `/api/flows/${flowData.id}/responses/${responseId}`
-      : `/api/flows/${flowData.id}/responses`
-    const data = {
-      ...storage,
-      content,
-    }
-    console.log("entered sendResponseEvent", method, url, data)
-    storage = data
-    await fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: data,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response event sent:", data)
+
+    setTimeout(async () => {
+      const method = responseId ? "PUT" : "POST"
+      const url = responseId
+        ? `/api/flows/${flowData.id}/responses/${responseId}`
+        : `/api/flows/${flowData.id}/responses`
+
+      // Use the updated totalFilled from Redux state
+      const data = {
+        ...storage,
+        ...totalFilled, // Use the latest value of totalFilled
+      }
+
+      console.log("Sending response event", method, url, "data", data)
+      storage = data
+
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: { ...totalFilled } }),
+        })
+
+        const responseData = await response.json()
+        console.log("Response event sent:", responseData)
+
         if (!responseId) {
           localStorage.setItem(
             `${RESPONSE_BUTTON_CLASS}${flowData.id}`,
             JSON.stringify({
-              responseId: data.id,
+              responseId: responseData.id,
               expiry: Date.now() + RESPONSE_EXPIRY_MINUTES * 60 * 1000,
             })
           ) // 30 minutes
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error sending response event:", error)
-      })
+      }
+    }, 3000)
   }
+
   async function sendVisitEvent(stepId) {
     console.log("entered sendVisitEvent", stepId, flowData.id)
     await fetch(`/api/flows/${flowData.id}/visits`, {
@@ -131,7 +132,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       ) // 1440 minutes = 24 hours
     }
   }
-  function handleSendResponse(stepId, state) {
+  function handleSendResponse(stepId) {
     console.log("entered handleSendResponse", stepId)
 
     const name = `${RESPONSES_STORAGE_PREFIX}${flowData.id}`
@@ -156,7 +157,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       localStorage.removeItem(name) // Remove item if parsing fails
     }
 
-    sendResponseEvent(stepId, totalFilled, responseId, state)
+    sendResponseEvent(stepId, responseId)
   }
 
   useEffect(() => {
@@ -178,8 +179,13 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       handleStepVisit(stepId)
     }
     dispatch(getAllFilledAnswers(true))
-    if (index === screenNames.length - 1) handleSendResponse(state, stepId)
   }, [screen])
+  useEffect(() => {
+    const stepId = screen
+    if (index === screenNames.length - 1) {
+      handleSendResponse(stepId)
+    }
+  }, [totalFilled])
 
   return null // This component does not need to render anything
 }

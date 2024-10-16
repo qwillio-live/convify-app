@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { MoveHorizontal, GripVertical, Trash2, Plus, Image } from "lucide-react"
+import {
+  MoveHorizontal,
+  GripVertical,
+  Trash2,
+  Plus,
+  Image,
+  Trash,
+} from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
 
@@ -30,7 +37,7 @@ import {
 } from "./user-picture-choice.component"
 import { Card } from "@/components/ui/card"
 import usePictureChoiceThemePresets from "./usePictureChoiceThemePresets"
-import { Switch } from "@/components/ui/switch"
+import { Switch } from "@/components/custom-switch"
 import { Checkbox } from "@/components/custom-checkbox"
 import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 import {
@@ -40,6 +47,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/custom-select"
+import { ColorInput } from "@/components/color-input"
+import { Icons } from "@/components/icons"
 
 export const PictureChoiceSettings = () => {
   const t = useTranslations("Components")
@@ -66,6 +75,7 @@ export const PictureChoiceSettings = () => {
       contentReversed,
       preset,
       defaultStyles,
+      labelColor,
       hoverStyles,
       selectedStyles,
       selections,
@@ -174,31 +184,31 @@ export const PictureChoiceSettings = () => {
         }}
         type="multiple"
         defaultValue={settingTabs || ["content"]}
-        className="mb-10 w-full"
+        className="w-full"
       >
         <AccordionItem value="content">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Content")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
-            <div className="flex items-center justify-between gap-2">
-              <span>{t("Single")}</span>
-              <Switch
-                checked={multiSelect}
-                onCheckedChange={(checked) =>
-                  handlePropChange("multiSelect", checked)
-                }
-              />
-              <span>{t("Multiple")}</span>
-            </div>
-            <div className="text-muted-foreground">
-              {t("Drag to re-arrange click to edit")}
+          <AccordionTrigger>{t("Content")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs">{t("Single")}</span>
+                <Switch
+                  checked={multiSelect}
+                  onCheckedChange={(checked) =>
+                    handlePropChange("multiSelect", checked)
+                  }
+                />
+                <span className="text-xs">{t("Multiple")}</span>
+              </div>
+              <div className="text-muted-foreground text-xs">
+                {t("Drag to re-arrange click to edit")}
+              </div>
             </div>
 
             <Reorder.Group
               axis="y"
               values={choices}
-              className="flex w-full flex-col gap-2"
+              className="flex w-full flex-col gap-4"
               onReorder={(e) => handlePropChange("choices", e)}
             >
               {choices.map((choice, index) => (
@@ -211,8 +221,7 @@ export const PictureChoiceSettings = () => {
               ))}
             </Reorder.Group>
             <Button
-              className="w-full"
-              variant="secondary"
+              className="h-9.5 w-full bg-[#23262C] text-white"
               size="sm"
               onClick={() =>
                 handlePropChange("choices", [
@@ -229,41 +238,28 @@ export const PictureChoiceSettings = () => {
                 ])
               }
             >
-              <Plus className="mr-2 size-4" /> {t("Add new")}
+              <Plus className="mr-2 size-4" /> {t("Add new option")}
             </Button>
           </AccordionContent>
         </AccordionItem>
-
         <AccordionItem value="general">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("General")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("General")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={required}
                 onCheckedChange={(e) => {
                   handlePropChange("required", e)
                 }}
                 id="required"
               />
-              <label
-                htmlFor="required"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Required")}
-              </label>
+              <Label htmlFor="required">{t("Required")}</Label>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-1">
-              <label
-                htmlFor="placeholder-text"
-                className="text-sm font-medium leading-none no-underline decoration-dotted peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Field Name")}
-              </label>
+            <div className="space-y-2">
+              <Label htmlFor="field-name">{t("Field Name")}</Label>
               <Input
+                id="field-name"
                 value={fieldName}
                 onChange={(e) => {
                   setFieldName(e.target.value)
@@ -275,251 +271,251 @@ export const PictureChoiceSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="basis-2/3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={containerBackground}
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
+                id="backgroundcolor"
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
-                id="backgroundcolor"
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
               />
             </div>
           </AccordionContent>
         </AccordionItem>
-
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Width")}</p>
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Width")}</Label>
               <Tabs
                 value={size}
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="small">{t("S")}</TabsTrigger>
-                  <TabsTrigger value="medium">{t("M")}</TabsTrigger>
-                  <TabsTrigger value="large">{t("L")}</TabsTrigger>
-                  <TabsTrigger value="full">
-                    <MoveHorizontal />
+                <TabsList className="grid w-full grid-cols-4 bg-[#eeeeee]">
+                  <TabsTrigger
+                    value="small"
+                    className="rounded text-base leading-4"
+                  >
+                    {t("S")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="medium"
+                    className="rounded text-base leading-4"
+                  >
+                    {t("M")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="large"
+                    className="rounded text-base leading-4"
+                  >
+                    {t("L")}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="full"
+                    className="rounded text-base leading-4"
+                  >
+                    <MoveHorizontal className="size-4" />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginTop}
-                </span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginTop">{t("Top")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginTop}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[marginTop]}
+                  value={[marginTop]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginTop", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[marginTop]}
-                value={[marginTop]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) => handlePropChangeDebounced("marginTop", e)}
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginBottom}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginBottom}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginBottom]}
+                  value={[marginBottom]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginBottom", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginBottom]}
-                value={[marginBottom]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("marginBottom", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginRight}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginRight">{t("Right")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginRight}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginRight]}
+                  value={[marginRight]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginRight", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginRight]}
-                value={[marginRight]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("marginRight", e)
-                }
-              />
-            </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col items-start gap-2">
-              <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="text-muted-foreground hover:border-border w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm">
-                  {marginLeft}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {marginLeft}
+                  </span>
+                </div>
+                <Slider
+                  defaultValue={[marginLeft]}
+                  value={[marginLeft]}
+                  max={100}
+                  min={0}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("marginLeft", e)
+                  }
+                />
               </div>
-              <Slider
-                defaultValue={[marginLeft]}
-                value={[marginLeft]}
-                max={100}
-                min={0}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("marginLeft", e)
-                }
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
-
         <AccordionItem value="styles">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Styles")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-4">
-              <Card
-                onClick={() => {
-                  changePresetStyles(outlinedPreset)
+          <AccordionTrigger>{t("Styles")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <Card
+              onClick={() => {
+                changePresetStyles(outlinedPreset)
+              }}
+              className="p-0 transition-all duration-300 hover:cursor-pointer"
+              style={{
+                ...(preset === PictureChoicePresets.outlined
+                  ? {
+                      border: `1px solid #2B3398`,
+                    }
+                  : {}),
+              }}
+            >
+              <PictureChoiceGen
+                {...{
+                  ...outlinedPreset,
+                  multiSelect,
+                  disabled: true,
+                  marginTop: 16,
+                  marginBottom: 16,
+                  marginLeft: 16,
+                  marginRight: 6,
+                  labelColor: labelColor,
+                  selections: defaultSelections,
+                  choices: defaultChoices.slice(0, 2),
                 }}
-                className="p-0 transition-all duration-300 hover:cursor-pointer"
-                style={{
-                  ...(preset === PictureChoicePresets.outlined
-                    ? {
-                        border: `1px solid ${primaryColor}`,
-                      }
-                    : {}),
+              />
+            </Card>
+            <Card
+              onClick={() => {
+                changePresetStyles(semifilledPreset)
+              }}
+              className="p-0 transition-all duration-300 hover:cursor-pointer"
+              style={{
+                ...(preset === PictureChoicePresets.semifilled
+                  ? {
+                      border: `1px solid #2B3398`,
+                    }
+                  : {}),
+              }}
+            >
+              <PictureChoiceGen
+                {...{
+                  ...semifilledPreset,
+                  multiSelect,
+                  disabled: true,
+                  marginTop: 16,
+                  marginBottom: 16,
+                  marginLeft: 16,
+                  marginRight: 6,
+                  labelColor: labelColor,
+                  selections: defaultSelections,
+                  choices: defaultChoices.slice(0, 2),
                 }}
-              >
-                <PictureChoiceGen
-                  {...{
-                    ...outlinedPreset,
-                    multiSelect,
-                    disabled: true,
-                    marginTop: 16,
-                    marginBottom: 16,
-                    marginLeft: 16,
-                    marginRight: 6,
-                    selections: defaultSelections,
-                    choices: defaultChoices.slice(0, 2),
-                  }}
-                />
-              </Card>
-              <Card
-                onClick={() => {
-                  changePresetStyles(semifilledPreset)
+              />
+            </Card>
+            <Card
+              onClick={() => {
+                changePresetStyles(filledPreset)
+              }}
+              className="p-0 transition-all duration-300 hover:cursor-pointer"
+              style={{
+                ...(preset === PictureChoicePresets.filled
+                  ? {
+                      border: `1px solid #2B3398`,
+                    }
+                  : {}),
+              }}
+            >
+              <PictureChoiceGen
+                {...{
+                  ...filledPreset,
+                  multiSelect,
+                  disabled: true,
+                  marginTop: 16,
+                  marginBottom: 16,
+                  marginLeft: 16,
+                  marginRight: 6,
+                  labelColor: labelColor,
+                  selections: defaultSelections,
+                  choices: defaultChoices.slice(0, 2),
                 }}
-                className="p-0 transition-all duration-300 hover:cursor-pointer"
-                style={{
-                  ...(preset === PictureChoicePresets.semifilled
-                    ? {
-                        border: `1px solid ${primaryColor}`,
-                      }
-                    : {}),
-                }}
-              >
-                <PictureChoiceGen
-                  {...{
-                    ...semifilledPreset,
-                    multiSelect,
-                    disabled: true,
-                    marginTop: 16,
-                    marginBottom: 16,
-                    marginLeft: 16,
-                    marginRight: 6,
-                    selections: defaultSelections,
-                    choices: defaultChoices.slice(0, 2),
-                  }}
-                />
-              </Card>
-              <Card
-                onClick={() => {
-                  changePresetStyles(filledPreset)
-                }}
-                className="p-0 transition-all duration-300 hover:cursor-pointer"
-                style={{
-                  ...(preset === PictureChoicePresets.filled
-                    ? {
-                        border: `1px solid ${primaryColor}`,
-                      }
-                    : {}),
-                }}
-              >
-                <PictureChoiceGen
-                  {...{
-                    ...filledPreset,
-                    multiSelect,
-                    disabled: true,
-                    marginTop: 16,
-                    marginBottom: 16,
-                    marginLeft: 16,
-                    marginRight: 6,
-                    selections: defaultSelections,
-                    choices: defaultChoices.slice(0, 2),
-                  }}
-                />
-              </Card>
-            </div>
+              />
+            </Card>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="tracking">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Tracking")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="w-full space-y-2 p-2">
-            <div className="col-span-2 flex flex-row items-center space-x-2">
+          <AccordionTrigger>{t("Tracking")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 id="tracking"
-                className="border-input ring-offset-background focus-visible:ring-ring data-[state=checked]:border-primary peer h-4 w-4 shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 checked={tracking}
                 onCheckedChange={(e) => {
                   handlePropChange("tracking", e)
                 }}
               />
-              <label
-                htmlFor="tracking"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {t("Tracking activated")}
-              </label>
+              <Label htmlFor="tracking">{t("Tracking activated")}</Label>
             </div>
 
             {tracking && (
-              <div>
-                <div className="text-muted-foreground pt-2">
+              <div className="space-y-4">
+                <div className="text-muted-foreground text-xs">
                   {t("Tracking Event")}
                 </div>
                 {choices.map((choice, index) => (
@@ -618,14 +614,14 @@ export const PictureChoiceItemSettings = ({
       transition={{ duration: 0 }}
       id={`picture-choice-${originalChoice.id}`}
       style={{ y }}
-      className="flex w-full select-none flex-col gap-2 [&>div>div>button>div>button>svg]:hover:visible [&>div>div]:hover:visible [&>div>svg]:hover:visible"
+      className="flex w-full select-none flex-col gap-1 "
     >
-      <div className="flex w-full items-center gap-2">
+      <div className="flex w-full items-center space-x-2">
         <PicturePicker
           className="transition-all duration-100 ease-in-out"
           picture={
             choice.pictureType === PictureTypes.NULL ? (
-              <Image className="text-muted-foreground invisible size-4" />
+              <Image className="text-muted-foreground size-4" />
             ) : (
               choice.picture
             )
@@ -637,21 +633,21 @@ export const PictureChoiceItemSettings = ({
         />
 
         <Input
-          className="h-8 flex-1"
+          className="h-8.5 flex-1 bg-[#FAFAFA] text-xs"
           value={choice.value}
           placeholder={`${t("Option")} ${index + 1}`}
           onChange={(e) => handleChoiceTextEdit(e.target.value)}
         />
 
-        <Trash2
-          className="text-muted-foreground invisible size-3 hover:cursor-pointer"
+        <Icons.Delete
+          className="hover:cursor-pointer"
           onClick={handleChoiceDelete}
         />
         <div
           onPointerDown={(e) => controls.start(e)}
-          className="reorder-handle invisible hover:cursor-move"
+          className="reorder-handle !ml-1 hover:cursor-move"
         >
-          <GripVertical className="text-muted-foreground size-4" />
+          <Icons.GripVertical />
         </div>
       </div>
       <div className="pl-10 pr-11">
@@ -711,15 +707,19 @@ const PictureChoiceItemNavigationSettings = ({
       }}
     >
       <SelectTrigger
-        className={`h-8 [&>span]:line-clamp-1 [&>span]:flex-1 [&>span]:text-ellipsis [&>span]:break-all${
+        className={`h-8.5 bg-[#FAFAFA] text-xs [&>span]:line-clamp-1 [&>span]:flex-1 [&>span]:text-ellipsis [&>span]:break-all${
           buttonAction === null ? " text-muted-foreground" : ""
         }`}
       >
         <SelectValue placeholder={t("Navigate to screen")} />
       </SelectTrigger>
       <SelectContent className="text-left">
-        <SelectItem value={"none"}>{t("Do Nothing")}</SelectItem>
-        <SelectItem value="next-screen">{t("Next Screen")}</SelectItem>
+        <SelectItem value={"none"} className="text-xs">
+          {t("Do Nothing")}
+        </SelectItem>
+        <SelectItem value="next-screen" className="text-xs">
+          {t("Next Screen")}
+        </SelectItem>
         {screenNames?.map((screenName, index) => (
           <SelectItem className="text-xs" value={screenName}>
             {index + 1} : {screenName}
@@ -749,13 +749,10 @@ const PictureChoiceItemTrackingSettings = ({
   }
 
   return (
-    <div className="style-control col-span-2 mt-2 flex w-full grow-0 basis-full flex-row items-center gap-2">
-      <label
-        htmlFor="label-event"
-        className="shrink-0 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-      >
-        {`${t("Option")} ${index + 1}`}
-      </label>
+    <div className="flex items-center space-x-2">
+      <Label className="w-14 shrink-0" htmlFor="label-event">{`${t("Option")} ${
+        index + 1
+      }`}</Label>
       <Input
         value={choice.trackingEvent ?? ""}
         defaultValue={choice.trackingEvent ?? ""}

@@ -6,8 +6,14 @@ interface FlowsLayoutProps {
 }
 import { env } from "@/env.mjs"
 
-export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Results",
+import { getTranslations } from "next-intl/server"
+
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+  const APP_NAME = process.env.APP_NAME
+  return {
+    title: `${APP_NAME} - ${t("Results")}`, // Use translations for title
+  }
 }
 export default async function ResultsLayout({ children }: FlowsLayoutProps) {
   return <>{children}</>

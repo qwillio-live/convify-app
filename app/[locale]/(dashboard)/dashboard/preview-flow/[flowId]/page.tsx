@@ -1,3 +1,4 @@
+// export const runtime = "edge"
 import React, { Suspense } from "react"
 import { cookies } from "next/headers"
 import { usePathname, useSearchParams } from "next/navigation"
@@ -110,7 +111,7 @@ export default async function PreviewFlows({
     headers: {
       Cookie: cookieString,
     },
-    cache: "default",
+    cache: "force-cache",
     next: { tags: ["previewFlow"] },
   })
   const data = await response.json()

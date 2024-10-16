@@ -34,6 +34,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { Controller } from "../settings/controller.component"
 import { UserLogo } from "./user-logo.component"
+import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
   alt,
@@ -113,6 +114,7 @@ export const LogoSettings = () => {
   const {
     actions: { setProp },
     props: {
+      windowTarget,
       enableLink,
       src,
       containerBackground,
@@ -261,7 +263,7 @@ export const LogoSettings = () => {
 
   return (
     <>
-      <Card className="p-2">
+      <Card className="mb-2 mt-4 p-2">
         <CardHeader className="p-2">
           <CardTitle>{t("Image")}</CardTitle>
         </CardHeader>
@@ -275,9 +277,9 @@ export const LogoSettings = () => {
           />
           <div
             onClick={() => (inputRef.current as HTMLInputElement)?.click()}
-            className="relative flex w-full flex-row justify-center group hover:cursor-pointer"
+            className="group relative flex w-full flex-row justify-center hover:cursor-pointer"
           >
-            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent group-hover:bg-white/[0.85] group-hover:opacity-100 opacity-0 transition-opacity duration-200 ease-in">
+            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-transparent opacity-0 transition-opacity duration-200 ease-in group-hover:bg-white/[0.85] group-hover:opacity-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -295,7 +297,7 @@ export const LogoSettings = () => {
                 <path d="M17 22v-5.5" />
                 <circle cx="9" cy="9" r="2" />
               </svg>
-              <span className="text-sm font-semibold text-black mt-1">
+              <span className="mt-1 text-sm font-semibold text-black">
                 {t("Upload")}
               </span>
             </div>
@@ -310,17 +312,14 @@ export const LogoSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="w-full mb-10"
+        className="w-full"
       >
         <AccordionItem value="item-2">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("General")}</span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex flex-col">
-              <p className="text-sm text-muted-foreground">{t("Alt label")}</p>
+          <AccordionTrigger>{t("General")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label>{t("Alt label")}</Label>
               <Input
-                className="p-2 text-sm"
                 value={alt}
                 placeholder={alt}
                 onChange={(e) => {
@@ -328,17 +327,14 @@ export const LogoSettings = () => {
                 }}
               />
             </div>
-          </AccordionContent>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                className="peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary"
                 checked={enableLink}
                 onCheckedChange={(e) => {
                   // setProp((props) => (props.enableIcon = e), 1000)
                   handlePropChange("enableLink", e)
                 }}
-                id="enableIcon"
+                id="enableLink"
               />
               <label
                 htmlFor="enableLink"
@@ -357,7 +353,6 @@ export const LogoSettings = () => {
                     {t("Add URL")}
                   </p>
                   <Input
-                    className="p-2 text-sm"
                     value={url}
                     placeholder={"URL"}
                     onChange={(e) => {
@@ -376,15 +371,15 @@ export const LogoSettings = () => {
                       setProp((props) => (props.icon = e), 1000)
                     }}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                       <SelectValue placeholder="Select Link" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="arrowright">
+                        <SelectItem className="text-xs" value="new-window">
                           <p>{t("New Window")}</p>
                         </SelectItem>
-                        <SelectItem value="aperture">
+                        <SelectItem className="text-xs" value="same-window">
                           <p>{t("Same Window")}</p>
                         </SelectItem>
                       </SelectGroup>
@@ -396,38 +391,30 @@ export const LogoSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="design">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Design")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="flex flex-row items-center col-span-2 space-x-2">
-              <label
-                htmlFor="backgroundcolor"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 basis-2/3"
-              >
-                {t("Background Color")}
-              </label>
-              <Input
-                defaultValue={themeBackgroundColor}
+          <AccordionTrigger>{t("Design")}</AccordionTrigger>
+          <AccordionContent className="space-y-6 pt-2">
+            <div className="flex flex-row items-center justify-between">
+              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <ColorInput
                 value={containerBackground}
-                onChange={(e) => {
+                handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
                 }}
-                className="basis-1/3"
-                type={"color"}
+                handleRemove={() =>
+                  debouncedSetProp("containerBackground", "transparent")
+                }
                 id="backgroundcolor"
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Corner Radius")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="corner-radius">{t("Corner Radius")}</Label>
+                <span className="text-muted-foreground text-xs">
                   {borderRad}
                 </span>
               </div>
               <Slider
-                className=""
                 defaultValue={[borderRad]}
                 value={[borderRad]}
                 max={200}
@@ -437,25 +424,24 @@ export const LogoSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
-              <p className="text-md text-muted-foreground">{t("Align")}</p>
+            <div className="space-y-2">
+              <Label>{t("Align")}</Label>
               <Tabs
                 value={align}
                 defaultValue={align}
                 onValueChange={(value) => {
                   setProp((props) => (props.align = value), 1000)
                 }}
-                className="flex-1"
               >
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="start">
-                    <AlignHorizontalJustifyStart />
+                <TabsList className="grid w-full grid-cols-3 bg-[#EEEEEE]">
+                  <TabsTrigger className="rounded" value="start">
+                    <AlignHorizontalJustifyStart size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="center">
-                    <AlignHorizontalJustifyCenter />
+                  <TabsTrigger className="rounded" value="center">
+                    <AlignHorizontalJustifyCenter size={16} />
                   </TabsTrigger>
-                  <TabsTrigger value="end">
-                    <AlignHorizontalJustifyEnd />
+                  <TabsTrigger className="rounded" value="end">
+                    <AlignHorizontalJustifyEnd size={16} />
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -463,16 +449,12 @@ export const LogoSettings = () => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">
-          <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
-            <span className="text-sm font-medium">{t("Spacing")} </span>
-          </AccordionTrigger>
-          <AccordionContent className="grid grid-cols-2 gap-y-2 p-2">
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
+          <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="marginTop">{t("Top")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {top}
-                </span>
+                <span className="text-muted-foreground text-xs">{top}</span>
               </div>
               <Slider
                 className=""
@@ -484,12 +466,10 @@ export const LogoSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("top", e)}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Bottom")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {bottom}
-                </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginBottom">{t("Bottom")}</Label>
+                <span className="text-muted-foreground text-xs">{bottom}</span>
               </div>
               <Slider
                 defaultValue={[bottom]}
@@ -501,12 +481,10 @@ export const LogoSettings = () => {
               />
             </div>
 
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Right")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {right}
-                </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginRight">{t("Right")}</Label>
+                <span className="text-muted-foreground text-xs">{right}</span>
               </div>
               <Slider
                 defaultValue={[right]}
@@ -517,13 +495,11 @@ export const LogoSettings = () => {
                 onValueChange={(e) => handlePropChangeDebounced("right", e)}
               />
             </div>
-            <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2 items-start">
-              <div className="flex w-full basis-full flex-row items-center gap-2 justify-between">
-                <Label htmlFor="marginTop">{t("Left")}</Label>
-                <span className="w-12 rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
-                  {left}
-                </span>
-              </div>
+            <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="marginLeft">{t("Left")}</Label>
+                  <span className="text-muted-foreground text-xs">{left}</span>
+                </div>
               <Slider
                 defaultValue={[left]}
                 value={[left]}
@@ -546,8 +522,8 @@ export const DefaultPropsLogo = {
   marginBottom: "20px",
   marginLeft: "20px",
   marginRight: "20px",
-  top: "10px",
-  bottom: "10px",
+  top: "0px",
+  bottom: "0px",
   left: "0px",
   right: "0px",
   background: "inherit",
@@ -564,7 +540,6 @@ export const DefaultPropsLogo = {
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: "https://convify.io/images/convify_logo_black.svg",
-  icon: "arrowright",
 }
 
 Img.craft = {

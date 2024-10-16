@@ -10,8 +10,12 @@ interface FlowsLayoutProps {
 import localFont from "next/font/local"
 import { env } from "@/env.mjs"
 
-export const metadata = {
-  title: env.NEXT_PUBLIC_APP_NAME + " - Create",
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+  const APP_NAME = process.env.APP_NAME
+  return {
+    title: `${APP_NAME} - ${t("Create")}`, // Use translations for title
+  }
 }
 const geist = localFont({
   variable: "--font-geist",
@@ -120,6 +124,8 @@ import {
   sans3,
 } from "../../../fonts"
 import { cn } from "@/lib/utils"
+import { getTranslations } from "next-intl/server"
+import ReactQueryProvider from "@/components/react-query-provider"
 export default async function FlowsLayout({
   children,
   params: { flowId },
@@ -184,9 +190,11 @@ export default async function FlowsLayout({
       )}
     >
       <StoreProvider>
-        <FlowsAutoSaveProvider flowId={flowId}>
-          <div className="font-sans">{children}</div>
-        </FlowsAutoSaveProvider>
+        <ReactQueryProvider>
+          <FlowsAutoSaveProvider flowId={flowId}>
+            <div className="font-sans">{children}</div>
+          </FlowsAutoSaveProvider>
+        </ReactQueryProvider>
       </StoreProvider>
     </main>
   )

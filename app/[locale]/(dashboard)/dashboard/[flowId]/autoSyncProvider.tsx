@@ -68,14 +68,21 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
     if (!isFlowLoaded) return
     if (localFlowData?.screens.length === 0) return
 
-    const steps = localFlowData?.screens.map((step, index) => ({
-      id: step.screenId,
-      name: step.screenName,
-      content: JSON.parse(step.screenData),
-      link: step.screenLink,
-      order: index,
-      templateId: step.screenTemplateId,
-    }))
+    const steps = localFlowData?.screens
+      ? Array.from(
+          new Set(localFlowData.screens.map((step) => step.screenName))
+        ).map((name) => {
+          const step = localFlowData.screens.find((s) => s.screenName === name)
+          return {
+            id: step?.screenId,
+            name: step?.screenName,
+            content: JSON.parse(step?.screenData),
+            link: step?.screenLink,
+            order: step ? localFlowData.screens.indexOf(step) : 0,
+            templateId: step?.screenTemplateId,
+          }
+        })
+      : [] // Return an empty array if localFlowData or screens is undefined
 
     const data = {
       steps,

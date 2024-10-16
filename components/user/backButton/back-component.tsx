@@ -295,7 +295,9 @@ export const BackButtonGen = ({
             )}
           </div>
         )}
-        <span className="text-md ml-2">{text}</span>
+        <span className="text-md ml-2">
+          <div dangerouslySetInnerHTML={{ __html: text }} />
+        </span>
       </StyledCustomButton>
     </div>
   )
@@ -356,7 +358,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-
+ 
   width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;

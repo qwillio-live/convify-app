@@ -53,7 +53,7 @@ export enum UserInputSizes {
 export type UserInputTextareaProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -114,7 +114,7 @@ export type UserInputTextareaProps = {
 export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -322,16 +322,23 @@ export const UserInputTextareaGen = ({ ...props }) => {
             className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
-              color: `${primaryTextColor}`,
+              // minWidth: `${UserInputSizeValues[props.size]}`,
+              // width: `${UserInputSizeValues[props.size]}`,
+              color: `${
+                props.textColor !== "#ffffff"
+                  ? props.textColor
+                  : primaryTextColor
+              }`,
             }}
           >
-            {props.label}
+            <div dangerouslySetInnerHTML={{ __html: props.label }} />
           </div>
 
           <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputTextareaStyled
+              data-label={props?.fieldName || ""}
               value={inputValue}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -603,7 +610,13 @@ export const UserInputTextarea = ({ ...props }) => {
             className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
-              color: `${primaryTextColor}`,
+              // minWidth: `${UserInputSizeValues[props.size]}`,
+              // width: `${UserInputSizeValues[props.size]}`,
+              color: `${
+                props.textColor !== "#ffffff"
+                  ? props.textColor
+                  : primaryTextColor
+              }`,
             }}
           />
 
@@ -638,7 +651,7 @@ export const UserInputTextarea = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={textAreaRef}
-              textColor={`${primaryTextColor}`}
+              textColor={`#fff`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive

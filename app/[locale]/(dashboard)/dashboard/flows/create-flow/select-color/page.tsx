@@ -42,56 +42,24 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
 import { env } from "@/env.mjs"
-import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 
 const ColorPicker = ({ color, onChange }) => {
   const t = useTranslations("Components")
   return (
-    <div className="color-picker">
+    <div className="space-y-2">
       <HexColorPicker color={color} onChange={onChange} />
       <div className="color-text-container">
         <input
           type="text"
           value={color}
           onChange={(e) => onChange(e.target.value)}
-          className="color-text font-sans3 font-xs font-normal text-[#191919]"
+          className="focus:border-primary h-6 w-full rounded-sm border bg-white px-3 py-1 text-center text-xs font-normal leading-none focus:outline-none"
         />
       </div>
-      <Separator className="mt-3" />
-      <span className="font-sans3 mt-2 flex w-full justify-start text-xs font-normal tracking-wide text-[#919191]">
+      <Separator className="!mt-3" />
+      <span className="flex w-full justify-start text-xs font-normal text-[#7B7D80]">
         {t("suggestions")}
       </span>
-      <style jsx>{`
-        .color-picker {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        .color-picker .react-colorful__saturation,
-        .color-picker .react-colorful__hue {
-          height: 5px !important;
-        }
-        .color-picker .react-colorful__pointer {
-          background: white;
-          border-radius: 50%;
-        }
-        .color-text-container {
-          margin-top: 10px;
-          background: white;
-          border: 1px solid #e9e9e9;
-          border-radius: 3px;
-          padding: 4px;
-          display: flex;
-          width: 100%;
-          justify-content: center;
-        }
-        .color-text {
-          width: 100%;
-          text-align: center;
-          border: none;
-          outline: none;
-        }
-      `}</style>
     </div>
   )
 }
@@ -111,41 +79,18 @@ const ColorPickerWithSuggestions = ({ color, onChange }) => {
   const suggestions = generateSuggestions(color)
 
   return (
-    <div className="color-picker-wrapper">
+    <div className="rounded-lg border bg-white p-2">
       <ColorPicker color={color} onChange={onChange} />
-      <div className="suggestions">
+      <div className="mt-2 grid grid-cols-5 gap-px">
         {suggestions.map((suggestion, index) => (
           <div
             key={index}
-            className="suggestion"
+            className="h-9 cursor-pointer rounded-sm"
             style={{ backgroundColor: suggestion }}
             onClick={() => onChange(suggestion)}
           />
         ))}
       </div>
-      <style jsx>{`
-        .color-picker-wrapper {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          border: 1px solid #e9e9e9;
-          border-radius: 8px;
-          padding: 9px;
-          background-color: #fff;
-        }
-        .suggestions {
-          display: flex;
-          justify-content: center;
-          margin-top: 8px;
-        }
-        .suggestion {
-          width: 45px;
-          height: 40px;
-          border: 1px solid #e9e9e9;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-      `}</style>
     </div>
   )
 }
@@ -272,122 +217,114 @@ export default function SelectColor() {
   const screens = useAppSelector((state) => state?.screen?.screens)
 
   console.log("templateid", templateSetting?.templateId)
-  const whatsAppNumber = env.NEXT_PUBLIC_WA_NUMBER
-  const telegramUser = env.NEXT_PUBLIC_TL_URL
+
   return (
-    <div className="font-sans3 flex h-screen flex-col overflow-hidden tracking-wide">
+    <div className="font-poppins flex h-screen flex-col overflow-hidden tracking-wide">
       {!desktopDrawerOpen && (
-        <div className="flex h-full w-full pl-12">
+        <div className="flex size-full">
           <div className="flex w-full">
-            <div className="w-full   md:w-6/12">
-              <ScrollArea className="z-20 h-full pb-9  ">
-                <h2 className="mb-5 mt-9 text-4xl font-semibold">
-                  {t("customiseColor")}
-                </h2>
-                <Breadcrumb className=" mt-4 text-base font-normal hover:cursor-pointer">
-                  <BreadcrumbList>
-                    <BreadcrumbItem className="mr-2 text-base">
-                      <BreadcrumbLink>
-                        <Link
-                          href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
-                        >
-                          {t("templateBreadcrumb")}
-                        </Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem className="mx-2 text-base">
-                      <BreadcrumbPage className="font-semibold">
-                        {t("colorsBreadcrumb")}
-                      </BreadcrumbPage>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem className="mx-2 text-base">
-                      <BreadcrumbLink>
-                        <Link
-                          href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
-                        >
-                          {t("finishBreadcrumb")}
-                        </Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-                {/* <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] "> */}
-                <div className="mb-8 mt-10 flex flex-wrap gap-3 ">
-                  <div className="flex flex-col">
-                    <label className="my-3 block text-base font-semibold ">
-                      {t("primaryColor")}
-                    </label>
-                    <ColorPickerWithSuggestions
-                      color={primaryColor}
-                      onChange={handlePrimaryColor}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="my-3 block text-base font-semibold ">
-                      {t("textColor")}
-                    </label>
-                    <ColorPickerWithSuggestions
-                      color={textColor}
-                      onChange={handleTextColor}
-                    />
-                    {/* <NewGlobalThemeSettings /> */}
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="my-3 block text-base font-semibold ">
-                      {t("backgroundColor")}
-                    </label>
-                    <ColorPickerWithSuggestions
-                      color={backgroundColor}
-                      onChange={handleBackgroundColor}
-                    />
+            <div className="relative w-full bg-[#FAFAFA] md:w-6/12">
+              <ScrollArea className="z-20 h-full px-6 2xl:px-10 ">
+                <div className="pb-24 pt-10">
+                  <h2 className="mb-6 text-[2rem] font-semibold leading-8">
+                    {t("customiseColor")}
+                  </h2>
+                  <Breadcrumb>
+                    <BreadcrumbList className="text-base sm:gap-4">
+                      <BreadcrumbItem>
+                        <BreadcrumbLink>
+                          <Link
+                            href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
+                          >
+                            {t("templateBreadcrumb")}
+                          </Link>
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>{t("colorsBreadcrumb")}</BreadcrumbPage>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbLink>
+                          <Link
+                            href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
+                          >
+                            {t("finishBreadcrumb")}
+                          </Link>
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                  {/* <ScrollArea className="max-h-[calc(100vh - 350px)] h-[38rem] "> */}
+                  <div className="mt-14 grid grid-cols-3 gap-6">
+                    <div className="space-y-3">
+                      <label className="block text-base font-semibold leading-none">
+                        {t("primaryColor")}
+                      </label>
+                      <ColorPickerWithSuggestions
+                        color={primaryColor}
+                        onChange={handlePrimaryColor}
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="block text-base font-semibold leading-none ">
+                        {t("textColor")}
+                      </label>
+                      <ColorPickerWithSuggestions
+                        color={textColor}
+                        onChange={handleTextColor}
+                      />
+                      {/* <NewGlobalThemeSettings /> */}
+                    </div>
+                    <div className="space-y-3">
+                      <label className="block text-base font-semibold leading-none ">
+                        {t("backgroundColor")}
+                      </label>
+                      <ColorPickerWithSuggestions
+                        color={backgroundColor}
+                        onChange={handleBackgroundColor}
+                      />
+                    </div>
                   </div>
                 </div>
               </ScrollArea>
+              <div className="absolute inset-x-0 bottom-0  z-30 flex items-center justify-between bg-white p-6 pt-4 2xl:px-10">
+                <Link href={"/dashboard"}>
+                  <Button
+                    className="w-[7.5rem] rounded-lg text-base font-normal"
+                    variant="outline"
+                  >
+                    {t("exit")}
+                  </Button>
+                </Link>
+                <div className="flex space-x-4">
+                  <Link
+                    href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
+                  >
+                    <Button
+                      variant="outline"
+                      className="h-9.5 rounded-lg px-2.5"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Link
+                    href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
+                  >
+                    <Button className="w-[7.5rem] rounded-lg text-base font-normal text-white ">
+                      {t("continue")}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
 
             <Separator orientation="vertical" className="z-40 h-full" />
-            <div className={`mx-auto w-full  md:w-6/12`}>
+            <div className={`mx-auto w-full md:w-6/12`}>
               <ScrollArea className="z-20 h-full bg-white ">
                 <NewFlowPreview />
               </ScrollArea>
-            </div>
-          </div>
-          <div className="fixed bottom-0 left-4 z-30 flex w-full items-center justify-between bg-white px-6 py-3 pr-11  md:w-6/12">
-            <Link
-              href={`/dashboard/flows/create-flow/select-template?allow=${isAllowed}`}
-            >
-              <Button
-                variant="secondary"
-                size="icon"
-                className="hover:cursor-pointer"
-              >
-                <ChevronLeft className="z-10 h-4 w-4" />
-              </Button>
-            </Link>
-
-            <div className="flex">
-              <Link href={"/dashboard"}>
-                <Button
-                  className="mr-2 w-32 font-bold hover:cursor-pointer"
-                  size="lg"
-                  variant="outline"
-                >
-                  {t("exit")}
-                </Button>
-              </Link>
-              <Link
-                href={`/dashboard/flows/create-flow/finish?allow=${isAllowed}`}
-              >
-                <Button
-                  className="w-32 font-bold text-white hover:cursor-pointer"
-                  size="lg"
-                  variant="default"
-                >
-                  {t("continue")}
-                </Button>
-              </Link>
             </div>
           </div>
         </div>

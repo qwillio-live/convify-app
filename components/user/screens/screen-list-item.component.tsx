@@ -50,9 +50,9 @@ export const ScreenListItem = ({
       <ContextMenu>
         <ContextMenuTrigger>
           {" "}
-          <div className="mt-4 flex flex-row items-center justify-between px-2 gap-4">
+          <div className="mt-4 flex flex-row items-center justify-between gap-4 px-2">
             <span>{index + 1}</span>
-            <span className="flex flex-row gap-2 items-center text-current bg-slate-500 p-2 grow justify-end hover:cursor-text">
+            <span className="flex grow flex-row items-center justify-end gap-2 bg-slate-500 p-2 text-current hover:cursor-text">
               <Pencil size={16} />
               {screen?.screenName ?? "New Screen"}
             </span>
@@ -60,15 +60,15 @@ export const ScreenListItem = ({
           <Card
             style={{ backgroundColor: backgroundColor }}
             className={cn(
-              "h-60 w-[14vw] mt-2 flex flex-col items-center justify-center border hover:cursor-pointer relative overflow-hidden",
+              "relative mt-2 flex h-60 w-[14vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer",
               {
                 "border-blue-500": selectedScreenIndex === index,
               }
             )}
             onClick={() => handleScreenClick(index)}
           >
-            <div className="text-xs text-muted-foreground scale-[.20] relative">
-              <div className="absolute w-full h-full z-10 bg-transparent top-0 left-0"></div>
+            <div className="text-muted-foreground relative scale-[.20] text-xs">
+              <div className="absolute left-0 top-0 z-10 h-full w-full bg-transparent"></div>
               <ResolvedComponentsFromCraftState
                 screen={screen.screenData ? screen.screenData : {}}
               />
