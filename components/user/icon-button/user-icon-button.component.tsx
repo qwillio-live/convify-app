@@ -20,6 +20,7 @@ import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
+  getAllFilledAnswers,
   navigateToScreen,
   setAlarm,
   setCurrentScreenName,
@@ -235,6 +236,7 @@ export const IconButtonGen = ({
             next: updatedScreenName,
           })
         )
+        dispatch(getAllFilledAnswers(true))
         dispatch(setSelectedScreen(index))
         handleSearch(updatedScreenName)
       } else {

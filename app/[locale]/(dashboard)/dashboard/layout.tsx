@@ -132,6 +132,7 @@ import { cn } from "@/lib/utils"
 import { env } from "@/env.mjs"
 import { Metadata } from "next"
 import { useTranslations } from "next-intl"
+import { ScreenshotsProvider } from "./thumbnailCronProvider"
 
 export default async function DashboardLayout({
   children,
@@ -145,69 +146,71 @@ export default async function DashboardLayout({
 
   return (
     <StoreProvider>
-      <div
-        className={cn(
-          "flex h-screen flex-col space-y-6 bg-[#F6F6F6]",
-          roboto.variable,
-          fontSans.variable,
-          fontHeading.variable,
-          inter.variable,
-          roboto_mono.variable,
-          geist.variable,
-          open_sans.variable,
-          montserrat.variable,
-          lato.variable,
-          oswald.variable,
-          raleway.variable,
-          pt_sans.variable,
-          merriweather.variable,
-          nunito.variable,
-          playfair_display.variable,
-          poppins.variable,
-          ubuntu.variable,
-          mukta.variable,
-          rubik.variable,
-          work_sans.variable,
-          roboto_condensed.variable,
-          noto_sans.variable,
-          fira_sans.variable,
-          quicksand.variable,
-          karla.variable,
-          cabin.variable,
-          barlow.variable,
-          arimo.variable,
-          teko.variable,
-          catamaran.variable,
-          libre_franklin.variable,
-          oxygen.variable,
-          heebo.variable,
-          asap.variable,
-          bitter.variable,
-          ibm_plex_sans.variable,
-          exo_2.variable,
-          dosis.variable,
-          pt_serif.variable,
-          overpass.variable,
-          varela_round.variable,
-          questrial.variable,
-          inconsolata.variable,
-          rokkitt.variable,
-          red_hat_display.variable,
-          cairo.variable,
-          lora.variable,
-          titillium_web.variable,
-          bebas_neue.variable,
-          anton.variable,
-          zilla_slab.variable,
-          nunito_sans.variable,
-          roboto_slab.variable,
-          sans3.variable
-        )}
-      >
-        <main>{children}</main>
-        <Toaster />
-        {/* <SiteFooter className="border-t" /> */}
-      </div>
+      <ScreenshotsProvider>
+        <div
+          className={cn(
+            "flex h-screen flex-col space-y-6 bg-white",
+            roboto.variable,
+            fontSans.variable,
+            fontHeading.variable,
+            inter.variable,
+            roboto_mono.variable,
+            geist.variable,
+            open_sans.variable,
+            montserrat.variable,
+            lato.variable,
+            oswald.variable,
+            raleway.variable,
+            pt_sans.variable,
+            merriweather.variable,
+            nunito.variable,
+            playfair_display.variable,
+            poppins.variable,
+            ubuntu.variable,
+            mukta.variable,
+            rubik.variable,
+            work_sans.variable,
+            roboto_condensed.variable,
+            noto_sans.variable,
+            fira_sans.variable,
+            quicksand.variable,
+            karla.variable,
+            cabin.variable,
+            barlow.variable,
+            arimo.variable,
+            teko.variable,
+            catamaran.variable,
+            libre_franklin.variable,
+            oxygen.variable,
+            heebo.variable,
+            asap.variable,
+            bitter.variable,
+            ibm_plex_sans.variable,
+            exo_2.variable,
+            dosis.variable,
+            pt_serif.variable,
+            overpass.variable,
+            varela_round.variable,
+            questrial.variable,
+            inconsolata.variable,
+            rokkitt.variable,
+            red_hat_display.variable,
+            cairo.variable,
+            lora.variable,
+            titillium_web.variable,
+            bebas_neue.variable,
+            anton.variable,
+            zilla_slab.variable,
+            nunito_sans.variable,
+            roboto_slab.variable,
+            sans3.variable
+          )}
+        >
+          <main>{children}</main>
+          <Toaster />
+          {/* <SiteFooter className="border-t" /> */}
+        </div>
+      </ScreenshotsProvider>
     </StoreProvider>
   )
 }

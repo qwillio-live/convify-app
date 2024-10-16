@@ -1,5 +1,5 @@
-// export const runtime = "nodejs"
-// export const dynamic = "force-static"
+// export const runtime = "edge"
+// "use client"
 import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import React, { Suspense } from "react"
 
@@ -48,27 +48,19 @@ import { UserContainerGen } from "@/components/user/container/user-container.com
 import { getCurrentUser } from "@/lib/session"
 import { authOptions } from "@/lib/auth"
 import { getServerSession } from "next-auth"
+import { cookies } from "next/headers"
 import { useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
-import FlowLayout from "@/components/flow-preview/flow-preview-server"
-// import { cookies } from "next/headers"
-import { unstable_setRequestLocale } from "next-intl/server"
-import { Analytics } from "@/components/analytics"
-import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
-import { StringToBoolean } from "class-variance-authority/dist/types"
-// import { cookies } from "next/headers"
 
-interface PageProps {
-  data: any
-  allScreens: string[]
-  screenName: string
-}
+import { env } from "@/env.mjs"
 
-export default function StaticPublishedFile({
-  data,
-  allScreens,
-  screenName,
-}: PageProps) {
+export default async function PreviewFlows({
+  params,
+  searchParams,
+}: {
+  params: { flowId: string; en: string }
+  searchParams: { screen: string }
+}) {
   const CraftJsUserComponents = {
     [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
     [CRAFT_ELEMENTS.LOGO]: UserLogo,
@@ -105,14 +97,39 @@ export default function StaticPublishedFile({
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
   }
-  const resolveComponents = (screen) => {
-    const craftState = screen
-    // console.log("Parsed Craft State:", craftState) // Log parsed JSON data
+
+  const screenName = searchParams?.screen || ""
+  // const cookieString = cookies()
+  //   .getAll()
+  //   .map((cookie) => `${cookie.name}=${cookie.value}`)
+  //   .join("; ")
+
+  const flowId = params?.flowId
+  const appUrl = env.NEXT_PUBLIC_APP_URL
+  const response = await fetch(`${appUrl}/api/flows/${flowId}`, {
+    method: "GET",
+    // headers: {
+    //   Cookie: cookieString,
+    // },
+    cache: "force-cache",
+    next: { tags: ["previewFlow"] },
+  })
+  const data = await response.json()
+  if (!response.ok) {
+    throw new Error(`Error fetching flow data: ${response.statusText}`)
+  }
+  console.log("data in preview", data)
+  const filteredStep = data.steps.find((screen) => screen.name === screenName)
+    ? data.steps.find((screen) => screen.name === screenName)
+    : data.steps[0]
+  const resolveComponents = (screenContent) => {
+    if (!screenContent) return <></>
+
+    const craftState = screenContent
     const parsedNodes = {}
 
     const parse = (nodeId: string, parentNodeId?: string) => {
       if (parsedNodes[nodeId]) return parsedNodes[nodeId]
-      // console.log(`Parsing node: ${parsedNodes[nodeId]}`)
 
       const nodeData = craftState[nodeId]
       if (!nodeData) return null
@@ -154,7 +171,6 @@ export default function StaticPublishedFile({
           parentNodeId={parentNodeId}
           nodeId={nodeId}
           key={nodeId}
-          // scrollY={scrollY}
         >
           {linkedNodesElements}
         </ReactComponent>
@@ -173,28 +189,25 @@ export default function StaticPublishedFile({
       return parsedNode
     }
 
+    // Ensure that `ROOT` exists and is valid
     return parse("ROOT") || <></>
   }
-  const filteredStep = data.steps.find(
-    (screen) => screen.name === screenName ?? allScreens[0]
-  )
-  console.log("filtered step: ", screenName, allScreens[0])
-  return (
-    <div
-      className={`flex h-screen w-full flex-col`}
-      style={{
-        backgroundColor:
-          data?.flowSettings?.general?.backgroundColor || "transparent",
-      }}
-    >
-      {data?.headerData &&
-        resolveComponents(JSON.parse(data?.headerData || {}))}
 
+  return (
+    <>
       <div
-        className={`flex min-h-[71vh] w-full flex-grow flex-col`}
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
         style={{
-          backgroundColor:
-            data?.flowSettings?.general?.backgroundColor || "transparent",
+          backgroundColor: data?.flowSettings?.general?.backgroundColor,
+        }}
+      >
+        {data?.headerData &&
+          resolveComponents(JSON.parse(data?.headerData || {}))}
+      </div>
+      <div
+        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] min-h-[71vh]`}
+        style={{
+          backgroundColor: data?.flowSettings?.general?.backgroundColor,
         }}
       >
         {filteredStep && (
@@ -202,27 +215,30 @@ export default function StaticPublishedFile({
             key={`${filteredStep.name}`}
             id={filteredStep.name}
             style={{
-              backgroundColor:
-                data?.flowSettings?.general?.backgroundColor || "transparent",
+              backgroundColor: data?.flowSettings?.general?.backgroundColor,
             }}
-            className={`
-              animate-flow
-              relative
-              min-w-full
-              shrink-0
-              basis-full
-            `}
+            className="
+                animate-flow
+    relative
+    min-w-full
+    shrink-0
+    basis-full
+    "
           >
             {resolveComponents(filteredStep.content)}
           </div>
         )}
       </div>
-
       {data?.footerData && (
-        <div className="font-geist">
+        <div
+          className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+          style={{
+            backgroundColor: data?.flowSettings?.general?.backgroundColor,
+          }}
+        >
           {resolveComponents(JSON.parse(data?.footerData || {}))}
         </div>
       )}
-    </div>
+    </>
   )
 }

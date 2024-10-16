@@ -453,6 +453,17 @@ export const UserInputMailSettings = () => {
                 }
               />
             </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="textColor">{tComponents("Label Color")}</Label>
+              <ColorInput
+                id="textColor"
+                value={textColor === "#ffffff" ? null : textColor}
+                handleChange={(e) => {
+                  handlePropChange("textColor", e.target.value)
+                }}
+                handleRemove={() => handlePropChange("textColor", "#ffffff")}
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">

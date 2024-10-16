@@ -257,6 +257,17 @@ export const UserInputCheckboxSettings = () => {
                 }
               />
             </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="textColor">{t("Text Color")}</Label>
+              <ColorInput
+                id="textColor"
+                value={textColor === "#ffffff" ? null : textColor}
+                handleChange={(e) => {
+                  handlePropChange("textColor", e.target.value)
+                }}
+                handleRemove={() => handlePropChange("textColor", "#ffffff")}
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="spacing">

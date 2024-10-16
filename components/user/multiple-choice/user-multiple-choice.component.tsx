@@ -23,6 +23,7 @@ import { usePathname } from "next/navigation"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import {
+  getAllFilledAnswers,
   setPreviewScreenData,
   setSelectedData,
   setSelectedScreen,
@@ -510,11 +511,27 @@ export const MultipleChoice = ({
                 setLabel(e.target.value)
                 handlePropChangeDebounced("label", e.target.value)
               }}
-              style={{
-                color: labelColor,
-                outlineColor: labelBorderColor,
-                borderRadius: "4px",
-              }}
+              // onSelectChange={() => {
+                //   if (multiSelect) {
+                //     setProp((props) => {
+                //       if (props.selections.includes(choice.id)) {
+                //         props.selections = props.selections.filter(
+                //           (selectionId) => selectionId !== choice.id
+                //         )
+                //       } else {
+                //         props.selections.push(choice.id)
+                //       }
+                //       return props
+                //     }, 200)
+                //   } else {
+                //     setProp((props) => {
+                //       props.selections = selections.includes(choice.id)
+                //         ? []
+                //         : [choice.id]
+                //       return props
+                //     }, 200)
+                //   }
+              // }}
             />
           </div>
           <ul
@@ -672,6 +689,7 @@ const MultipleChoiceItem = ({
           })
         )
         handleSearch(updatedScreenName)
+        dispatch(getAllFilledAnswers(true))
         dispatch(setSelectedScreen(index))
       } else if (newsc !== "none") {
         console.log(
@@ -687,6 +705,7 @@ const MultipleChoiceItem = ({
           })
         )
         handleSearch(newsc)
+        dispatch(getAllFilledAnswers(true))
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
         dispatch(setSelectedScreen(index))
       }

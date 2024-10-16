@@ -12,6 +12,7 @@ import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
 import {
+  getAllFilledAnswers,
   setPreviewScreenData,
   setSelectedData,
   setSelectedScreen,
@@ -499,11 +500,27 @@ export const PictureChoice = ({
                 setLabel(e.target.value)
                 handlePropChangeDebounced("label", e.target.value)
               }}
-              style={{
-                color: labelColor,
-                outlineColor: labelBorderColor,
-                borderRadius: "4px",
-              }}
+              // onSelectChange={() => {
+                // if (multiSelect) {
+                //   setProp((props) => {
+                //     if (props.selections.includes(choice.id)) {
+                //       props.selections = props.selections.filter(
+                //         (selectionId) => selectionId !== choice.id
+                //       )
+                //     } else {
+                //       props.selections.push(choice.id)
+                //     }
+                //     return props
+                //   }, 200)
+                // } else {
+                //   setProp((props) => {
+                //     props.selections = selections.includes(choice.id)
+                //       ? []
+                //       : [choice.id]
+                //     return props
+                //   }, 200)
+                // }
+              // }}
             />
           </div>
           <ul
@@ -740,6 +757,7 @@ const PictureChoiceItem = ({
           })
         )
         handleSearch(updatedScreenName)
+        dispatch(getAllFilledAnswers(true))
         dispatch(setSelectedScreen(index))
       } else if (newsc !== "none") {
         console.log(
@@ -754,6 +772,7 @@ const PictureChoiceItem = ({
             next: newsc,
           })
         )
+        dispatch(getAllFilledAnswers(true))
         handleSearch(newsc)
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
         dispatch(setSelectedScreen(index))
