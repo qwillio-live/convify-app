@@ -32,6 +32,13 @@ import {
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { UserInputSizes } from "../input/user-input.component"
 
+const MultipleChoiceSizeValues = {
+  small: "300px",
+  medium: "376px",
+  large: "576px",
+  full: "100%",
+}
+
 const Wrapper = styled.div<{
   size: UserInputSizes
   mobileScreen?: boolean
@@ -187,7 +194,7 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <Wrapper size={size} className="mcq-input-comp">
+      {/* <Wrapper size={size} className="mcq-input-comp"> */}
         <ul
           ref={itemRef}
           className="flex w-full flex-col items-center justify-center"
@@ -199,8 +206,11 @@ export const MultipleChoiceGen = ({
           <div
             className="w-full p-1 text-center"
             style={{
-              color: labelColor,
+              color: `${
+                labelColor !== "#ffffff" ? labelColor : primaryTextColor
+              }`,
               fontFamily: `var(${fontFamily?.value})`,
+              maxWidth: MultipleChoiceSizeValues[size || "small"],
             }}
           >
             <label>{label}</label>
@@ -329,7 +339,7 @@ export const MultipleChoiceGen = ({
             />
           ))}
         </ul>
-      </Wrapper>
+      {/* </Wrapper> */}
     </div>
   )
 }
