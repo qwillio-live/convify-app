@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useEffect, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
@@ -48,8 +49,8 @@ import { Input } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
-import { UserInputSettings } from "./user-input-settings.component"
 import { InputIconRenderer } from "./user-input-icon-picker"
+import { UserInputSettings } from "./user-input-settings.component"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -935,7 +936,7 @@ export type UserInputProps = {
   fieldType: "data" | "action" | "design"
   required: boolean
   fontSize: number
-  textColor: string
+  textColor?: string
   parentScreenId: string
   fontWeight: string
   marginLeft: number
