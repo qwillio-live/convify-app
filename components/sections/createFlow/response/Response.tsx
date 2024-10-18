@@ -30,20 +30,26 @@ interface Response {
 
 type Content = Record<string, any>
 
-const extractLabels = (content: Content) => {
-  const labels: string[] = []
-  const seenLabels = new Set<string>()
+function extractLabels(
+  content: Content
+): { id: string; label: string; value: string }[] {
+  const labels: { id: string; label: string; value: string }[] = []
 
-  Object.entries(content).forEach(([key, value]) => {
-    let label = value.label || key
-    if (seenLabels.has(label)) {
-      label = `${label} (${key})`
-    } else {
-      seenLabels.add(label)
+  function traverse(obj: Content, parentId: string | null = null) {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key]
+        if (typeof value === "object" && value !== null) {
+          traverse(value, key)
+        } else if (key === "label" && parentId) {
+          const parentValue = obj["value"] || ""
+          labels.push({ id: parentId, label: value, value: parentValue })
+        }
+      }
     }
-    labels.push(label)
-  })
+  }
 
+  traverse(content)
   return labels
 }
 
@@ -93,15 +99,15 @@ const extractValuesOfLabels = (content: Content) => {
     } else {
       seenLabels.add(label)
     }
-    valuesWithLabels[label] = value.value
+    valuesWithLabels[key] = { label, value: value.value }
   })
 
   return valuesWithLabels
 }
 
-function tableMap(elementsOfLabels: Array<Object>, labels: Set<string>) {
+function tableMap(elementsOfLabels: Array<Object>, labels: string[]) {
   const rows: Object[] = []
-  labels.add("Submission time")
+  labels.push("Submission time")
   elementsOfLabels.forEach((element: any) => {
     const oneObj = {}
     labels.forEach((label) => {
@@ -195,14 +201,14 @@ const ResponseFlowComponents = () => {
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true)
-      try{
+      try {
         const response = await fetch(`/api/flows/${flowId}/responses/`)
         const dataRes = await response.json()
         console.log("response", dataRes)
         localStorage.setItem("responses", JSON.stringify(dataRes))
         localStorage.setItem("flowId", JSON.stringify(flowId))
         setResponses(dataRes)
-      }finally{
+      } finally {
         setLoading(false)
       }
 
@@ -210,10 +216,10 @@ const ResponseFlowComponents = () => {
       // const flowIdStorage = JSON.parse(localStorage.getItem("flowId") || "{}")
       // if (dataRes && flowIdStorage === `${flowId}`) {
       //   setResponses(storedResponses))
-      // } 
+      // }
     }
-    if(flowId){
-    getResponses()
+    if (flowId) {
+      getResponses()
     }
   }, [flowId])
 
@@ -226,45 +232,54 @@ const ResponseFlowComponents = () => {
   // }, [])
 
   // console.log("response", responses)
-  
+
   useEffect(() => {
-    const uniqueLabels = new Set<string>()
-    responses.length > 0 &&
+    if (responses.length > 0) {
+      const uniqueLabels = new Map<string, string>() // Map to store the latest label for each unique key
+      const elementsWithLabels: any[] = []
+
+      // Extract the latest label for each unique key
       responses.forEach((item) => {
-        const labels = extractLabels(item.content as Content) // Add type assertion to item.content
-        labels.forEach((label) => uniqueLabels.add(label))
+        // for header
+        const labels = extractLabels(item.content as Content)
+        labels.forEach((label) => {
+          if (!uniqueLabels.has(label.id))
+            uniqueLabels.set(label.id, label.label) // Store the latest label for each key
+        })
+
+        // Extract values and associate them with the latest labels
+        const valuesWithLabels = extractValuesOfLabels(item.content as Content)
+        console.log("valuesWithLabels", valuesWithLabels)
+        valuesWithLabels["Submission time"] = item.createdAt
+        valuesWithLabels["flowId"] = item.flowId
+        elementsWithLabels.push(valuesWithLabels)
       })
 
-    const elementsWithLabels: any[] = [] // Change type annotation to 'any[]'
-    // console.log("responses", responses)
-    responses.length > 0 &&
-      responses.forEach((item) => {
-        const valuesWithLables = extractValuesOfLabels(item.content as Content) // Add type assertion to item.content
-        valuesWithLables["Submission time"] = item.createdAt
-        valuesWithLables["flowId"] = item.flowId
-        elementsWithLabels.push(valuesWithLables)
+      // Add "Submission time" to the unique labels
+      uniqueLabels.set("Submission time", "Submission time")
+
+      const normalizedUniqueLabels = Array.from(uniqueLabels.values()) // Get the latest labels
+      const sortedRows = tableMap(elementsWithLabels, normalizedUniqueLabels) // Use normalizedUniqueLabels
+
+      // Initial sort
+      sortedRows.sort((a, b) => {
+        return isAscending
+          ? new Date(a["Submission time"]).getTime() -
+              new Date(b["Submission time"]).getTime()
+          : new Date(b["Submission time"]).getTime() -
+              new Date(a["Submission time"]).getTime()
       })
 
-    const normalizedUniqueLabels = normalizeNamesWithRegex(
-      uniqueLabels
-    ) as Set<string> // Cast uniqueLabels to Set<string>
-    const sortedRows = tableMap(elementsWithLabels, normalizedUniqueLabels) // Use normalizedUniqueLabels instead of uniqueLabels
-
-    // Initial sort
-    sortedRows.sort((a, b) => {
-      return isAscending
-        ? new Date(a["Submission time"]).getTime() -
-            new Date(b["Submission time"]).getTime()
-        : new Date(b["Submission time"]).getTime() -
-            new Date(a["Submission time"]).getTime()
-    })
-
-    setRows(sortedRows) // Update rows state
+      setRows(sortedRows) // Update rows state
+      console.log("anjit rows", rows)
+      console.log("anjit uniqueLabels", uniqueLabels)
+      console.log("anjit elementsWithLabels", elementsWithLabels)
+    }
   }, [responses, isAscending]) // Add dependencies
 
   const uniqueLabelsArray = Array.from(
     normalizeNamesWithRegex(new Set(rows.flatMap(Object.keys)))
-  )
+  ) // Add dependencies
 
   const handleSort = () => {
     setIsAscending(!isAscending)

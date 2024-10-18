@@ -157,7 +157,6 @@ export const SelectGen = ({
         paddingLeft: `${marginLeft}px`,
         paddingRight: `${marginRight}px`,
       }}
-      
     >
       <CustomSelect
         value={selectedOptionId}
@@ -516,7 +515,7 @@ export type SelectProps = {
   selectOptions: object[]
   selectedOptionId: string | undefined
   fontFamily: StyleProperty
-  labelColor: string
+  labelColor?: string
   containerBackground: string
   disabled: boolean
   required: boolean
