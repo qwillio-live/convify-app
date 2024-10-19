@@ -211,18 +211,24 @@ export const UserLogo = ({
 
   const animation = useMemo(() => {
     // 130
-    let translateYPercent = Math.min(130, 50 + (scrollY || bodyScrollY || 0))
-    let box = Math.max(49, 80 - (scrollY || bodyScrollY || 0))
-    if (isMobileScreen) {
-      translateYPercent = Math.min(130, 50 + (scrollY || bodyScrollY || 0))
+    let translateYPercent = Math.min(117, 50 + (scrollY || bodyScrollY || 0))
+    let box = Math.max(49, 90 - (scrollY || bodyScrollY || 0))
+    if (isMobileScreen || mobileScreen) {
+      translateYPercent = Math.min(124, 50 + (scrollY || bodyScrollY || 0))
       box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
     }
 
     return {
       y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
-      box: hasComponentBeforeAvatar ? `${box}px` : "80px",
+      box: hasComponentBeforeAvatar ? `${box}px` : "90px",
     }
-  }, [scrollY, bodyScrollY, hasComponentBeforeAvatar, isMobileScreen])
+  }, [
+    scrollY,
+    bodyScrollY,
+    hasComponentBeforeAvatar,
+    isMobileScreen,
+    mobileScreen,
+  ])
 
   return (
     <div

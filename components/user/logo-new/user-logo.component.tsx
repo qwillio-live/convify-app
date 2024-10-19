@@ -156,7 +156,12 @@ export const UserLogo = ({
 }) => {
   return (
     <div
-      style={{ height: h, width: w, overflow: "hidden", position: "relative" }}
+      style={{
+        height: "58px",
+        width: w,
+        overflow: "hidden",
+        position: "relative",
+      }}
     >
       <img
         alt={alt}
