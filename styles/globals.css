@@ -305,3 +305,14 @@ div[containertype="header"] .progress-comp {
 .scroll-container::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.no-hover-effects * {
+  pointer-events: none;
+}
+
+.no-hover-effects *:hover {
+  transform: none;
+  border-color: inherit;
+  color: inherit;
+  background-color: inherit;
+}
