@@ -106,58 +106,70 @@ const extractValuesOfLabels = (content: Content) => {
 }
 
 function tableMap(elementsOfLabels: Array<Object>, labels: string[]) {
-  const rows: Object[] = []
-  labels.push("Submission time")
-  elementsOfLabels.forEach((element: any) => {
-    const oneObj = {}
-    labels.forEach((label) => {
-      if (label in element) {
-        oneObj[label] = element[label]
-      } else if (
-        ("first-name" in element && label === "firstName") ||
-        ("First name" in element && label === "firstName")
-      ) {
-        if ("first-name" in element) {
-          oneObj[label] = element["first-name"]
-        } else {
-          oneObj[label] = element["First name"]
-        }
-      } else if (
-        ("last-name" in element && label === "lastName") ||
-        ("Last name" in element && label === "lastName")
-      ) {
-        if ("last-name" in element) {
-          oneObj[label] = element["last-name"]
-        } else {
-          oneObj[label] = element["Last name"]
-        }
-      } else if (
-        ("email" in element && label === "email") ||
-        ("Email address" in element && label === "email")
-      ) {
-        if ("email" in element) {
-          oneObj[label] = element["email"]
-        } else {
-          oneObj[label] = element["Email address"]
-        }
-      } else if (
-        ("phone" in element && label === "phone") ||
-        ("Phone" in element && label === "phone")
-      ) {
-        if ("phone" in element) {
-          oneObj[label] = element["phone"]
-        } else {
-          oneObj[label] = element["Phone"]
-        }
-      } else {
-        oneObj[label] = "" // or some default value if the label is not found
-      }
-    })
-    rows.push(oneObj)
-  })
+  // const rows: Object[] = []
+  // labels.push("Submission time")
+  // elementsOfLabels.forEach((element: any) => {
+  //   const oneObj = {}
+  //   labels.forEach((label) => {
+  //     if (label in element) {
+  //       oneObj[label] = element[label]
+  //     } else if (
+  //       ("first-name" in element && label === "firstName") ||
+  //       ("First name" in element && label === "firstName")
+  //     ) {
+  //       if ("first-name" in element) {
+  //         oneObj[label] = element["first-name"]
+  //       } else {
+  //         oneObj[label] = element["First name"]
+  //       }
+  //     } else if (
+  //       ("last-name" in element && label === "lastName") ||
+  //       ("Last name" in element && label === "lastName")
+  //     ) {
+  //       if ("last-name" in element) {
+  //         oneObj[label] = element["last-name"]
+  //       } else {
+  //         oneObj[label] = element["Last name"]
+  //       }
+  //     } else if (
+  //       ("email" in element && label === "email") ||
+  //       ("Email address" in element && label === "email")
+  //     ) {
+  //       if ("email" in element) {
+  //         oneObj[label] = element["email"]
+  //       } else {
+  //         oneObj[label] = element["Email address"]
+  //       }
+  //     } else if (
+  //       ("phone" in element && label === "phone") ||
+  //       ("Phone" in element && label === "phone")
+  //     ) {
+  //       if ("phone" in element) {
+  //         oneObj[label] = element["phone"]
+  //       } else {
+  //         oneObj[label] = element["Phone"]
+  //       }
+  //     } else {
+  //       oneObj[label] = "" // or some default value if the label is not found
+  //     }
+  //   })
+  //   rows.push(oneObj)
+  // })
 
-  return rows
+  // return rows
+  return elementsOfLabels.map((element) => {
+    const result = {}
+    for (const key in element) {
+      if (key === "Submission time") {
+        result[key] = element[key]
+        continue
+      }
+      result[key] = element[key]?.value ?? ""
+    }
+    return result
+  })
 }
+
 function convertTimestamp(timestamp: string): string {
   const date = new Date(timestamp)
 
@@ -181,6 +193,7 @@ const ResponseFlowComponents = () => {
   const t = useTranslations("CreateFlow.ResultsPage")
   const [flowId, setFlowId] = useState<string | null>(null)
   const currentPath = usePathname()
+  const [tableHeader, setTableHeader] = useState<string[]>([])
 
   useEffect(() => {
     const extractFlowIdFromUrl = async () => {
@@ -242,6 +255,7 @@ const ResponseFlowComponents = () => {
       responses.forEach((item) => {
         // for header
         const labels = extractLabels(item.content as Content)
+        // console.log("anjit labels", labels)
         labels.forEach((label) => {
           if (!uniqueLabels.has(label.id))
             uniqueLabels.set(label.id, label.label) // Store the latest label for each key
@@ -249,7 +263,6 @@ const ResponseFlowComponents = () => {
 
         // Extract values and associate them with the latest labels
         const valuesWithLabels = extractValuesOfLabels(item.content as Content)
-        console.log("valuesWithLabels", valuesWithLabels)
         valuesWithLabels["Submission time"] = item.createdAt
         valuesWithLabels["flowId"] = item.flowId
         elementsWithLabels.push(valuesWithLabels)
@@ -257,8 +270,9 @@ const ResponseFlowComponents = () => {
 
       // Add "Submission time" to the unique labels
       uniqueLabels.set("Submission time", "Submission time")
+      setTableHeader(Array.from(uniqueLabels.values()))
 
-      const normalizedUniqueLabels = Array.from(uniqueLabels.values()) // Get the latest labels
+      const normalizedUniqueLabels = Array.from(uniqueLabels.values()) // Get the latest label
       const sortedRows = tableMap(elementsWithLabels, normalizedUniqueLabels) // Use normalizedUniqueLabels
 
       // Initial sort
@@ -271,15 +285,15 @@ const ResponseFlowComponents = () => {
       })
 
       setRows(sortedRows) // Update rows state
+
       console.log("anjit rows", rows)
-      console.log("anjit uniqueLabels", uniqueLabels)
-      console.log("anjit elementsWithLabels", elementsWithLabels)
+      // console.log("anjit elementsWithLabels", elementsWithLabels)
     }
   }, [responses, isAscending]) // Add dependencies
 
   const uniqueLabelsArray = Array.from(
     normalizeNamesWithRegex(new Set(rows.flatMap(Object.keys)))
-  ) // Add dependencies
+  ).filter((label) => label !== "Submission time" && label !== "flowId")
 
   const handleSort = () => {
     setIsAscending(!isAscending)
@@ -296,28 +310,28 @@ const ResponseFlowComponents = () => {
   }
 
   return (
-    <div className="min-h-screen flex-1 items-center justify-center mx-auto py-4 px-0 lg:px-8 lg:py-4">
+    <div className="mx-auto min-h-screen flex-1 items-center justify-center px-0 py-4 lg:px-8 lg:py-4">
       {loading ? (
         <LoadingEl />
       ) : responses.length > 0 ? (
-        <Card className="overflow-x-auto h-full">
-          <Table className="text-xs h-full">
+        <Card className="h-full overflow-x-auto">
+          <Table className="h-full text-xs">
             <TableHeader>
               <TableRow>
                 <TableHead
-                  className="flex gap-0.5 items-center whitespace-nowrap"
+                  className="flex items-center gap-0.5 whitespace-nowrap"
                   style={{ cursor: "pointer" }}
                   onClick={handleSort} // Use handleSort
                 >
                   {t("Submission time")}{" "}
                   {isAscending ? (
-                    <ArrowUp className="w-4 h-4" />
+                    <ArrowUp className="h-4 w-4" />
                   ) : (
-                    <ArrowDown className="w-4 h-4" />
+                    <ArrowDown className="h-4 w-4" />
                   )}
                 </TableHead>
-                {uniqueLabelsArray.length > 0 &&
-                  uniqueLabelsArray.map((label: string) => (
+                {tableHeader.length > 0 &&
+                  tableHeader.map((label: string) => (
                     <TableHead
                       className="whitespace-nowrap"
                       key={label as React.Key}
@@ -345,13 +359,13 @@ const ResponseFlowComponents = () => {
                       label !== "label" &&
                       !!row[label]
                         ? typeof row[label] === "string"
-                          ? row[label]
+                          ? row[label] + "aa"
                           : Array.isArray(row[label])
                           ? row[label]
                               ?.map((rowItem) => rowItem?.value)
                               .join(", ")
-                          : row[label]?.value
-                          ? row[label].value
+                          : row[label]?.value + "bb"
+                          ? row[label].value + "bb"
                           : ""
                         : ""}
                     </TableCell>
