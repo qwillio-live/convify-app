@@ -163,7 +163,7 @@ export const UserLogo = ({
         src={src}
         style={{
           width: w,
-          height: `calc(${80}px - ${top}px - ${bottom}px)`,
+          height: `calc(${60}px - ${top}px - ${bottom}px)`,
           borderRadius: `${borderRad}px`,
           backgroundColor: background,
           objectFit: "cover",
@@ -511,7 +511,7 @@ export const LogoDefaultProps: IconButtonProps = {
   enableLink: false,
   minWidth: "120px",
   w: "auto",
-  h: "80px",
+  h: "60px",
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,

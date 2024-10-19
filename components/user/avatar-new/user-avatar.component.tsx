@@ -211,13 +211,18 @@ export const UserLogo = ({
 
   const animation = useMemo(() => {
     // 130
-    let translateYPercent = Math.min(130,  50 + (scrollY || bodyScrollY || 0))
-    let box = Math.max(49, 80 - (scrollY  || bodyScrollY || 0 ))
+    let translateYPercent = Math.min(130, 50 + (scrollY || bodyScrollY || 0))
+    let box = Math.max(49, 80 - (scrollY || bodyScrollY || 0))
+    if (isMobileScreen) {
+      translateYPercent = Math.min(130, 50 + (scrollY || bodyScrollY || 0))
+      box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
+    }
+
     return {
       y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
-      box: hasComponentBeforeAvatar ? `${box}px` : '80px',
+      box: hasComponentBeforeAvatar ? `${box}px` : "80px",
     }
-  }, [scrollY, bodyScrollY, hasComponentBeforeAvatar])
+  }, [scrollY, bodyScrollY, hasComponentBeforeAvatar, isMobileScreen])
 
   return (
     <div
@@ -225,8 +230,7 @@ export const UserLogo = ({
       ref={avatarRef}
       className={cn("")}
       style={{
-        transform : `translateY(${animation.y})`
-
+        transform: `translateY(${animation.y})`,
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element*/}
@@ -413,7 +417,7 @@ export const AvatarComponent = ({
       }
     }
   }, [primaryColor])
-  
+
   const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
     const value = e.target.innerText
