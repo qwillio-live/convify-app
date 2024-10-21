@@ -202,7 +202,7 @@ export default async function PreviewFlows({
         </div>
 
         <div
-          className={`flex w-full flex-grow flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+          className={`flex w-full flex-1 flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
           style={{
             backgroundColor: data?.flowSettings?.general?.backgroundColor,
           }}

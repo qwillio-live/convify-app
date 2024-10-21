@@ -191,7 +191,7 @@ export default function StaticPublishedFile({
         resolveComponents(JSON.parse(data?.headerData || {}))}
 
       <div
-        className={`flex min-h-[71vh] w-full flex-grow flex-col`}
+        className={`flex  w-full flex-1 flex-col`}
         style={{
           backgroundColor:
             data?.flowSettings?.general?.backgroundColor || "transparent",
