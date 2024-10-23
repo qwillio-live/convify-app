@@ -91,27 +91,20 @@ const IconButtonSizeValues = {
   full: "100%",
 }
 
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1.1rem",
-  large: "1.3rem",
-}
 const paddingValues = {
   small: "9.9px 11.6px",
   medium: "11.275px 15px",
   large: "14.69px 18.55px",
 }
+const ButtonSizeValues = {
+  small: ".8rem",
+  medium: "1rem",
+  large: "1.2rem",
+}
 const IconSizeValues = {
   small: 18,
   medium: 22,
   large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "70px",
-  medium: "90px",
-  large: "110px",
-  full: "100%",
 }
 
 const ButtonTextLimit = {
@@ -345,6 +338,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   display: flex;
   flex-direction: row;
   position: relative;
+  overflow: hidden;
   gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
@@ -367,28 +361,59 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-
-  width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  padding: ${(props) => paddingValues[props.buttonSize || "medium"]};
+  padding-left: ${(props) => props.paddingLeft}px;
+  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-right: ${(props) => props.paddingRight}px;
+  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
+
+  ${({ size, mobileScreen }) => {
+    if (size === IconButtonSizes.small) {
+      return { width: "250px" }
+    } else if (size === IconButtonSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === IconButtonSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === IconButtonSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === IconButtonSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 
