@@ -49,6 +49,12 @@ const ShareFlowComponents = ({
   const [view, setView] = useState("desktop")
   const [innerview, setInnerView] = useState("desktop")
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
+  const [messageId, setMessageId] = useState(1)
+  const messages = {
+    1: "Create a custom link",
+    2: "Create a custom email link",
+    3: "Create a custom QR code",
+  }
   const [link, setLink] = useState(() => {
     return data && data.link ? data.link : "https://convify.io/survey-es"
   })
@@ -87,6 +93,7 @@ const ShareFlowComponents = ({
         <>
           <HeaderComponent
             setIsCustomLinkOpen={setIsCustomLinkOpen}
+            setMessageId={setMessageId}
             isPublished={isPublished}
             link={link}
             t={t}
@@ -159,14 +166,7 @@ const ShareFlowComponents = ({
             <div className="z-[1] flex w-[512px] flex-col items-center p-8">
               <div className="min-h-0 min-w-0 shrink-0 pb-2">
                 <span className="block text-center text-4xl font-light">
-                  {t("Create a custom link")}
-                </span>
-              </div>
-              <div className="min-h-0 min-w-0 shrink-0">
-                <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                  {t(
-                    "Edit the link and let people know what your flow is about"
-                  )}
+                  {t(messages[messageId])}
                 </span>
               </div>
               <div className="mb-10"></div>
@@ -291,7 +291,10 @@ const ShareFlowComponents = ({
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => setIsCustomLinkOpen(true)}
+                  onClick={() => {
+                    setIsCustomLinkOpen(true)
+                    setMessageId(2)
+                  }}
                   className="h-9 cursor-pointer gap-1 rounded-md border border-[#E6E2DD] px-4 text-sm font-normal text-[#23262C]"
                 >
                   <Mail className="h-4" />
@@ -299,7 +302,10 @@ const ShareFlowComponents = ({
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => setIsCustomLinkOpen(true)}
+                  onClick={() => {
+                    setIsCustomLinkOpen(true)
+                    setMessageId(3)
+                  }}
                   className="h-9 cursor-pointer gap-1 rounded-md border border-[#E6E2DD] px-4 text-sm font-normal text-[#23262C]"
                 >
                   <QrCode className="h-4" />
@@ -343,7 +349,13 @@ const ShareFlowComponents = ({
 
 export default ShareFlowComponents
 
-const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
+const HeaderComponent = ({
+  setIsCustomLinkOpen,
+  isPublished,
+  link,
+  t,
+  setMessageId,
+}) => {
   return (
     <div className="flex h-[88px] items-center justify-between border-b border-[#E6E2DD] bg-white px-2 md:px-10">
       <div className="flex w-full max-w-[480px] items-center">
@@ -371,7 +383,10 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
       <div className="flex items-center gap-2 text-[#23262C]">
         <Button
           variant="outline"
-          onClick={() => setIsCustomLinkOpen(true)}
+          onClick={() => {
+            setIsCustomLinkOpen(true)
+            setMessageId(1)
+          }}
           className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
         >
           <PenLine className="h-4" />
@@ -379,7 +394,10 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         </Button>
         <Button
           variant="outline"
-          onClick={() => setIsCustomLinkOpen(true)}
+          onClick={() => {
+            setIsCustomLinkOpen(true)
+            setMessageId(2)
+          }}
           className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
         >
           <Mail className="h-4" />
@@ -387,7 +405,10 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         </Button>
         <Button
           variant="outline"
-          onClick={() => setIsCustomLinkOpen(true)}
+          onClick={() => {
+            setIsCustomLinkOpen(true)
+            setMessageId(3)
+          }}
           className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
         >
           <QrCode className="h-4" />
