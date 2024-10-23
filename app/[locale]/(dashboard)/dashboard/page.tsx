@@ -239,7 +239,7 @@ export default function DashboardPage() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="grid h-full w-full flex-1 overflow-y-auto md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="grid h-full w-full flex-1 overflow-y-auto bg-[#F6F6F6] md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div className="sticky top-0 hidden h-[calc(100vh-60px)] border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
           <div className="flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
             <div className="h-[88px] md:border-b md:border-b-[#E6E2DD]">
@@ -277,11 +277,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div
-          className={`${
-            loading ? "max-h-[100vh]" : ""
-          } overflow-x-hidden pt-4 md:pt-0`}
-        >
+        <div className="overflow-x-hidden pt-4 md:pt-0">
           <div
             className={`md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0 ${
               openCreateFlow ? "h-[88px]" : "h-6 md:h-[88px]"
@@ -304,7 +300,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           </div>
-          <main className={`flex  flex-col bg-[#F6F6F6] p-4 lg:p-8`}>
+          <main className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8`}>
             {loading ? (
               <div
                 className={`flex flex-1 items-center justify-center rounded-lg border-none`}
