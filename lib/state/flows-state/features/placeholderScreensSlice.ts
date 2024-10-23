@@ -191,12 +191,12 @@ export const screensSlice = createSlice({
     },
     setSelectedData: (state, action: PayloadAction<string[]>) => {
       const screens = JSON.parse(JSON.stringify(state.screens[0]))
-      console.log(
-        "changing selected data",
-        action.payload,
-        screens,
-        state.selectedScreen
-      )
+      // console.log(
+      //   "changing selected data",
+      //   action.payload,
+      //   screens,
+      //   state.selectedScreen
+      // )
       state.screens[state.selectedScreen] = {
         ...state.screens[state.selectedScreen],
         selectedData: action.payload,

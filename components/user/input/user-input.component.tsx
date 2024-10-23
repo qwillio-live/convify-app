@@ -105,10 +105,29 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
+<<<<<<< HEAD
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
   console.log("user input", screenData, nodeId, parsedData, props)
+=======
+
+  // console.log(
+  //   "user input",
+  //   "screenData",
+  //   screenData,
+  //   "nodeId",
+  //   props.nodeId,
+  //   "parsedData",
+  //   // parsedData,
+  //   "props",
+  //   props,
+  //   "fullScreenData",
+  //   fullScreenData,
+  //   "screenDatatry"
+  //   // screenDatatry
+  // )
+>>>>>>> 5f3db56a (refactor: rewrite switch view tab bar + icon button + global theme)
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {

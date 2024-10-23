@@ -166,7 +166,7 @@ export async function POST(req: NextRequest) {
     })
     const flowId = flow.id
     if (templateSteps.length > 0) {
-      console.log("template steps eetered", templateSteps.length)
+      // console.log("template steps eetered", templateSteps.length)
       const flowSteps = templateSteps.map((step) => ({
         flowId,
         name: step.name,

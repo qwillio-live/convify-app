@@ -175,7 +175,6 @@ export const MultipleChoiceGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
-
   return (
     <div
       className="m-choice relative w-full"

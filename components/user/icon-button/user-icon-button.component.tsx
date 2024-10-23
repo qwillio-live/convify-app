@@ -1,9 +1,7 @@
 "use client"
-import React, { useCallback, useEffect, useRef } from "react"
-import Link from "next/link"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { track } from "@vercel/analytics/react"
-import { debounce, throttle } from "lodash"
+import { debounce } from "lodash"
 import {
   Activity,
   Anchor,
@@ -14,16 +12,13 @@ import {
   Mountain,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { darken, rgba } from "polished"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
-import { useEditor, useNode } from "@/lib/craftjs"
+import { useNode } from "@/lib/craftjs"
 import {
   getAllFilledAnswers,
-  navigateToScreen,
   setAlarm,
-  setCurrentScreenName,
   setErrorCount,
   setSelectedScreen,
   validateScreen,
@@ -32,27 +27,7 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Button as CustomButton } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
 import {
   ImagePictureTypes,
   PictureTypes,
@@ -61,36 +36,33 @@ import {
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
-import {
-  getBackgroundForPreset,
-  getHoverBackgroundForPreset,
-} from "./useButtonThemePresets"
 import { IconButtonSettings } from "./user-icon-button.settings"
 import { useSearchParams } from "next/navigation"
 import { UserInputSizes } from "../input/user-input.component"
 import hexoid from "hexoid"
+import { getNextScreenInfoFromStore } from "./utils"
 
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-}
+// const IconsList = {
+//   aperture: (props) => <Aperture {...props} />,
+//   activity: (props) => <Activity {...props} />,
+//   dollarsign: (props) => <DollarSign {...props} />,
+//   anchor: (props) => <Anchor {...props} />,
+//   disc: (props) => <Disc {...props} />,
+//   mountain: (props) => <Mountain {...props} />,
+//   arrowright: (props) => <ArrowRight {...props} />,
+// }
 
-const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  const IconComponent = IconsList[icon]
+// const IconGenerator = ({ icon, size, className = "", ...rest }) => {
+//   const IconComponent = IconsList[icon]
 
-  if (!IconComponent) {
-    return null // or some default icon or error handling
-  }
+//   if (!IconComponent) {
+//     return null // or some default icon or error handling
+//   }
 
-  return (
-    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
-  )
-}
+//   return (
+//     <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
+//   )
+// }
 
 const ButtonSizeValues = {
   small: ".8rem",
@@ -114,6 +86,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+
 export const IconButtonGen = ({
   disabled,
   fontFamily,
@@ -150,13 +123,13 @@ export const IconButtonGen = ({
 }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const pathName = usePathname()
+  // const pathName = usePathname()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
-  const alarm = useAppSelector(
-    (state) =>
-      state?.screen?.screens[state.screen.selectedScreen]?.alarm || false
-  )
+  // const alarm = useAppSelector(
+  //   (state) =>
+  //     state?.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  // )
   const currentScreenTotal =
     useAppSelector(
       (state) =>
@@ -167,67 +140,71 @@ export const IconButtonGen = ({
       (state) =>
         state?.screen?.screens[state.screen.selectedScreen]?.totalFilled
     ) || ""
-  const AllScreens = useAppSelector((state) => state?.screen?.screens)
+  // const AllScreens = useAppSelector((state) => state?.screen?.screens)
   const selectedScreen = useAppSelector(
     (state) =>
       state?.screen?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-  const sc = useAppSelector((state) => state?.screen?.screens) || []
-  const screenValidated =
-    useAppSelector(
-      (state: RootState) =>
-        state.screen?.screens[selectedScreen]?.screenValidated
-    ) || false
+  const sc = useAppSelector((state) => state?.screen?.screens || [])
+  // const screenValidated =
+  //   useAppSelector(
+  //     (state: RootState) =>
+  //       state.screen?.screens[selectedScreen]?.screenValidated
+  //   ) || false
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { replace } = useRouter()
+  // const { replace } = useRouter()
   function handleSearch(term: string) {
-    const params = new URLSearchParams(searchParams || undefined)
+    const params = new URLSearchParams((searchParams || "").toString())
     if (term) {
       params.set("screen", term)
     }
-    console.log("new path", `${pathname}?${params.toString()}`)
+    // console.log("new path", `${pathname}?${params.toString()}`)
     router.push(`${pathname}?${params.toString()}`)
   }
-  const newScreensMapper = {
-    "next-screen":
-      selectedScreen + 1 < sc.length
-        ? sc[selectedScreen + 1]?.screenName
-        : sc[selectedScreen]?.screenName,
-    "back-screen":
-      selectedScreen - 1 >= 0
-        ? sc[selectedScreen - 1]?.screenName
-        : sc[selectedScreen]?.screenName,
-    none: "none",
-  }
+
+  const newScreensMapper = useMemo(
+    () => ({
+      "next-screen":
+        selectedScreen + 1 < sc.length
+          ? sc[selectedScreen + 1]?.screenName
+          : sc[selectedScreen]?.screenName,
+      "back-screen":
+        selectedScreen - 1 >= 0
+          ? sc[selectedScreen - 1]?.screenName
+          : sc[selectedScreen]?.screenName,
+      none: "none",
+    }),
+    [selectedScreen, sc]
+  )
   const newsc = nextScreen.screenName
   const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
   const index = sc.findIndex(
     (screen) => screen.screenName === updatedScreenName
   )
-  console.log(
-    "next-screen to navigatte",
-    newsc,
-    updatedScreenName,
-    props.buttonAction,
-    selectedScreen,
-    selectedScreen + 1,
-    sc.length,
-    selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
-    sc
-  )
+  // console.log(
+  //   "next-screen to navigatte",
+  //   newsc,
+  //   updatedScreenName,
+  //   props.buttonAction,
+  //   selectedScreen,
+  //   selectedScreen + 1,
+  //   sc.length,
+  //   selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
+  //   sc
+  // )
   const handleNavigateToContent = () => {
-    console.log(
-      "btn navigating",
-      "currentScreenFilled",
-      currentScreenFilled,
-      "currentScreenTotal",
-      currentScreenTotal,
-      "index",
-      index
-    )
+    // console.log(
+    //   "btn navigating",
+    //   "currentScreenFilled",
+    //   currentScreenFilled,
+    //   "currentScreenTotal",
+    //   currentScreenTotal,
+    //   "index",
+    //   index
+    // )
     if (index !== -1) {
       if (currentScreenFilled === currentScreenTotal) {
         dispatch(
@@ -253,7 +230,6 @@ export const IconButtonGen = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
-
   return (
     <div
       className="relative w-full"
@@ -358,6 +334,7 @@ export const IconButtonGen = ({
                     }
                   )}
                   loading="lazy"
+                  alt="button-icon"
                 />
               </picture>
             )}
@@ -518,147 +495,93 @@ export const IconButton = ({
   const {
     actions: { setProp },
     connectors: { connect, drag },
-    selected,
-    isHovered,
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const { actions } = useEditor((state, query) => ({
-    enabled: state.options.enabled,
-  }))
-  const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full")
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
-  const secondaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.secondaryColor
-  )
-  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const secondaryColor = useAppSelector(
-    (state) => state.theme?.general?.secondaryColor
-  )
+  // const primaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.primaryColor
+  // )
+  // const secondaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.secondaryColor
+  // )
+  // const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  // const primaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.primaryColor
+  // )
+  // const secondaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.secondaryColor
+  // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state) => state?.screen?.screens)
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
+  // const screens = useAppSelector((state) => state?.screen?.screens || [])
+  // const screensLength = screens?.length
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
 
-  const nextScreenName =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-        ]?.screenName
-    ) || ""
-  const nextScreenId =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-        ]?.screenId
-    ) || ""
-  const screenNames = useScreenNames()
+  // const nextScreenName =
+  //   useAppSelector(
+  //     (state: RootState) =>
+  //       state?.screen?.screens[
+  //         selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+  //       ]?.screenName
+  //   ) || ""
+  // const nextScreenId =
+  //   useAppSelector(
+  //     (state: RootState) =>
+  //       state?.screen?.screens[
+  //         selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+  //       ]?.screenId
+  //   ) || ""
+  // const screenNames = useScreenNames()
 
-  //editor load needs to be refreshed so that screenName value is re-populated but
+  // editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
-  useEffect(() => {
-    let screenNameChanged = false
-    if (buttonAction === "next-screen") {
-      setProp(
-        (props) =>
-          (props.nextScreen = {
-            screenName: nextScreenName,
-            screenId: nextScreenId,
-          }),
-        200
-      )
-    } else if (buttonAction === "custom-action") {
-      screenNames?.map((screen) => {
-        if (screen.screenId === nextScreen.screenId) {
-          setProp(
-            (props) =>
-              (props.nextScreen = {
-                screenName: screen.screenName,
-                screenId: screen.screenId,
-              }),
-            200
-          )
-          screenNameChanged = true
-        }
-      })
-      if (!screenNameChanged) {
-        setProp((props) => (props.buttonAction = "next-screen"), 200)
-        setProp(
-          (props) =>
-            (props.nextScreen = {
-              screenId: nextScreenId,
-              screenName: nextScreenName,
-            })
-        )
-      }
-    }
-  }, [nextScreenName, buttonAction])
+  // this effects to performance
+  // useEffect(() => {
+  //   let screenNameChanged = false
+  //   if (buttonAction === "next-screen") {
+  //     setProp(
+  //       (props) =>
+  //         (props.nextScreen = {
+  //           screenName: nextScreenName,
+  //           screenId: nextScreenId,
+  //         }),
+  //       200
+  //     )
+  //   } else if (buttonAction === "custom-action") {
+  //     screenNames?.map((screen) => {
+  //       if (screen.screenId === nextScreen.screenId) {
+  //         setProp(
+  //           (props) =>
+  //             (props.nextScreen = {
+  //               screenName: screen.screenName,
+  //               screenId: screen.screenId,
+  //             }),
+  //           200
+  //         )
+  //         screenNameChanged = true
+  //       }
+  //     })
+  //     if (!screenNameChanged) {
+  //       setProp((props) => (props.buttonAction = "next-screen"), 200)
+  //       setProp(
+  //         (props) =>
+  //           (props.nextScreen = {
+  //             screenId: nextScreenId,
+  //             screenName: nextScreenName,
+  //           })
+  //       )
+  //     }
+  //   }
+  // }, [nextScreenName, buttonAction])
 
-  useEffect(() => {
-    if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => (props.fontFamily.value = primaryFont), 200)
-    }
-  }, [primaryFont])
-
-  useEffect(() => {
-    if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-
-      if (background.globalStyled && !background.isCustomized) {
-        setProp(
-          (props) => (props.background.value = backgroundPrimaryColor),
-          200
-        )
-      }
-      if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => (props.color.value = primaryColor), 200)
-      }
-      if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => (props.borderColor.value = primaryColor), 200)
-      }
-
-      // hover colors
-
-      if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp(
-          (props) =>
-            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
-          200
-        )
-      }
-      if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
-      }
-      if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => (props.colorHover.value = primaryColor), 200)
-      }
-    }
-  }, [primaryColor])
   const maxLength = ButtonTextLimit[size]
-  const handleTextChange = (e) => {
+
+  const handleTextChange = () => {
     if (ref.current) {
       const currentText = ref.current.innerText
       if (currentText.length <= maxLength) {
@@ -716,21 +639,23 @@ export const IconButton = ({
       }
     }
   }, [text, maxLength])
-  const throttledSetProp = useCallback(
-    throttle((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }, 200), // Throttle to 50ms to 200ms
-    [setProp]
-  )
 
-  const handlePropChangeThrottled = (property, value) => {
-    throttledSetProp(property, value)
-  }
+  // const throttledSetProp = useCallback(
+  //   (property, value) =>
+  //     throttle(() => {
+  //       setProp((prop) => {
+  //         prop[property] = value
+  //       }, 0)
+  //     }, 200), // Throttle to 50ms to 200ms
+  //   [setProp]
+  // )
 
-  const handleNavigateToScreen = async () => {
-    console.log("entered validating")
+  // const handlePropChangeThrottled = (property, value) => {
+  //   throttledSetProp(property, value)
+  // }
+
+  const handleNavigateToScreen = () => {
+    // console.log("entered validating")
     dispatch(
       validateScreen({ current: selectedScreen, next: nextScreen.screenName })
     )
@@ -746,11 +671,12 @@ export const IconButton = ({
   }
 
   const debouncedSetProp = useCallback(
-    debounce((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }),
+    (property, value) =>
+      debounce(() => {
+        setProp((prop) => {
+          prop[property] = value
+        }, 0)
+      }),
     [setProp]
   )
 
@@ -761,16 +687,12 @@ export const IconButton = ({
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
-      className=""
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
+      className="group flex w-full justify-center"
     >
-      {hover && <Controller nameOfComponent={t("Button")} />}
+      <Controller
+        className="invisible group-hover:visible"
+        nameOfComponent={t("Button")}
+      />
       <div
         className="relative w-full"
         style={{
@@ -815,9 +737,9 @@ export const IconButton = ({
           buttonSize={buttonSize}
           className="button-input-comp"
           {...props}
-          onClick={() => handleNavigateToScreen()}
+          onClick={handleNavigateToScreen}
         >
-          <div className="relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip">
+          <div className="relative flex min-h-[16px] min-w-[32px] max-w-full flex-col overflow-hidden overflow-x-clip">
             {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable
@@ -834,7 +756,7 @@ export const IconButton = ({
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
-                handleTextChange(e)
+                handleTextChange()
                 // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
               }}
               tagName="div"
@@ -886,6 +808,7 @@ export const IconButton = ({
                         "w-[18px]": buttonSize === "small",
                       }
                     )}
+                    alt="button-icon"
                     loading="lazy"
                   />
                 </picture>
@@ -941,7 +864,7 @@ export type IconButtonProps = {
   height: string | number
   fullWidth: boolean
   preset: string
-  settingsTab: string
+  settingsTab: string[]
   buttonSize: string
   tracking: boolean
   trackingEvent: string
@@ -1020,13 +943,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: "filled",
-  settingsTab: "content",
+  settingsTab: ["content"],
   tracking: false,
   trackingEvent: "button_clicked",
-  nextScreen: {
-    screenId: "",
-    screenName: "",
-  },
+  nextScreen: getNextScreenInfoFromStore(),
   buttonAction: "next-screen",
   id: `input-${hexoid(6)()}`,
 }

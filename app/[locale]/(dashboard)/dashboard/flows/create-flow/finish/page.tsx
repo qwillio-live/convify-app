@@ -98,7 +98,7 @@ export default function SelectColor() {
       })
 
       const data = await res.json()
-      console.log("result:", data)
+      // console.log("result:", data)
       setIsLoading(false) // Stop loading
       router.push(`/dashboard/${data.id}/create-flow`)
     } catch (err) {

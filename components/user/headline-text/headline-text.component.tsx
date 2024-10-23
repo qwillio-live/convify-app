@@ -163,7 +163,7 @@ export const HeadlineTextGen = ({
     .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
     .replace(/<br>/g, "\n") // Replace <br> tags with new lines
 
-  console.log("container | bg", containerBackground, borderColor)
+  // console.log("container | bg", containerBackground, borderColor)
   return (
     <div
       className="relative mt-7 w-full heading-text-comp"
