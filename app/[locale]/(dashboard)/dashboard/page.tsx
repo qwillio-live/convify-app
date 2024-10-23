@@ -216,26 +216,26 @@ export default function DashboardPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link className="cursor-pointer" href={"/dashboard"}>
-                    {t("Dashboard")}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/dashboard/flows/create-flow/select-template"
-                    className="cursor-pointer"
-                  >
-                    {t("Create flow")}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  {t("Logout")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+              <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link className="cursor-pointer" href={"/dashboard"}>
+                  {t("Dashboard")}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/dashboard/flows/create-flow/select-template"
+                  className="cursor-pointer"
+                >
+                  {t("Create flow")}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                {t("Logout")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
@@ -277,7 +277,11 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="overflow-x-hidden pt-4 md:pt-0">
+        <div
+          className={`${
+            loading ? "max-h-[100vh]" : ""
+          } overflow-x-hidden pt-4 md:pt-0`}
+        >
           <div
             className={`md:border-b md:border-b-[#E6E2DD] md:bg-white md:pt-0 ${
               openCreateFlow ? "h-[88px]" : "h-6 md:h-[88px]"
@@ -300,13 +304,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           </div>
-          <main
-            className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8 ${
-              openCreateFlow
-                ? "h-[calc(100%-88px)]"
-                : "h-[calc(100%-24px)] md:h-[calc(100%-88px)]"
-            }`}
-          >
+          <main className={`flex  flex-col bg-[#F6F6F6] p-4 lg:p-8`}>
             {loading ? (
               <div
                 className={`flex flex-1 items-center justify-center rounded-lg border-none`}
