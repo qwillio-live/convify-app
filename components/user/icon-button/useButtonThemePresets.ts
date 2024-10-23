@@ -93,7 +93,7 @@ const useButtonThemePresets = () => {
     border: 2,
     fullWidth: true,
     preset: "filled",
-    settingsTab: "content",
+    settingsTab: ["content"],
     buttonSize: "medium",
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
