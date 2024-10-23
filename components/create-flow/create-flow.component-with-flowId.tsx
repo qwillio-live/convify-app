@@ -1,7 +1,6 @@
 "use client"
 
-import { clear } from "console"
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { debounce, throttle } from "lodash"
 import {
@@ -252,7 +251,20 @@ export function CreateFlowComponent({ flowId }) {
 
   const selectedScreenIdex =
     useAppSelector((state) => state?.screen?.selectedScreen) || 0
-  React.useEffect(() => {
+
+  const checkComponentBeforeAvatar = () => {
+    const parsedEditor = JSON.parse(screensHeader)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    return avatarIndex > 0
+  }
+
+  useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
       setValidateScreen({
@@ -269,18 +281,6 @@ export function CreateFlowComponent({ flowId }) {
   }, [])
 
   useEffect(() => {
-    const checkComponentBeforeAvatar = () => {
-      const parsedEditor = JSON.parse(screensHeader)
-      const container = parsedEditor["ROOT"]
-      if (!container) {
-        return false
-      }
-      const avatarIndex = container.nodes.findIndex(
-        (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
-      )
-      return avatarIndex > 0
-    }
-
     const hasComponentBeforeAvatar = checkComponentBeforeAvatar()
     dispatch(setComponentBeforeAvatar(hasComponentBeforeAvatar))
   }, [editorLoad, dispatch])
@@ -302,6 +302,7 @@ export function CreateFlowComponent({ flowId }) {
       }
     }
   }, [headerMode, height])
+
   React.useEffect(() => {
     if (!headerMode) {
       const updateWidth = () => {

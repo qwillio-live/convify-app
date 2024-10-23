@@ -89,30 +89,6 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const hasComponentBeforeAvatar = useAppSelector(
-    (state) => state?.screen?.hasComponentBeforeAvatar
-  )
-  const avatarRef = useRef(null)
-  const baseSize = 90 // Initial base size of the avatar
-  const minimumSize = 48 // Minimum size of the avatar
-  const sizeReductionFactor = 0.5 // Control the rate of size reduction
-  const mobileBaseSize = 60
-
-  // Calculate dynamic size
-  // let dynamicSize = Math.max(
-  //   baseSize - scrollY * sizeReductionFactor,
-  //   minimumSize
-  // )
-  // let translateYPercent = Math.max(0, 35 - scrollY)
-  // const translateY = mobileScreen ? `calc(${translateYPercent}%)` : "0px"
-  const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
-  )
-  const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
-
   return (
     <div
       className=""
@@ -194,6 +170,8 @@ export const UserLogo = ({
   const hasComponentBeforeAvatar = useAppSelector(
     (state) => state?.screen?.hasComponentBeforeAvatar
   )
+
+  console.log("anjit has component before avatar", hasComponentBeforeAvatar)
 
   const avatarRef = useRef(null)
 
