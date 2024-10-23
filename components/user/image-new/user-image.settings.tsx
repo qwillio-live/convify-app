@@ -1,11 +1,16 @@
 import React, { useCallback, useEffect } from "react"
+import { DefaultImagePlaceholder } from "@/constant"
+import axios from "axios"
+
+
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
 import {
   MoveHorizontal,
   AlignHorizontalJustifyStart,
   AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyCenter,
 } from "lucide-react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
@@ -19,9 +24,9 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/custom-checkbox"
 import {
   Select,
   SelectContent,
@@ -31,13 +36,12 @@ import {
   SelectValue,
 } from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
+
 import { Controller } from "../settings/controller.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { IconButtonSizes, UserLogo } from "./user-image.component"
-import axios from "axios"
 import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
@@ -451,7 +455,7 @@ export const ImageSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="w-full"
+        className="w-full mb-10"
       >
         <AccordionItem value="item-2">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
@@ -477,12 +481,22 @@ export const ImageSettings = () => {
                 }}
                 id="enableLink"
               />
-              <Label htmlFor="enableLink">{t("Enable Link")}</Label>
+              <label
+                htmlFor="enableLink"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                onClick={(e) => {
+                  handlePropChange("enableLink", !enableLink)
+                }}
+              >
+                {t("Enable Link")}
+              </label>
             </div>
             {enableLink && (
               <>
-                <div className="space-y-2">
-                  <Label htmlFor="text-url">{t("Add URL")}</Label>
+                <div className="style-control col-span-2 flex flex-col">
+                  <p className="text-sm text-muted-foreground">
+                    {t("Add URL")}
+                  </p>
                   <Input
                     id="text-url"
                     type="text"
@@ -493,18 +507,15 @@ export const ImageSettings = () => {
                     }}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>{t("Open in")}</Label>
+                <div className="style-control col-span-2 flex flex-col">
+                  <p className="text-md flex-1 text-muted-foreground">
+                    {t("Open in")}
+                  </p>
                   <Select
-                    defaultValue={"new-window"}
-                    value={windowTarget ? "new-window" : "same-window"}
-                    onValueChange={(e) =>
-                      setProp(
-                        (props) =>
-                          (props.windowTarget =
-                            e === "new-window" ? true : false)
-                      )
-                    }
+                    defaultValue={"arrowright"}
+                    onValueChange={(e) => {
+                      setProp((props) => (props.icon = e), 1000)
+                    }}
                   >
                     <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                       <SelectValue placeholder="Select Link" />
@@ -857,8 +868,8 @@ export const ImageSettings = () => {
 export const DefaultPropsImg = {
   alt: "Image",
   radiusCorner: 0,
-  size: "small",
-  // picSize: IconButtonSizes.small,
+  size: "medium",
+  // picSize: IconButtonSizes.medium,
   marginTop: "20px",
   marginBottom: "20px",
   marginLeft: "20px",
@@ -876,7 +887,7 @@ export const DefaultPropsImg = {
   imageSize: 100,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
-  src: ImagePlaceholder.src,
+  src: DefaultImagePlaceholder,
 }
 
 Img.craft = {

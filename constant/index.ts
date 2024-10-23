@@ -325,3 +325,6 @@ export const templates: Template[] = [
     isPopular: false,
   },
 ]
+
+export const DefaultImagePlaceholder =
+  "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"

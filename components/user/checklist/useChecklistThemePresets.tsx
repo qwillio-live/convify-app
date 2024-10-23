@@ -1,12 +1,14 @@
+import hexoid from "hexoid"
+import { useTranslations } from "next-intl"
+
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+
 import {
   ChecklistLayouts,
   ChecklistPresets,
   ChecklistProps,
   ChecklistSizes,
 } from "./user-checklist.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import hexoid from "hexoid"
-import { useTranslations } from "next-intl"
 
 const useChecklistThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
@@ -32,7 +34,7 @@ const useChecklistThemePresets = () => {
     iconColor: "#30AB66",
     width: ChecklistSizes.small,
     height: 50,
-    size: ChecklistSizes.small,
+    size: ChecklistSizes.medium,
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,

@@ -184,7 +184,16 @@ export const UserTextInputSettings = () => {
                 value={justifyContent}
                 defaultValue={justifyContent}
                 onValueChange={(value) => {
-                  setProp((props) => (props.justifyContent = value), 1000)
+                  setProp((props) => {
+                    props.justifyContent = value
+                    if (value === "start") {
+                      props.textAlign = "left"
+                    } else if (value === "end") {
+                      props.textAlign = "right"
+                    } else {
+                      props.textAlign = "center"
+                    }
+                  }, 1000)
                 }}
               >
                 <TabsList className="grid w-full grid-cols-3 bg-[#eeeeee]">

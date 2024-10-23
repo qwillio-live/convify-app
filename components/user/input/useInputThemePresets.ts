@@ -1,6 +1,7 @@
-import { darken, rgba } from "polished"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import hexoid from "hexoid"
+import { darken, rgba } from "polished"
+
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { PictureTypes } from "@/components/PicturePicker"
 
 import { UserInputProps, UserInputSizes } from "./user-input.component"

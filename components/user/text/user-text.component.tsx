@@ -21,19 +21,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
-
-const ContainerWidthValues = {
-  small: "520px",
-  medium: "647px",
-  large: "770px",
-  full: "100%",
-}
-const MobileContainerWidthValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
+import { UserInputSizes } from "../input/user-input.component"
 
 export enum TextContainerSize {
   small = "small",
@@ -81,7 +69,7 @@ export type TextInputProps = {
   size: TextContainerSize
   fontSize: number
   fontWeight: string | number
-  textAlign: StyleProperty
+  textAlign: string
   containerBackground: string
   background: StyleProperty
   backgroundHover: StyleProperty
@@ -165,14 +153,10 @@ export const TextInputDefaultProps: TextInputProps = {
   marginBottom: 20,
   fontSize: 18,
   fontWeight: "400",
-  textAlign: {
-    value: "center",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  paddingLeft: "0",
+  textAlign: "center",
+  paddingLeft: "12",
   paddingTop: "0",
-  paddingRight: "0",
+  paddingRight: "12",
   paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
@@ -191,6 +175,7 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
   transition: all 0.2s ease;
+  text-align: ${(props) => `${props?.textAlign}`};
 
   &:focus {
     border-color: ${(props) =>
@@ -198,11 +183,7 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   }
 
   color: ${(props) => `${props?.color}`};
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
-  width: 100%;
+  overflow: hidden;
   box-sizing: border-box;
   height: ${(props) => props.height};
   margin-top: ${(props) => props.marginTop}px;
@@ -214,13 +195,28 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (mobileScreen) {
+      return { width: "calc(100% - 20px)" }
+    } else {
+      if (size === UserInputSizes.small) {
+        return { width: "520px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "650px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "770px" }
+      } else {
+        return { width: "calc(100% - 20px)" }
+      }
+    }
+  }};
+
+  @media (max-width: 520px) {
+    width: calc(100% - 20px);
   }
 `
 
@@ -312,8 +308,9 @@ export const UserTextInputGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
+        textAlign={textAlign}
         {...props}
-        className="text-[1rem]"
+        className="user-text-comp text-[1rem]"
       >
         <div
           style={{
@@ -367,6 +364,8 @@ export const UserText = ({
   textColor,
   ...props
 }) => {
+  paddingLeft = 16
+  paddingRight = 16
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -580,6 +579,7 @@ export const UserText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          className="user-text-comp"
           {...props}
         >
           <div className="flex flex-col overflow-x-clip">

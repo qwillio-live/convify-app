@@ -1,7 +1,18 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef, useState } from "react"
+import hexoid from "hexoid"
+import { debounce } from "lodash"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
+
 import { useNode } from "@/lib/craftjs"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Select as CustomSelect,
   SelectContent,
@@ -9,19 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
 import { Controller } from "../settings/controller.component"
-import { SelectSettings } from "./user-select.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { useTranslations } from "next-intl"
-import hexoid from "hexoid"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
-import ContentEditable from "react-contenteditable"
-import { debounce } from "lodash"
-import {
-  setPreviewScreenData,
-  setUpdateFilledCount,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { SelectSettings } from "./user-select.settings"
 
 const SelectSizeValues = {
   small: "300px",
@@ -80,9 +83,6 @@ export const SelectGen = ({
     }
     return []
   })
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
@@ -143,7 +143,7 @@ export const SelectGen = ({
   return (
     <div
       ref={itemRefNew}
-      className="relative w-full"
+      className="relative w-full max-w-[calc(100%-20px)]"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -151,7 +151,7 @@ export const SelectGen = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        minWidth: "100%",
+        // minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
         paddingLeft: `${marginLeft}px`,
@@ -180,17 +180,14 @@ export const SelectGen = ({
         <div
           className={`w-full p-1 `}
           style={{
-            color: `${
-              labelColor !== "#ffffff" ? labelColor : primaryTextColor
-            }`,
+            color: labelColor,
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: SelectSizeValues[size || "medium"],
           }}
         >
-          <div dangerouslySetInnerHTML={{ __html: label }} />
+          <label>{label}</label>
         </div>
         <StyledCustomSelectTrigger
-          data-label={props?.fieldName || ""}
           className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
             !selectedOptionId ? "text-muted-foreground" : ""
           } ${alarm && isRequired && !isFilled && "!border-red-600"}`}
@@ -262,10 +259,9 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
       props.borderHoverColor}; /* Change to your desired hover border color */
   }
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+  /* &:focus {
+    border-color: ${(props) => props.borderHoverColor};
+  } */
 
   overflow: hidden;
   max-width: ${(props) =>
@@ -383,6 +379,12 @@ export const Select = ({
     }
   }, [primaryColor])
 
+  useEffect(() => {
+    if (primaryTextColor) {
+      setProp((props) => (props.labelColor = primaryTextColor), 200)
+    }
+  }, [primaryTextColor])
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -449,9 +451,7 @@ export const Select = ({
                 handlePropChangeDebounced("label", e.target.value)
               }}
               style={{
-                color: `${
-                  labelColor !== "#ffffff" ? labelColor : primaryTextColor
-                }`,
+                color: labelColor,
                 outlineColor: borderHoverColor.value,
                 borderRadius: "4px",
               }}
@@ -557,7 +557,7 @@ export const SelectDefaultProps: SelectProps = {
     globalStyled: true,
     isCustomized: false,
   },
-  labelColor: "#ffffff",
+  labelColor: "#000000",
   containerBackground: "transparent",
   borderColor: {
     value: "inherit",

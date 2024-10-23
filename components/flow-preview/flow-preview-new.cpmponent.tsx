@@ -10,6 +10,7 @@ import {
 } from "@/lib/state/flows-state/features/newScreens"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
+
 import ResolvedNewComponentsFromCraftState from "../user/settings/new-resolved-components"
 
 type Position = "static" | "relative" | "absolute" | "sticky" | "fixed"
@@ -94,8 +95,7 @@ export default function NewFlowPreview() {
       router.push(
         `${pathname}?screen=${
           currentScreenName !== "" ? currentScreenName : firstScreenName
-        }`,
-        { scroll: false }
+        }`
       )
 
       router.refresh()

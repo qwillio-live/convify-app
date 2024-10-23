@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect } from "react"
+import axios from "axios"
+import { debounce, throttle } from "lodash"
 import {
-  AlignHorizontalJustifyStart,
-  AlignHorizontalJustifyEnd,
   AlignHorizontalJustifyCenter,
+  AlignHorizontalJustifyEnd,
+  AlignHorizontalJustifyStart,
 } from "lucide-react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { useTranslations } from "next-intl"
-import { throttle, debounce } from "lodash"
+
 import { useNode } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -15,9 +18,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/custom-checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/custom-checkbox"
 import {
   Select,
   SelectContent,
@@ -27,11 +30,10 @@ import {
   SelectValue,
 } from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
+
 import { Controller } from "../settings/controller.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
 import { UserLogo } from "./user-logo.component"
-import axios from "axios"
 import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
@@ -334,12 +336,22 @@ export const LogoSettings = () => {
                 }}
                 id="enableLink"
               />
-              <Label htmlFor="enableLink">{t("Enable Link")}</Label>
+              <label
+                htmlFor="enableLink"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                onClick={(e) => {
+                  handlePropChange("enableLink", !enableLink)
+                }}
+              >
+                {t("Enable Link")}
+              </label>
             </div>
             {enableLink && (
               <>
-                <div className="space-y-2">
-                  <Label>{t("Add URL")}</Label>
+                <div className="style-control col-span-2 flex flex-col">
+                  <p className="text-sm text-muted-foreground">
+                    {t("Add URL")}
+                  </p>
                   <Input
                     value={url}
                     placeholder={"URL"}
@@ -348,18 +360,16 @@ export const LogoSettings = () => {
                     }}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>{t("Open in")}</Label>
+                <div className="style-control col-span-2 flex flex-col">
+                  <p className="text-md flex-1 text-muted-foreground">
+                    {t("Open in")}
+                  </p>
                   <Select
-                    defaultValue={"new-window"}
-                    value={windowTarget ? "new-window" : "same-window"}
-                    onValueChange={(e) =>
-                      setProp(
-                        (props) =>
-                          (props.windowTarget =
-                            e === "new-window" ? true : false)
-                      )
-                    }
+                    defaultValue={"aperture"}
+                    value={icon === "arrowright" ? "arrowright" : "aperture"}
+                    onValueChange={(e) => {
+                      setProp((props) => (props.icon = e), 1000)
+                    }}
                   >
                     <SelectTrigger className="h-8.5 w-full bg-[#FAFAFA] text-xs">
                       <SelectValue placeholder="Select Link" />

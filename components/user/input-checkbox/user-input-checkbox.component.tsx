@@ -50,7 +50,7 @@ export type UserInputCheckboxProps = {
   marginLeft: number
   marginRight: number
   marginTop: number
-  width: number
+  width: number | string
   marginBottom: number
   paddingLeft: number
   paddingRight: number
@@ -104,8 +104,8 @@ export type UserInputCheckboxProps = {
 export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   inputValue: "",
   fontSize: 16,
+  width: "unset",
   textColor: "#ffffff",
-  width: 366,
   fontWeight: "normal",
   marginLeft: 0,
   marginRight: 0,
@@ -213,7 +213,53 @@ const UserInputCheckboxStyled = styled.div<StyledUserInputCheckboxProps>`
   border-right-width: ${(props) => props.borderRightWidth}px;
   align-self: center;
 `
-// width: ${(props) => props.width}px;
+
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
+
 export const UserInputCheckboxGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
@@ -316,22 +362,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-            // backgroundColor: containerHover
-            //   ? darkenedBg
-            //   : props.backgroundColor,
-          }}
-          onMouseEnter={(e) => {
-            e.stopPropagation()
-            setContainerHover(true)
-          }}
-          onMouseLeave={(e) => {
-            e.stopPropagation()
-            setContainerHover(false)
-          }}
+        <Wrapper
+          size={props.size}
+          className="checkbox-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           <div
             className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
@@ -476,7 +509,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
             </UserInputCheckboxStyled>
           </div>
           {/** End field container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -621,15 +654,10 @@ export const UserInputCheckbox = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${
-              mobileScreen
-                ? UserInputMobileSizeValues[props.size]
-                : UserInputSizeValues[props.size]
-            }`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="checkbox-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           <div className="field-container flex w-full flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputCheckboxStyled
@@ -690,7 +718,6 @@ export const UserInputCheckbox = ({ ...props }) => {
                 }
               }}
               style={{
-                width: UserInputSizeValues[props.size],
                 zIndex: 1,
                 backgroundColor: containerHover
                   ? darkenedBg
@@ -745,7 +772,7 @@ export const UserInputCheckbox = ({ ...props }) => {
               )}
             </UserInputCheckboxStyled>
           </div>
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

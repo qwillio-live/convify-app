@@ -1,26 +1,16 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useNode } from "@/lib/craftjs"
-import { Controller } from "../settings/controller.component"
-import { PictureChoiceSettings } from "./user-picture-choice.settings"
-import { StyleProperty } from "../types/style.types"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import hexoid from "hexoid"
+import { debounce } from "lodash"
+import { Pi } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
-import styled from "styled-components"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import hexoid from "hexoid"
-import {
-  ImagePictureTypes,
-  PictureTypes,
-  SvgRenderer,
-} from "@/components/PicturePicker"
-import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { usePathname, useSearchParams } from "next/navigation"
-import { useRouter } from "next/navigation"
+import styled from "styled-components"
+
+import { useNode } from "@/lib/craftjs"
 import {
   getAllFilledAnswers,
   setPreviewScreenData,
@@ -29,13 +19,47 @@ import {
   setUpdateFilledCount,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
-const PictureChoiceSizeValues = {
-  small: "400px",
-  medium: "800px",
-  large: "1200px",
-  full: "100%",
-}
+import { UserInputSizes } from "../input/user-input.component"
+import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
+import { PictureChoiceSettings } from "./user-picture-choice.settings"
+import { useMediaQuery } from "@/hooks/use-media-query"
+
+const Wrapper = styled.ul<{ mobileScreen?: boolean; size: UserInputSizes }>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (mobileScreen) {
+      return { width: "calc(100% - 20px)" }
+    } else {
+      if (size === UserInputSizes.small) {
+        return { width: "376px", maxWidth: "400px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)", maxWidth: "800px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)", maxWidth: "1000px" }
+      } else {
+        return { width: "calc(100% - 20px)" }
+      }
+    }
+  }};
+
+  @media (max-width: 376px) {
+    width: calc(100% - 20px);
+  }
+`
 
 export const PictureChoiceGen = ({
   disabled = false,
@@ -135,7 +159,7 @@ export const PictureChoiceGen = ({
   )
   return (
     <div
-      className="relative w-full"
+      className="relative w-full m-choice"
       style={{
         pointerEvents: disabled ? "none" : "auto",
         width: "100%",
@@ -151,149 +175,149 @@ export const PictureChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <div
-        className="w-full p-1 text-center"
-        style={{
-          color: `${labelColor !== "#ffffff" ? labelColor : primaryTextColor}`,
-          fontFamily: `var(${fontFamily?.value})`,
-          maxWidth: PictureChoiceSizeValues[size || "small"],
-        }}
-      >
-        <div dangerouslySetInnerHTML={{ __html: label }} />
-      </div>
-      <ul
-        data-label={props?.fieldName || ""}
-        // className="flex w-full flex-wrap justify-center"
-        ref={itemRef}
-        className={`flex w-full flex-wrap justify-center`}
-        style={{
-          fontFamily: `var(${fontFamily?.value})`,
-          maxWidth: PictureChoiceSizeValues[size || "medium"],
-        }}
-      >
-        {choices?.map((choice, index) => (
-          <PictureChoiceItem
-            buttonAction={choice.buttonAction}
-            key={index}
-            isFirst={index === 0}
-            isLast={index === choices.length - 1}
-            isSelected={selectedChoices?.includes(choice.id) || false}
-            size={size}
-            required={required}
-            tracking={tracking}
-            choicesLength={choices.length}
-            choice={choice}
-            fieldName={fieldName}
-            multiSelect={multiSelect}
-            checkboxVisible={checkboxVisible}
-            defaultStyles={defaultStyles}
-            hoverStyles={hoverStyles}
-            selectedStyles={selectedStyles}
-            onValueChange={null}
-            forGen={true}
-            selections={selectedChoices}
-            isRequired={isRequired}
-            onSelectChange={() => {
-              if (multiSelect) {
-                setSelectedChoices((prev) => {
-                  if (prev.includes(choice.id)) {
-                    // Remove choice from selection
-                    const updatedChoices = prev.filter(
-                      (selectionId) => selectionId !== choice.id
-                    )
-                    if (isRequired) {
-                      console.log(
-                        "updatedChoices.length > 0 && !isCountUpdated",
-                        updatedChoices.length,
-                        isCountUpdated
+      <Wrapper size={size} className="user-picture-choice-component">
+        <div
+          className="w-full p-1 text-center"
+          style={{
+            color: labelColor,
+            fontFamily: `var(${fontFamily?.value})`,
+          }}
+        >
+          <label>{label}</label>
+        </div>
+        <ul
+          // className="flex w-full flex-wrap justify-center"
+          ref={itemRef}
+          className={`flex w-full flex-wrap justify-center gap-[10px]`}
+          style={{
+            fontFamily: `var(${fontFamily?.value})`,
+            // maxWidth:
+          }}
+        >
+          {choices?.map((choice, index) => (
+            <PictureChoiceItem
+              buttonAction={choice.buttonAction}
+              key={index}
+              isFirst={index === 0}
+              isLast={index === choices.length - 1}
+              isSelected={selectedChoices?.includes(choice.id) || false}
+              size={size}
+              required={required}
+              tracking={tracking}
+              choicesLength={choices.length}
+              choice={choice}
+              fieldName={fieldName}
+              multiSelect={multiSelect}
+              checkboxVisible={checkboxVisible}
+              defaultStyles={defaultStyles}
+              hoverStyles={hoverStyles}
+              selectedStyles={selectedStyles}
+              onValueChange={null}
+              forGen={true}
+              selections={selectedChoices}
+              isRequired={isRequired}
+              onSelectChange={() => {
+                if (multiSelect) {
+                  setSelectedChoices((prev) => {
+                    if (prev.includes(choice.id)) {
+                      // Remove choice from selection
+                      const updatedChoices = prev.filter(
+                        (selectionId) => selectionId !== choice.id
                       )
-                      if (updatedChoices.length > 0 && !isCountUpdated) {
-                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                        setIsCountUpdated(true) // Set count updated flag
-                      } else if (
-                        updatedChoices.length === 0 &&
-                        isCountUpdated
-                      ) {
-                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                        setIsCountUpdated(false) // Reset count updated flag
+                      if (isRequired) {
+                        console.log(
+                          "updatedChoices.length > 0 && !isCountUpdated",
+                          updatedChoices.length,
+                          isCountUpdated
+                        )
+                        if (updatedChoices.length > 0 && !isCountUpdated) {
+                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          setIsCountUpdated(true) // Set count updated flag
+                        } else if (
+                          updatedChoices.length === 0 &&
+                          isCountUpdated
+                        ) {
+                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          setIsCountUpdated(false) // Reset count updated flag
+                        }
                       }
-                    }
-                    // Dispatch action for removing choice
-                    dispatch(
-                      setPreviewScreenData({
-                        nodeId: props.nodeId,
-                        newSelections: updatedChoices,
-                        entity: "selections",
-                        isArray: true,
-                      })
-                    )
+                      // Dispatch action for removing choice
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          newSelections: updatedChoices,
+                          entity: "selections",
+                          isArray: true,
+                        })
+                      )
 
-                    return updatedChoices
-                  } else {
-                    // Add choice to selection
-                    const updatedChoices = [...prev, choice.id]
-                    if (isRequired) {
-                      if (updatedChoices.length > 0 && !isCountUpdated) {
-                        dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                        setIsCountUpdated(true) // Set count updated flag
-                      } else if (
-                        updatedChoices.length === 0 &&
-                        isCountUpdated
-                      ) {
-                        dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                        setIsCountUpdated(false) // Reset count updated flag
+                      return updatedChoices
+                    } else {
+                      // Add choice to selection
+                      const updatedChoices = [...prev, choice.id]
+                      if (isRequired) {
+                        if (updatedChoices.length > 0 && !isCountUpdated) {
+                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          setIsCountUpdated(true) // Set count updated flag
+                        } else if (
+                          updatedChoices.length === 0 &&
+                          isCountUpdated
+                        ) {
+                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          setIsCountUpdated(false) // Reset count updated flag
+                        }
                       }
+                      // Dispatch action for adding choice
+                      dispatch(
+                        setPreviewScreenData({
+                          nodeId: props.nodeId,
+                          newSelections: updatedChoices,
+                          entity: "selections",
+                          isArray: true,
+                        })
+                      )
+                      return updatedChoices
                     }
-                    // Dispatch action for adding choice
-                    dispatch(
-                      setPreviewScreenData({
-                        nodeId: props.nodeId,
-                        newSelections: updatedChoices,
-                        entity: "selections",
-                        isArray: true,
-                      })
+                  })
+                } else {
+                  console.log("entered else")
+                  const newSelection = selectedChoices?.includes(choice.id)
+                    ? []
+                    : [choice.id]
+
+                  dispatch(
+                    setSelectedData(
+                      selectedChoices?.includes(choice.id) ? [] : [choice.id]
                     )
-                    return updatedChoices
+                  )
+                  dispatch(
+                    setPreviewScreenData({
+                      nodeId: props.nodeId,
+                      newSelections: selectedChoices?.includes(choice.id)
+                        ? []
+                        : [choice.id],
+                      entity: "selections",
+                      isArray: true,
+                    })
+                  )
+                  if (isRequired) {
+                    if (newSelection.length > 0 && !isCountUpdated) {
+                      dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                      setIsCountUpdated(true) // Set count updated flag
+                    } else if (newSelection.length === 0 && isCountUpdated) {
+                      dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                      setIsCountUpdated(false) // Reset count updated flag
+                    }
                   }
-                })
-              } else {
-                console.log("entered else")
-                const newSelection = selectedChoices?.includes(choice.id)
-                  ? []
-                  : [choice.id]
-
-                dispatch(
-                  setSelectedData(
+                  setSelectedChoices(
                     selectedChoices?.includes(choice.id) ? [] : [choice.id]
                   )
-                )
-                dispatch(
-                  setPreviewScreenData({
-                    nodeId: props.nodeId,
-                    newSelections: selectedChoices?.includes(choice.id)
-                      ? []
-                      : [choice.id],
-                    entity: "selections",
-                    isArray: true,
-                  })
-                )
-                if (isRequired) {
-                  if (newSelection.length > 0 && !isCountUpdated) {
-                    dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
-                    setIsCountUpdated(true) // Set count updated flag
-                  } else if (newSelection.length === 0 && isCountUpdated) {
-                    dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
-                    setIsCountUpdated(false) // Reset count updated flag
-                  }
                 }
-                setSelectedChoices(
-                  selectedChoices?.includes(choice.id) ? [] : [choice.id]
-                )
-              }
-            }}
-          />
-        ))}
-      </ul>
+              }}
+            />
+          ))}
+        </ul>
+      </Wrapper>
     </div>
   )
 }
@@ -438,85 +462,45 @@ export const PictureChoice = ({
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Picture Choice")} />}
-      <div
-        className="relative w-full"
-        style={{
-          background: `${containerBackground}`,
-          display: "inline-flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          boxSizing: "border-box",
-          minWidth: "100%",
-          maxWidth: "100%",
-          paddingTop: `${marginTop}px`,
-          paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft}px`,
-          paddingRight: `${marginRight}px`,
-        }}
+      <Wrapper
+        size={size}
+        mobileScreen={!!mobileScreen}
+        className="user-picture-choice-component"
       >
+        {hover && <Controller nameOfComponent={t("Picture Choice")} />}
         <div
-          className="w-full p-1 text-center"
+          className="relative w-full"
           style={{
-            fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: PictureChoiceSizeValues[size || "medium"],
+            background: `${containerBackground}`,
+            display: "inline-flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            minWidth: "100%",
+            maxWidth: "100%",
+            paddingTop: `${marginTop}px`,
+            paddingBottom: `${marginBottom}px`,
+            paddingLeft: `${marginLeft}px`,
+            paddingRight: `${marginRight}px`,
           }}
         >
-          {/** @ts-ignore */}
-          {/** @ts-ignore */}
-          <ContentEditable
-            className="px-1"
-            html={label}
-            onChange={(e) => {
-              setLabel(e.target.value)
-              handlePropChangeDebounced("label", e.target.value)
-            }}
+          <div
+            className="w-full p-1 text-center"
             style={{
-              color: `${
-                labelColor !== "#ffffff" ? labelColor : primaryTextColor
-              }`,
-              outlineColor: labelBorderColor,
-              borderRadius: "4px",
+              fontFamily: `var(${fontFamily?.value})`,
             }}
-          />
-        </div>
-        <ul
-          data-label={props?.fieldName || ""}
-          className="flex w-full flex-wrap justify-center"
-          style={{
-            fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: PictureChoiceSizeValues[size || "medium"],
-          }}
-        >
-          {choices.map((choice, index) => (
-            <PictureChoiceItem
-              buttonAction={choice.buttonAction}
-              isRequired={false}
-              key={index}
-              isFirst={index === 0}
-              isLast={index === choices.length - 1}
-              isSelected={selections.includes(choice.id)}
-              required={required}
-              tracking={tracking}
-              size={size}
-              choicesLength={choices.length}
-              choice={choice}
-              fieldName={fieldName}
-              multiSelect={multiSelect}
-              checkboxVisible={checkboxVisible}
-              defaultStyles={defaultStyles}
-              hoverStyles={hoverStyles}
-              selectedStyles={selectedStyles}
-              forGen={false}
-              selections={selections}
-              onValueChange={(updatedValue) => {
-                setProp((props) => {
-                  props.choices[index].value = updatedValue
-                  return props
-                }, 200)
+          >
+            {/** @ts-ignore */}
+            {/** @ts-ignore */}
+            <ContentEditable
+              className="px-1"
+              html={label}
+              onChange={(e) => {
+                setLabel(e.target.value)
+                handlePropChangeDebounced("label", e.target.value)
               }}
-              onSelectChange={() => {
+              // onSelectChange={() => {
                 // if (multiSelect) {
                 //   setProp((props) => {
                 //     if (props.selections.includes(choice.id)) {
@@ -536,11 +520,71 @@ export const PictureChoice = ({
                 //     return props
                 //   }, 200)
                 // }
-              }}
+              // }}
             />
-          ))}
-        </ul>
-      </div>
+          </div>
+          <ul
+            className={cn(
+              "flex w-full justify-center gap-[10px]  flex-wrap",
+              {}
+            )}
+            style={{
+              fontFamily: `var(${fontFamily?.value})`,
+            }}
+          >
+            {choices.map((choice, index) => (
+              <PictureChoiceItem
+                buttonAction={choice.buttonAction}
+                isRequired={false}
+                key={index}
+                isFirst={index === 0}
+                isLast={index === choices.length - 1}
+                isSelected={selections.includes(choice.id)}
+                required={required}
+                tracking={tracking}
+                size={size}
+                choicesLength={choices.length}
+                choice={choice}
+                fieldName={fieldName}
+                multiSelect={multiSelect}
+                checkboxVisible={checkboxVisible}
+                defaultStyles={defaultStyles}
+                hoverStyles={hoverStyles}
+                selectedStyles={selectedStyles}
+                forGen={false}
+                selections={selections}
+                onValueChange={(updatedValue) => {
+                  setProp((props) => {
+                    props.choices[index].value = updatedValue
+                    return props
+                  }, 200)
+                }}
+                onSelectChange={() => {
+                  if (multiSelect) {
+                    setProp((props) => {
+                      if (props.selections.includes(choice.id)) {
+                        props.selections = props.selections.filter(
+                          (selectionId) => selectionId !== choice.id
+                        )
+                      } else {
+                        props.selections.push(choice.id)
+                      }
+                      return props
+                    }, 200)
+                  } else {
+                    setProp((props) => {
+                      props.selections = selections.includes(choice.id)
+                        ? []
+                        : [choice.id]
+                      return props
+                    }, 200)
+                  }
+                }}
+              />
+            ))}
+          </ul>
+        </div>
+      </Wrapper>
     </div>
   )
 }
@@ -570,33 +614,81 @@ const PictureChoiceItem = ({
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
 
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+  const isMobileScreen = useMediaQuery("(max-width: 640px)")
+
   useEffect(() => {
     setChoiceValue(choice.value)
   }, [choice.value])
 
   const getFlexBasis = (n) => {
+    // for only desktop
     if (size === PictureChoiceSizes.small) {
       return 50
     }
     if (n === 1) {
       return 100
     }
+    if (mobileScreen || isMobileScreen) {
+      // if (n % 3 === 0) {
+      //   return 33.33
+      // } else {
+      return 50
+      // }
+    }
+
     if (n === 7 || n == 11) {
       return 25
     }
     if (n === 2) {
       return 50
     }
-    if ((n - 4) % 2 === 0 && n !== 6) {
+
+    // if ((n - 3) % 2 === 0) {
+    //   return 33.33
+    // }
+
+    if (n % 3 == 1 || n % 4 == 0) {
       return 25
     }
-    if ((n - 3) % 2 === 0) {
+
+    if (n % 3 == 0 || n % 3 == 2) {
       return 33.33
     }
-    if (n % 3 === 0) {
-      return 33.33
-    }
+
+    // if (size === PictureChoiceSizes.small) {
+    //   return 50
+    // }
+    // if (n === 1) {
+    //   return 100
+    // }
+    // if (n === 7 || n == 11) {
+    //   return 25
+    // }
+    // if (n === 2) {
+    //   return 50
+    // }
+    // if (n % 3 === 0 && !mobileScreen) {
+    //   return 25
+    // }
+    // // in case check for responsive flex basis
+    // if (n % 2 == 0) {
+    //   return 50
+    // }
+    // if ((n - 4) % 2 === 0 && n !== 6) {
+    //   if (!mobileScreen && size == PictureChoiceSizes.medium) {
+    //     return 33.33
+    //   }
+    //   return 25
+    // }
+    // if ((n - 3) % 2 === 0) {
+    //   return 33.33
+    // }
+    // if (n % 3 === 0) {
+    //   return 33.33
+    // }
   }
+
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -689,9 +781,9 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className={` flex min-w-[0] max-w-[205px] flex-[1] flex-grow-0 justify-center pb-[10px] pr-[10px]`}
+      className={cn(`picture-item flex max-w-[193px] grow-1 justify-center`)}
       style={{
-        flexBasis: `${getFlexBasis(choicesLength)}%`,
+        flexBasis: `calc(${getFlexBasis(choicesLength)}% - 10px)`,
       }}
       onClick={() => {
         if (forGen) {
@@ -845,10 +937,8 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   justify-content: center;
   position: relative;
   border-radius: 15px;
-
   transition: transform 0.1s ease-in-out;
   transform: translateY(${({ isSelected }) => (isSelected ? -2 : 0)}px);
-
   border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor};
   color: ${({ defaultStyles }) => defaultStyles.textColor};
   background-color: ${({ defaultStyles }) => defaultStyles.backgroundColor};

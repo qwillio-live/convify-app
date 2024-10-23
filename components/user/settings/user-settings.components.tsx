@@ -1,26 +1,26 @@
 import React, { useEffect } from "react"
 import { Layers } from "@craftjs/layers/"
+import { useTranslations } from "next-intl"
 
 import { useEditor } from "@/lib/craftjs"
+import {
+  removeField,
+  setSelectedComponent,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 import { GlobalThemeSettings } from "./global-theme-settings"
-import { useTranslations } from "next-intl"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import {
-  removeField,
-  setSelectedComponent,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
+
 
 export const SettingsPanel = () => {
   const t = useTranslations("Components")
@@ -62,6 +62,7 @@ export const SettingsPanel = () => {
       console.log("error in user settings", e)
     }
   }, [mobileScreen, selectedComponent])
+
   return (
     <Tabs defaultValue="element" className="font-poppins">
       <TabsList className="h-15 w-full rounded-none border-b px-5 pb-0">

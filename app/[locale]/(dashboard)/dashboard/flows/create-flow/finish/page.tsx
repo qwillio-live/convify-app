@@ -1,6 +1,18 @@
 "use client"
+
 import React, { useEffect, useState } from "react"
-import { Separator } from "@/components/ui/separator"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { ChevronLeft } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { z } from "zod"
+
+import { env } from "@/env.mjs"
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,24 +22,14 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { useTranslations } from "next-intl"
-import Link from "next/link"
-import { z } from "zod"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
-import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
-import { useRouter } from "next/navigation"
-import NewFlowPreview from "@/components/flow-preview/flow-preview-new.cpmponent"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Drawer } from "@/components/ui/drawer"
 import { DrawerContent } from "@/components/ui/drawerDesctop"
-import { env } from "@/env.mjs"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import NewFlowPreview from "@/components/flow-preview/flow-preview-new.cpmponent"
 import { Icons } from "@/components/icons"
-import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { useSearchParams } from "next/navigation"
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 
 // Define Zod schema for input validation
 const nameSchema = z

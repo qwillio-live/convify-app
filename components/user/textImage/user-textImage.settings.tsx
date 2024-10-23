@@ -1,4 +1,9 @@
 import React, { useCallback, useEffect } from "react"
+import { DefaultImagePlaceholder } from "@/constant"
+import axios from "axios"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+
 import {
   MoveHorizontal,
   AlignHorizontalJustifyStart,
@@ -8,7 +13,6 @@ import {
   AlignCenterHorizontal,
   AlignEndHorizontal,
 } from "lucide-react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 import { useTranslations } from "next-intl"
 import Cropper, { ReactCropperElement } from "react-cropper"
@@ -22,9 +26,10 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/custom-checkbox"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/custom-checkbox"
 import {
   Select,
   SelectContent,
@@ -34,13 +39,11 @@ import {
   SelectValue,
 } from "@/components/custom-select"
 import { Slider } from "@/components/custom-slider"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
+
 import { Controller } from "../settings/controller.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { IconButtonSizes, UserLogo } from "./user-textImage.component"
-import axios from "axios"
 import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
@@ -1055,7 +1058,7 @@ export const DefaultPropsTextImg = {
   Text: "Text",
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
-  src: ImagePlaceholder.src,
+  src: DefaultImagePlaceholder,
   bothAlign: "start",
   horizontalGap: 20,
   verticalGap: 10,

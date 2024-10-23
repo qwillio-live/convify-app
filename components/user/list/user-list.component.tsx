@@ -19,6 +19,7 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { UserInputSizes } from "../input/user-input.component"
 
 const ListSizeValues = {
   small: "400px",
@@ -75,11 +76,14 @@ export const ListGen = ({
         minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
-        paddingLeft: `${marginLeft + 10}px`,
-        paddingRight: `${marginRight + 10}px`,
+        paddingLeft: `${marginLeft}px`,
+        paddingRight: `${marginRight}px`,
       }}
     >
       <StyledListContainer
+        isPreviewScreen={true}
+        className="user-list-comp"
+        size={size}
         verticalGap={verticalGap}
         columnsDesktop={columnsDesktop}
         columnsMobile={columnsMobile}
@@ -215,11 +219,14 @@ export const List = ({
           maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft + 10}px`,
-          paddingRight: `${marginRight + 10}px`,
+          paddingLeft: `${marginLeft}px`,
+          paddingRight: `${marginRight}px`,
         }}
       >
         <StyledListContainer
+          isPreviewScreen={false}
+          className="user-list-comp"
+          size={size}
           verticalGap={verticalGap}
           columnsDesktop={columnsDesktop}
           columnsMobile={columnsMobile}
@@ -377,11 +384,11 @@ type StyledListContainerProps = {
   columnsMobile: number
   mobileScreen: boolean
   maxWidth: string
+  size: UserInputSizes
+  isPreviewScreen: boolean
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
-  width: 100%;
-  max-width: ${({ maxWidth }) => maxWidth};
   display: grid;
   column-gap: 40px;
   row-gap: ${({ verticalGap }) => `${verticalGap}px`};
@@ -396,6 +403,65 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
       ${({ columnsMobile }) => columnsMobile},
       minmax(0, 1fr)
     );
+  }
+
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen, isPreviewScreen }) => {
+    if (isPreviewScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "800px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "1000px" }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    } else {
+      if (size === UserInputSizes.small) {
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "376px" }
+        }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)", maxWidth: 800 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)", maxWidth: 1000 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 

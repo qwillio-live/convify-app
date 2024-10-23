@@ -1,10 +1,20 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { revalidateFlow } from "@/actions/flow/revalidateFlow"
 import { Eye, Plus } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
+
+import { env } from "@/env.mjs"
+import {
+  setResetTotalFilled,
+  setSelectedScreen,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,18 +25,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId"
-import { useEffect, useState } from "react"
-import { User } from "../../page"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   setIsUpdating,
-  setResetTotalFilled,
-  setSelectedScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { revalidateFlow } from "@/actions/flow/revalidateFlow"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Icons } from "@/components/icons"
-import { env } from "@/env.mjs"
+
+import { User } from "../../page"
 
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -39,6 +43,7 @@ const clearFlowNamesFromLocalStorage = () => {
 
 const Header = ({ flowId }) => {
   const t = useTranslations("CreateFlow")
+  const t1 = useTranslations("Dashboard")
   const router = useRouter()
   const currentPath = usePathname()
   const dispatch = useAppDispatch()
@@ -299,8 +304,24 @@ const Header = ({ flowId }) => {
             <DropdownMenuContent align="end" style={{ zIndex: 80 }}>
               <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>{t("Settings")}</DropdownMenuItem>
-              <DropdownMenuItem>{t("Support")}</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  className="cursor-pointer"
+                  href={"/dashboard"}
+                  prefetch={false}
+                >
+                  {t1("Dashboard")}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/dashboard/flows/create-flow/select-template"
+                  className="cursor-pointer"
+                  prefetch={false}
+                >
+                  {t1("Create flow")}
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 {t("Logout")}

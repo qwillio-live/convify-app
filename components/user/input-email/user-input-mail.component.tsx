@@ -56,16 +56,9 @@ export enum UserInputSizes {
 }
 
 const UserInputSizeValues = {
-  small: "260px",
+  small: "250px",
   medium: "376px",
   large: "576px",
-  full: "100%",
-}
-
-const UserInputMobileSizeValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
   full: "100%",
 }
 
@@ -245,6 +238,52 @@ const convertToSvg = (svgBody) => {
   height="33.5">${svgBody}</svg>`
 }
 
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
+
 export const UserInputMailGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
@@ -356,11 +395,9 @@ export const UserInputMailGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          className="email-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -625,7 +662,7 @@ export const UserInputMailGen = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -736,15 +773,10 @@ export const UserInputMail = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${
-              mobileScreen
-                ? UserInputMobileSizeValues[props.size]
-                : UserInputSizeValues[props.size]
-            }`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="email-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -927,7 +959,7 @@ export const UserInputMail = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

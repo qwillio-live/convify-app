@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useState, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Reorder } from "framer-motion"
 import {
@@ -14,6 +14,7 @@ import {
   PlusCircle,
   Trash2,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 
 import { Frame, useEditor } from "@/lib/craftjs"
@@ -40,7 +41,6 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -48,11 +48,11 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/input-custom"
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
 import emptyScreenData from "@/components/user/screens/empty-screen.json"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
-import { useTranslations } from "next-intl"
+import { Input } from "@/components/input-custom"
 import { Card as UiCard } from "@/components/ui/card"
 
 const ScreensList = ({ flowId }) => {
@@ -247,7 +247,7 @@ const ScreensList = ({ flowId }) => {
     <Accordion
       type="multiple"
       // className="w-[94vw]  small:w-[98vw] bg-red-500 overflow-x-hidden pt-12 md:pt-0 md:max-w-[13.5vw] pb-32"
-      className="font-poppins relative w-[94vw] overflow-x-hidden pb-24 md:pb-0 md:w-[13.5vw]"
+      className="font-poppins relative w-[94vw] overflow-x-hidden pb-24 md:w-[13.5vw] md:pb-0"
       defaultValue={["item-2"]}
     >
       <AccordionItem value="item-1" className="border-b-0">
@@ -341,8 +341,8 @@ const ScreensList = ({ flowId }) => {
               )}
               onClick={() => handleFooterScreenClick()}
             >
-              <div className="absolute bottom-0 left-0 z-10 size-full bg-transparent"></div>
-              <div className="text-muted-foreground absolute bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
+              {/* <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div> */}
+              <div className="text-muted-foreground bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
                 <ResolvedComponentsFromCraftState screen={screensFooter} />
               </div>
             </Card>
@@ -423,7 +423,7 @@ const ScreensList = ({ flowId }) => {
                 <ContextMenu>
                   <ContextMenuTrigger>
                     <div className="flex flex-row items-center justify-between gap-4">
-                      <span className="text-sm font-bold">{index + 1}</span>
+                      <span className="text-sm font-bold">{index + 1} </span>
                       <EditScreenName
                         screenId={screen.screenId}
                         screenName={screen.screenName}
@@ -518,7 +518,7 @@ const ScreensList = ({ flowId }) => {
                     >
                       {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
                       <div
-                        className="text-muted-foreground relative   text-xs"
+                        className="text-muted-foreground no-hover-effects relative text-xs"
                         style={{
                           overflow: "hidden", // Hide content that overflows
                           transform: "scale(1,1)", // Zoom out vertically
@@ -526,6 +526,7 @@ const ScreensList = ({ flowId }) => {
                           pointerEvents: "none",
                         }}
                       >
+                        {/* just the header */}
                         <div
                           style={{
                             background:

@@ -180,7 +180,7 @@ export const GlobalThemeSettings = (props: Props) => {
           <AccordionItem value="item-1">
             <AccordionTrigger>{t("General")}</AccordionTrigger>
             <AccordionContent className="space-y-4 pt-2">
-              {/* <div className="col-span-2 flex flex-row items-center space-x-2">
+              <div className="col-span-2 flex flex-row items-center space-x-2">
                 <label
                   htmlFor="headerscroll"
                   className="basis-2/3 whitespace-nowrap text-nowrap text-xs leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -205,7 +205,7 @@ export const GlobalThemeSettings = (props: Props) => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-              </div> */}
+              </div>
               <div className="flex items-center justify-between">
                 <Label htmlFor="primarycolor">{t("Primary Color")}</Label>
                 <ColorInput

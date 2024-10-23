@@ -10,16 +10,31 @@ import {
   Columns,
   GripVertical,
   Image as ImageIcon,
+  ImagePlus,
+  Images,
+  LayoutList,
   Link,
   Loader as LoaderIcon,
   Mail,
+  MessageCircleMoreIcon,
+  Navigation,
+  NotebookPen,
+  Paintbrush,
+  Paintbrush2,
+  Pencil,
+  Rocket,
+  Send,
+  SeparatorHorizontal,
+  SkipBack,
+  SquareCheckIcon,
+  SquareMousePointer,
   Phone,
   RectangleEllipsis,
   SquarePen,
   SwatchBook,
   TextCursorInput,
-  LayoutList,
-  Send,
+  Trophy,
+  Type,
   User,
   InfoIcon,
   HeadingIcon,
@@ -33,6 +48,7 @@ import {
   ServerIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import styled from "styled-components"
 
 import { useEditor } from "@/lib/craftjs"
 import { useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
@@ -89,7 +105,10 @@ import {
   IconButton,
   IconButtonGen,
 } from "../icon-button/user-icon-button.component"
-import { ImageComponent } from "../image-new/user-image.component"
+import {
+  ImageComponent,
+  ImageDefaultProps,
+} from "../image-new/user-image.component"
 import { Img, ImgDefaultProps } from "../image/user-image-component"
 import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
 import {
@@ -159,7 +178,6 @@ import {
   TextImageComponentPreview,
   TextImageDefaultProps,
 } from "../textImage/user-textImage.component"
-import { ImageDefaultProps } from "../image-new/user-image.component"
 import useShareButtonTheme from "../socialShareButton/share-theme"
 import useTelegramButtonTheme from "../telegramShareButton/telegram-theme"
 import {
@@ -182,6 +200,29 @@ function HelperInformation({ infoText }: { infoText: string }) {
     </UiCard>
   )
 }
+
+const HoverCardWrapper = styled.div`
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp,
+  .textarea-input-comp,
+  .button-input-comp,
+  .mcq-input-comp,
+  .separator-comp,
+  .progress-comp,
+  .user-headline-comp,
+  .user-text-comp,
+  .user-picture-choice-component,
+  .logobar-comp,
+  .user-list-comp,
+  .user-checklist-comp {
+    width: 100%;
+  }
+  .heading-text-comp {
+    margin: 0;
+  }
+`
 
 const HoverCardComponent = ({ title, icon, children }) => {
   const [openCard, setOpenCard] = React.useState(false)
@@ -231,30 +272,32 @@ const HoverCardComponent = ({ title, icon, children }) => {
         </span>{" "}
         <GripVertical className="right-4 size-4 shrink-0 text-[#7B7D80]" />
       </div>
-      {openCard && (
-        <HoverCard openDelay={0}>
-          <HoverCardTrigger
-            asChild={false}
-            className="w-full"
-          ></HoverCardTrigger>
-          <HoverCardContent
-            className="flex w-full min-w-[382px] flex-row items-center justify-center px-10"
-            forceMount={true}
-            style={{
-              background: themeBackgroundColor,
-              backgroundImage: themeBackgroundImage,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
-            avoidCollisions
-            side="left"
-            sideOffset={32}
-          >
-            {children}
-          </HoverCardContent>
-        </HoverCard>
-      )}
+      <HoverCardWrapper>
+        {openCard && (
+          <HoverCard openDelay={0}>
+            <HoverCardTrigger
+              asChild={false}
+              className="w-full"
+            ></HoverCardTrigger>
+            <HoverCardContent
+              className="flex min-w-[382px] flex-row items-center justify-center px-10 leading-normal"
+              forceMount={true}
+              style={{
+                background: themeBackgroundColor,
+                backgroundImage: themeBackgroundImage,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+              avoidCollisions
+              side="left"
+              sideOffset={32}
+            >
+              {children}
+            </HoverCardContent>
+          </HoverCard>
+        )}
+      </HoverCardWrapper>
     </>
   )
 }
@@ -326,7 +369,7 @@ export const UserToolbox = () => {
       <div className="flex flex-col items-center justify-center gap-6">
         <HelperInformation infoText={t("Helper Information")} />
 
-        <ScrollArea className="w-full overflow-y-auto">
+        <ScrollArea className="w-full overflow-y-auto  pb-24 pt-4 md:pb-0">
           <Accordion
             type="multiple"
             className="flex flex-col gap-6"
@@ -354,7 +397,7 @@ export const UserToolbox = () => {
                     icon={<HeadingIcon size={12} className="size-4" />}
                     data-cy="toolbox-text"
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
                       <HeadlineTextGen
                         textColor={"#ffffff"}
                         {...h2Preset}
@@ -382,7 +425,7 @@ export const UserToolbox = () => {
                     icon={<TypeIcon size={12} className="size-4" />}
                     data-cy="toolbox-text"
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 border p-4">
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
                       <UserTextInputGen
                         textColor={"#ffffff"}
                         {...spanPreset}
@@ -1271,8 +1314,8 @@ export const UserToolbox = () => {
                         <Image
                           src={ImagePlaceholder.src}
                           alt="Image component"
-                          width={360}
-                          height={203}
+                          width={250}
+                          height={140}
                           className="size-full"
                         />
                       </HoverCardComponent>

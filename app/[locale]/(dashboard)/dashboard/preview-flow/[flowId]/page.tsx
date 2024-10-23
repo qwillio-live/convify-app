@@ -1,57 +1,56 @@
 // export const runtime = "edge"
-import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import React, { Suspense } from "react"
+import { cookies } from "next/headers"
+import { usePathname, useSearchParams } from "next/navigation"
+import { User } from "lucide-react"
+import { getServerSession } from "next-auth"
 
-import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
-import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
-import { UserLogo } from "@/components/user/logo/user-logo.component"
-// import lz from "lzutf8";
-import { UserTextInputGen } from "@/components/user/text/user-text.component"
-import { UserInputGen } from "@/components/user/input/user-input.component"
-import { LogoBarGen } from "@/components/user/logo-bar/user-logo-bar.component"
-import { ProgressBarGen } from "@/components/user/progress/user-progress.component"
+import { env } from "@/env.mjs"
+import { authOptions } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/session"
+import { cn } from "@/lib/utils"
+import FlowLayout from "@/components/flow-preview/flow-preview-server"
+import { AvatarComponentGen } from "@/components/user/avatar-new/user-avatar.component"
+import { BackButtonGen } from "@/components/user/backButton/back-component"
 import {
-  FormContentGen,
-  FormContent,
-  FormGen,
-} from "@/components/user/form/user-form.component"
-import { PictureChoiceGen } from "@/components/user/picture-choice/user-picture-choice.component"
-import { MultipleChoiceGen } from "@/components/user/multiple-choice/user-multiple-choice.component"
-import { ScreenFooterGen } from "@/components/user/screens/screen-footer.component"
-import {
-  CardContentGen,
   CardContent,
+  CardContentGen,
   CardGen,
 } from "@/components/user/card/user-card.component"
-
+import { ChecklistGen } from "@/components/user/checklist/user-checklist.component"
+import { UserContainerGen } from "@/components/user/container/user-container.component"
+import {
+  FormContent,
+  FormContentGen,
+  FormGen,
+} from "@/components/user/form/user-form.component"
+import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
+import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
+import { ImageComponentGen } from "@/components/user/image-new/user-image.component"
 import { UserInputCheckboxGen } from "@/components/user/input-checkbox/user-input-checkbox.component"
 import { UserInputMailGen } from "@/components/user/input-email/user-input-mail.component"
-import { User } from "lucide-react"
 import { UserInputPhoneGen } from "@/components/user/input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "@/components/user/input-textarea/user-input-textarea.component"
-import { ImageComponentGen } from "@/components/user/image-new/user-image.component"
-import { SelectGen } from "@/components/user/select/user-select.component"
-import { ChecklistGen } from "@/components/user/checklist/user-checklist.component"
-import { ListGen } from "@/components/user/list/user-list.component"
-import { StepsGen } from "@/components/user/steps/user-steps.component"
+import { UserInputGen } from "@/components/user/input/user-input.component"
 import { IconLineSeperator } from "@/components/user/lineSeperator/line-seperator-component"
-import { BackButtonGen } from "@/components/user/backButton/back-component"
 import { LinkButtonGen } from "@/components/user/link/link-component"
-import { AvatarComponentGen } from "@/components/user/avatar-new/user-avatar.component"
-import { LogoComponentGen } from "@/components/user/logo-new/user-logo.component"
+import { ListGen } from "@/components/user/list/user-list.component"
 import { LoaderComponentGen } from "@/components/user/loader-new/user-loader.component"
-import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { LogoBarGen } from "@/components/user/logo-bar/user-logo-bar.component"
+import { LogoComponentGen } from "@/components/user/logo-new/user-logo.component"
+import { UserLogo } from "@/components/user/logo/user-logo.component"
+import { MultipleChoiceGen } from "@/components/user/multiple-choice/user-multiple-choice.component"
+import { PictureChoiceGen } from "@/components/user/picture-choice/user-picture-choice.component"
+import { ProgressBarGen } from "@/components/user/progress/user-progress.component"
+import { ScreenFooterGen } from "@/components/user/screens/screen-footer.component"
+import { SelectGen } from "@/components/user/select/user-select.component"
+import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import { SocialShareButtonGen } from "@/components/user/socialShareButton/share-component"
+import { StepsGen } from "@/components/user/steps/user-steps.component"
 import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/telegram-component"
-import { UserContainerGen } from "@/components/user/container/user-container.component"
-import { getCurrentUser } from "@/lib/session"
-import { authOptions } from "@/lib/auth"
-import { getServerSession } from "next-auth"
-import { cookies } from "next/headers"
-import { useSearchParams } from "next/navigation"
-import { usePathname } from "next/navigation"
-import FlowLayout from "@/components/flow-preview/flow-preview-server"
-import { env } from "@/env.mjs"
+// import lz from "lzutf8";
+import { UserTextInputGen } from "@/components/user/text/user-text.component"
+import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
 
 export default async function PreviewFlows({
   params,
@@ -114,9 +113,10 @@ export default async function PreviewFlows({
     next: { tags: ["previewFlow"] },
   })
   const data = await response.json()
-  const filteredStep = data.steps.find((screen) => screen.name === screenName)
-    ? data.steps.find((screen) => screen.name === screenName)
-    : data.steps[0]
+  const filteredStep = data.steps?.find((screen) => screen.name === screenName)
+    ? data.steps?.find((screen) => screen.name === screenName)
+    : data?.steps?.[0]
+
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
 
@@ -188,11 +188,18 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
+  console.log("anjit", data?.flowSettings?.header)
+
   return (
     <>
       <div className="flex h-screen flex-col">
         <div
-          className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+          className={cn(
+            `flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] z-20`,
+            {
+              fixed: data?.flowSettings?.header?.headerPosition === "absolute",
+            }
+          )}
           style={{
             backgroundColor: data?.flowSettings?.general?.backgroundColor,
           }}

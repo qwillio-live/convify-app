@@ -82,7 +82,7 @@ export default function FlowPreview() {
     if (!selectedScreenError) {
       // console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
 
-      router.push(`${pathname}?screen=${currentScreenName}`, { scroll: false })
+      router.push(`${pathname}?screen=${currentScreenName}`)
 
       router.refresh()
       // router.replace(`${pathName}#${currentScreenName}`);

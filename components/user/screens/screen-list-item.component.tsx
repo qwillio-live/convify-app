@@ -1,26 +1,28 @@
 import React from "react"
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu"
+import { Reorder } from "framer-motion"
 import {
   Clipboard,
   ClipboardCopy,
   Delete,
   Edit,
   MousePointer,
+  Pencil,
   PlusCircle,
   Scissors,
   Trash2,
-  Pencil,
 } from "lucide-react"
-import { Reorder } from "framer-motion"
-import { Card } from "@/components/ui/card"
-import ResolvedComponentsFromCraftState from "../settings/resolved-components"
+
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
+import { Card } from "@/components/ui/card"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+
+import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 
 export const ScreenListItem = ({
   screen,

@@ -266,6 +266,13 @@ userContainer > *:hover {
   animation-fill-mode: forwards;
 }
 
+#editor-header .progress-comp {
+  width: 100%;
+}
+div[containertype="header"] .progress-comp {
+  width: 100%;
+}
+
 .scroll-container {
   overflow-x: auto;
   white-space: nowrap;
@@ -297,4 +304,15 @@ userContainer > *:hover {
 
 .scroll-container::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.no-hover-effects * {
+  pointer-events: none;
+}
+
+.no-hover-effects *:hover {
+  transform: none;
+  border-color: inherit;
+  color: inherit;
+  background-color: inherit;
 }

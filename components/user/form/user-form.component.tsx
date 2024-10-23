@@ -1,4 +1,5 @@
 "use client"
+
 import React from "react"
 import { transform } from "next/dist/build/swc"
 import hexoid from "hexoid"
@@ -123,6 +124,9 @@ const FormContentInner = styled.form<FormInnerStyles>`
     justify-content: ${(props) => props.mobileJustifyContent};
   }
   overflow: visible;
+  .text-input-comp {
+    width: 100%;
+  }
 `
 
 export const FormContentGen = ({ children, ...props }) => {
@@ -201,8 +205,8 @@ export const FormContent = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
       className={cn(
-        `relative border border-transparent`,
-        isHovered ? "border border-dotted border-blue-500" : ""
+        `relative`
+        // isHovered ? "border border-dotted border-blue-500" : ""
       )}
     >
       <FormContentGen
@@ -348,9 +352,48 @@ const FormContainer = styled.div<{
   background: ${({ background }) => background};
   max-width: fit-content;
   width: 100%;
+
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp,
+  .textarea-input-comp,
+  .button-input-comp,
+  .mcq-input-comp,
+  .separator-comp,
+  .progress-comp,
+  .user-headline-comp,
+  .user-text-comp,
+  .user-picture-choice-component,
+  .logobar-comp,
+  .user-list-comp,
+  .user-checklist-comp {
+    width: 100%;
+  }
+`
+const FormGenWrapper = styled.div<{}>`
+  width: 100%;
+  height: 100%;
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp,
+  .textarea-input-comp,
+  .button-input-comp,
+  .mcq-input-comp,
+  .separator-comp,
+  .progress-comp,
+  .user-headline-comp,
+  .user-text-comp,
+  .user-picture-choice-component,
+  .logobar-comp,
+  .user-list-comp,
+  .user-checklist-comp {
+    width: 100%;
+  }
 `
 export const FormGen = ({ children, ...props }) => {
-  return <div style={{ width: "100%", height: "100%" }}>{children}</div>
+  return <FormGenWrapper>{children}</FormGenWrapper>
 }
 
 export const Form = ({ children, ...props }) => {
@@ -387,7 +430,7 @@ export const Form = ({ children, ...props }) => {
         e.stopPropagation()
         setHover(false)
       }}
-      style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)" }}
+      style={{ minWidth: "100%", height: "100%" }}
       id={props.id}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
@@ -402,9 +445,7 @@ export const Form = ({ children, ...props }) => {
         gap="5"
         ref={(ref: any) => connect(drag(ref))}
         style={{ width: "100%", height: "100%" }}
-        className={`${
-          isHovered ? "border border-dotted border-blue-500" : ""
-        } relative border border-transparent`}
+        className={` relative border border-transparent`}
       >
         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element

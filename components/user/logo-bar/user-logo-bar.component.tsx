@@ -9,13 +9,7 @@ import styled from "styled-components"
 import hexoid from "hexoid"
 import { debounce } from "lodash"
 import { ImagePictureTypes } from "@/components/PicturePicker"
-
-const LogoBarSizeValues = {
-  small: "400px",
-  medium: "800px",
-  large: "1200px",
-  full: "100%",
-}
+import { UserInputSizes } from "../input/user-input.component"
 
 export const LogoBarGen = ({
   size,
@@ -52,18 +46,18 @@ export const LogoBarGen = ({
         minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
-        paddingLeft: `${marginLeft + 10}px`,
-        paddingRight: `${marginRight + 10}px`,
       }}
     >
       <StyledLogoBarContainer
+        size={size}
         mobileScreen={false}
-        maxWidth={LogoBarSizeValues[size || "medium"]}
         align={align}
         height={height}
         gap={gap}
         alignMobile={alignMobile}
         mobileRowItems={mobileRowItems}
+        isPreviewScreen={true}
+        className="logobar-comp"
       >
         {items.map((item, index) => (
           <li
@@ -171,18 +165,18 @@ export const LogoBar = ({
           maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft + 10}px`,
-          paddingRight: `${marginRight + 10}px`,
         }}
       >
         <StyledLogoBarContainer
+          size={size}
           mobileScreen={mobileScreen ?? false}
-          maxWidth={LogoBarSizeValues[size || "medium"]}
           align={align}
           height={height}
           gap={gap}
           alignMobile={alignMobile}
           mobileRowItems={mobileRowItems}
+          className="logobar-comp"
+          isPreviewScreen={false}
         >
           {items.map((item, index) => (
             <li
@@ -217,18 +211,17 @@ export const LogoBar = ({
 
 type StyledLogoBarContainerProps = {
   mobileScreen: boolean
-  maxWidth: string
   align: LogoBarAlignments
   height: number
   gap: number
   alignMobile: boolean
   mobileRowItems: number
+  size: UserInputSizes
+  isPreviewScreen: boolean
 }
 
 const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
-  width: 100%;
   height: auto;
-  max-width: ${({ maxWidth }) => maxWidth};
   display: ${({ alignMobile, mobileScreen }) =>
     alignMobile && mobileScreen ? "grid" : "flex"};
   justify-content: ${({ align }) => align};
@@ -241,6 +234,65 @@ const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
 
   @media (max-width: 560px) {
     display: ${({ alignMobile }) => (alignMobile ? "grid" : "flex")} !important;
+  }
+
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen, isPreviewScreen }) => {
+    if (isPreviewScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "800px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "1000px" }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    } else {
+      if (size === UserInputSizes.small) {
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "376px" }
+        }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)", maxWidth: 800 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)", maxWidth: 1000 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 

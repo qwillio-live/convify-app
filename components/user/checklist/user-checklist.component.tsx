@@ -1,30 +1,23 @@
 "use client"
+
 import React, { useCallback, useEffect, useState } from "react"
+import { debounce } from "lodash"
+import { Check } from "lucide-react"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
+import styled from "styled-components"
+
 import { useNode } from "@/lib/craftjs"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { cn } from "@/lib/utils"
+
+import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
 import {
   ChecklistIconRenderer,
   ChecklistSettings,
 } from "./user-checklist.settings"
-import { StyleProperty } from "../types/style.types"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { useTranslations } from "next-intl"
-import ContentEditable from "react-contenteditable"
-import { debounce } from "lodash"
-
-const ChecklistSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ChecklistMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
 
 export const ChecklistGen = ({
   checklistItems,
@@ -54,7 +47,7 @@ export const ChecklistGen = ({
   )
   return (
     <div
-      className="relative w-full"
+      className="relative w-full max-w-[calc(100%-22px)]"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -62,18 +55,19 @@ export const ChecklistGen = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        minWidth: "100%",
+        // minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
         paddingLeft: `${marginLeft}px`,
         paddingRight: `${marginRight}px`,
       }}
     >
-      <ul
+      <Wrapper
+        size={size}
+        mobileScreen={false}
         className="flex w-full gap-2"
         style={{
           flexDirection: layout,
-          maxWidth: ChecklistMobileSizeValues[size || "medium"],
         }}
       >
         {checklistItems.map((item, index) => (
@@ -99,10 +93,37 @@ export const ChecklistGen = ({
             </span>
           </li>
         ))}
-      </ul>
+      </Wrapper>
     </div>
   )
 }
+
+const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+
+  /* @media (max-width: 1000px) {
+    ${({ size }) => ({ width: "calc(100% - 22px)" })}
+  } */
+
+  ${({ size, mobileScreen }) => {
+    if (mobileScreen) {
+      return { width: "calc(100% - 22px)" }
+    }
+
+    switch (size) {
+      case UserInputSizes.small:
+        return { width: "376px" } // Assuming small size width
+      case UserInputSizes.medium:
+        return { width: "800px" }
+      case UserInputSizes.large:
+        return { width: "1000px" }
+      default:
+        return { width: "100%" }
+    }
+  }};
+`
 
 export const Checklist = ({
   checklistItems,
@@ -128,6 +149,7 @@ export const Checklist = ({
   paddingBottom,
   ...props
 }) => {
+  console.log("ChecklistProps", size)
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -174,8 +196,11 @@ export const Checklist = ({
       onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={t("Checklist")} />}
+
       <div
-        className="relative w-full"
+        className={cn("relative w-full", {
+          "max-w-[calc(100%-22px)]": !mobileScreen,
+        })}
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
@@ -183,21 +208,18 @@ export const Checklist = ({
           justifyContent: "center",
           alignItems: "center",
           boxSizing: "border-box",
-          minWidth: "100%",
-          maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
           paddingLeft: `${marginLeft}px`,
           paddingRight: `${marginRight}px`,
         }}
       >
-        <ul
-          className="flex w-full gap-2"
+        <Wrapper
+          size={size}
+          mobileScreen={!!mobileScreen}
+          className="user-checklist-comp flex w-full gap-2 "
           style={{
             flexDirection: layout,
-            maxWidth: mobileScreen
-              ? ChecklistMobileSizeValues[size || "small"]
-              : ChecklistSizeValues[size || "small"],
           }}
         >
           {checklistItems.map((item, index) => (
@@ -219,7 +241,7 @@ export const Checklist = ({
               }
             />
           ))}
-        </ul>
+        </Wrapper>
       </div>
     </div>
   )
@@ -238,6 +260,7 @@ const ChecklistItemSettings = ({
   onValueChange,
 }) => {
   const [itemValue, setItemValue] = useState(item.value)
+  console.log("ChecklistProps inside")
 
   useEffect(() => {
     setItemValue(item.value)
@@ -339,7 +362,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   iconColor: "green",
   width: ChecklistSizes.small,
   height: "auto",
-  size: ChecklistSizes.small,
+  size: ChecklistSizes.medium,
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,

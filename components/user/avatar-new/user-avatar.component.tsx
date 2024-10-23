@@ -1,5 +1,7 @@
 "use client"
-import React, { useEffect, useRef } from "react"
+
+import React, { useEffect, useMemo, useRef } from "react"
+import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
 import {
   Activity,
   Anchor,
@@ -9,23 +11,28 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 import styled from "styled-components"
+
 import { useEditor, useNode } from "@/lib/craftjs"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import { Button as CustomButton } from "@/components/ui/button"
+
 import { Controller } from "../settings/controller.component"
-import { AvatarSettings } from "./user-avatar.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useAvatarThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import AvatarPlaceholder from "@/assets/images/default-avatar.webp"
-import classNames from "classnames"
+import { AvatarSettings } from "./user-avatar.settings"
 import "./styles.css"
+import Image from "next/image"
+
+import { env } from "@/env.mjs"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import useScrollPosition from "@/hooks/use-scroll-position"
 
 const ButtonTextLimit = {
   small: 100,
@@ -82,30 +89,6 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const hasComponentBeforeAvatar = useAppSelector(
-    (state) => state?.screen?.hasComponentBeforeAvatar
-  )
-  const avatarRef = useRef(null)
-  const baseSize = 90 // Initial base size of the avatar
-  const minimumSize = 48 // Minimum size of the avatar
-  const sizeReductionFactor = 0.5 // Control the rate of size reduction
-  const mobileBaseSize = 60
-
-  // Calculate dynamic size
-  // let dynamicSize = Math.max(
-  //   baseSize - scrollY * sizeReductionFactor,
-  //   minimumSize
-  // )
-  // let translateYPercent = Math.max(0, 35 - scrollY)
-  // const translateY = mobileScreen ? `calc(${translateYPercent}%)` : "0px"
-  const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
-  )
-  const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
-
   return (
     <div
       className=""
@@ -130,35 +113,28 @@ export const AvatarComponentGen = ({
         <div
           className={`relative flex flex-row justify-${align} w-full border border-transparent`}
         >
-          <div
-            ref={avatarRef}
-            id="avatar-component"
-            // className={classNames(
-            //   avatarClass,
-            //   hasComponentBeforeAvatar
-            //     ? "absolute translate-y-[-50%] transition-transform duration-300 ease-in-out"
-            //     : ""
-            // )}
-            // style={{
-            //   transform: mobileScreen ? `translateY(${translateY})` : "",
-            // }}
-          >
-            <img
-              alt={alt}
-              src={src}
-              style={{
-                height: "80px",
-                width: "80px",
-                //   ? `${mobileDynamicSize}px`
-                //   : `${dynamicSize}px`,
-                // height: mobileScreen
-                //   ? `${mobileDynamicSize}px`
-                //   : `${dynamicSize}px`,
-                borderRadius: `${cornRad}px`,
-                backgroundColor: "transparent",
-              }}
-            />
-          </div>
+          <UserLogo
+            alt={alt}
+            marginTop={marginTop}
+            marginBottom={marginBottom}
+            cornRad={cornRad}
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            top={top}
+            bottom={bottom}
+            left={left}
+            right={right}
+            background={background}
+            radius={radius}
+            align={align}
+            width={width}
+            height={height}
+            w={w}
+            h={h}
+            src={src}
+            isPreview={false}
+            {...props}
+          />
         </div>
       </div>
     </div>
@@ -184,50 +160,74 @@ export const UserLogo = ({
   cornRad,
   bottom,
   right,
+  isPreview,
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const isMobileScreen = useMediaQuery("(max-width: 640px)")
+  const bodyScrollY = useScrollPosition()
   const hasComponentBeforeAvatar = useAppSelector(
     (state) => state?.screen?.hasComponentBeforeAvatar
   )
 
+  console.log("anjit has component before avatar", hasComponentBeforeAvatar)
+
   const avatarRef = useRef(null)
 
   // const avatarClass = `${
-  //   // hasComponentBeforeAvatar
-  //   //   ? scrollY && scrollY > 50
-  //   //     ? "avatar-top"
-  //   //     : "avatar-half"
-  //   //   : scrollY && scrollY > 50
-  //   //   ? "avatar-none-scrolled"
-  //   //   : mobileScreen
-  //   //   ? "avatar-none-mobile"
-  //   //   : "avatar-none"
+  //   hasComponentBeforeAvatar
+  //     ? (isPreview ? bodyScrollY > 50 : scrollY && scrollY > 50)
+  //       ? "avatar-top"
+  //       : "avatar-half"
+  //     : scrollY && scrollY > 50
+  //     ? "avatar-none-scrolled"
+  //     : mobileScreen || isMobileScreen
+  //     ? "avatar-none-mobile"
+  //     : "avatar-none"
   // }`
+
+  const animation = useMemo(() => {
+    // 130
+    let translateYPercent = Math.min(117, 50 + (scrollY || bodyScrollY || 0))
+    let box = Math.max(49, 90 - (scrollY || bodyScrollY || 0))
+    if (isMobileScreen || mobileScreen) {
+      translateYPercent = Math.min(124, 50 + (scrollY || bodyScrollY || 0))
+      box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
+    }
+
+    return {
+      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
+      box: hasComponentBeforeAvatar ? `${box}px` : "90px",
+    }
+  }, [
+    scrollY,
+    bodyScrollY,
+    hasComponentBeforeAvatar,
+    isMobileScreen,
+    mobileScreen,
+  ])
+
   return (
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={
-        classNames()
-        // avatarClass
-        // hasComponentBeforeAvatar
-        //   ? "transition-transform duration-300 ease-in-out"
-        //   : ""
-      }
+      className={cn("")}
+      style={{
+        transform: `translateY(${animation.y})`,
+      }}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element*/}
       <img
         alt={alt}
         src={src}
-        // className="rounded-full"
         style={{
-          width: "80px",
-          height: "80px",
+          width: animation.box,
+          height: animation.box,
           borderRadius: `${cornRad}px`,
           backgroundColor: "transparent",
           objectFit: "cover",
-          // transform: `translateY(${top}px)`,
+          transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
         }}
@@ -331,6 +331,7 @@ export const AvatarComponent = ({
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
@@ -400,6 +401,7 @@ export const AvatarComponent = ({
       }
     }
   }, [primaryColor])
+
   const maxLength = ButtonTextLimit[size]
   const handleTextChange = (e) => {
     const value = e.target.innerText
@@ -462,30 +464,28 @@ export const AvatarComponent = ({
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
         >
-          {
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <UserLogo
-              alt={alt}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              cornRad={cornRad}
-              marginLeft={marginLeft}
-              marginRight={marginRight}
-              top={top}
-              bottom={bottom}
-              left={left}
-              right={right}
-              background={background}
-              radius={radius}
-              align={align}
-              width={width}
-              height={height}
-              w={w}
-              h={h}
-              src={src}
-              {...props}
-            />
-          }
+          <UserLogo
+            alt={alt}
+            marginTop={marginTop}
+            marginBottom={marginBottom}
+            cornRad={cornRad}
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            top={top}
+            bottom={bottom}
+            left={left}
+            right={right}
+            background={background}
+            radius={radius}
+            align={align}
+            width={width}
+            height={height}
+            w={w}
+            h={h}
+            isPreview
+            src={src}
+            {...props}
+          />
         </div>
       </div>
     </div>
@@ -599,7 +599,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: "https://convify.io",
+  url: env.NEXT_PUBLIC_APP_URL,
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
   enableLink: false,
@@ -620,7 +620,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
-  icon: "arrowright",
+  icon: "aperture",
   paddingLeft: "16",
   paddingTop: "26",
   paddingRight: "16",

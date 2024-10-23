@@ -111,8 +111,10 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   }
   @media (max-width: 660px) {
     width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
+    max-width: calc(100% - 20px);
   }
+
+  
 `
 
 export const HeadlineTextGen = ({
@@ -164,7 +166,7 @@ export const HeadlineTextGen = ({
   console.log("container | bg", containerBackground, borderColor)
   return (
     <div
-      className="relative mt-7 w-full"
+      className="relative mt-7 w-full heading-text-comp"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -208,7 +210,7 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         text={t("HeadlineDescription")}
         {...props}
-        className={`!text-[24px] md:text-[${fontSize}px] items-center`}
+        className={`!text-[24px] md:text-[${fontSize}px] items-center user-headline-comp`}
         onClick={() => console.log(text)}
       >
         <h1
@@ -598,9 +600,9 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   marginBottom: 20,
   fontSize: headlineFontSize.desktop,
   fontWeight: "700",
-  paddingLeft: "0",
+  paddingLeft: 12,
   paddingTop: "0",
-  paddingRight: "0",
+  paddingRight: 12,
   paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
