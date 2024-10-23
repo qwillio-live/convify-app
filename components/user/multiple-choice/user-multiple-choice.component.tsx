@@ -178,7 +178,7 @@ export const MultipleChoiceGen = ({
 
   return (
     <div
-      className="relative w-full m-choice"
+      className="m-choice relative w-full"
       style={{
         pointerEvents: disabled ? "none" : "auto",
         width: "100%",
@@ -194,7 +194,7 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      {/* <Wrapper size={size} className="mcq-input-comp"> */}
+      <Wrapper size={size} className="mcq-input-comp">
         <ul
           ref={itemRef}
           className="flex w-full flex-col items-center justify-center"
@@ -339,7 +339,7 @@ export const MultipleChoiceGen = ({
             />
           ))}
         </ul>
-      {/* </Wrapper> */}
+      </Wrapper>
     </div>
   )
 }
@@ -512,7 +512,6 @@ export const MultipleChoice = ({
               fontFamily: `var(${fontFamily?.value})`,
             }}
           >
-            
             {/** @ts-ignore */}
             <ContentEditable
               className="px-1"
@@ -522,25 +521,25 @@ export const MultipleChoice = ({
                 handlePropChangeDebounced("label", e.target.value)
               }}
               // onSelectChange={() => {
-                //   if (multiSelect) {
-                //     setProp((props) => {
-                //       if (props.selections.includes(choice.id)) {
-                //         props.selections = props.selections.filter(
-                //           (selectionId) => selectionId !== choice.id
-                //         )
-                //       } else {
-                //         props.selections.push(choice.id)
-                //       }
-                //       return props
-                //     }, 200)
-                //   } else {
-                //     setProp((props) => {
-                //       props.selections = selections.includes(choice.id)
-                //         ? []
-                //         : [choice.id]
-                //       return props
-                //     }, 200)
-                //   }
+              //   if (multiSelect) {
+              //     setProp((props) => {
+              //       if (props.selections.includes(choice.id)) {
+              //         props.selections = props.selections.filter(
+              //           (selectionId) => selectionId !== choice.id
+              //         )
+              //       } else {
+              //         props.selections.push(choice.id)
+              //       }
+              //       return props
+              //     }, 200)
+              //   } else {
+              //     setProp((props) => {
+              //       props.selections = selections.includes(choice.id)
+              //         ? []
+              //         : [choice.id]
+              //       return props
+              //     }, 200)
+              //   }
               // }}
             />
           </div>
