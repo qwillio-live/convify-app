@@ -614,7 +614,6 @@ const EditScreenName = ({ screenId, screenName }) => {
     if (!checkDuplicateName(inputName)) {
       dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
       setName(inputName)
-      toast.success("Screen name changed successfully")
       setEditing(false)
     } else {
       toast.error("Screen name already exists")
