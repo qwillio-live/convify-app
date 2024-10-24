@@ -51,6 +51,7 @@ import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/te
 // import lz from "lzutf8";
 import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { FAQGen } from "@/components/user/faq/user-faq.component"
 
 export default async function PreviewFlows({
   params,
@@ -85,6 +86,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.STEPS]: StepsGen,
     [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
     [CRAFT_ELEMENTS.LIST]: ListGen,
+    [CRAFT_ELEMENTS.FAQ]: FAQGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
     [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,

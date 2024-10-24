@@ -29,6 +29,7 @@ export const CRAFT_ELEMENTS = {
   STEPS: "Steps",
   CHECKLIST: "Checklist",
   LIST: "List",
+  FAQ: "FAQ",
   SCREENFOOTER: "ScreenFooter",
   INPUTMAIL: "UserInputMail",
   INPUTPHONE: "UserInputPhone",

@@ -53,6 +53,7 @@ import { useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
 
 import { env } from "@/env.mjs"
+import { FAQGen } from "@/components/user/faq/user-faq.component"
 
 export default async function PreviewFlows({
   params,
@@ -87,6 +88,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.STEPS]: StepsGen,
     [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
     [CRAFT_ELEMENTS.LIST]: ListGen,
+    [CRAFT_ELEMENTS.FAQ]: FAQGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
     [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,

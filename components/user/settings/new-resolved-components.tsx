@@ -35,6 +35,7 @@ import { UserInputMailGen } from "../input-email/user-input-mail.component"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
 import { FormContentGen, FormGen } from "../form/user-form.component"
+import { FAQGen } from "../faq/user-faq.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -62,6 +63,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.STEPS]: StepsGen,
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
+  [CRAFT_ELEMENTS.FAQ]: FAQGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
   [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,

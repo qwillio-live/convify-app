@@ -93,6 +93,7 @@ import { SocialShareButton } from "../user/socialShareButton/share-component"
 import { Steps } from "../user/steps/user-steps.component"
 import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
 import { TextImageComponent } from "../user/textImage/user-textImage.component"
+import { FAQ } from "../user/faq/user-faq.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -396,6 +397,7 @@ export function CreateFlowComponent({ flowId }) {
           Steps,
           Checklist,
           List,
+          FAQ,
           LogoBar,
           LayoutContainer,
           Loader,

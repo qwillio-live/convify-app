@@ -46,6 +46,7 @@ import {
   MinusIcon,
   ListIcon,
   ServerIcon,
+  ListCollapse,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
@@ -189,6 +190,8 @@ import {
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
 import hexoid from "hexoid"
+import { FAQ, FAQGen } from "../faq/user-faq.component"
+import useFaqThemePresets from "../faq/useFaqThemePresets"
 
 function HelperInformation({ infoText }: { infoText: string }) {
   return (
@@ -336,6 +339,8 @@ export const UserToolbox = () => {
     horizontalPreset: listHorizontalPreset,
     defaultIcon: listPreviewIcon,
   } = useListThemePresets()
+
+  const { preset: faqPresets } = useFaqThemePresets()
 
   const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
   const { outlinedPresetChecbox, underlinedPresetChecbox } =
@@ -520,7 +525,7 @@ export const UserToolbox = () => {
                           marginBottom={0}
                           text={t("Submit")}
                           gap={0}
-                          // paddingLeft={185}
+                        // paddingLeft={185}
                         />
                       </div>
                     </HoverCardComponent>
@@ -600,7 +605,7 @@ export const UserToolbox = () => {
                         label={t("InputMail")}
                         // label={t("Label")}
                         placeholder={t("InputMail")}
-                        // placeholder={t("Placeholder")}
+                      // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
@@ -626,7 +631,7 @@ export const UserToolbox = () => {
                         label={t("InputPhone")}
                         // label={t("Label")}
                         placeholder={t("InputPhone")}
-                        // placeholder={t("Placeholder")}
+                      // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
@@ -654,7 +659,7 @@ export const UserToolbox = () => {
                         // label={t("Label")}
                         placeholder={t("TextArea")}
                         inputValue={""}
-                        // placeholder={t("Placeholder")}
+                      // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
@@ -1126,35 +1131,35 @@ export const UserToolbox = () => {
                         <ProgressBar
                           {...(isHeaderFooterMode
                             ? {
-                                ...ProgressBarDefaultProps,
-                                size: "full",
-                                forHeader: true,
-                                type: "header",
-                                marginTop: 0,
-                                marginBottom: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                              }
+                              ...ProgressBarDefaultProps,
+                              size: "full",
+                              forHeader: true,
+                              type: "header",
+                              marginTop: 0,
+                              marginBottom: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                            }
                             : {
-                                ...ProgressBarDefaultProps,
-                                forHeader: false,
-                                type: "body",
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                marginTop: 20,
-                                marginBottom: 20,
-                                maxValue: screensLength,
-                                progressvalue:
-                                  screensLength > 0 ? selectedScreen + 1 : 1,
-                              })}
+                              ...ProgressBarDefaultProps,
+                              forHeader: false,
+                              type: "body",
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              marginTop: 20,
+                              marginBottom: 20,
+                              maxValue: screensLength,
+                              progressvalue:
+                                screensLength > 0 ? selectedScreen + 1 : 1,
+                            })}
                         />
                       )
                     }
@@ -1168,39 +1173,39 @@ export const UserToolbox = () => {
                         <ProgressBarGen
                           {...(isHeaderFooterMode
                             ? {
-                                ...ProgressBarDefaultProps,
-                                size: "full",
-                                forHeader: true,
-                                type: "header",
-                                marginTop: 0,
-                                marginBottom: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                              }
+                              ...ProgressBarDefaultProps,
+                              size: "full",
+                              forHeader: true,
+                              type: "header",
+                              marginTop: 0,
+                              marginBottom: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                            }
                             : {
-                                ...ProgressBarDefaultProps,
-                                size: "full",
-                                forHeader: false,
-                                type: "body",
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                marginTop: 0,
-                                marginBottom: 0,
-                                radius: 0,
-                                maxValue: screensLength,
-                                progressvalue:
-                                  screensLength > 0 ? selectedScreen + 1 : 1,
-                              })}
-                          // Uncomment the following line if you need to set a value for the progress bar
-                          // value={50}
+                              ...ProgressBarDefaultProps,
+                              size: "full",
+                              forHeader: false,
+                              type: "body",
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              marginTop: 0,
+                              marginBottom: 0,
+                              radius: 0,
+                              maxValue: screensLength,
+                              progressvalue:
+                                screensLength > 0 ? selectedScreen + 1 : 1,
+                            })}
+                        // Uncomment the following line if you need to set a value for the progress bar
+                        // value={50}
                         />
                       </div>
                     </HoverCardComponent>
@@ -1575,6 +1580,38 @@ export const UserToolbox = () => {
                     <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
+
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <FAQ
+                            {...faqPresets}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("FAQ")}
+                        icon={<ListCollapse className="size-4" />}
+                      >
+                        <div className="p-3">
+                          {/** @ts-ignore */}
+                          {/** @ts-ignore */}
+                          <FAQGen
+                            {...faqPresets}
+                            marginTop={0}
+                            marginBottom={0}
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
                         connectors.create(
@@ -1681,35 +1718,35 @@ export const UserToolbox = () => {
                           <ProgressBar
                             {...(isHeaderFooterMode
                               ? {
-                                  ...ProgressBarDefaultProps,
-                                  size: "full",
-                                  forHeader: true,
-                                  type: "header",
-                                  marginTop: 0,
-                                  marginBottom: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                }
+                                ...ProgressBarDefaultProps,
+                                size: "full",
+                                forHeader: true,
+                                type: "header",
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                              }
                               : {
-                                  ...ProgressBarDefaultProps,
-                                  forHeader: false,
-                                  type: "body",
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  marginTop: 20,
-                                  marginBottom: 20,
-                                  maxValue: screensLength,
-                                  progressvalue:
-                                    screensLength > 0 ? selectedScreen + 1 : 1,
-                                })}
+                                ...ProgressBarDefaultProps,
+                                forHeader: false,
+                                type: "body",
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                marginTop: 20,
+                                marginBottom: 20,
+                                maxValue: screensLength,
+                                progressvalue:
+                                  screensLength > 0 ? selectedScreen + 1 : 1,
+                              })}
                           />
                         )
                       }
@@ -1740,39 +1777,39 @@ export const UserToolbox = () => {
                           <ProgressBarGen
                             {...(isHeaderFooterMode
                               ? {
-                                  ...ProgressBarDefaultProps,
-                                  size: "full",
-                                  forHeader: true,
-                                  type: "header",
-                                  marginTop: 0,
-                                  marginBottom: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                }
+                                ...ProgressBarDefaultProps,
+                                size: "full",
+                                forHeader: true,
+                                type: "header",
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                              }
                               : {
-                                  ...ProgressBarDefaultProps,
-                                  size: "full",
-                                  forHeader: false,
-                                  type: "body",
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  marginTop: 0,
-                                  marginBottom: 0,
-                                  radius: 0,
-                                  maxValue: screensLength,
-                                  progressvalue:
-                                    screensLength > 0 ? selectedScreen + 1 : 1,
-                                })}
-                            // Uncomment the following line if you need to set a value for the progress bar
-                            // value={50}
+                                ...ProgressBarDefaultProps,
+                                size: "full",
+                                forHeader: false,
+                                type: "body",
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                marginTop: 0,
+                                marginBottom: 0,
+                                radius: 0,
+                                maxValue: screensLength,
+                                progressvalue:
+                                  screensLength > 0 ? selectedScreen + 1 : 1,
+                              })}
+                          // Uncomment the following line if you need to set a value for the progress bar
+                          // value={50}
                           />
                         </div>
                       </HoverCardComponent>

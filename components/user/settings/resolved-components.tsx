@@ -49,6 +49,7 @@ import { LoaderComponentGen } from "../loader-new/user-loader.component"
 import { TextImageComponentGen } from "../textImage/user-textImage.component"
 import { SocialShareButtonGen } from "../socialShareButton/share-component"
 import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
+import { FAQGen } from "../faq/user-faq.component"
 
 export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -76,6 +77,7 @@ export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.STEPS]: StepsGen,
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
+  [CRAFT_ELEMENTS.FAQ]: FAQGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
   [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
