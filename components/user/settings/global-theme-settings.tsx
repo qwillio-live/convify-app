@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl"
 
 import {
   GlobalThemeState,
-  // setHeaderPosition,
+  setHeaderPosition,
   setPartialStyles,
 } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
