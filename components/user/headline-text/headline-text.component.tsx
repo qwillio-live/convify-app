@@ -114,7 +114,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
     max-width: calc(100% - 20px);
   }
 
-  
+
 `
 
 export const HeadlineTextGen = ({
@@ -279,99 +279,95 @@ export const HeadlineText = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const { actions } = useEditor((state, query) => ({
-    enabled: state.options.enabled,
-  }))
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
-  const [displayController, setDisplayController] = React.useState(false)
+  // const [displayController, setDisplayController] = React.useState(false)
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
-  const secondaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.secondaryColor
-  )
+  // const secondaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.secondaryColor
+  // )
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const secondaryColor = useAppSelector(
-    (state) => state.theme?.general?.secondaryColor
-  )
+  // const primaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.primaryColor
+  // )
+  // const secondaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.secondaryColor
+  // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
+  // const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  // const screensLength = useAppSelector(
+  //   (state: RootState) => state?.screen?.screens?.length ?? 0
+  // )
+  // const selectedScreen = useAppSelector(
+  //   (state: RootState) => state.screen?.selectedScreen ?? 0
+  // )
 
-  useEffect(() => {
-    if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => (props.fontFamily.value = primaryFont), 200)
-    }
-  }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
+  // useEffect(() => {
+  //   if (fontFamily.globalStyled && !fontFamily.isCustomized) {
+  //     setProp((props) => (props.fontFamily.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
 
-  useEffect(() => {
-    if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
+  // useEffect(() => {
+  //   if (primaryColor) {
+  //     const backgroundPrimaryColor = getBackgroundForPreset(
+  //       primaryColor,
+  //       props.preset
+  //     )
+  //     const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+  //       primaryColor,
+  //       props.preset
+  //     )
 
-      if (background.globalStyled && !background.isCustomized) {
-        setProp(
-          (props) => (props.background.value = backgroundPrimaryColor),
-          200
-        )
-      }
-      if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => (props.color.value = primaryTextColor), 200)
-      }
-      if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => (props.borderColor.value = primaryColor), 200)
-      }
+  //     if (background.globalStyled && !background.isCustomized) {
+  //       setProp(
+  //         (props) => (props.background.value = backgroundPrimaryColor),
+  //         200
+  //       )
+  //     }
+  //     if (color.globalStyled && !color.isCustomized) {
+  //       setProp((props) => (props.color.value = primaryTextColor), 200)
+  //     }
+  //     if (borderColor.globalStyled && !borderColor.isCustomized) {
+  //       setProp((props) => (props.borderColor.value = primaryColor), 200)
+  //     }
 
-      // hover colors
+  //     // hover colors
 
-      if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp(
-          (props) =>
-            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
-          200
-        )
-      }
-      if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
-      }
-      if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => (props.colorHover.value = primaryColor), 200)
-      }
-    }
-  }, [
-    primaryColor,
-    primaryTextColor,
-    setProp,
-    background.globalStyled,
-    background.isCustomized,
-    backgroundHover.globalStyled,
-    backgroundHover.isCustomized,
-    borderColor.globalStyled,
-    borderColor.isCustomized,
-    borderHoverColor.globalStyled,
-    borderHoverColor.isCustomized,
-    color.globalStyled,
-    color.isCustomized,
-    colorHover.globalStyled,
-    colorHover.isCustomized,
-    props.preset,
-  ])
+  //     if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
+  //       setProp(
+  //         (props) =>
+  //           (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+  //         200
+  //       )
+  //     }
+  //     if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
+  //       setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
+  //     }
+  //     if (colorHover.globalStyled && !colorHover.isCustomized) {
+  //       setProp((props) => (props.colorHover.value = primaryColor), 200)
+  //     }
+  //   }
+  // }, [
+  //   primaryColor,
+  //   primaryTextColor,
+  //   setProp,
+  //   background.globalStyled,
+  //   background.isCustomized,
+  //   backgroundHover.globalStyled,
+  //   backgroundHover.isCustomized,
+  //   borderColor.globalStyled,
+  //   borderColor.isCustomized,
+  //   borderHoverColor.globalStyled,
+  //   borderHoverColor.isCustomized,
+  //   color.globalStyled,
+  //   color.isCustomized,
+  //   colorHover.globalStyled,
+  //   colorHover.isCustomized,
+  //   props.preset,
+  // ])
 
   const handleTextChange = useCallback(
     (e) => {
@@ -398,44 +394,41 @@ export const HeadlineText = ({
     }
   }, [handleTextChange])
 
-  const throttledSetProp = useCallback(
-    throttle((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }, 200), // Throttle to 50ms to 200ms
-    [setProp]
-  )
+  // const throttledSetProp = useCallback(
+  //   throttle((property, value) => {
+  //     setProp((prop) => {
+  //       prop[property] = value
+  //     }, 0)
+  //   }, 200), // Throttle to 50ms to 200ms
+  //   [setProp]
+  // )
 
-  const handlePropChangeThrottled = (property, value) => {
-    throttledSetProp(property, value)
-  }
+  // const handlePropChangeThrottled = (property, value) => {
+  //   throttledSetProp(property, value)
+  // }
 
-  const debouncedSetProp = useCallback(
-    debounce((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }),
-    [setProp]
-  )
+  // const debouncedSetProp = useCallback(
+  //   debounce((property, value) => {
+  //     setProp((prop) => {
+  //       prop[property] = value
+  //     }, 0)
+  //   }),
+  //   [setProp]
+  // )
 
-  const handlePropChangeDebounced = (property, value) => {
-    debouncedSetProp(property, value)
-  }
+  // const handlePropChangeDebounced = (property, value) => {
+  //   debouncedSetProp(property, value)
+  // }
 
   return (
     <div
       ref={(el: any) => connect(drag(el))}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-      onMouseOver={() => setDisplayController(true)}
-      onMouseOut={() => setDisplayController(false)}
+      className="group/headline flex w-full justify-center"
     >
-      {displayController && <Controller nameOfComponent={t("Headline")} />}
+      <Controller
+        className="invisible group-hover/headline:visible"
+        nameOfComponent={t("Headline")}
+      />
       <div
         className="relative w-full"
         style={{
@@ -479,7 +472,7 @@ export const HeadlineText = ({
           {...props}
           text={t("HeadlineDescription")}
         >
-          <div className="flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-x-clip">
+          <div className="flex min-h-4 min-w-8 max-w-full flex-col overflow-x-clip">
             {/** @ts-ignore */}
             <ContentEditable
               html={text.replace(/\n/g, "<br>")}

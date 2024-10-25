@@ -2,9 +2,13 @@ import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalT
 import { Node, WithoutPrivateActions } from "@craftjs/core"
 import { CRAFT_ELEMENTS } from "./craft-elements"
 import {
-  getBackgroundForPreset,
-  getHoverBackgroundForPreset,
+  getBackgroundForPreset as getIconButtonBackgroundForPreset,
+  getHoverBackgroundForPreset as getIconButtonHoverBackgroundForPreset,
 } from "../icon-button/useButtonThemePresets"
+import {
+  getBackgroundForPreset as getHeadlineTextBackgroundForPreset,
+  getHoverBackgroundForPreset as getHeadlineTextHoverBackgroundForPreset,
+} from "../headline-text/useHeadlineThemePresets"
 
 export const updateElementProps = (
   node: Node,
@@ -15,6 +19,12 @@ export const updateElementProps = (
   switch (elementName) {
     case CRAFT_ELEMENTS.ICONBUTTON:
       updateIconButtonProps(node, actions, style)
+      break
+    case CRAFT_ELEMENTS.HEADLINETEXT:
+      updateHeadlineTextProps(node, actions, style)
+      break
+    case CRAFT_ELEMENTS.USERINPUT:
+      updateUserInputProps(node, actions, style)
       break
     default:
       break
@@ -41,11 +51,131 @@ const updateIconButtonProps = (
 
   if (style.general?.primaryColor) {
     const primaryColor = style.general?.primaryColor
-    const backgroundPrimaryColor = getBackgroundForPreset(
+    const backgroundPrimaryColor = getIconButtonBackgroundForPreset(
       primaryColor,
       nodeProps.preset
     )
-    const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+    const hoverBackgroundPrimaryColor = getIconButtonHoverBackgroundForPreset(
+      primaryColor,
+      nodeProps.preset
+    )
+    if (
+      nodeProps.background &&
+      nodeProps.background.globalStyled &&
+      !nodeProps.background.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.background.value = backgroundPrimaryColor)
+      )
+    }
+    if (
+      nodeProps.color &&
+      nodeProps.color.globalStyled &&
+      !nodeProps.color.isCustomized
+    ) {
+      actions.setProp(node.id, (props) => (props.color.value = primaryColor))
+    }
+    if (
+      nodeProps.borderColor &&
+      nodeProps.borderColor.globalStyled &&
+      !nodeProps.borderColor.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.borderColor.value = primaryColor)
+      )
+    }
+    if (
+      nodeProps.backgroundHover &&
+      nodeProps.backgroundHover.globalStyled &&
+      !nodeProps.backgroundHover.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.backgroundHover.value = hoverBackgroundPrimaryColor)
+      )
+    }
+    if (
+      nodeProps.borderHoverColor &&
+      nodeProps.borderHoverColor.globalStyled &&
+      !nodeProps.borderHoverColor.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.borderHoverColor.value = primaryColor)
+      )
+    }
+    if (
+      nodeProps.colorHover &&
+      nodeProps.colorHover.globalStyled &&
+      !nodeProps.colorHover.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.colorHover.value = primaryColor)
+      )
+    }
+  }
+}
+
+const updateUserInputProps = (
+  node: Node,
+  actions: WithoutPrivateActions<null>,
+  style: GlobalThemeState
+) => {
+  const nodeProps = node.data.props
+  if (
+    style.text?.primaryFont &&
+    nodeProps.primaryFont &&
+    nodeProps.primaryFont.globalStyled &&
+    !nodeProps.primaryFont.isCustomized
+  ) {
+    actions.setProp(
+      node.id,
+      (props) => (props.primaryFont.value = style.text?.primaryFont)
+    )
+  }
+
+  if (
+    style.text?.secondaryFont &&
+    nodeProps.secondaryFont &&
+    nodeProps.secondaryFont.globalStyled &&
+    !nodeProps.secondaryFont.isCustomized
+  ) {
+    actions.setProp(
+      node.id,
+      (props) => (props.secondaryFont.value = style.text?.secondaryFont)
+    )
+  }
+}
+
+const updateHeadlineTextProps = (
+  node: Node,
+  actions: WithoutPrivateActions<null>,
+  style: GlobalThemeState
+) => {
+  const nodeProps = node.data.props
+  if (
+    style.text?.primaryFont &&
+    nodeProps.fontFamily &&
+    nodeProps.fontFamily.globalStyled &&
+    !nodeProps.fontFamily.isCustomized
+  ) {
+    actions.setProp(
+      node.id,
+      (props) => (props.fontFamily.value = style.text?.primaryFont)
+    )
+  }
+
+  if (style.general?.primaryColor) {
+    const primaryColor = style.general?.primaryColor
+    const primaryTextColor = style.text?.primaryColor
+    const backgroundPrimaryColor = getHeadlineTextBackgroundForPreset(
+      primaryColor,
+      nodeProps.preset
+    )
+    const hoverBackgroundPrimaryColor = getHeadlineTextHoverBackgroundForPreset(
       primaryColor,
       nodeProps.preset
     )
@@ -66,7 +196,7 @@ const updateIconButtonProps = (
     ) {
       actions.setProp(
         node.id,
-        (props) => (props.background.value = primaryColor)
+        (props) => (props.color.value = primaryTextColor)
       )
     }
     if (

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
   Activity,
@@ -45,7 +45,7 @@ import {
   PictureTypes,
   SvgRenderer,
 } from "@/components/PicturePicker"
-import { Input } from "@/components/input-custom"
+import { Input, InputProps } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
@@ -105,29 +105,10 @@ export const UserInputGen = ({ ...props }) => {
     }
     return false
   })
-<<<<<<< HEAD
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  console.log("user input", screenData, nodeId, parsedData, props)
-=======
-
-  // console.log(
-  //   "user input",
-  //   "screenData",
-  //   screenData,
-  //   "nodeId",
-  //   props.nodeId,
-  //   "parsedData",
-  //   // parsedData,
-  //   "props",
-  //   props,
-  //   "fullScreenData",
-  //   fullScreenData,
-  //   "screenDatatry"
-  //   // screenDatatry
-  // )
->>>>>>> 5f3db56a (refactor: rewrite switch view tab bar + icon button + global theme)
+  // console.log("user input", screenData, nodeId, parsedData, props)
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {
@@ -263,13 +244,8 @@ export const UserInputGen = ({ ...props }) => {
     <div
       ref={itemRefNew}
       className={cn(
-        "relative focus-visible:ring-0 focus-visible:ring-transparent"
+        "relative flex w-full justify-center focus-visible:ring-0 focus-visible:ring-transparent"
       )}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
     >
       <div
         className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
@@ -404,18 +380,10 @@ export const UserInputGen = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `outline-none
-          ring-0
-          ring-opacity-0
-          transition-all
-          duration-200
-          ease-in-out
-          focus-visible:outline-none
-          focus-visible:ring-0
-          focus-visible:ring-transparent
-          focus-visible:ring-offset-0 peer-focus-visible:outline-none
-          ${!isFilled && alarm && isRequired && " !border-red-600"}
-          `
+                "ring-opacity/0 outline-none ring-0 transition-all duration-200 ease-in-out",
+                "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0",
+                "peer-focus-visible:outline-none",
+                !isFilled && alarm && isRequired && "!border-red-600"
               )}
               onChange={(e) => {
                 if (isRequired) {
@@ -545,7 +513,30 @@ const Wrapper = styled.div<{
   }
 `
 
-const UserInputStyled = styled(Input)<{
+const NewWrapper = ({
+  mobileScreen,
+  size,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  size: UserInputSizes
+  mobileScreen?: boolean
+}) => {
+  const generateWidthClass = useMemo(() => {
+    if (mobileScreen) return "w-[calc(100%-22px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+      case UserInputSizes.medium:
+        return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      default:
+        return "w-[250x]"
+    }
+  }, [size, mobileScreen])
+  return <div className={cn("mx-auto", generateWidthClass)} {...props} />
+}
+
+type UserInputStyledProps = {
   textColor: string
   width: number
   backgroundColor: string
@@ -561,27 +552,86 @@ const UserInputStyled = styled(Input)<{
   borderLeftWidth: number
   borderRightWidth: number
   primaryFont: string
-  size: UserInputSizes
+  // size: UserInputSizes
   error: boolean
-}>`
-  color: ${(props) => props.textColor};
-  max-width: 100%;
-  min-height: 50px;
-  background: #ffffff;
-  font-family: ${(props) => `var(${props?.primaryFont})`};
-  border-top-right-radius: ${(props) => props.topRightRadius}px;
-  border-top-left-radius: ${(props) => props.topLeftRadius}px;
-  border-bottom-right-radius: ${(props) =>
-    props.error ? 0 : props.bottomRightRadius}px;
-  border-bottom-left-radius: ${(props) =>
-    props.error ? 0 : props.bottomLeftRadius}px;
-  border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
-  border-top-width: ${(props) => props.borderTopWidth}px;
-  border-bottom-width: ${(props) => props.borderBottomWidth}px;
-  border-left-width: ${(props) => props.borderLeftWidth}px;
-  border-right-width: ${(props) => props.borderRightWidth}px;
-  align-self: center;
-`
+}
+
+// const UserInputStyled = styled(Input)<UserInputStyledProps>`
+//   color: ${(props) => props.textColor};
+//   max-width: 100%;
+//   min-height: 50px;
+//   background: #ffffff;
+//   font-family: ${(props) => `var(${props?.primaryFont})`};
+//   border-top-right-radius: ${(props) => props.topRightRadius}px;
+//   border-top-left-radius: ${(props) => props.topLeftRadius}px;
+//   border-bottom-right-radius: ${(props) =>
+//     props.error ? 0 : props.bottomRightRadius}px;
+//   border-bottom-left-radius: ${(props) =>
+//     props.error ? 0 : props.bottomLeftRadius}px;
+//   border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
+//   border-top-width: ${(props) => props.borderTopWidth}px;
+//   border-bottom-width: ${(props) => props.borderBottomWidth}px;
+//   border-left-width: ${(props) => props.borderLeftWidth}px;
+//   border-right-width: ${(props) => props.borderRightWidth}px;
+//   align-self: center;
+// `
+
+const UserInputStyled = React.forwardRef<
+  HTMLInputElement,
+  InputProps & UserInputStyledProps
+>(
+  (
+    {
+      textColor,
+      width,
+      backgroundColor,
+      borderColor,
+      borderWidth,
+      borderRadius,
+      topLeftRadius,
+      topRightRadius,
+      bottomLeftRadius,
+      bottomRightRadius,
+      borderTopWidth,
+      borderBottomWidth,
+      borderLeftWidth,
+      borderRightWidth,
+      primaryFont,
+      error,
+      className,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Input
+        className={cn(
+          "m-h-[50px] max-w-full self-center",
+          topRightRadius && `rounded-tr-[${topRightRadius}]`,
+          topLeftRadius && `rounded-tl-[${topLeftRadius}]`,
+          bottomRightRadius && `rounded-br-[${bottomRightRadius}]`,
+          bottomLeftRadius && `rounded-bl-[${bottomLeftRadius}]`,
+          borderTopWidth && `border-t-[${borderTopWidth}px]`,
+          borderBottomWidth && `border-b-[${borderBottomWidth}px]`,
+          borderLeftWidth && `border-l-[${borderLeftWidth}px]`,
+          borderRightWidth && `border-r-[${borderRightWidth}px]`,
+          textColor && `text-[${textColor}]`,
+          className
+        )}
+        {...props}
+        ref={ref}
+        style={{
+          fontFamily: `var(${primaryFont})`,
+          borderColor: error ? "#cc0000" : borderColor,
+          ...style,
+        }}
+      />
+    )
+  }
+)
+
+UserInputStyled.displayName = "UserInputStyled"
 
 export const UserInput = ({ ...props }) => {
   const {
@@ -675,7 +725,7 @@ export const UserInput = ({ ...props }) => {
         screenToggleError: false,
       })
     )
-    setProp((props) => (props.compId = compId))
+    // setProp((props) => (props.compId = compId))
   }, [])
   // useEffect(() => {
   //   console.log("FIELD ERROR", JSON.stringify({
@@ -687,59 +737,56 @@ export const UserInput = ({ ...props }) => {
   //     inputRequired: props.inputRequired
   //   }))
   // } ,[selectedField,fieldError,screenValidated])
-  useEffect(() => {
-    if (
-      parentContainer.id !== "ROOT" &&
-      parentContainer.data.name === "CardContent"
-    ) {
-      setProp((props) => (props.size = "full"))
-    }
-  }, [parentContainer])
+  // useEffect(() => {
+  //   if (
+  //     parentContainer.id !== "ROOT" &&
+  //     parentContainer.data.name === "CardContent"
+  //   ) {
+  //     setProp((props) => (props.size = "full"))
+  //   }
+  // }, [parentContainer])
 
-  useEffect(() => {
-    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-      setProp((props) => (props.primaryFont.value = primaryFont), 200)
-    }
-  }, [primaryFont])
+  // useEffect(() => {
+  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont])
 
-  useEffect(() => {
-    if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
-      setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
-    }
-  }, [secondaryFont])
+  // useEffect(() => {
+  //   if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
+  //     setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
+  //   }
+  // }, [secondaryFont])
 
-  useEffect(() => {
-    if (
-      props.activeBorderColor.globalStyled &&
-      !props.activeBorderColor.isCustomized
-    ) {
-      setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
-    }
-  }, [primaryColor])
+  // useEffect(() => {
+  //   if (
+  //     props.activeBorderColor.globalStyled &&
+  //     !props.activeBorderColor.isCustomized
+  //   ) {
+  //     setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
+  //   }
+  // }, [primaryColor])
 
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }
+
   return (
     <div
       className={cn(
-        "relative focus-visible:ring-0 focus-visible:ring-transparent",
+        "group/input relative flex w-full justify-center focus-visible:ring-0 focus-visible:ring-transparent",
         {
           "animate-shake": fieldError,
         }
       )}
       ref={(ref: any) => ref && connect(drag(ref))}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Input Field")} />}
+      <Controller
+        className="invisible group-hover/input:visible"
+        nameOfComponent={t("Input Field")}
+      />
       <div
         className={cn(
           "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
@@ -757,7 +804,7 @@ export const UserInput = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <Wrapper
+        <NewWrapper
           size={props.size}
           mobileScreen={mobileScreen}
           className="text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
@@ -943,7 +990,7 @@ export const UserInput = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </Wrapper>
+        </NewWrapper>
       </div>
     </div>
   )
