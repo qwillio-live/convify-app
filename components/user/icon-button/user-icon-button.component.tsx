@@ -1,16 +1,16 @@
 "use client"
-import { useCallback, useEffect, useMemo, useRef } from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { debounce } from "lodash"
-import {
-  Activity,
-  Anchor,
-  Aperture,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  Mountain,
-} from "lucide-react"
+// import {
+//   Activity,
+//   Anchor,
+//   Aperture,
+//   ArrowRight,
+//   Disc,
+//   DollarSign,
+//   Mountain,
+// } from "lucide-react"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
@@ -27,7 +27,7 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import { Button as CustomButton } from "@/components/ui/button"
+import { ButtonProps, Button as CustomButton } from "@/components/ui/button"
 import {
   ImagePictureTypes,
   PictureTypes,
@@ -379,11 +379,18 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   flex-direction: row;
   position: relative;
   overflow: hidden;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
-  border: 1px dashed transparent;
   transition: all 0.2s ease;
+  ${({ buttonSize }) => {
+    if (buttonSize) {
+      return {
+        fontSize: ButtonSizeValues[buttonSize || "medium"],
+        paddingTop: ButtonSizeValues[buttonSize || "medium"],
+        paddingBottom: ButtonSizeValues[buttonSize || "medium"],
+      }
+    }
+    return null
+  }}
 
   &:hover {
     border-style: solid;
@@ -400,7 +407,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
 
   background: ${(props) => props.background};
   color: ${(props) => props.color};
-  overflow: hidden;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
@@ -408,9 +414,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
@@ -425,13 +429,23 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { width: "376px" }
+        return `
+        width: 376px;
+        @media (max-width: 390px) {
+          width: calc(100% - 22px)
+        }
+        `
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { width: "576px" }
+        return `
+        width: 576px;
+        @media (max-width: 600px) {
+          width: calc(100% - 22px)
+        }
+        `
       }
     } else {
       return {
@@ -439,23 +453,95 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
       }
     }
   }};
-
-  @media (max-width: 600px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
-
-  @media (max-width: 390px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
 `
+
+// const StyledCustomButton = ({
+//   fontFamily,
+//   buttonSize,
+//   borderHoverColor,
+//   backgroundHover,
+//   colorHover,
+//   background,
+//   color,
+//   height,
+//   marginTop,
+//   marginLeft,
+//   marginRight,
+//   marginBottom,
+//   paddingLeft,
+//   paddingRight,
+//   radius,
+//   flexDirection,
+//   alignItems,
+//   justifyContent,
+//   gap,
+//   borderColor,
+//   border,
+//   mobileScreen,
+//   size,
+//   className,
+//   style,
+//   ...props
+// }: React.ButtonHTMLAttributes<HTMLButtonElement> & StyledCustomButtonProps) => {
+//   const generateWidthClass = useMemo(() => {
+//     if (mobileScreen) return "w-[calc(100%-22px)]"
+//     switch (size) {
+//       case UserInputSizes.large:
+//         return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+//       case UserInputSizes.medium:
+//         return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+//       case UserInputSizes.small:
+//         return "w-[250px]"
+//       default:
+//         return "w-[calc(100%-22px)]"
+//     }
+//   }, [size, mobileScreen])
+
+//   console.log({ paddingRight, paddingLeft })
+
+//   return (
+//     <button
+//       className={cn(
+//         `relative box-border flex overflow-hidden font-medium transition-all duration-200 hover:border-solid ${
+//           border ? `border-[${border}px]` : "border"
+//         }`,
+//         `flex-${flexDirection || "row"}`,
+//         radius && `rounded-[${radius}px]`,
+//         borderHoverColor &&
+//           `!hover:border-[${borderHoverColor}] !focus:border-[${borderHoverColor}]`,
+//         backgroundHover && `!hover:bg-[${backgroundHover}]`,
+//         colorHover && `!hover:text-[${colorHover}]`,
+//         // border ? `border-[${border}px]` : "border",
+//         generateWidthClass,
+//         className
+//       )}
+//       {...props}
+//       style={{
+//         height: height === "auto" ? "auto" : `${height}px`,
+//         gap,
+//         color,
+//         ...(buttonSize
+//           ? {
+//               fontSize: ButtonSizeValues[buttonSize || "medium"],
+//               paddingBlock: ButtonSizeValues[buttonSize || "medium"],
+//             }
+//           : {}),
+//         borderColor: borderColor || "transparent",
+//         marginTop,
+//         marginLeft,
+//         marginRight,
+//         marginBottom,
+//         background,
+//         paddingRight: `${paddingRight}px`,
+//         paddingLeft: `${paddingLeft}px`,
+//         fontFamily: `var(${fontFamily})`,
+//         justifyContent,
+//         alignItems,
+//         ...style,
+//       }}
+//     />
+//   )
+// }
 
 export const IconButton = ({
   fontFamily,
@@ -516,68 +602,68 @@ export const IconButton = ({
   //   (state) => state.theme?.general?.secondaryColor
   // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  // const screens = useAppSelector((state) => state?.screen?.screens || [])
-  // const screensLength = screens?.length
+  const screens = useAppSelector((state) => state?.screen?.screens || [])
+  const screensLength = screens?.length
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
 
-  // const nextScreenName =
-  //   useAppSelector(
-  //     (state: RootState) =>
-  //       state?.screen?.screens[
-  //         selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-  //       ]?.screenName
-  //   ) || ""
-  // const nextScreenId =
-  //   useAppSelector(
-  //     (state: RootState) =>
-  //       state?.screen?.screens[
-  //         selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-  //       ]?.screenId
-  //   ) || ""
-  // const screenNames = useScreenNames()
+  const nextScreenName =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+        ]?.screenName
+    ) || ""
+  const nextScreenId =
+    useAppSelector(
+      (state: RootState) =>
+        state?.screen?.screens[
+          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+        ]?.screenId
+    ) || ""
+  const screenNames = useScreenNames()
 
   // editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
   // this effects to performance
-  // useEffect(() => {
-  //   let screenNameChanged = false
-  //   if (buttonAction === "next-screen") {
-  //     setProp(
-  //       (props) =>
-  //         (props.nextScreen = {
-  //           screenName: nextScreenName,
-  //           screenId: nextScreenId,
-  //         }),
-  //       200
-  //     )
-  //   } else if (buttonAction === "custom-action") {
-  //     screenNames?.map((screen) => {
-  //       if (screen.screenId === nextScreen.screenId) {
-  //         setProp(
-  //           (props) =>
-  //             (props.nextScreen = {
-  //               screenName: screen.screenName,
-  //               screenId: screen.screenId,
-  //             }),
-  //           200
-  //         )
-  //         screenNameChanged = true
-  //       }
-  //     })
-  //     if (!screenNameChanged) {
-  //       setProp((props) => (props.buttonAction = "next-screen"), 200)
-  //       setProp(
-  //         (props) =>
-  //           (props.nextScreen = {
-  //             screenId: nextScreenId,
-  //             screenName: nextScreenName,
-  //           })
-  //       )
-  //     }
-  //   }
-  // }, [nextScreenName, buttonAction])
+  useEffect(() => {
+    let screenNameChanged = false
+    if (buttonAction === "next-screen") {
+      setProp(
+        (props) =>
+          (props.nextScreen = {
+            screenName: nextScreenName,
+            screenId: nextScreenId,
+          }),
+        200
+      )
+    } else if (buttonAction === "custom-action") {
+      screenNames?.map((screen) => {
+        if (screen.screenId === nextScreen.screenId) {
+          setProp(
+            (props) =>
+              (props.nextScreen = {
+                screenName: screen.screenName,
+                screenId: screen.screenId,
+              }),
+            200
+          )
+          screenNameChanged = true
+        }
+      })
+      if (!screenNameChanged) {
+        setProp((props) => (props.buttonAction = "next-screen"), 200)
+        setProp(
+          (props) =>
+            (props.nextScreen = {
+              screenId: nextScreenId,
+              screenName: nextScreenName,
+            })
+        )
+      }
+    }
+  }, [nextScreenName])
 
   const maxLength = ButtonTextLimit[size]
 
@@ -687,10 +773,10 @@ export const IconButton = ({
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
-      className="group flex w-full justify-center"
+      className="group/button flex w-full justify-center"
     >
       <Controller
-        className="invisible group-hover:visible"
+        className="invisible group-hover/button:visible"
         nameOfComponent={t("Button")}
       />
       <div
@@ -946,7 +1032,10 @@ export const IconButtonDefaultProps: IconButtonProps = {
   settingsTab: ["content"],
   tracking: false,
   trackingEvent: "button_clicked",
-  nextScreen: getNextScreenInfoFromStore(),
+  nextScreen: {
+    screenId: "",
+    screenName: "",
+  },
   buttonAction: "next-screen",
   id: `input-${hexoid(6)()}`,
 }

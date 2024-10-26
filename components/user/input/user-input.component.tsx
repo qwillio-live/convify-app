@@ -15,8 +15,8 @@ import {
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
-import { useForm, useFormContext } from "react-hook-form"
-import styled from "styled-components"
+// import { useForm, useFormContext } from "react-hook-form"
+// import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
@@ -28,23 +28,23 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import {
-  ImagePictureTypes,
-  PictureTypes,
-  SvgRenderer,
-} from "@/components/PicturePicker"
+// import { Label } from "@/components/ui/label"
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select"
+// import { Slider } from "@/components/ui/slider"
+// import {
+//   ImagePictureTypes,
+//   PictureTypes,
+//   SvgRenderer,
+// } from "@/components/PicturePicker"
 import { Input, InputProps } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
@@ -380,10 +380,18 @@ export const UserInputGen = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                "ring-opacity/0 outline-none ring-0 transition-all duration-200 ease-in-out",
-                "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0",
-                "peer-focus-visible:outline-none",
-                !isFilled && alarm && isRequired && "!border-red-600"
+                `ring-opacity/0
+          outline-none
+          ring-0
+          transition-all
+          duration-200
+          ease-in-out
+          focus-visible:outline-none
+          focus-visible:ring-0
+          focus-visible:ring-transparent
+          focus-visible:ring-offset-0 peer-focus-visible:outline-none
+          ${!isFilled && alarm && isRequired && " !border-red-600"}
+          `
               )}
               onChange={(e) => {
                 if (isRequired) {
@@ -467,53 +475,53 @@ export const UserInputGen = ({ ...props }) => {
   )
 }
 
-const Wrapper = styled.div<{
-  size: UserInputSizes
-  mobileScreen?: boolean
-}>`
-  margin-left: auto;
-  margin-right: auto;
+// const Wrapper = styled.div<{
+//   size: UserInputSizes
+//   mobileScreen?: boolean
+// }>`
+//   margin-left: auto;
+//   margin-right: auto;
 
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "250px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "376px" }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "576px" }
-      }
-    } else {
-      return {
-        width: "calc(100% - 22px)",
-      }
-    }
-  }};
+//   ${({ size, mobileScreen }) => {
+//     if (size === UserInputSizes.small) {
+//       return { width: "250px" }
+//     } else if (size === UserInputSizes.medium) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return { width: "376px" }
+//       }
+//     } else if (size === UserInputSizes.large) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return { width: "576px" }
+//       }
+//     } else {
+//       return {
+//         width: "calc(100% - 22px)",
+//       }
+//     }
+//   }};
 
-  @media (max-width: 600px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
+//   @media (max-width: 600px) {
+//     ${({ size }) => {
+//       if (size === UserInputSizes.large) {
+//         return { width: "calc(100% - 22px)" }
+//       }
+//     }}
+//   }
 
-  @media (max-width: 390px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
-`
+//   @media (max-width: 390px) {
+//     ${({ size }) => {
+//       if (size === UserInputSizes.medium) {
+//         return { width: "calc(100% - 22px)" }
+//       }
+//     }}
+//   }
+// `
 
-const NewWrapper = ({
+const Wrapper = ({
   mobileScreen,
   size,
   className,
@@ -529,12 +537,54 @@ const NewWrapper = ({
         return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
       case UserInputSizes.medium:
         return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      case UserInputSizes.small:
+        return "w-[250px]"
       default:
-        return "w-[250x]"
+        return "w-[calc(100%-22px)]"
     }
   }, [size, mobileScreen])
-  return <div className={cn("mx-auto", generateWidthClass)} {...props} />
+  return (
+    <div className={cn("mx-auto", generateWidthClass, className)} {...props} />
+  )
 }
+
+// const UserInputStyled = styled(Input)<{
+//   textColor: string
+//   width: number
+//   backgroundColor: string
+//   borderColor: string
+//   borderWidth: number
+//   borderRadius: number
+//   topLeftRadius: number
+//   topRightRadius: number
+//   bottomLeftRadius: number
+//   bottomRightRadius: number
+//   borderTopWidth: number
+//   borderBottomWidth: number
+//   borderLeftWidth: number
+//   borderRightWidth: number
+//   primaryFont: string
+//   size: UserInputSizes
+//   error: boolean
+// }>`
+//   color: ${(props) => props.textColor};
+//   max-width: 100%;
+//   min-height: 50px;
+//   background: #ffffff;
+//   font-family: ${(props) => `var(${props?.primaryFont})`};
+//   border-top-right-radius: ${(props) => props.topRightRadius}px;
+//   border-top-left-radius: ${(props) => props.topLeftRadius}px;
+//   border-bottom-right-radius: ${(props) =>
+//     props.error ? 0 : props.bottomRightRadius}px;
+//   border-bottom-left-radius: ${(props) =>
+//     props.error ? 0 : props.bottomLeftRadius}px;
+//   border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
+//   border-top-width: ${(props) => props.borderTopWidth}px;
+//   border-bottom-width: ${(props) => props.borderBottomWidth}px;
+//   border-left-width: ${(props) => props.borderLeftWidth}px;
+//   border-right-width: ${(props) => props.borderRightWidth}px;
+//   align-self: center;
+// `
 
 type UserInputStyledProps = {
   textColor: string
@@ -555,26 +605,6 @@ type UserInputStyledProps = {
   // size: UserInputSizes
   error: boolean
 }
-
-// const UserInputStyled = styled(Input)<UserInputStyledProps>`
-//   color: ${(props) => props.textColor};
-//   max-width: 100%;
-//   min-height: 50px;
-//   background: #ffffff;
-//   font-family: ${(props) => `var(${props?.primaryFont})`};
-//   border-top-right-radius: ${(props) => props.topRightRadius}px;
-//   border-top-left-radius: ${(props) => props.topLeftRadius}px;
-//   border-bottom-right-radius: ${(props) =>
-//     props.error ? 0 : props.bottomRightRadius}px;
-//   border-bottom-left-radius: ${(props) =>
-//     props.error ? 0 : props.bottomLeftRadius}px;
-//   border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
-//   border-top-width: ${(props) => props.borderTopWidth}px;
-//   border-bottom-width: ${(props) => props.borderBottomWidth}px;
-//   border-left-width: ${(props) => props.borderLeftWidth}px;
-//   border-right-width: ${(props) => props.borderRightWidth}px;
-//   align-self: center;
-// `
 
 const UserInputStyled = React.forwardRef<
   HTMLInputElement,
@@ -606,22 +636,19 @@ const UserInputStyled = React.forwardRef<
   ) => {
     return (
       <Input
-        className={cn(
-          "m-h-[50px] max-w-full self-center",
-          topRightRadius && `rounded-tr-[${topRightRadius}]`,
-          topLeftRadius && `rounded-tl-[${topLeftRadius}]`,
-          bottomRightRadius && `rounded-br-[${bottomRightRadius}]`,
-          bottomLeftRadius && `rounded-bl-[${bottomLeftRadius}]`,
-          borderTopWidth && `border-t-[${borderTopWidth}px]`,
-          borderBottomWidth && `border-b-[${borderBottomWidth}px]`,
-          borderLeftWidth && `border-l-[${borderLeftWidth}px]`,
-          borderRightWidth && `border-r-[${borderRightWidth}px]`,
-          textColor && `text-[${textColor}]`,
-          className
-        )}
+        className={cn("m-h-[50px] max-w-full self-center", className)}
         {...props}
         ref={ref}
         style={{
+          color: textColor,
+          borderTopRightRadius: topRightRadius,
+          borderTopLeftRadius: topLeftRadius,
+          borderBottomRightRadius: bottomRightRadius,
+          borderBottomLeftRadius: bottomLeftRadius,
+          borderTopWidth,
+          borderBottomWidth,
+          borderLeftWidth,
+          borderRightWidth,
           fontFamily: `var(${primaryFont})`,
           borderColor: error ? "#cc0000" : borderColor,
           ...style,
@@ -638,17 +665,17 @@ export const UserInput = ({ ...props }) => {
     connectors: { connect, drag },
     compId,
     parent,
-    selected,
-    isHovered,
+    // selected,
+    // isHovered,
     actions: { setProp },
     props: { icon },
   } = useNode((state) => ({
     compId: state.id,
     props: state.data.props,
     parent: state.data.parent,
-    selected: state.events.selected,
+    // selected: state.events.selected,
     dragged: state.events.dragged,
-    isHovered: state.events.hovered,
+    // isHovered: state.events.hovered,
   }))
   const {
     // query,
@@ -660,11 +687,11 @@ export const UserInput = ({ ...props }) => {
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
-  const [hover, setHover] = useState(false)
+  // const [hover, setHover] = useState(false)
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
-  const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
+  // const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.selectedScreen || 0
   )
@@ -681,21 +708,21 @@ export const UserInput = ({ ...props }) => {
         ?.fieldValue
   )
   // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
-  const fieldRequired =
-    useAppSelector(
-      (state) =>
-        state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
-          ?.fieldRequired
-    ) || false
+  // const fieldRequired =
+  //   useAppSelector(
+  //     (state) =>
+  //       state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+  //         ?.fieldRequired
+  //   ) || false
   // const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
   const fieldError =
     props.inputRequired &&
     (!fieldValue || fieldValue == null) &&
     screenValidated
 
-  const secondaryFont = useAppSelector(
-    (state) => state?.theme?.text?.secondaryFont
-  )
+  // const secondaryFont = useAppSelector(
+  //   (state) => state?.theme?.text?.secondaryFont
+  // )
   const primaryColor = useAppSelector(
     (state) => state?.theme?.general?.primaryColor
   )
@@ -725,7 +752,7 @@ export const UserInput = ({ ...props }) => {
         screenToggleError: false,
       })
     )
-    // setProp((props) => (props.compId = compId))
+    setProp((props) => (props.compId = compId))
   }, [])
   // useEffect(() => {
   //   console.log("FIELD ERROR", JSON.stringify({
@@ -737,14 +764,14 @@ export const UserInput = ({ ...props }) => {
   //     inputRequired: props.inputRequired
   //   }))
   // } ,[selectedField,fieldError,screenValidated])
-  // useEffect(() => {
-  //   if (
-  //     parentContainer.id !== "ROOT" &&
-  //     parentContainer.data.name === "CardContent"
-  //   ) {
-  //     setProp((props) => (props.size = "full"))
-  //   }
-  // }, [parentContainer])
+  useEffect(() => {
+    if (
+      parentContainer.id !== "ROOT" &&
+      parentContainer.data.name === "CardContent"
+    ) {
+      setProp((props) => (props.size = "full"))
+    }
+  }, [parentContainer])
 
   // useEffect(() => {
   //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
@@ -758,21 +785,20 @@ export const UserInput = ({ ...props }) => {
   //   }
   // }, [secondaryFont])
 
-  // useEffect(() => {
-  //   if (
-  //     props.activeBorderColor.globalStyled &&
-  //     !props.activeBorderColor.isCustomized
-  //   ) {
-  //     setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
-  //   }
-  // }, [primaryColor])
+  useEffect(() => {
+    if (
+      props.activeBorderColor.globalStyled &&
+      !props.activeBorderColor.isCustomized
+    ) {
+      setProp((props) => (props.activeBorderColor.value = primaryColor), 200)
+    }
+  }, [primaryColor])
 
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }
-
   return (
     <div
       className={cn(
@@ -804,7 +830,7 @@ export const UserInput = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <NewWrapper
+        <Wrapper
           size={props.size}
           mobileScreen={mobileScreen}
           className="text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
@@ -990,7 +1016,7 @@ export const UserInput = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </NewWrapper>
+        </Wrapper>
       </div>
     </div>
   )
