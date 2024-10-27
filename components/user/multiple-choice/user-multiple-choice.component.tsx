@@ -194,7 +194,7 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <Wrapper size={size} className="mcq-input-comp">
+      <Wrapper size={size} className="mcq-input-comp max-w-[calc(100%-22px)]">
         <ul
           ref={itemRef}
           className="flex w-full flex-col items-center justify-center"

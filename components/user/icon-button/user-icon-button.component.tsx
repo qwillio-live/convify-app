@@ -256,13 +256,13 @@ export const IconButtonGen = ({
 
   return (
     <div
-      className="relative w-full"
+      className="relative w-full max-w-[calc(100%-22px)]"
       style={{
         width: "100%",
         background: `${containerBackground}`,
         display: "flex",
         justifyContent: "center",
-        minWidth: "100%",
+        // minWidth: "100%",
         paddingTop: `${props.marginTop}px`,
         paddingBottom: `${props.marginBottom}px`,
         paddingLeft: `${props.marginLeft}px`,
@@ -466,7 +466,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   @media (max-width: 600px) {
     ${({ size }) => {
       if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
+        // return { width: "calc(100% - 22px)" }
+        return { width: "100%" }
       }
     }}
   }
@@ -474,7 +475,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   @media (max-width: 390px) {
     ${({ size }) => {
       if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
+        // return { width: "calc(100% - 22px)" }
+        return { width: "100%" }
       }
     }}
   }
