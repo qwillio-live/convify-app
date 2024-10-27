@@ -46,6 +46,7 @@ export const FAQGen = ({
   blockColor,
   marginTop,
   marginRight,
+  fullWidth,
   marginBottom,
   borderRadius,
   borderWidth,
@@ -77,7 +78,6 @@ export const FAQGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-
       <StyledFAQContainer
         className="faq-component"
         containerBackground={containerBackground}
@@ -89,7 +89,6 @@ export const FAQGen = ({
         isPreviewScreen={true}
         size={size}
         mobileScreen={false}
-
         maxWidth={FAQSizeValues[size || "medium"]}
       >
         {items.map((item, index) => (
@@ -129,6 +128,7 @@ export const FAQ = ({
   marginRight,
   marginBottom, borderRadius,
   iconType,
+  fullWidth = true,
   items,
   borderWidth,
   ...props
@@ -165,13 +165,14 @@ export const FAQ = ({
     }),
     [setProp]
   )
-
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
-      className=""
+      className="w-full"
       style={{
         width: "100%",
+        minWidth: "100%",
         display: "flex",
         justifyContent: "center",
       }}
@@ -179,45 +180,63 @@ export const FAQ = ({
       onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={t('FAQ')} />}
-      <StyledFAQContainer
-        className="faq-component"
-        size={size}
-        isPreviewScreen={true}
-        containerBackground={containerBackground}
-        marginLeft={marginLeft}
-        marginTop={marginTop}
-        marginRight={marginRight}
-        marginBottom={marginBottom}
-        verticalGap={verticalGap}
-        mobileScreen={false}
-        maxWidth={FAQSizeValues[size || "medium"]}
+      <div
+        className="relative w-full"
+        style={{
+          background: `${containerBackground}`,
+          display: "inline-flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          boxSizing: "border-box",
+          minWidth: "100%",
+          maxWidth: "100%",
+          paddingTop: `${marginTop}px`,
+          paddingBottom: `${marginBottom}px`,
+          paddingLeft: `${marginLeft}px`,
+          paddingRight: `${marginRight}px`,
+        }}
       >
-        {items.map((item, index) => (
-          <FAQItem
-            key={item.id}
-            borderRadius={borderRadius}
-            borderWidth={borderWidth}
-            iconType={iconType}
-            titleFontFamily={titleFontFamily || primaryFont}
-            contentFontFamily={contentFontFamily || secondaryFont}
-            textAlign={textAlign}
-            titleColor={titleColor || primaryTextColor}
-            contentColor={contentColor || secondaryTextColor}
-            backgroundColor={blockColor}
-            item={item}
-            onQuestionChange={(updatedQuestion) => {
-              setProp((prop) => {
-                prop.items[index].question = updatedQuestion
-              }, 200)
-            }}
-            onAnswerChange={(updatedAnswer) => {
-              setProp((prop) => {
-                prop.items[index].answer = updatedAnswer
-              }, 200)
-            }}
-          />
-        ))}
-      </StyledFAQContainer>
+        <StyledFAQContainer
+          className="faq-component w-full"
+          size={size}
+          isPreviewScreen={false}
+          containerBackground={containerBackground}
+          marginLeft={marginLeft}
+          marginTop={marginTop}
+          marginRight={marginRight}
+          marginBottom={marginBottom}
+          verticalGap={verticalGap}
+          mobileScreen={!!mobileScreen}
+          maxWidth={FAQSizeValues[size || "medium"]}
+        >
+          {items.map((item, index) => (
+            <FAQItem
+              key={item.id}
+              borderRadius={borderRadius}
+              borderWidth={borderWidth}
+              iconType={iconType}
+              titleFontFamily={titleFontFamily || primaryFont}
+              contentFontFamily={contentFontFamily || secondaryFont}
+              textAlign={textAlign}
+              titleColor={titleColor || primaryTextColor}
+              contentColor={contentColor || secondaryTextColor}
+              backgroundColor={blockColor}
+              item={item}
+              onQuestionChange={(updatedQuestion) => {
+                setProp((prop) => {
+                  prop.items[index].question = updatedQuestion
+                }, 200)
+              }}
+              onAnswerChange={(updatedAnswer) => {
+                setProp((prop) => {
+                  prop.items[index].answer = updatedAnswer
+                }, 200)
+              }}
+            />
+          ))}
+        </StyledFAQContainer>
+      </div>
     </div>
   )
 }
@@ -237,7 +256,7 @@ const FAQItem = ({
   onQuestionChange = (updatedQuestion: string) => { },
   onAnswerChange = (updatedAnswer: string) => { },
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(item.defaultOpen ?? false)
   const [questionValue, setQuestionValue] = useState(item.question)
   const [answerValue, setAnswerValue] = useState(item.answer)
   const [answerHeight, setAnswerHeight] = useState(0)
@@ -337,14 +356,21 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
   flex-direction: column;
   gap:${({ verticalGap }) => `${verticalGap}px`};
 
+  margin-left: auto;
+  margin-right: auto;
+
   ${({ size, mobileScreen, isPreviewScreen }) => {
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
-        return { width: "376px" }
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "376px" }
+        }
       } else if (size === UserInputSizes.medium) {
-        return { width: "800px" }
+        return { width: "calc(100% - 22px)", maxWidth: 800 }
       } else if (size === UserInputSizes.large) {
-        return { width: "1000px" }
+        return { width: "calc(100% - 22px)", maxWidth: 1000 }
       } else {
         return {
           width: "calc(100% - 22px)",
@@ -369,29 +395,29 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
     }
   }};
 
-  @media (max-width: 1000px) {
-    ${({ size }) => {
+@media (max-width: 1000px) {
+  ${({ size }) => {
     if (size === UserInputSizes.large) {
       return { width: "calc(100% - 22px)" }
     }
   }}
-  }
+}
 
-  @media (max-width: 800px) {
-    ${({ size }) => {
+@media (max-width: 800px) {
+  ${({ size }) => {
     if (size === UserInputSizes.medium) {
       return { width: "calc(100% - 22px)" }
     }
   }}
-  }
+}
 
-  @media (max-width: 376px) {
-    ${({ size }) => {
+@media (max-width: 376px) {
+  ${({ size }) => {
     if (size === UserInputSizes.small) {
       return { width: "calc(100% - 22px)" }
     }
   }}
-  }
+}
 `
 
 type StyledFAQItemProps = {
@@ -429,13 +455,15 @@ const StyledFAQItem = styled.div<StyledFAQItemProps>`
   }
   
   .faq-answer {
-   overflow: hidden;
+    overflow: hidden;
     transition: max-height 0.3s ease-out;
     
     .answer-text {
       font-family: var(${({ titleFontFamily }) => titleFontFamily});
       color: ${({ contentColor }) => contentColor};
       text-align: ${({ textAlign }) => textAlign};
+      word-wrap: break-word;
+      overflow-wrap: break-word;
       font-size: 16px;
       padding: 10px;
     }
@@ -461,6 +489,7 @@ export const FAQDefaultProps = {
   marginLeft: 0,
   marginTop: 20,
   marginRight: 0,
+  fullWdth: true,
   marginBottom: 20,
   items: [
     {

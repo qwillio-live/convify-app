@@ -54,6 +54,7 @@ import { usePathname } from "next/navigation"
 
 import { env } from "@/env.mjs"
 import { FAQGen } from "@/components/user/faq/user-faq.component"
+import { LinksGen } from "@/components/user/links/user-links.component"
 
 export default async function PreviewFlows({
   params,
@@ -88,6 +89,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.STEPS]: StepsGen,
     [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
     [CRAFT_ELEMENTS.LIST]: ListGen,
+    [CRAFT_ELEMENTS.LINKS]: LinksGen,
     [CRAFT_ELEMENTS.FAQ]: FAQGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,

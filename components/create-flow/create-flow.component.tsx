@@ -76,6 +76,7 @@ import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { Steps } from "../user/steps/user-steps.component"
 import { FAQ } from "../user/faq/user-faq.component"
+import { Links } from "../user/links/user-links.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -309,6 +310,7 @@ export function CreateFlowComponent() {
           Steps,
           Checklist,
           List,
+          Links,
           FAQ,
           LogoBar,
           LayoutContainer,

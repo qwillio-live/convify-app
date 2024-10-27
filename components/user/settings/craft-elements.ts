@@ -30,6 +30,7 @@ export const CRAFT_ELEMENTS = {
   CHECKLIST: "Checklist",
   LIST: "List",
   FAQ: "FAQ",
+  LINKS: "Links",
   SCREENFOOTER: "ScreenFooter",
   INPUTMAIL: "UserInputMail",
   INPUTPHONE: "UserInputPhone",

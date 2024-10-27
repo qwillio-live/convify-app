@@ -22,6 +22,7 @@ const useFaqThemePresets = () => {
         id: hexoid(6)(),
         question: t("FAQ Q1"),
         answer: t("FAQ A1"),
+        defaultOpen: true,
       },
       {
         id: hexoid(6)(),
@@ -41,7 +42,7 @@ const useFaqThemePresets = () => {
         descriptionFontFamily: theme?.text?.secondaryFont || "inherit",
         textAlign: "start",
         verticalGap: 6,
-        size: FAQSizes.small,
+        size: FAQSizes.medium,
         iconColor: theme?.general?.primaryColor || "#3182ce",
         titleColor: theme?.text?.primaryColor || "#000000",
         contentColor: theme?.text?.secondaryColor || "#5a5a5a",
@@ -51,12 +52,13 @@ const useFaqThemePresets = () => {
         marginTop: 20,
         marginRight: 0,
         marginBottom: 20,
+        fullWidth: true,
         blockColor:'transparent',
         flexDirection: "row",
         settingTabs: ["content"],
         borderRadius: 0,
         borderWidth: 1.5,
-        iconType: IconType.plus,
+        iconType: IconType.chevron,
         items: defaultItems,
     }
 

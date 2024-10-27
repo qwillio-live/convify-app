@@ -394,7 +394,15 @@
     "Answer":"Answer",
     "Question Color":"Question Color",
     "Answer Color":"Answer Color",
-    "Block Color":"Block Color"
+    "Block Color":"Block Color",
+    "Terms": "Terms",
+    "Privacy":"Privacy",
+    "Links":"Links",
+    "Show dots":"Show Dots",
+    "Add new link":"Add new link",
+    "Links color":"Links color",
+    "Enable tracking":"Enable tracking",
+    "New window":"New window"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

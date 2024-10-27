@@ -390,7 +390,14 @@
     "Answer": "Responder",
     "Question Color": "Cor da pergunta",
     "Answer Color": "Cor da resposta",
-    "Block Color": "Cor do bloco"
+    "Block Color": "Cor do bloco",
+    "Terms":"Termos",
+    "Privacy":"Privacidade",
+    "Links":"Ligações",
+    "Show dots":"Mostrar pontos",
+    "Add new link":"Adicionar novo link",
+    "Links Color":"Cor dos links",
+    "Enable tracking":"Habilitar rastreamento"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",
