@@ -501,6 +501,7 @@ const StyledCustomButton = ({
 
   const customStyles: CSSProperties = {
     "--icon-button-background": background,
+    "--icon-button-border-color": borderColor,
     "--icon-button-border-hover-color": borderHoverColor,
     "--icon-button-size": ButtonSizeValues[buttonSize || "medium"],
     "--icon-button-margin-top": `${marginTop}px`,
@@ -510,9 +511,7 @@ const StyledCustomButton = ({
     "--icon-button-background-hover": backgroundHover,
     "--icon-button-color-hover": colorHover,
     "--icon-button-color": color,
-    "--icon-button-border-width": `${border}px`,
     "--icon-button-border-radius": `${radius}px`,
-    "--icon-button-border-color": borderColor || "transparent",
     "--icon-button-gap": `${gap}px`,
     "--icon-button-height": height === "auto" ? "auto" : `${height}px`,
     "--icon-button-padding-right": `${paddingRight}px`,
@@ -521,6 +520,7 @@ const StyledCustomButton = ({
     justifyContent,
     alignItems,
     color,
+    borderWidth: border,
     ...style,
   } as CSSProperties
 
@@ -528,8 +528,7 @@ const StyledCustomButton = ({
     <button
       className={cn(
         `relative box-border flex overflow-hidden font-medium transition-all duration-200 hover:border-solid`,
-        border ? `border-[var(--icon-button-border-width)]` : "border",
-        borderColor && `border-[var(--icon-button-border-color)]`,
+        borderColor && "border-[var(--icon-button-border-color)]",
         gap && "gap-[var(--icon-button-gap)]",
         "h-[var(--icon-button-height)]",
         `flex-${flexDirection || "row"}`,
