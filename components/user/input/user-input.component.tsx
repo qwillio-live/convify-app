@@ -815,15 +815,12 @@ export const UserInput = ({ ...props }) => {
       />
       <div
         className={cn(
-          "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+          "relative flex w-full min-w-full justify-center transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
           // { "animate-shake": props.inputRequired }
         )}
         style={{
-          display: "flex",
-          justifyContent: "center",
           backgroundColor: `${props.backgroundColor}`,
           backgroundImage: `${props.backgroundImage}`,
-          minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,

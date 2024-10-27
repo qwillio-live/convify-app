@@ -336,7 +336,7 @@ export const IconButtonGen = ({
                     }
                   )}
                   loading="lazy"
-                  alt="button-icon"
+                  // alt="button-icon"
                 />
               </picture>
             )}

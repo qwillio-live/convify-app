@@ -185,7 +185,7 @@ export async function POST(req: NextRequest) {
           link: "",
           content: {
             ROOT: {
-              type: { resolvedName: "UserContainer" },
+              type: "UserContainer",
               nodes: ["fxUOaKZg8l", "rlca7E5r-5", "pJuarHFYBL", "4Wzqo77fQZ"],
               props: {
                 padding: 5,

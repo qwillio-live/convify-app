@@ -1,6 +1,6 @@
 {
   "ROOT": {
-    "type": { "resolvedName": "UserContainer" },
+    "type": "UserContainer",
     "isCanvas": true,
     "props": {
       "padding": 5,
