@@ -1,5 +1,11 @@
 "use client"
-import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { debounce } from "lodash"
 // import {
@@ -13,7 +19,7 @@ import { debounce } from "lodash"
 // } from "lucide-react"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
-import styled from "styled-components"
+// import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
 import {
@@ -27,7 +33,7 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import { ButtonProps, Button as CustomButton } from "@/components/ui/button"
+// import { ButtonProps, Button as CustomButton } from "@/components/ui/button"
 import {
   ImagePictureTypes,
   PictureTypes,
@@ -40,7 +46,7 @@ import { IconButtonSettings } from "./user-icon-button.settings"
 import { useSearchParams } from "next/navigation"
 import { UserInputSizes } from "../input/user-input.component"
 import hexoid from "hexoid"
-import { getNextScreenInfoFromStore } from "./utils"
+// import { getNextScreenInfoFromStore } from "./utils"
 
 // const IconsList = {
 //   aperture: (props) => <Aperture {...props} />,
@@ -232,13 +238,9 @@ export const IconButtonGen = ({
   }
   return (
     <div
-      className="relative w-full"
+      className="relative flex w-full min-w-full justify-center"
       style={{
-        width: "100%",
         background: `${containerBackground}`,
-        display: "flex",
-        justifyContent: "center",
-        minWidth: "100%",
         paddingTop: `${props.marginTop}px`,
         paddingBottom: `${props.marginBottom}px`,
         paddingLeft: `${props.marginLeft}px`,
@@ -373,175 +375,186 @@ interface StyledCustomButtonProps {
   borderHoverColor?: string
   mobileScreen: boolean
 }
-const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  overflow: hidden;
-  font-weight: 400;
-  transition: all 0.2s ease;
-  ${({ buttonSize }) => {
-    if (buttonSize) {
-      return {
-        fontSize: ButtonSizeValues[buttonSize || "medium"],
-        paddingTop: ButtonSizeValues[buttonSize || "medium"],
-        paddingBottom: ButtonSizeValues[buttonSize || "medium"],
-      }
-    }
-    return null
-  }}
-
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
-
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
-
-  background: ${(props) => props.background};
-  color: ${(props) => props.color};
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-right: ${(props) => props.paddingRight}px;
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "250px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return `
-        width: 376px;
-        @media (max-width: 390px) {
-          width: calc(100% - 22px)
-        }
-        `
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return `
-        width: 576px;
-        @media (max-width: 600px) {
-          width: calc(100% - 22px)
-        }
-        `
-      }
-    } else {
-      return {
-        width: "calc(100% - 22px)",
-      }
-    }
-  }};
-`
-
-// const StyledCustomButton = ({
-//   fontFamily,
-//   buttonSize,
-//   borderHoverColor,
-//   backgroundHover,
-//   colorHover,
-//   background,
-//   color,
-//   height,
-//   marginTop,
-//   marginLeft,
-//   marginRight,
-//   marginBottom,
-//   paddingLeft,
-//   paddingRight,
-//   radius,
-//   flexDirection,
-//   alignItems,
-//   justifyContent,
-//   gap,
-//   borderColor,
-//   border,
-//   mobileScreen,
-//   size,
-//   className,
-//   style,
-//   ...props
-// }: React.ButtonHTMLAttributes<HTMLButtonElement> & StyledCustomButtonProps) => {
-//   const generateWidthClass = useMemo(() => {
-//     if (mobileScreen) return "w-[calc(100%-22px)]"
-//     switch (size) {
-//       case UserInputSizes.large:
-//         return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
-//       case UserInputSizes.medium:
-//         return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
-//       case UserInputSizes.small:
-//         return "w-[250px]"
-//       default:
-//         return "w-[calc(100%-22px)]"
+// const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+//   font-family: ${(props) => `var(${props?.fontFamily})`};
+//   display: flex;
+//   flex-direction: row;
+//   position: relative;
+//   overflow: hidden;
+//   font-weight: 400;
+//   transition: all 0.2s ease;
+//   ${({ buttonSize }) => {
+//     if (buttonSize) {
+//       return {
+//         fontSize: ButtonSizeValues[buttonSize || "medium"],
+//         paddingTop: ButtonSizeValues[buttonSize || "medium"],
+//         paddingBottom: ButtonSizeValues[buttonSize || "medium"],
+//       }
 //     }
-//   }, [size, mobileScreen])
+//     return null
+//   }}
 
-//   console.log({ paddingRight, paddingLeft })
+//   &:hover {
+//     border-style: solid;
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired hover border color */
+//     background: ${(props) => props.backgroundHover};
+//     color: ${(props) => props.colorHover};
+//   }
 
-//   return (
-//     <button
-//       className={cn(
-//         `relative box-border flex overflow-hidden font-medium transition-all duration-200 hover:border-solid ${
-//           border ? `border-[${border}px]` : "border"
-//         }`,
-//         `flex-${flexDirection || "row"}`,
-//         radius && `rounded-[${radius}px]`,
-//         borderHoverColor &&
-//           `!hover:border-[${borderHoverColor}] !focus:border-[${borderHoverColor}]`,
-//         backgroundHover && `!hover:bg-[${backgroundHover}]`,
-//         colorHover && `!hover:text-[${colorHover}]`,
-//         // border ? `border-[${border}px]` : "border",
-//         generateWidthClass,
-//         className
-//       )}
-//       {...props}
-//       style={{
-//         height: height === "auto" ? "auto" : `${height}px`,
-//         gap,
-//         color,
-//         ...(buttonSize
-//           ? {
-//               fontSize: ButtonSizeValues[buttonSize || "medium"],
-//               paddingBlock: ButtonSizeValues[buttonSize || "medium"],
-//             }
-//           : {}),
-//         borderColor: borderColor || "transparent",
-//         marginTop,
-//         marginLeft,
-//         marginRight,
-//         marginBottom,
-//         background,
-//         paddingRight: `${paddingRight}px`,
-//         paddingLeft: `${paddingLeft}px`,
-//         fontFamily: `var(${fontFamily})`,
-//         justifyContent,
-//         alignItems,
-//         ...style,
-//       }}
-//     />
-//   )
-// }
+//   &:focus {
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired focus border color */
+//   }
+
+//   background: ${(props) => props.background};
+//   color: ${(props) => props.color};
+//   box-sizing: border-box;
+//   height: ${(props) => props.height}px;
+//   margin-top: ${(props) => props.marginTop}px;
+//   margin-left: ${(props) => props.marginLeft}px;
+//   margin-right: ${(props) => props.marginRight}px;
+//   margin-bottom: ${(props) => props.marginBottom}px;
+//   padding-left: ${(props) => props.paddingLeft}px;
+//   padding-right: ${(props) => props.paddingRight}px;
+//   border-radius: ${(props) => props.radius}px;
+//   flex-direction: ${(props) => props.flexDirection};
+//   align-items: ${(props) => props.alignItems};
+//   justify-content: ${(props) => props.justifyContent};
+//   gap: ${(props) => props.gap}px;
+//   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+
+//   ${({ size, mobileScreen }) => {
+//     if (size === UserInputSizes.small) {
+//       return { width: "250px" }
+//     } else if (size === UserInputSizes.medium) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return `
+//         width: 376px;
+//         @media (max-width: 390px) {
+//           width: calc(100% - 22px)
+//         }
+//         `
+//       }
+//     } else if (size === UserInputSizes.large) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return `
+//         width: 576px;
+//         @media (max-width: 600px) {
+//           width: calc(100% - 22px)
+//         }
+//         `
+//       }
+//     } else {
+//       return {
+//         width: "calc(100% - 22px)",
+//       }
+//     }
+//   }};
+// `
+
+const StyledCustomButton = ({
+  fontFamily,
+  buttonSize,
+  borderHoverColor,
+  backgroundHover,
+  colorHover,
+  background,
+  color,
+  height,
+  marginTop,
+  marginLeft,
+  marginRight,
+  marginBottom,
+  paddingLeft,
+  paddingRight,
+  radius,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  gap,
+  borderColor,
+  border,
+  mobileScreen,
+  size,
+  className,
+  style,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & StyledCustomButtonProps) => {
+  const generateWidthClass = useMemo(() => {
+    if (mobileScreen) return "w-[calc(100%-22px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+      case UserInputSizes.medium:
+        return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      case UserInputSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-22px)]"
+    }
+  }, [size, mobileScreen])
+
+  const customStyles: CSSProperties = {
+    "--icon-button-background": background,
+    "--icon-button-border-hover-color": borderHoverColor,
+    "--icon-button-size": ButtonSizeValues[buttonSize || "medium"],
+    "--icon-button-margin-top": `${marginTop}px`,
+    "--icon-button-margin-left": `${marginLeft}px`,
+    "--icon-button-margin-right": `${marginRight}px`,
+    "--icon-button-margin-bottom": `${marginBottom}px`,
+    "--icon-button-background-hover": backgroundHover,
+    "--icon-button-color-hover": colorHover,
+    "--icon-button-color": color,
+    "--icon-button-border-width": `${border}px`,
+    "--icon-button-border-radius": `${radius}px`,
+    "--icon-button-border-color": borderColor || "transparent",
+    "--icon-button-gap": `${gap}px`,
+    "--icon-button-height": height === "auto" ? "auto" : `${height}px`,
+    "--icon-button-padding-right": `${paddingRight}px`,
+    "--icon-button-padding-left": `${paddingLeft}px`,
+    fontFamily: `var(${fontFamily})`,
+    justifyContent,
+    alignItems,
+    color,
+    ...style,
+  } as CSSProperties
+
+  return (
+    <button
+      className={cn(
+        `relative box-border flex overflow-hidden font-medium transition-all duration-200 hover:border-solid`,
+        border ? `border-[var(--icon-button-border-width)]` : "border",
+        borderColor && `border-[var(--icon-button-border-color)]`,
+        gap && "gap-[var(--icon-button-gap)]",
+        "h-[var(--icon-button-height)]",
+        `flex-${flexDirection || "row"}`,
+        radius && "rounded-[var(--icon-button-border-radius)]",
+        borderHoverColor &&
+          "hover:border-[var(--icon-button-border-hover-color)] focus:border-[var(--icon-button-border-hover-color)]",
+        buttonSize &&
+          "py-[var(--icon-button-size)] text-[var(--icon-button-size)]",
+        paddingLeft && "pl-[var(--icon-button-padding-left)]",
+        paddingRight && "pr-[var(--icon-button-padding-right)]",
+        marginTop && "mt-[var(--icon-button-margin-top)]",
+        marginLeft && "ml-[var(--icon-button-margin-left)]",
+        marginRight && "mr-[var(--icon-button-margin-right)]",
+        marginBottom && "mb-[var(--icon-button-margin-bottom)]",
+        backgroundHover && "hover:bg-[var(--icon-button-background-hover)]",
+        colorHover && "hover:text-[var(--icon-button-color-hover)]",
+        background && "bg-[var(--icon-button-background)]",
+        generateWidthClass,
+        className
+      )}
+      {...props}
+      style={customStyles}
+    />
+  )
+}
 
 export const IconButton = ({
   fontFamily,
@@ -576,6 +589,10 @@ export const IconButton = ({
   borderColor,
   buttonAction,
   nextScreen,
+  tracking,
+  trackingEvent,
+  settingsTab,
+  fullWidth,
   ...props
 }) => {
   const {
@@ -627,43 +644,43 @@ export const IconButton = ({
   // editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
   // this effects to performance
-  useEffect(() => {
-    let screenNameChanged = false
-    if (buttonAction === "next-screen") {
-      setProp(
-        (props) =>
-          (props.nextScreen = {
-            screenName: nextScreenName,
-            screenId: nextScreenId,
-          }),
-        200
-      )
-    } else if (buttonAction === "custom-action") {
-      screenNames?.map((screen) => {
-        if (screen.screenId === nextScreen.screenId) {
-          setProp(
-            (props) =>
-              (props.nextScreen = {
-                screenName: screen.screenName,
-                screenId: screen.screenId,
-              }),
-            200
-          )
-          screenNameChanged = true
-        }
-      })
-      if (!screenNameChanged) {
-        setProp((props) => (props.buttonAction = "next-screen"), 200)
-        setProp(
-          (props) =>
-            (props.nextScreen = {
-              screenId: nextScreenId,
-              screenName: nextScreenName,
-            })
-        )
-      }
-    }
-  }, [nextScreenName])
+  // useEffect(() => {
+  //   let screenNameChanged = false
+  //   if (buttonAction === "next-screen") {
+  //     setProp(
+  //       (props) =>
+  //         (props.nextScreen = {
+  //           screenName: nextScreenName,
+  //           screenId: nextScreenId,
+  //         }),
+  //       200
+  //     )
+  //   } else if (buttonAction === "custom-action") {
+  //     screenNames?.map((screen) => {
+  //       if (screen.screenId === nextScreen.screenId) {
+  //         setProp(
+  //           (props) =>
+  //             (props.nextScreen = {
+  //               screenName: screen.screenName,
+  //               screenId: screen.screenId,
+  //             }),
+  //           200
+  //         )
+  //         screenNameChanged = true
+  //       }
+  //     })
+  //     if (!screenNameChanged) {
+  //       setProp((props) => (props.buttonAction = "next-screen"), 200)
+  //       setProp(
+  //         (props) =>
+  //           (props.nextScreen = {
+  //             screenId: nextScreenId,
+  //             screenName: nextScreenName,
+  //           })
+  //       )
+  //     }
+  //   }
+  // }, [nextScreenName])
 
   const maxLength = ButtonTextLimit[size]
 
@@ -894,7 +911,6 @@ export const IconButton = ({
                         "w-[18px]": buttonSize === "small",
                       }
                     )}
-                    alt="button-icon"
                     loading="lazy"
                   />
                 </picture>

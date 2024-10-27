@@ -256,13 +256,13 @@ export const screensSlice = createSlice({
         )
         let count = Object.values(screenData).filter(
           (node: any) =>
-            node.type !== "UserContainer" &&
+            (node.type !== "UserContainer" ||node.type?.resolvedName !== "UserContainer") &&
             (node.props?.required === true ||
               node.props?.inputRequired === true)
         )
         let count2 = Object.values(screenData).filter(
           (node: any) =>
-            node.type !== "UserContainer" &&
+            (node.type !== "UserContainer" ||node.type?.resolvedName !== "UserContainer") &&
             (node.props?.required === true ||
               node.props?.inputRequired === true) &&
             ((node.props?.selections && node.props?.selections?.length > 0) ||
@@ -301,7 +301,7 @@ export const screensSlice = createSlice({
         const dataId = node.props?.id || key || node?.displayName
         console.log("node", node, "data-label", dataLabel, "key", key)
         if (
-          node.type !== "UserContainer" &&
+          (node.type !== "UserContainer" ||node.type?.resolvedName !== "UserContainer") &&
           ((node.props?.selections && node.props?.selections.length > 0) ||
             (node.props?.inputValue &&
               node.props.inputValue !== "Components.Text Area") ||
@@ -456,9 +456,9 @@ export const screensSlice = createSlice({
       const screenFields = state.screens[selectedScreen]?.screenFields
 
       if (!screenFields || !screenFields[fieldId]) {
-        console.error(
-          `Field with fieldId ${fieldId} not found in screenFields.`
-        )
+        // console.error(
+        //   `Field with fieldId ${fieldId} not found in screenFields.`
+        // )
         return
       }
 
@@ -514,7 +514,7 @@ export const screensSlice = createSlice({
       let screenIndex = -1 // Initialize to -1 for easier error checking
 
       state.screens.forEach((screen, index) => {
-        console.log("SCREEN NAMES ARE: ", screen.screenName)
+        // console.log("SCREEN NAMES ARE: ", screen.screenName)
         if (screen.screenName === screenName) {
           screenId = screen.screenId
           screenIndex = index

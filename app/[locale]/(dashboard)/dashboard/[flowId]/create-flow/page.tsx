@@ -82,25 +82,25 @@ export default function CreateFlowsPage({
 }: {
   params: { flowId: string; en: string }
 }) {
-  const router = useRouter()
+  // const router = useRouter()
   const flowId = params?.flowId
-  console.log("flowId", flowId)
+  // console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [customCss, setCustomCsss] = useState("")
 
   const dispatch = useAppDispatch()
-  const firstScreenName =
-    useAppSelector((state) => state?.screen?.firstScreenName) || ""
+  // const firstScreenName =
+  //   useAppSelector((state) => state?.screen?.firstScreenName) || ""
 
   const [tab, setTab] = useState("create")
 
   const t = useTranslations("Components")
 
   // store the current tab value
-  const onTabChange = (value: string) => {
-    setTab(value)
-    // router.replace(`/dashboard/flows/${value}`);
-  }
+  // const onTabChange = (value: string) => {
+  //   setTab(value)
+  //   // router.replace(`/dashboard/flows/${value}`);
+  // }
 
   useEffect(() => {
     const getFlowData = async () => {
