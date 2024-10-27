@@ -863,7 +863,7 @@ export const UserToolbox = () => {
                         disabled={false}
                         text={t("WhatsApp")}
                         justifyContent={"center"}
-                        size={"small"}
+                        size={"medium"}
                         marginTop={20}
                         marginBottom={20}
                         marginLeft={0}
@@ -932,7 +932,7 @@ export const UserToolbox = () => {
                         disabled={false}
                         text={t("Telegram")}
                         justifyContent={"center"}
-                        size={"small"}
+                        size={"medium"}
                         marginTop={20}
                         marginBottom={20}
                         marginLeft={0}

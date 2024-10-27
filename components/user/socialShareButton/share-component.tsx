@@ -714,6 +714,7 @@ export const SocialShareButton = ({
               innerRef={ref}
               disabled={disabled}
               style={{
+                fontSize: "16px",
                 maxWidth: "100%",
                 position: "relative",
                 border: text?.length <= 0 && "1px dotted white",
