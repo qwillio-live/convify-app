@@ -609,15 +609,21 @@ const EditScreenName = ({ screenId, screenName }) => {
   const [editing, setEditing] = React.useState(false)
   const [name, setName] = React.useState(screenName)
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-
+  const errorId = "screen-name-error"
   const handleChange = (inputName) => {
     if (!checkDuplicateName(inputName)) {
       dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
       setName(inputName)
       setEditing(false)
     } else {
-      toast.error("Screen name already exists")
-      ref?.current?.focus()
+      // Dismiss the previous toast and show a new one immediately
+
+      toast.error("Screen name already exists", {
+        id: errorId, // Use a unique ID for the toast
+      })
+      toast.dismiss(errorId)
+
+      // ref?.current?.focus();
     }
   }
 
