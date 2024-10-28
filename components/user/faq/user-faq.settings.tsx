@@ -55,6 +55,7 @@ export const FAQSettings = () => {
             columnsDesktop,
             columnsMobile,
             flexDirection,
+            blockColor,
             fullWidth,
             settingTabs,
             iconType,
@@ -353,7 +354,7 @@ export const FAQSettings = () => {
                         {selectedPreset === PRESETNAMES.blockedPreset && <div className="flex items-center justify-between">
                             <Label htmlFor="backgroundcolor">{t("Block Color")}</Label>
                             <ColorInput
-                                value={contentColor}
+                                value={blockColor}
                                 handleChange={(e) => {
                                     debouncedSetProp("blockColor", e.target.value)
                                 }}
