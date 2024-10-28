@@ -95,9 +95,9 @@ export const SelectGen = ({
     return false
   })
   useEffect(() => {
-    console.log("setting filled true", screenData)
+    // console.log("setting filled true", screenData)
     if (screenData !== undefined) {
-      console.log("setting filled true", screenData)
+      // console.log("setting filled true", screenData)
       setIsFiiled(true)
     }
     if (screenData?.length > 0) setSelectedOptionId(screenData)
@@ -129,17 +129,17 @@ export const SelectGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt]) // Depend on alarm state
-  console.log(
-    "in sselect",
-    screenData,
-    selectedOptionId,
-    isFilled,
-    isRequired,
-    "placeGolder",
-    placeholder,
-    "fontfamily",
-    fontFamily
-  )
+  // console.log(
+  //   "in sselect",
+  //   screenData,
+  //   selectedOptionId,
+  //   isFilled,
+  //   isRequired,
+  //   "placeGolder",
+  //   placeholder,
+  //   "fontfamily",
+  //   fontFamily
+  // )
   return (
     <div
       ref={itemRefNew}

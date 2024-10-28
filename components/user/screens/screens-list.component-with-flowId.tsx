@@ -58,7 +58,7 @@ import { Card as UiCard } from "@/components/ui/card"
 const ScreensList = ({ flowId }) => {
   const t = useTranslations("Components")
 
-  console.log("flowId in screens-list.component is", flowId)
+  // console.log("flowId in screens-list.component is", flowId)
 
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
   const dispatch = useAppDispatch()
@@ -136,7 +136,7 @@ const ScreensList = ({ flowId }) => {
   }
 
   useEffect(() => {
-    console.log("entering useEffect")
+    // console.log("entering useEffect")
     try {
       if (
         screens &&
@@ -144,8 +144,8 @@ const ScreensList = ({ flowId }) => {
         screens[selectedScreenIndex] &&
         screens[selectedScreenIndex].screenData
       ) {
-        console.log("screen to deserialise", selectedScreenIndex)
-        actions.deserialize(screens[selectedScreenIndex].screenData || {})
+        // console.log("screen to deserialise", selectedScreenIndex)
+        // actions.deserialize((screens[selectedScreenIndex].screenData || {}))
       }
     } catch (error) {
       console.error("Error during deserialization:", error)

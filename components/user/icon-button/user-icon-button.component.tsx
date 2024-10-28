@@ -1,29 +1,30 @@
 "use client"
-import React, { useCallback, useEffect, useRef } from "react"
-import Link from "next/link"
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { track } from "@vercel/analytics/react"
-import { debounce, throttle } from "lodash"
-import {
-  Activity,
-  Anchor,
-  Aperture,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  Mountain,
-} from "lucide-react"
+import { debounce } from "lodash"
+// import {
+//   Activity,
+//   Anchor,
+//   Aperture,
+//   ArrowRight,
+//   Disc,
+//   DollarSign,
+//   Mountain,
+// } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { darken, rgba } from "polished"
 import ContentEditable from "react-contenteditable"
-import styled from "styled-components"
+// import styled from "styled-components"
 
-import { useEditor, useNode } from "@/lib/craftjs"
+import { useNode } from "@/lib/craftjs"
 import {
   getAllFilledAnswers,
-  navigateToScreen,
   setAlarm,
-  setCurrentScreenName,
   setErrorCount,
   setSelectedScreen,
   validateScreen,
@@ -32,27 +33,7 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button as CustomButton } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
+// import { ButtonProps, Button as CustomButton } from "@/components/ui/button"
 import {
   ImagePictureTypes,
   PictureTypes,
@@ -61,36 +42,33 @@ import {
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
-import {
-  getBackgroundForPreset,
-  getHoverBackgroundForPreset,
-} from "./useButtonThemePresets"
 import { IconButtonSettings } from "./user-icon-button.settings"
 import { useSearchParams } from "next/navigation"
 import { UserInputSizes } from "../input/user-input.component"
 import hexoid from "hexoid"
+// import { getNextScreenInfoFromStore } from "./utils"
 
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-}
+// const IconsList = {
+//   aperture: (props) => <Aperture {...props} />,
+//   activity: (props) => <Activity {...props} />,
+//   dollarsign: (props) => <DollarSign {...props} />,
+//   anchor: (props) => <Anchor {...props} />,
+//   disc: (props) => <Disc {...props} />,
+//   mountain: (props) => <Mountain {...props} />,
+//   arrowright: (props) => <ArrowRight {...props} />,
+// }
 
-const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  const IconComponent = IconsList[icon]
+// const IconGenerator = ({ icon, size, className = "", ...rest }) => {
+//   const IconComponent = IconsList[icon]
 
-  if (!IconComponent) {
-    return null // or some default icon or error handling
-  }
+//   if (!IconComponent) {
+//     return null // or some default icon or error handling
+//   }
 
-  return (
-    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
-  )
-}
+//   return (
+//     <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
+//   )
+// }
 
 const ButtonSizeValues = {
   small: ".8rem",
@@ -114,6 +92,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+
 export const IconButtonGen = ({
   disabled,
   fontFamily,
@@ -150,13 +129,13 @@ export const IconButtonGen = ({
 }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const pathName = usePathname()
+  // const pathName = usePathname()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
-  const alarm = useAppSelector(
-    (state) =>
-      state?.screen?.screens[state.screen.selectedScreen]?.alarm || false
-  )
+  // const alarm = useAppSelector(
+  //   (state) =>
+  //     state?.screen?.screens[state.screen.selectedScreen]?.alarm || false
+  // )
   const currentScreenTotal =
     useAppSelector(
       (state) =>
@@ -167,67 +146,71 @@ export const IconButtonGen = ({
       (state) =>
         state?.screen?.screens[state.screen.selectedScreen]?.totalFilled
     ) || ""
-  const AllScreens = useAppSelector((state) => state?.screen?.screens)
+  // const AllScreens = useAppSelector((state) => state?.screen?.screens)
   const selectedScreen = useAppSelector(
     (state) =>
       state?.screen?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-  const sc = useAppSelector((state) => state?.screen?.screens) || []
-  const screenValidated =
-    useAppSelector(
-      (state: RootState) =>
-        state.screen?.screens[selectedScreen]?.screenValidated
-    ) || false
+  const sc = useAppSelector((state) => state?.screen?.screens || [])
+  // const screenValidated =
+  //   useAppSelector(
+  //     (state: RootState) =>
+  //       state.screen?.screens[selectedScreen]?.screenValidated
+  //   ) || false
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { replace } = useRouter()
+  // const { replace } = useRouter()
   function handleSearch(term: string) {
-    const params = new URLSearchParams(searchParams || undefined)
+    const params = new URLSearchParams((searchParams || "").toString())
     if (term) {
       params.set("screen", term)
     }
-    console.log("new path", `${pathname}?${params.toString()}`)
+    // console.log("new path", `${pathname}?${params.toString()}`)
     router.push(`${pathname}?${params.toString()}`)
   }
-  const newScreensMapper = {
-    "next-screen":
-      selectedScreen + 1 < sc.length
-        ? sc[selectedScreen + 1]?.screenName
-        : sc[selectedScreen]?.screenName,
-    "back-screen":
-      selectedScreen - 1 >= 0
-        ? sc[selectedScreen - 1]?.screenName
-        : sc[selectedScreen]?.screenName,
-    none: "none",
-  }
+
+  const newScreensMapper = useMemo(
+    () => ({
+      "next-screen":
+        selectedScreen + 1 < sc.length
+          ? sc[selectedScreen + 1]?.screenName
+          : sc[selectedScreen]?.screenName,
+      "back-screen":
+        selectedScreen - 1 >= 0
+          ? sc[selectedScreen - 1]?.screenName
+          : sc[selectedScreen]?.screenName,
+      none: "none",
+    }),
+    [selectedScreen, sc]
+  )
   const newsc = nextScreen.screenName
   const updatedScreenName = newScreensMapper[props.buttonAction] || newsc
   const index = sc.findIndex(
     (screen) => screen.screenName === updatedScreenName
   )
-  console.log(
-    "next-screen to navigatte",
-    newsc,
-    updatedScreenName,
-    props.buttonAction,
-    selectedScreen,
-    selectedScreen + 1,
-    sc.length,
-    selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
-    sc
-  )
+  // console.log(
+  //   "next-screen to navigatte",
+  //   newsc,
+  //   updatedScreenName,
+  //   props.buttonAction,
+  //   selectedScreen,
+  //   selectedScreen + 1,
+  //   sc.length,
+  //   selectedScreen + 1 < sc.length ? sc[selectedScreen + 1]?.screenName : "",
+  //   sc
+  // )
   const handleNavigateToContent = () => {
-    console.log(
-      "btn navigating",
-      "currentScreenFilled",
-      currentScreenFilled,
-      "currentScreenTotal",
-      currentScreenTotal,
-      "index",
-      index
-    )
+    // console.log(
+    //   "btn navigating",
+    //   "currentScreenFilled",
+    //   currentScreenFilled,
+    //   "currentScreenTotal",
+    //   currentScreenTotal,
+    //   "index",
+    //   index
+    // )
     if (index !== -1) {
       if (currentScreenFilled === currentScreenTotal) {
         dispatch(
@@ -253,16 +236,11 @@ export const IconButtonGen = ({
     //   console.log("SCREEN NOT VALIDATED", screenValidated)
     // }
   }
-
   return (
     <div
-      className="relative w-full"
+      className="relative flex w-full min-w-full justify-center"
       style={{
-        width: "100%",
         background: `${containerBackground}`,
-        display: "flex",
-        justifyContent: "center",
-        minWidth: "100%",
         paddingTop: `${props.marginTop}px`,
         paddingBottom: `${props.marginBottom}px`,
         paddingLeft: `${props.marginLeft}px`,
@@ -358,6 +336,7 @@ export const IconButtonGen = ({
                     }
                   )}
                   loading="lazy"
+                  // alt="button-icon"
                 />
               </picture>
             )}
@@ -396,89 +375,186 @@ interface StyledCustomButtonProps {
   borderHoverColor?: string
   mobileScreen: boolean
 }
-const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  overflow: hidden;
-  gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  font-weight: 400;
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
+// const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+//   font-family: ${(props) => `var(${props?.fontFamily})`};
+//   display: flex;
+//   flex-direction: row;
+//   position: relative;
+//   overflow: hidden;
+//   font-weight: 400;
+//   transition: all 0.2s ease;
+//   ${({ buttonSize }) => {
+//     if (buttonSize) {
+//       return {
+//         fontSize: ButtonSizeValues[buttonSize || "medium"],
+//         paddingTop: ButtonSizeValues[buttonSize || "medium"],
+//         paddingBottom: ButtonSizeValues[buttonSize || "medium"],
+//       }
+//     }
+//     return null
+//   }}
 
-  &:hover {
-    border-style: solid;
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
-    background: ${(props) => props.backgroundHover};
-    color: ${(props) => props.colorHover};
-  }
+//   &:hover {
+//     border-style: solid;
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired hover border color */
+//     background: ${(props) => props.backgroundHover};
+//     color: ${(props) => props.colorHover};
+//   }
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+//   &:focus {
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired focus border color */
+//   }
 
-  background: ${(props) => props.background};
-  color: ${(props) => props.color};
-  overflow: hidden;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+//   background: ${(props) => props.background};
+//   color: ${(props) => props.color};
+//   box-sizing: border-box;
+//   height: ${(props) => props.height}px;
+//   margin-top: ${(props) => props.marginTop}px;
+//   margin-left: ${(props) => props.marginLeft}px;
+//   margin-right: ${(props) => props.marginRight}px;
+//   margin-bottom: ${(props) => props.marginBottom}px;
+//   padding-left: ${(props) => props.paddingLeft}px;
+//   padding-right: ${(props) => props.paddingRight}px;
+//   border-radius: ${(props) => props.radius}px;
+//   flex-direction: ${(props) => props.flexDirection};
+//   align-items: ${(props) => props.alignItems};
+//   justify-content: ${(props) => props.justifyContent};
+//   gap: ${(props) => props.gap}px;
+//   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
 
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "250px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "376px" }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "576px" }
-      }
-    } else {
-      return {
-        width: "calc(100% - 22px)",
-      }
+//   ${({ size, mobileScreen }) => {
+//     if (size === UserInputSizes.small) {
+//       return { width: "250px" }
+//     } else if (size === UserInputSizes.medium) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return `
+//         width: 376px;
+//         @media (max-width: 390px) {
+//           width: calc(100% - 22px)
+//         }
+//         `
+//       }
+//     } else if (size === UserInputSizes.large) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return `
+//         width: 576px;
+//         @media (max-width: 600px) {
+//           width: calc(100% - 22px)
+//         }
+//         `
+//       }
+//     } else {
+//       return {
+//         width: "calc(100% - 22px)",
+//       }
+//     }
+//   }};
+// `
+
+const StyledCustomButton = ({
+  fontFamily,
+  buttonSize,
+  borderHoverColor,
+  backgroundHover,
+  colorHover,
+  background,
+  color,
+  height,
+  marginTop,
+  marginLeft,
+  marginRight,
+  marginBottom,
+  paddingLeft,
+  paddingRight,
+  radius,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  gap,
+  borderColor,
+  border,
+  mobileScreen,
+  size,
+  className,
+  style,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & StyledCustomButtonProps) => {
+  const generateWidthClass = useMemo(() => {
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-22px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+      case UserInputSizes.medium:
+        return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      case UserInputSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-22px)]"
     }
-  }};
+  }, [size, mobileScreen])
 
-  @media (max-width: 600px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
+  const customStyles: CSSProperties = {
+    "--icon-button-background": background,
+    "--icon-button-border-color": borderColor,
+    "--icon-button-border-hover-color": borderHoverColor,
+    "--icon-button-size": ButtonSizeValues[buttonSize || "medium"],
+    "--icon-button-margin-top": `${marginTop}px`,
+    "--icon-button-margin-left": `${marginLeft}px`,
+    "--icon-button-margin-right": `${marginRight}px`,
+    "--icon-button-margin-bottom": `${marginBottom}px`,
+    "--icon-button-background-hover": backgroundHover,
+    "--icon-button-color-hover": colorHover,
+    "--icon-button-color": color,
+    "--icon-button-border-radius": `${radius}px`,
+    "--icon-button-gap": `${gap}px`,
+    "--icon-button-height": height === "auto" ? "auto" : `${height}px`,
+    "--icon-button-padding-right": `${paddingRight}px`,
+    "--icon-button-padding-left": `${paddingLeft}px`,
+    fontFamily: `var(${fontFamily})`,
+    justifyContent,
+    alignItems,
+    color,
+    borderWidth: border,
+    ...style,
+  } as CSSProperties
 
-  @media (max-width: 390px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
-`
+  return (
+    <button
+      className={cn(
+        `relative box-border flex overflow-hidden font-medium transition-all duration-200 hover:border-solid`,
+        borderColor && "border-[var(--icon-button-border-color)]",
+        gap && "gap-[var(--icon-button-gap)]",
+        "h-[var(--icon-button-height)]",
+        `flex-${flexDirection || "row"}`,
+        radius && "rounded-[var(--icon-button-border-radius)]",
+        borderHoverColor &&
+          "hover:border-[var(--icon-button-border-hover-color)] focus:border-[var(--icon-button-border-hover-color)]",
+        buttonSize &&
+          "py-[var(--icon-button-size)] text-[var(--icon-button-size)]",
+        paddingLeft && "pl-[var(--icon-button-padding-left)]",
+        paddingRight && "pr-[var(--icon-button-padding-right)]",
+        marginTop && "mt-[var(--icon-button-margin-top)]",
+        marginLeft && "ml-[var(--icon-button-margin-left)]",
+        marginRight && "mr-[var(--icon-button-margin-right)]",
+        marginBottom && "mb-[var(--icon-button-margin-bottom)]",
+        backgroundHover && "hover:bg-[var(--icon-button-background-hover)]",
+        colorHover && "hover:text-[var(--icon-button-color-hover)]",
+        background && "bg-[var(--icon-button-background)]",
+        generateWidthClass,
+        className
+      )}
+      {...props}
+      style={customStyles}
+    />
+  )
+}
 
 export const IconButton = ({
   fontFamily,
@@ -513,43 +589,38 @@ export const IconButton = ({
   borderColor,
   buttonAction,
   nextScreen,
+  tracking,
+  trackingEvent,
+  settingsTab,
+  fullWidth,
   ...props
 }) => {
   const {
     actions: { setProp },
     connectors: { connect, drag },
-    selected,
-    isHovered,
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  const { actions } = useEditor((state, query) => ({
-    enabled: state.options.enabled,
-  }))
-  const [hover, setHover] = React.useState(false)
   const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
-  const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full")
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
-  const secondaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.secondaryColor
-  )
-  const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const secondaryColor = useAppSelector(
-    (state) => state.theme?.general?.secondaryColor
-  )
+  // const primaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.primaryColor
+  // )
+  // const secondaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.secondaryColor
+  // )
+  // const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+  // const primaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.primaryColor
+  // )
+  // const secondaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.secondaryColor
+  // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state) => state?.screen?.screens)
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
+  const screens = useAppSelector((state) => state?.screen?.screens || [])
+  const screensLength = screens?.length
   const selectedScreen = useAppSelector(
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
@@ -570,95 +641,50 @@ export const IconButton = ({
     ) || ""
   const screenNames = useScreenNames()
 
-  //editor load needs to be refreshed so that screenName value is re-populated but
+  // editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
-  useEffect(() => {
-    let screenNameChanged = false
-    if (buttonAction === "next-screen") {
-      setProp(
-        (props) =>
-          (props.nextScreen = {
-            screenName: nextScreenName,
-            screenId: nextScreenId,
-          }),
-        200
-      )
-    } else if (buttonAction === "custom-action") {
-      screenNames?.map((screen) => {
-        if (screen.screenId === nextScreen.screenId) {
-          setProp(
-            (props) =>
-              (props.nextScreen = {
-                screenName: screen.screenName,
-                screenId: screen.screenId,
-              }),
-            200
-          )
-          screenNameChanged = true
-        }
-      })
-      if (!screenNameChanged) {
-        setProp((props) => (props.buttonAction = "next-screen"), 200)
-        setProp(
-          (props) =>
-            (props.nextScreen = {
-              screenId: nextScreenId,
-              screenName: nextScreenName,
-            })
-        )
-      }
-    }
-  }, [nextScreenName, buttonAction])
+  // this effects to performance
+  // useEffect(() => {
+  //   let screenNameChanged = false
+  //   if (buttonAction === "next-screen") {
+  //     setProp(
+  //       (props) =>
+  //         (props.nextScreen = {
+  //           screenName: nextScreenName,
+  //           screenId: nextScreenId,
+  //         }),
+  //       200
+  //     )
+  //   } else if (buttonAction === "custom-action") {
+  //     screenNames?.map((screen) => {
+  //       if (screen.screenId === nextScreen.screenId) {
+  //         setProp(
+  //           (props) =>
+  //             (props.nextScreen = {
+  //               screenName: screen.screenName,
+  //               screenId: screen.screenId,
+  //             }),
+  //           200
+  //         )
+  //         screenNameChanged = true
+  //       }
+  //     })
+  //     if (!screenNameChanged) {
+  //       setProp((props) => (props.buttonAction = "next-screen"), 200)
+  //       setProp(
+  //         (props) =>
+  //           (props.nextScreen = {
+  //             screenId: nextScreenId,
+  //             screenName: nextScreenName,
+  //           })
+  //       )
+  //     }
+  //   }
+  // }, [nextScreenName])
 
-  useEffect(() => {
-    if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => (props.fontFamily.value = primaryFont), 200)
-    }
-  }, [primaryFont])
-
-  useEffect(() => {
-    if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-
-      if (background.globalStyled && !background.isCustomized) {
-        setProp(
-          (props) => (props.background.value = backgroundPrimaryColor),
-          200
-        )
-      }
-      if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => (props.color.value = primaryColor), 200)
-      }
-      if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => (props.borderColor.value = primaryColor), 200)
-      }
-
-      // hover colors
-
-      if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp(
-          (props) =>
-            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
-          200
-        )
-      }
-      if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
-      }
-      if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => (props.colorHover.value = primaryColor), 200)
-      }
-    }
-  }, [primaryColor])
   const maxLength = ButtonTextLimit[size]
-  const handleTextChange = (e) => {
+
+  const handleTextChange = () => {
     if (ref.current) {
       const currentText = ref.current.innerText
       if (currentText.length <= maxLength) {
@@ -716,21 +742,23 @@ export const IconButton = ({
       }
     }
   }, [text, maxLength])
-  const throttledSetProp = useCallback(
-    throttle((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }, 200), // Throttle to 50ms to 200ms
-    [setProp]
-  )
 
-  const handlePropChangeThrottled = (property, value) => {
-    throttledSetProp(property, value)
-  }
+  // const throttledSetProp = useCallback(
+  //   (property, value) =>
+  //     throttle(() => {
+  //       setProp((prop) => {
+  //         prop[property] = value
+  //       }, 0)
+  //     }, 200), // Throttle to 50ms to 200ms
+  //   [setProp]
+  // )
 
-  const handleNavigateToScreen = async () => {
-    console.log("entered validating")
+  // const handlePropChangeThrottled = (property, value) => {
+  //   throttledSetProp(property, value)
+  // }
+
+  const handleNavigateToScreen = () => {
+    // console.log("entered validating")
     dispatch(
       validateScreen({ current: selectedScreen, next: nextScreen.screenName })
     )
@@ -746,11 +774,12 @@ export const IconButton = ({
   }
 
   const debouncedSetProp = useCallback(
-    debounce((property, value) => {
-      setProp((prop) => {
-        prop[property] = value
-      }, 0)
-    }),
+    (property, value) =>
+      debounce(() => {
+        setProp((prop) => {
+          prop[property] = value
+        }, 0)
+      }),
     [setProp]
   )
 
@@ -761,16 +790,12 @@ export const IconButton = ({
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
-      className=""
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
+      className="group/button flex w-full justify-center"
     >
-      {hover && <Controller nameOfComponent={t("Button")} />}
+      <Controller
+        className="invisible group-hover/button:visible"
+        nameOfComponent={t("Button")}
+      />
       <div
         className="relative w-full"
         style={{
@@ -815,9 +840,9 @@ export const IconButton = ({
           buttonSize={buttonSize}
           className="button-input-comp"
           {...props}
-          onClick={() => handleNavigateToScreen()}
+          onClick={handleNavigateToScreen}
         >
-          <div className="relative flex min-h-[16px] min-w-[32px] max-w-[100%] flex-col overflow-hidden overflow-x-clip">
+          <div className="relative flex min-h-[16px] min-w-[32px] max-w-full flex-col overflow-hidden overflow-x-clip">
             {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable
@@ -834,7 +859,7 @@ export const IconButton = ({
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
-                handleTextChange(e)
+                handleTextChange()
                 // handlePropChangeThrottled('text',e.target.value.substring(0,maxLength))
               }}
               tagName="div"
@@ -941,7 +966,7 @@ export type IconButtonProps = {
   height: string | number
   fullWidth: boolean
   preset: string
-  settingsTab: string
+  settingsTab: string[]
   buttonSize: string
   tracking: boolean
   trackingEvent: string
@@ -1020,7 +1045,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: "filled",
-  settingsTab: "content",
+  settingsTab: ["content"],
   tracking: false,
   trackingEvent: "button_clicked",
   nextScreen: {

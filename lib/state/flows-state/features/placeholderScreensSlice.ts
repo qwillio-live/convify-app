@@ -191,12 +191,12 @@ export const screensSlice = createSlice({
     },
     setSelectedData: (state, action: PayloadAction<string[]>) => {
       const screens = JSON.parse(JSON.stringify(state.screens[0]))
-      console.log(
-        "changing selected data",
-        action.payload,
-        screens,
-        state.selectedScreen
-      )
+      // console.log(
+      //   "changing selected data",
+      //   action.payload,
+      //   screens,
+      //   state.selectedScreen
+      // )
       state.screens[state.selectedScreen] = {
         ...state.screens[state.selectedScreen],
         selectedData: action.payload,
@@ -456,9 +456,9 @@ export const screensSlice = createSlice({
       const screenFields = state.screens[selectedScreen]?.screenFields
 
       if (!screenFields || !screenFields[fieldId]) {
-        console.error(
-          `Field with fieldId ${fieldId} not found in screenFields.`
-        )
+        // console.error(
+        //   `Field with fieldId ${fieldId} not found in screenFields.`
+        // )
         return
       }
 
@@ -514,7 +514,7 @@ export const screensSlice = createSlice({
       let screenIndex = -1 // Initialize to -1 for easier error checking
 
       state.screens.forEach((screen, index) => {
-        console.log("SCREEN NAMES ARE: ", screen.screenName)
+        // console.log("SCREEN NAMES ARE: ", screen.screenName)
         if (screen.screenName === screenName) {
           screenId = screen.screenId
           screenIndex = index

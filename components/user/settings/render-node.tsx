@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useEditor, useNode } from "@craftjs/core"
 import { ArrowUp, GripHorizontal, Move, Trash2 } from "lucide-react"
@@ -60,11 +60,9 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
     if (props.isActive && props.id !== "ROOT") {
       return "#60A5FA"
     }
-    return props.borderColor
-      ? props.name !== "ProgressBar"
-        ? props.borderColor
-        : "transparent"
-      : "transparent"
+    return !props.borderColor || props.name === "ProgressBar"
+      ? "transparent"
+      : props.borderColor
   }};
   z-index: 10;
   &:hover {
@@ -72,6 +70,64 @@ const StyledNodeDiv = styled.div<StyledNodeDivProps>`
     border-style: dotted;
   }
 `
+
+const NewStyledNodeDiv = ({
+  borderColor,
+  selectedComponent,
+  fullWidth,
+  selected,
+  isActive,
+  id,
+  name,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & StyledNodeDivProps) => {
+  const borderWidth = useMemo(() => {
+    if (
+      id === "ROOT" ||
+      ((name === "Card" || name === "Card Content" || name === "ProgressBar") &&
+        !isActive)
+    ) {
+      return "border-none"
+    } else if ((name === "Card" || name === "Card Content") && isActive) {
+      return "border-none"
+    } else {
+      return "border"
+    }
+  }, [id, name, isActive])
+
+  const borderStyle =
+    selected || selectedComponent === id ? "border-dotted" : "border-solid"
+
+  const borderColorValue = useMemo(() => {
+    if (selected || selectedComponent === id) {
+      return "border-[#60A5FA]"
+    }
+    if (isActive && id !== "ROOT") {
+      return "border-[#60A5FA]"
+    }
+    return !borderColor ||
+      borderColor === "transparent" ||
+      name === "ProgressBar"
+      ? "border-transparent"
+      : `border-[${borderColor}]`
+  }, [selected, selectedComponent, id, isActive, borderColor, name])
+
+  return (
+    <div
+      className={cn(
+        "relative z-10 hover:border-dotted hover:border-transparent",
+        fullWidth ? "w-full" : "w-auto",
+        name === "ProgressBar" ? "p-px" : "p-0",
+        borderWidth,
+        borderStyle,
+        borderColorValue,
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
 export default StyledNodeDiv
 
@@ -178,18 +234,19 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
           toggleError: false,
         })
       )
-      setProp((props) => {
-        props.parentScreenId = currentScreenId
-      })
+      // console.log("run here")
+      // setProp((props) => {
+      //   props.parentScreenId = currentScreenId
+      // })
     }
   }, [])
 
   if (name === "AvatarComponent" && id !== avatarComponentId) {
     return null
   }
-  console.log("name", name)
+  // console.log("name", name)
   return (
-    <StyledNodeDiv
+    <NewStyledNodeDiv
       selected={isSelected}
       borderColor={borderColor}
       fullWidth={fullWidth}
@@ -200,6 +257,6 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       className="parent-component"
     >
       {render}
-    </StyledNodeDiv>
+    </NewStyledNodeDiv>
   )
 }
