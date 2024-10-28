@@ -316,7 +316,7 @@ export const UserInputGen = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  "flex min-h-[49px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#ffffff",
@@ -891,7 +891,7 @@ export const UserInput = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  "flex min-h-[49px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#ffffff",
