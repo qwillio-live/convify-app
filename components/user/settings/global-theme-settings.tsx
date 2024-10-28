@@ -9,6 +9,7 @@ import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 
 import {
+  GlobalThemeState,
   setHeaderPosition,
   setPartialStyles,
 } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
@@ -38,18 +39,23 @@ import { updateHeaderPosition } from "@/lib/state/flows-state/features/placehold
 import { X } from "lucide-react"
 import clsx from "clsx"
 import { Label } from "@/components/ui/label"
+import { useEditor } from "@craftjs/core"
+import { updateElementProps } from "./utils"
+
 type Props = {}
 
 export const GlobalThemeSettings = (props: Props) => {
+  const { actions, query } = useEditor()
+
   const [open, setOpen] = useState(false)
   const [secondaryOpen, setSecondaryOpen] = useState(false)
-  const [isPickerVisible, setPickerVisible] = useState(false)
+  // const [isPickerVisible, setPickerVisible] = useState(false)
 
   const dispatch = useAppDispatch()
 
   const t = useTranslations("Components")
 
-  const [image, setImage] = useState<string>("")
+  // const [image, setImage] = useState<string>("")
 
   /** GENERAL STYLES */
   const primaryColor = useAppSelector(
@@ -103,19 +109,19 @@ export const GlobalThemeSettings = (props: Props) => {
   const defaultSecondaryTextColor = useAppSelector(
     (state) => state.theme?.defaultText?.secondaryColor
   )
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  // const screens = useAppSelector((state: RootState) => state?.screen?.screens)
 
-  const handleApplyTheme = (themeStyles) => {
-    dispatch({ type: "APPLY_THEME_AND_CYCLE_SCREENS", payload: themeStyles })
-  }
+  // const handleApplyTheme = (themeStyles) => {
+  //   dispatch({ type: "APPLY_THEME_AND_CYCLE_SCREENS", payload: themeStyles })
+  // }
 
-  const handleFileChange = (e) => {
-    if (!e?.target?.files?.length) return
-    const file = e?.target?.files[0]
-    const objectUrl = URL.createObjectURL(file)
+  // const handleFileChange = (e) => {
+  //   if (!e?.target?.files?.length) return
+  //   const file = e?.target?.files[0]
+  //   const objectUrl = URL.createObjectURL(file)
 
-    dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }))
-  }
+  //   dispatch(setPartialStyles({ general: { backgroundImage: objectUrl } }))
+  // }
 
   const throttledDispatch = useCallback(
     throttle((value) => {
@@ -126,11 +132,18 @@ export const GlobalThemeSettings = (props: Props) => {
 
   const handleStyleChange = (style) => {
     throttledDispatch(style)
+    changeGlobalStyle(style)
   }
 
-  useEffect(() => {
-    console.log("primaryFonts", primaryFonts)
-  }, [primaryFonts])
+  const changeGlobalStyle = (style: GlobalThemeState) => {
+    // console.log("style", style)
+    // console.log("nodes", query.getNodes())
+    const textNodes = query.getNodes()
+
+    Object.values(textNodes).forEach((node) => {
+      updateElementProps(node, actions, style)
+    })
+  }
 
   const debouncedDispatch = useCallback(
     debounce(
@@ -147,6 +160,7 @@ export const GlobalThemeSettings = (props: Props) => {
 
   const handleStyleChangeDebounced = (style) => {
     debouncedDispatch(style)
+    changeGlobalStyle(style)
   }
 
   const handleUploadComplete = (url: string) => {
@@ -168,7 +182,7 @@ export const GlobalThemeSettings = (props: Props) => {
   //   })
   // }
 
-  console.log('bg color, default bg"', backgroundColor, defaultBackgroundColor)
+  // console.log('bg color, default bg"', backgroundColor, defaultBackgroundColor)
   return (
     <>
       <ScrollArea>
