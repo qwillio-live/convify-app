@@ -471,6 +471,7 @@ export const Form = ({ children, ...props }) => {
             canvas
             is={UserInput}
             {...formPreset}
+            textColor="#505051"
             label={t("FirstName")}
             placeholder="Enter your first name"
             floatingLabel={true}
@@ -490,6 +491,7 @@ export const Form = ({ children, ...props }) => {
             is={UserInput}
             {...formPresets}
             floatingLabel={true}
+            textColor="#505051"
             label={t("LastName")}
             placeholder="Enter your last name"
             backgroundColor={"transparent"}

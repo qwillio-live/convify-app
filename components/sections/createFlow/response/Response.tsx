@@ -214,10 +214,14 @@ const ResponseFlowComponents = () => {
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true)
-      function sortContentByOrder(arr) {
-        return arr.map((item) => {
+      function sortContentByOrder(arr: any[]) {
+        return arr.map((item: any) => {
+          //@ts-ignore
           const sortedContent = Object.entries(item.content)
-            .sort(([, a], [, b]) => (a.order || 0) - (b.order || 0))
+            .sort(
+              ([, a]: [string, any], [, b]: [string, any]) =>
+                (a.order || 0) - (b.order || 0)
+            )
             .reduce((acc, [key, value]) => {
               acc[key] = value
               return acc

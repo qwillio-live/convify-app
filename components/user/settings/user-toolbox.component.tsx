@@ -531,7 +531,10 @@ export const UserToolbox = () => {
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
-                      connectors.create(ref, <UserInput {...outlinedPreset} />)
+                      connectors.create(
+                        ref,
+                        <UserInput textColor="#505051" {...outlinedPreset} />
+                      )
                     }
                     data-cy="toolbox-text"
                   >
@@ -542,6 +545,7 @@ export const UserToolbox = () => {
                       <UserInputGen
                         {...outlinedPreset}
                         label={t("Label")}
+                        textColor="#505051"
                         placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
