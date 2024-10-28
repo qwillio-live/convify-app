@@ -292,7 +292,7 @@ const FAQItem = ({
     setAnswerValue(item.answer)
   }, [item.answer])
 
-  const DropdownIcon = iconType === IconType.plus ? <Plus size={20} /> : <ChevronDown size={20} />
+  const DropdownIcon = iconType === IconType.plus ? <Plus size={24} /> : <ChevronDown size={24} />
   return (
     <StyledFAQItem
       titleFontFamily={titleFontFamily}

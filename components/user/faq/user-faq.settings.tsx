@@ -163,6 +163,91 @@ export const FAQSettings = () => {
                     </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="design">
+                    <AccordionTrigger>{t("Design")}</AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-2">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+                            <ColorInput
+                                value={containerBackground}
+                                handleChange={(e) => {
+                                    debouncedSetProp("containerBackground", e.target.value)
+                                }}
+                                handleRemove={() => {
+                                    debouncedSetProp("containerBackground", "transparent")
+                                }}
+                                id="backgroundcolor"
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label>{t("Icon")}</Label>
+                                <span className="text-muted-foreground text-xs">
+                                    {columnsMobile}
+                                </span>
+                            </div>
+                            <Tabs
+                                defaultValue={iconType}
+                                onValueChange={(value) => debouncedSetProp("iconType", value)}
+                            >
+                                <TabsList className="grid w-full grid-cols-2 bg-[#EEEEEE]">
+                                    <TabsTrigger className="rounded" value={IconType.plus}>
+                                        <Plus size={16} />
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        className="rounded"
+                                        value={IconType.chevron}
+                                    >
+                                        <ChevronDown size={16} />
+                                    </TabsTrigger>
+                                </TabsList>
+                            </Tabs>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="backgroundcolor">{t("Question Color")}</Label>
+                            <ColorInput
+                                value={titleColor}
+                                handleChange={(e) => {
+                                    debouncedSetProp("titleColor", e.target.value)
+                                }}
+                                handleRemove={() => {
+                                    debouncedSetProp("titleColor", primaryColor)
+                                }}
+                                id="questionColor"
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="backgroundcolor">{t("Answer Color")}</Label>
+                            <ColorInput
+                                value={contentColor}
+                                handleChange={(e) => {
+                                    debouncedSetProp("contentColor", e.target.value)
+                                }}
+                                handleRemove={() => {
+                                    debouncedSetProp("contentColor", secondaryColor)
+                                }}
+                                id="answerColor"
+                            />
+                        </div>
+
+                        {selectedPreset === PRESETNAMES.blockedPreset && <div className="flex items-center justify-between">
+                            <Label htmlFor="backgroundcolor">{t("Block Color")}</Label>
+                            <ColorInput
+                                value={blockColor}
+                                handleChange={(e) => {
+                                    debouncedSetProp("blockColor", e.target.value)
+                                }}
+                                handleRemove={() => {
+                                    debouncedSetProp("blockColor", "#f5f5f5")
+                                }}
+                                id="blockColor"
+                            />
+                        </div>}
+
+                    </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="spacing">
                     <AccordionTrigger>{t("Spacing")}</AccordionTrigger>
                     <AccordionContent className="space-y-6 pt-2">
@@ -280,91 +365,6 @@ export const FAQSettings = () => {
                                 />
                             </div>
                         </div>
-                    </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="design">
-                    <AccordionTrigger>{t("Design")}</AccordionTrigger>
-                    <AccordionContent className="space-y-4 pt-2">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
-                            <ColorInput
-                                value={containerBackground}
-                                handleChange={(e) => {
-                                    debouncedSetProp("containerBackground", e.target.value)
-                                }}
-                                handleRemove={() => {
-                                    debouncedSetProp("containerBackground", "transparent")
-                                }}
-                                id="backgroundcolor"
-                            />
-                        </div>
-
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <Label>{t("Icon")}</Label>
-                                <span className="text-muted-foreground text-xs">
-                                    {columnsMobile}
-                                </span>
-                            </div>
-                            <Tabs
-                                defaultValue={iconType}
-                                onValueChange={(value) => debouncedSetProp("iconType", value)}
-                            >
-                                <TabsList className="grid w-full grid-cols-2 bg-[#EEEEEE]">
-                                    <TabsTrigger className="rounded" value={IconType.plus}>
-                                        <Plus size={16} />
-                                    </TabsTrigger>
-                                    <TabsTrigger
-                                        className="rounded"
-                                        value={IconType.chevron}
-                                    >
-                                        <ChevronDown size={16} />
-                                    </TabsTrigger>
-                                </TabsList>
-                            </Tabs>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Question Color")}</Label>
-                            <ColorInput
-                                value={titleColor}
-                                handleChange={(e) => {
-                                    debouncedSetProp("titleColor", e.target.value)
-                                }}
-                                handleRemove={() => {
-                                    debouncedSetProp("titleColor", primaryColor)
-                                }}
-                                id="questionColor"
-                            />
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Answer Color")}</Label>
-                            <ColorInput
-                                value={contentColor}
-                                handleChange={(e) => {
-                                    debouncedSetProp("contentColor", e.target.value)
-                                }}
-                                handleRemove={() => {
-                                    debouncedSetProp("contentColor", secondaryColor)
-                                }}
-                                id="answerColor"
-                            />
-                        </div>
-
-                        {selectedPreset === PRESETNAMES.blockedPreset && <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Block Color")}</Label>
-                            <ColorInput
-                                value={blockColor}
-                                handleChange={(e) => {
-                                    debouncedSetProp("blockColor", e.target.value)
-                                }}
-                                handleRemove={() => {
-                                    debouncedSetProp("blockColor", "#f5f5f5")
-                                }}
-                                id="blockColor"
-                            />
-                        </div>}
-
                     </AccordionContent>
                 </AccordionItem>
 
