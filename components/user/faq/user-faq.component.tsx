@@ -320,6 +320,7 @@ const FAQItem = ({
         </div>
         <StyledIcon
           isOpen={isOpen}
+          fontColor={titleColor}
           closedIconRotation={0}
           openIconRotation={iconType === IconType.plus ? 45 : 180}
         >
@@ -487,8 +488,9 @@ const StyledFAQItem = styled.div<StyledFAQItemProps>`
   }
 `
 
-const StyledIcon = styled.div<{ isOpen: boolean; closedIconRotation: number; openIconRotation: number }>`
+const StyledIcon = styled.div<{ isOpen: boolean; closedIconRotation: number; openIconRotation: number, fontColor: string }>`
   transition: transform 0.3s ease;
+  color: ${({ fontColor }) => fontColor};
   transform: rotate(${({ isOpen, closedIconRotation, openIconRotation }) =>
     isOpen ? `${openIconRotation}deg` : `${closedIconRotation}deg`
   });
