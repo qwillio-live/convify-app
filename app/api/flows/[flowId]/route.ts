@@ -68,7 +68,7 @@ export async function GET(
       },
     })
     flow.steps = flowSteps.sort((a, b) => a.order - b.order)
-    console.log("returning flow", flow)
+    // console.log("returning flow", flow)
     return NextResponse.json(flow)
   } catch (error) {
     const statusCode = 500
@@ -131,7 +131,7 @@ export async function PUT(
     }
 
     if (data.steps) {
-      console.log("data.steps", data.steps)
+      // console.log("data.steps", data.steps)
       const existingSteps = await prisma.FlowStep.findMany({
         where: {
           flowId: String(flowId),
@@ -139,7 +139,7 @@ export async function PUT(
         },
       })
       const newStepIds = new Set(data.steps.map((step) => step.id))
-      console.log("existig.steps,newStepIds", existingSteps, newStepIds)
+      // console.log("existig.steps,newStepIds", existingSteps, newStepIds)
       // Mark missing steps as isDeleted: true
       for (const step of existingSteps) {
         if (!newStepIds.has(step.id)) {
@@ -162,9 +162,9 @@ export async function PUT(
             flowId: String(flowId),
           },
         })
-        console.log("existingStep", existingStep)
+        // console.log("existingStep", existingStep)
         if (existingStep) {
-          console.log(`Updating ${existingStep}`)
+          // console.log(`Updating ${existingStep}`)
           await prisma.FlowStep.update({
             where: {
               id: step.id,

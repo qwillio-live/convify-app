@@ -162,7 +162,7 @@ export const NewGlobalThemeSettings = (props: Props) => {
   //   })
   // }
 
-  console.log('bg color, default bg"', backgroundColor, defaultBackgroundColor)
+  // console.log('bg color, default bg"', backgroundColor, defaultBackgroundColor)
   return (
     <>
       <ScrollArea>
