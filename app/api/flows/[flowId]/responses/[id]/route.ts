@@ -86,9 +86,17 @@ export async function PUT(
 
     // Merge the old content with the new data
     const updatedContent = {
-      ...oldContent,
       ...data.content, // Assuming data.content holds the new fields to be merged
+      ...oldContent,
     }
+    console.log(
+      "old content: ",
+      oldContent,
+      "new content: ",
+      data.content,
+      "updated content: ",
+      updatedContent
+    )
 
     const response = await prisma.response.update({
       where: { id: String(id) },

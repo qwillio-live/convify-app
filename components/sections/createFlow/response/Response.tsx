@@ -214,13 +214,29 @@ const ResponseFlowComponents = () => {
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true)
+      function sortContentByOrder(arr) {
+        return arr.map((item) => {
+          const sortedContent = Object.entries(item.content)
+            .sort(([, a], [, b]) => (a.order || 0) - (b.order || 0))
+            .reduce((acc, [key, value]) => {
+              acc[key] = value
+              return acc
+            }, {})
+
+          return { ...item, content: sortedContent }
+        })
+      }
       try {
         const response = await fetch(`/api/flows/${flowId}/responses/`)
-        const dataRes = await response.json()
+        let dataRes = await response.json()
         console.log("response", dataRes)
         localStorage.setItem("responses", JSON.stringify(dataRes))
         localStorage.setItem("flowId", JSON.stringify(flowId))
-        setResponses(dataRes)
+
+        const sortedData = sortContentByOrder(dataRes)
+
+        console.log("updated dataRe", sortedData)
+        setResponses(sortedData)
       } finally {
         setLoading(false)
       }
@@ -262,6 +278,7 @@ const ResponseFlowComponents = () => {
         })
 
         // Extract values and associate them with the latest labels
+        console.log("item", item)
         const valuesWithLabels = extractValuesOfLabels(item.content as Content)
         valuesWithLabels["Submission time"] = item.createdAt
         valuesWithLabels["flowId"] = item.flowId
@@ -359,7 +376,7 @@ const ResponseFlowComponents = () => {
                       label !== "label" &&
                       !!row[label]
                         ? typeof row[label] === "string"
-                          ? row[label] + "aa"
+                          ? row[label]
                           : Array.isArray(row[label])
                           ? row[label]
                               ?.map((rowItem) => rowItem?.value)
