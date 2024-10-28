@@ -94,6 +94,7 @@ export const LinksGen = ({
             style={{
                 width: "100%",
                 background: `${containerBackground}`,
+                fontFamily: `var(${fontFamily})`,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -106,7 +107,7 @@ export const LinksGen = ({
         >
             <Wrapper size={size} className="user-picture-choice-component">
                 <div className={cn("flex flex-wrap items-center justify-center")} aria-label="Horizontal navigation" style={{
-                    fontFamily: `var(${fontFamily?.value})`,
+                    fontFamily: `var(${fontFamily})`,
                 }}>
                     {links.map((link, index) => {
                         const { buttonAction, nextScreen, windowTarget, href, tracking, trackingEvent } = link;
@@ -114,7 +115,7 @@ export const LinksGen = ({
                             <span key={index} className="flex items-center">
                                 {buttonAction === 'none'
                                     ? (
-                                        <StyledLinkItem textColor={textColor} fontFamily={fontFamily?.value} fontSize={fontSize} fontWeight={fontWeight}>
+                                        <StyledLinkItem textColor={textColor} fontFamily={fontFamily} fontSize={fontSize} fontWeight={fontWeight}>
                                             {link.value}
                                         </StyledLinkItem>
                                     ) : (
@@ -132,7 +133,7 @@ export const LinksGen = ({
                                             data-tracking={tracking}
                                             data-event-name={trackingEvent}
                                         >
-                                            <StyledLinkItem textColor={textColor} fontFamily={fontFamily?.value} fontSize={fontSize} fontWeight={fontWeight}>
+                                            <StyledLinkItem textColor={textColor} fontFamily={fontFamily} fontSize={fontSize} fontWeight={fontWeight}>
                                                 {link.value}
                                             </StyledLinkItem>
                                         </Link>
@@ -186,7 +187,6 @@ export const Links = ({
     showDots,
     ...props
 }) => {
-
     const {
         actions: { setProp },
         connectors: { connect, drag },
@@ -200,6 +200,18 @@ export const Links = ({
     const t = useTranslations("Components")
     const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
     const [hover, setHover] = useState(false)
+    const secondaryFont = useAppSelector(
+      (state) => state.theme?.text?.secondaryFont
+    )
+    const secondaryTextColor = useAppSelector(
+      (state) => state.theme?.text?.secondaryColor
+    )
+    useEffect(() => {
+      setProp((props) => (props.fontFamily = secondaryFont), 200)
+    }, [secondaryFont])
+    useEffect(() => {
+        setProp((props) => (props.textColor = secondaryTextColor), 200)
+      }, [secondaryTextColor])
     return (
         <div
             ref={(ref: any) => connect(drag(ref))}
@@ -228,6 +240,7 @@ export const Links = ({
                     paddingBottom: `${marginBottom}px`,
                     paddingLeft: `${marginLeft}px`,
                     paddingRight: `${marginRight}px`,
+                    fontFamily: `var(${fontFamily})`,
                 }}
             >
                 <StylesLinksContainer className="w-full flex flex-wrap items-center justify-center"
@@ -240,7 +253,7 @@ export const Links = ({
                     mobileScreen={!!mobileScreen}
                     maxWidth={LinksSizesValues[size || "medium"]}
                     size={size}
-                    fontFamily={fontFamily?.value}
+                    fontFamily={fontFamily}
                 >
                     {links.map((link, index) => {
                         const { buttonAction, nextScreen, windowTarget, href } = link;
@@ -255,7 +268,7 @@ export const Links = ({
                                         })
                                     }}
                                     textColor={textColor}
-                                    fontFamily={fontFamily?.value}
+                                    fontFamily={fontFamily}
                                     fontSize={fontSize}
                                     fontWeight={fontWeight}
                                 />
@@ -290,7 +303,7 @@ const LinksItem = ({
 
     return (
         <>
-            <StyledLinkItem fontFamily={fontFamily?.value} className={className} textColor={textColor} fontSize={fontSize} fontWeight={fontWeight} >
+            <StyledLinkItem fontFamily={fontFamily} className={className} textColor={textColor} fontSize={fontSize} fontWeight={fontWeight} >
                 {/** @ts-ignore */}
                 {/** @ts-ignore */}
                 <ContentEditable
@@ -397,6 +410,7 @@ const StyledLinkItem = styled.div<StyledLinkItemProps>`
     cursor: pointer;
     font-weight: ${({ fontWeight }) => fontWeight};
     font-size: ${({ fontSize }) => fontSize}px;
+    font-family: var(${({ fontFamily }) => fontFamily});
     text-decoration: none;
     transition: color 0.3s ease;
 
@@ -412,11 +426,7 @@ const StyledLinkItem = styled.div<StyledLinkItemProps>`
 `
 
 const LinksDefaultProps = {
-    fontFamily: {
-        value: "inherit",
-        globalStyled: true,
-        isCustomized: false,
-    },
+    fontFamily: "inherit",
     showDots: true,
     containerBackground: "transparent",
     paddingLeft: "16",

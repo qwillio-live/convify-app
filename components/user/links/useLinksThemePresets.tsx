@@ -39,11 +39,7 @@ export const useLinksThemePresets = () => {
   ]
 
   const defaultPresets = {
-    fontFamily: {
-      value: theme?.text?.primaryFont || "inherit",
-      globalStyled: true,
-      isCustomized: false,
-    },
+    fontFamily: theme?.text?.secondaryFont,
     showDots: true,
     containerBackground: "transparent",
     paddingLeft: "16",
