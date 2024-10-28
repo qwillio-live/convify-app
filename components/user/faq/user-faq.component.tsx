@@ -156,6 +156,22 @@ export const FAQ = ({
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
+  useEffect(() => {
+    setProp((props) => (props.titleFontFamily = primaryFont), 200)
+  }, [primaryFont])
+
+  useEffect(() => {
+    setProp((props) => (props.contentFontFamily = secondaryFont), 200)
+  }, [secondaryFont])
+
+  useEffect(() => {
+    setProp((props) => (props.titleColor = primaryTextColor), 200)
+  }, [primaryTextColor])
+
+  useEffect(() => {
+    setProp((props) => (props.contentColor = secondaryTextColor), 200)
+  }, [secondaryTextColor])
+
 
   const debouncedSetProp = useCallback(
     debounce((property, value) => {
@@ -212,7 +228,7 @@ export const FAQ = ({
         >
           {items.map((item, index) => (
             <FAQItem
-              key={item.id}
+              key={index}
               borderRadius={borderRadius}
               borderWidth={borderWidth}
               iconType={iconType}
@@ -459,7 +475,7 @@ const StyledFAQItem = styled.div<StyledFAQItemProps>`
     transition: max-height 0.3s ease-out;
     
     .answer-text {
-      font-family: var(${({ titleFontFamily }) => titleFontFamily});
+      font-family: var(${({ contentFontFamily }) => contentFontFamily});
       color: ${({ contentColor }) => contentColor};
       text-align: ${({ textAlign }) => textAlign};
       word-wrap: break-word;
