@@ -464,7 +464,8 @@ const StyledFAQItem = styled.div<StyledFAQItemProps>`
       text-align: ${({ textAlign }) => textAlign};
       word-wrap: break-word;
       overflow-wrap: break-word;
-      font-size: 16px;
+      font-size: 14px;
+      font-weight: 400;
       padding: 10px;
     }
   }
