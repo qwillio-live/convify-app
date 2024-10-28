@@ -312,7 +312,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt]) // Depend on alarm state
-  console.log(props.backgroundImage)
+  // console.log(props.backgroundImage)
 
   const primaryTextColor = useAppSelector(
     (state) => state?.theme?.text?.primaryColor
@@ -339,7 +339,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   }
   const darkenedBg = getHoverBackgroundForPreset(primaryColor)
 
-  console.log("props.textColor", props.textColor)
+  // console.log("props.textColor", props.textColor)
   return (
     <div
       ref={itemRefNew}
@@ -696,8 +696,8 @@ export const UserInputCheckbox = ({ ...props }) => {
                 ease-in-out
                 focus-visible:outline-none
                 focus-visible:ring-0
-                focus-visible:ring-transparent 
-                focus-visible:ring-offset-0 
+                focus-visible:ring-transparent
+                focus-visible:ring-offset-0
                 peer-focus-visible:outline-none
                 `
               )}

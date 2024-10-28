@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
   Activity,
@@ -15,8 +15,8 @@ import {
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
-import { useForm, useFormContext } from "react-hook-form"
-import styled from "styled-components"
+// import { useForm, useFormContext } from "react-hook-form"
+// import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
@@ -28,24 +28,24 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import {
-  ImagePictureTypes,
-  PictureTypes,
-  SvgRenderer,
-} from "@/components/PicturePicker"
-import { Input } from "@/components/input-custom"
+// import { Label } from "@/components/ui/label"
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select"
+// import { Slider } from "@/components/ui/slider"
+// import {
+//   ImagePictureTypes,
+//   PictureTypes,
+//   SvgRenderer,
+// } from "@/components/PicturePicker"
+import { Input, InputProps } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
@@ -108,7 +108,7 @@ export const UserInputGen = ({ ...props }) => {
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  console.log("user input", screenData, nodeId, parsedData, props)
+  // console.log("user input", screenData, nodeId, parsedData, props)
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {
@@ -194,7 +194,7 @@ export const UserInputGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [error, setError] = useState(props.error)
+  // const [error, setError] = useState(props.error)
 
   // useEffect(() => {
   //   setInputValue(fieldValue)
@@ -244,13 +244,8 @@ export const UserInputGen = ({ ...props }) => {
     <div
       ref={itemRefNew}
       className={cn(
-        "relative focus-visible:ring-0 focus-visible:ring-transparent"
+        "relative flex w-full justify-center focus-visible:ring-0 focus-visible:ring-transparent"
       )}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
     >
       <div
         className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
@@ -321,7 +316,7 @@ export const UserInputGen = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  "flex min-h-[49px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#ffffff",
@@ -385,9 +380,9 @@ export const UserInputGen = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `outline-none
+                `ring-opacity/0
+          outline-none
           ring-0
-          ring-opacity-0
           transition-all
           duration-200
           ease-in-out
@@ -480,53 +475,119 @@ export const UserInputGen = ({ ...props }) => {
   )
 }
 
-const Wrapper = styled.div<{
+// const Wrapper = styled.div<{
+//   size: UserInputSizes
+//   mobileScreen?: boolean
+// }>`
+//   margin-left: auto;
+//   margin-right: auto;
+
+//   ${({ size, mobileScreen }) => {
+//     if (size === UserInputSizes.small) {
+//       return { width: "250px" }
+//     } else if (size === UserInputSizes.medium) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return { width: "376px" }
+//       }
+//     } else if (size === UserInputSizes.large) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return { width: "576px" }
+//       }
+//     } else {
+//       return {
+//         width: "calc(100% - 22px)",
+//       }
+//     }
+//   }};
+
+//   @media (max-width: 600px) {
+//     ${({ size }) => {
+//       if (size === UserInputSizes.large) {
+//         return { width: "calc(100% - 22px)" }
+//       }
+//     }}
+//   }
+
+//   @media (max-width: 390px) {
+//     ${({ size }) => {
+//       if (size === UserInputSizes.medium) {
+//         return { width: "calc(100% - 22px)" }
+//       }
+//     }}
+//   }
+// `
+
+const Wrapper = ({
+  mobileScreen,
+  size,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
   size: UserInputSizes
   mobileScreen?: boolean
-}>`
-  margin-left: auto;
-  margin-right: auto;
-
-  ${({ size, mobileScreen }) => {
-    if (size === UserInputSizes.small) {
-      return { width: "250px" }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "376px" }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
-      } else {
-        return { width: "576px" }
-      }
-    } else {
-      return {
-        width: "calc(100% - 22px)",
-      }
+}) => {
+  const generateWidthClass = useMemo(() => {
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-22px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+      case UserInputSizes.medium:
+        return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      case UserInputSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-22px)]"
     }
-  }};
+  }, [size, mobileScreen])
+  return (
+    <div className={cn("mx-auto", generateWidthClass, className)} {...props} />
+  )
+}
 
-  @media (max-width: 600px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
+// const UserInputStyled = styled(Input)<{
+//   textColor: string
+//   width: number
+//   backgroundColor: string
+//   borderColor: string
+//   borderWidth: number
+//   borderRadius: number
+//   topLeftRadius: number
+//   topRightRadius: number
+//   bottomLeftRadius: number
+//   bottomRightRadius: number
+//   borderTopWidth: number
+//   borderBottomWidth: number
+//   borderLeftWidth: number
+//   borderRightWidth: number
+//   primaryFont: string
+//   size: UserInputSizes
+//   error: boolean
+// }>`
+//   color: ${(props) => props.textColor};
+//   max-width: 100%;
+//   min-height: 50px;
+//   background: #ffffff;
+//   font-family: ${(props) => `var(${props?.primaryFont})`};
+//   border-top-right-radius: ${(props) => props.topRightRadius}px;
+//   border-top-left-radius: ${(props) => props.topLeftRadius}px;
+//   border-bottom-right-radius: ${(props) =>
+//     props.error ? 0 : props.bottomRightRadius}px;
+//   border-bottom-left-radius: ${(props) =>
+//     props.error ? 0 : props.bottomLeftRadius}px;
+//   border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
+//   border-top-width: ${(props) => props.borderTopWidth}px;
+//   border-bottom-width: ${(props) => props.borderBottomWidth}px;
+//   border-left-width: ${(props) => props.borderLeftWidth}px;
+//   border-right-width: ${(props) => props.borderRightWidth}px;
+//   align-self: center;
+// `
 
-  @media (max-width: 390px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
-`
-
-const UserInputStyled = styled(Input)<{
+type UserInputStyledProps = {
   textColor: string
   width: number
   backgroundColor: string
@@ -542,44 +603,80 @@ const UserInputStyled = styled(Input)<{
   borderLeftWidth: number
   borderRightWidth: number
   primaryFont: string
-  size: UserInputSizes
+  // size: UserInputSizes
   error: boolean
-}>`
-  color: ${(props) => props.textColor};
-  max-width: 100%;
-  min-height: 50px;
-  background: #ffffff;
-  font-family: ${(props) => `var(${props?.primaryFont})`};
-  border-top-right-radius: ${(props) => props.topRightRadius}px;
-  border-top-left-radius: ${(props) => props.topLeftRadius}px;
-  border-bottom-right-radius: ${(props) =>
-    props.error ? 0 : props.bottomRightRadius}px;
-  border-bottom-left-radius: ${(props) =>
-    props.error ? 0 : props.bottomLeftRadius}px;
-  border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
-  border-top-width: ${(props) => props.borderTopWidth}px;
-  border-bottom-width: ${(props) => props.borderBottomWidth}px;
-  border-left-width: ${(props) => props.borderLeftWidth}px;
-  border-right-width: ${(props) => props.borderRightWidth}px;
-  align-self: center;
-`
+}
+
+const UserInputStyled = React.forwardRef<
+  HTMLInputElement,
+  InputProps & UserInputStyledProps
+>(
+  (
+    {
+      textColor,
+      width,
+      backgroundColor,
+      borderColor,
+      borderWidth,
+      borderRadius,
+      topLeftRadius,
+      topRightRadius,
+      bottomLeftRadius,
+      bottomRightRadius,
+      borderTopWidth,
+      borderBottomWidth,
+      borderLeftWidth,
+      borderRightWidth,
+      primaryFont,
+      error,
+      className,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Input
+        className={cn("m-h-[50px] max-w-full self-center", className)}
+        {...props}
+        ref={ref}
+        style={{
+          color: textColor,
+          borderTopRightRadius: topRightRadius,
+          borderTopLeftRadius: topLeftRadius,
+          borderBottomRightRadius: error ? 0 : bottomRightRadius,
+          borderBottomLeftRadius: error ? 0 : bottomLeftRadius,
+          borderTopWidth,
+          borderBottomWidth,
+          borderLeftWidth,
+          borderRightWidth,
+          fontFamily: `var(${primaryFont})`,
+          borderColor: error ? "#cc0000" : borderColor,
+          ...style,
+        }}
+      />
+    )
+  }
+)
+
+UserInputStyled.displayName = "UserInputStyled"
 
 export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
     parent,
-    selected,
-    isHovered,
+    // selected,
+    // isHovered,
     actions: { setProp },
     props: { icon },
   } = useNode((state) => ({
     compId: state.id,
     props: state.data.props,
     parent: state.data.parent,
-    selected: state.events.selected,
+    // selected: state.events.selected,
     dragged: state.events.dragged,
-    isHovered: state.events.hovered,
+    // isHovered: state.events.hovered,
   }))
   const {
     // query,
@@ -591,11 +688,11 @@ export const UserInput = ({ ...props }) => {
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
-  const [hover, setHover] = useState(false)
+  // const [hover, setHover] = useState(false)
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
-  const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
+  // const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.selectedScreen || 0
   )
@@ -612,21 +709,21 @@ export const UserInput = ({ ...props }) => {
         ?.fieldValue
   )
   // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
-  const fieldRequired =
-    useAppSelector(
-      (state) =>
-        state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
-          ?.fieldRequired
-    ) || false
+  // const fieldRequired =
+  //   useAppSelector(
+  //     (state) =>
+  //       state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+  //         ?.fieldRequired
+  //   ) || false
   // const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
   const fieldError =
     props.inputRequired &&
     (!fieldValue || fieldValue == null) &&
     screenValidated
 
-  const secondaryFont = useAppSelector(
-    (state) => state?.theme?.text?.secondaryFont
-  )
+  // const secondaryFont = useAppSelector(
+  //   (state) => state?.theme?.text?.secondaryFont
+  // )
   const primaryColor = useAppSelector(
     (state) => state?.theme?.general?.primaryColor
   )
@@ -677,17 +774,17 @@ export const UserInput = ({ ...props }) => {
     }
   }, [parentContainer])
 
-  useEffect(() => {
-    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-      setProp((props) => (props.primaryFont.value = primaryFont), 200)
-    }
-  }, [primaryFont])
+  // useEffect(() => {
+  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont])
 
-  useEffect(() => {
-    if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
-      setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
-    }
-  }, [secondaryFont])
+  // useEffect(() => {
+  //   if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
+  //     setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
+  //   }
+  // }, [secondaryFont])
 
   useEffect(() => {
     if (
@@ -706,32 +803,25 @@ export const UserInput = ({ ...props }) => {
   return (
     <div
       className={cn(
-        "relative focus-visible:ring-0 focus-visible:ring-transparent",
+        "group/input relative flex w-full justify-center focus-visible:ring-0 focus-visible:ring-transparent",
         {
           "animate-shake": fieldError,
         }
       )}
       ref={(ref: any) => ref && connect(drag(ref))}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Input Field")} />}
+      <Controller
+        className="invisible group-hover/input:visible"
+        nameOfComponent={t("Input Field")}
+      />
       <div
         className={cn(
-          "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+          "relative flex w-full min-w-full justify-center transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
           // { "animate-shake": props.inputRequired }
         )}
         style={{
-          display: "flex",
-          justifyContent: "center",
           backgroundColor: `${props.backgroundColor}`,
           backgroundImage: `${props.backgroundImage}`,
-          minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
@@ -801,16 +891,16 @@ export const UserInput = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  "flex min-h-[49px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#ffffff",
-                  borderColor: props.error
+                  borderColor: fieldError
                     ? "#cc0000"
                     : props.isActive
                     ? props.activeBorderColor.value
                     : props.borderColor.value,
-                  borderBottomLeftRadius: props.error
+                  borderBottomLeftRadius: fieldError
                     ? 0
                     : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,

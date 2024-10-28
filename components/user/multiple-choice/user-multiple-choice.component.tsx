@@ -53,7 +53,7 @@ const Wrapper = styled.div<{
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { width: "376px" }
+        return { maxWidth: "376px", width: "calc(100% - 22px)" }
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
@@ -175,7 +175,6 @@ export const MultipleChoiceGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt, alarm, isRequired]) // Depend on alarm state
-
   return (
     <div
       className="m-choice relative w-full"
@@ -194,6 +193,7 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
+      {/* max-w-[calc(100%-22px)] */}
       <Wrapper size={size} className="mcq-input-comp max-w-[calc(100%-22px)]">
         <ul
           ref={itemRef}

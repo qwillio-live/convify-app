@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { revalidateFlow } from "@/actions/flow/revalidateFlow"
@@ -334,4 +334,4 @@ const Header = ({ flowId }) => {
   )
 }
 
-export default Header
+export default memo(Header)

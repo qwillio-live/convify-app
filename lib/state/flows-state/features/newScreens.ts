@@ -206,7 +206,7 @@ export const newScreensSlice = createSlice({
         state.screens[selectedScreen].screenFields = screenFields
       }
       const screenFieldsList = state.screensFieldsList
-      console.log("SCREEN FIELDS LIST IS: ", screenFieldsList)
+      // console.log("SCREEN FIELDS LIST IS: ", screenFieldsList)
       const screenListItem = screenFieldsList[selectedScreenId]
       if (screenListItem) {
         const field = screenListItem[fieldId]
