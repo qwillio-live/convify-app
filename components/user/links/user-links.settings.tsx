@@ -344,6 +344,8 @@ export const LinksSettings = () => {
                                     : {}),
                             }}
                         >
+                            {/** @ts-ignore */}
+                            {/** @ts-ignore */}
                             <LinksGen {...defaultPresets} />
                         </Card>
                         <Card
@@ -359,6 +361,8 @@ export const LinksSettings = () => {
                                     : {}),
                             }}
                         >
+                            {/** @ts-ignore */}
+                            {/** @ts-ignore */}
                             <LinksGen {...boldPreset} />
                         </Card>
                     </div>

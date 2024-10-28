@@ -8,11 +8,11 @@ import { useNode } from "@craftjs/core";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { useEffect, useState } from "react";
 import { Controller } from "../settings/controller.component";
-import ContentEditable from "react-contenteditable";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PRIVACY_URL, TERMS_URL } from "@/constant";
 import { useTranslations } from "next-intl";
+import ContentEditable from "react-contenteditable";
 
 export enum LinksSizes {
     small = "small",
@@ -291,6 +291,8 @@ const LinksItem = ({
     return (
         <>
             <StyledLinkItem fontFamily={fontFamily?.value} className={className} textColor={textColor} fontSize={fontSize} fontWeight={fontWeight} >
+                {/** @ts-ignore */}
+                {/** @ts-ignore */}
                 <ContentEditable
                     html={linkValue}
                     disabled={onValueChange === null}
