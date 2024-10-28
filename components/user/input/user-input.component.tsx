@@ -194,7 +194,7 @@ export const UserInputGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [error, setError] = useState(props.error)
+  // const [error, setError] = useState(props.error)
 
   // useEffect(() => {
   //   setInputValue(fieldValue)
@@ -531,7 +531,8 @@ const Wrapper = ({
   mobileScreen?: boolean
 }) => {
   const generateWidthClass = useMemo(() => {
-    if (mobileScreen) return "w-[calc(100%-22px)]"
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-22px)]"
     switch (size) {
       case UserInputSizes.large:
         return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
@@ -643,8 +644,8 @@ const UserInputStyled = React.forwardRef<
           color: textColor,
           borderTopRightRadius: topRightRadius,
           borderTopLeftRadius: topLeftRadius,
-          borderBottomRightRadius: bottomRightRadius,
-          borderBottomLeftRadius: bottomLeftRadius,
+          borderBottomRightRadius: error ? 0 : bottomRightRadius,
+          borderBottomLeftRadius: error ? 0 : bottomLeftRadius,
           borderTopWidth,
           borderBottomWidth,
           borderLeftWidth,
@@ -894,12 +895,12 @@ export const UserInput = ({ ...props }) => {
                 )}
                 style={{
                   backgroundColor: "#ffffff",
-                  borderColor: props.error
+                  borderColor: fieldError
                     ? "#cc0000"
                     : props.isActive
                     ? props.activeBorderColor.value
                     : props.borderColor.value,
-                  borderBottomLeftRadius: props.error
+                  borderBottomLeftRadius: fieldError
                     ? 0
                     : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,

@@ -486,7 +486,8 @@ const StyledCustomButton = ({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & StyledCustomButtonProps) => {
   const generateWidthClass = useMemo(() => {
-    if (mobileScreen) return "w-[calc(100%-22px)]"
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-22px)]"
     switch (size) {
       case UserInputSizes.large:
         return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
