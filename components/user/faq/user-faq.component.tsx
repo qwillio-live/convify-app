@@ -282,7 +282,7 @@ const FAQItem = ({
     if (answerRef.current) {
       setAnswerHeight(answerRef.current.scrollHeight)
     }
-  }, [answerValue])
+  }, [answerValue, contentFontFamily])
 
   useEffect(() => {
     setQuestionValue(item.question)

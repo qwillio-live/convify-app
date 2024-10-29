@@ -39,7 +39,7 @@ const useFaqThemePresets = () => {
   
     const preset = {
         titleFontFamily: theme?.text?.primaryFont || "inherit",
-        descriptionFontFamily: theme?.text?.secondaryFont || "inherit",
+        contentFontFamily: theme?.text?.secondaryFont || "inherit",
         textAlign: "start",
         verticalGap: 6,
         size: FAQSizes.medium,
