@@ -84,6 +84,7 @@ export const ChecklistSettings = () => {
       marginTop,
       marginRight,
       marginBottom,
+      columnsDesktop,
       width,
       height,
       settingTabs,
@@ -238,7 +239,7 @@ export const ChecklistSettings = () => {
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="layout">{t("Layout")}</Label>
               <Tabs
                 value={layout}
@@ -257,6 +258,24 @@ export const ChecklistSettings = () => {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
+            </div> */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label>{t("Columns Desktop")}</Label>
+                <span className="text-muted-foreground text-xs">
+                  {columnsDesktop}
+                </span>
+              </div>
+              <Slider
+                defaultValue={[columnsDesktop]}
+                value={[columnsDesktop]}
+                max={5}
+                min={1}
+                step={1}
+                onValueChange={(e) =>
+                  handlePropChangeDebounced("columnsDesktop", e)
+                }
+              />
             </div>
           </AccordionContent>
         </AccordionItem>

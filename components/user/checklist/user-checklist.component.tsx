@@ -40,6 +40,7 @@ export const ChecklistGen = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  columnsDesktop,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -65,6 +66,7 @@ export const ChecklistGen = ({
       <Wrapper
         size={size}
         mobileScreen={false}
+        columnsDesktop={columnsDesktop}
         className="flex w-full gap-2"
         style={{
           flexDirection: layout,
@@ -98,10 +100,18 @@ export const ChecklistGen = ({
   )
 }
 
-const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
+const Wrapper = styled.ul<{
+  size: UserInputSizes
+  mobileScreen: boolean
+  columnsDesktop?: number
+}>`
   margin-left: auto;
   margin-right: auto;
   max-width: 100%;
+  display: grid;
+
+  ${({ columnsDesktop }) =>
+    columnsDesktop && `grid-template-columns: repeat(${columnsDesktop}, 1fr);`}
 
   /* @media (max-width: 1000px) {
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
@@ -147,6 +157,7 @@ export const Checklist = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  columnsDesktop,
   ...props
 }) => {
   console.log("ChecklistProps", size)
@@ -217,6 +228,7 @@ export const Checklist = ({
         <Wrapper
           size={size}
           mobileScreen={!!mobileScreen}
+          columnsDesktop={columnsDesktop}
           className="user-checklist-comp flex w-full gap-2 "
           style={{
             flexDirection: layout,
@@ -343,6 +355,7 @@ export type ChecklistProps = {
   fullWidth: boolean
   settingTabs: string[]
   preset: ChecklistPresets
+  columnsDesktop?: number
 }
 
 export const ChecklistDefaultProps: ChecklistProps = {
@@ -374,6 +387,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fullWidth: true,
   settingTabs: ["content"],
   preset: ChecklistPresets.normal,
+  columnsDesktop: 2,
 }
 
 Checklist.craft = {

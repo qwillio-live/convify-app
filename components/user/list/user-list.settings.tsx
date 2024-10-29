@@ -256,7 +256,7 @@ export const ListSettings = () => {
               />
             </div>
 
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label>{t("Columns Mobile")}</Label>
                 <span className="text-muted-foreground text-xs">
@@ -273,7 +273,7 @@ export const ListSettings = () => {
                   handlePropChangeDebounced("columnsMobile", e)
                 }
               />
-            </div>
+            </div> */}
           </AccordionContent>
         </AccordionItem>
 
