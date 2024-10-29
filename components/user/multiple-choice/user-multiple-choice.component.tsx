@@ -53,7 +53,7 @@ const Wrapper = styled.div<{
       if (mobileScreen) {
         return { width: "calc(100% - 22px)" }
       } else {
-        return { width: "376px" }
+        return { maxWidth: "376px", width: "calc(100% - 22px)" }
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
@@ -193,7 +193,8 @@ export const MultipleChoiceGen = ({
         paddingRight: `${marginRight}px`,
       }}
     >
-      <Wrapper size={size} className="mcq-input-comp">
+      {/* max-w-[calc(100%-22px)] */}
+      <Wrapper size={size} className="mcq-input-comp max-w-[calc(100%-22px)]">
         <ul
           ref={itemRef}
           className="flex w-full flex-col items-center justify-center"

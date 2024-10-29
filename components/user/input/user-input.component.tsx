@@ -265,7 +265,7 @@ export const UserInputGen = ({ ...props }) => {
         <Wrapper
           size={props.size}
           className={cn(
-            "text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
+            "text-input-comp relative max-w-[calc(100%-22px)] overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
             {
               "animate-shake": fieldError,
             }
