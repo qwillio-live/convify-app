@@ -1,4 +1,5 @@
-// 'use client'
+'use client'
+export const Temp = () => <></>
 // import Stories from 'react-insta-stories';
 // import { ImageStorySizes } from './useImageStoryThemePresets';
 // import hexoid from 'hexoid';
