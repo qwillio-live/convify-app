@@ -81,13 +81,15 @@ export const LinksGen = ({
     links,
     tracking,
     textColor,
-    showDots,
     fontSize,
     fontWeight,
+    viewOnly = false,
     ...props
 }) => {
     const pathname = usePathname()
-
+    const primaryColor = useAppSelector(
+        (state) => state.theme?.text?.primaryColor || ''
+      )
     return (
         <div
             className="relative w-full m-choice"
@@ -113,9 +115,9 @@ export const LinksGen = ({
                         const { buttonAction, nextScreen, windowTarget, href, tracking, trackingEvent } = link;
                         return (
                             <span key={index} className="flex items-center">
-                                {buttonAction === 'none'
+                                {(buttonAction === 'none' || viewOnly)
                                     ? (
-                                        <StyledLinkItem textColor={textColor} fontFamily={fontFamily} fontSize={fontSize} fontWeight={fontWeight}>
+                                        <StyledLinkItem textColor={textColor} fontFamily={fontFamily} fontSize={fontSize} fontWeight={fontWeight} viewOnly={viewOnly} primaryColor={primaryColor}>
                                             {link.value}
                                         </StyledLinkItem>
                                     ) : (
@@ -133,18 +135,12 @@ export const LinksGen = ({
                                             data-tracking={tracking}
                                             data-event-name={trackingEvent}
                                         >
-                                            <StyledLinkItem textColor={textColor} fontFamily={fontFamily} fontSize={fontSize} fontWeight={fontWeight}>
+                                            <StyledLinkItem textColor={textColor} fontFamily={fontFamily} fontSize={fontSize} fontWeight={fontWeight} primaryColor={primaryColor}>
                                                 {link.value}
                                             </StyledLinkItem>
                                         </Link>
                                     )
                                 }
-
-                                {showDots && index < links.length - 1 && (
-                                    <span className="mx-2 text-muted-foreground" aria-hidden="true">
-                                        &bull;
-                                    </span>
-                                )}
                             </span>
                         )
                     })}
@@ -184,7 +180,6 @@ export const Links = ({
     tracking,
     fontSize,
     fontWeight,
-    showDots,
     ...props
 }) => {
     const {
@@ -206,6 +201,9 @@ export const Links = ({
     const secondaryTextColor = useAppSelector(
       (state) => state.theme?.text?.secondaryColor
     )
+    const primaryColor = useAppSelector(
+        (state) => state.theme?.text?.primaryColor
+      )
     useEffect(() => {
       setProp((props) => (props.fontFamily = secondaryFont), 200)
     }, [secondaryFont])
@@ -271,12 +269,9 @@ export const Links = ({
                                     fontFamily={fontFamily}
                                     fontSize={fontSize}
                                     fontWeight={fontWeight}
+                                    viewOnly={false}
+                                    primaryColor={primaryColor}
                                 />
-                                {showDots && index < links.length - 1 && (
-                                    <span className="mx-2 text-muted-foreground" aria-hidden="true">
-                                        &bull;
-                                    </span>
-                                )}
                             </span>
                         )
                     })}
@@ -293,6 +288,8 @@ const LinksItem = ({
     className,
     textColor,
     fontSize,
+    viewOnly,
+    primaryColor,
     fontWeight
 }) => {
     const [linkValue, setLinkValue] = useState(link.value)
@@ -303,7 +300,7 @@ const LinksItem = ({
 
     return (
         <>
-            <StyledLinkItem fontFamily={fontFamily} className={className} textColor={textColor} fontSize={fontSize} fontWeight={fontWeight} >
+            <StyledLinkItem fontFamily={fontFamily} className={className} textColor={textColor} fontSize={fontSize} fontWeight={fontWeight} viewOnly={viewOnly} primaryColor={primaryColor}>
                 {/** @ts-ignore */}
                 {/** @ts-ignore */}
                 <ContentEditable
@@ -325,6 +322,8 @@ type StyledLinkItemProps = {
     textColor: string
     fontSize: string
     fontWeight: string
+    viewOnly?: boolean
+    primaryColor: string
 }
 
 
@@ -407,15 +406,15 @@ const StylesLinksContainer = styled.div<StylesLinksContainerProps>`
 
 const StyledLinkItem = styled.div<StyledLinkItemProps>`
     color: ${({ textColor }) => textColor};
-    cursor: pointer;
+    cursor: ${({ viewOnly }) => viewOnly ? "default" : "pointer"};
     font-weight: ${({ fontWeight }) => fontWeight};
     font-size: ${({ fontSize }) => fontSize}px;
     font-family: var(${({ fontFamily }) => fontFamily});
     text-decoration: none;
     transition: color 0.3s ease;
-
+    margin-right: 1rem;
     &:hover {
-        color: var(--color-primary-foreground);
+        color:${({ primaryColor }) => primaryColor};
         text-decoration: underline;
     }
     
@@ -427,7 +426,6 @@ const StyledLinkItem = styled.div<StyledLinkItemProps>`
 
 const LinksDefaultProps = {
     fontFamily: "inherit",
-    showDots: true,
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",

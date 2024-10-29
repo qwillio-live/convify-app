@@ -57,7 +57,6 @@ export const LinksSettings = () => {
             size,
             containerBackground,
             marginLeft,
-            showDots,
             marginTop,
             marginRight,
             marginBottom,
@@ -120,17 +119,6 @@ export const LinksSettings = () => {
             <AccordionItem value="content">
                 <AccordionTrigger>{t("Content")}</AccordionTrigger>
                 <AccordionContent className="space-y-4 pt-2">
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
-                            checked={showDots}
-                            onCheckedChange={(e) => {
-                                handlePropChange("showDots", e)
-                            }}
-                            id="showDots"
-                        />
-                        <Label htmlFor="showDots">{t("Show dots")}</Label>
-                    </div>
-
                     <Reorder.Group
                         axis="y"
                         values={links}
@@ -346,7 +334,7 @@ export const LinksSettings = () => {
                         >
                             {/** @ts-ignore */}
                             {/** @ts-ignore */}
-                            <LinksGen {...defaultPresets} />
+                            <LinksGen {...defaultPresets} viewOnly />
                         </Card>
                         <Card
                             onClick={() => {
@@ -363,7 +351,7 @@ export const LinksSettings = () => {
                         >
                             {/** @ts-ignore */}
                             {/** @ts-ignore */}
-                            <LinksGen {...boldPreset} />
+                            <LinksGen {...boldPreset} viewOnly/>
                         </Card>
                     </div>
                 </AccordionContent>

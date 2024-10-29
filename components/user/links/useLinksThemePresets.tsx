@@ -40,7 +40,6 @@ export const useLinksThemePresets = () => {
 
   const defaultPresets = {
     fontFamily: theme?.text?.secondaryFont,
-    showDots: true,
     containerBackground: "transparent",
     paddingLeft: "16",
     paddingTop: "20",
