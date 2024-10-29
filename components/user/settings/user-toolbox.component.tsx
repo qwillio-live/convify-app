@@ -1667,7 +1667,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Links")}
-                        icon={<Link2 className="size-4" />}
+                        icon={<Icons.Links/>}
                       >
                         <div className="p-3">
                           {/** @ts-ignore */}

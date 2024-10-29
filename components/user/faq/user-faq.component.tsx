@@ -277,12 +277,14 @@ const FAQItem = ({
   const [answerValue, setAnswerValue] = useState(item.answer)
   const [answerHeight, setAnswerHeight] = useState(0)
   const answerRef = useRef<null | HTMLDivElement>(null)
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
 
   useEffect(() => {
     if (answerRef.current) {
       setAnswerHeight(answerRef.current.scrollHeight)
     }
-  }, [answerValue, contentFontFamily])
+  }, [answerValue, contentFontFamily, mobileScreen])
 
   useEffect(() => {
     setQuestionValue(item.question)
