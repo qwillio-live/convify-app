@@ -436,7 +436,8 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
         }
       } else if (size === UserInputSizes.medium) {
         return {
-          width: columnsMobile > 1 ? "calc(100% - 22px)" : "auto",
+          width:
+            columnsMobile > 1 && mobileScreen ? "calc(100% - 22px)" : "auto",
           maxWidth: 800,
         }
       } else if (size === UserInputSizes.large) {
