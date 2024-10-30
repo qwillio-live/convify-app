@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { ArrowDown, ArrowUp } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { orderBy, sortBy } from "lodash"
 
 import { Card } from "@/components/ui/card"
 import {
@@ -214,33 +215,21 @@ const ResponseFlowComponents = () => {
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true)
-      function sortContentByOrder(arr: any[]) {
-        return arr.map((item: any) => {
-          //@ts-ignore
-          const sortedContent = Object.entries(item.content)
-            .sort(
-              ([, a]: [string, any], [, b]: [string, any]) =>
-                (a.order || 0) - (b.order || 0)
-            )
-            .reduce((acc, [key, value]) => {
-              acc[key] = value
-              return acc
-            }, {})
 
-          return { ...item, content: sortedContent }
-        })
-      }
       try {
         const response = await fetch(`/api/flows/${flowId}/responses/`)
         let dataRes = await response.json()
         console.log("response", dataRes)
         localStorage.setItem("responses", JSON.stringify(dataRes))
         localStorage.setItem("flowId", JSON.stringify(flowId))
-
-        const sortedData = sortContentByOrder(dataRes)
-
-        console.log("updated dataRe", sortedData)
-        setResponses(sortedData)
+        dataRes.forEach((item) => {
+          console.log("each item", item)
+          const sortedContent = sortBy(item.content, "order")
+          console.log("sortedContent", sortedContent)
+          item.content = sortedContent
+        })
+        console.log("sortby", dataRes)
+        setResponses(dataRes)
       } finally {
         setLoading(false)
       }
@@ -385,8 +374,8 @@ const ResponseFlowComponents = () => {
                           ? row[label]
                               ?.map((rowItem) => rowItem?.value)
                               .join(", ")
-                          : row[label]?.value + "bb"
-                          ? row[label].value + "bb"
+                          : row[label]?.value
+                          ? row[label].value
                           : ""
                         : ""}
                     </TableCell>

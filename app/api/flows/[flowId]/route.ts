@@ -143,11 +143,15 @@ export async function PUT(
       // // Mark missing steps as isDeleted: true
       for (const step of existingSteps) {
         if (!newStepIds.has(step.id)) {
-          await prisma.FlowStep.delete({
-            where: {
-              id: step.id,
-            },
-          })
+          try {
+            await prisma.FlowStep.delete({
+              where: {
+                id: step.id,
+              },
+            })
+          } catch (err) {
+            console.log("step not found")
+          }
         }
       }
       let order = 0

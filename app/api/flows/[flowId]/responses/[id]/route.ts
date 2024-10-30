@@ -86,8 +86,8 @@ export async function PUT(
 
     // Merge the old content with the new data
     const updatedContent = {
-      ...data.content, // Assuming data.content holds the new fields to be merged
       ...oldContent,
+      ...data.content, // Assuming data.content holds the new fields to be merged
     }
     console.log(
       "old content: ",

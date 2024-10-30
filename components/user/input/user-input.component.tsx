@@ -274,7 +274,7 @@ export const UserInputGen = ({ ...props }) => {
           {!props.floatingLabel && (
             <>
               <div
-                className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative mb-1  transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                 }}
@@ -292,7 +292,7 @@ export const UserInputGen = ({ ...props }) => {
                   focusInput() // Focus the input when placeholder is clicked
                 }
               }}
-              className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
+              className={`absolute line-clamp-1 text-ellipsis  transition-all duration-200 ease-in-out  hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
                 (inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
@@ -411,7 +411,7 @@ export const UserInputGen = ({ ...props }) => {
                         }),
                         dispatch(
                           setPreviewScreenData({
-                            nodeId,
+                            nodeId: props.nodeId,
                             isArray: false,
                             entity: "inputValue",
                             newSelections: [e.target.value],
@@ -431,7 +431,7 @@ export const UserInputGen = ({ ...props }) => {
                       }),
                       dispatch(
                         setPreviewScreenData({
-                          nodeId,
+                          nodeId: props.nodeId,
                           isArray: false,
                           entity: "inputValue",
                           newSelections: [e.target.value],
@@ -661,7 +661,7 @@ const UserInputStyled = React.forwardRef<
 
 UserInputStyled.displayName = "UserInputStyled"
 
-export const UserInput = ({ ...props }) => {
+export const UserInput = ({ textColor, ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
@@ -854,6 +854,7 @@ export const UserInput = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
+                  color: textColor !== "#ffffff" ? textColor : "#505051",
                 }}
               />
             </>
