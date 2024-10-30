@@ -139,21 +139,18 @@ export async function PUT(
         },
       })
       const newStepIds = new Set(data.steps.map((step) => step.id))
-      // console.log("existig.steps,newStepIds", existingSteps, newStepIds)
-      // Mark missing steps as isDeleted: true
+      // // console.log("existig.steps,newStepIds", existingSteps, newStepIds)
+      // // Mark missing steps as isDeleted: true
       for (const step of existingSteps) {
         if (!newStepIds.has(step.id)) {
-          await prisma.FlowStep.update({
+          await prisma.FlowStep.delete({
             where: {
               id: step.id,
-            },
-            data: {
-              isDeleted: true,
             },
           })
         }
       }
-
+      let order = 0
       // Upsert steps (Insert ignore on duplicate key update)
       for (const step of data.steps) {
         const existingStep = await prisma.FlowStep.findUnique({
@@ -173,7 +170,7 @@ export async function PUT(
             data: {
               link: step.link,
               content: step.content,
-              order: step.order,
+              order: order,
               name: step.name || "",
               templateId: step.templateId || "",
               updatedAt: new Date(),
@@ -187,13 +184,14 @@ export async function PUT(
               flowId: String(flowId),
               link: step.link,
               content: step.content,
-              order: step.order,
+              order: order,
               templateId: step.templateId || "",
               isDeleted: false,
               updatedAt: new Date(),
             },
           })
         }
+        order += 1
       }
 
       // Update numberOfSteps in Flows table
