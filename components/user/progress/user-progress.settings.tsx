@@ -187,7 +187,7 @@ export const ProgressBarSettings = () => {
 
   return (
     <>
-      {!isHeaderFooterMode ? (
+      {isHeaderFooterMode ? (
         <UiCard className={cn("mt-6 flex gap-2 rounded-lg border p-3 pr-4")}>
           <div className="flex flex-row items-start gap-1 text-left">
             <InfoIcon className="size-4 shrink-0" />
