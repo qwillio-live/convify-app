@@ -1,37 +1,11 @@
-import React, { useCallback, useEffect } from "react"
-import {
-  Activity,
-  Anchor,
-  Aperture,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  Mountain,
-  MoveHorizontal,
-  AlignHorizontalJustifyStart,
-  AlignHorizontalJustifyEnd,
-  AlignHorizontalJustifyCenter,
-  AlignHorizontalSpaceBetween,
-  CornerRightDown,
-  Minus,
-  RectangleHorizontal,
-  GripHorizontal,
-  Ellipsis,
-} from "lucide-react"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/custom-tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
+import { Ellipsis, InfoIcon, Minus, MoveHorizontal } from "lucide-react"
 import { useTranslations } from "next-intl"
+import React, { useCallback, useEffect } from "react"
 
-import { throttle, debounce } from "lodash"
-import ContentEditable from "react-contenteditable"
-import styled from "styled-components"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { debounce, throttle } from "lodash"
 
-import { useNode } from "@/lib/craftjs"
+import { Slider } from "@/components/custom-slider"
 import {
   Accordion,
   AccordionContent,
@@ -39,34 +13,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card as UiCard } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/custom-select"
-import { Slider } from "@/components/custom-slider"
+import { useNode } from "@/lib/craftjs"
 
-import { Controller } from "../settings/controller.component"
-import {
-  ProgressBarDefaultProps,
-  ProgressBarGen,
-} from "./user-progress.component"
-import useButtonThemePresets from "../icon-button/useButtonThemePresets"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
 import {
   useScreenNames,
   useScreensLength,
 } from "@/lib/state/flows-state/features/screenHooks"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import Image from "next/image"
+import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 
 import dash_icon from "@/assets/images/dash_icon_new.svg"
 import dash_icon_selected from "@/assets/images/dash_icon_selected.svg"
@@ -229,18 +187,11 @@ export const ProgressBarSettings = () => {
 
   return (
     <>
-      {isHeaderFooterMode ? (
-        <UiCard
-          className={cn(
-            "flex flex-col items-center justify-center border border-gray-500 px-4 py-3"
-          )}
-        >
+      {!isHeaderFooterMode ? (
+        <UiCard className={cn("mt-6 flex gap-2 rounded-lg border p-3 pr-4")}>
           <div className="flex flex-row items-start gap-1 text-left">
-            <div>
-              <p className="text-sm font-light">
-                {t("Progress_bar_description")}
-              </p>
-            </div>
+            <InfoIcon className="size-4 shrink-0" />
+            <p className="text-xs">{t("Progress_bar_description")}</p>
           </div>
         </UiCard>
       ) : (

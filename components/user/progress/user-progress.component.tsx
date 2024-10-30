@@ -191,7 +191,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
       }
     } else {
       return {
-        width: "calc(100% - 22px)",
+        // width: "calc(100% - 22px)",
+        width: "100%",
       }
     }
   }};
@@ -683,6 +684,24 @@ export const ProgressBar = ({
     return icons
   }
 
+  const renderProgressBar = () => {
+    const progressBars: React.ReactElement[] = []
+    for (let i = 0; i < maxValue; i++) {
+      progressBars.push(
+        <Progress
+          value={i < progressvalue ? 100 : 0}
+          // style={{ maxWidth: `${maxWidth}px` }}
+          className={`h-1 ${fullWidth ? "w-full" : ""} ${
+            size === "full" ? "" : "rounded-full"
+          }`}
+          indicatorColor={primaryColor || color}
+        />
+      )
+    }
+
+    return progressBars
+  }
+
   useEffect(() => {
     if (progressvalue !== 1 && maxValue !== 5) {
       debouncedSetProp("maxValue", screensLength)
@@ -762,7 +781,7 @@ export const ProgressBar = ({
           justifyContent={justifyContent}
           marginLeft={marginLeft}
           width={width}
-          size={progressStyle === "minus" ? size : "auto"}
+          size={progressStyle !== "grip" ? size : "auto"}
           buttonSize={buttonSize}
           height={height}
           marginRight={marginRight}
@@ -773,7 +792,7 @@ export const ProgressBar = ({
           paddingRight={paddingRight}
           paddingBottom={paddingBottom}
           alignItems={alignItems}
-          gap={gap}
+          gap={progressStyle === "rectangle" ? "16" : gap}
           mobileScreen={!!mobileScreen}
           {...props}
           className="progress-comp text-[1rem]"
@@ -791,6 +810,8 @@ export const ProgressBar = ({
               }`}
               indicatorColor={primaryColor || color}
             />
+          ) : progressStyle === "rectangle" ? (
+            <>{renderProgressBar()}</>
           ) : (
             <div className="" style={{ display: "flex", alignItems: "center" }}>
               {renderIcons()}
