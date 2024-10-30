@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from "react"
 import { DefaultImagePlaceholder } from "@/constant"
 import axios from "axios"
 
-
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { cn } from "@/lib/utils"
 import {
@@ -332,8 +331,8 @@ export const ImageSettings = () => {
             .toDataURL()),
         1000
       )
-      setProp((props) => (props.width = "100%"), 1000)
-      setProp((props) => (props.height = "auto"), 1000)
+      // setProp((props) => (props.width = "100%"), 1000)
+      // setProp((props) => (props.height = "auto"), 1000)
       setShowDialog(false)
       setActiveAspectRatioBtn("source")
       setProp(
@@ -344,11 +343,12 @@ export const ImageSettings = () => {
         1000
       )
       const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
-      const imageData = croppedCanvas.toDataURL("image/jpeg")
-      const blob = base64ToBlob(imageData, "image/jpeg")
-      const file = new File([blob], "cropped-image.jpg", { type: "image/jpeg" })
+      const imageData = croppedCanvas.toDataURL("image/png")
+      const blob = base64ToBlob(imageData, "image/png")
+      const file = new File([blob], "cropped-image.png", { type: "image/png" })
       const aspectRatio = croppedCanvas.width / croppedCanvas.height
       const uploadedImage = await uploadToS3(file, aspectRatio)
+      console.log("uploadedImage", uploadedImage)
       if (
         uploadedImage &&
         uploadedImage.data.data.images[uploadedImage.desktopSize]
@@ -455,7 +455,7 @@ export const ImageSettings = () => {
         }}
         type="multiple"
         defaultValue={["content"]}
-        className="w-full mb-10"
+        className="mb-10 w-full"
       >
         <AccordionItem value="item-2">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
@@ -494,7 +494,7 @@ export const ImageSettings = () => {
             {enableLink && (
               <>
                 <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {t("Add URL")}
                   </p>
                   <Input
@@ -508,7 +508,7 @@ export const ImageSettings = () => {
                   />
                 </div>
                 <div className="style-control col-span-2 flex flex-col">
-                  <p className="text-md flex-1 text-muted-foreground">
+                  <p className="text-md text-muted-foreground flex-1">
                     {t("Open in")}
                   </p>
                   <Select
