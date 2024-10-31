@@ -478,7 +478,16 @@ export function CreateFlowComponent({ flowId }) {
             onScroll={handleScroll}
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
-            <div className="section-body w-full">
+            <div
+              className={`section-body ${
+                (JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0 &&
+                  headerMode) ||
+                (!headerMode &&
+                  JSON.parse(screensHeader)?.ROOT?.nodes?.length === 0)
+                  ? "mt-8"
+                  : "mt-0"
+              } w-full`}
+            >
               <div
                 style={{
                   backgroundColor: backgroundColor,
@@ -488,7 +497,7 @@ export function CreateFlowComponent({ flowId }) {
                   backgroundPosition: "center",
                 }}
                 className={cn(
-                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-52px+99vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
+                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-64px+99vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                   footerMode ? "flex items-end justify-center" : "",
                   view == VIEWS.DESKTOP
                     ? "shahid w-full border-0"
@@ -525,36 +534,17 @@ export function CreateFlowComponent({ flowId }) {
                 {headerMode || footerMode ? (
                   <>
                     <div
-                      id="editor-container"
+                      id="editor-content"
                       style={{
-                        position: "relative", // Ensure the container can hold absolute positioned elements
+                        paddingTop: !headerMode ? `30px` : "0px",
+                        backgroundColor: headerMode
+                          ? avatarBackgroundColor
+                          : "",
                       }}
                     >
-                      {/* Separate paddingTop div with color #f6f6f6 */}
-                      <div
-                        style={{
-                          height: "40px",
-                          backgroundColor: "#f6f6f6",
-                          display:
-                            !headerMode && headerPosition === "absolute"
-                              ? "none"
-                              : "block", // Show or hide based on the opposite condition
-                        }}
-                      />
-
-                      <div
-                        id="editor-content"
-                        style={{
-                          paddingTop: !headerMode ? `30px` : "0px",
-                          backgroundColor: headerMode
-                            ? avatarBackgroundColor
-                            : "",
-                        }}
-                      >
-                        <Frame
-                          data={updateMinHeightAndClassName(editorLoad)}
-                        ></Frame>
-                      </div>
+                      <Frame
+                        data={updateMinHeightAndClassName(editorLoad)}
+                      ></Frame>
                     </div>
                   </>
                 ) : (
@@ -566,7 +556,7 @@ export function CreateFlowComponent({ flowId }) {
                           !headerMode &&
                           headerPosition === "absolute" &&
                           JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
-                            ? `${height + 12}px`
+                            ? `${height}px`
                             : "0px",
                         backgroundColor: headerMode
                           ? avatarBackgroundColor

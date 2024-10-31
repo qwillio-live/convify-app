@@ -6,7 +6,7 @@
       "padding": 5,
       "background": "transparent",
       "expanded": "true",
-      "className": "min-h-[65vh] min-w-full flex flex-col items-center py-8 new-screens"
+      "className": "min-h-[65vh] min-w-full flex flex-col items-center new-screens"
     },
     "displayName": "New Screen",
     "custom": {},

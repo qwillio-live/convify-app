@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
                 padding: 5,
                 expanded: "true",
                 className:
-                  "min-h-[65vh] min-w-full flex flex-col items-center py-8 new-screens",
+                  "min-h-[65vh] min-w-full flex flex-col items-center new-screens",
                 background: "transparent",
               },
               custom: {},

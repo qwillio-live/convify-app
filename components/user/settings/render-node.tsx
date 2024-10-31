@@ -116,7 +116,7 @@ const NewStyledNodeDiv = ({
   return (
     <div
       className={cn(
-        "relative z-10 hover:border-dotted hover:border-transparent",
+        "relative z-50 hover:border-dotted hover:border-transparent",
         fullWidth ? "w-full" : "w-auto",
         name === "ProgressBar" ? "p-px" : "p-0",
         borderWidth,
