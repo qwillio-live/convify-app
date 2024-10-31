@@ -54,6 +54,7 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { Input } from "@/components/input-custom"
 import { Card as UiCard } from "@/components/ui/card"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 const ScreensList = ({ flowId }) => {
   const t = useTranslations("Components")
@@ -212,6 +213,7 @@ const ScreensList = ({ flowId }) => {
   const handleHeaderScreenClick = async () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true))
+
     await actions.deserialize(screensHeader)
   }
 
@@ -242,7 +244,35 @@ const ScreensList = ({ flowId }) => {
       }
     }
   }, [])
+  const revertMinHeightAndClassName = (data) => {
+    console.log("reverting editorload in screensss", data)
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      console.log("erring", e)
+      data = data
+    }
+    console.log("pop", data)
+    if (data.ROOT && data.ROOT.props) {
+      // Check if the style object exists; if not, create it
+      if (!data.ROOT.props.style) {
+        data.ROOT.props.style = {} // Create the style object
+      }
+      data.ROOT.props.style.minHeight = "none" // Update to 80vh
+      data.ROOT.props.style.height = "auto" // Update to 80vh
 
+      // Check for className and remove any class starting with "min-h-"
+      if (data.ROOT.props.className) {
+        data.ROOT.props.className = data.ROOT.props.className
+          .split(" ") // Split into an array of class names
+          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
+          .join(" ") // Join back into a string
+      }
+      console.log(" reverted editorLoad", data)
+      data.ROOT.props.className += ` !py-0` // Append the new class
+      return JSON.stringify(data)
+    }
+  }
   return (
     <Accordion
       type="multiple"
@@ -383,7 +413,10 @@ const ScreensList = ({ flowId }) => {
       <AccordionItem value="item-2" className="border-b-0 border-t">
         <AccordionTrigger
           className=" hover:no-underline"
-          onClick={() => dispatch(setHeaderFooterMode(false))}
+          onClick={() => {
+            dispatch(setHeaderFooterMode(false))
+            dispatch(setMobileScreen(false))
+          }}
         >
           {t("Screens")}
         </AccordionTrigger>
@@ -484,13 +517,13 @@ const ScreensList = ({ flowId }) => {
                           </div>
                           <div style={{ paddingTop: "50px" }}>
                             <ResolvedComponentsFromCraftState
-                              screen={
+                              screen={revertMinHeightAndClassName(
                                 screen.screenData ? screen.screenData : {}
-                              }
+                              )}
                             />
                           </div>
                           <ResolvedComponentsFromCraftState
-                            screen={screensFooter}
+                            screen={revertMinHeightAndClassName(screensFooter)}
                           />
                         </div>
                       </Card>
@@ -538,11 +571,11 @@ const ScreensList = ({ flowId }) => {
                           }}
                         >
                           <ResolvedComponentsFromCraftState
-                            screen={screensHeader}
+                            screen={revertMinHeightAndClassName(screensHeader)}
                           />
                         </div>
 
-                        <div style={{ paddingTop: "50px" }}>
+                        <div style={{ paddingTop: "0px" }}>
                           {JSON.parse(screen.screenData)["ROOT"].nodes.length >
                           0 ? (
                             <ResolvedComponentsFromCraftState
@@ -551,9 +584,11 @@ const ScreensList = ({ flowId }) => {
                               }
                             />
                           ) : (
-                            <div style={{ paddingTop: "15%" }}>
+                            <div style={{ paddingTop: "24rem" }}>
                               <ResolvedComponentsFromCraftState
-                                screen={screensFooter}
+                                screen={revertMinHeightAndClassName(
+                                  screensFooter
+                                )}
                               />
                             </div>
                           )}

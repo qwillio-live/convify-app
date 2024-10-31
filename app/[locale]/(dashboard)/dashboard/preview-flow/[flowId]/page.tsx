@@ -189,7 +189,34 @@ export default async function PreviewFlows({
   }
 
   console.log("anjit", data?.flowSettings?.header)
+  const revertMinHeightAndClassName = (data) => {
+    console.log("reverting editorload", data)
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      console.log("erring", e)
+      data = data
+    }
+    console.log("pop", data)
+    if (data.ROOT && data.ROOT.props) {
+      // Check if the style object exists; if not, create it
+      if (!data.ROOT.props.style) {
+        data.ROOT.props.style = {} // Create the style object
+      }
+      data.ROOT.props.style.minHeight = "none" // Update to 80vh
+      data.ROOT.props.style.height = "auto" // Update to 80vh
 
+      // Check for className and remove any class starting with "min-h-"
+      if (data.ROOT.props.className) {
+        data.ROOT.props.className = data.ROOT.props.className
+          .split(" ") // Split into an array of class names
+          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
+          .join(" ") // Join back into a string
+      }
+      console.log(" reverted editorLoad", data)
+      return data
+    }
+  }
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -205,7 +232,7 @@ export default async function PreviewFlows({
           }}
         >
           {data?.headerData &&
-            resolveComponents(JSON.parse(data?.headerData || {}))}
+            resolveComponents(revertMinHeightAndClassName(data?.headerData))}
         </div>
 
         <div
@@ -235,7 +262,9 @@ export default async function PreviewFlows({
               backgroundColor: data?.flowSettings?.general?.backgroundColor,
             }}
           >
-            {resolveComponents(JSON.parse(data?.footerData || {}))}
+            {resolveComponents(
+              revertMinHeightAndClassName(data?.footerData || {})
+            )}
           </div>
         )}
       </div>

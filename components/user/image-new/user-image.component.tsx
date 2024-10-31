@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { DefaultImagePlaceholder } from "@/constant"
 import { debounce, throttle } from "lodash"
@@ -159,7 +159,7 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
           )}
         >
           {
@@ -212,12 +212,16 @@ export const UserLogo = ({
   ...props
 }) => {
   console.log("max width in the image is: ", maxWidth, width)
+  const [imgg, setImg] = useState("")
+  useEffect(() => {
+    setImg(src)
+  }, [src])
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         alt={alt}
-        src={src}
+        src={imgg}
         width={parseFloat(width) ?? 346}
         height={parseFloat(height) || 212}
         style={{
@@ -496,7 +500,7 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
           )}
         >
           {
