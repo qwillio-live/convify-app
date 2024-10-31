@@ -35,6 +35,7 @@ export function ColorInput({
         <Input
           type="color"
           onChange={handleChange}
+          value={value}
           className="h-8.5 opacity-0"
           {...rest}
         />

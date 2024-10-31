@@ -156,6 +156,7 @@ export const Links = ({
     size,
     label,
     required,
+    fullWidth=true,
     fieldName,
     labelColor,
     containerBackground,
@@ -213,7 +214,7 @@ export const Links = ({
     return (
         <div
             ref={(ref: any) => connect(drag(ref))}
-            className=""
+            className="w-full"
             style={{
                 width: "100%",
                 display: "flex",
@@ -412,7 +413,8 @@ const StyledLinkItem = styled.div<StyledLinkItemProps>`
     font-family: var(${({ fontFamily }) => fontFamily});
     text-decoration: none;
     transition: color 0.3s ease;
-    margin-right: 1rem;
+    margin-right: 5px;
+    margin-left: 5px;
     &:hover {
         color:${({ primaryColor }) => primaryColor};
         text-decoration: underline;

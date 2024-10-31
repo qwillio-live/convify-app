@@ -53,7 +53,7 @@ export const useLinksThemePresets = () => {
     settingTabs: ["content"],
     size: LinksSizes.medium,
     textColor: theme?.text?.secondaryColor || "#5a5a5a",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 400,
     links: links,
     preset: LinksPreset.default,
@@ -62,7 +62,7 @@ export const useLinksThemePresets = () => {
 
   const boldPreset = {
     ...defaultPresets,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 500,
     preset: LinksPreset.bold,
     textColor: "#23262C"
