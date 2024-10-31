@@ -159,7 +159,7 @@ export const PictureChoiceGen = ({
   )
   return (
     <div
-      className="relative w-full m-choice"
+      className="m-choice relative w-full"
       style={{
         pointerEvents: disabled ? "none" : "auto",
         width: "100%",
@@ -196,6 +196,7 @@ export const PictureChoiceGen = ({
         >
           {choices?.map((choice, index) => (
             <PictureChoiceItem
+              preset={preset}
               buttonAction={choice.buttonAction}
               key={index}
               isFirst={index === 0}
@@ -501,31 +502,31 @@ export const PictureChoice = ({
                 handlePropChangeDebounced("label", e.target.value)
               }}
               // onSelectChange={() => {
-                // if (multiSelect) {
-                //   setProp((props) => {
-                //     if (props.selections.includes(choice.id)) {
-                //       props.selections = props.selections.filter(
-                //         (selectionId) => selectionId !== choice.id
-                //       )
-                //     } else {
-                //       props.selections.push(choice.id)
-                //     }
-                //     return props
-                //   }, 200)
-                // } else {
-                //   setProp((props) => {
-                //     props.selections = selections.includes(choice.id)
-                //       ? []
-                //       : [choice.id]
-                //     return props
-                //   }, 200)
-                // }
+              // if (multiSelect) {
+              //   setProp((props) => {
+              //     if (props.selections.includes(choice.id)) {
+              //       props.selections = props.selections.filter(
+              //         (selectionId) => selectionId !== choice.id
+              //       )
+              //     } else {
+              //       props.selections.push(choice.id)
+              //     }
+              //     return props
+              //   }, 200)
+              // } else {
+              //   setProp((props) => {
+              //     props.selections = selections.includes(choice.id)
+              //       ? []
+              //       : [choice.id]
+              //     return props
+              //   }, 200)
+              // }
               // }}
             />
           </div>
           <ul
             className={cn(
-              "flex w-full justify-center gap-[10px]  flex-wrap",
+              "flex w-full flex-wrap justify-center  gap-[10px]",
               {}
             )}
             style={{
@@ -534,6 +535,7 @@ export const PictureChoice = ({
           >
             {choices.map((choice, index) => (
               <PictureChoiceItem
+                preset={preset}
                 buttonAction={choice.buttonAction}
                 isRequired={false}
                 key={index}
@@ -610,6 +612,7 @@ const PictureChoiceItem = ({
   isRequired,
   buttonAction,
   selections,
+  preset,
 }) => {
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
@@ -781,7 +784,7 @@ const PictureChoiceItem = ({
   }
   return (
     <li
-      className={cn(`picture-item flex max-w-[193px] grow-1 justify-center`)}
+      className={cn(`picture-item grow-1 flex max-w-[193px] justify-center`)}
       style={{
         flexBasis: `calc(${getFlexBasis(choicesLength)}% - 10px)`,
       }}
@@ -797,6 +800,7 @@ const PictureChoiceItem = ({
         defaultStyles={isSelected ? selectedStyles : defaultStyles}
         hoverStyles={isSelected ? selectedStyles : hoverStyles}
         onClick={isEditing ? null : onSelectChange}
+        preset={preset}
         // className={`${
         //   alarm && isRequired && selections?.length === 0 && "shake"
         // }`}
@@ -901,6 +905,7 @@ const PictureChoiceItem = ({
 type StyledPictureChoiceItemProps = {
   isSelected: boolean
   pictureType: PictureTypes
+  preset: string
   defaultStyles: {
     checkBoxIconColor: string
     checkboxBorderColor: string
@@ -938,16 +943,32 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   position: relative;
   border-radius: 15px;
   transition: transform 0.1s ease-in-out;
-  transform: translateY(${({ isSelected }) => (isSelected ? -2 : 0)}px);
+  transform: translateY(
+    ${({ isSelected, preset }) =>
+      isSelected ? (preset === PictureChoicePresets.prefilled ? -4 : -2) : 0}px
+  );
+  box-shadow: ${({ isSelected, preset }) =>
+    isSelected
+      ? preset === PictureChoicePresets.prefilled
+        ? "0 10px 5px rgba(0, 0, 0, 0.1), -2px 0 3px rgba(0, 0, 0, 0.1), 2px 0 3px rgba(0, 0, 0, 0.1)"
+        : "none"
+      : "none"};
+
   border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor};
   color: ${({ defaultStyles }) => defaultStyles.textColor};
   background-color: ${({ defaultStyles }) => defaultStyles.backgroundColor};
-
   &:hover {
-    transform: translateY(-2px);
+    transform: ${({ preset }) =>
+      preset === PictureChoicePresets.prefilled
+        ? "translateY(-4px)"
+        : "translateY(-2px)"};
     border-color: ${({ hoverStyles }) => hoverStyles.borderColor};
     color: ${({ hoverStyles }) => hoverStyles.textColor};
     background-color: ${({ hoverStyles }) => hoverStyles.backgroundColor};
+    box-shadow: ${({ preset }) =>
+      preset === PictureChoicePresets.prefilled
+        ? "0 10px 5px rgba(0, 0, 0, 0.1), -2px 0 3px rgba(0, 0, 0, 0.1), 2px 0 3px rgba(0, 0, 0, 0.1)" // Bottom shadow with smaller left/right shadows
+        : "none"};
   }
 
   //For Checkbox
@@ -1053,6 +1074,7 @@ export enum PictureChoicePresets {
   filled = "filled",
   semifilled = "semifilled",
   outlined = "outlined",
+  prefilled = "prefilled",
 }
 
 export type PictureChoiceProps = {

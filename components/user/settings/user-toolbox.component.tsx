@@ -328,6 +328,8 @@ export const UserToolbox = () => {
     outlinedPreset: pictureChoiceOutlinedPreset,
     defaultChoices: pictureChoiceDefaultChoices,
     defaultSelections: pictureChoiceDefaultSelections,
+    filledPreset: pictureChoiceFilledSelections,
+    preFilledPresent: pictureChoicePreFilledSelections,
   } = usePictureChoiceThemePresets()
 
   const { defaultPreset: stepsDefaultPreset } = useStepsThemePresets()
@@ -739,7 +741,7 @@ export const UserToolbox = () => {
                         ref,
                         <PictureChoice
                           labelColor={"#ffffff"}
-                          {...pictureChoiceOutlinedPreset}
+                          {...pictureChoicePreFilledSelections}
                         />
                       )
                     }
@@ -751,7 +753,7 @@ export const UserToolbox = () => {
                     >
                       <PictureChoiceGen
                         {...{
-                          ...pictureChoiceOutlinedPreset,
+                          ...pictureChoicePreFilledSelections,
                           labelColor: "#ffffff",
                           disabled: true,
                           marginTop: 8,
