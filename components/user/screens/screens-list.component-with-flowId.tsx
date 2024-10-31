@@ -304,7 +304,7 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": headerMode,
-                  "hover:border-4": !headerMode,
+                  "hover:border-2": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -339,6 +339,8 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": headerMode,
+
+                  "hover:border-2": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -366,7 +368,7 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": footerMode,
-                  "hover:border-4": !footerMode,
+                  "hover:border-2": !footerMode,
                 }
               )}
               onClick={() => handleFooterScreenClick()}
@@ -398,7 +400,7 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": footerMode,
-                  "hover:border-4": !footerMode,
+                  "hover:border-2": !footerMode,
                 }
               )}
             >
@@ -484,12 +486,12 @@ const ScreensList = ({ flowId }) => {
                           backgroundPosition: "center",
                         }}
                         className={cn(
-                          "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:hidden md:h-32 md:w-[13.5vw]",
+                          "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer hover:border-2 md:hidden md:h-32 md:w-[13.5vw]",
+
                           {
-                            "border-[#2B3398]":
+                            "!border-[#2B3398] p-0 hover:border-0":
                               selectedScreenIndex === index &&
                               !headerFooterMode,
-                            "hover:border-4": selectedScreenIndex !== index,
                           }
                         )}
                       >
@@ -538,11 +540,11 @@ const ScreensList = ({ flowId }) => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "relative mt-1 hidden h-32 w-[94vw] flex-col overflow-hidden  border p-[3px] hover:cursor-pointer hover:p-0 md:flex md:w-[13.5vw]",
+                        "relative mt-1  hidden h-32 w-[94vw] flex-col overflow-hidden border p-[1px] hover:cursor-pointer hover:border-2 hover:p-0 md:flex md:w-[13.5vw]",
+
                         {
-                          "border-blue-500 p-0":
+                          "!border-[#2B3398] p-0 hover:border-0":
                             selectedScreenIndex === index && !headerFooterMode,
-                          "hover:border-4": selectedScreenIndex !== index,
                         }
                       )}
                       onClick={() => {
