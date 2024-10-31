@@ -205,7 +205,7 @@ export const FAQSettings = () => {
                             </Tabs>
                         </div>
                         <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Question Color")}</Label>
+                            <Label htmlFor="questionColor">{t("Question Color")}</Label>
                             <ColorInput
                                 value={titleColor}
                                 handleChange={(e) => {
@@ -218,7 +218,7 @@ export const FAQSettings = () => {
                             />
                         </div>
                         <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Answer Color")}</Label>
+                            <Label htmlFor="answerColor">{t("Answer Color")}</Label>
                             <ColorInput
                                 value={contentColor}
                                 handleChange={(e) => {
@@ -232,7 +232,7 @@ export const FAQSettings = () => {
                         </div>
 
                         {selectedPreset === PRESETNAMES.blockedPreset && <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Block Color")}</Label>
+                            <Label htmlFor="blockColor">{t("Block Color")}</Label>
                             <ColorInput
                                 value={blockColor}
                                 handleChange={(e) => {
@@ -384,6 +384,14 @@ export const FAQSettings = () => {
                                 <FAQGen
                                     {...defaultPreset}
                                     size={'full'}
+                                    answerFontSize={6}
+                                    answerLineHeight={9}
+                                    questionFontSize={8}
+                                    questionLineHeight={11}
+                                    paddingValueBlocked={8}
+                                    paddingValueNonBlocked={6}
+                                    marginTop={8}
+                                    marginBottom={8}
                                 />
                             </Card>
                             <Card
@@ -399,6 +407,15 @@ export const FAQSettings = () => {
                                 <FAQGen
                                     {...blockedPreset}
                                     size={'full'}
+                                    answerFontSize={6}
+                                    answerLineHeight={9}
+                                    questionFontSize={8}
+                                    paddingValueBlocked={8}
+                                    paddingValueNonBlocked={6}
+                                    questionLineHeight={11}
+                                    verticalGap={6}
+                                    marginTop={8}
+                                    marginBottom={8}
                                 />
                             </Card>
                         </div>

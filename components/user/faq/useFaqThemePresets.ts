@@ -41,7 +41,7 @@ const useFaqThemePresets = () => {
         titleFontFamily: theme?.text?.primaryFont || "inherit",
         contentFontFamily: theme?.text?.secondaryFont || "inherit",
         textAlign: "start",
-        verticalGap: 6,
+        verticalGap: 16,
         size: FAQSizes.medium,
         iconColor: theme?.general?.primaryColor || "#3182ce",
         titleColor: theme?.text?.primaryColor || "#000000",
@@ -64,8 +64,8 @@ const useFaqThemePresets = () => {
 
     const blockedPreset = {
       ...preset,
-      blockColor: "#f5f5f5",
-      borderRadius: 4,
+      blockColor: "#EFEDEB",
+      borderRadius: 8,
       borderWidth: 0
     }
 

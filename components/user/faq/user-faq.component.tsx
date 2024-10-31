@@ -36,6 +36,10 @@ export const FAQGen = ({
   titleFontFamily,
   contentFontFamily,
   size,
+  questionFontSize,
+  answerFontSize,
+  questionLineHeight,
+  answerLineHeight,
   textAlign,
   verticalGap,
   titleColor,
@@ -52,6 +56,8 @@ export const FAQGen = ({
   borderWidth,
   iconType,
   items,
+  paddingValueBlocked = 20,
+  paddingValueNonBlocked = 16,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -60,6 +66,8 @@ export const FAQGen = ({
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
+
+  const len = items.length
 
   return (
     <div
@@ -102,8 +110,15 @@ export const FAQGen = ({
             borderRadius={borderRadius}
             borderWidth={borderWidth}
             titleColor={titleColor || primaryTextColor}
+            answerFontSize={answerFontSize}
+            answerLineHeight={answerLineHeight}
+            questionFontSize={questionFontSize}
+            questionLineHeight={questionLineHeight}
             contentColor={contentColor || secondaryTextColor}
+            paddingValueBlocked={paddingValueBlocked}
+            paddingValueNonBlocked={paddingValueNonBlocked}
             item={item}
+            hideBorder={index === (len - 1)}
             disabled={true}
           />
         ))}
@@ -182,6 +197,7 @@ export const FAQ = ({
     [setProp]
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+  const length = items.length
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -239,6 +255,7 @@ export const FAQ = ({
               contentColor={contentColor || secondaryTextColor}
               backgroundColor={blockColor}
               item={item}
+              hideBorder={index === (length - 1)}
               onQuestionChange={(updatedQuestion) => {
                 setProp((prop) => {
                   prop.items[index].question = updatedQuestion
@@ -269,6 +286,13 @@ const FAQItem = ({
   iconType,
   borderWidth,
   disabled = false,
+  hideBorder = false,
+  questionFontSize = 20,
+  answerFontSize = 14,
+  questionLineHeight = 28,
+  answerLineHeight = 21,
+  paddingValueBlocked = 20,
+  paddingValueNonBlocked = 16,
   onQuestionChange = (updatedQuestion: string) => { },
   onAnswerChange = (updatedAnswer: string) => { },
 }) => {
@@ -278,7 +302,7 @@ const FAQItem = ({
   const [answerHeight, setAnswerHeight] = useState(0)
   const answerRef = useRef<null | HTMLDivElement>(null)
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-
+  const paddingValues = borderWidth === 0 ? `${paddingValueBlocked}px` : `${paddingValueNonBlocked}px 0`
 
   useEffect(() => {
     if (answerRef.current) {
@@ -305,8 +329,11 @@ const FAQItem = ({
       backgroundColor={backgroundColor}
       borderRadius={borderRadius}
       borderWidth={borderWidth}
+      hideBorder={hideBorder}
+      paddingValues={paddingValues}
+      className='faq-item'
     >
-      <div className="faq-question" onClick={() => setIsOpen(!isOpen)}>
+      <div className="faq-question" onClick={() => setIsOpen(!isOpen)} style={{ fontSize: questionFontSize, lineHeight: `${questionLineHeight}px` }}>
         <div style={{ width: "90%" }}>
           {/** @ts-ignore */}
           {/** @ts-ignore */}
@@ -331,7 +358,10 @@ const FAQItem = ({
       </div>
       <div
         className={`faq-answer ${isOpen ? 'open' : ''}`}
-        style={{ maxHeight: isOpen ? `${answerHeight}px` : '0px' }}
+        style={{
+          maxHeight: isOpen ? `${answerHeight}px` : '0px',
+          fontSize: answerFontSize, lineHeight: `${answerLineHeight}px`,
+        }}
       >
         <div style={{ width: "90%" }}>
           <div ref={answerRef}>
@@ -377,6 +407,9 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
 
   margin-left: auto;
   margin-right: auto;
+  & > .faq-item:last-child {
+  margin-bottom: 0;
+  }
 
   ${({ size, mobileScreen, isPreviewScreen }) => {
     if (isPreviewScreen) {
@@ -448,44 +481,44 @@ type StyledFAQItemProps = {
   backgroundColor: string,
   borderRadius: number
   borderWidth: number
+  hideBorder?: boolean
+  paddingValues: string
 }
 
 const StyledFAQItem = styled.div<StyledFAQItemProps>`
   width: 100%;
-  border-bottom: ${({ borderWidth }) => borderWidth}px solid #E6E2DD;
+  border-bottom: ${({ borderWidth, hideBorder }) => hideBorder ? '0' : borderWidth}px solid #E6E2DD;
   border-radius:${({ borderRadius }) => borderRadius}px;
   background-color: ${({ backgroundColor }) => backgroundColor};
+  padding: ${({ paddingValues }) => paddingValues};
   
+
   .faq-question {
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    padding: 10px;
     border-radius: 5px;
     
     .question-text {
       font-family: var(${({ titleFontFamily }) => titleFontFamily});
       color: ${({ titleColor }) => titleColor};
       font-weight: 500;
-      font-size: 20px;
       text-align: ${({ textAlign }) => textAlign};
     }
   }
   
   .faq-answer {
     overflow: hidden;
+    margin-top: 0.5rem;
     transition: max-height 0.3s ease-out;
-    
     .answer-text {
       font-family: var(${({ contentFontFamily }) => contentFontFamily});
       color: ${({ contentColor }) => contentColor};
       text-align: ${({ textAlign }) => textAlign};
       word-wrap: break-word;
       overflow-wrap: break-word;
-      font-size: 14px;
       font-weight: 400;
-      padding: 10px;
     }
   }
 `

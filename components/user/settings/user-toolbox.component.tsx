@@ -1635,14 +1635,14 @@ export const UserToolbox = () => {
                         title={t("FAQ")}
                         icon={<CircleHelp className="size-4" />}
                       >
-                        <div className="p-3">
+                        <div>
                           {/** @ts-ignore */}
                           {/** @ts-ignore */}
                           <FAQGen
                             {...faqPresets}
                             marginTop={0}
-                            marginBottom={0}
-                            size={FAQSizes.small}
+                            size={FAQSizes.full}
+                            marginBottom={10}
                           />
                         </div>
                       </HoverCardComponent>
