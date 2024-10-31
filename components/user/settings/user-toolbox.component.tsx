@@ -399,10 +399,18 @@ export const UserToolbox = () => {
                     icon={<HeadingIcon size={12} className="size-4" />}
                     data-cy="toolbox-text"
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
+                    <div className="flex ">
                       <HeadlineTextGen
                         textColor={"#ffffff"}
                         {...h2Preset}
+                        paddingBottom={0}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        paddingTop={0}
+                        marginBottom={0}
+                        marginLeft={0}
+                        marginRight={0}
+                        marginTop={30}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
                       />
@@ -686,7 +694,7 @@ export const UserToolbox = () => {
                       icon={<MousePointer className="size-4" />}
                     >
                       <SelectGen
-                        labelColor={"#ffffff"}
+                        labelColor={"#000000"}
                         className="w-full"
                         {...selectPreset}
                         size="small"
@@ -754,10 +762,10 @@ export const UserToolbox = () => {
                       <PictureChoiceGen
                         {...{
                           ...pictureChoicePreFilledSelections,
-                          labelColor: "#ffffff",
+                          labelColor: "#000000",
                           disabled: true,
                           marginTop: 8,
-                          marginBottom: 8,
+                          marginBottom: 12,
                           marginLeft: 8,
                           marginRight: 8,
                           size: "small",
