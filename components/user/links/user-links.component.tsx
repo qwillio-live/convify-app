@@ -199,18 +199,12 @@ export const Links = ({
     const secondaryFont = useAppSelector(
       (state) => state.theme?.text?.secondaryFont
     )
-    const secondaryTextColor = useAppSelector(
-      (state) => state.theme?.text?.secondaryColor
-    )
     const primaryColor = useAppSelector(
         (state) => state.theme?.text?.primaryColor
       )
     useEffect(() => {
       setProp((props) => (props.fontFamily = secondaryFont), 200)
     }, [secondaryFont])
-    useEffect(() => {
-        setProp((props) => (props.textColor = secondaryTextColor), 200)
-      }, [secondaryTextColor])
     return (
         <div
             ref={(ref: any) => connect(drag(ref))}
@@ -419,11 +413,6 @@ const StyledLinkItem = styled.div<StyledLinkItemProps>`
         color:${({ primaryColor }) => primaryColor};
         text-decoration: underline;
     }
-    
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px var(--color-primary);
-    }
 `
 
 const LinksDefaultProps = {
@@ -440,6 +429,7 @@ const LinksDefaultProps = {
     fullWidth: true,
     width: LinksSizes.medium,
     settingTabs: ["content"],
+    textColor:"#7B7D80",
     links: [
         {
             id: `input-${hexoid(6)()}`,

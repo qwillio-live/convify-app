@@ -52,7 +52,7 @@ export const useLinksThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     size: LinksSizes.medium,
-    textColor: theme?.text?.secondaryColor || "#5a5a5a",
+    textColor:"#7B7D80",
     fontSize: 12,
     fontWeight: 400,
     links: links,
