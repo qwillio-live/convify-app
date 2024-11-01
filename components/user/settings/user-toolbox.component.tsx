@@ -348,10 +348,10 @@ export const UserToolbox = () => {
   } = useListThemePresets()
 
   const { preset: faqPresets } = useFaqThemePresets()
-  const {defaultItems: linksItems, defaultPresets: linksPresets} = useLinksThemePresets()
+  const { defaultItems: linksItems, defaultPresets: linksPresets } = useLinksThemePresets()
 
   const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
-  const {defaultPreset: imageStoryPreset} = useImageStoryThemePresets()
+  const { defaultPreset: imageStoryPreset } = useImageStoryThemePresets()
   const { outlinedPresetChecbox, underlinedPresetChecbox } =
     useInputCheckboxThemePresets()
   const { outlinedPresetMail, underlinedPresetMail } =
@@ -1220,37 +1220,37 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
                   <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
-                      //eslint-disable-next-line
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
 
-                      ref={(ref: any) =>
-                        ref &&
-                        connectors.create(
-                          ref,
-                          /** @ts-ignore */
-                          <Links
-                            {...linksPresets}
-                          />
-                        )
-                      }
-                      data-cy="toolbox-layout-container"
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        /** @ts-ignore */
+                        <Links
+                          {...linksPresets}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
+                  >
+                    <HoverCardComponent
+                      title={t("Links")}
+                      icon={<Icons.Links />}
                     >
-                      <HoverCardComponent
-                        title={t("Links")}
-                        icon={<Icons.Links/>}
-                      >
-                        <div className="p-3">
-                          {/** @ts-ignore */}
-                          {/** @ts-ignore */}
-                          <LinksGen
-                            {...linksPresets}
-                            marginTop={0}
-                            links={linksItems}
-                            marginBottom={0}
-                          />
-                        </div>
-                      </HoverCardComponent>
-                    </div>
+                      <div className="p-3">
+                        {/** @ts-ignore */}
+                        {/** @ts-ignore */}
+                        <LinksGen
+                          {...linksPresets}
+                          marginTop={0}
+                          links={linksItems}
+                          marginBottom={0}
+                        />
+                      </div>
+                    </HoverCardComponent>
+                  </div>
 
                 </AccordionContent>
               </AccordionItem>
@@ -1368,13 +1368,14 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
 
-                    {/* <div
+                    <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
                         connectors.create(
                           ref,
+                          /** @ts-ignore */
                           <ImageStory
                             {...imageStoryPreset}
                           />
@@ -1386,11 +1387,12 @@ export const UserToolbox = () => {
                         title={"Image story"}
                         icon={<ImagesIcon className="size-4" />}
                       >
+                        { /** @ts-ignore */}
                         <ImageStoryGen
-                            {...imageStoryPreset}
-                          />
+                          {...imageStoryPreset}
+                        />
                       </HoverCardComponent>
-                    </div> */}
+                    </div>
                     <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
@@ -1695,7 +1697,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Links")}
-                        icon={<Icons.Links/>}
+                        icon={<Icons.Links />}
                       >
                         <div className="p-3">
                           {/** @ts-ignore */}

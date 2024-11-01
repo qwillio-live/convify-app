@@ -9,6 +9,16 @@ export enum ImageStorySizes {
     full = "full",
 }
 
+export enum ImageStoryAspectRatios {
+    sixteenByNine = "16 / 9",
+    fiveByFour = "5 / 4",
+}
+
+export enum ImageStoryAspectRatiosLabels {
+    sixteenByNine = "16:9",
+    fiveByFour = "5:4",
+}
+
 
 export const useImageStoryThemePresets = () => {
     const theme = useAppSelector((state) => state.theme)
@@ -20,14 +30,13 @@ export const useImageStoryThemePresets = () => {
         },
         {
             id: `logo-bar-item-${hexoid(6)()}`,
-            src: "https://images.pexels.com/photos/251454/pexels-photo-251454.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src: "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"
         },
     ]
     const defaultPreset = {
         size: ImageStorySizes.medium,
-        containerBackground: "transparent",
+        containerBackground: "red",
         align: "center",
-        gap: 30,
         paddingLeft: "16",
         paddingTop: "20",
         paddingRight: "16",
@@ -38,6 +47,7 @@ export const useImageStoryThemePresets = () => {
         marginBottom: 20,
         settingTabs: ["content"],
         items: defaultItems,
+        aspectRatio: ImageStoryAspectRatios.fiveByFour,
     }
 
     return {

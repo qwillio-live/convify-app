@@ -3,6 +3,11 @@ import Stories from 'react-insta-stories';
 import { ImageStorySizes } from './useImageStoryThemePresets';
 import hexoid from 'hexoid';
 import { ImageStorySettnigs } from './image-story.settings';
+import { Controller } from '../settings/controller.component';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { useNode } from '@craftjs/core';
+import Image from 'next/image';
 
 export const ImageStoryGen = ({
     size,
@@ -18,6 +23,7 @@ export const ImageStoryGen = ({
     marginRight,
     marginBottom,
     settingTabs,
+    fullWidth = true,
     items,
 }) => {
     console.log(items, "bhuvanesg")
@@ -56,23 +62,51 @@ export const ImageStory = ({
     marginBottom,
     settingTabs,
     items,
+    fullWidth = true,
 }) => {
+    const {
+        actions: { setProp },
+        connectors: { connect, drag },
+        selected,
+        isHovered,
+    } = useNode((state) => ({
+        selected: state.events.selected,
+        isHovered: state.events.hovered,
+    }))
+
+    const [hover, setHover] = useState(false)
+    const t = useTranslations('Components')
+
     return (
         <div
-            className="relative w-full"
+            ref={(ref: any) => connect(drag(ref))}
+            className="w-full"
             style={{
                 width: "100%",
-                background: `${containerBackground}`,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
                 minWidth: "100%",
-                paddingTop: `${marginTop}px`,
-                paddingBottom: `${marginBottom}px`,
+                display: "flex",
+                justifyContent: "center",
             }}
+            onMouseOver={() => setHover(true)}
+            onMouseOut={() => setHover(false)}
         >
-            <ImageStoryItems images={items} aspectRatio={''} />
+            {hover && <Controller nameOfComponent={"Image story"} />}
+            <div
+                className="relative w-full"
+                style={{
+                    width: "100%",
+                    background: `${containerBackground}`,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minWidth: "100%",
+                    paddingTop: `${marginTop}px`,
+                    paddingBottom: `${marginBottom}px`,
+                }}
+            >
+                <ImageStoryItems images={items} aspectRatio={''} />
+            </div>
         </div>
     )
 }
@@ -80,31 +114,41 @@ export const ImageStory = ({
 export const ImageStoryItems = ({ images, aspectRatio }) => {
     const stories = images.map((image) => ({ url: image.src }))
     return (
-        <div>
-
-        <Stories
-            stories={stories}
-            loop
-            width="100%"
-            height="100%"
-            storyStyles={{
-                width: '100%',
-                // height: '50vmin',
-                // margin: '0 auto',
-                // aspectRatio: '9 / 16',
-                margin: '0 auto',
-                
-                backgroundColor: '#000',
-            }}
-            storyContainerStyles={{
-                maxWidth: '1000px',
-                width:"400px",
-                aspectRatio: '9 / 16',
-                objectFit: 'cover',
-            }}
+        <div style={{
+            width: "600px",
+            maxWidth: '600px',
+            aspectRatio: 'auto 16 / 9',
+            objectFit: 'cover',
+        }}>
+            <Stories
+                stories={images.map((image, index) => (
+                    {content: () => <img alt={"story"} src={image.src} key={index} style={{borderRadius:'16px'}}/>}
+                ))}
+                loop
+                width="100%"
+                height="100%"
+                storyStyles={{
+                    width: '100%',
+                    height: '100%',
+                    margin: '0 auto',
+                    backgroundColor: '#000',
+                    borderRadius: '16px !important'
+                }}
+                progressWrapperStyles={{
+                    height: '4px',
+                    backgroundColor: '#9CA3AF99',
+                    borderRadius: '100px',
+                }}
+                progressStyles={{
+                    backgroundColor: '#FFFFFF',
+                }}
+                storyContainerStyles={{
+                    borderRadius: '16px !important',
+                    background: 'transparent',
+                }}
             />
-            </div>
-            )
+        </div>
+    )
 }
 export const ImageStoryDefaultProps = {
     size: ImageStorySizes.medium,

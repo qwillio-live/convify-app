@@ -204,7 +204,7 @@ export const FAQSettings = () => {
                                 </TabsList>
                             </Tabs>
                         </div>
-                        <div className="flex items-center justify-between">
+                        {/* <div className="flex items-center justify-between">
                             <Label htmlFor="questionColor">{t("Question Color")}</Label>
                             <ColorInput
                                 value={titleColor}
@@ -229,7 +229,7 @@ export const FAQSettings = () => {
                                 }}
                                 id="answerColor"
                             />
-                        </div>
+                        </div> */}
 
                         {selectedPreset === PRESETNAMES.blockedPreset && <div className="flex items-center justify-between">
                             <Label htmlFor="blockColor">{t("Block Color")}</Label>
