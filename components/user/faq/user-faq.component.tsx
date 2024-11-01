@@ -179,13 +179,13 @@ export const FAQ = ({
     setProp((props) => (props.contentFontFamily = secondaryFont), 200)
   }, [secondaryFont])
 
-  useEffect(() => {
-    setProp((props) => (props.titleColor = primaryTextColor), 200)
-  }, [primaryTextColor])
+  // useEffect(() => {
+  //   setProp((props) => (props.titleColor = primaryTextColor), 200)
+  // }, [primaryTextColor])
 
-  useEffect(() => {
-    setProp((props) => (props.contentColor = secondaryTextColor), 200)
-  }, [secondaryTextColor])
+  // useEffect(() => {
+  //   setProp((props) => (props.contentColor = secondaryTextColor), 200)
+  // }, [secondaryTextColor])
 
 
   const debouncedSetProp = useCallback(

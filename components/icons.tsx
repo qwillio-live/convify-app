@@ -221,5 +221,21 @@ export const Icons = {
         </clipPath>
       </defs>
     </svg>
-  )
+  ),
+  ImageStory: ({ ...props }: LucideProps) => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0_1413_5170)">
+        <path d="M9.8402 1.11969L2.10502 1.93269C1.49474 1.99683 1.052 2.54356 1.11614 3.15385L1.92914 10.889C1.99329 11.4993 2.54002 11.942 3.15031 11.8779L10.8855 11.0649C11.4958 11.0008 11.9385 10.454 11.8744 9.84374L11.0614 2.10857C10.9972 1.49828 10.4505 1.05554 9.8402 1.11969Z" fill="#FAFAFA" stroke="#23262C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M4.77969 6.1193C5.38998 6.05515 5.83272 5.50842 5.76857 4.89813C5.70443 4.28784 5.1577 3.8451 4.54741 3.90925C3.93712 3.97339 3.49438 4.52013 3.55853 5.13042C3.62267 5.7407 4.1694 6.18344 4.77969 6.1193Z" stroke="#23262C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M13.8889 5H6.11111C5.49746 5 5 5.49746 5 6.11111V13.8889C5 14.5025 5.49746 15 6.11111 15H13.8889C14.5025 15 15 14.5025 15 13.8889V6.11111C15 5.49746 14.5025 5 13.8889 5Z" fill="#FAFAFA" stroke="#23262C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M8.33377 9.44488C8.94742 9.44488 9.44488 8.94742 9.44488 8.33377C9.44488 7.72012 8.94742 7.22266 8.33377 7.22266C7.72012 7.22266 7.22266 7.72012 7.22266 8.33377C7.22266 8.94742 7.72012 9.44488 8.33377 9.44488Z" stroke="#23262C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M15.0003 11.6667L13.2859 9.95227C13.0775 9.74397 12.795 9.62695 12.5003 9.62695C12.2057 9.62695 11.9231 9.74397 11.7148 9.95227L6.66699 15" stroke="#23262C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <defs>
+        <clipPath id="clip0_1413_5170">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+    )
 }

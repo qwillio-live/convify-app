@@ -77,6 +77,7 @@ import ResolvedComponentsFromCraftState from "../user/settings/resolved-componen
 import { Steps } from "../user/steps/user-steps.component"
 import { FAQ } from "../user/faq/user-faq.component"
 import { Links } from "../user/links/user-links.component"
+import { ImageStory } from "../user/image-story/image-story.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -316,6 +317,7 @@ export function CreateFlowComponent() {
           LayoutContainer,
           Loader,
           Img,
+          ImageStory,
         }}
         onRender={RenderNode}
       >

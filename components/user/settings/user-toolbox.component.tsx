@@ -49,6 +49,7 @@ import {
   ListCollapse,
   Link2,
   CircleHelp,
+  ImagesIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
@@ -196,6 +197,8 @@ import { FAQ, FAQGen, FAQSizes } from "../faq/user-faq.component"
 import useFaqThemePresets from "../faq/useFaqThemePresets"
 import { Links, LinksGen } from "../links/user-links.component"
 import { useLinksThemePresets } from "../links/useLinksThemePresets"
+import { useImageStoryThemePresets } from "../image-story/useImageStoryThemePresets"
+import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
 
 function HelperInformation({ infoText }: { infoText: string }) {
   return (
@@ -348,6 +351,7 @@ export const UserToolbox = () => {
   const {defaultItems: linksItems, defaultPresets: linksPresets} = useLinksThemePresets()
 
   const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
+  const {defaultPreset: imageStoryPreset} = useImageStoryThemePresets()
   const { outlinedPresetChecbox, underlinedPresetChecbox } =
     useInputCheckboxThemePresets()
   const { outlinedPresetMail, underlinedPresetMail } =
@@ -1363,6 +1367,30 @@ export const UserToolbox = () => {
                         />
                       </HoverCardComponent>
                     </div>
+
+                    {/* <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <ImageStory
+                            {...imageStoryPreset}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={"Image story"}
+                        icon={<ImagesIcon className="size-4" />}
+                      >
+                        <ImageStoryGen
+                            {...imageStoryPreset}
+                          />
+                      </HoverCardComponent>
+                    </div> */}
                     <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line

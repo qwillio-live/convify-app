@@ -53,6 +53,7 @@ import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
 import { FAQGen } from "@/components/user/faq/user-faq.component"
 import { LinksGen } from "@/components/user/links/user-links.component"
+import { ImageStory, ImageStoryGen } from "@/components/user/image-story/image-story.component"
 
 export default async function PreviewFlows({
   params,
@@ -89,6 +90,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.LIST]: ListGen,
     [CRAFT_ELEMENTS.LINKS]: LinksGen,
     [CRAFT_ELEMENTS.FAQ]: FAQGen,
+    [CRAFT_ELEMENTS.IMAGESTORY]: ImageStoryGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
     [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,

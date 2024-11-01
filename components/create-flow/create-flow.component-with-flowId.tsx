@@ -94,6 +94,7 @@ import { TelegramShareButton } from "../user/telegramShareButton/telegram-compon
 import { TextImageComponent } from "../user/textImage/user-textImage.component"
 import { FAQ } from "../user/faq/user-faq.component"
 import { Links } from "../user/links/user-links.component"
+import { ImageStory } from "../user/image-story/image-story.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -409,6 +410,7 @@ export function CreateFlowComponent({ flowId }) {
           Loader,
           UserInputTextarea,
           Img,
+          ImageStory,
         }}
         onRender={RenderNode}
       >

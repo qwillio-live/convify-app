@@ -7,16 +7,20 @@ export enum ImageStorySizes {
     medium = "medium",
     large = "large",
     full = "full",
-  }
+}
 
-  
+
 export const useImageStoryThemePresets = () => {
     const theme = useAppSelector((state) => state.theme)
     const t = useTranslations("Components")
     const defaultItems = [
         {
-          id: `logo-bar-item-${hexoid(6)()}`,
-          src: ""
+            id: `logo-bar-item-${hexoid(6)()}`,
+            src: "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"
+        },
+        {
+            id: `logo-bar-item-${hexoid(6)()}`,
+            src: "https://images.pexels.com/photos/251454/pexels-photo-251454.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
         },
     ]
     const defaultPreset = {
@@ -34,10 +38,10 @@ export const useImageStoryThemePresets = () => {
         marginBottom: 20,
         settingTabs: ["content"],
         items: defaultItems,
-      }
+    }
 
-      return {
+    return {
         defaultItems,
         defaultPreset
-      }
+    }
 }

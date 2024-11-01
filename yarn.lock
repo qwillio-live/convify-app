@@ -7886,6 +7886,11 @@ react-hook-form@^7.43.9:
   resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.52.1.tgz"
   integrity sha512-uNKIhaoICJ5KQALYZ4TOaOLElyM+xipord+Ha3crEFhTntdLvWZqVY49Wqd/0GiVCA/f9NjemLeiNPjG7Hpurg==
 
+react-insta-stories@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/react-insta-stories/-/react-insta-stories-2.7.0.tgz#53532f4d552e18ad1417602a3121424b0771ccf1"
+  integrity sha512-pCPHzC323b9Ttvr8ByLrX/iH/ft/L3ThWGDJPKdvHnaWdR5dhFkonrQ0/KNiEIH5t539dNyFPevLJUOobkD2WQ==
+
 react-is@^16.10.2, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
