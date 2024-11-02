@@ -489,7 +489,7 @@ const ScreensList = ({ flowId }) => {
                           "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer hover:border-2 md:hidden md:h-32 md:w-[13.5vw]",
 
                           {
-                            "!border-[#2B3398] p-0 hover:border-0":
+                            "!border-[#2B3398] p-0 hover:!border-[#2B3398]":
                               selectedScreenIndex === index &&
                               !headerFooterMode,
                           }
@@ -543,7 +543,7 @@ const ScreensList = ({ flowId }) => {
                         "relative mt-1  hidden h-32 w-[94vw] flex-col overflow-hidden border p-[1px] hover:cursor-pointer hover:border-2 hover:p-0 md:flex md:w-[13.5vw]",
 
                         {
-                          "!border-[#2B3398] p-0 hover:border-0":
+                          "hover:border-1 !border-[#2B3398] p-0 hover:!border-[#2B3398]":
                             selectedScreenIndex === index && !headerFooterMode,
                         }
                       )}
