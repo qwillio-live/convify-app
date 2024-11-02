@@ -71,6 +71,7 @@ interface StyledCustomHeadlineInput {
   padding?: string
   preset?: string
   settingsTab?: string
+  lineHeight?: string | number;
 }
 const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -97,6 +98,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
+  line-height: ${(props) => props.lineHeight}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
@@ -113,8 +115,6 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
     width: 100%; /* Make the container take the full width on smaller screens */
     max-width: calc(100% - 20px);
   }
-
-
 `
 
 export const HeadlineTextGen = ({
@@ -146,6 +146,7 @@ export const HeadlineTextGen = ({
   borderColor,
   borderHoverColor,
   textColor,
+  lineHeight,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -166,7 +167,7 @@ export const HeadlineTextGen = ({
   // console.log("container | bg", containerBackground, borderColor)
   return (
     <div
-      className="relative mt-7 w-full heading-text-comp"
+      className="heading-text-comp relative mt-7 w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -208,9 +209,10 @@ export const HeadlineTextGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
+        lineHeight={lineHeight}
         text={t("HeadlineDescription")}
         {...props}
-        className={`!text-[24px] md:text-[${fontSize}px] items-center user-headline-comp`}
+        className={`!text-[24px] md:text-[${fontSize}px] user-headline-comp items-center`}
         onClick={() => console.log(text)}
       >
         <h1
@@ -223,7 +225,7 @@ export const HeadlineTextGen = ({
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
-            lineHeight: "1.5",
+            lineHeight: `${lineHeight}`,
           }}
         >
           {processedText.split("\n").map((line, index) => (
@@ -268,6 +270,7 @@ export const HeadlineText = ({
   border,
   borderColor,
   mobileFontSize,
+  lineHeight,
   ...props
 }) => {
   const {
@@ -487,6 +490,7 @@ export const HeadlineText = ({
                 }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
+                lineHeight: `${lineHeight}px`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
@@ -545,7 +549,7 @@ export enum TextContainerSize {
 
 export const HeadlineTextDefaultProps: HeadlineTextProps = {
   text: "HeadlineDescription",
-  lineHeight: "1.5",
+  lineHeight: 38,
   fontFamily: {
     value: "inherit",
     globalStyled: true,

@@ -101,6 +101,7 @@ export const HeadlineTextSettings = () => {
       textColor,
       textAlign,
       mobileFontSize,
+      lineHeight
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -136,6 +137,7 @@ export const HeadlineTextSettings = () => {
       "textColor",
       "textAlign",
       "mobileFontSize",
+      "lineHeight",
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
@@ -288,6 +290,25 @@ export const HeadlineTextSettings = () => {
                 />
               </div>
             )}
+             <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("LineHeight")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {lineHeight}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[lineHeight]}
+                  value={[lineHeight]}
+                  max={100}
+                  min={12}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("lineHeight", e)
+                  }
+                />
+              </div>
 
             <div className="space-y-2">
               <Label>{t("FontWeight")}</Label>

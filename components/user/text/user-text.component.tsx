@@ -62,6 +62,7 @@ interface StyleCustomTextContainerProps {
   borderRadius?: string
   padding?: string
   preset?: string
+  lineHeight?: string | number
 }
 
 export type TextInputProps = {
@@ -97,6 +98,7 @@ export type TextInputProps = {
   fullWidth: boolean
   preset: string
   buttonSize: string
+  lineHeight: string | number
 }
 
 export const TextInputDefaultProps: TextInputProps = {
@@ -152,6 +154,7 @@ export const TextInputDefaultProps: TextInputProps = {
   marginRight: 0,
   marginBottom: 20,
   fontSize: 18,
+  lineHeight: 24,
   fontWeight: "400",
   textAlign: "center",
   paddingLeft: "12",
@@ -195,7 +198,7 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-
+  line-height: ${(props) => props.lineHeight}px;
   margin-left: auto;
   margin-right: auto;
 
@@ -251,6 +254,7 @@ export const UserTextInputGen = ({
   border,
   borderColor,
   borderHoverColor,
+  lineHeight,
   ...props
 }) => {
   const secondaryTextColor = useAppSelector(
@@ -321,7 +325,6 @@ export const UserTextInputGen = ({
             color: `${
               textColor !== "#ffffff" ? textColor : secondaryTextColor
             }`,
-            lineHeight: "1.5",
           }}
         >
           <div dangerouslySetInnerHTML={{ __html: text }} />
@@ -362,6 +365,7 @@ export const UserText = ({
   border,
   borderColor,
   textColor,
+  lineHeight,
   ...props
 }) => {
   paddingLeft = 16
@@ -597,6 +601,7 @@ export const UserText = ({
                 }`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
+                lineHeight: `${lineHeight}px`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
