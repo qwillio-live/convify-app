@@ -312,6 +312,7 @@ export const UserTextInputGen = ({
         alignItems={alignItems}
         mobileScreen={false}
         textAlign={textAlign}
+        lineHeight={lineHeight}
         {...props}
         className="user-text-comp text-[1rem]"
       >
@@ -582,6 +583,7 @@ export const UserText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          lineHeight={lineHeight}
           className="user-text-comp"
           {...props}
         >

@@ -97,6 +97,7 @@
     "textarea": "textarea",
     "InputMail": "Email",
     "FontSize": "Font Size",
+    "LineHeight": "Line Height",
     "FontWeight": "Font Weight",
     "InputPhone": "Phone",
     "Checkbox": "Checkbox",

@@ -224,7 +224,7 @@ export const HeadlineTextGen = ({
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
-            lineHeight: `${lineHeight}`,
+            lineHeight: `${lineHeight}px`,
           }}
         >
           {processedText.split("\n").map((line, index) => (
