@@ -178,7 +178,6 @@ export const BackButtonGen = ({
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
     if (term) {
@@ -358,8 +357,28 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
+ ${({ size, mobileScreen }) => {
+    if (size === IconButtonSizes.small) {
+      return { width: "250px" }
+    } else if (size === IconButtonSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === IconButtonSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
  
-  width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;

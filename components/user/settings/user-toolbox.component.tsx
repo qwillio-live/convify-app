@@ -820,7 +820,6 @@ export const UserToolbox = () => {
                         disabled={false}
                         text={t("Back")}
                         justifyContent={"center"}
-                        size={"large"}
                         marginTop={20}
                         marginBottom={20}
                         paddingLeft={0}
