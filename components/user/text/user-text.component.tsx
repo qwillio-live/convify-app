@@ -177,7 +177,6 @@ const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
   font-size: ${(props) => `${props?.fontSize}`}px;
   font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
   text-align: ${(props) => `${props?.textAlign}`};
 
   &:focus {

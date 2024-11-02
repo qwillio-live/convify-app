@@ -71,7 +71,7 @@ interface StyledCustomHeadlineInput {
   padding?: string
   preset?: string
   settingsTab?: string
-  lineHeight?: string | number;
+  lineHeight?: string | number
 }
 const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -82,7 +82,6 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-size: ${(props) => `${props?.fontSize}`}px;
   font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
 
   &:focus {
     border-color: ${(props) =>
