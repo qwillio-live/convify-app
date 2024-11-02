@@ -408,23 +408,17 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({
-    size,
-    mobileScreen,
-    isPreviewScreen,
-    columnsDesktop,
-    columnsMobile,
-  }) => {
+  ${({ size, mobileScreen, isPreviewScreen }) => {
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
         return { width: "376px" }
       } else if (size === UserInputSizes.medium) {
-        return { width: columnsDesktop > 1 ? "800px" : "auto" }
+        return { width: "800px" }
       } else if (size === UserInputSizes.large) {
         return { width: "1000px" }
       } else {
         return {
-          width: columnsDesktop > 1 ? "calc(100% - 22px)" : "auto",
+          width: "calc(100% - 22px)",
         }
       }
     } else {
@@ -435,61 +429,40 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
           return { width: "376px" }
         }
       } else if (size === UserInputSizes.medium) {
-        return {
-          width:
-            columnsMobile > 1 && mobileScreen ? "calc(100% - 22px)" : "auto",
-          maxWidth: 800,
-        }
+        return mobileScreen ? { width: "calc(100% - 22px)", maxWidth: 800 } : {}
       } else if (size === UserInputSizes.large) {
-        return {
-          width: columnsMobile > 1 ? "calc(100% - 22px)" : "auto",
-          maxWidth: 1000,
-        }
+        return mobileScreen
+          ? { width: "calc(100% - 22px)", maxWidth: 1000 }
+          : {}
       } else {
-        return {
-          width: columnsMobile > 1 ? "calc(100% - 22px)" : "auto",
-        }
+        return mobileScreen ? { width: "calc(100% - 22px)" } : {}
       }
     }
   }};
 
   @media (max-width: 1000px) {
-    ${({ size, columnsDesktop, columnsMobile }) => {
+    ${({ size }) => {
       if (size === UserInputSizes.large) {
-        return {
-          width:
-            columnsDesktop > 1 || columnsMobile > 1
-              ? "calc(100% - 22px)"
-              : "auto",
-        }
+        return { width: "calc(100% - 22px)" }
       }
     }}
   }
 
   @media (max-width: 800px) {
-    ${({ size, columnsDesktop, columnsMobile }) => {
+    ${({ size }) => {
       if (size === UserInputSizes.medium) {
-        return {
-          width:
-            columnsDesktop > 1 || columnsMobile > 1
-              ? "calc(100% - 22px)"
-              : "auto",
-        }
+        return { width: "calc(100% - 22px)" }
       }
     }}
   }
 
   @media (max-width: 376px) {
-    ${({ size, columnsDesktop, columnsMobile }) => {
+    ${({ size }) => {
       if (size === UserInputSizes.small) {
-        return {
-          width:
-            columnsDesktop > 1 || columnsMobile > 1
-              ? "calc(100% - 22px)"
-              : "auto",
-        }
+        return { width: "calc(100% - 22px)" }
       }
     }}
+  }
 `
 
 type StyledListItemProps = {
