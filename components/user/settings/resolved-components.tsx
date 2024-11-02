@@ -44,6 +44,7 @@ import { TelegramShareButtonGen } from "../telegramShareButton/telegram-componen
 import { FAQGen } from "../faq/user-faq.component"
 import { LinksGen } from "../links/user-links.component"
 import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
+import { YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
 
 export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -73,6 +74,7 @@ export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.LIST]: ListGen,
   [CRAFT_ELEMENTS.LINKS]: LinksGen,
   [CRAFT_ELEMENTS.FAQ]: FAQGen,
+  [CRAFT_ELEMENTS.YOUTUBEVIDEO]: YoutubeVideoGen,
   [CRAFT_ELEMENTS.IMAGESTORY]: ImageStoryGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,

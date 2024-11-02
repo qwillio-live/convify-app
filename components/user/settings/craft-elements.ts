@@ -38,4 +38,5 @@ export const CRAFT_ELEMENTS = {
   FORM: "Form",
   FORMCONTENT: "FormContent",
   IMAGESTORY: "ImageStory",
+  YOUTUBEVIDEO: "YoutubeVideo",
 }

@@ -95,6 +95,7 @@ import { TextImageComponent } from "../user/textImage/user-textImage.component"
 import { FAQ } from "../user/faq/user-faq.component"
 import { Links } from "../user/links/user-links.component"
 import { ImageStory } from "../user/image-story/image-story.component"
+import { YoutubeVideo } from "../user/youtube-video/user-youtube-video.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -411,6 +412,7 @@ export function CreateFlowComponent({ flowId }) {
           UserInputTextarea,
           Img,
           ImageStory,
+          YoutubeVideo
         }}
         onRender={RenderNode}
       >
