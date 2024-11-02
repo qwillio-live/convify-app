@@ -1,5 +1,12 @@
 "use client"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import local from "next/font/local"
 import { usePathname, useRouter } from "next/navigation"
 import { track } from "@vercel/analytics/react"
@@ -22,6 +29,7 @@ import {
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
 import { UserInputSizes } from "../input/user-input.component"
+import { cn } from "@/lib/utils"
 
 export enum TextContainerSize {
   small = "small",
@@ -165,60 +173,149 @@ export const TextInputDefaultProps: TextInputProps = {
   preset: "paragraph",
 }
 
-const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  background: ${(props) => `${props?.background}`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  font-size: ${(props) => `${props?.fontSize}`}px;
-  font-weight: ${(props) => `${props?.fontWeight}`};
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
-  text-align: ${(props) => `${props?.textAlign}`};
+// const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
+//   font-family: ${(props) => `var(${props?.fontFamily})`};
+//   background: ${(props) => `${props?.background}`};
+//   display: flex;
+//   flex-direction: row;
+//   position: relative;
+//   font-size: ${(props) => `${props?.fontSize}`}px;
+//   font-weight: ${(props) => `${props?.fontWeight}`};
+//   border: 1px dashed transparent;
+//   transition: all 0.2s ease;
+//   text-align: ${(props) => `${props?.textAlign}`};
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+//   &:focus {
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired focus border color */
+//   }
 
-  color: ${(props) => `${props?.color}`};
-  overflow: hidden;
-  box-sizing: border-box;
-  height: ${(props) => props.height};
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+//   color: ${(props) => `${props?.color}`};
+//   overflow: hidden;
+//   box-sizing: border-box;
+//   height: ${(props) => props.height};
+//   margin-top: ${(props) => props.marginTop}px;
+//   margin-left: ${(props) => props.marginLeft}px;
+//   margin-right: ${(props) => props.marginRight}px;
+//   margin-bottom: ${(props) => props.marginBottom}px;
+//   border-radius: ${(props) => props.radius}px;
+//   flex-direction: ${(props) => props.flexDirection};
+//   align-items: ${(props) => props.alignItems};
+//   justify-content: ${(props) => props.justifyContent};
+//   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
 
-  margin-left: auto;
-  margin-right: auto;
+//   margin-left: auto;
+//   margin-right: auto;
 
-  ${({ size, mobileScreen }) => {
-    if (mobileScreen) {
-      return { width: "calc(100% - 20px)" }
-    } else {
-      if (size === UserInputSizes.small) {
-        return { width: "520px" }
-      } else if (size === UserInputSizes.medium) {
-        return { width: "650px" }
-      } else if (size === UserInputSizes.large) {
-        return { width: "770px" }
-      } else {
-        return { width: "calc(100% - 20px)" }
-      }
+//   ${({ size, mobileScreen }) => {
+//     if (mobileScreen) {
+//       return { width: "calc(100% - 20px)" }
+//     } else {
+//       if (size === UserInputSizes.small) {
+//         return { width: "520px" }
+//       } else if (size === UserInputSizes.medium) {
+//         return { width: "650px" }
+//       } else if (size === UserInputSizes.large) {
+//         return { width: "770px" }
+//       } else {
+//         return { width: "calc(100% - 20px)" }
+//       }
+//     }
+//   }};
+
+//   @media (max-width: 520px) {
+//     width: calc(100% - 20px);
+//   }
+// `
+
+const StyledCustomTextInput = ({
+  fontFamily,
+  borderHoverColor,
+  colorHover,
+  background,
+  color,
+  height,
+  marginTop,
+  marginLeft,
+  marginRight,
+  marginBottom,
+  radius,
+  textAlign,
+  fontSize,
+  fontWeight,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  borderColor,
+  border,
+  mobileScreen,
+  size,
+  className,
+  style,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLDivElement> &
+  StyleCustomTextContainerProps) => {
+  const customStyles: CSSProperties = {
+    fontFamily: `var(${fontFamily})`,
+    "--user-text-background": background,
+    "--user-text-size": fontSize,
+    fontWeight,
+    textAlign,
+    "--user-text-border-color": borderColor,
+    "--user-text-border-hover-color": borderHoverColor,
+    color,
+    "--user-text-height": height === "auto" ? "auto" : `${height}px`,
+    "--user-text-margin-top": `${marginTop}px`,
+    "--user-text-margin-left": `${marginLeft}px`,
+    "--user-text-margin-right": `${marginRight}px`,
+    "--user-text-margin-bottom": `${marginBottom}px`,
+    "--user-text-border-radius": `${radius}px`,
+    alignItems,
+    justifyContent,
+    borderWidth: border,
+    ...style,
+  } as CSSProperties
+
+  const generateWidthClass = useMemo(() => {
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-20px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[770px]"
+      case UserInputSizes.medium:
+        return "w-[650px]"
+      case UserInputSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-20px)]"
     }
-  }};
+  }, [size, mobileScreen])
 
-  @media (max-width: 520px) {
-    width: calc(100% - 20px);
-  }
-`
+  return (
+    <div
+      className={cn(
+        "relative box-border flex overflow-hidden border-solid transition-all max-[520px]:w-[calc(100%-20px)]",
+        fontSize && "text-[var(--user-text-size)]",
+        background && "bg-[var(--user-text-background)]",
+        marginTop && "mt-[var(--user-text-margin-top)]",
+        marginLeft && "ml-[var(--user-text-margin-left)]",
+        marginRight && "mr-[var(--user-text-margin-right)]",
+        marginBottom && "mb-[var(--user-text-margin-bottom)]",
+        radius && "rounded-[var(--user-text-border-radius)]",
+        "h-[var(--user-text-height)]",
+        borderColor &&
+          "border-[var(--user-text-border-color)]",
+        borderHoverColor &&
+          "focus:border-[var(--user-text-border-hover-color)]",
+        `flex-${flexDirection || "row"}`,
+        generateWidthClass,
+        className
+      )}
+      {...props}
+      style={customStyles}
+    />
+  )
+}
 
 export const UserTextInputGen = ({
   fontFamily,
@@ -369,109 +466,104 @@ export const UserText = ({
   const {
     actions: { setProp },
     connectors: { connect, drag },
-    selected,
-    isHovered,
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    isHovered: state.events.hovered,
-  }))
-  const { actions } = useEditor((state, query) => ({
-    enabled: state.options.enabled,
-  }))
+  } = useNode()
+  // const { actions } = useEditor((state, query) => ({
+  //   enabled: state.options.enabled,
+  // }))
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
   const [displayController, setDisplayController] = React.useState(false)
-  const [localText, setLocalText] = useState(text)
+  // const [localText, setLocalText] = useState(text)
 
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
+  // const primaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.primaryColor
+  // )
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
   const primaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const secondaryColor = useAppSelector(
-    (state) => state.theme?.general?.secondaryColor
-  )
+  // const primaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.primaryColor
+  // )
+  // const secondaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.secondaryColor
+  // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
+  // const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  // const screensLength = useAppSelector(
+  //   (state: RootState) => state?.screen?.screens?.length ?? 0
+  // )
+  // const selectedScreen = useAppSelector(
+  //   (state: RootState) => state.screen?.selectedScreen ?? 0
+  // )
 
-  useEffect(() => {
-    if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => (props.fontFamily.value = primaryFont), 200)
-    }
-  }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
+  // useEffect(() => {
+  //   if (fontFamily.globalStyled && !fontFamily.isCustomized) {
+  //     setProp((props) => (props.fontFamily.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
 
-  useEffect(() => {
-    if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
+  // useEffect(() => {
+  //   if (primaryColor) {
+  //     const backgroundPrimaryColor = getBackgroundForPreset(
+  //       primaryColor,
+  //       props.preset
+  //     )
+  //     const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+  //       primaryColor,
+  //       props.preset
+  //     )
 
-      if (background.globalStyled && !background.isCustomized) {
-        setProp(
-          (props) => (props.background.value = backgroundPrimaryColor),
-          200
-        )
-      }
-      if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => (props.color.value = secondaryTextColor), 200)
-      }
-      if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => (props.borderColor.value = primaryColor), 200)
-      }
+  //     if (background.globalStyled && !background.isCustomized) {
+  //       setProp(
+  //         (props) => (props.background.value = backgroundPrimaryColor),
+  //         200
+  //       )
+  //     }
+  //     if (color.globalStyled && !color.isCustomized) {
+  //       setProp((props) => (props.color.value = secondaryTextColor), 200)
+  //     }
+  //     if (borderColor.globalStyled && !borderColor.isCustomized) {
+  //       setProp((props) => (props.borderColor.value = primaryColor), 200)
+  //     }
 
-      // hover colors
+  //     // hover colors
 
-      if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp(
-          (props) =>
-            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
-          200
-        )
-      }
-      if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
-      }
-      if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => (props.colorHover.value = primaryColor), 200)
-      }
-    }
-  }, [
-    primaryColor,
-    secondaryTextColor,
-    setProp,
-    background.globalStyled,
-    background.isCustomized,
-    backgroundHover.globalStyled,
-    backgroundHover.isCustomized,
-    borderColor.globalStyled,
-    borderColor.isCustomized,
-    borderHoverColor.globalStyled,
-    borderHoverColor.isCustomized,
-    color.globalStyled,
-    color.isCustomized,
-    colorHover.globalStyled,
-    colorHover.isCustomized,
-    props.preset,
-  ])
+  //     if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
+  //       setProp(
+  //         (props) =>
+  //           (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+  //         200
+  //       )
+  //     }
+  //     if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
+  //       setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
+  //     }
+  //     if (colorHover.globalStyled && !colorHover.isCustomized) {
+  //       setProp((props) => (props.colorHover.value = primaryColor), 200)
+  //     }
+  //   }
+  // }, [
+  //   primaryColor,
+  //   secondaryTextColor,
+  //   setProp,
+  //   background.globalStyled,
+  //   background.isCustomized,
+  //   backgroundHover.globalStyled,
+  //   backgroundHover.isCustomized,
+  //   borderColor.globalStyled,
+  //   borderColor.isCustomized,
+  //   borderHoverColor.globalStyled,
+  //   borderHoverColor.isCustomized,
+  //   color.globalStyled,
+  //   color.isCustomized,
+  //   colorHover.globalStyled,
+  //   colorHover.isCustomized,
+  //   props.preset,
+  // ])
 
   // useEffect(() => {
   //   const currentRef = ref.current

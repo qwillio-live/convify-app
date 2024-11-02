@@ -9,6 +9,10 @@ import {
   getBackgroundForPreset as getHeadlineTextBackgroundForPreset,
   getHoverBackgroundForPreset as getHeadlineTextHoverBackgroundForPreset,
 } from "../headline-text/useHeadlineThemePresets"
+import {
+  getBackgroundForPreset as getUserTextBackgroundForPreset,
+  getHoverBackgroundForPreset as getUserTextHoverBackgroundForPreset,
+} from "../text/useTextThemePresets"
 
 export const updateElementProps = (
   node: Node,
@@ -22,6 +26,9 @@ export const updateElementProps = (
       break
     case CRAFT_ELEMENTS.HEADLINETEXT:
       updateHeadlineTextProps(node, actions, style)
+      break
+    case CRAFT_ELEMENTS.USERTEXT:
+      updateUserTextProps(node, actions, style)
       break
     case CRAFT_ELEMENTS.USERINPUT:
       updateUserInputProps(node, actions, style)
@@ -197,6 +204,98 @@ const updateHeadlineTextProps = (
       actions.setProp(
         node.id,
         (props) => (props.color.value = primaryTextColor)
+      )
+    }
+    if (
+      nodeProps.borderColor &&
+      nodeProps.borderColor.globalStyled &&
+      !nodeProps.borderColor.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.borderColor.value = primaryColor)
+      )
+    }
+    if (
+      nodeProps.backgroundHover &&
+      nodeProps.backgroundHover.globalStyled &&
+      !nodeProps.backgroundHover.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.backgroundHover.value = hoverBackgroundPrimaryColor)
+      )
+    }
+    if (
+      nodeProps.borderHoverColor &&
+      nodeProps.borderHoverColor.globalStyled &&
+      !nodeProps.borderHoverColor.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.borderHoverColor.value = primaryColor)
+      )
+    }
+    if (
+      nodeProps.colorHover &&
+      nodeProps.colorHover.globalStyled &&
+      !nodeProps.colorHover.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.colorHover.value = primaryColor)
+      )
+    }
+  }
+}
+
+const updateUserTextProps = (
+  node: Node,
+  actions: WithoutPrivateActions<null>,
+  style: GlobalThemeState
+) => {
+  const nodeProps = node.data.props
+  if (
+    style.text?.primaryFont &&
+    nodeProps.fontFamily &&
+    nodeProps.fontFamily.globalStyled &&
+    !nodeProps.fontFamily.isCustomized
+  ) {
+    actions.setProp(
+      node.id,
+      (props) => (props.fontFamily.value = style.text?.primaryFont)
+    )
+  }
+
+  if (style.general?.primaryColor) {
+    const primaryColor = style.general?.primaryColor
+    const secondaryTextColor = style.text?.secondaryColor
+    const backgroundPrimaryColor = getUserTextBackgroundForPreset(
+      primaryColor,
+      nodeProps.preset
+    )
+    const hoverBackgroundPrimaryColor = getUserTextHoverBackgroundForPreset(
+      primaryColor,
+      nodeProps.preset
+    )
+    if (
+      nodeProps.background &&
+      nodeProps.background.globalStyled &&
+      !nodeProps.background.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.background.value = backgroundPrimaryColor)
+      )
+    }
+    if (
+      nodeProps.color &&
+      nodeProps.color.globalStyled &&
+      !nodeProps.color.isCustomized
+    ) {
+      actions.setProp(
+        node.id,
+        (props) => (props.color.value = secondaryTextColor)
       )
     }
     if (

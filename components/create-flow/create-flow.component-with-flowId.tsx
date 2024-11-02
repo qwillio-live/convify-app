@@ -517,11 +517,11 @@ export function CreateFlowComponent({ flowId }) {
               <UserToolbox />
             </div>
           </ScrollArea>
-          <ScrollArea className="hidden  h-full max-h-[calc(-60px+99vh)] basis-[17.5%] overflow-y-auto border-r bg-[#f6f6f6]  md:block">
+          <ScrollArea className="hidden h-full max-h-[calc(-60px+99vh)] basis-[17.5%] overflow-y-auto border-r bg-[#f6f6f6]  md:block">
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto bg-[#f6f6f6]">
+            <div className="section-body w-full max-w-full overflow-y-auto bg-[#f6f6f6]">
               <SettingsPanel />
             </div>
           </ScrollArea>
