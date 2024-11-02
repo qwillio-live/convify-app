@@ -57,8 +57,8 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
   return (
     <div
       className={cn(
+        "special absolute bottom-full left-0 z-30 flex flex-row items-center gap-4 border-0 bg-blue-500 p-2 text-xs text-white",
         className,
-        "special absolute bottom-full left-0 z-30 flex flex-row items-center gap-4 border-0 bg-blue-500 p-2 text-xs text-white"
       )}
     >
       <span className="uppercase hover:cursor-default">{nameOfComponent}</span>

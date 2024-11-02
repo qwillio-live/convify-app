@@ -197,7 +197,7 @@ import { FAQ, FAQGen, FAQSizes } from "../faq/user-faq.component"
 import useFaqThemePresets from "../faq/useFaqThemePresets"
 import { Links, LinksGen } from "../links/user-links.component"
 import { useLinksThemePresets } from "../links/useLinksThemePresets"
-import { useImageStoryThemePresets } from "../image-story/useImageStoryThemePresets"
+import { ImageStorySizes, useImageStoryThemePresets } from "../image-story/useImageStoryThemePresets"
 import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
 
 function HelperInformation({ infoText }: { infoText: string }) {
@@ -1384,12 +1384,15 @@ export const UserToolbox = () => {
                       data-cy="toolbox-text"
                     >
                       <HoverCardComponent
-                        title={"Image story"}
+                        title={t("Image story")}
                         icon={<ImagesIcon className="size-4" />}
                       >
                         { /** @ts-ignore */}
                         <ImageStoryGen
                           {...imageStoryPreset}
+                          size={ImageStorySizes.full}
+                          marginBottom={10}
+                          marginTop={10}
                         />
                       </HoverCardComponent>
                     </div>

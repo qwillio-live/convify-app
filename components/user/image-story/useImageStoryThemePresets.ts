@@ -25,26 +25,26 @@ export const useImageStoryThemePresets = () => {
     const t = useTranslations("Components")
     const defaultItems = [
         {
-            id: `logo-bar-item-${hexoid(6)()}`,
+            id: `image-story-item-${hexoid(6)()}`,
             src: "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"
         },
         {
-            id: `logo-bar-item-${hexoid(6)()}`,
+            id: `image-story-item-${hexoid(6)()}`,
             src: "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"
         },
     ]
     const defaultPreset = {
         size: ImageStorySizes.medium,
-        containerBackground: "red",
+        containerBackground: "transparent",
         align: "center",
         paddingLeft: "16",
         paddingTop: "20",
         paddingRight: "16",
         paddingBottom: "20",
         marginLeft: 0,
-        marginTop: 20,
+        marginTop: 0,
         marginRight: 0,
-        marginBottom: 20,
+        marginBottom: 0,
         settingTabs: ["content"],
         items: defaultItems,
         aspectRatio: ImageStoryAspectRatios.fiveByFour,

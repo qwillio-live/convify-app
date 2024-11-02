@@ -397,7 +397,9 @@
     "Show dots":"Mostrar pontos",
     "Add new link":"Adicionar novo link",
     "Links Color":"Cor dos links",
-    "Enable tracking":"Habilitar rastreamento"
+    "Enable tracking":"Habilitar rastreamento",
+    "Image story": "História de imagem",
+    "Ratio": "Proporção"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",
