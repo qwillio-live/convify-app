@@ -415,6 +415,32 @@ export const UserToolbox = () => {
                     />
                   </div>
                 </HoverCardComponent>
+                <HoverCardComponent
+                  title={t("Text")}
+                  icon={<TypeIcon size={12} className="size-4" />}
+                  data-cy="toolbox-text"
+                >
+                  <div
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <UserText textColor={"#ffffff"} {...parapgraphPreset} />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
+                      <UserTextInputGen
+                        textColor={"#ffffff"}
+                        {...spanPreset}
+                        label={t("Text")}
+                        placeholder={t("Placeholder")}
+                      />
+                    </div>
+                  </div>
+                </HoverCardComponent>
               </AccordionContent>
             </AccordionItem>
 
