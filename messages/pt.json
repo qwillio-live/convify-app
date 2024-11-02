@@ -82,6 +82,7 @@
     "Are you sure want to delete the Flow": "Tem certeza de que deseja excluir o Fluxo?"
   },
   "Components": {
+    "line height": "Altura da linha",
     "Label Color": "Cor da etiqueta",
     "Text Color": "Cor do texto",
     "Title Color": "Cor do título",

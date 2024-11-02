@@ -292,7 +292,7 @@ export const HeadlineTextSettings = () => {
             )}
              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <Label>{t("LineHeight")}</Label>
+                  <Label>{t("Line Height")}</Label>
                   <span className="text-muted-foreground text-xs">
                     {lineHeight}
                   </span>
