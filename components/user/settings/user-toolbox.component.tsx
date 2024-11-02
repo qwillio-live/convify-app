@@ -1385,7 +1385,7 @@ export const UserToolbox = () => {
                     >
                       <HoverCardComponent
                         title={t("Image story")}
-                        icon={<ImagesIcon className="size-4" />}
+                        icon={<Icons.ImageStory />}
                       >
                         { /** @ts-ignore */}
                         <ImageStoryGen
