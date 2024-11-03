@@ -72,6 +72,7 @@ interface StyledCustomHeadlineInput {
   preset?: string
   settingsTab?: string
   lineHeight?: string | number
+  textAlign?: string
 }
 const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -82,6 +83,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-size: ${(props) => `${props?.fontSize}`}px;
   font-weight: ${(props) => `${props?.fontWeight}`};
   border: 1px dashed transparent;
+  text-align: ${(props) => `${props?.textAlign}`};
 
   &:focus {
     border-color: ${(props) =>
@@ -113,6 +115,7 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   @media (max-width: 660px) {
     width: 100%; /* Make the container take the full width on smaller screens */
     max-width: calc(100% - 20px);
+    font-size: 24px;
   }
 `
 
@@ -146,6 +149,9 @@ export const HeadlineTextGen = ({
   borderHoverColor,
   textColor,
   lineHeight,
+  textAlign,
+  mobileScreen,
+  mobileFontSize,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -166,7 +172,7 @@ export const HeadlineTextGen = ({
   // console.log("container | bg", containerBackground, borderColor)
   return (
     <div
-      className="heading-text-comp relative mt-7 w-full"
+      className="heading-text-comp relative w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -190,7 +196,6 @@ export const HeadlineTextGen = ({
         flexDirection={flexDirection}
         fontSize={fontSize}
         fontWeight={fontWeight}
-        // textAlign={textAlign?.value}
         justifyContent={justifyContent}
         borderColor={primarycolor}
         border={border}
@@ -210,8 +215,9 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         lineHeight={lineHeight}
         text={t("HeadlineDescription")}
+        textAlign={textAlign}
         {...props}
-        className={`!text-[24px] md:text-[${fontSize}px] user-headline-comp items-center`}
+        className={`user-headline-comp items-center`}
         onClick={() => console.log(text)}
       >
         <h1
@@ -228,9 +234,9 @@ export const HeadlineTextGen = ({
           }}
         >
           {processedText.split("\n").map((line, index) => (
-            <span key={index}>
+            <span key={index}>   
               <div dangerouslySetInnerHTML={{ __html: line }} />
-              <br />
+             
             </span>
           ))}
         </h1>
@@ -270,6 +276,7 @@ export const HeadlineText = ({
   borderColor,
   mobileFontSize,
   lineHeight,
+  textAlign,
   ...props
 }) => {
   const {
@@ -436,7 +443,7 @@ export const HeadlineText = ({
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
-          justifyContent: `${justifyContent}`,
+          justifyContent: 'center',
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
@@ -471,6 +478,7 @@ export const HeadlineText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          textAlign={textAlign}
           {...props}
           text={t("HeadlineDescription")}
         >
@@ -538,6 +546,7 @@ export type HeadlineTextProps = {
   lineHeight: string | number
   mobileFontSize: number
   textColor?: string
+  textAlign?: string
 }
 export enum TextContainerSize {
   small = "small",
@@ -608,6 +617,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   preset: "h2",
   mobileFontSize: 24,
   textColor: "#ffffff",
+  textAlign: "center",
 }
 
 HeadlineText.craft = {
