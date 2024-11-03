@@ -149,8 +149,7 @@ export const HeadlineTextGen = ({
   borderHoverColor,
   textColor,
   lineHeight,
-  textAlign,
-  mobileScreen,
+
   mobileFontSize,
   ...props
 }) => {
@@ -215,7 +214,7 @@ export const HeadlineTextGen = ({
         mobileScreen={false}
         lineHeight={lineHeight}
         text={t("HeadlineDescription")}
-        textAlign={textAlign}
+        textAlign={props.textAlign}
         {...props}
         className={`user-headline-comp items-center`}
         onClick={() => console.log(text)}
@@ -234,9 +233,8 @@ export const HeadlineTextGen = ({
           }}
         >
           {processedText.split("\n").map((line, index) => (
-            <span key={index}>   
+            <span key={index}>
               <div dangerouslySetInnerHTML={{ __html: line }} />
-             
             </span>
           ))}
         </h1>
@@ -276,7 +274,6 @@ export const HeadlineText = ({
   borderColor,
   mobileFontSize,
   lineHeight,
-  textAlign,
   ...props
 }) => {
   const {
@@ -443,7 +440,7 @@ export const HeadlineText = ({
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
-          justifyContent: 'center',
+          justifyContent: "center",
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
@@ -478,7 +475,7 @@ export const HeadlineText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
-          textAlign={textAlign}
+          textAlign={props.textAlign}
           {...props}
           text={t("HeadlineDescription")}
         >
