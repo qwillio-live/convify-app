@@ -95,8 +95,8 @@ const IconButtonSizeValues = {
 
 const ButtonSizeValues = {
   small: ".8rem",
-  medium: "1.1rem",
-  large: "1.3rem",
+  medium: "1rem",
+  large: "1.2rem",
 }
 const paddingValues = {
   small: "9.1px 9.5px",
@@ -328,7 +328,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
 
   &:hover {
     border-style: solid;
@@ -719,6 +718,7 @@ export const LinkButton = ({
               innerRef={ref}
               disabled={disabled}
               style={{
+                fontSize: "1rem",
                 maxWidth: "100%",
                 position: "relative",
                 border: text?.length <= 0 && "1px dotted white",

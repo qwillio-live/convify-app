@@ -98,7 +98,7 @@ const paddingValues = {
 }
 const ButtonSizeValues = {
   small: ".8rem",
-  medium: "1rem",
+  medium: "1.032rem",
   large: "1.2rem",
 }
 const IconSizeValues = {
@@ -340,7 +340,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   position: relative;
   overflow: hidden;
   gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  font-size: 16px;
   font-weight: 400;
   border: 1px dashed transparent;
   transition: all 0.2s ease;
@@ -708,6 +708,7 @@ export const TelegramShareButton = ({
               disabled={disabled}
               style={{
                 maxWidth: "100%",
+                fontSize: "16px",
                 position: "relative",
                 border: text?.length <= 0 && "1px dotted white",
                 transitionProperty: "all",

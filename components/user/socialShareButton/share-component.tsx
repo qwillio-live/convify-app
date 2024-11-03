@@ -84,34 +84,15 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
   )
 }
 
-const IconButtonSizeValues = {
-  small: "70px",
-  medium: "90px",
-  large: "110px",
-  full: "100%",
-}
-
 const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1.1rem",
-  large: "1.3rem",
-}
-const paddingValues = {
-  small: "9.9px 11.6px",
-  medium: "11.275px 15px",
-  large: "14.69px 18.55px",
+  small: ".83rem",
+  medium: "1.032rem",
+  large: "1.23rem",
 }
 const IconSizeValues = {
   small: 18,
   medium: 22,
   large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "70px",
-  medium: "90px",
-  large: "110px",
-  full: "100%",
 }
 
 const ButtonTextLimit = {
@@ -125,6 +106,7 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+
 export const SocialShareButtonGen = ({
   disabled,
   fontFamily,
@@ -343,6 +325,7 @@ interface StyledCustomButtonProps {
 const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   display: flex;
+  border
   flex-direction: row;
   position: relative;
   overflow: hidden;
@@ -350,7 +333,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
 
   &:hover {
     border-style: solid;
