@@ -842,7 +842,7 @@ const PictureChoiceItem = ({
             className="flex w-full items-center justify-center"
             style={{
               padding:
-                choice.pictureType !== PictureTypes.IMAGE ? "12.5% 0 2.5%" : "",
+                choice.pictureType !== PictureTypes.IMAGE ? "17.5% 0 2.5%" : "",
             }}
           >
             {choice.pictureType === PictureTypes.ICON ? (
@@ -863,7 +863,7 @@ const PictureChoiceItem = ({
                 />
                 <img
                   src={(choice.picture as ImagePictureTypes).desktop}
-                  className="h-auto w-full overflow-hidden rounded-t-[13px] object-cover"
+                  className="h-auto max-h-[100px] w-[100vw] overflow-hidden rounded-t-[13px] object-cover"
                   loading="lazy"
                 />
               </picture>
@@ -950,11 +950,14 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
   box-shadow: ${({ isSelected, preset }) =>
     isSelected
       ? preset === PictureChoicePresets.prefilled
-        ? "0 10px 5px rgba(0, 0, 0, 0.1), -2px 0 3px rgba(0, 0, 0, 0.1), 2px 0 3px rgba(0, 0, 0, 0.1)"
+        ? "0 2px 4px rgba(0, 0, 0, 0.1)"
         : "none"
       : "none"};
 
-  border: 2px solid ${({ defaultStyles }) => defaultStyles.borderColor};
+  border: ${({ defaultStyles, preset }) =>
+    preset !== PictureChoicePresets.prefilled
+      ? `2px solid ${defaultStyles.borderColor}`
+      : ""};
   color: ${({ defaultStyles }) => defaultStyles.textColor};
   background-color: ${({ defaultStyles }) => defaultStyles.backgroundColor};
   &:hover {
@@ -962,12 +965,13 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
       preset === PictureChoicePresets.prefilled
         ? "translateY(-4px)"
         : "translateY(-2px)"};
-    border-color: ${({ hoverStyles }) => hoverStyles.borderColor};
+    border-color: ${({ hoverStyles, preset }) =>
+      preset === PictureChoicePresets.prefilled && hoverStyles.borderColor};
     color: ${({ hoverStyles }) => hoverStyles.textColor};
     background-color: ${({ hoverStyles }) => hoverStyles.backgroundColor};
     box-shadow: ${({ preset }) =>
       preset === PictureChoicePresets.prefilled
-        ? "0 10px 5px rgba(0, 0, 0, 0.1), -2px 0 3px rgba(0, 0, 0, 0.1), 2px 0 3px rgba(0, 0, 0, 0.1)" // Bottom shadow with smaller left/right shadows
+        ? "0 2px 4px rgba(0, 0, 0, 0.1)" // Bottom shadow with smaller left/right shadows
         : "none"};
   }
 
@@ -1135,7 +1139,7 @@ export type PictureChoiceProps = {
   selections: string[]
   choices: {
     id: string
-    picture: ImagePictureTypes | string | null
+    picture: ImagePictureTypes | string | null | object
     pictureType: PictureTypes
     value: string
     buttonAction: string | null

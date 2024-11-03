@@ -8,6 +8,8 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
+import img1 from "@/assets/images/img_1.png"
+import img2 from "@/assets/images/img_2.png"
 
 const usePictureChoiceThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
@@ -18,8 +20,8 @@ const usePictureChoiceThemePresets = () => {
   const defaultChoices = [
     {
       id: `input-${hexoid(6)()}`,
-      picture: "🎶",
-      pictureType: PictureTypes.EMOJI,
+      picture: "ai-generate-music-spark",
+      pictureType: PictureTypes.ICON,
       value: t("Music"),
       buttonAction: "custom-action",
       nextScreen: "none",
@@ -27,8 +29,8 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: "🌅",
-      pictureType: PictureTypes.EMOJI,
+      picture: "ai-generate-landscape-image-spark",
+      pictureType: PictureTypes.ICON,
       value: t("Image"),
       buttonAction: "custom-action",
       nextScreen: "none",
@@ -36,8 +38,11 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      pictureType: PictureTypes.EMOJI,
-      picture: "📹",
+      pictureType: PictureTypes.IMAGE,
+      picture: {
+        desktop: "https://img-uploads.b-cdn.net/400x289_1730661889335_blob",
+        mobile: "https://img-uploads.b-cdn.net/400x289_1730661889335_blob",
+      },
       value: t("Video"),
       buttonAction: "custom-action",
       nextScreen: "none",
@@ -45,8 +50,11 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: "🖼️",
-      pictureType: PictureTypes.EMOJI,
+      picture: {
+        desktop: "https://img-uploads.b-cdn.net/400x289_1730661937116_blob",
+        mobile: "https://img-uploads.b-cdn.net/400x289_1730661937116_blob",
+      },
+      pictureType: PictureTypes.IMAGE,
       value: t("Gallery"),
       buttonAction: "custom-action",
       nextScreen: "none",
