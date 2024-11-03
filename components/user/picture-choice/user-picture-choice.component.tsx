@@ -632,7 +632,7 @@ const PictureChoiceItem = ({
     if (n === 1) {
       return 100
     }
-    if (mobileScreen || isMobileScreen) {
+    if ((mobileScreen && !forGen) || isMobileScreen) {
       // if (n % 3 === 0) {
       //   return 33.33
       // } else {
