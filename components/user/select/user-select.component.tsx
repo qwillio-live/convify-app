@@ -210,7 +210,6 @@ export const SelectGen = ({
           style={{
             color: labelColor,
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: SelectSizeValues[size || "medium"],
           }}
         >
           <label>{label}</label>
