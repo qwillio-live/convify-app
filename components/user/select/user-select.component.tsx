@@ -168,6 +168,7 @@ export const SelectGen = ({
   //   "fontfamily",
   //   fontFamily
   // )
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
   return (
     <div
       ref={itemRefNew}
@@ -210,6 +211,9 @@ export const SelectGen = ({
           style={{
             color: labelColor,
             fontFamily: `var(${fontFamily?.value})`,
+            maxWidth: mobileScreen
+              ? SelectMobileSizeValues[size || "small"]
+              : SelectSizeValues[size || "small"],
           }}
         >
           <label>{label}</label>
