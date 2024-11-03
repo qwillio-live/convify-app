@@ -556,7 +556,7 @@ const ScreensList = ({ flowId }) => {
                         className="text-muted-foreground no-hover-effects relative text-xs"
                         style={{
                           overflow: "hidden", // Hide content that overflows
-                          transform: "scale(1,1)", // Zoom out vertically
+                          transform: "scale(0.9)", // Zoom out vertically
                           zoom: "25%",
                           pointerEvents: "none",
                         }}
