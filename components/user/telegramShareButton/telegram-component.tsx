@@ -342,7 +342,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   gap: 6px;
   font-size: 16px;
   font-weight: 400;
-  border: 1px dashed transparent;
+
   transition: all 0.2s ease;
 
   &:hover {
@@ -376,8 +376,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-
+  border: 1px solid #0077b3;
   ${({ size, mobileScreen }) => {
     if (size === IconButtonSizes.small) {
       return { width: "250px" }
