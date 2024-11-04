@@ -265,30 +265,38 @@ export const ImageSettings = () => {
       setProp((props) => (props.src = image))
       setShowDialog(false)
       setIsLoading(true)
+
       const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile))
       const uploadedImage = await uploadToS3(imageFile, aspectRatio)
-      if (
-        uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.desktopSize]
-      ) {
-        setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
-          props.uploadedImageUrl =
-            uploadedImage.data.data[uploadedImage.desktopSize]
-        }, 1000)
+
+      if (uploadedImage) {
+        const desktopImage =
+          uploadedImage.data.data.images[uploadedImage.desktopSize]
+        const mobileImage =
+          uploadedImage.data.data.images[uploadedImage.mobileSize]
+
+        // Set props with a timeout of 6 seconds
+        setTimeout(() => {
+          if (desktopImage) {
+            setProp((props) => {
+              props.src = desktopImage
+              props.uploadedImageUrl =
+                uploadedImage.data.data[uploadedImage.desktopSize]
+            })
+          }
+
+          if (mobileImage) {
+            setProp((props) => {
+              props.uploadedImageMobileUrl = mobileImage
+            })
+          }
+        }, 6000) // 6000 milliseconds = 6 seconds
       }
-      if (
-        uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.mobileSize]
-      ) {
-        setProp((props) => {
-          props.uploadedImageMobileUrl =
-            uploadedImage.data.data.images[uploadedImage.mobileSize]
-        }, 1000)
-      }
+
       setIsLoading(false)
     }
   }
+
   console.log("src is: ", src)
 
   const cropperRef = React.useRef<ReactCropperElement>(null)
@@ -323,51 +331,49 @@ export const ImageSettings = () => {
   const getCropData = async () => {
     setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
-      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
-      setProp(
-        (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
-        1000
-      )
-      // setProp((props) => (props.width = "100%"), 1000)
-      // setProp((props) => (props.height = "auto"), 1000)
-      setShowDialog(false)
-      setActiveAspectRatioBtn("source")
-      setProp(
-        (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
-        1000
-      )
       const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
+      const croppedDataUrl = croppedCanvas.toDataURL()
+
+      // Set crop data immediately
+      setCropData(croppedDataUrl)
+
+      // Set props with a timeout of 6 seconds
+      setTimeout(() => {
+        setProp((props) => (props.src = croppedDataUrl))
+        setShowDialog(false)
+        setActiveAspectRatioBtn("source")
+      }, 6000)
+
       const imageData = croppedCanvas.toDataURL("image/png")
       const blob = base64ToBlob(imageData, "image/png")
       const file = new File([blob], "cropped-image.png", { type: "image/png" })
       const aspectRatio = croppedCanvas.width / croppedCanvas.height
       const uploadedImage = await uploadToS3(file, aspectRatio)
       console.log("uploadedImage", uploadedImage)
-      if (
-        uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.desktopSize]
-      ) {
-        setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
-          props.uploadedImageUrl =
-            uploadedImage.data.data.images[uploadedImage.desktopSize]
-        }, 1000)
+
+      if (uploadedImage) {
+        const desktopImage =
+          uploadedImage.data.data.images[uploadedImage.desktopSize]
+        const mobileImage =
+          uploadedImage.data.data.images[uploadedImage.mobileSize]
+
+        // Set props with a timeout of 6 seconds
+        setTimeout(() => {
+          if (desktopImage) {
+            setProp((props) => {
+              props.src = desktopImage
+              props.uploadedImageUrl = desktopImage
+            })
+          }
+
+          if (mobileImage) {
+            setProp((props) => {
+              props.uploadedImageMobileUrl = mobileImage
+            })
+          }
+        }, 6000)
       }
-      if (
-        uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.mobileSize]
-      ) {
-        setProp((props) => {
-          props.uploadedImageMobileUrl =
-            uploadedImage.data.data.images[uploadedImage.mobileSize]
-        }, 1000)
-      }
+
       setIsLoading(false)
     }
   }
@@ -697,6 +703,7 @@ export const ImageSettings = () => {
                 />
               </div>
               <div className="space-y-3">
+                c
                 <div className="flex items-center justify-between">
                   <Label htmlFor="marginBottom">{t("Bottom")}</Label>
                   <span className="text-muted-foreground text-xs">
@@ -842,9 +849,9 @@ export const ImageSettings = () => {
                 variant="secondary"
                 disabled={isLoading}
               >
-                {isLoading && (
+                {/* {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                )}
+                )} */}
                 {t("Upload original")}
               </Button>
               <Button

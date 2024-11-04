@@ -31,6 +31,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
 import { ImageSettings } from "./user-image.settings"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -213,12 +214,26 @@ export const UserLogo = ({
 }) => {
   console.log("max width in the image is: ", maxWidth, width)
   const [imgg, setImg] = useState("")
+  const [count, setCount] = useState(0)
+
+  const dispatch = useAppDispatch()
   useEffect(() => {
-    setImg(src)
+    console.log("updating src", src)
+    if (count === 0) {
+      setImg(src)
+    } else {
+      setCount((prev) => prev + 1)
+      const timeoutId = setTimeout(() => {
+        setImg(src) // Assuming you have setImg defined
+      }, 6000) // 5000 milliseconds = 5 seconds
+      // Cleanup the timeout on unmount or when `src` changes
+      return () => clearTimeout(timeoutId)
+    }
   }, [src])
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
+
       <img
         alt={alt}
         src={imgg}
