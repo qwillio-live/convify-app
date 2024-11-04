@@ -1,131 +1,129 @@
 {
-    "ROOT": {
-        "type": "UserContainer",
-        "isCanvas": true,
-        "props": {
-            "padding": 5,
-            "background": "#ad2121",
-            "expanded": "true",
-            "containerType": "header",
-            "style": {
-                "minHeight": "40px",
-                "minWidth": "100%",
-                "flexDirection": "column",
-                "width": "100%",
-                "zIndex": 20,
-                "top": 0,
-                "position": "relative",
-                "justifyContent": "start"
-            },
-            "className": "min-h-auto min-w-full flex flex-col items-center"
-        },
-        "displayName": "Header Screen",
-        "custom": {},
-        "hidden": false,
-        "nodes": [
-            "xTIX1BInqi"
-        ],
-        "linkedNodes": {}
+  "ROOT": {
+    "type": "UserContainer",
+    "isCanvas": true,
+    "props": {
+      "padding": 5,
+      "background": "#ad2121",
+      "expanded": "true",
+      "containerType": "header",
+      "style": {
+        "minHeight": "80vh",
+        "minWidth": "100%",
+        "flexDirection": "column",
+        "width": "100%",
+        "zIndex": 20,
+        "top": 0,
+        "position": "relative",
+        "justifyContent": "start"
+      },
+      "className": "min-h-[80vh] min-w-full flex flex-col items-center"
     },
-    "xTIX1BInqi": {
-        "type": {
-            "resolvedName": "LogoComponent"
-        },
-        "isCanvas": false,
-        "props": {
-            "fontFamily": {
-                "value": "--font-poppins",
-                "globalStyled": true,
-                "isCustomized": false
-            },
-            "containerBackground": "rgba(255,255,255,0)",
-            "background": {
-                "value": "#3c68ec",
-                "globalStyled": true,
-                "isCustomized": false
-            },
-            "color": {
-                "value": "#ffffff",
-                "globalStyled": false,
-                "isCustomized": true
-            },
-            "backgroundHover": {
-                "value": "#2e5deb",
-                "globalStyled": true,
-                "isCustomized": false
-            },
-            "colorHover": {
-                "value": "#ffffff",
-                "globalStyled": false,
-                "isCustomized": true
-            },
-            "radius": {
-                "value": "8",
-                "globalStyled": false,
-                "isCustomized": false
-            },
-            "justifyContent": "space-between",
-            "borderColor": {
-                "value": "#3c68ec",
-                "globalStyled": true,
-                "isCustomized": false
-            },
-            "borderHoverColor": {
-                "value": "#3c68ec",
-                "globalStyled": true,
-                "isCustomized": false
-            },
-            "alt": "Image",
-            "align": "center",
-            "url": "https://convify.io",
-            "src": "/_next/static/media/convify_logo_black.0085e885.png",
-            "disabled": false,
-            "enableLink": false,
-            "minWidth": "120px",
-            "w": "auto",
-            "h": "80px",
-            "width": "medium",
-            "height": "auto",
-            "size": "medium",
-            "imageSize": 90,
-            "buttonSize": "medium",
-            "time": 2,
-            "text": "Continue",
-            "top": 0,
-            "bottom": 0,
-            "left": 0,
-            "right": 0,
-            "marginLeft": 0,
-            "marginTop": 20,
-            "marginRight": 0,
-            "marginBottom": 20,
-            "icon": {
-                "picture": "interface-arrows-right-arrow-right-keyboard",
-                "pictureType": "icon"
-            },
-            "paddingLeft": "16",
-            "paddingTop": "14",
-            "paddingRight": "16",
-            "paddingBottom": "14",
-            "flexDirection": "row",
-            "alignItems": "center",
-            "gap": 4,
-            "border": 2,
-            "fullWidth": true,
-            "preset": "filled",
-            "settingsTab": "content",
-            "tracking": false,
-            "trackingEvent": "button-d33100",
-            "nextScreen": "screen-7622e700",
-            "buttonAction": "next-screen",
-            "borderRad": 0,
-            "enableIcon": true
-        },
-        "displayName": "LogoComponent",
-        "custom": {},
-        "parent": "ROOT",
-        "hidden": false,
-        "nodes": [],
-        "linkedNodes": {}
-    }
+    "displayName": "Header Screen",
+    "custom": {},
+    "hidden": false,
+    "nodes": ["xTIX1BInqi"],
+    "linkedNodes": {}
+  },
+  "xTIX1BInqi": {
+    "type": {
+      "resolvedName": "LogoComponent"
+    },
+    "isCanvas": false,
+    "props": {
+      "fontFamily": {
+        "value": "--font-poppins",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "containerBackground": "rgba(255,255,255,0)",
+      "background": {
+        "value": "#3c68ec",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "color": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": true
+      },
+      "backgroundHover": {
+        "value": "#2e5deb",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "colorHover": {
+        "value": "#ffffff",
+        "globalStyled": false,
+        "isCustomized": true
+      },
+      "radius": {
+        "value": "8",
+        "globalStyled": false,
+        "isCustomized": false
+      },
+      "justifyContent": "space-between",
+      "borderColor": {
+        "value": "#3c68ec",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "borderHoverColor": {
+        "value": "#3c68ec",
+        "globalStyled": true,
+        "isCustomized": false
+      },
+      "alt": "Image",
+      "align": "center",
+      "url": "https://convify.io",
+      "src": "/_next/static/media/convify_logo_black.0085e885.png",
+      "disabled": false,
+      "enableLink": false,
+      "minWidth": "120px",
+      "w": "auto",
+      "h": "80px",
+      "width": "medium",
+      "height": "auto",
+      "size": "medium",
+      "imageSize": 90,
+      "buttonSize": "medium",
+      "time": 2,
+      "text": "Continue",
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0,
+      "marginLeft": 0,
+      "marginTop": 20,
+      "marginRight": 0,
+      "marginBottom": 20,
+      "icon": {
+        "picture": "interface-arrows-right-arrow-right-keyboard",
+        "pictureType": "icon"
+      },
+      "paddingLeft": "16",
+      "paddingTop": "14",
+      "paddingRight": "16",
+      "paddingBottom": "14",
+      "flexDirection": "row",
+      "alignItems": "center",
+      "gap": 4,
+      "border": 2,
+      "fullWidth": true,
+      "preset": "filled",
+      "settingsTab": "content",
+      "tracking": false,
+      "trackingEvent": "button-d33100",
+      "nextScreen": "screen-7622e700",
+      "buttonAction": "next-screen",
+      "borderRad": 0,
+      "enableIcon": true
+    },
+    "displayName": "LogoComponent",
+    "custom": {},
+    "parent": "ROOT",
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  }
 }

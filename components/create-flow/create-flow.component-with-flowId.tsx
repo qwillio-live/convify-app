@@ -540,6 +540,7 @@ export function CreateFlowComponent({ flowId }) {
                         backgroundColor: headerMode
                           ? avatarBackgroundColor
                           : "",
+                        minWidth: "100%",
                       }}
                     >
                       <Frame
