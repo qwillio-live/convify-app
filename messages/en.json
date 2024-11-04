@@ -404,7 +404,11 @@
     "Enable tracking":"Enable tracking",
     "New window":"New window",
     "Image story":"Image story",
-    "Ratio":"Ratio"
+    "Ratio":"Ratio",
+    "Video link":"Video link",
+    "Youtube":"Youtube",
+    "Hide controls":"Hide controls",
+    "Enter YouTube video link":"Enter YouTube video link"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

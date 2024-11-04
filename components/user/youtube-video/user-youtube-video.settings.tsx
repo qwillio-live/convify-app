@@ -2,8 +2,6 @@ import { useNode } from "@craftjs/core"
 import { useTranslations } from "next-intl"
 import { useCallback, useEffect, useState } from "react"
 import { throttle, debounce } from "lodash"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { Reorder, useDragControls, useMotionValue } from "framer-motion"
 
 import {
     MoveHorizontal,
@@ -126,10 +124,10 @@ export const YoutubeVideoSettings = () => {
                     <AccordionTrigger>{t("Content")}</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-2">
                         <div className="space-y-2">
-                            <Label>{t("Alt label")}</Label>
+                            <Label>{t("Video link")}</Label>
                             <Input
                                 value={link}
-                                placeholder={"Enter YouTube video link"}
+                                placeholder={t("Enter YouTube video link")}
                                 onChange={(e) => {
                                     handlePropChangeDebounced("link", getYouTubeEmbedLink(e.target.value))
                                 }}
@@ -147,7 +145,7 @@ export const YoutubeVideoSettings = () => {
                                 htmlFor="hide-controls"
                                 className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
-                                {"Hide controls"}
+                                {t("Hide controls")}
                             </label>
                         </div>
 

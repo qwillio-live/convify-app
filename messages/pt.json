@@ -399,7 +399,11 @@
     "Links Color":"Cor dos links",
     "Enable tracking":"Habilitar rastreamento",
     "Image story": "História de imagem",
-    "Ratio": "Proporção"
+    "Ratio": "Proporção",
+    "Video link": "Link do vídeo",
+    "Youtube": "Youtube",
+    "Hide controls": "Ocultar controles",
+    "Enter YouTube video link": "Insira o link do vídeo do YouTube"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",

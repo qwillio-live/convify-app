@@ -6,7 +6,12 @@ export enum YoutubeVideoSizes {
     large = "large",
     full = "full",
   }
-
+export const  YoutubeVideoSizeValues = {
+  small: "300px",
+  medium: "376px",
+  large: "576px",
+  full: "100%",
+  }
 export const useYoutubeVideoThemePresets = () => {
     const defaultPresets = {
         link: "https://www.youtube.com/embed/_qwLHlVjRyw",

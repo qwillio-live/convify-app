@@ -75,39 +75,27 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
   display: flex;
 
   ${({ size, mobileScreen, isPreviewScreen }) => {
-        if (isPreviewScreen) {
-            if (size === YoutubeVideoSizes.small) {
-                if (mobileScreen) {
-                    return { width: "360px" }
-                } else {
-                    return { width: "376px" }
-                }
-            } else if (size === YoutubeVideoSizes.medium) {
-                return { width: "calc(100% - 22px)", maxWidth: 800 }
-            } else if (size === YoutubeVideoSizes.large) {
-                return { width: "calc(100% - 22px)", maxWidth: 1000 }
+        if (size === YoutubeVideoSizes.small) {
+            if (mobileScreen) {
+                return { width: "250px" }
             } else {
-                return {
-                    width: "calc(100% - 22px)",
-                }
+                return { width: "250px" }
+            }
+        } else if (size === YoutubeVideoSizes.medium) {
+                return { width: "360px" }
+        } else if (size === YoutubeVideoSizes.large) {
+            if (mobileScreen) {
+                return { width: "calc(100% - 22px)" }
+            } else {
+                return { width: "576px" }
             }
         } else {
-            if (size === YoutubeVideoSizes.small) {
-                if (mobileScreen) {
-                    return { width: "360px" }
-                } else {
-                    return { width: "376px" }
-                }
-            } else if (size === YoutubeVideoSizes.medium) {
-                return { width: "calc(100% - 22px)", maxWidth: 800 }
-            } else if (size === YoutubeVideoSizes.large) {
-                return { width: "calc(100% - 22px)", maxWidth: 1000 }
-            } else {
-                return {
-                    width: "calc(100% - 22px)",
-                }
+            return {
+                width: "calc(100% - 22px)",
             }
         }
+    }
+    }
     }};
 
 @media (max-width: 1000px) {
@@ -121,14 +109,6 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
 @media (max-width: 800px) {
   ${({ size }) => {
         if (size === YoutubeVideoSizes.medium) {
-            return { width: "calc(100% - 22px)" }
-        }
-    }}
-}
-
-@media (max-width: 376px) {
-  ${({ size }) => {
-        if (size === YoutubeVideoSizes.small) {
             return { width: "calc(100% - 22px)" }
         }
     }}
@@ -215,11 +195,11 @@ export const YoutubeVideo = ({
 }
 
 export const YoutubeVideoFrame = ({ link, showControls }) => {
-    if(!link){
+    if (!link) {
         return <div className='h-20 w-20'></div>
     }
     const url = new URL(link)
-    if(!showControls){
+    if (!showControls) {
         url.searchParams.set("controls", "0")
     }
     return (
