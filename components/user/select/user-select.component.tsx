@@ -297,7 +297,7 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
   overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
-      ? SelectMobileSizeValues[props.size || "medium"]
+      ? '100%'
       : SelectSizeValues[props.size || "medium"]};
   width: 100%;
   box-sizing: border-box;
