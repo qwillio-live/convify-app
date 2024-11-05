@@ -7,7 +7,14 @@ import localFont from "next/font/local"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
-import { env } from "@/env.mjs"
+import { Poppins } from "next/font/google"
+
+export const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  display: "swap",
+  weight: ["100", "300", "400", "500", "700", "900"],
+})
 
 const fontSans = localFont({
   src: "../../assets/fonts/Inter-Regular.ttf",
@@ -75,7 +82,8 @@ export default function RootLayout({
       <body
         className={cn(
           "bg-background min-h-screen font-sans antialiased ",
-          fontSans.variable
+          fontSans.variable,
+          poppins.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>

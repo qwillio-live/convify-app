@@ -496,7 +496,7 @@ const HeaderComponent = ({
             </Button>
           </DialogTrigger>
           <DialogContent
-            className="flex h-[308px] min-w-[434px] justify-center !rounded-[12px]"
+            className="flex h-[308px] !w-[600px] justify-center !rounded-[12px]"
             dialogueClassname="bg-[#9C9C9E]/80 backdrop-blur-0"
           >
             <DialogHeader>
@@ -512,7 +512,7 @@ const HeaderComponent = ({
                 </DialogClose>
               </DialogTitle>
               <DialogDescription className=" flex-wrap content-center items-center  text-base font-normal ">
-                <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[32px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
+                <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[30px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
                   {t(messages[2])}
                 </span>
                 <span className="mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center !font-poppins">
