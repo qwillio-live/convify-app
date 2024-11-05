@@ -9,7 +9,7 @@ import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
 import { Poppins } from "next/font/google"
 
-export const poppins = Poppins({
+const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
   display: "swap",
