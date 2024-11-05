@@ -62,7 +62,7 @@ export const ImageStoryGen = ({
                 mobileScreen={false}
                 maxWidth={ImageStorySizes[size || "medium"]}
             >
-                <ImageStoryItems images={items} aspectRatio={aspectRatio} />
+                <ImageStoryItems images={items} key={items?.length ?? 0} aspectRatio={aspectRatio} />
             </StyledImageStoryContainer>
         </div>
     )
@@ -142,7 +142,7 @@ export const ImageStory = ({
                     mobileScreen={false}
                     maxWidth={ImageStorySizes[size || "medium"]}
                 >
-                    <ImageStoryItems images={items} aspectRatio={aspectRatio} />
+                    <ImageStoryItems images={items} key={items?.length ?? 0} aspectRatio={aspectRatio} />
                 </StyledImageStoryContainer>
             </div>
         </div>
@@ -168,17 +168,18 @@ export const ImageStoryItems = ({ images, aspectRatio }) => {
                 stories={((images ?? []).map((image, index) => (
                     {
                         content: () => (
-                            <div style={{ borderRadius: "16px" }}>
+                            <div style={{ borderRadius: "16px" }} key={index}>
                                 <img alt={"story"} src={image.src} key={index} style={{ borderRadius: '16px !important', objectFit: 'cover', aspectRatio: `${aspectRatio}` }} />
                             </div>
                         )
                     }
-                ))) ?? [{
-                    content: () => <></>
-                }]}
+                ))) ?? 
+                    [{ content: null}]
+                }
                 loop
                 height={"100%"}
                 width={"100%"}
+                defaultInterval={5000}
                 storyStyles={{
                     width: '100%',
                     height: '100%',
@@ -195,6 +196,7 @@ export const ImageStoryItems = ({ images, aspectRatio }) => {
                 progressStyles={{
                     backgroundColor: '#FFFFFF',
                     overflow: 'hidden',
+                    height: '4px',
                 }}
                 storyContainerStyles={{
                     borderRadius: '16px',
@@ -249,7 +251,7 @@ const StyledImageStoryContainer = styled.div<StyledImageStoryContainerPropTypes>
                 if (mobileScreen) {
                     return { width: "360px" }
                 } else {
-                    return { width: "376px" }
+                    return { width: "360px" }
                 }
             } else if (size === ImageStorySizes.medium) {
                 return { width: "calc(100% - 22px)", maxWidth: 800 }

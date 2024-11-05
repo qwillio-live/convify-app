@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-
 import crypto from "crypto"
 import { sign } from "jsonwebtoken"
 import prisma from "@/lib/prisma"
@@ -67,4 +66,12 @@ export const generateSignInLink = async (userEmail) => {
   console.log("Sign-in link:", signInLink)
 
   return signInLink
+}
+
+export const serialize = value => {
+  return JSON.stringify(value)
+}
+
+export const deserialize = string => {
+  return JSON.parse(string)
 }
