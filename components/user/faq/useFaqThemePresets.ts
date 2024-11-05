@@ -13,6 +13,11 @@ export enum RequiredRotation  {
   chevron= 180,
 }
 
+export enum FAQPresetType {
+  default = "default",
+  blocked = "blocked",
+}
+
 const useFaqThemePresets = () => {
     const theme = useAppSelector((state) => state.theme)
     const t = useTranslations("Components")
@@ -60,13 +65,15 @@ const useFaqThemePresets = () => {
         borderWidth: 1.5,
         iconType: IconType.chevron,
         items: defaultItems,
+        presetType: FAQPresetType.default,
     }
 
     const blockedPreset = {
       ...preset,
       blockColor: "#EFEDEB",
       borderRadius: 8,
-      borderWidth: 0
+      borderWidth: 0,
+      presetType: FAQPresetType.blocked,
     }
 
     return {

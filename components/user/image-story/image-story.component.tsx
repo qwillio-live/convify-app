@@ -190,9 +190,11 @@ export const ImageStoryItems = ({ images, aspectRatio }) => {
                     height: '4px',
                     backgroundColor: '#9CA3AF99',
                     borderRadius: '100px',
+                    overflow: 'hidden',
                 }}
                 progressStyles={{
                     backgroundColor: '#FFFFFF',
+                    overflow: 'hidden',
                 }}
                 storyContainerStyles={{
                     borderRadius: '16px',

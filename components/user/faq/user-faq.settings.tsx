@@ -1,6 +1,6 @@
 import { useNode } from "@craftjs/core"
 import { useTranslations } from "next-intl"
-import useFaqThemePresets, { IconType } from "./useFaqThemePresets"
+import useFaqThemePresets, { FAQPresetType, IconType } from "./useFaqThemePresets"
 import { useCallback, useEffect, useState } from "react"
 import { throttle, debounce } from "lodash"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
@@ -27,6 +27,7 @@ import { ColorInput } from "@/components/color-input"
 import { FAQGen, FAQItemIcons } from "./user-faq.component"
 import hexoid from "hexoid"
 import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 
 export const FAQSettings = () => {
@@ -60,16 +61,12 @@ export const FAQSettings = () => {
             settingTabs,
             iconType,
             items,
+            presetType
         },
     } = useNode((node) => ({
         props: node.data.props,
     }))
     const { blockedPreset, preset: defaultPreset } = useFaqThemePresets()
-    enum PRESETNAMES {
-        blockedPreset = "blocked",
-        regular = "regular",
-    }
-    const [selectedPreset, setSelectedPreset] = useState(PRESETNAMES.regular)
     const changePresetStyles = (preset) => {
         const updatedStyles = ["blockColor", "borderRadius", "borderWidth"]
 
@@ -231,7 +228,7 @@ export const FAQSettings = () => {
                             />
                         </div> */}
 
-                        {selectedPreset === PRESETNAMES.blockedPreset && <div className="flex items-center justify-between">
+                        {presetType === FAQPresetType.blocked && <div className="flex items-center justify-between">
                             <Label htmlFor="blockColor">{t("Block Color")}</Label>
                             <ColorInput
                                 value={blockColor}
@@ -375,9 +372,9 @@ export const FAQSettings = () => {
                             <Card
                                 onClick={() => {
                                     changePresetStyles(defaultPreset)
-                                    setSelectedPreset(PRESETNAMES.regular)
+                                    debouncedSetProp("presetType", FAQPresetType.default)
                                 }}
-                                className="px-4 transition-all duration-300 hover:cursor-pointer"
+                                className={cn("px-4 transition-all duration-300 hover:cursor-pointer",  { "border-[#2B3398]": presetType === FAQPresetType.default })}
                             >
                                 {/** @ts-ignore */}
                                 {/** @ts-ignore */}
@@ -397,9 +394,9 @@ export const FAQSettings = () => {
                             <Card
                                 onClick={() => {
                                     changePresetStyles(blockedPreset)
-                                    setSelectedPreset(PRESETNAMES.blockedPreset)
+                                    debouncedSetProp("presetType", FAQPresetType.blocked)
                                 }}
-                                className="p-0 transition-all duration-300 hover:cursor-pointer"
+                                className={cn("p-0 transition-all duration-300 hover:cursor-pointer", { "border-[#2B3398]": presetType === FAQPresetType.blocked })}
 
                             >
                                 {/** @ts-ignore */}
