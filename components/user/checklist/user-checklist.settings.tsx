@@ -11,6 +11,7 @@ import { debounce, throttle } from "lodash"
 import {
   GripVertical,
   X as IconX,
+  Image,
   MoveHorizontal,
   Plus,
   Search,
@@ -57,6 +58,7 @@ import {
 } from "./user-checklist.component"
 import { ColorInput } from "@/components/color-input"
 import { Icons } from "@/components/icons"
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 
 export const ChecklistSettings = () => {
   const t = useTranslations("Components")
@@ -89,6 +91,7 @@ export const ChecklistSettings = () => {
       settingTabs,
       preset,
       textColor,
+      iconType,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -131,6 +134,17 @@ export const ChecklistSettings = () => {
     debouncedSetProp(property, value)
   }
 
+  const handleMultiplePropChangeDebounced = useCallback(
+    debounce((properties) => {
+      setProp((prop) => {
+        Object.keys(properties).forEach((key) => {
+          prop[key] = properties[key]
+        })
+      }, 0)
+    }),
+    [setProp]
+  )
+
   const themeBackgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
@@ -139,6 +153,7 @@ export const ChecklistSettings = () => {
     (state) => state?.theme?.general?.primaryColor
   )
 
+  console.log("======>icons", icon, iconType)
   return (
     <>
       <Accordion
@@ -195,10 +210,23 @@ export const ChecklistSettings = () => {
           <AccordionContent className="space-y-4 pt-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="icon">{t("Icon")}</Label>
-              <ChecklistSettingsIconPicker
-                icon={icon}
-                onChange={(icon) => {
-                  debouncedSetProp("icon", icon)
+              <PicturePicker
+                picture={
+                  iconType === PictureTypes.NULL ? (
+                    <Image className="text-muted-foreground size-4" />
+                  ) : (
+                    icon
+                  )
+                }
+                pictureType={iconType}
+                maxWidthMobile={400}
+                maxWidthDesktop={400}
+                onChange={(icon, iconType) => {
+                  handleMultiplePropChangeDebounced({
+                    iconType,
+                    icon,
+                  })
+                  // debouncedSetProp("iconType", pictureType)
                 }}
               />
             </div>

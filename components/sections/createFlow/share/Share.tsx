@@ -449,7 +449,10 @@ const HeaderComponent = ({
               {t("Customize link")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="flex h-[308px] w-[434px] justify-center">
+          <DialogContent
+            className="flex h-[308px] w-[434px] justify-center !rounded-[12px]"
+            dialogueClassname="bg-[#9C9C9E]/80 backdrop-blur-0"
+          >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
                 <DialogClose asChild>
@@ -458,19 +461,19 @@ const HeaderComponent = ({
                     type="button"
                     variant="ghost"
                   >
-                    <span className="font-bold">X</span>
+                    <X className="size-5" color="#7B7D80" />
                   </Button>
                 </DialogClose>
               </DialogTitle>
-              <DialogDescription className=" flex-wrap content-center items-center  text-base font-normal ">
+              <DialogDescription className=" flex-wrap content-center items-center  text-base font-normal">
                 <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[32px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
                   {t(messages[1])}
                 </span>
-                <span className="mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center">
+                <span className="!font-poppins mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center text-[#505050]">
                   {t("Available on these plans: Plus, Business, Enterprise")}
                 </span>
                 <div className="flex w-full justify-center">
-                  <Button className="mx-auto h-[48px] w-[298px] ">
+                  <Button className="mx-auto h-[48px] w-[298px] !font-poppins text-[16px] ">
                     {t("Upgrade my plan")}
                   </Button>
                 </div>
@@ -492,7 +495,10 @@ const HeaderComponent = ({
               {t("Email link")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="flex h-[308px] min-w-[434px] justify-center">
+          <DialogContent
+            className="flex h-[308px] min-w-[434px] justify-center !rounded-[12px]"
+            dialogueClassname="bg-[#9C9C9E]/80 backdrop-blur-0"
+          >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
                 <DialogClose asChild>
@@ -501,7 +507,7 @@ const HeaderComponent = ({
                     type="button"
                     variant="ghost"
                   >
-                    <span className="font-bold">X</span>
+                    <X className="size-5" color="#7B7D80" />
                   </Button>
                 </DialogClose>
               </DialogTitle>
@@ -509,11 +515,11 @@ const HeaderComponent = ({
                 <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[32px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
                   {t(messages[2])}
                 </span>
-                <span className="mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center">
+                <span className="mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center !font-poppins">
                   {t("Available on these plans: Plus, Business, Enterprise")}
                 </span>
                 <div className="flex w-full justify-center">
-                  <Button className="mx-auto h-[48px] w-[298px] ">
+                  <Button className="mx-auto h-[48px] w-[298px] !font-poppins text-[16px] ">
                     {t("Upgrade my plan")}
                   </Button>
                 </div>
@@ -535,7 +541,10 @@ const HeaderComponent = ({
               {t("QR Code")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="flex h-[308px] min-w-[434px] justify-center">
+          <DialogContent
+            className="flex h-[308px] min-w-[434px] justify-center !rounded-[12px]"
+            dialogueClassname="bg-[#9C9C9E]/80 backdrop-blur-0"
+          >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
                 <DialogClose asChild>
@@ -544,7 +553,7 @@ const HeaderComponent = ({
                     type="button"
                     variant="ghost"
                   >
-                    <span className="font-bold">X</span>
+                    <X className="size-5" color="#7B7D80" />
                   </Button>
                 </DialogClose>
               </DialogTitle>
@@ -552,11 +561,11 @@ const HeaderComponent = ({
                 <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[32px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
                   {t(messages[3])}
                 </span>
-                <span className="mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center">
+                <span className="mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center !font-poppins">
                   {t("Available on these plans: Plus, Business, Enterprise")}
                 </span>
                 <div className="flex w-full justify-center">
-                  <Button className="mx-auto h-[48px] w-[298px] ">
+                  <Button className="mx-auto h-[48px] w-[298px] !font-poppins text-[16px] ">
                     {t("Upgrade my plan")}
                   </Button>
                 </div>

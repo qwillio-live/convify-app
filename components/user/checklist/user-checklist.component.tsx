@@ -18,6 +18,11 @@ import {
   ChecklistIconRenderer,
   ChecklistSettings,
 } from "./user-checklist.settings"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
 export const ChecklistGen = ({
   checklistItems,
@@ -25,6 +30,7 @@ export const ChecklistGen = ({
   fontWeight,
   fontSize,
   icon,
+  iconType,
   layout,
   size,
   marginLeft,
@@ -72,14 +78,33 @@ export const ChecklistGen = ({
       >
         {checklistItems.map((item, index) => (
           <li key={index} className="flex flex-1 items-center gap-3">
-            <ChecklistIconRenderer
-              iconName={icon}
-              style={{
-                width: `${fontSize}px`,
-                height: `${fontSize}px`,
-                color: iconColor,
-              }}
-            />
+            {iconType === PictureTypes.NULL && (icon as React.ReactNode)}
+            {iconType === PictureTypes.ICON && (
+              <SvgRenderer iconName={icon as string} />
+            )}
+            {iconType === PictureTypes.EMOJI && (
+              <span className="flex size-5 items-center justify-center text-[18px] leading-[20px]">
+                {icon as string}
+              </span>
+            )}
+            {iconType === PictureTypes.IMAGE && (
+              <picture>
+                <source
+                  media="(min-width:1080px)"
+                  srcSet={(icon as ImagePictureTypes).desktop}
+                />
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(icon as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(icon as ImagePictureTypes).original}
+                  alt="icon"
+                  className="size-5 object-contain"
+                />
+              </picture>
+            )}
+
             <span
               className="flex-1"
               style={{
@@ -108,17 +133,17 @@ const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
   } */
 
   ${({ size, mobileScreen }) => {
-    if (mobileScreen) {
+    if (mobileScreen && size !== UserInputSizes.small) {
       return { width: "calc(100% - 22px)" }
     }
 
     switch (size) {
       case UserInputSizes.small:
-        return { width: "376px" } // Assuming small size width
+        return { width: "min(250px, 100%)" } // Assuming small size width
       case UserInputSizes.medium:
-        return { width: "800px" }
+        return { width: "min(376px, 100%)" }
       case UserInputSizes.large:
-        return { width: "1000px" }
+        return { width: "min(576px, 100%)" }
       default:
         return { width: "100%" }
     }
@@ -131,6 +156,7 @@ export const Checklist = ({
   fontWeight,
   fontSize,
   icon,
+  iconType,
   iconColor,
   layout,
   size,
@@ -239,6 +265,7 @@ export const Checklist = ({
                   prop.checklistItems[index].value = updatedValue
                 }, 200)
               }
+              iconType={iconType}
             />
           ))}
         </Wrapper>
@@ -255,6 +282,7 @@ const ChecklistItemSettings = ({
   textColor,
   borderColor,
   icon,
+  iconType,
   item,
   index,
   onValueChange,
@@ -268,14 +296,33 @@ const ChecklistItemSettings = ({
 
   return (
     <li key={index} className="flex w-full flex-1 items-center gap-3">
-      <ChecklistIconRenderer
-        iconName={icon}
-        style={{
-          width: `${fontSize}px`,
-          height: `${fontSize}px`,
-          color: iconColor,
-        }}
-      />
+      {iconType === PictureTypes.NULL && (icon as React.ReactNode)}
+      {iconType === PictureTypes.ICON && (
+        <SvgRenderer iconName={icon as string} />
+      )}
+      {iconType === PictureTypes.EMOJI && (
+        <span className="flex size-5 items-center justify-center text-[18px] leading-[20px]">
+          {icon as string}
+        </span>
+      )}
+      {iconType === PictureTypes.IMAGE && (
+        <picture>
+          <source
+            media="(min-width:1080px)"
+            srcSet={(icon as ImagePictureTypes).desktop}
+          />
+          <source
+            media="(min-width:560px)"
+            srcSet={(icon as ImagePictureTypes).mobile}
+          />
+          <img
+            src={(icon as ImagePictureTypes).original}
+            alt="icon"
+            className="size-5 object-contain"
+          />
+        </picture>
+      )}
+
       <div className="flex-1">
         {/** @ts-ignore */}
         {/** @ts-ignore */}
@@ -329,6 +376,7 @@ export type ChecklistProps = {
   paddingRight: string | number
   paddingBottom: string | number
   icon: string
+  iconType: PictureTypes
   iconColor: string
   textColor?: string
   borderColor: string
@@ -355,6 +403,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fontWeight: "normal",
   fontSize: 16,
   icon: "interface-validation-check-circle-checkmark-addition-circle-success-check-validation-add-form",
+  iconType: PictureTypes.ICON,
   layout: ChecklistLayouts.column,
   textColor: "#ffffff",
   borderColor: "#3182ce",
