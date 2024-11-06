@@ -599,7 +599,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: env.NEXT_PUBLIC_APP_URL,
+  url: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
   enableLink: true,
