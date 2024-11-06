@@ -85,9 +85,9 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
 }
 
 const ButtonSizeValues = {
-  small: ".83rem",
-  medium: "1.032rem",
-  large: "1.23rem",
+  small: ".8625rem",
+  medium: "1.0629rem",
+  large: "1.2624rem",
 }
 const IconSizeValues = {
   small: 18,
