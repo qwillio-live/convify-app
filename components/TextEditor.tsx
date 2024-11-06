@@ -35,14 +35,14 @@ const toggleMark = (editor, format) => {
 }
 const isLinkActive = (editor) => {
     const [link] = Editor.nodes(editor, {
-        match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
+        match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any).type === 'link',
     })
     return !!link
 }
 
 const unwrapLink = (editor) => {
     Transforms.unwrapNodes(editor, {
-        match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
+        match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any).type === 'link',
     })
 }
 
