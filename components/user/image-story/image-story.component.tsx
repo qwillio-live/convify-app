@@ -112,7 +112,7 @@ export const ImageStory = ({
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
         >
-            {hover && <Controller nameOfComponent={t("Image story")} className='w-full min-w-full' />}
+            {hover && <Controller nameOfComponent={t("Image story")} />}
             <div
                 className="relative w-full"
                 style={{
