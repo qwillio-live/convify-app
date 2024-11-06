@@ -451,7 +451,7 @@ const HeaderComponent = ({
           </DialogTrigger>
           <DialogContent
             className="flex h-[308px] w-[434px] justify-center !rounded-[12px]"
-            dialogueClassname="bg-[#9C9C9E]/80 !backdrop-blur-0"
+            dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
           >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
@@ -497,7 +497,7 @@ const HeaderComponent = ({
           </DialogTrigger>
           <DialogContent
             className="flex h-[308px] !w-[600px] justify-center !rounded-[12px]"
-            dialogueClassname="bg-[#9C9C9E]/80 !backdrop-blur-0"
+            dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
           >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
@@ -543,7 +543,7 @@ const HeaderComponent = ({
           </DialogTrigger>
           <DialogContent
             className="flex h-[308px] min-w-[434px] justify-center !rounded-[12px]"
-            dialogueClassname="bg-[#9C9C9E]/80 !backdrop-blur-0"
+            dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
           >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
