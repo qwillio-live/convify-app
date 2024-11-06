@@ -7,6 +7,8 @@ import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalT
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import { HeadlineTextProps, TextContainerSize } from "./headline-text.component"
+import { serialize } from "@/lib/utils"
+
 
 const useHeadlineThemePresets = () => {
   const t = useTranslations("Components")
@@ -19,6 +21,12 @@ const useHeadlineThemePresets = () => {
     theme?.general?.primaryColor || "#3182ce",
     0.1
   )
+
+const defaultContent = serialize([{
+    type: 'paragraph',
+    children: [
+        { text:  t("HeadlineDescription") }]
+}])
 
   const h1Preset: HeadlineTextProps = {
     lineHeight: "1.5",
@@ -70,7 +78,7 @@ const useHeadlineThemePresets = () => {
     width: TextContainerSize.medium,
     height: "auto",
     size: TextContainerSize.medium,
-    text: t("HeadlineDescription"),
+    text:defaultContent,
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -138,7 +146,7 @@ const useHeadlineThemePresets = () => {
     width: "fit-content",
     height: "fit-content",
     size: TextContainerSize.medium,
-    text: t("HeadlineDescription"),
+    text: defaultContent,
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,

@@ -254,9 +254,9 @@ const StyledImageStoryContainer = styled.div<StyledImageStoryContainerPropTypes>
                     return { width: "360px" }
                 }
             } else if (size === ImageStorySizes.medium) {
-                return { width: "calc(100% - 22px)", maxWidth: 800 }
+                return { width: "calc(100% - 21px)", maxWidth: 800 }
             } else if (size === ImageStorySizes.large) {
-                return { width: "calc(100% - 22px)", maxWidth: 1000 }
+                return { width: "calc(100% - 21px)", maxWidth: 1000 }
             } else {
                 return {
                     width: "calc(100% - 22px)",

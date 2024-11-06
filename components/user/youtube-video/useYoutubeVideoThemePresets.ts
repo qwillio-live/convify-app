@@ -15,7 +15,7 @@ export const  YoutubeVideoSizeValues = {
 export const useYoutubeVideoThemePresets = () => {
     const defaultPresets = {
         link: "https://www.youtube.com/embed/_qwLHlVjRyw",
-        size: YoutubeVideoSizes.small,
+        size: YoutubeVideoSizes.medium,
         marginLeft: 0,
         marginTop: 0,
         marginRight: 0,
