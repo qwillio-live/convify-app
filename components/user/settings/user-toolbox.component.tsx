@@ -406,7 +406,7 @@ export const UserToolbox = () => {
                         paddingLeft={0}
                         paddingRight={0}
                         paddingTop={0}
-                        marginBottom={0}
+                        marginBottom={30}
                         marginLeft={0}
                         marginRight={0}
                         marginTop={30}
