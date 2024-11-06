@@ -6,6 +6,7 @@ import { useNode } from "@craftjs/core"
 import { useState } from "react"
 import { Controller } from '../settings/controller.component'
 import { useTranslations } from "next-intl"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 export const YoutubeVideoGen = ({
     size,
@@ -73,6 +74,7 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
         `${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px`};
   background-color: ${({ containerBackground }) => containerBackground};
   display: flex;
+  max-width:calc(100% - 22px);
 
   ${({ size, mobileScreen, isPreviewScreen }) => {
         if (size === YoutubeVideoSizes.small) {
@@ -82,12 +84,15 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
                 return { width: "250px" }
             }
         } else if (size === YoutubeVideoSizes.medium) {
+            if (mobileScreen) {
                 return { width: "360px" }
+            }
+             else {   return { width: "376px" }}
         } else if (size === YoutubeVideoSizes.large) {
             if (mobileScreen) {
                 return { width: "calc(100% - 22px)" }
             } else {
-                return { width: "576px" }
+                return { width: "800px" }
             }
         } else {
             return {
@@ -97,23 +102,6 @@ margin: ${({ marginTop, marginRight, marginBottom, marginLeft }) =>
     }
     }
     }};
-
-@media (max-width: 1000px) {
-  ${({ size }) => {
-        if (size === YoutubeVideoSizes.large) {
-            return { width: "calc(100% - 22px)" }
-        }
-    }}
-}
-
-@media (max-width: 800px) {
-  ${({ size }) => {
-        if (size === YoutubeVideoSizes.medium) {
-            return { width: "calc(100% - 22px)" }
-        }
-    }}
-}
-
 `
 
 export const YoutubeVideo = ({
@@ -140,6 +128,8 @@ export const YoutubeVideo = ({
 
     const [hover, setHover] = useState(false)
     const t = useTranslations('Components')
+    const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
+
 
     return (
         <div
@@ -177,7 +167,7 @@ export const YoutubeVideo = ({
                     size={size}
                     containerBackground={containerBackground}
                     isPreviewScreen={false}
-                    mobileScreen={false}
+                    mobileScreen={mobileScreen ?? false}
                     marginBottom={marginBottom}
                     marginLeft={marginLeft}
                     marginRight={marginRight}
