@@ -14,30 +14,29 @@ const useListThemePresets = () => {
   const defaultItems = [
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: "graph-arrow-increase",
-      pictureType: PictureTypes.ICON,
+      picture: "📌",
+      pictureType: PictureTypes.EMOJI,
       title: t("Streamlined Access"),
       description: t("Quick entry points to all features"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture:
-        "interface-edit-brush-2-brush-color-colors-design-paint-painting",
-      pictureType: PictureTypes.ICON,
+      picture: "🖌️",
+      pictureType: PictureTypes.EMOJI,
       title: t("Customizable Interface"),
       description: t("Tailor your workspace to your needs"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: "check",
-      pictureType: PictureTypes.ICON,
+      picture: "💯",
+      pictureType: PictureTypes.EMOJI,
       title: t("Rock-Solid Reliability"),
       description: t("Depend on consistent, uninterrupted service"),
     },
     {
       id: `list-item-${hexoid(6)()}`,
-      picture: "interface-edit-binocular-binocular-binoculars-view-zoom",
-      pictureType: PictureTypes.ICON,
+      picture: "📑",
+      pictureType: PictureTypes.EMOJI,
       title: t("Behavioral Analytics"),
       description: t("Explore comprehensive user activity data"),
     },
