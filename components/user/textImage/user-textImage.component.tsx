@@ -461,6 +461,7 @@ export const TextImageComponentGen = ({
                             ? textColor
                             : primaryTextColor,
                         fontSize: `${titleFontSize}px`,
+                        lineHeight:`${titleFontSize * 1.5}px`,
                         transitionProperty: "all",
                         overflowX: "clip",
                         textOverflow: "ellipsis",
