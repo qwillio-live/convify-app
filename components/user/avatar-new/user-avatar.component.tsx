@@ -102,7 +102,7 @@ export const AvatarComponentGen = ({
       <div
         className="relative w-full"
         style={{
-          background: `${"transparent"}`,
+          background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -450,7 +450,7 @@ export const AvatarComponent = ({
       <div
         className="relative w-full"
         style={{
-          background: `${"transparent"}`,
+          background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -602,7 +602,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   url: env.NEXT_PUBLIC_APP_URL,
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
-  enableLink: false,
+  enableLink: true,
   w: "auto",
   h: "60px",
   width: "85%",
