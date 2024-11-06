@@ -269,7 +269,7 @@ export const UserTextInputSettings = () => {
                 defaultValue={[lineHeight]}
                 value={[lineHeight]}
                 max={100}
-                min={12}
+                min={18}
                 step={1}
                 onValueChange={(e) =>
                   handlePropChangeDebounced("lineHeight", e)

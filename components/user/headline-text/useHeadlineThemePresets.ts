@@ -21,7 +21,7 @@ const useHeadlineThemePresets = () => {
   )
 
   const h1Preset: HeadlineTextProps = {
-    lineHeight: 38,
+    lineHeight: 29,
     fontSize: 32,
     fontWeight: "700",
     fontFamily: {
@@ -143,7 +143,7 @@ const useHeadlineThemePresets = () => {
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    lineHeight: 38,
+    lineHeight: 29,
     paddingLeft: "12",
     paddingTop: "14",
     paddingRight: "12",
