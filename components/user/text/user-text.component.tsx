@@ -154,7 +154,7 @@ export const TextInputDefaultProps: TextInputProps = {
   marginRight: 0,
   marginBottom: 20,
   fontSize: 18,
-  lineHeight: 24,
+  lineHeight: 23,
   fontWeight: "400",
   textAlign: "center",
   paddingLeft: "12",

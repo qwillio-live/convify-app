@@ -73,6 +73,8 @@ interface StyledCustomHeadlineInput {
   settingsTab?: string
   lineHeight?: string | number
   textAlign?: string
+  mobileLineHeight?: string | number
+  mobileFontSize?: string | number
 }
 const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -115,7 +117,10 @@ const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
   @media (max-width: 660px) {
     width: 100%; /* Make the container take the full width on smaller screens */
     max-width: calc(100% - 20px);
-    font-size: 24px;
+    ${(props) =>
+      props.mobileFontSize && `font-size: ${props.mobileFontSize}px`};
+    ${(props) =>
+      props.mobileLineHeight && `line-height: ${props.mobileLineHeight}px`};
   }
 `
 
@@ -149,7 +154,7 @@ export const HeadlineTextGen = ({
   borderHoverColor,
   textColor,
   lineHeight,
-
+  mobileLineHeight,
   mobileFontSize,
   ...props
 }) => {
@@ -194,6 +199,7 @@ export const HeadlineTextGen = ({
         colorHover={colorHover?.value}
         flexDirection={flexDirection}
         fontSize={fontSize}
+        mobileFontSize={mobileFontSize}
         fontWeight={fontWeight}
         justifyContent={justifyContent}
         borderColor={primarycolor}
@@ -213,6 +219,7 @@ export const HeadlineTextGen = ({
         alignItems={alignItems}
         mobileScreen={false}
         lineHeight={lineHeight}
+        mobileLineHeight={mobileLineHeight}
         text={t("HeadlineDescription")}
         textAlign={props.textAlign}
         {...props}
@@ -229,7 +236,7 @@ export const HeadlineTextGen = ({
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
-            lineHeight: `${lineHeight}px`,
+            // lineHeight: `${lineHeight}px`,
           }}
         >
           {processedText.split("\n").map((line, index) => (
@@ -273,6 +280,7 @@ export const HeadlineText = ({
   border,
   borderColor,
   mobileFontSize,
+  mobileLineHeight,
   lineHeight,
   ...props
 }) => {
@@ -452,7 +460,10 @@ export const HeadlineText = ({
       >
         <StyledCustomHeadlineInput
           fontFamily={primaryFont}
-          fontSize={`${mobileScreen ? mobileFontSize : fontSize}px`}
+          fontSize={fontSize}
+          lineHeight={lineHeight}
+          mobileFontSize={mobileFontSize}
+          mobileLineHeight={mobileLineHeight}
           color={color.value}
           colorHover={colorHover.value}
           flexDirection={flexDirection}
@@ -494,7 +505,7 @@ export const HeadlineText = ({
                 }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
-                lineHeight: `${lineHeight}px`,
+                lineHeight: `${mobileScreen ? mobileLineHeight : lineHeight}px`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
@@ -542,6 +553,7 @@ export type HeadlineTextProps = {
   preset: string
   lineHeight: string | number
   mobileFontSize: number
+  mobileLineHeight: number
   textColor?: string
   textAlign?: string
 }
@@ -613,6 +625,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   tagType: "h1",
   preset: "h2",
   mobileFontSize: 24,
+  mobileLineHeight: 32,
   textColor: "#ffffff",
   textAlign: "center",
 }

@@ -101,6 +101,7 @@ export const HeadlineTextSettings = () => {
       textColor,
       textAlign,
       mobileFontSize,
+      mobileLineHeight,
       lineHeight,
     },
   } = useNode((node) => ({
@@ -137,6 +138,7 @@ export const HeadlineTextSettings = () => {
       "textColor",
       "textAlign",
       "mobileFontSize",
+      "mobileLineHeight",
       "lineHeight",
     ]
     setProp((props) => {
@@ -290,25 +292,47 @@ export const HeadlineTextSettings = () => {
                 />
               </div>
             )}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label>{t("Line Height")}</Label>
-                <span className="text-muted-foreground text-xs">
-                  {lineHeight}
-                </span>
+            {mobileScreen ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>{t("Line Height")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {mobileLineHeight}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[mobileLineHeight]}
+                  value={[mobileLineHeight]}
+                  max={100}
+                  min={12}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("mobileLineHeight", e)
+                  }
+                />
               </div>
-              <Slider
-                className=""
-                defaultValue={[lineHeight]}
-                value={[lineHeight]}
-                max={100}
-                min={18}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("lineHeight", e)
-                }
-              />
-            </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>{t("Line Height")}</Label>
+                  <span className="text-muted-foreground text-xs">
+                    {lineHeight}
+                  </span>
+                </div>
+                <Slider
+                  className=""
+                  defaultValue={[lineHeight]}
+                  value={[lineHeight]}
+                  max={100}
+                  min={12}
+                  step={1}
+                  onValueChange={(e) =>
+                    handlePropChangeDebounced("lineHeight", e)
+                  }
+                />
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label>{t("FontWeight")}</Label>
