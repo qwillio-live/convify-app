@@ -133,6 +133,7 @@ function tableMap(
       if (matchingContents.length > 0) {
         // If there are multiple matches, concatenate their values as a string
         result[labelObj.value] =
+          //@ts-ignore
           matchingContents
             .map((content: any) => content.value?.value || content.value)
             .join(", ") || "" // Join values with a comma
@@ -302,6 +303,7 @@ const ResponseFlowComponents = () => {
           //@ts-ignore
           uniqueLabels.set(label.id, {
             label: label.label,
+            //@ts-ignore
             value: label.value?.value || label.value,
           })
         })
