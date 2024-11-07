@@ -232,13 +232,13 @@ const ResponseFlowComponents = () => {
 
         console.log("result", dataRes)
 
-        console.log(
-          "first",
-          dataRes[0].content,
-          "screens",
-          screens,
-          JSON.parse(screens[1].screenData)
-        )
+        // console.log(
+        //   "first",
+        //   dataRes[0].content,
+        //   "screens",
+        //   screens,
+        //   JSON.parse(screens[1].screenData)
+        // )
         localStorage.setItem("responses", JSON.stringify(dataRes))
         localStorage.setItem("flowId", JSON.stringify(flowId))
         setResponses(dataRes)
