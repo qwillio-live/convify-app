@@ -451,7 +451,7 @@ const HeaderComponent = ({
           </DialogTrigger>
           <DialogContent
             className="flex h-[308px] w-[434px] justify-center !rounded-[12px]"
-            dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
+            dialogueClassname="bg-[rgba(0,0,0,0.5)] !backdrop-blur-0"
           >
             <DialogHeader>
               <DialogTitle className="relative left-[2.5rem] flex justify-end">
