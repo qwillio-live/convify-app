@@ -444,7 +444,7 @@ export const TextImageComponentGen = ({
                     style={{
                       alignSelf: `${bothAlign}`,
                       flex: "50%",
-                      marginTop: bothAlign == "start" ? "20px" : "",
+                      // marginTop: bothAlign == "start" ? "20px" : "",
                     }}
                   >
                     {/** @ts-ignore */}
@@ -508,7 +508,7 @@ export const TextImageComponentGen = ({
                       maxWidth: `calc(${(textSplit / 12) * 100}% - ${
                         totalGap / 2
                       }px)`,
-                      marginTop: bothAlign == "start" ? "20px" : "",
+                      // marginTop: bothAlign == "start" ? "20px" : "",
                       alignSelf: `${bothAlign}`,
                     }}
                   >
