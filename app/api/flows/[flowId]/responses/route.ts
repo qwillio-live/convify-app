@@ -152,8 +152,27 @@ export async function GET(
     flow.responses.sort(
       (a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
     )
-    console.log("flow response", flow.responses)
-    return NextResponse.json(flow.responses)
+    // Transform the content to an array and add `orgKey` to each item
+    const transformedResponses = flow.responses.map((response) => {
+      // Transform the content into an array
+      //@ts-ignore
+      const transformedContent = Object.entries(response.content).map(
+        ([orgKey, value]) => {
+          return {
+            //@ts-ignore
+            ...value, // Spread the original object
+            orgKey: orgKey, // Add the original key as `orgKey`
+          }
+        }
+      )
+
+      return {
+        ...response, // Keep other response properties
+        content: transformedContent, // Add the transformed content
+      }
+    })
+    console.log("flow response", transformedResponses)
+    return NextResponse.json(transformedResponses)
   } catch (error) {
     const statusCode = 500
     const errorMessage = error.message || "An unexpected error occurred"

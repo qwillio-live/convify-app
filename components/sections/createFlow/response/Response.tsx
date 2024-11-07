@@ -16,6 +16,7 @@ import {
 import EmptyResponse from "@/components/sections/createFlow/empty/Empty"
 
 import { LoadingEl } from "./ResponseLoading"
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 interface Response {
   id?: string
@@ -43,7 +44,8 @@ function extractLabels(
         if (typeof value === "object" && value !== null) {
           traverse(value, key)
         } else if (key === "label" && parentId) {
-          const parentValue = obj["value"] || ""
+          const parentValue = obj["orgKey"] || ""
+          console.log("valeuee", value)
           labels.push({ id: parentId, label: value, value: parentValue })
         }
       }
@@ -90,84 +92,57 @@ function normalizeNamesWithRegex(set) {
 }
 
 const extractValuesOfLabels = (content: Content) => {
-  const valuesWithLabels: { [key: string]: any } = {}
-  const seenLabels = new Set<string>()
+  const uniqueLabels = content.map((item) => item.value)
+  console.log("uniqueLabels", uniqueLabels)
+  // const valuesWithLabels: { [key: string]: any } = {}
+  // const seenLabels = new Set<string>()
 
-  Object.entries(content).forEach(([key, value]) => {
-    let label = value.label || key
-    if (seenLabels.has(label)) {
-      label = `${label} (${key})`
-    } else {
-      seenLabels.add(label)
-    }
-    valuesWithLabels[key] = { label, value: value.value }
-  })
-
-  return valuesWithLabels
-}
-
-function tableMap(elementsOfLabels: Array<Object>, labels: string[]) {
-  // const rows: Object[] = []
-  // labels.push("Submission time")
-  // elementsOfLabels.forEach((element: any) => {
-  //   const oneObj = {}
-  //   labels.forEach((label) => {
-  //     if (label in element) {
-  //       oneObj[label] = element[label]
-  //     } else if (
-  //       ("first-name" in element && label === "firstName") ||
-  //       ("First name" in element && label === "firstName")
-  //     ) {
-  //       if ("first-name" in element) {
-  //         oneObj[label] = element["first-name"]
-  //       } else {
-  //         oneObj[label] = element["First name"]
-  //       }
-  //     } else if (
-  //       ("last-name" in element && label === "lastName") ||
-  //       ("Last name" in element && label === "lastName")
-  //     ) {
-  //       if ("last-name" in element) {
-  //         oneObj[label] = element["last-name"]
-  //       } else {
-  //         oneObj[label] = element["Last name"]
-  //       }
-  //     } else if (
-  //       ("email" in element && label === "email") ||
-  //       ("Email address" in element && label === "email")
-  //     ) {
-  //       if ("email" in element) {
-  //         oneObj[label] = element["email"]
-  //       } else {
-  //         oneObj[label] = element["Email address"]
-  //       }
-  //     } else if (
-  //       ("phone" in element && label === "phone") ||
-  //       ("Phone" in element && label === "phone")
-  //     ) {
-  //       if ("phone" in element) {
-  //         oneObj[label] = element["phone"]
-  //       } else {
-  //         oneObj[label] = element["Phone"]
-  //       }
-  //     } else {
-  //       oneObj[label] = "" // or some default value if the label is not found
-  //     }
-  //   })
-  //   rows.push(oneObj)
+  // Object.entries(content).forEach(([key, value]) => {
+  //   let label = value.label || key
+  //   if (seenLabels.has(label)) {
+  //     label = `${label} (${key})`
+  //   } else {
+  //     seenLabels.add(label)
+  //   }
+  //   valuesWithLabels[key] = { label, value: value.value }
   // })
 
-  // return rows
-  return elementsOfLabels.map((element) => {
-    const result = {}
-    for (const key in element) {
-      if (key === "Submission time") {
-        result[key] = element[key]
-        continue
+  return uniqueLabels
+}
+function tableMap(
+  elementsOfLabels: Array<Object>,
+  labels: Map<string, { label: string; value: string }>
+) {
+  return elementsOfLabels.map((element: any) => {
+    const result: any = {} // This will store the final mapped result
+    const contentItems = element.content
+
+    // Iterate over the labels in the same order (since Map keeps insertion order)
+    labels.forEach((labelObj, labelId) => {
+      // For "Submission time", add it directly
+      if (labelObj.label === "Submission time") {
+        result[labelObj.label] = element.createdAt || "" // You can replace createdAt with any other timestamp you want
+        return // Skip further logic for "Submission time"
       }
-      result[key] = element[key]?.value ?? ""
-    }
-    return result
+
+      // For other labels, check for the corresponding value based on orgKey
+      const matchingContents = contentItems.filter(
+        (content: any) => content.orgKey === labelObj.value
+      )
+
+      if (matchingContents.length > 0) {
+        // If there are multiple matches, concatenate their values as a string
+        result[labelObj.value] =
+          matchingContents
+            .map((content: any) => content.value?.value || content.value)
+            .join(", ") || "" // Join values with a comma
+      } else {
+        // If no matching content is found, assign an empty string
+        result[labelObj.value] = ""
+      }
+    })
+
+    return result // Return the mapped result for this element
   })
 }
 
@@ -211,7 +186,7 @@ const ResponseFlowComponents = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [isAscending, setIsAscending] = useState<boolean>(false)
   const [rows, setRows] = useState<Object[]>([]) // Add state for rows
-
+  const screens = useAppSelector((state) => state.screen?.screens)
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true)
@@ -219,16 +194,53 @@ const ResponseFlowComponents = () => {
       try {
         const response = await fetch(`/api/flows/${flowId}/responses/`)
         let dataRes = await response.json()
+        const ogLabels = screens?.map((screen, index) => {
+          let screenData = JSON.parse(screen.screenData) // Parse the screenData string
+          const labels = Object.keys(screenData).filter((key) => key !== "ROOT") // Get the keys from the object
+          return { [index]: labels } // Return an object where the index is the key and labels are the value
+        })
+
+        console.log("ogLabels", ogLabels)
+
         console.log("response", dataRes)
+        // Result container for the arrays
+        const result = []
+
+        // Iterate over the ordersArray
+        dataRes.map((data, index) => {
+          let tempResult = []
+          let sortedIndex = 0
+          //@ts-ignore
+          ogLabels.forEach((step, stepIndex) => {
+            const key = Object.keys(step)[0] // Get the key (step index)
+            const orgKeysForStep = step[key] // Get the orgKeys for the current step
+
+            // Filter the content array to find matching orgKeys
+            const matchedContent = data.content.filter((item) =>
+              orgKeysForStep.includes(item.orgKey)
+            )
+            if (matchedContent.length > 0) {
+              sortedIndex = stepIndex
+              //@ts-ignore
+              tempResult = [...tempResult, ...matchedContent]
+            }
+          })
+
+          data.content = tempResult
+          console.log("stepContent", data)
+        })
+
+        console.log("result", dataRes)
+
+        console.log(
+          "first",
+          dataRes[0].content,
+          "screens",
+          screens,
+          JSON.parse(screens[1].screenData)
+        )
         localStorage.setItem("responses", JSON.stringify(dataRes))
         localStorage.setItem("flowId", JSON.stringify(flowId))
-        dataRes.forEach((item) => {
-          console.log("each item", item)
-          const sortedContent = sortBy(item.content, "order")
-          console.log("sortedContent", sortedContent)
-          item.content = sortedContent
-        })
-        console.log("sortby", dataRes)
         setResponses(dataRes)
       } finally {
         setLoading(false)
@@ -254,52 +266,80 @@ const ResponseFlowComponents = () => {
   // }, [])
 
   // console.log("response", responses)
+  const reorderRow = (row, header) => {
+    const reorderedRow = {}
 
+    // Iterate through the tableHeader and reorder the row
+    header.forEach((label) => {
+      // Find the corresponding key in the row and add it to the reorderedRow
+      for (const key in row) {
+        if (row[key].label === label) {
+          reorderedRow[label] = row[key].value || row[key] // Add value if available
+        }
+      }
+      // Handle special cases like 'Submission time'
+      if (label === "Submission time" && !reorderedRow[label]) {
+        reorderedRow[label] = row["Submission time"]
+      }
+    })
+
+    return reorderedRow
+  }
   useEffect(() => {
     if (responses.length > 0) {
-      const uniqueLabels = new Map<string, string>() // Map to store the latest label for each unique key
+      const uniqueLabels = new Map<string, { label: string; value: string }>()
       const elementsWithLabels: any[] = []
+      const rowsBeforeSort: any[] = [] // This will hold the rows before sorting
 
       // Extract the latest label for each unique key
       responses.forEach((item) => {
-        // for header
-        const labels = extractLabels(item.content as Content)
-        // console.log("anjit labels", labels)
-        labels.forEach((label) => {
-          if (!uniqueLabels.has(label.id))
-            uniqueLabels.set(label.id, label.label) // Store the latest label for each key
-        })
+        // Extract labels from the content
 
-        // Extract values and associate them with the latest labels
-        console.log("item", item)
+        const labels = extractLabels(item.content as Content)
+        console.log("labelszzz", labels)
+        labels.forEach((label) => {
+          // Here, we store the 'label' and 'value' for each 'label.id'
+          //@ts-ignore
+          uniqueLabels.set(label.id, {
+            label: label.label,
+            value: label.value?.value || label.value,
+          })
+        })
+        // Extract values associated with the labels
         const valuesWithLabels = extractValuesOfLabels(item.content as Content)
+
+        // Add "Submission time" and "flowId" to the valuesWithLabels object
         valuesWithLabels["Submission time"] = item.createdAt
         valuesWithLabels["flowId"] = item.flowId
+
+        // Push the valuesWithLabels to elementsWithLabels array
         elementsWithLabels.push(valuesWithLabels)
+
+        // Push the row with originalIndex for sorting later
+        rowsBeforeSort.push({ ...valuesWithLabels, originalIndex: item.id })
       })
 
       // Add "Submission time" to the unique labels
-      uniqueLabels.set("Submission time", "Submission time")
-      setTableHeader(Array.from(uniqueLabels.values()))
-
-      const normalizedUniqueLabels = Array.from(uniqueLabels.values()) // Get the latest label
-      const sortedRows = tableMap(elementsWithLabels, normalizedUniqueLabels) // Use normalizedUniqueLabels
-
-      // Initial sort
-      sortedRows.sort((a, b) => {
-        return isAscending
-          ? new Date(a["Submission time"]).getTime() -
-              new Date(b["Submission time"]).getTime()
-          : new Date(b["Submission time"]).getTime() -
-              new Date(a["Submission time"]).getTime()
+      uniqueLabels.set("Submission time", {
+        label: "Submission time",
+        value: "Submission time",
       })
+      const labelArray = Array.from(uniqueLabels.values()).map(
+        (item) => item.label
+      )
+      console.log("labelArray", labelArray)
+      setTableHeader(labelArray)
 
-      setRows(sortedRows) // Update rows state
+      const normalizedUniqueLabels = labelArray
+      console.log("uniqueLabels", uniqueLabels)
 
-      console.log("anjit rows", rows)
-      // console.log("anjit elementsWithLabels", elementsWithLabels)
+      // Ensure sorting logic works but respects the original order
+      const sortedRows = tableMap(responses, uniqueLabels)
+      console.log("sortedRows", sortedRows)
+      // Now that the rows are sorted by timestamp, you can apply sorting logic based on the original order if needed.
+      setRows(sortedRows)
     }
-  }, [responses, isAscending]) // Add dependencies
+  }, [responses, isAscending]) // Make sure this only triggers when responses or isAscending changes
 
   const uniqueLabelsArray = Array.from(
     normalizeNamesWithRegex(new Set(rows.flatMap(Object.keys)))
