@@ -207,6 +207,7 @@ const ScreensList = ({ flowId }) => {
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setFooterMode(true))
+
     actions.deserialize(screensFooter)
   }
 
@@ -374,7 +375,7 @@ const ScreensList = ({ flowId }) => {
               onClick={() => handleFooterScreenClick()}
             >
               {/* <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div> */}
-              <div className="text-muted-foreground bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
+              <div className="text-muted-foreground mb-[7rem] h-auto w-[40vw] scale-[.30] text-xs">
                 <ResolvedComponentsFromCraftState screen={screensFooter} />
               </div>
             </Card>

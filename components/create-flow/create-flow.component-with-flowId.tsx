@@ -557,7 +557,10 @@ export function CreateFlowComponent({ flowId }) {
                           !headerMode &&
                           headerPosition === "absolute" &&
                           JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
-                            ? `${height}px`
+                            ? `${
+                                document?.getElementById("editor-header")
+                                  ?.offsetHeight
+                              }px`
                             : "0px",
                         backgroundColor: headerMode
                           ? avatarBackgroundColor
