@@ -20,6 +20,8 @@ import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/custom-slider"
 import { ColorInput } from "@/components/color-input"
 import { ImageStoryAspectRatios } from "./useImageStoryThemePresets"
+import { is } from "date-fns/locale"
+import { cn } from "@/lib/utils"
 
 export const ImageStorySettnigs = () => {
   const t = useTranslations("Components")
@@ -90,11 +92,13 @@ export const ImageStorySettnigs = () => {
               axis="y"
               values={items}
               className="flex w-full flex-col gap-2"
-              onReorder={(e) => handlePropChange("items", e)}
+              onReorder={(e) => {
+                handlePropChange("items", e)
+              }}
             >
               {items.map((item, index) => (
                 <ImageStoryItemSetting
-                  key={`image-story-item-${item.id}`}
+                  key={`image-story-item-${item.id}-${item.src}`}
                   originalItem={item}
                   index={index}
                 />
@@ -392,7 +396,7 @@ export const ImageStoryItemSetting = ({ originalItem, index }) => {
 
   return (
     <Reorder.Item
-      dragListener={false}
+      dragListener={true}
       dragControls={controls}
       value={item}
       style={{ y }}
@@ -435,8 +439,10 @@ export const ImageStoryItemSetting = ({ originalItem, index }) => {
         onClick={handleItemDelete}
       />
       <div
-        onPointerDown={(e) => controls.start(e)}
-        className="reorder-handle !ml-1 hover:cursor-move"
+        onPointerDown={(e) => {
+          controls.start(e)
+        }}
+        className={cn("reorder-handle !ml-1 hover:cursor-move", isLoading && "pointer-events-none cursor-not-allowed")}
       >
         <Icons.GripVertical />
       </div>

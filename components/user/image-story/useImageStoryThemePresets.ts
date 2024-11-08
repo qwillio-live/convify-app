@@ -30,7 +30,7 @@ export const useImageStoryThemePresets = () => {
         },
         {
             id: `image-story-item-${hexoid(6)()}`,
-            src: "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"
+            src: "https://siteimages.b-cdn.net/flow/default-image2.webp"
         },
     ]
     const defaultPreset = {
@@ -42,11 +42,12 @@ export const useImageStoryThemePresets = () => {
         paddingRight: "16",
         paddingBottom: "20",
         marginLeft: 0,
-        marginTop: 20,
+        marginTop: 0,
         marginRight: 0,
-        marginBottom: 20,
+        marginBottom: 0,
         settingTabs: ["content"],
         items: defaultItems,
+        defaultIndex: 0,
         aspectRatio: ImageStoryAspectRatios.fiveByFour,
     }
 
