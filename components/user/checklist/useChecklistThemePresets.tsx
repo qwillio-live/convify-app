@@ -43,6 +43,7 @@ const useChecklistThemePresets = () => {
     paddingTop: "20",
     paddingRight: "16",
     paddingBottom: "20",
+    columnsDesktop: 2,
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.normal,
@@ -80,6 +81,8 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.bold,
+    columnsDesktop: 2,
+
   }
 
   return { normalPreset, boldPreset }

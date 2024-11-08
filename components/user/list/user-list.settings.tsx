@@ -255,25 +255,6 @@ export const ListSettings = () => {
                 }
               />
             </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label>{t("Columns Mobile")}</Label>
-                <span className="text-muted-foreground text-xs">
-                  {columnsMobile}
-                </span>
-              </div>
-              <Slider
-                defaultValue={[columnsMobile]}
-                value={[columnsMobile]}
-                max={5}
-                min={1}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("columnsMobile", e)
-                }
-              />
-            </div>
           </AccordionContent>
         </AccordionItem>
 

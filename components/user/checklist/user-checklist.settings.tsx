@@ -84,6 +84,7 @@ export const ChecklistSettings = () => {
       marginTop,
       marginRight,
       marginBottom,
+      columnsDesktop,
       width,
       height,
       settingTabs,
@@ -239,24 +240,22 @@ export const ChecklistSettings = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="layout">{t("Layout")}</Label>
-              <Tabs
-                value={layout}
-                defaultValue={ChecklistLayouts.column}
-                onValueChange={(value) => debouncedSetProp("layout", value)}
-              >
-                <TabsList className="grid w-full grid-cols-2 bg-[#EEEEEE]">
-                  <TabsTrigger
-                    className="rounded"
-                    value={ChecklistLayouts.column}
-                  >
-                    <StretchHorizontal size={16} />
-                  </TabsTrigger>
-                  <TabsTrigger className="rounded" value={ChecklistLayouts.row}>
-                    <StretchVertical size={16} />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+              <div className="flex items-center justify-between">
+                <Label>{t("Columns Desktop")}</Label>
+                <span className="text-muted-foreground text-xs">
+                  {columnsDesktop}
+                </span>
+              </div>
+              <Slider
+                defaultValue={[columnsDesktop]}
+                value={[columnsDesktop]}
+                max={5}
+                min={1}
+                step={1}
+                onValueChange={(e) =>
+                  handlePropChangeDebounced("columnsDesktop", e)
+                }
+              />
             </div>
           </AccordionContent>
         </AccordionItem>

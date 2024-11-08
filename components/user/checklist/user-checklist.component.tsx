@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react"
 import { debounce } from "lodash"
-import { Check } from "lucide-react"
+import { Check, Settings } from "lucide-react"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
@@ -40,6 +40,7 @@ export const ChecklistGen = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  columnsDesktop,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -66,9 +67,10 @@ export const ChecklistGen = ({
         size={size}
         mobileScreen={false}
         className="flex w-full gap-2"
-        style={{
-          flexDirection: layout,
-        }}
+        columnsDesktop={columnsDesktop}
+        // style={{
+        //   flexDirection: layout,
+        // }}
       >
         {checklistItems.map((item, index) => (
           <li key={index} className="flex flex-1 items-center gap-3">
@@ -98,14 +100,27 @@ export const ChecklistGen = ({
   )
 }
 
-const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
+type StyledWrapper = {
+  size: UserInputSizes
+  mobileScreen: boolean
+  columnsDesktop: number
+}
+
+const Wrapper = styled.ul<StyledWrapper>`
   margin-left: auto;
   margin-right: auto;
   max-width: 100%;
+  column-gap: 40px;
+  display: grid;
 
   /* @media (max-width: 1000px) {
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
   } */
+
+  grid-template-columns: repeat(
+  ${({ columnsDesktop }) => columnsDesktop},
+  minmax(0, 1fr)
+);
 
   ${({ size, mobileScreen }) => {
     if (mobileScreen) {
@@ -147,6 +162,7 @@ export const Checklist = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  columnsDesktop,
   ...props
 }) => {
   console.log("ChecklistProps", size)
@@ -218,9 +234,10 @@ export const Checklist = ({
           size={size}
           mobileScreen={!!mobileScreen}
           className="user-checklist-comp flex w-full gap-2 "
-          style={{
-            flexDirection: layout,
-          }}
+          columnsDesktop={columnsDesktop}
+          // style={{
+          //   flexDirection: layout,
+          // }}
         >
           {checklistItems.map((item, index) => (
             <ChecklistItemSettings
@@ -343,6 +360,7 @@ export type ChecklistProps = {
   fullWidth: boolean
   settingTabs: string[]
   preset: ChecklistPresets
+  columnsDesktop: number
 }
 
 export const ChecklistDefaultProps: ChecklistProps = {
@@ -374,6 +392,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fullWidth: true,
   settingTabs: ["content"],
   preset: ChecklistPresets.normal,
+  columnsDesktop: 2
 }
 
 Checklist.craft = {
