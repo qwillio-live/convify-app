@@ -159,7 +159,7 @@ export const TelegramShareButtonGen = ({
 
   return (
     <div
-      className="relative w-full max-w-[calc(100%-20px)]"
+      className="relative w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -337,8 +337,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   gap: 6px;
   font-size: 16px;
   font-weight: 400;
-
-  transition: all 0.2s ease;
 
   &:hover {
     border-style: solid;

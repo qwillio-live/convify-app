@@ -153,7 +153,7 @@ export const SocialShareButtonGen = ({
 
   return (
     <div
-      className="relative w-full max-w-[calc(100%-20px)]"
+      className="relative w-full "
       style={{
         width: "100%",
         background: `${containerBackground}`,
