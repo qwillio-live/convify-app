@@ -22,9 +22,9 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "./line-seperator-settings"
 
 const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "376px",
+  medium: "576px",
+  large: "800px",
   full: "100%",
 }
 
