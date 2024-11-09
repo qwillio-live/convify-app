@@ -450,7 +450,7 @@ const HeaderComponent = ({
             </Button>
           </DialogTrigger>
           <DialogContent
-            className="flex h-[308px] w-[434px] justify-center !rounded-[12px]"
+            className="flex h-[308px] w-[445px] justify-center !rounded-[12px]"
             dialogueClassname="bg-[rgba(0,0,0,0.5)] !backdrop-blur-0"
           >
             <DialogHeader>
@@ -461,7 +461,7 @@ const HeaderComponent = ({
                     type="button"
                     variant="ghost"
                   >
-                    <X className="size-5" color="#7B7D80" />
+                    <X className="mr-[2px] mt-[-20px] size-6" color="#7B7D80" />
                   </Button>
                 </DialogClose>
               </DialogTitle>
@@ -496,7 +496,7 @@ const HeaderComponent = ({
             </Button>
           </DialogTrigger>
           <DialogContent
-            className="flex h-[308px] !w-[600px] justify-center !rounded-[12px]"
+            className="flex h-[308px] w-[612px] justify-center !rounded-[12px]"
             dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
           >
             <DialogHeader>
@@ -507,7 +507,7 @@ const HeaderComponent = ({
                     type="button"
                     variant="ghost"
                   >
-                    <X className="size-5" color="#7B7D80" />
+                    <X className="mr-[2px] mt-[-20px] size-6" color="#7B7D80" />
                   </Button>
                 </DialogClose>
               </DialogTitle>
@@ -542,7 +542,7 @@ const HeaderComponent = ({
             </Button>
           </DialogTrigger>
           <DialogContent
-            className="flex h-[308px] min-w-[434px] justify-center !rounded-[12px]"
+            className="flex h-[308px] min-w-[520px] justify-center !rounded-[12px]"
             dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
           >
             <DialogHeader>
@@ -553,7 +553,7 @@ const HeaderComponent = ({
                     type="button"
                     variant="ghost"
                   >
-                    <X className="size-5" color="#7B7D80" />
+                    <X className="mr-[2px] mt-[-20px] size-6" color="#7B7D80" />
                   </Button>
                 </DialogClose>
               </DialogTitle>
