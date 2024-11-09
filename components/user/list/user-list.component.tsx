@@ -20,6 +20,7 @@ import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { UserInputSizes } from "../input/user-input.component"
+import { usePathname } from "next/navigation"
 
 const ListSizeValues = {
   small: "400px",
@@ -63,6 +64,7 @@ export const ListGen = ({
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
+  const pathname = usePathname()
   return (
     <div
       className="relative w-full"
@@ -81,7 +83,7 @@ export const ListGen = ({
       }}
     >
       <StyledListContainer
-        isPreviewScreen={true}
+        isPreviewScreen={pathname?.includes("create-flow") ? false : true}
         className="user-list-comp"
         size={size}
         verticalGap={verticalGap}
@@ -426,43 +428,23 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
         if (mobileScreen) {
           return { width: "360px" }
         } else {
-          return { width: "376px" }
+          return { width: "auto", maxWidth: 376 }
         }
       } else if (size === UserInputSizes.medium) {
-        return mobileScreen ? { width: "calc(100% - 22px)", maxWidth: 800 } : {}
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 600 }
       } else if (size === UserInputSizes.large) {
         return mobileScreen
-          ? { width: "calc(100% - 22px)", maxWidth: 1000 }
-          : {}
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 700 }
       } else {
-        return mobileScreen ? { width: "calc(100% - 22px)" } : {}
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: "calc(100% - 22px)" }
       }
     }
   }};
-
-  @media (max-width: 1000px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
-
-  @media (max-width: 800px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
-
-  @media (max-width: 376px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.small) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
-  }
 `
 
 type StyledListItemProps = {
