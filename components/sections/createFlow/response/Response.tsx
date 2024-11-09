@@ -133,10 +133,16 @@ function tableMap(
       if (matchingContents.length > 0) {
         // If there are multiple matches, concatenate their values as a string
         result[labelObj.value] =
-          //@ts-ignore
           matchingContents
-            .map((content: any) => content.value?.value || content.value)
-            .join(", ") || "" // Join values with a comma
+            .map((content: any) => {
+              if (Array.isArray(content.value)) {
+                // If content.value is an array, return the 'value' property of each item, joined by commas
+                return content.value.map((item: any) => item.value).join(", ")
+              }
+              // If content.value is not an array, use the value directly
+              return content.value?.value || content.value
+            })
+            .join(", ") || "" // Join values with a comma if multiple values exist
       } else {
         // If no matching content is found, assign an empty string
         result[labelObj.value] = ""
