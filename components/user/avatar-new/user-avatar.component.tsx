@@ -171,7 +171,7 @@ export const UserLogo = ({
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY) ?? 0 / 3
   const isMobileScreen = useMediaQuery("(max-width: 640px)")
   const bodyScrollY = useScrollPosition()
   const hasComponentBeforeAvatar = useAppSelector(
