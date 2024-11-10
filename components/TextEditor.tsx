@@ -249,11 +249,11 @@ const FloatingToolbar = () => {
     })
     useEffect(() => {
         const [linkNode] = Editor.nodes(editor, {
-            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
+            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any) === 'link',
         })
-        setLinkUrl(linkNode ? linkNode[0].url : '')
+        setLinkUrl(linkNode ? (linkNode[0] as any).url : '')
         const marks = Editor.marks(editor)
-        setTextColor(marks?.color || '#000000')
+        setTextColor((marks as any)?.color || '#000000')
     })
     const addLink = (url) => {
         if (url) {
