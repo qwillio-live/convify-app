@@ -215,9 +215,30 @@ export default function StaticPublishedFile({
           data?.flowSettings?.general?.backgroundColor || "transparent",
       }}
     >
-      {data?.headerData &&
-        resolveComponents(revertMinHeightAndClassName(data?.headerData || {}))}
-
+      {data?.headerData && (
+        <div
+          className={`${
+            data?.flowSettings?.header?.headerPosition === "absolute"
+              ? "fixed z-20 w-full"
+              : "flex"
+          }`}
+        >
+          {resolveComponents(
+            revertMinHeightAndClassName(data?.headerData || {})
+          )}
+        </div>
+      )}
+      {data?.flowSettings?.header?.headerPosition === "absolute" && (
+        <div
+          style={{
+            backgroundColor: data?.flowSettings?.general?.backgroundColor,
+            visibility: "hidden", // This hides the content but keeps the space
+          }}
+        >
+          {data?.headerData &&
+            resolveComponents(revertMinHeightAndClassName(data?.headerData))}
+        </div>
+      )}
       <div
         className={`flex  w-full flex-1 flex-col`}
         style={{

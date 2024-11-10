@@ -375,7 +375,7 @@ const ScreensList = ({ flowId }) => {
               onClick={() => handleFooterScreenClick()}
             >
               {/* <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div> */}
-              <div className="text-muted-foreground mb-[7rem] h-auto w-[40vw] scale-[.30] text-xs">
+              <div className="text-muted-foreground mb-[11rem] h-auto  w-[40vw] scale-[.30] text-xs">
                 <ResolvedComponentsFromCraftState screen={screensFooter} />
               </div>
             </Card>

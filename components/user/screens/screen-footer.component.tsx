@@ -7,8 +7,8 @@ import { TextInputDefaultProps, UserText } from "../text/user-text.component"
 
 export const ScreenFooterGen = () => {
   return (
-    <div className="w-full">
-      <div className="flex basis-full flex-row items-center justify-center">
+    <div id="footer-gen" className="w-full">
+      {/* <div className="flex basis-full flex-row items-center justify-center">
         as seen on <span>Convify blog</span>
       </div>
       <div className="flex basis-full flex-row items-center justify-center">
@@ -18,7 +18,7 @@ export const ScreenFooterGen = () => {
         <Link href={"#"}>
           <span>Link to Convify</span>
         </Link>
-      </div>
+      </div> */}
     </div>
   )
 }
@@ -26,22 +26,15 @@ export const ScreenFooterGen = () => {
 export const ScreenFooter = ({ scale = 1 }) => {
   const {
     connectors: { connect, drag },
-    selected,
-    isHovered,
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    isHovered: state.events.hovered,
-  }))
+  } = useNode((state) => ({}))
   const [hover, setHover] = React.useState(false)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
-      className={`flex w-full basis-full flex-col justify-center gap-6 py-3 text-center text-base`}
-      style={{
-        transform: `scale(${scale})`,
-      }}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
+      className={`flex h-1 w-full`}
+
+      // onMouseOver={() => setHover(true)}
+      // onMouseOut={() => setHover(false)}
     >
       {hover && <Controller nameOfComponent={"Screen Footer"} />}
       <ScreenFooterGen />
@@ -56,8 +49,8 @@ ScreenFooter.craft = {
   rules: {
     canDrop: () => true,
     canDrag: () => true,
-    canMoveIn: () => true,
-    canMoveOut: () => true,
+    canMoveIn: () => false,
+    canMoveOut: () => false,
   },
   related: {},
 }

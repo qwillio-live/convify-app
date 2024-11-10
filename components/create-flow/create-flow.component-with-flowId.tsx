@@ -344,6 +344,19 @@ export function CreateFlowComponent({ flowId }) {
           .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
           .join(" ") // Join back into a string
       }
+      const footer = document.getElementById("footer-gen")
+      console.log("headermode | fpptermode", headerMode, footerMode, footer)
+      if (footerMode) {
+        console.log("footermonde is true", data)
+        if (footer) {
+          if (data.ROOT.nodes.length > 1) {
+            footer.style.display = "hidden"
+          } else {
+            footer.style.display = "flex"
+          }
+        }
+      }
+
       console.log(" updated editorLoad", data)
       // Add the new class
       data.ROOT.props.className += ` !py-0 min-h-[80vh]` // Append the new class

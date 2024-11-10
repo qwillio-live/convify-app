@@ -82,6 +82,7 @@ const NewStyledNodeDiv = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & StyledNodeDivProps) => {
+  console.log("selected", selected)
   const borderWidth = useMemo(() => {
     if (
       id === "ROOT" ||
@@ -113,6 +114,7 @@ const NewStyledNodeDiv = ({
       : `border-[${borderColor}]`
   }, [selected, selectedComponent, id, isActive, borderColor, name])
 
+  // return id !== "footer-node" ? (
   return (
     <div
       className={cn(
@@ -126,6 +128,8 @@ const NewStyledNodeDiv = ({
       )}
       {...props}
     />
+    // ) : (
+    //   <div></div>
   )
 }
 
@@ -190,7 +194,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     (state) => state?.screen?.avatarComponentIds
   )
   useEffect(() => {
-    if (dom && id !== "ROOT") {
+    console.log("isdifs", id)
+    if (dom && id !== "ROOT" && id !== "footer-node") {
       if (isHover && !isSelected) {
         // If hover and not selected, add hover class
         dom.classList.add("component-hover")
@@ -244,7 +249,11 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   if (name === "AvatarComponent" && id !== avatarComponentId) {
     return null
   }
-  // console.log("name", name)
+  // if (name === "Screen Footer") {
+  //   return null
+  // }
+
+  console.log("name", name, "selectedComponent"), selectedComponent
   return (
     <NewStyledNodeDiv
       selected={isSelected}

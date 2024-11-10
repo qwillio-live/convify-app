@@ -47,6 +47,7 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
         }
       }
 
+      console.log("selected:", selected)
       return {
         selected,
         isEnabled: state.options.enabled,
@@ -54,7 +55,8 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
       }
     }
   )
-  return (
+  return nameOfComponent !== "Screen Footer" &&
+    selected?.name !== "ScreenFooter" ? (
     <div
       className={cn(
         className,
@@ -65,14 +67,14 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
       <span className="hover:cursor-move">
         <Move />
       </span>
-      {/* {isHovered?.isDeletable && ( */}
       <button
         onClick={() => {
           if (selected.name === "AvatarComponent") {
             dispatch(removeAvatarComponentId(selected.id))
             dispatch(setAvatarBackgroundColor("rgba(255,255,255,.1)"))
           }
-          actions.delete(selected.id), dispatch(setSelectedComponent("ROOT"))
+          actions.delete(selected.id)
+          dispatch(setSelectedComponent("ROOT"))
           if (selected.fieldType === "data") {
             dispatch(removeField(selected.id))
           }
@@ -81,7 +83,6 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
       >
         <Trash2 />
       </button>
-      {/* )} */}
     </div>
-  )
+  ) : null // Return null if nameOfComponent === "screen footer"
 }
