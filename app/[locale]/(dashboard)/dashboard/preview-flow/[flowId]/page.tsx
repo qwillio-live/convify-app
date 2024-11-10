@@ -55,6 +55,7 @@ import { FAQGen } from "@/components/user/faq/user-faq.component"
 import { LinksGen } from "@/components/user/links/user-links.component"
 import { ImageStory, ImageStoryGen } from "@/components/user/image-story/image-story.component"
 import { YoutubeVideoGen } from "@/components/user/youtube-video/user-youtube-video.component"
+import { CookieConsentComponent } from "@/components/cookie-consent/CookieConsentComponent"
 
 export default async function PreviewFlows({
   params,
@@ -124,6 +125,8 @@ export default async function PreviewFlows({
   const filteredStep = data.steps?.find((screen) => screen.name === screenName)
     ? data.steps?.find((screen) => screen.name === screenName)
     : data?.steps?.[0]
+
+  const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup
 
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
@@ -196,11 +199,12 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
-  console.log("anjit", data?.flowSettings?.header)
+  console.log("anjit", data?.flowSettings)
 
   return (
     <>
       <div className="flex h-screen flex-col">
+      {showCookieConsentPopup && <CookieConsentComponent forceShow/>}
         <div
           className={cn(
             `flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] z-20`,

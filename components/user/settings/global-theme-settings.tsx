@@ -78,8 +78,8 @@ export const GlobalThemeSettings = (props: Props) => {
     (state) => state.theme?.general?.backgroundImage
   )
 
-  const showCookokieConsentPopup = useAppSelector(
-    (state) => state.theme?.general?.showCookokieConsentPopup
+  const showCookieConsentPopup = useAppSelector(
+    (state) => state.theme?.general?.showCookieConsentPopup
   )
   const defaultBackgroundColor = useAppSelector(
     (state) => state.theme?.defaultGeneral?.backgroundColor
@@ -304,15 +304,15 @@ export const GlobalThemeSettings = (props: Props) => {
                 <div className="flex items-center justify-between gap-2 pb-2">
                   <span className="text-xs">{"Cookie consent popup"}</span>
                   <Switch
-                    checked={showCookokieConsentPopup}
+                    checked={showCookieConsentPopup}
                     onCheckedChange={checked => {
                       handleStyleChangeDebounced({
-                        general: { showCookokieConsentPopup: checked },
+                        general: { showCookieConsentPopup: checked },
                       })
                     }}
                   />
                 </div>
-                {showCookokieConsentPopup &&
+                {showCookieConsentPopup &&
                   (<span className="text-muted-foreground text-xs mt-4">
                     {("The popup will appear when the page loads")}
                   </span>)}

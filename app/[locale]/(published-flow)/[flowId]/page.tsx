@@ -7,6 +7,7 @@ import { env } from "@/env.mjs"
 import Head from "next/head"
 import localFont from "next/font/local"
 import { redirect } from "next/navigation"
+import { CookieConsentComponent } from "@/components/cookie-consent/CookieConsentComponent"
 
 interface PageProps {
   params: {
@@ -105,7 +106,7 @@ export default async function PublishedFlows({
     data?.flowSettings?.text?.primaryFont || "--font-roboto"
   const secondaryFontKey =
     data?.flowSettings?.text?.secondaryFont || "--font-inter"
-
+    const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup ?? false
   const getFontImport = (fontKeys: string[]) => {
     const fontQueries = fontKeys
       .map((fontKey) => fontMappings[fontKey])
@@ -171,6 +172,7 @@ export default async function PublishedFlows({
           gta={data?.integrations?.googleAnalyticsId}
           meta={data?.integrations?.metaPixelId}
         />
+        {showCookieConsentPopup && <CookieConsentComponent/>}
         <FlowStateSetter flowData={data} screenNames={screenNames} />
         <StaticPublishedFile
           data={data}
