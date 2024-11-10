@@ -20,7 +20,7 @@ import styled from "styled-components"
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import { cn } from "@/lib/utils"
+import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
 import { Button as CustomButton } from "@/components/ui/button"
 
 import { UserInputSizes } from "../input/user-input.component"
@@ -31,6 +31,8 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextImageThemePresets"
 import { TextImageSettings } from "./user-textImage.settings"
+import { TextEditor } from "@/components/TextEditor"
+
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -108,26 +110,26 @@ const Wrapper = styled.div<{
 
   @media (max-width: 1000px) {
     ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.large) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 800px) {
     ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.medium) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 376px) {
     ${({ size }) => {
-      if (size === UserInputSizes.small) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.small) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 `
 
@@ -447,53 +449,39 @@ export const TextImageComponentGen = ({
                       marginTop: bothAlign == "start" ? "20px" : "",
                     }}
                   >
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={title}
-                      innerRef={titleRef}
-                      disabled={true}
-                      style={{
-                        maxWidth: "100%",
-                        fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                        fontFamily: `var(${fontFamily.value})`,
-                        color:
-                          textColor !== "#ffffff"
-                            ? textColor
-                            : primaryTextColor,
-                        fontSize: `${titleFontSize}px`,
-                        transitionProperty: "all",
-                        overflowX: "clip",
-                        textOverflow: "ellipsis",
-                      }}
-                      onChange={(e) => {
-                        handleTitleChange(e)
-                      }}
-                      tagName="h1"
-                    />
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={Text}
-                      innerRef={ref}
-                      disabled={true}
-                      style={{
-                        maxWidth: "100%",
-                        fontWeight: fontWeightMap[textFontWeight],
-                        color:
-                          secTextColor !== "#ffffff"
-                            ? secTextColor
-                            : secondaryTextColor,
-                        marginTop: "15px",
-                        fontFamily: `var(${secondaryFontFamily.value})`,
-                        fontSize: `${textFontSize}px`,
-                        transitionProperty: "all",
-                        overflowX: "clip",
-                        textOverflow: "ellipsis",
-                      }}
-                      onChange={(e) => {
-                        handleTextChange(e)
-                      }}
-                      tagName="div"
-                    />
+                    <div style={{
+                      maxWidth: "100%",
+                      fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                      fontFamily: `var(${fontFamily.value})`,
+                      color:
+                        textColor !== "#ffffff"
+                          ? textColor
+                          : primaryTextColor,
+                      fontSize: `${titleFontSize}px`,
+                      transitionProperty: "all",
+                      overflowX: "clip",
+                      textOverflow: "ellipsis",
+                    }}
+                      role="heading">
+                      <TextEditor isReadOnly initValue={getComputedValueForTextEditor(title)} />
+                    </div>
+                    <div style={{
+                      maxWidth: "100%",
+                      fontWeight: fontWeightMap[textFontWeight],
+                      color:
+                        secTextColor !== "#ffffff"
+                          ? secTextColor
+                          : secondaryTextColor,
+                      marginTop: "15px",
+                      fontFamily: `var(${secondaryFontFamily.value})`,
+                      fontSize: `${textFontSize}px`,
+                      transitionProperty: "all",
+                      overflowX: "clip",
+                      textOverflow: "ellipsis",
+                    }}
+                      role="contentinfo">
+                      <TextEditor isReadOnly initValue={getComputedValueForTextEditor(Text)} />
+                    </div>
                   </div>
                 </>
               ) : (
@@ -501,74 +489,54 @@ export const TextImageComponentGen = ({
                   <div
                     className={`items-start self-center text-start`}
                     style={{
-                      flex: `0 0 calc(${(textSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      maxWidth: `calc(${(textSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
+                      flex: `0 0 calc(${(textSplit / 12) * 100}% - ${totalGap / 2
+                        }px)`,
+                      maxWidth: `calc(${(textSplit / 12) * 100}% - ${totalGap / 2
+                        }px)`,
                       marginTop: bothAlign == "start" ? "20px" : "",
                       alignSelf: `${bothAlign}`,
                     }}
                   >
-                    {/** @ts-ignore */}
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={title}
-                      innerRef={titleRef}
-                      disabled={true}
-                      style={{
-                        maxWidth: "100%",
-                        fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                        fontFamily: `var(${fontFamily.value})`,
-                        color:
-                          textColor !== "#ffffff"
-                            ? textColor
-                            : primaryTextColor,
-                        fontSize: `${titleFontSize}px`,
-                        transitionProperty: "all",
-                        overflowX: "clip",
-                        textOverflow: "ellipsis",
-                      }}
-                      onChange={(e) => {
-                        handleTitleChange(e)
-                      }}
-                      tagName="h1"
-                    />
-                    {/** @ts-ignore */}
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={Text}
-                      innerRef={ref}
-                      disabled={true}
-                      style={{
-                        maxWidth: "100%",
-                        transitionProperty: "all",
-                        marginTop: "15px",
-                        fontSize: `${textFontSize}px`,
-                        color:
-                          secTextColor !== "#ffffff"
-                            ? secTextColor
-                            : secondaryTextColor,
-                        fontWeight: fontWeightMap[textFontWeight],
-                        fontFamily: `var(${secondaryFontFamily.value})`,
-                        overflowX: "clip",
-                        textOverflow: "ellipsis",
-                      }}
-                      onChange={(e) => {
-                        handleTextChange(e)
-                      }}
-                      tagName="div"
-                    />
+                    <div style={{
+                      maxWidth: "100%",
+                      fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                      fontFamily: `var(${fontFamily.value})`,
+                      color:
+                        textColor !== "#ffffff"
+                          ? textColor
+                          : primaryTextColor,
+                      fontSize: `${titleFontSize}px`,
+                      transitionProperty: "all",
+                      overflowX: "clip",
+                      textOverflow: "ellipsis",
+                    }}
+                      role="heading">
+                      <TextEditor isReadOnly initValue={getComputedValueForTextEditor(title)} />
+                    </div>
+                    <div style={{
+                      maxWidth: "100%",
+                      transitionProperty: "all",
+                      marginTop: "15px",
+                      fontSize: `${textFontSize}px`,
+                      color:
+                        secTextColor !== "#ffffff"
+                          ? secTextColor
+                          : secondaryTextColor,
+                      fontWeight: fontWeightMap[textFontWeight],
+                      fontFamily: `var(${secondaryFontFamily.value})`,
+                      overflowX: "clip",
+                      textOverflow: "ellipsis",
+                    }}
+                      role="contentinfo">
+                      <TextEditor isReadOnly initValue={getComputedValueForTextEditor(Text)} />
+                    </div>
                   </div>
                   <div
                     style={{
-                      flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
+                      flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${totalGap / 2
+                        }px)`,
+                      maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${totalGap / 2
+                        }px)`,
                       alignSelf: `${bothAlign}`,
                       display: "flex",
                       justifyContent: "center",
@@ -649,8 +617,7 @@ export const UserLogo = ({
   const titleRef = useRef<HTMLDivElement>(null)
 
   const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.value
+    (value) => {
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.Text = value
@@ -661,8 +628,7 @@ export const UserLogo = ({
     [setProp]
   )
   const handleTitleChange = useCallback(
-    (e) => {
-      const value = e.target.value
+    (value) => {
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.title = value
@@ -749,12 +715,10 @@ export const UserLogo = ({
           <>
             <div
               style={{
-                flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
-                maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
+                flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
+                maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
                 alignSelf: `${bothAlign}`,
                 display: "flex",
                 justifyContent: "center",
@@ -774,59 +738,40 @@ export const UserLogo = ({
             <div
               className={`items-center text-start`}
               style={{
-                flex: `0 0 calc(${(textSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
-                maxWidth: `calc(${(textSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
+                flex: `0 0 calc(${(textSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
+                maxWidth: `calc(${(textSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
                 alignSelf: `${bothAlign}`,
               }}
             >
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={title}
-                innerRef={titleRef}
-                style={{
-                  maxWidth: "100%",
-                  fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                  fontFamily: `var(${fontFamily.value})`,
-                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
-                  fontSize: `${titleFontSize}px`,
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-                onChange={(e) => {
-                  handleTitleChange(e)
-                }}
-                tagName="h1"
-              />
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={Text}
-                innerRef={ref}
-                disabled={disabled}
-                style={{
-                  maxWidth: "100%",
-                  fontWeight: fontWeightMap[textFontWeight],
-                  color:
-                    secTextColor !== "#ffffff"
-                      ? secTextColor
-                      : secondaryTextColor,
-                  fontFamily: `var(${secondaryFontFamily.value})`,
-                  fontSize: `${textFontSize}px`,
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-                onChange={(e) => {
-                  handleTextChange(e)
-                }}
-                tagName="div"
-              />
+              <div style={{
+                maxWidth: "100%",
+                fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                fontFamily: `var(${fontFamily.value})`,
+                color: textColor !== "#ffffff" ? textColor : primaryTextColor,
+                fontSize: `${titleFontSize}px`,
+                transitionProperty: "all",
+                overflowX: "clip",
+                textOverflow: "ellipsis",
+              }}>
+                <TextEditor onChange={val => handleTitleChange(serialize(val))} initValue={getComputedValueForTextEditor(title)} />
+              </div>
+              <div style={{
+                maxWidth: "100%",
+                fontWeight: fontWeightMap[textFontWeight],
+                color:
+                  secTextColor !== "#ffffff"
+                    ? secTextColor
+                    : secondaryTextColor,
+                fontFamily: `var(${secondaryFontFamily.value})`,
+                fontSize: `${textFontSize}px`,
+                transitionProperty: "all",
+                overflowX: "clip",
+                textOverflow: "ellipsis",
+              }}>
+                <TextEditor onChange={val => handleTextChange(serialize(val))} initValue={getComputedValueForTextEditor(Text)} />
+              </div>
             </div>
           </>
         ) : (
@@ -834,69 +779,47 @@ export const UserLogo = ({
             <div
               className={`items-start self-center text-start`}
               style={{
-                flex: `0 0 calc(${(textSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
-                maxWidth: `calc(${(textSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
+                flex: `0 0 calc(${(textSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
+                maxWidth: `calc(${(textSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
                 alignSelf: `${bothAlign}`,
               }}
             >
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={title}
-                innerRef={titleRef}
-                disabled={disabled}
-                style={{
-                  maxWidth: "100%",
-                  fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                  fontFamily: `var(${fontFamily.value})`,
-                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
-                  fontSize: `${titleFontSize}px`,
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-                onChange={(e) => {
-                  handleTitleChange(e)
-                }}
-                tagName="h1"
-              />
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={Text}
-                innerRef={ref}
-                disabled={disabled}
-                style={{
-                  maxWidth: "100%",
-                  transitionProperty: "all",
-                  fontSize: `${textFontSize}px`,
-                  color:
-                    secTextColor !== "#ffffff"
-                      ? secTextColor
-                      : secondaryTextColor,
-                  fontWeight: fontWeightMap[textFontWeight],
-                  fontFamily: `var(${secondaryFontFamily.value})`,
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-                onChange={(e) => {
-                  handleTextChange(e)
-                }}
-                tagName="div"
-              />
+              <div style={{
+                maxWidth: "100%",
+                fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                fontFamily: `var(${fontFamily.value})`,
+                color: textColor !== "#ffffff" ? textColor : primaryTextColor,
+                fontSize: `${titleFontSize}px`,
+                transitionProperty: "all",
+                overflowX: "clip",
+                textOverflow: "ellipsis",
+              }}>
+                <TextEditor onChange={val => handleTitleChange(serialize(val))} initValue={getComputedValueForTextEditor(title)} />
+              </div>
+              <div style={{
+                maxWidth: "100%",
+                transitionProperty: "all",
+                fontSize: `${textFontSize}px`,
+                color:
+                  secTextColor !== "#ffffff"
+                    ? secTextColor
+                    : secondaryTextColor,
+                fontWeight: fontWeightMap[textFontWeight],
+                fontFamily: `var(${secondaryFontFamily.value})`,
+                overflowX: "clip",
+                textOverflow: "ellipsis",
+              }}>
+                <TextEditor onChange={val => handleTextChange(serialize(val))} initValue={getComputedValueForTextEditor(Text)} />
+              </div>
             </div>
             <div
               style={{
-                flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
-                maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${
-                  totalGap / 2
-                }px)`,
+                flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
+                maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${totalGap / 2
+                  }px)`,
                 alignSelf: `${bothAlign}`,
                 display: "flex",
                 justifyContent: "center",
@@ -933,49 +856,30 @@ export const UserLogo = ({
             />
           </div>
           <div className="w-full m-auto items-start self-center text-start">
-            {/** @ts-ignore */}
-            {/** @ts-ignore */}
-            <ContentEditable
-              html={title}
-              innerRef={titleRef}
-              disabled={disabled}
-              style={{
-                maxWidth: "100%",
-                fontSize: `${titleFontSize}px`,
-                color: primaryTextColor,
-                fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                fontFamily: `var(${fontFamily.value})`,
-                transitionProperty: "all",
-                overflowX: "clip",
-                textOverflow: "ellipsis",
-              }}
-              onChange={(e) => {
-                handleTitleChange(e)
-              }}
-              tagName="h1"
-            />
-            {/** @ts-ignore */}
-            {/** @ts-ignore */}
-            <ContentEditable
-              html={Text}
-              innerRef={ref}
-              disabled={disabled}
-              style={{
-                maxWidth: "100%",
-                fontSize: `${textFontSize}px`,
-                color: secondaryTextColor,
-                fontWeight: fontWeightMap[textFontWeight],
-                fontFamily: `var(${secondaryFontFamily.value})`,
-                transitionProperty: "all",
-                overflowX: "clip",
-                textOverflow: "ellipsis",
-              }}
-              className={`min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500`}
-              onChange={(e) => {
-                handleTextChange(e)
-              }}
-              tagName="div"
-            />
+            <div style={{
+              maxWidth: "100%",
+              fontSize: `${titleFontSize}px`,
+              color: primaryTextColor,
+              fontWeight: `${fontWeightMap[titleFontWeight]}`,
+              fontFamily: `var(${fontFamily.value})`,
+              transitionProperty: "all",
+              overflowX: "clip",
+              textOverflow: "ellipsis",
+            }}>
+              <TextEditor onChange={val => handleTitleChange(serialize(val))} initValue={getComputedValueForTextEditor(title)} />
+            </div>
+            <div style={{
+              maxWidth: "100%",
+              fontSize: `${textFontSize}px`,
+              color: secondaryTextColor,
+              fontWeight: fontWeightMap[textFontWeight],
+              fontFamily: `var(${secondaryFontFamily.value})`,
+              transitionProperty: "all",
+              overflowX: "clip",
+              textOverflow: "ellipsis",
+            }}>
+              <TextEditor onChange={val => handleTextChange(serialize(val))} initValue={getComputedValueForTextEditor(Text)} />
+            </div>
           </div>
         </>
       )}

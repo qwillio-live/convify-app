@@ -41,6 +41,7 @@ import clsx from "clsx"
 import { Label } from "@/components/ui/label"
 import { useEditor } from "@craftjs/core"
 import { updateElementProps } from "./utils"
+import { Switch } from "@/components/custom-switch"
 
 type Props = {}
 
@@ -75,6 +76,10 @@ export const GlobalThemeSettings = (props: Props) => {
   )
   const backgroundImage = useAppSelector(
     (state) => state.theme?.general?.backgroundImage
+  )
+
+  const showCookokieConsentPopup = useAppSelector(
+    (state) => state.theme?.general?.showCookokieConsentPopup
   )
   const defaultBackgroundColor = useAppSelector(
     (state) => state.theme?.defaultGeneral?.backgroundColor
@@ -285,6 +290,32 @@ export const GlobalThemeSettings = (props: Props) => {
                   backgroundImage={backgroundImage}
                   removeSelectedImage={removeSelectedImage}
                 />
+              </div>
+              <div className="space-y-2 pt-2">
+                {/* <Input
+                  onChange={handleFileChange}
+                  multiple={false}
+                  className="basis-full"
+                  type={"file"}
+                  placeholder="Upload Image"
+                  accept="image/*"
+                  id="backgroundimage"
+                /> */}
+                <div className="flex items-center justify-between gap-2 pb-2">
+                  <span className="text-xs">{"Cookie consent popup"}</span>
+                  <Switch
+                    checked={showCookokieConsentPopup}
+                    onCheckedChange={checked => {
+                      handleStyleChangeDebounced({
+                        general: { showCookokieConsentPopup: checked },
+                      })
+                    }}
+                  />
+                </div>
+                {showCookokieConsentPopup &&
+                  (<span className="text-muted-foreground text-xs mt-4">
+                    {("The popup will appear when the page loads")}
+                  </span>)}
               </div>
             </AccordionContent>
           </AccordionItem>

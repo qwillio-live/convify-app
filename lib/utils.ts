@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 import crypto from "crypto"
 import { sign } from "jsonwebtoken"
 import prisma from "@/lib/prisma"
+import { Node } from "slate"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -59,9 +60,8 @@ export const generateSignInLink = async (userEmail) => {
   console.log("JWT token:", jwtToken)
 
   // Create a sign-in link using the JWT token
-  const signInLink = `${
-    process.env.NEXT_PUBLIC_DOMAIN_URL
-  }/auth/signin-link?token=${encodeURIComponent(shortToken)}`
+  const signInLink = `${process.env.NEXT_PUBLIC_DOMAIN_URL
+    }/auth/signin-link?token=${encodeURIComponent(shortToken)}`
 
   console.log("Sign-in link:", signInLink)
 
@@ -74,4 +74,32 @@ export const serialize = value => {
 
 export const deserialize = string => {
   return JSON.parse(string)
+}
+
+export const getComputedValueForTextEditor = text => {
+  let val;
+  let computedValue = [{
+    type: 'paragraph',
+    children: [{ text: text }]
+  }]
+  try {
+    val = deserialize(text)
+    if (Array.isArray(val)) {
+      console.log(val, "check")
+      computedValue = val
+    }
+  }
+  catch (e) {
+    console.log(e)
+  }
+  return computedValue
+}
+
+export const getTextContentOfEditor = (value) => {
+  return (
+    deserialize(value)
+      .map(n => Node.string(n))
+      .join('\n')
+  )
+
 }

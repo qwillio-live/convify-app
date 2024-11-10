@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { withHistory } from "slate-history"
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Button } from './ui/button'
-import { Bold, Highlighter, Italic, Link, LinkIcon, Underline } from 'lucide-react'
+import { Bold, Highlighter, Italic, Link, LinkIcon, Type, Underline } from 'lucide-react'
 import { Slate, Editable, withReact, useSlate, useFocused } from 'slate-react'
 import {
     Editor,
@@ -17,6 +17,7 @@ import {
 import { cn } from '@/lib/utils'
 import { Separator } from './ui/separator'
 import { Input } from './ui/input'
+import { ColorInput } from './color-input'
 
 const isMarkActive = (editor, format) => {
     const marks = Editor.marks(editor)
@@ -24,13 +25,13 @@ const isMarkActive = (editor, format) => {
 }
 
 
-const toggleMark = (editor, format) => {
+const toggleMark = (editor, format, value = true) => {
     const isActive = isMarkActive(editor, format)
 
     if (isActive) {
         Editor.removeMark(editor, format)
     } else {
-        Editor.addMark(editor, format, true)
+        Editor.addMark(editor, format, value)
     }
 }
 const isLinkActive = (editor) => {
@@ -85,14 +86,21 @@ const Element = props => {
             return <p {...attributes}>{children}</p>
     }
 }
-const LinkInput = ({ onSubmit }) => {
-    const [url, setUrl] = useState('')
+const LinkInput = ({ onSubmit, initialUrl, onClose = () => { } }) => {
+
+    const [url, setUrl] = useState(initialUrl)
 
     const handleSubmit = (e) => {
         e.preventDefault()
         onSubmit(url)
         setUrl('')
+        onClose()
     }
+
+    useEffect(() => {
+        setUrl(initialUrl)
+    }, [initialUrl])
+
 
     return (
         <form onSubmit={handleSubmit} className="p-2 flex space-x-2">
@@ -122,12 +130,13 @@ const Leaf = ({ attributes, children, leaf }) => {
         children = <u>{children}</u>
     }
 
-    if (leaf.highlight) {
-        children = <span className="bg-yellow-200">{children}</span>
+    if (leaf.color) {
+        children = <span style={{ color: leaf.color }}>{children}</span>
     }
 
-    if(leaf.link) {
 
+    if (leaf.highlight) {
+        children = <span className="bg-yellow-200">{children}</span>
     }
 
     return <span {...attributes}>{children}</span>
@@ -155,7 +164,8 @@ const ToolbarItem = ({ icon, label, onClickHandler, isActive = false, popoverCon
             </PopoverTrigger>
             {showPopover && (
                 <PopoverContent className="w-auto p-0">
-                    {popoverContent}
+                    {React.cloneElement(popoverContent, { onClose: () => setIsOpen(false) })}
+
                 </PopoverContent>
             )}
         </Popover>)
@@ -199,7 +209,10 @@ const isUrl = (string) => {
 const FloatingToolbar = () => {
     const editorRef = useRef<HTMLDivElement | null>(null)
     const editor = useSlate()
+    const [linkUrl, setLinkUrl] = useState('')
     const inFocus = useFocused()
+    const [textColor, setTextColor] = useState('#000000')
+
 
     useEffect(() => {
         const el = editorRef.current
@@ -234,17 +247,30 @@ const FloatingToolbar = () => {
         el.style.left = `${rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
             }px`
     })
+    useEffect(() => {
+        const [linkNode] = Editor.nodes(editor, {
+            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === 'link',
+        })
+        setLinkUrl(linkNode ? linkNode[0].url : '')
+        const marks = Editor.marks(editor)
+        setTextColor(marks?.color || '#000000')
+    })
     const addLink = (url) => {
         if (url) {
             wrapLink(editor, url)
         }
+    }
+
+    const addColor = (color) => {
+        toggleMark(editor, 'color', color)
+        setTextColor(color)
     }
     return (
         <div ref={editorRef} onMouseDown={e => {
             // prevent toolbar from taking focus away from editor
             e.preventDefault()
         }}
-            className="fixed z-50 transition-opacity duration-200"
+            className="fixed z-1000 transition-opacity duration-200"
         >
             <div className="flex justify-center p-4">
                 <div className="bg-white rounded-lg shadow-md border border-gray-200 p-2 flex items-center space-x-2">
@@ -252,14 +278,44 @@ const FloatingToolbar = () => {
                         <ToolbarItem icon={<Bold className="h-4 w-4" />} label="Bold" onClickHandler={() => toggleMark(editor, 'bold')} isActive={isMarkActive(editor, 'bold')} />
                         <ToolbarItem icon={<Italic className="h-4 w-4" />} label="Italic" onClickHandler={() => toggleMark(editor, 'italic')} isActive={isMarkActive(editor, 'italic')} />
                         <ToolbarItem icon={<Underline className="h-4 w-4" />} label="Underline" onClickHandler={() => toggleMark(editor, 'underline')} isActive={isMarkActive(editor, 'underline')} />
-                        <ToolbarItem icon={<Highlighter className="h-4 w-4" />} label="Underline" onClickHandler={() => toggleMark(editor, 'highlight')} isActive={isMarkActive(editor, 'highlight')} />
-
-                        <ToolbarItem 
-                            icon={<LinkIcon className="h-4 w-4" />} 
-                            label="Link" 
+                        <Separator orientation='vertical' className="h-6 w-[1px]" />
+                        <ToolbarItem icon={<Highlighter className="h-4 w-4" />} label="Highligh" onClickHandler={() => toggleMark(editor, 'highlight')} isActive={isMarkActive(editor, 'highlight')} />
+                        <ToolbarItem
+                            icon={<Type className="h-4 w-4" style={{ color: textColor }} />}
+                            label="Text Color"
                             showPopover={true}
-                            onClickHandler={() => {}}
-                            popoverContent={<LinkInput onSubmit={addLink} />}
+                            onClickHandler={() => { }}
+                            popoverContent={
+                                <ColorInput
+                                handleChange={(e) => addColor(e.target.value)}
+                                value={textColor}
+                                handleRemove={() => addColor('#000000')}
+                                className='p-2'
+                                />
+                                // <div
+                                //     style={{
+                                //         backgroundColor:
+                                //             typeof textColor === "string" && textColor[0] === "#"
+                                //                 ? textColor
+                                //                 : "transparent",
+                                //     }}
+                                //     className="relative h-[32px] w-[62px] overflow-hidden rounded-md"
+                                // >
+                                //     <Input
+                                //         type="color"
+                                //         value={textColor}
+                                //         onChange={(e) => addColor(e.target.value)} />
+
+                                // </div>}
+                            }
+                            isActive={isMarkActive(editor, 'color')}
+                        />
+                        <ToolbarItem
+                            icon={<LinkIcon className="h-4 w-4" />}
+                            label="Link"
+                            showPopover={true}
+                            onClickHandler={() => { }}
+                            popoverContent={<LinkInput onSubmit={addLink} initialUrl={linkUrl} />}
                             isActive={isLinkActive(editor)}
                         />
 
@@ -271,7 +327,7 @@ const FloatingToolbar = () => {
 
 }
 export const TextEditor = ({ isReadOnly = false, initValue, onChange = (val) => { } }) => {
-    const [editor] = useState(() =>withLinks(withHistory(withReact(createEditor()))))
+    const [editor] = useState(() => withLinks(withHistory(withReact(createEditor()))))
 
     return (
         <Slate editor={editor} initialValue={initValue}
@@ -284,7 +340,6 @@ export const TextEditor = ({ isReadOnly = false, initValue, onChange = (val) => 
                 readOnly={isReadOnly}
                 renderLeaf={props => <Leaf {...props} />}
                 renderElement={props => <Element {...props} />}
-                placeholder="Enter some text..."
                 onDOMBeforeInput={(event: InputEvent) => {
                     switch (event.inputType) {
                         case 'formatBold':

@@ -408,7 +408,9 @@
     "Video link":"Video link",
     "Youtube":"Youtube",
     "Hide controls":"Hide controls",
-    "Enter YouTube video link":"Enter YouTube video link"
+    "Enter YouTube video link":"Enter YouTube video link",
+    "Cookie consent popup":"Cookie consent popup",
+    "The popup will appear when the page loads":"The popup will appear when the page loads"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

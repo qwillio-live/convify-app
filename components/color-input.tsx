@@ -1,5 +1,6 @@
 import { X } from "lucide-react"
 import { Input } from "./ui/input"
+import { cn } from "@/lib/utils"
 
 interface ColorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string
@@ -11,12 +12,13 @@ export function ColorInput({
   value,
   handleChange,
   handleRemove,
+  className,
   ...rest
 }: ColorInputProps) {
   console.log(value)
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <div
         style={{
           backgroundColor:

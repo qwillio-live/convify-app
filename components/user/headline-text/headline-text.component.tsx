@@ -19,10 +19,6 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { HeadlineTextSettings } from "./headline-text-settings"
-import {
-  getBackgroundForPreset,
-  getHoverBackgroundForPreset,
-} from "./useHeadlineThemePresets"
 import { cn, deserialize, serialize } from "@/lib/utils"
 import { TextEditor } from "@/components/TextEditor"
 
@@ -242,7 +238,7 @@ export const HeadlineTextGen = ({
 
 
   let val;
-  let finalValue = [{
+  let computedValue = [{
     type: 'paragraph',
     children: [{ text: text }]
   }]
@@ -250,7 +246,7 @@ export const HeadlineTextGen = ({
     val = deserialize(text)
     if (Array.isArray(val)) {
       console.log(val, "check")
-      finalValue = val
+      computedValue = val
     }
   }
   catch (e) {
@@ -321,7 +317,7 @@ export const HeadlineTextGen = ({
             lineHeight: "1.5",
           }}
         >
-          <TextEditor isReadOnly initValue={finalValue} />
+          <TextEditor isReadOnly initValue={computedValue} />
         </h1>
       </StyledCustomHeadlineInput>
     </div>
@@ -464,7 +460,6 @@ export const HeadlineText = ({
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.text = value
-          console.log("saving text", value)
           return { ...props }
         })
       }
@@ -611,7 +606,6 @@ export const HeadlineText = ({
             >
 
               <TextEditor initValue={finalValue} onChange={val => {
-                console.log("editor", val)
                 handleTextChange(serialize(val))
               }} />
             </div>

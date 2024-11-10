@@ -5,7 +5,7 @@ import hexoid from 'hexoid';
 import { ImageStorySettnigs } from './image-story.settings';
 import { Controller } from '../settings/controller.component';
 import { useTranslations } from 'next-intl';
-import { CSSProperties, useMemo, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 import { useNode } from '@craftjs/core';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -20,21 +20,20 @@ const ImageStorySizeValues = {
 export const ImageStoryGen = ({
     size,
     containerBackground,
-    align,
-    gap,
-    paddingLeft,
-    paddingTop,
-    paddingRight,
-    paddingBottom,
     marginLeft,
     marginTop,
     marginRight,
     marginBottom,
-    settingTabs,
     fullWidth = true,
     items,
     aspectRatio,
 }) => {
+    const [delayed, setDelayed] = useState(true);
+    const fallbackDelay = 250;
+    useEffect(() => {
+        const timeout = setTimeout(() => setDelayed(false), fallbackDelay);
+        return () => clearTimeout(timeout);
+      }, []);
     return (
         <div
             className="relative w-full"
@@ -62,7 +61,7 @@ export const ImageStoryGen = ({
                 mobileScreen={false}
                 maxWidth={ImageStorySizes[size || "medium"]}
             >
-                <ImageStoryItems images={items} key={items?.length ?? 0} aspectRatio={aspectRatio} />
+               {!delayed && <ImageStoryItems images={items} key={items?.length ?? 0} aspectRatio={aspectRatio} />}
             </StyledImageStoryContainer>
         </div>
     )
@@ -98,6 +97,8 @@ export const ImageStory = ({
 
     const [hover, setHover] = useState(false)
     const t = useTranslations('Components')
+    console.log(selected, "check")
+    console.log(isHovered, "check")
 
     return (
         <div
@@ -149,7 +150,7 @@ export const ImageStory = ({
     )
 }
 
-export const ImageStoryItems = ({ images, aspectRatio }) => {
+export const ImageStoryItems = React.memo(function temp({ images, aspectRatio }: { images: any[], aspectRatio: string }) {
     const stories = images.map((image) => ({ url: image.src }))
     if (images.length === 0) {
         return <></>
@@ -165,6 +166,7 @@ export const ImageStoryItems = ({ images, aspectRatio }) => {
             justifyContent: 'center',
         }}>
             <Stories
+            loader={<div></div>}
                 stories={((images ?? []).map((image, index) => (
                     {
                         content: () => (
@@ -173,8 +175,8 @@ export const ImageStoryItems = ({ images, aspectRatio }) => {
                             </div>
                         )
                     }
-                ))) ?? 
-                    [{ content: null}]
+                ))) ??
+                    [{ content: null }]
                 }
                 loop
                 height={"100%"}
@@ -210,7 +212,7 @@ export const ImageStoryItems = ({ images, aspectRatio }) => {
             />
         </div>
     )
-}
+})
 
 type StyledImageStoryContainerPropTypes = {
     marginTop: number
@@ -238,9 +240,9 @@ const StyledImageStoryContainer = styled.div<StyledImageStoryContainerPropTypes>
             if (size === ImageStorySizes.small) {
                 return { width: "376px" }
             } else if (size === ImageStorySizes.medium) {
-                return { width: "800px" }
+                return { width: "calc(100% - 22px)", maxWidth: 800 }
             } else if (size === ImageStorySizes.large) {
-                return { width: "1000px" }
+                return { width: "calc(100% - 22px)", maxWidth: 1000 }
             } else {
                 return {
                     width: "calc(100% - 22px)",
@@ -284,6 +286,9 @@ const StyledImageStoryContainer = styled.div<StyledImageStoryContainerPropTypes>
   @media (max-width: 376px) {
     ${({ size }) => {
         if (size === ImageStorySizes.small) {
+            return { width: "calc(100% - 22px)" }
+        }
+        if (size === ImageStorySizes.medium) {
             return { width: "calc(100% - 22px)" }
         }
     }}

@@ -23,6 +23,7 @@ export interface GlobalThemeState {
     secondaryColor?: string | undefined
     backgroundColor?: string | undefined
     backgroundImage?: string | undefined
+    showCookokieConsentPopup?: boolean | undefined
   }
   defaultText?: {
     primaryFont?: string

@@ -57,6 +57,7 @@ import {
 } from "./user-checklist.component"
 import { ColorInput } from "@/components/color-input"
 import { Icons } from "@/components/icons"
+import { getTextContentOfEditor } from "@/lib/utils"
 
 export const ChecklistSettings = () => {
   const t = useTranslations("Components")
@@ -475,12 +476,9 @@ export const ChecklistItemSettings = ({
     >
       <Input
         className="h-8.5 flex-1 text-xs"
-        value={item.value}
+        value={getTextContentOfEditor(item.value)}
         placeholder={`${t("Item")} ${index + 1}`}
-        onChange={(e) => handleItemValueEdit(e.target.value)}
-        // onBlur={() =>
-        //   setProp((props) => (props.checklistItems[index] = item), 200)
-        // }
+        disabled
       />
       <Icons.Delete
         className="hover:cursor-pointer"
