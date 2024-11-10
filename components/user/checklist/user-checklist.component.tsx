@@ -118,26 +118,9 @@ const Wrapper = styled.ul<StyledWrapper>`
   } */
 
   grid-template-columns: repeat(
-  ${({ columnsDesktop }) => columnsDesktop},
+  ${({ columnsDesktop, mobileScreen }) => mobileScreen ? 1 :columnsDesktop},
   minmax(0, 1fr)
 );
-
-  ${({ size, mobileScreen }) => {
-    if (mobileScreen) {
-      return { width: "calc(100% - 22px)" }
-    }
-
-    switch (size) {
-      case UserInputSizes.small:
-        return { width: "376px" } // Assuming small size width
-      case UserInputSizes.medium:
-        return { width: "800px" }
-      case UserInputSizes.large:
-        return { width: "1000px" }
-      default:
-        return { width: "100%" }
-    }
-  }};
 `
 
 export const Checklist = ({
@@ -233,7 +216,7 @@ export const Checklist = ({
         <Wrapper
           size={size}
           mobileScreen={!!mobileScreen}
-          className="user-checklist-comp flex w-full gap-2 "
+          className="user-checklist-comp flex w-full gap-2"
           columnsDesktop={columnsDesktop}
           // style={{
           //   flexDirection: layout,

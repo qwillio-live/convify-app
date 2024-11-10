@@ -19,6 +19,7 @@ const useChecklistThemePresets = () => {
       { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
       { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
       { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
+      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 4` },
     ],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -54,6 +55,7 @@ const useChecklistThemePresets = () => {
       { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
       { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
       { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
+      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 4` },
     ],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
