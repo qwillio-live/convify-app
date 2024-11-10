@@ -449,15 +449,11 @@ export const ImageSettings = () => {
         </CardContent>
       </Card>
       <Accordion
-        value={settingsTab || "content"}
-        onValueChange={(value) => {
-          setProp((props) => (props.settingsTab = value), 200)
-        }}
         type="multiple"
-        defaultValue={["content"]}
+        defaultValue={["general"]}
         className="w-full mb-10"
       >
-        <AccordionItem value="item-2">
+        <AccordionItem value="general">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="space-y-2">

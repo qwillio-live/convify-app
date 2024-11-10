@@ -569,4 +569,7 @@ Form.craft = {
     canDragIn: () => true,
     canDragOut: () => true,
   },
+  related: {
+    settings: FormSettings,
+  },
 }

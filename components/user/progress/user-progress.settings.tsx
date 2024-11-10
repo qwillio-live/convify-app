@@ -247,12 +247,8 @@ export const ProgressBarSettings = () => {
         </div>
       ) : (
         <Accordion
-          value={settingsTab || "content"}
-          onValueChange={(value) => {
-            setProp((props) => (props.settingsTab = value), 200)
-          }}
           type="multiple"
-          defaultValue={["content"]}
+          defaultValue={["design"]}
           className="w-full"
         >
           <AccordionItem value="design">

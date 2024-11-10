@@ -108,51 +108,6 @@ export const FormSettings = () => {
         <AccordionItem value="layout">
           <AccordionTrigger>{t("Layout")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            {/* <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
-              <Label className="text-md text-muted-foreground col-span-1">
-                {t("Layout Desktop")}
-              </Label>
-              <Tabs
-                value={flexDirection}
-                defaultValue={flexDirection}
-                onValueChange={(value) => {
-                  setProp((props) => (props.flexDirection = value), 200)
-                }}
-                className="flex-1 col-span-1"
-              >
-                <TabsList className="flex-initial flex flex-row shrink-0">
-                <TabsTrigger value="column">
-                    <AlignVerticalJustifyStart size={16} />
-                  </TabsTrigger>
-                <TabsTrigger value="row">
-                    <AlignHorizontalJustifyStart size={16} />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            <div className="grid grid-cols-2 items-center col-span-2 space-x-2">
-              <Label className="col-span-1 text-md text-muted-foreground">
-                {t("Layout Mobile")}
-              </Label>
-              <Tabs
-                value={mobileFlexDirection}
-                defaultValue={mobileFlexDirection}
-                onValueChange={(value) => {
-                  setProp((props) => (props.mobileFlexDirection = value), 200)
-                }}
-                className="flex-1 col-span-1"
-              >
-                <TabsList className="flex-initial flex flex-row shrink-0">
-                <TabsTrigger value="column">
-                    <AlignVerticalJustifyStart size={16} />
-                  </TabsTrigger>
-                  <TabsTrigger value="row">
-                    <AlignHorizontalJustifyStart size={16} />
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            */}
             <div className="space-y-2">
               <Label>{t("Content Align")}</Label>
               <Tabs

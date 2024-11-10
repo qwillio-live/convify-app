@@ -145,6 +145,7 @@ export const ImgSettings = () => {
       width,
       height,
       src,
+      settingsTab
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -279,8 +280,12 @@ export const ImgSettings = () => {
           </div>
         </CardContent>
       </Card>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-2">
+      <Accordion
+        type="multiple"
+        defaultValue={["general"]}
+        className="w-full"
+      >
+        <AccordionItem value="general">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("General")}</span>
           </AccordionTrigger>
@@ -320,7 +325,7 @@ export const ImgSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-3">
+        <AccordionItem value="spacing">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2 hover:no-underline">
             <span className="text-sm font-medium">{t("Spacing")}</span>
           </AccordionTrigger>
@@ -388,7 +393,7 @@ export const ImgSettings = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-4">
+        <AccordionItem value="appearance">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">{t("Appearance")}</span>
           </AccordionTrigger>
