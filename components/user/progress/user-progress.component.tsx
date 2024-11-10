@@ -62,7 +62,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import { Progress } from "@/components/ui/progress-custom"
-import { Minus, Circle } from "lucide-react"
+import { Circle } from "lucide-react"
 import { string } from "prop-types"
 import { UserInputSizes } from "../input/user-input.component"
 
@@ -86,6 +86,10 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
   return (
     <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
   )
+}
+
+const Minus = ({color, style, widthOfRectangle, isRectangle, spacingOfRectangle}) => {
+  return (<div style={{...style, height: "4px", width: isRectangle ? `${widthOfRectangle}px` : "800px", background: color, marginLeft: `${spacingOfRectangle/2}px`, marginRight: `${spacingOfRectangle/2}px`}}/>)
 }
 
 const ButtonSizeValues = {
@@ -179,19 +183,19 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
       return { width: "250px" }
     } else if (size === UserInputSizes.medium) {
       if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
+        return { width: "calc(100%)" }
       } else {
         return { width: "376px" }
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
-        return { width: "calc(100% - 22px)" }
+        return { width: "calc(100%)" }
       } else {
         return { width: "576px" }
       }
     } else {
       return {
-        width: "calc(100% - 22px)",
+        width: "calc(100%)",
       }
     }
   }};
@@ -199,7 +203,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   @media (max-width: 600px) {
     ${({ size }) => {
       if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
+        return { width: "calc(100%)" }
       }
     }}
   }
@@ -207,7 +211,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   @media (max-width: 390px) {
     ${({ size }) => {
       if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
+        return { width: "calc(100%)" }
       }
     }}
   }
@@ -492,6 +496,10 @@ export const ProgressBar = ({
 
   const screenNames = useScreenNames()
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const [wrapperWidth, setWrapperWidth] = useState(0);
+
   //editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
   useEffect(() => {
@@ -645,7 +653,7 @@ export const ProgressBar = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-  const renderIcons = () => {
+  const renderIcons = (WrapperWidth: number) => {
     const icons: React.ReactElement[] = []
     const progressComponents = {
       rectangle: Minus,
@@ -653,6 +661,26 @@ export const ProgressBar = ({
     }
     const SelectedComponent =
       progressComponents[progressStyle] || progressComponents["rectangle"]
+    
+    const spacingOfRectangle = 16
+    let widthOfRectangle = 0;
+    let totalWidthOfRectangle = width;
+
+    //  Calculate the width of rectangle
+    if (progressStyle === 'rectangle') {
+      if (size === UserInputSizes.small) {
+        totalWidthOfRectangle = 250
+      } else if (size === UserInputSizes.medium) {
+        totalWidthOfRectangle = 376
+      } else if (size === UserInputSizes.large) {
+        totalWidthOfRectangle = 576
+      } else {
+        totalWidthOfRectangle = wrapperWidth
+      }
+      
+      widthOfRectangle = (totalWidthOfRectangle - spacingOfRectangle * (maxValue - 1)) / maxValue;
+    }
+
     for (let i = 0; i < maxValue; i++) {
       icons.push(
         <SelectedComponent
@@ -675,7 +703,10 @@ export const ProgressBar = ({
                 : "#eaeaeb",
             borderRadius: progressStyle === "grip" ? "50px" : "disabled",
           }}
-          size={progressStyle === "grip" ? 8 : 28}
+          size={progressStyle === "grip" ? 8 : 24}
+          widthOfRectangle={widthOfRectangle}
+          isRectangle={progressStyle === "rectangle"}
+          spacingOfRectangle={spacingOfRectangle}
         />
       )
     }
@@ -692,6 +723,13 @@ export const ProgressBar = ({
     }
   }, [screensLength])
 
+  useEffect(() => {
+    if (wrapperRef.current) {
+      const { width } = wrapperRef.current.getBoundingClientRect();
+      setWrapperWidth(width)
+    }
+  }, []);
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -707,6 +745,7 @@ export const ProgressBar = ({
       {hover && <Controller nameOfComponent={t("Progress Bar")} />}
 
       <div
+        ref={wrapperRef}
         className="relative w-full"
         style={{
           background: `${
@@ -793,7 +832,7 @@ export const ProgressBar = ({
             />
           ) : (
             <div className="" style={{ display: "flex", alignItems: "center" }}>
-              {renderIcons()}
+              {renderIcons(wrapperWidth)}
             </div>
           )}
         </StyledCustomButton>

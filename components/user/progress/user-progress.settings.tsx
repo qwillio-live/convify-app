@@ -17,6 +17,7 @@ import {
   RectangleHorizontal,
   GripHorizontal,
   Ellipsis,
+  InfoIcon,
 } from "lucide-react"
 import {
   Tabs,
@@ -71,6 +72,17 @@ import Image from "next/image"
 import dash_icon from "@/assets/images/dash_icon_new.svg"
 import dash_icon_selected from "@/assets/images/dash_icon_selected.svg"
 import { ColorInput } from "@/components/color-input"
+
+function HelperInformation({ infoText }: { infoText: string }) {
+  return (
+    <UiCard className={cn("flex gap-2 rounded-lg border p-3 pr-4")}>
+      <div className="flex flex-row items-start gap-1 text-left">
+        <InfoIcon className="size-4 shrink-0" />
+        <p className="text-xs">{infoText}</p>
+      </div>
+    </UiCard>
+  )
+}
 
 export const ProgressBarSettings = () => {
   const t = useTranslations("Components")
@@ -230,19 +242,9 @@ export const ProgressBarSettings = () => {
   return (
     <>
       {isHeaderFooterMode ? (
-        <UiCard
-          className={cn(
-            "flex flex-col items-center justify-center border border-gray-500 px-4 py-3"
-          )}
-        >
-          <div className="flex flex-row items-start gap-1 text-left">
-            <div>
-              <p className="text-sm font-light">
-                {t("Progress_bar_description")}
-              </p>
-            </div>
-          </div>
-        </UiCard>
+        <div className="mt-7">
+          <HelperInformation infoText={t("Progress_bar_description")} />
+        </div>
       ) : (
         <Accordion
           value={settingsTab || "content"}
