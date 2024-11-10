@@ -31,6 +31,11 @@ import {
   setPreviewScreenData,
   setUpdateFilledCount,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -120,6 +125,7 @@ export type UserInputMailProps = {
   }
   settingsTab: string
   id: string
+  iconType?: PictureTypes
 }
 export const UserInputMailDefaultProps: UserInputMailProps = {
   inputValue: "",
@@ -406,9 +412,7 @@ export const UserInputMailGen = ({ ...props }) => {
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${
-                    props.textColor !== "#ffffff"
-                      ? props.textColor
-                      : primaryTextColor
+                    props.textColor !== "#ffffff" ? props.textColor : "#505051"
                   }`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
@@ -442,10 +446,10 @@ export const UserInputMailGen = ({ ...props }) => {
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
                 color: `${
-                  props.textColor !== "#ffffff"
-                    ? props.textColor
-                    : primaryTextColor
+                  props.textColor !== "#ffffff" ? props.textColor : "#9ca3af"
                 }`,
+                fontSize: "15px",
+                fontWeight: 330,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -481,14 +485,34 @@ export const UserInputMailGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: convertToSvg(icons[props.icon]?.body),
-                  }}
-                  style={{
-                    color: `#505051`,
-                  }}
-                />
+                {props.iconType !== PictureTypes.NULL && (
+                  <div className="flex items-center justify-center">
+                    {props.iconType === PictureTypes.ICON ? (
+                      <SvgRenderer
+                        iconName={props.icon}
+                        width="1em"
+                        height="1em"
+                      />
+                    ) : props.iconType === PictureTypes.EMOJI ? (
+                      <span className="text-[1em] leading-[1em]">
+                        {props.icon}
+                      </span>
+                    ) : (
+                      <picture key={(props.icon as ImagePictureTypes).desktop}>
+                        <source
+                          media="(min-width:560px)"
+                          srcSet={(props.icon as ImagePictureTypes).mobile}
+                        />
+                        <img
+                          src={(props.icon as ImagePictureTypes).desktop}
+                          className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                          style={{ height: "1em", width: "auto" }}
+                          loading="lazy"
+                        />
+                      </picture>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             <UserInputMailStyled
@@ -801,9 +825,7 @@ export const UserInputMail = ({ ...props }) => {
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
                   color: `${
-                    props.textColor !== "#ffffff"
-                      ? props.textColor
-                      : primaryTextColor
+                    props.textColor !== "#ffffff" ? props.textColor : "#505051"
                   }`,
                 }}
               />
@@ -833,10 +855,10 @@ export const UserInputMail = ({ ...props }) => {
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
                 color: `${
-                  props.textColor !== "#ffffff"
-                    ? props.textColor
-                    : primaryTextColor
+                  props.textColor !== "#ffffff" ? props.textColor : "#9ca3af"
                 }`,
+                fontSize: "15px",
+                fontWeight: 330,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -868,14 +890,34 @@ export const UserInputMail = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: convertToSvg(icons[props.icon]?.body),
-                  }}
-                  style={{
-                    color: `#505051`,
-                  }}
-                />
+                {props.iconType !== PictureTypes.NULL && (
+                  <div className="flex items-center justify-center">
+                    {props.iconType === PictureTypes.ICON ? (
+                      <SvgRenderer
+                        iconName={props.icon}
+                        width="1em"
+                        height="1em"
+                      />
+                    ) : props.iconType === PictureTypes.EMOJI ? (
+                      <span className="text-[1em] leading-[1em]">
+                        {props.icon}
+                      </span>
+                    ) : (
+                      <picture key={(props.icon as ImagePictureTypes).desktop}>
+                        <source
+                          media="(min-width:560px)"
+                          srcSet={(props.icon as ImagePictureTypes).mobile}
+                        />
+                        <img
+                          src={(props.icon as ImagePictureTypes).desktop}
+                          className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                          style={{ height: "1em", width: "auto" }}
+                          loading="lazy"
+                        />
+                      </picture>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             <UserInputMailStyled

@@ -325,9 +325,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
               // minWidth: `${UserInputSizeValues[props.size]}`,
               // width: `${UserInputSizeValues[props.size]}`,
               color: `${
-                props.textColor !== "#ffffff"
-                  ? props.textColor
-                  : primaryTextColor
+                props.textColor !== "#ffffff" ? props.textColor : "#505051"
               }`,
             }}
           >
@@ -613,9 +611,7 @@ export const UserInputTextarea = ({ ...props }) => {
               // minWidth: `${UserInputSizeValues[props.size]}`,
               // width: `${UserInputSizeValues[props.size]}`,
               color: `${
-                props.textColor !== "#ffffff"
-                  ? props.textColor
-                  : primaryTextColor
+                props.textColor !== "#ffffff" ? props.textColor : "#505051"
               }`,
             }}
           />

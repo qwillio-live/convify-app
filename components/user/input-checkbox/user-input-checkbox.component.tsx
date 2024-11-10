@@ -326,13 +326,13 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   const primaryColor = useAppSelector(
     (state) => state?.theme?.general?.primaryColor
   )
-  useEffect(() => {
-    setCheckmarkColor(primaryTextColor || "#748BA7") // update color when primaryTextColor changes, default to gray if undefined
-  }, [primaryTextColor])
+  // useEffect(() => {
+  //   setCheckmarkColor(primaryTextColor || "#748BA7") // update color when primaryTextColor changes, default to gray if undefined
+  // }, [primaryTextColor])
 
-  useEffect(() => {
-    setCheckmarkBorder(primaryColor || "#748BA7") // update color when primaryColor changes, default to gray if undefined
-  }, [primaryColor])
+  // useEffect(() => {
+  //   setCheckmarkBorder(primaryColor || "#748BA7") // update color when primaryColor changes, default to gray if undefined
+  // }, [primaryColor])
 
   const getHoverBackgroundForPreset = (color) => {
     return rgba(color, 0.1)
@@ -420,9 +420,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${
-                    props.textColor !== "#ffffff"
-                      ? props.textColor
-                      : primaryTextColor
+                    props.textColor !== "#ffffff" ? props.textColor : "#505051"
                   }`,
                 }}
               >
@@ -598,20 +596,13 @@ export const UserInputCheckbox = ({ ...props }) => {
     }
   }, [primaryColor, props.activeBorderColor, setProp])
 
-  useEffect(() => {
-    setCheckmarkColor(primaryTextColor || "#748BA7") // update color when primaryTextColor changes, default to gray if undefined
-  }, [primaryTextColor])
+  // useEffect(() => {
+  //   setCheckmarkColor(primaryTextColor || "#748BA7") // update color when primaryTextColor changes, default to gray if undefined
+  // }, [primaryTextColor])
 
-  useEffect(() => {
-    setCheckmarkBorder(primaryColor || "#748BA7") // update color when primaryColor changes, default to gray if undefined
-  }, [primaryColor])
-
-  const getTextColor = () => {
-    if (containerHover || props.isActive || isChecked) {
-      return primaryTextColor
-    }
-    return `${primaryTextColor}`
-  }
+  // useEffect(() => {
+  //   setCheckmarkBorder(primaryColor || "#748BA7") // update color when primaryColor changes, default to gray if undefined
+  // }, [primaryColor])
 
   const focusInput = () => {
     if (inputRef.current) {
@@ -743,9 +734,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                   color: `${
-                    props.textColor !== "#ffffff"
-                      ? props.textColor
-                      : getTextColor()
+                    props.textColor !== "#ffffff" ? props.textColor : "#505051"
                   }`,
                   zIndex: 10,
                 }}

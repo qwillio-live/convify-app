@@ -25,7 +25,7 @@ const useInputCheckboxThemePresets = () => {
   const outlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
+    textColor: "#ffffff",
     width: "unset",
     fontWeight: "normal",
     marginLeft: 0,
@@ -101,7 +101,7 @@ const useInputCheckboxThemePresets = () => {
   const underlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
+    textColor: "#ffffff",
     width: "unset",
     fontWeight: "normal",
     marginLeft: 0,

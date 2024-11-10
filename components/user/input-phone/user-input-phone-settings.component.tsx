@@ -11,7 +11,7 @@ import {
   useInView,
   useMotionValue,
 } from "framer-motion"
-import { throttle } from "lodash"
+import { throttle, debounce } from "lodash"
 import {
   Activity,
   AlignHorizontalJustifyCenter,
@@ -105,6 +105,7 @@ import useInputPhoneThemePresets from "./useInputPhoneThemePresets"
 import { UserInputPhone, UserInputPhoneGen } from "./user-input-phone.component"
 import { InputSettingsIconPicker } from "../input/user-input-icon-picker"
 import { ColorInput } from "@/components/color-input"
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 
 const IconRenderer = ({ iconName, onClick }) => {
   const ref = useRef(null)
@@ -278,7 +279,16 @@ export const UserInputPhoneSettings = () => {
   const handlePropChange = (property, value) => {
     throttledSetProp(property, value)
   }
-
+  const handleMultiplePropChangeDebounced = useCallback(
+    debounce((properties) => {
+      setProp((prop) => {
+        Object.keys(properties).forEach((key) => {
+          prop[key] = properties[key]
+        })
+      }, 0)
+    }),
+    [setProp]
+  )
   return (
     <>
       <Accordion
@@ -380,61 +390,24 @@ export const UserInputPhoneSettings = () => {
             </div>
             {props.enableIcon && (
               <div className="flex items-center justify-between">
-                {/* {props.enableIcon && (
-                <>
-                  <p className="text-md flex-1 text-muted-foreground">
-                    {t("Icon")}
-                  </p>
-                  <Select
-                    defaultValue={props.icon}
-                    onValueChange={(e) => {
-                      setProp((props) => (props.icon = e), 1000)
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="arrowright">
-                          <ArrowRight />
-                        </SelectItem>
-                        <SelectItem value="aperture">
-                          <Aperture />
-                        </SelectItem>
-                        <SelectItem value="activity">
-                          <Activity />
-                        </SelectItem>
-                        <SelectItem value="dollarsign">
-                          <DollarSign />
-                        </SelectItem>
-                        <SelectItem value="anchor">
-                          <Anchor />
-                        </SelectItem>
-                        <SelectItem value="disc">
-                          <Disc />
-                        </SelectItem>
-                        <SelectItem value="mountain">
-                          <Mountain />
-                        </SelectItem>
-                        <SelectItem value="phone">
-                          <Phone />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </>
-              )} */}
-                {/* <p className="text-md flex-1 text-muted-foreground">
-                {t("Icon")}
-              </p> */}
-
-                <Label>{tComponents("Select Icons")}</Label>
-                <InputSettingsIconPicker
-                  className="w-auto"
-                  icon={props.icon}
-                  onChange={(icon) => {
-                    handlePropChange("icon", icon)
+                <Label htmlFor="icon">Icon</Label>
+                <PicturePicker
+                  picture={
+                    props.iconType === PictureTypes.NULL ? (
+                      <ImageIcon className="text-muted-foreground size-4" />
+                    ) : (
+                      props.icon
+                    )
+                  }
+                  pictureType={props.iconType}
+                  maxWidthMobile={400}
+                  maxWidthDesktop={400}
+                  onChange={(icon, iconType) => {
+                    handleMultiplePropChangeDebounced({
+                      iconType,
+                      icon,
+                    })
+                    // debouncedSetProp("iconType", pictureType)
                   }}
                 />
               </div>

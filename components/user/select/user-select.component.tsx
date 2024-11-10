@@ -31,14 +31,14 @@ const SelectSizeValues = {
   small: "250px",
   medium: "376px",
   large: "576px",
-  full: "100%",
+  full: "99px",
 }
 
 const SelectMobileSizeValues = {
   small: "250px",
   medium: "330px",
   large: "360px",
-  full: "100%",
+  full: "360px",
 }
 
 const Wrapper = ({
@@ -172,9 +172,9 @@ export const SelectGen = ({
   return (
     <div
       ref={itemRefNew}
-      className="relative w-full max-w-[calc(100%-20px)]"
+      className="relative w-full max-w-[calc(100%-20px)] px-4"
       style={{
-        width: "100%",
+        // width: "100%",
         background: `${containerBackground}`,
         display: "flex",
         flexDirection: "column",
@@ -209,7 +209,7 @@ export const SelectGen = ({
         <div
           className={`w-full p-1 `}
           style={{
-            color: labelColor,
+            color: labelColor !== "#ffffff" ? labelColor : "#505051",
             fontFamily: `var(${fontFamily?.value})`,
             maxWidth: mobileScreen
               ? SelectMobileSizeValues[size || "small"]
@@ -296,9 +296,7 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
 
   overflow: hidden;
   max-width: ${(props) =>
-    props.mobileScreen
-      ? '100%'
-      : SelectSizeValues[props.size || "medium"]};
+    props.mobileScreen ? "100%" : SelectSizeValues[props.size || "medium"]};
   width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
@@ -410,12 +408,6 @@ export const Select = ({
     }
   }, [primaryColor])
 
-  useEffect(() => {
-    if (primaryTextColor) {
-      setProp((props) => (props.labelColor = primaryTextColor), 200)
-    }
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -487,7 +479,7 @@ export const Select = ({
                   handlePropChangeDebounced("label", e.target.value)
                 }}
                 style={{
-                  color: labelColor,
+                  color: labelColor !== "#ffffff" ? labelColor : "#505051",
                   outlineColor: borderHoverColor.value,
                   borderRadius: "4px",
                 }}
