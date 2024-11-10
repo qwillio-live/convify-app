@@ -101,5 +101,4 @@ export const getTextContentOfEditor = (value) => {
       .map(n => Node.string(n))
       .join('\n')
   )
-
 }
