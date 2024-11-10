@@ -89,6 +89,9 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const containerHeight = Math.min(100, (scrollY ?? 0) * 1)
+  const heightPercent = `${100 - containerHeight}px`
   return (
     <div
       className=""
@@ -96,13 +99,14 @@ export const AvatarComponentGen = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        // height: "50px",
+        height: heightPercent,
       }}
     >
       <div
         className="relative w-full"
         style={{
           background: `${containerBackground}`,
+          height: heightPercent,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -112,6 +116,9 @@ export const AvatarComponentGen = ({
       >
         <div
           className={`relative flex flex-row justify-${align} w-full border border-transparent`}
+          style={{
+            height: heightPercent,
+          }}
         >
           <UserLogo
             alt={alt}
@@ -189,15 +196,15 @@ export const UserLogo = ({
 
   const animation = useMemo(() => {
     // 130
-    let translateYPercent = Math.min(117, 50 + (scrollY || bodyScrollY || 0))
+    let translateYPercent = Math.min(58, 50 + (scrollY || bodyScrollY || 0))
     let box = Math.max(49, 90 - (scrollY || bodyScrollY || 0))
     if (isMobileScreen || mobileScreen) {
-      translateYPercent = Math.min(124, 50 + (scrollY || bodyScrollY || 0))
+      translateYPercent = Math.min(58, 50 + (scrollY || bodyScrollY || 0))
       box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
     }
 
     return {
-      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
+      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}px)` : "0px",
       box: hasComponentBeforeAvatar ? `${box}px` : "90px",
     }
   }, [
@@ -434,6 +441,10 @@ export const AvatarComponent = ({
     }
   }, [text, maxLength])
 
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const containerHeight = Math.min(100, (scrollY ?? 0) * 1.31578947368)
+  const heightPercent = `${100 - containerHeight}px`
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -442,6 +453,7 @@ export const AvatarComponent = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
+        height: heightPercent,
       }}
       onMouseOver={() => setDisplayController(true)}
       onMouseOut={() => setDisplayController(false)}
@@ -456,6 +468,7 @@ export const AvatarComponent = ({
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
+          height: heightPercent,
         }}
       >
         <div
@@ -463,6 +476,9 @@ export const AvatarComponent = ({
           className={cn(
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
+          style={{
+            height: heightPercent,
+          }}
         >
           <UserLogo
             alt={alt}
