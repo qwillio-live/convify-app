@@ -60,6 +60,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Range, RangeGen } from "@/components/user/range/user-range.component"
 import { Button } from "@/components/ui/button"
 import { Card as UiCard } from "@/components/ui/card"
 import {
@@ -1752,6 +1753,15 @@ export const UserToolbox = () => {
                                   paddingRight: 0,
                                   paddingBottom: 0,
                                   paddingTop: 0,
+                                  isVisibleLabel: true,
+                                  isVisibleBottomLabels: true,
+                                  lowerLimit: 0,
+                                  defaultValue: 50,
+                                  upperLimit: 100,
+                                  stepSize: 1,
+                                  prefix: "",
+                                  suffix: "",
+                                  slideColor: "",
                                 }
                               : {
                                   ...ProgressBarDefaultProps,
@@ -1771,8 +1781,96 @@ export const UserToolbox = () => {
                                   progressvalue:
                                     screensLength > 0 ? selectedScreen + 1 : 1,
                                 })}
-                            // Uncomment the following line if you need to set a value for the progress bar
-                            // value={50}
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          <Range
+                            {...{
+                              ...ProgressBarDefaultProps,
+                              forHeader: false,
+                              type: "body",
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              marginTop: 20,
+                              marginBottom: 20,
+                              maxValue: screensLength,
+                              progressvalue:
+                                screensLength > 0 ? selectedScreen + 1 : 1,
+                              isVisibleLabel: true,
+                              isVisibleBottomLabels: true,
+                              lowerLimit: 0,
+                              defaultValue: 50,
+                              upperLimit: 100,
+                              stepSize: 1,
+                              prefix: "",
+                              suffix: "",
+                              slideColor: "",
+                            }}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Range")}
+                        icon={
+                          <svg
+                            className="size-4"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M2 8H14M2 4H14M2 12H14M2 8C2 8.55228 2.44772 9 3 9C3.55228 9 4 8.55228 4 8C4 7.44772 3.55228 7 3 7C2.44772 7 2 7.44772 2 8ZM12 8C12 8.55228 12.4477 9 13 9C13.5523 9 14 8.55228 14 8C14 7.44772 13.5523 7 13 7C12.4477 7 12 7.44772 12 8Z"
+                              stroke="#23262C"
+                              stroke-width="1.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        }
+                      >
+                        <div className="flex w-[360px] flex-row items-center justify-between p-4">
+                          <RangeGen
+                            {...{
+                              ...ProgressBarDefaultProps,
+                              forHeader: false,
+                              type: "body",
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              marginTop: 20,
+                              marginBottom: 20,
+                              maxValue: screensLength,
+                              progressvalue:
+                                screensLength > 0 ? selectedScreen + 1 : 1,
+                              isVisibleLabel: true,
+                              isVisibleBottomLabels: true,
+                              lowerLimit: 0,
+                              defaultValue: 50,
+                              upperLimit: 100,
+                              stepSize: 1,
+                              prefix: "",
+                              suffix: "",
+                              slideColor: "",
+                            }}
                           />
                         </div>
                       </HoverCardComponent>

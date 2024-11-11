@@ -190,10 +190,6 @@ export const LineSelectorSettings = () => {
   return (
     <>
       <Accordion
-        value={settingsTab || "content"}
-        onValueChange={(value) => {
-          setProp((props) => (props.settingsTab = value), 200)
-        }}
         type="multiple"
         defaultValue={["content"]}
         className="w-full"

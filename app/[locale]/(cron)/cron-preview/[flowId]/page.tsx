@@ -45,6 +45,7 @@ import { TextImageComponentGen } from "@/components/user/textImage/user-textImag
 import { SocialShareButtonGen } from "@/components/user/socialShareButton/share-component"
 import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/telegram-component"
 import { UserContainerGen } from "@/components/user/container/user-container.component"
+import { RangeGen } from "@/components/user/range/user-range.component"
 import { getCurrentUser } from "@/lib/session"
 import { authOptions } from "@/lib/auth"
 import { getServerSession } from "next-auth"
@@ -96,6 +97,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+    [CRAFT_ELEMENTS.RANGE]: RangeGen,
   }
 
   const screenName = searchParams?.screen || ""

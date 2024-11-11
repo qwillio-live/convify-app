@@ -35,6 +35,7 @@ import { UserInputMailGen } from "../input-email/user-input-mail.component"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
 import { FormContentGen, FormGen } from "../form/user-form.component"
+import { RangeGen } from "../range/user-range.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -71,6 +72,7 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
   [CRAFT_ELEMENTS.FORM]: FormGen,
   [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+  [CRAFT_ELEMENTS.RANGE]: RangeGen,
 }
 
 interface Props {

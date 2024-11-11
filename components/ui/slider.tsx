@@ -5,9 +5,14 @@ import * as SliderPrimitive from "@radix-ui/react-slider"
 
 import { cn } from "@/lib/utils"
 
+type AdditionalProps = {
+  background: string
+  slideColor: string
+}
+
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & AdditionalProps
 >(({ className, ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
@@ -15,12 +20,25 @@ const Slider = React.forwardRef<
       "relative flex w-full touch-none select-none items-center",
       className
     )}
-    {...props}
+    defaultValue={props.defaultValue}
+    min={props.min}
+    max={props.max}
+    step={props.step}
+    onValueChange={props.onValueChange}
   >
-    <SliderPrimitive.Track className="bg-primary/20 relative h-2 w-full grow overflow-hidden rounded-full">
-      <SliderPrimitive.Range className="bg-primary absolute h-full" />
+    <SliderPrimitive.Track
+      className="relative h-1 w-full grow rounded-full bg-white"
+      // style={{ backgroundColor: props.background }}
+    >
+      <SliderPrimitive.Range
+        className="bg-background absolute h-full rounded-full"
+        style={{ backgroundColor: props.slideColor }}
+      />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className="border-primary bg-background ring-offset-background focus-visible:ring-ring block h-5 w-5 rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+    <SliderPrimitive.Thumb
+      className="border-primary bg-background block h-5 w-5 rounded-full focus:outline-none"
+      style={{ backgroundColor: props.slideColor }}
+    />
   </SliderPrimitive.Root>
 ))
 Slider.displayName = SliderPrimitive.Root.displayName

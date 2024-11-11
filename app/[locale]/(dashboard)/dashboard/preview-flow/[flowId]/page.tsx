@@ -51,6 +51,7 @@ import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/te
 // import lz from "lzutf8";
 import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { RangeGen } from "@/components/user/range/user-range.component"
 
 export default async function PreviewFlows({
   params,
@@ -94,6 +95,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+    [CRAFT_ELEMENTS.RANGE]: RangeGen,
   }
 
   const screenName = searchParams?.screen || ""

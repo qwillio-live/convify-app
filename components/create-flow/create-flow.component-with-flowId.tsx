@@ -92,6 +92,7 @@ import { SocialShareButton } from "../user/socialShareButton/share-component"
 import { Steps } from "../user/steps/user-steps.component"
 import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
 import { TextImageComponent } from "../user/textImage/user-textImage.component"
+import { Range } from "../user/range/user-range.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -357,6 +358,7 @@ export function CreateFlowComponent({ flowId }) {
           UserInputMail,
           UserInputPhone,
           ProgressBar,
+          Range,
           Element,
           Progress,
           ButtonChoiceScreen,

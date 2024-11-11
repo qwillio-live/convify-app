@@ -8,6 +8,7 @@ export const CRAFT_ELEMENTS = {
   DIV: "div",
   LOGOBAR: "LogoBar",
   PROGRESSBAR: "ProgressBar",
+  RANGE: "Range",
   ICONBUTTON: "IconButton",
   LINESELECTOR: "LineSelector",
   BACKBUTTON: "BackButton",
