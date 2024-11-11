@@ -204,7 +204,7 @@ export default async function PreviewFlows({
   return (
     <>
       <div className="flex h-screen flex-col">
-      {showCookieConsentPopup && <CookieConsentComponent forceShow/>}
+      {showCookieConsentPopup && <CookieConsentComponent />}
         <div
           className={cn(
             `flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] z-20`,

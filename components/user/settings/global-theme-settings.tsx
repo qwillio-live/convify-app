@@ -302,7 +302,7 @@ export const GlobalThemeSettings = (props: Props) => {
                   id="backgroundimage"
                 /> */}
                 <div className="flex items-center justify-between gap-2 pb-2">
-                  <span className="text-xs">{"Cookie consent popup"}</span>
+                  <span className="text-xs">{t("Cookie consent popup")}</span>
                   <Switch
                     checked={showCookieConsentPopup}
                     onCheckedChange={checked => {
@@ -314,7 +314,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 </div>
                 {showCookieConsentPopup &&
                   (<span className="text-muted-foreground text-xs mt-4">
-                    {("The popup will appear when the page loads")}
+                    {t("The popup will appear when the page loads")}
                   </span>)}
               </div>
             </AccordionContent>
