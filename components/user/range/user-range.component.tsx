@@ -305,7 +305,7 @@ export const RangeGen = ({
     (state) => state?.theme?.general?.backgroundColor
   )
 
-  const wrapperRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLButtonElement>(null)
   const valueRef = useRef<HTMLSpanElement>(null)
   const [wrapperWidth, setWrapperWidth] = useState(0)
   const [currentValue, setCurrentValue] = useState(50)
@@ -577,7 +577,7 @@ export const Range = ({
 
   const screenNames = useScreenNames()
 
-  const wrapperRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLButtonElement>(null)
   const valueRef = useRef<HTMLSpanElement>(null)
   const [wrapperWidth, setWrapperWidth] = useState(0)
   const [currentValue, setCurrentValue] = useState(50)

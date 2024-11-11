@@ -118,9 +118,10 @@ const Wrapper = styled.ul<StyledWrapper>`
   } */
 
   grid-template-columns: repeat(
-  ${({ columnsDesktop, mobileScreen }) => mobileScreen ? 1 :columnsDesktop},
-  minmax(0, 1fr)
-);
+    ${({ columnsDesktop, mobileScreen }) =>
+      mobileScreen ? 1 : columnsDesktop},
+    minmax(0, 1fr)
+  );
 `
 
 export const Checklist = ({
@@ -375,7 +376,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fullWidth: true,
   settingTabs: ["content"],
   preset: ChecklistPresets.normal,
-  columnsDesktop: 2
+  columnsDesktop: 2,
 }
 
 Checklist.craft = {

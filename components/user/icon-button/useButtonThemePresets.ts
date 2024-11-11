@@ -105,6 +105,91 @@ const useButtonThemePresets = () => {
     id: `input-${hexoid(6)()}`,
   }
 
+  const filledSeparatorPreset: IconButtonProps = {
+    fontFamily: {
+      value: theme?.text?.primaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    containerBackground: "transparent",
+    background: {
+      value: getBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
+      ),
+      globalStyled: true,
+      isCustomized: false,
+    },
+    color: {
+      value: "#ffffff",
+      globalStyled: false,
+      isCustomized: true,
+    },
+    backgroundHover: {
+      value: getHoverBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
+      ),
+      globalStyled: true,
+      isCustomized: false,
+    },
+    colorHover: {
+      value: "#ffffff",
+      globalStyled: false,
+      isCustomized: true,
+    },
+    radius: {
+      value: "8",
+      globalStyled: false,
+      isCustomized: false,
+    },
+    borderColor: {
+      value: theme?.general?.primaryColor || "#4050ff",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    borderHoverColor: {
+      value: darkenedPrimaryColor || "#3182ce",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    justifyContent: "space-between",
+    disabled: false,
+    enableIcon: true,
+    width: IconButtonSizes.large,
+    height: "auto",
+    size: IconButtonSizes.large,
+    text: t("Continue"),
+    marginLeft: 0,
+    marginTop: 20,
+    marginRight: 0,
+    marginBottom: 20,
+    icon: {
+      picture: "interface-arrows-right-arrow-right-keyboard",
+      pictureType: PictureTypes.ICON,
+    },
+    paddingLeft: "16",
+    paddingTop: "14",
+    paddingRight: "16",
+    paddingBottom: "14",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    border: 2,
+    fullWidth: true,
+    preset: "filled",
+    settingsTab: ["content"],
+    buttonSize: "large",
+    tracking: false,
+    trackingEvent: "button-" + hexoid(6)().toLowerCase(),
+    nextScreen: {
+      screenId: "",
+      screenName: "",
+    },
+    buttonAction: "next-screen",
+    id: `input-${hexoid(6)()}`,
+  }
+
   const outLinePreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -274,7 +359,7 @@ const useButtonThemePresets = () => {
     id: `input-${hexoid(6)()}`,
   }
 
-  return { filledPreset, outLinePreset, formPreset }
+  return { filledPreset, outLinePreset, formPreset, filledSeparatorPreset }
 }
 
 export const getBackgroundForPreset = (color, preset) => {

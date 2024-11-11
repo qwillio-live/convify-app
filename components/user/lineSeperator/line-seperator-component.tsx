@@ -92,7 +92,7 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   flex-direction: row;
   position: relative;
   gap: 6px;
-  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  font-size: ${(props) => ButtonSizeValues[props.buttonSize || "large"]};
   font-weight: 400;
   border: 1px dashed transparent;
   transition: all 0.2s ease;
@@ -115,8 +115,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   overflow: hidden;
   max-width: ${(props) =>
     props.mobileScreen
-      ? IconButtonMobileSizeValues[props.size || "medium"]
-      : IconButtonSizeValues[props.size || "medium"]};
+      ? IconButtonMobileSizeValues[props.size || "large"]
+      : IconButtonSizeValues[props.size || "large"]};
   width: 100%;
   cursor: default;
   height: ${(props) => props.height}px;
@@ -125,9 +125,9 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
   padding-left: ${(props) => props.paddingLeft}px;
-  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "large"]};
   padding-right: ${(props) => props.paddingRight}px;
-  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "large"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
@@ -241,8 +241,8 @@ export const IconButtonDefaultProps: IconButtonProps = {
   enableIcon: true,
   width: "366",
   height: "auto",
-  size: IconButtonSizes.medium,
-  buttonSize: "medium",
+  size: IconButtonSizes.large,
+  buttonSize: "large",
   text: "Get quote",
   marginLeft: 0,
   marginTop: 0,

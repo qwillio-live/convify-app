@@ -136,6 +136,7 @@ import { UserInput, UserInputGen } from "../input/user-input.component"
 import {
   IconLineSeperator,
   LineSelector,
+  IconButtonDefaultProps,
 } from "../lineSeperator/line-seperator-component"
 import { LinkButton, LinkButtonGen } from "../link/link-component"
 import useLinkThemePresets from "../link/link-theme"
@@ -308,7 +309,8 @@ export const UserToolbox = () => {
   const APP_URL =
     process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid"
   const { connectors } = useEditor()
-  const { filledPreset, outLinePreset } = useButtonThemePresets()
+  const { filledPreset, outLinePreset, filledSeparatorPreset } =
+    useButtonThemePresets()
   const { linkFilledPreset, linkOutLinePreset } = useLinkThemePresets()
   const { backFilledPreset, backOutLinePreset } = useBackThemePresets()
   const { SocialFilledPreset } = useShareButtonTheme()
@@ -1266,7 +1268,7 @@ export const UserToolbox = () => {
                           <LineSelector
                             // {...IconButtonDefaultProps}
                             // {...filledPreset}
-                            {...filledPreset}
+                            {...filledSeparatorPreset}
                             // {...outLinePreset}
                             disabled={false}
                             enableLine={true}
