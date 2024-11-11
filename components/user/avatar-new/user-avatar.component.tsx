@@ -89,9 +89,6 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
-  const containerHeight = Math.min(100, (scrollY ?? 0) * 1)
-  const heightPercent = `${100 - containerHeight}px`
   return (
     <div
       className=""
@@ -99,14 +96,13 @@ export const AvatarComponentGen = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        height: heightPercent,
+        // height: "50px",
       }}
     >
       <div
         className="relative w-full"
         style={{
-          background: `${containerBackground}`,
-          height: heightPercent,
+          background: `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -116,9 +112,6 @@ export const AvatarComponentGen = ({
       >
         <div
           className={`relative flex flex-row justify-${align} w-full border border-transparent`}
-          style={{
-            height: heightPercent,
-          }}
         >
           <UserLogo
             alt={alt}
@@ -171,7 +164,7 @@ export const UserLogo = ({
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY) ?? 0 / 3
+  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
   const isMobileScreen = useMediaQuery("(max-width: 640px)")
   const bodyScrollY = useScrollPosition()
   const hasComponentBeforeAvatar = useAppSelector(
@@ -196,16 +189,20 @@ export const UserLogo = ({
 
   const animation = useMemo(() => {
     // 130
-    let translateYPercent = Math.min(58, 50 + (scrollY || bodyScrollY || 0))
+    let translateYPercent = Math.min(117, 50 + (scrollY || bodyScrollY || 0))
     let box = Math.max(49, 90 - (scrollY || bodyScrollY || 0))
     if (isMobileScreen || mobileScreen) {
-      translateYPercent = Math.min(58, 50 + (scrollY || bodyScrollY || 0))
+      translateYPercent = Math.min(124, 50 + (scrollY || bodyScrollY || 0))
       box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
     }
 
     return {
-      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}px)` : "0px",
-      box: hasComponentBeforeAvatar ? `${box}px` : "90px",
+      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
+      box: hasComponentBeforeAvatar
+        ? box < 100
+          ? `${box}px`
+          : "100px"
+        : "100px",
     }
   }, [
     scrollY,
@@ -441,10 +438,6 @@ export const AvatarComponent = ({
     }
   }, [text, maxLength])
 
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
-  const containerHeight = Math.min(100, (scrollY ?? 0) * 1.31578947368)
-  const heightPercent = `${100 - containerHeight}px`
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -453,7 +446,6 @@ export const AvatarComponent = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        height: heightPercent,
       }}
       onMouseOver={() => setDisplayController(true)}
       onMouseOut={() => setDisplayController(false)}
@@ -462,13 +454,12 @@ export const AvatarComponent = ({
       <div
         className="relative w-full"
         style={{
-          background: `${containerBackground}`,
+          background: `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
-          height: heightPercent,
         }}
       >
         <div
@@ -476,9 +467,6 @@ export const AvatarComponent = ({
           className={cn(
             `relative flex flex-row justify-${align} w-full border border-transparent`
           )}
-          style={{
-            height: heightPercent,
-          }}
         >
           <UserLogo
             alt={alt}
@@ -624,7 +612,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,
-  imageSize: 90,
+  imageSize: 100,
   buttonSize: "medium",
   time: 2,
   text: "Get quote",
