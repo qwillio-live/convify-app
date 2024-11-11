@@ -413,15 +413,23 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   ${({ size, mobileScreen, isPreviewScreen }) => {
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
-        return { width: "376px" }
-      } else if (size === UserInputSizes.medium) {
-        return { width: "800px" }
-      } else if (size === UserInputSizes.large) {
-        return { width: "1000px" }
-      } else {
-        return {
-          width: "calc(100% - 22px)",
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "auto", maxWidth: 376 }
         }
+      } else if (size === UserInputSizes.medium) {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 600 }
+      } else if (size === UserInputSizes.large) {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 700 }
+      } else {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: "calc(100% - 22px)" }
       }
     } else {
       if (size === UserInputSizes.small) {
