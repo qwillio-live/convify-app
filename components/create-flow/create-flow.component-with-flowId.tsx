@@ -492,7 +492,7 @@ export function CreateFlowComponent({ flowId }) {
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div
-              className={`section-body ${
+              className={`section-body bg-white ${
                 (JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0 &&
                   headerMode) ||
                 (!headerMode &&
@@ -510,7 +510,7 @@ export function CreateFlowComponent({ flowId }) {
                   backgroundPosition: "center",
                 }}
                 className={cn(
-                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-64px+99vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
+                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-64px+96vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                   footerMode ? "flex items-end justify-center" : "",
                   view == VIEWS.DESKTOP
                     ? "shahid w-full border-0"
