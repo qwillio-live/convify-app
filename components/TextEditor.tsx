@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { withHistory } from "slate-history"
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Button } from './ui/button'
-import { Bold, Highlighter, Italic, Link, LinkIcon, Type, Underline } from 'lucide-react'
+import { Bold, Highlighter, Italic, Link, LinkIcon, Trash2, Type, Underline } from 'lucide-react'
 import { Slate, Editable, withReact, useSlate, useFocused } from 'slate-react'
 import {
     Editor,
@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils'
 import { Separator } from './ui/separator'
 import { Input } from './ui/input'
 import { ColorInput } from './color-input'
+import { ToolbarColorPicker } from './toolbar-color-picker'
 
 const isMarkActive = (editor, format) => {
     const marks = Editor.marks(editor)
@@ -33,6 +34,9 @@ const toggleMark = (editor, format, value = true) => {
     } else {
         Editor.addMark(editor, format, value)
     }
+}
+const removeLink = (editor) => {
+    unwrapLink(editor)
 }
 const isLinkActive = (editor) => {
     const [link] = Editor.nodes(editor, {
@@ -71,7 +75,7 @@ const wrapLink = (editor, url) => {
 
 const LinkElement = ({ attributes, children, element }) => {
     return (
-        <a {...attributes} href={element.url} className="text-blue-600 hover:underline">
+        <a {...attributes} href={element.url} target='__blank' className="text-inherit underline">
             {children}
         </a>
     )
@@ -86,7 +90,7 @@ const Element = props => {
             return <p {...attributes}>{children}</p>
     }
 }
-const LinkInput = ({ onSubmit, initialUrl, onClose = () => { } }) => {
+const LinkInput = ({ onSubmit, initialUrl, onClose = () => { }, onRemove = () => { } }) => {
 
     const [url, setUrl] = useState(initialUrl)
 
@@ -112,6 +116,11 @@ const LinkInput = ({ onSubmit, initialUrl, onClose = () => { } }) => {
                 className="flex-grow"
             />
             <Button type="submit">Add</Button>
+            {initialUrl && (
+                <Button type="button" variant="destructive" onClick={() => { onRemove(); onClose(); }} aria-label="Remove link">
+                    <Trash2 className="h-4 w-4" />
+                </Button>
+            )}
         </form>
     )
 }
@@ -134,9 +143,8 @@ const Leaf = ({ attributes, children, leaf }) => {
         children = <span style={{ color: leaf.color }}>{children}</span>
     }
 
-
     if (leaf.highlight) {
-        children = <span className="bg-yellow-200">{children}</span>
+        children = <span className="bg-yellow-200" style={{borderRadius:'2px'}}>{children}</span>
     }
 
     return <span {...attributes}>{children}</span>
@@ -249,12 +257,15 @@ const FloatingToolbar = () => {
     })
     useEffect(() => {
         const [linkNode] = Editor.nodes(editor, {
-            match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any) === 'link',
+            match: n => {
+                return !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any).type === 'link'
+            },
         })
+        console.log(linkNode, "linkNode")
         setLinkUrl(linkNode ? (linkNode[0] as any).url : '')
         const marks = Editor.marks(editor)
         setTextColor((marks as any)?.color || '#000000')
-    })
+    }, [editor.selection, editor.children])
     const addLink = (url) => {
         if (url) {
             wrapLink(editor, url)
@@ -280,42 +291,17 @@ const FloatingToolbar = () => {
                         <ToolbarItem icon={<Underline className="h-4 w-4" />} label="Underline" onClickHandler={() => toggleMark(editor, 'underline')} isActive={isMarkActive(editor, 'underline')} />
                         <Separator orientation='vertical' className="h-6 w-[1px]" />
                         <ToolbarItem icon={<Highlighter className="h-4 w-4" />} label="Highligh" onClickHandler={() => toggleMark(editor, 'highlight')} isActive={isMarkActive(editor, 'highlight')} />
-                        <ToolbarItem
-                            icon={<Type className="h-4 w-4" style={{ color: textColor }} />}
-                            label="Text Color"
-                            showPopover={true}
-                            onClickHandler={() => { }}
-                            popoverContent={
-                                <ColorInput
-                                handleChange={(e) => addColor(e.target.value)}
-                                value={textColor}
-                                handleRemove={() => addColor('#000000')}
-                                className='p-2'
-                                />
-                                // <div
-                                //     style={{
-                                //         backgroundColor:
-                                //             typeof textColor === "string" && textColor[0] === "#"
-                                //                 ? textColor
-                                //                 : "transparent",
-                                //     }}
-                                //     className="relative h-[32px] w-[62px] overflow-hidden rounded-md"
-                                // >
-                                //     <Input
-                                //         type="color"
-                                //         value={textColor}
-                                //         onChange={(e) => addColor(e.target.value)} />
-
-                                // </div>}
-                            }
-                            isActive={isMarkActive(editor, 'color')}
+                        <ToolbarColorPicker
+                            value={textColor}
+                            onChange={addColor}
+                            className="ml-1"
                         />
                         <ToolbarItem
                             icon={<LinkIcon className="h-4 w-4" />}
                             label="Link"
                             showPopover={true}
                             onClickHandler={() => { }}
-                            popoverContent={<LinkInput onSubmit={addLink} initialUrl={linkUrl} />}
+                            popoverContent={<LinkInput onSubmit={addLink} initialUrl={linkUrl} onRemove={() => removeLink(editor)} />}
                             isActive={isLinkActive(editor)}
                         />
 
