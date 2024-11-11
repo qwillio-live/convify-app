@@ -198,9 +198,7 @@ export const Checklist = ({
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
 
   useEffect(() => {
-    if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => (props.fontFamily.value = primaryFont), 200)
-    }
+    setProp((props) => (props.fontFamily.value = primaryFont), 200)
   }, [primaryFont])
 
   useEffect(() => {

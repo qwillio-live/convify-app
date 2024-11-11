@@ -306,6 +306,8 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                fontSize: "15px",
+                fontWeight: 330,
               }}
             >
               {props.floatingLabel && props.label}
@@ -692,7 +694,7 @@ export const UserInput = ({ textColor, ...props }) => {
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
-  // const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
+  const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.selectedScreen || 0
   )
@@ -721,9 +723,9 @@ export const UserInput = ({ textColor, ...props }) => {
     (!fieldValue || fieldValue == null) &&
     screenValidated
 
-  // const secondaryFont = useAppSelector(
-  //   (state) => state?.theme?.text?.secondaryFont
-  // )
+  const secondaryFont = useAppSelector(
+    (state) => state?.theme?.text?.secondaryFont
+  )
   const primaryColor = useAppSelector(
     (state) => state?.theme?.general?.primaryColor
   )
@@ -774,17 +776,17 @@ export const UserInput = ({ textColor, ...props }) => {
     }
   }, [parentContainer])
 
-  // useEffect(() => {
-  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
-  //   }
-  // }, [primaryFont])
+  useEffect(() => {
+    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+      setProp((props) => (props.primaryFont.value = primaryFont), 200)
+    }
+  }, [primaryFont])
 
-  // useEffect(() => {
-  //   if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
-  //     setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
-  //   }
-  // }, [secondaryFont])
+  useEffect(() => {
+    if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
+      setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
+    }
+  }, [secondaryFont])
 
   useEffect(() => {
     if (
@@ -882,6 +884,8 @@ export const UserInput = ({ textColor, ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
+                fontSize: "15px",
+                fontWeight: 330,
               }}
             >
               {props.floatingLabel && props.label}
