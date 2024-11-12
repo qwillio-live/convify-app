@@ -408,37 +408,7 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen, isPreviewScreen }) => {
-    if (isPreviewScreen) {
-      if (size === UserInputSizes.small) {
-        return { width: "376px" }
-      } else if (size === UserInputSizes.medium) {
-        return { width: "800px" }
-      } else if (size === UserInputSizes.large) {
-        return { width: "1000px" }
-      } else {
-        return {
-          width: "calc(100% - 22px)",
-        }
-      }
-    } else {
-      if (size === UserInputSizes.small) {
-        if (mobileScreen) {
-          return { width: "360px" }
-        } else {
-          return { width: "376px" }
-        }
-      } else if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)", maxWidth: 800 }
-      } else if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)", maxWidth: 1000 }
-      } else {
-        return {
-          width: "calc(100% - 22px)",
-        }
-      }
-    }
-  }};
+  width: calc(100% - 22px);
 
   @media (max-width: 1000px) {
     ${({ size }) => {
