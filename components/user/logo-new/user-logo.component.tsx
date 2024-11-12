@@ -101,6 +101,7 @@ export const LogoComponentGen = ({
         className="relative w-full"
         style={{
           background: `${
+            avatarContainerBackground &&
             avatarContainerBackground !== "transparent"
               ? avatarContainerBackground
               : containerBackground
@@ -369,7 +370,7 @@ export const LogoComponent = ({
   const avatarContainerBackground = avatarComponent
     ? avatarComponent.props.containerBackground
     : null
-
+  console.log("avatarContainerBackground", avatarContainerBackground)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -387,6 +388,7 @@ export const LogoComponent = ({
         className="relative w-full"
         style={{
           background: `${
+            avatarContainerBackground &&
             avatarContainerBackground !== "transparent"
               ? avatarContainerBackground
               : containerBackground

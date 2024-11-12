@@ -197,12 +197,14 @@ export const UserLogo = ({
     }
 
     return {
-      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
+      y: hasComponentBeforeAvatar
+        ? `calc(-${translateYPercent}%)`
+        : `calc(-${translateYPercent - 150}%)`,
       box: hasComponentBeforeAvatar
         ? box < 100
           ? `${box}px`
           : "100px"
-        : "100px",
+        : `${box}px`,
     }
   }, [
     scrollY,
@@ -454,7 +456,7 @@ export const AvatarComponent = ({
       <div
         className="relative w-full"
         style={{
-          background: `${"transparent"}`,
+          background: hasComponentBeforeAvatar ? "#ffffff" : `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",

@@ -124,19 +124,19 @@ export default function StaticPublishedFile({
         : null
 
       let filteredNodes = nodes
-      if (resolvedName !== "AvatarComponent") {
-        const avatarComponents = nodes.filter(
-          (childNodeId) =>
-            craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
-        )
-        filteredNodes = nodes.filter(
-          (childNodeId) =>
-            craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
-        )
-        if (avatarComponents.length > 0) {
-          filteredNodes.push(avatarComponents[avatarComponents.length - 1])
-        }
-      }
+      // if (resolvedName !== "AvatarComponent") {
+      //   const avatarComponents = nodes.filter(
+      //     (childNodeId) =>
+      //       craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
+      //   )
+      //   filteredNodes = nodes.filter(
+      //     (childNodeId) =>
+      //       craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
+      //   )
+      //   if (avatarComponents.length > 0) {
+      //     filteredNodes.push(avatarComponents[avatarComponents.length - 1])
+      //   }
+      // }
 
       const childNodes = filteredNodes.map((childNodeId: string) =>
         parse(childNodeId, nodeId)
