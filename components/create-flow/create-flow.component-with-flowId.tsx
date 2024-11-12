@@ -350,9 +350,13 @@ export function CreateFlowComponent({ flowId }) {
         console.log("footermonde is true", data)
         if (footer) {
           if (data.ROOT.nodes.length > 1) {
-            footer.style.display = "hidden"
-          } else {
-            footer.style.display = "flex"
+            // Remove "footer-node" from ROOT's nodes array
+            data.ROOT.nodes = data.ROOT.nodes.filter(
+              (node) => node !== "footer-node"
+            )
+
+            // Remove the "footer-node" object from the data
+            delete data["footer-node"]
           }
         }
       }

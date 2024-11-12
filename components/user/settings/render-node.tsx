@@ -24,6 +24,7 @@ interface StyledNodeDivProps {
   isActive: boolean
   id: string
   name: string
+  new?: boolean
 }
 
 const StyledNodeDiv = styled.div<StyledNodeDivProps>`
@@ -115,7 +116,7 @@ const NewStyledNodeDiv = ({
   }, [selected, selectedComponent, id, isActive, borderColor, name])
 
   // return id !== "footer-node" ? (
-  return (
+  return props.new ? (
     <div
       className={cn(
         "relative  hover:border-dotted hover:border-transparent",
@@ -128,9 +129,17 @@ const NewStyledNodeDiv = ({
       )}
       {...props}
     />
-    // ) : (
-    //   <div></div>
+  ) : (
+    <div
+      className={cn(
+        "!b-0 hover:b-0 relative h-1 bg-white",
+        fullWidth ? "w-full" : "w-auto"
+      )}
+      {...props}
+    />
   )
+  // ) : (
+  //   <div></div>
 }
 
 export default StyledNodeDiv
@@ -249,9 +258,6 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   if (name === "AvatarComponent" && id !== avatarComponentId) {
     return null
   }
-  // if (name === "Screen Footer") {
-  //   return null
-  // }
 
   console.log("name", name, "selectedComponent"), selectedComponent
   return (
@@ -264,6 +270,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       name={name}
       isActive={isActive}
       className="parent-component"
+      new={name === "Footer" ? false : true}
     >
       {render}
     </NewStyledNodeDiv>
