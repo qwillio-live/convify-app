@@ -575,11 +575,9 @@ export const UserInputCheckbox = ({ ...props }) => {
     }
   }, [parentContainer, props.size, setProp])
 
-  // useEffect(() => {
-  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
-  //   }
-  // }, [primaryFont, props.primaryFont, setProp])
+  useEffect(() => {
+    setProp((props) => (props.primaryFont.value = primaryFont), 200)
+  }, [primaryFont, props.primaryFont, setProp])
 
   useEffect(() => {
     if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {

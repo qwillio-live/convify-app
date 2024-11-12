@@ -521,7 +521,7 @@ export const Form = ({ children, ...props }) => {
           paddingRight={"4px"}
           label={t("EmailLabel")}
           fieldName={t("EmailFieldName")}
-          icon={"📞"}
+          icon={"✉️"}
           iconType={PictureTypes.EMOJI}
           iconLa
           size={"full"}
@@ -532,7 +532,7 @@ export const Form = ({ children, ...props }) => {
           {...formPresetPhone}
           floatingLabel={true}
           backgroundColor={"transparent"}
-          icon={"✉️"}
+          icon={"📞"}
           iconType={PictureTypes.EMOJI}
           marginTop={0}
           marginBottom={0}

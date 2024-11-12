@@ -218,11 +218,9 @@ export const UserLogo = ({
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={cn("")}
+      className={cn("translate-y-[-55px]")}
       style={{
-        transform: animation.y
-          ? `translateY(${animation.y})`
-          : `translateY(-55px)`,
+        transform: `translateY(${animation.y}) !important`,
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element*/}
