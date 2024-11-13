@@ -17,6 +17,7 @@ import {
   RectangleHorizontal,
   GripHorizontal,
   Ellipsis,
+  Info,
 } from "lucide-react"
 import {
   Tabs,
@@ -38,7 +39,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Card as UiCard } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -230,19 +231,22 @@ export const ProgressBarSettings = () => {
   return (
     <>
       {isHeaderFooterMode ? (
-        <UiCard
+        <Card
           className={cn(
-            "flex flex-col items-center justify-center border border-gray-500 px-4 py-3"
+            "flex flex-col items-center justify-center px-4 py-3 mt-6"
           )}
         >
-          <div className="flex flex-row items-start gap-1 text-left">
-            <div>
-              <p className="text-sm font-light">
-                {t("Progress_bar_description")}
-              </p>
-            </div>
+          <div className="flex flex-row items-start gap-1">
+            <Info
+              className="w-4 h-4 flex-shrink-0"
+            />
+            {/* <div> */}
+            <p className="text-xs font-poppins text-left">
+              {t("Progress_bar_description")}
+            </p>
+            {/* </div> */}
           </div>
-        </UiCard>
+        </Card>
       ) : (
         <Accordion
           value={settingsTab || "content"}
