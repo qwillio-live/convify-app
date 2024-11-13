@@ -310,7 +310,15 @@ const ScreensList = ({ flowId }) => {
               )}
               onClick={() => handleHeaderScreenClick()}
             >
-              <div className="text-muted-foreground absolute bottom-[70%] top-0 h-auto w-[40vw] scale-[.30] text-xs">
+              <div
+                className="text-muted-foreground no-hover-effects relative w-full text-xs"
+                style={{
+                  overflow: "hidden", // Hide content that overflows
+                  transform: "scale(1.01)", // Zoom out vertically
+                  zoom: "25%",
+                  pointerEvents: "none",
+                }}
+              >
                 <ResolvedComponentsFromCraftState screen={screensHeader} />
               </div>
               <div className="absolute left-0 top-0 z-10 size-full bg-transparent"></div>
@@ -557,7 +565,7 @@ const ScreensList = ({ flowId }) => {
                         className="text-muted-foreground no-hover-effects relative text-xs"
                         style={{
                           overflow: "hidden", // Hide content that overflows
-                          transform: "scale(0.9)", // Zoom out vertically
+                          transform: "scale(1.01)", // Zoom out vertically
                           zoom: "25%",
                           pointerEvents: "none",
                         }}

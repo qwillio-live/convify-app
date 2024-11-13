@@ -501,7 +501,7 @@ export function CreateFlowComponent({ flowId }) {
                   headerMode) ||
                 (!headerMode &&
                   JSON.parse(screensHeader)?.ROOT?.nodes?.length === 0)
-                  ? "mt-8"
+                  ? "mt-[2.5rem]"
                   : "mt-0"
               } w-full`}
             >
