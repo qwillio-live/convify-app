@@ -144,7 +144,7 @@ const Leaf = ({ attributes, children, leaf }) => {
     }
 
     if (leaf.highlight) {
-        children = <span className="bg-yellow-200" style={{borderRadius:'2px'}}>{children}</span>
+        children = <mark className="bg-yellow-200" style={{borderRadius:'2px', paddingLeft:"1px", paddingRight:"1px", paddingBottom:"1px", color:'inherit'}}>{children}</mark>
     }
 
     return <span {...attributes}>{children}</span>
