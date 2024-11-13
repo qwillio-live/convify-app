@@ -75,33 +75,19 @@ const Wrapper = styled.div<{
   margin-right: auto;
 
   ${({ size, mobileScreen, isPreviewScreen }) => {
-    if (isPreviewScreen) {
-      if (size === UserInputSizes.small) {
+    if (size === UserInputSizes.small) {
+      if (mobileScreen) {
+        return { width: "360px", maxWidth: "calc(100% - 22px)" }
+      } else {
         return { width: "376px" }
-      } else if (size === UserInputSizes.medium) {
-        return { width: "800px" }
-      } else if (size === UserInputSizes.large) {
-        return { width: "1000px" }
-      } else {
-        return {
-          width: "calc(100% - 22px)",
-        }
       }
+    } else if (size === UserInputSizes.medium) {
+      return { width: "700px", maxWidth: 700 }
+    } else if (size === UserInputSizes.large) {
+      return { width: "800px", maxWidth: 800 }
     } else {
-      if (size === UserInputSizes.small) {
-        if (mobileScreen) {
-          return { width: "360px", maxWidth: "calc(100% - 22px)" }
-        } else {
-          return { width: "376px" }
-        }
-      } else if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)", maxWidth: 800 }
-      } else if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)", maxWidth: 1000 }
-      } else {
-        return {
-          width: "calc(100% - 22px)",
-        }
+      return {
+        width: "calc(100% - 22px)",
       }
     }
   }};
@@ -400,7 +386,7 @@ export const TextImageComponentGen = ({
           isPreviewScreen={true}
           size={size}
           className={cn(
-            `relative flex flex-row justify-${align} border border-transparent max-w-[calc(100vw-22px)]`
+            `relative flex flex-row justify-${align} max-w-[calc(100vw-22px)] border border-transparent`
           )}
         >
           {
@@ -461,7 +447,7 @@ export const TextImageComponentGen = ({
                             ? textColor
                             : primaryTextColor,
                         fontSize: `${titleFontSize}px`,
-                        lineHeight:`${titleFontSize * 1.5}px`,
+                        lineHeight: `${titleFontSize * 1.5}px`,
                         transitionProperty: "all",
                         overflowX: "clip",
                         textOverflow: "ellipsis",
@@ -933,7 +919,7 @@ export const UserLogo = ({
               }}
             />
           </div>
-          <div className="w-full m-auto items-start self-center text-start">
+          <div className="m-auto w-full items-start self-center text-start">
             {/** @ts-ignore */}
             {/** @ts-ignore */}
             <ContentEditable

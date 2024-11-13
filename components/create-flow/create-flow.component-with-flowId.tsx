@@ -517,8 +517,8 @@ export function CreateFlowComponent({ flowId }) {
                   "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-64px+96vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                   footerMode ? "flex items-end justify-center" : "",
                   view == VIEWS.DESKTOP
-                    ? "shahid w-full border-0"
-                    : "w-96 border px-0"
+                    ? "shahid w-full border-x border-t"
+                    : "w-96 border-x border-t px-0"
                 )}
               >
                 {!headerMode &&
