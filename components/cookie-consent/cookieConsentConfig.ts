@@ -7,7 +7,6 @@ const translations = {
             description: `We use cookies and other similar technologies (collectively referred to as "Cookies") on our website. Some of these are essential, while others help us enhance this website and improve your experience.`,
             acceptAllBtn: "Accept all",
             acceptNecessaryBtn: "Reject all",
-            footer: "<a href=\"#link\">Privacy Policy</a>\n<a href=\"#link\">Terms and conditions</a>"
         },
         preferencesModal: {
             title: "Consent Preferences Center",
@@ -54,7 +53,6 @@ const translations = {
             "description": `Utilizamos cookies e outras tecnologias semelhantes (referidas coletivamente como "Cookies") em nosso site. Alguns deles são essenciais, enquanto outros nos ajudam a aprimorar este site e melhorar sua experiência.`,
             "acceptAllBtn": "Aceitar todos",
             "acceptNecessaryBtn": "Rejeitar todos",
-            "footer": "<a href=\"#link\">Política de Privacidade</a>\n<a href=\"#link\">Termos e Condições</a>"
         },
         "preferencesModal": {
             "title": "Centro de Preferências de Consentimento",
