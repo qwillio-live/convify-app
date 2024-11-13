@@ -4,7 +4,7 @@ const translations = {
     en: {
         consentModal: {
             title: "Hello traveller, it's cookie time!",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+            description: `We use cookies and other similar technologies (collectively referred to as "Cookies") on our website. Some of these are essential, while others help us enhance this website and improve your experience.`,
             acceptAllBtn: "Accept all",
             acceptNecessaryBtn: "Reject all",
             footer: "<a href=\"#link\">Privacy Policy</a>\n<a href=\"#link\">Terms and conditions</a>"
@@ -51,7 +51,7 @@ const translations = {
     pt: {
         "consentModal": {
             "title": "Olá, viajante, é hora dos cookies!",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+            "description": `Utilizamos cookies e outras tecnologias semelhantes (referidas coletivamente como "Cookies") em nosso site. Alguns deles são essenciais, enquanto outros nos ajudam a aprimorar este site e melhorar sua experiência.`,
             "acceptAllBtn": "Aceitar todos",
             "acceptNecessaryBtn": "Rejeitar todos",
             "footer": "<a href=\"#link\">Política de Privacidade</a>\n<a href=\"#link\">Termos e Condições</a>"
@@ -99,12 +99,13 @@ const translations = {
 
 export const getConfig = (locale = "en") => {
     const config: CookieConsentConfig = {
+        disablePageInteraction: true,
         guiOptions: {
             consentModal: {
-                layout: "box",
-                position: "middle center",
-                equalWeightButtons: true,
-                flipButtons: false,
+                layout: "box inline",
+                position: "bottom left",
+                equalWeightButtons: false,
+                flipButtons: false
             },
             preferencesModal: {
                 layout: "box",
@@ -117,9 +118,7 @@ export const getConfig = (locale = "en") => {
             necessary: {
                 readOnly: true
             },
-            functionality: {},
-            analytics: {},
-            marketing: {}
+            analytics: {}
         },
         language: {
             default: locale,

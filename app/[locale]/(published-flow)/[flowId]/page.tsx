@@ -106,7 +106,7 @@ export default async function PublishedFlows({
     data?.flowSettings?.text?.primaryFont || "--font-roboto"
   const secondaryFontKey =
     data?.flowSettings?.text?.secondaryFont || "--font-inter"
-    const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup ?? false
+  const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup ?? false
   const getFontImport = (fontKeys: string[]) => {
     const fontQueries = fontKeys
       .map((fontKey) => fontMappings[fontKey])
@@ -140,11 +140,11 @@ export default async function PublishedFlows({
   const cssVariables = `
     :root {
       ${Object.entries(fontMappings)
-        .map(
-          ([key, value]) =>
-            `${key}: ${value.split(":")[0].replace(/\+/g, " ")};`
-        )
-        .join("\n")}
+      .map(
+        ([key, value]) =>
+          `${key}: ${value.split(":")[0].replace(/\+/g, " ")};`
+      )
+      .join("\n")}
     }
   `
   console.log("cssVariables", cssVariables)
@@ -159,20 +159,20 @@ export default async function PublishedFlows({
       </style>
       <div
         className={`${geist.variable}`}
-        // style={{
-        //   fontFamily: fontMappings[secondaryFontKey]
-        //     ? fontMappings[secondaryFontKey]
-        //         .split(":")[0] // Extract font family name
-        //         .replace(/\+/g, " ") // Replace '+' with spaces
-        //     : "sans-serif",
-        // }}
+      // style={{
+      //   fontFamily: fontMappings[secondaryFontKey]
+      //     ? fontMappings[secondaryFontKey]
+      //         .split(":")[0] // Extract font family name
+      //         .replace(/\+/g, " ") // Replace '+' with spaces
+      //     : "sans-serif",
+      // }}
       >
         <MetaGoogleAnalytics
           gtm={data?.integrations?.googleTagManagerId}
           gta={data?.integrations?.googleAnalyticsId}
           meta={data?.integrations?.metaPixelId}
         />
-        {showCookieConsentPopup && <CookieConsentComponent/>}
+        {showCookieConsentPopup && <CookieConsentComponent />}
         <FlowStateSetter flowData={data} screenNames={screenNames} />
         <StaticPublishedFile
           data={data}
