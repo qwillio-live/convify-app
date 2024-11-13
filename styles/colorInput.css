@@ -30,12 +30,12 @@
     padding: 0;
     width: 1.5rem;
   }
-  
+/*   
   *:focus{
     border-radius: 0;
     outline: none;
   }
-  
+   */
   ::-webkit-color-swatch-wrapper {
     padding: 0;
   }
