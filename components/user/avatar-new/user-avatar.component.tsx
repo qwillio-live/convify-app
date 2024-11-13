@@ -218,7 +218,7 @@ export const UserLogo = ({
     <div
       id="avatar-component"
       ref={avatarRef}
-      // className={cn("translate-y-[-55px]")}
+      className={cn(`${hasComponentBeforeAvatar ? "translate-y-[-55px]" : ""}`)}
       style={{
         transform: `translateY(${animation.y}) !important`,
       }}
