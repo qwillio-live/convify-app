@@ -133,7 +133,7 @@ interface StyledCustomButtonProps {
   borderHoverColor?: string
   mobileScreen: boolean
 }
-const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   display: flex;
   flex-direction: row;
@@ -145,14 +145,14 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
 
   &:hover {
     border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
+    props.borderHoverColor}; /* Change to your desired hover border color */
     background: ${(props) => props.backgroundHover};
     color: ${(props) => props.colorHover};
   }
 
   &:focus {
     border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
+    props.borderHoverColor}; /* Change to your desired focus border color */
   }
 
   background: ${(props) => props.background};
@@ -191,25 +191,25 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
       }
     } else {
       return {
-        width: "calc(100% - 22px)",
+        width: "100%",
       }
     }
   }};
 
   @media (max-width: 600px) {
     ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.large) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 390px) {
     ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.medium) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 `
 export const ProgressBarGen = ({
@@ -293,12 +293,11 @@ export const ProgressBarGen = ({
     <div
       className="relative w-full"
       style={{
-        background: `${
-          typeof containerBackground === "string" &&
+        background: `${typeof containerBackground === "string" &&
           containerBackground[0] === "#"
-            ? containerBackground
-            : bgColor
-        }`,
+          ? containerBackground
+          : bgColor
+          }`,
         display: "flex",
         justifyContent: "center",
         boxSizing: "border-box",
@@ -313,31 +312,31 @@ export const ProgressBarGen = ({
         fontFamily={fontFamily?.value}
         color={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         background={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         backgroundHover={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         borderHoverColor={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         colorHover={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
@@ -361,7 +360,7 @@ export const ProgressBarGen = ({
         mobileScreen={!!mobileScreen}
         {...props}
         className="progress-comp text-[1rem]"
-        // onClick={disabled}
+      // onClick={disabled}
       >
         <Progress
           value={
@@ -499,10 +498,10 @@ export const ProgressBar = ({
     if (buttonAction === "next-screen") {
       setProp(
         (props) =>
-          (props.nextScreen = {
-            screenName: nextScreenName,
-            screenId: nextScreenId,
-          }),
+        (props.nextScreen = {
+          screenName: nextScreenName,
+          screenId: nextScreenId,
+        }),
         200
       )
     } else if (buttonAction === "custom-action") {
@@ -510,10 +509,10 @@ export const ProgressBar = ({
         if (screen.screenId === nextScreen.screenId) {
           setProp(
             (props) =>
-              (props.nextScreen = {
-                screenName: screen.screenName,
-                screenId: screen.screenId,
-              }),
+            (props.nextScreen = {
+              screenName: screen.screenName,
+              screenId: screen.screenId,
+            }),
             200
           )
           screenNameChanged = true
@@ -523,10 +522,10 @@ export const ProgressBar = ({
         setProp((props) => (props.buttonAction = "next-screen"), 200)
         setProp(
           (props) =>
-            (props.nextScreen = {
-              screenId: nextScreenId,
-              screenName: nextScreenName,
-            })
+          (props.nextScreen = {
+            screenId: nextScreenId,
+            screenName: nextScreenName,
+          })
         )
       }
     }
@@ -660,8 +659,8 @@ export const ProgressBar = ({
             i < progressvalue && progressStyle === "grip"
               ? primaryColor
               : i < progressvalue && progressStyle === "rectangle"
-              ? primaryColor
-              : "#eaeaeb"
+                ? primaryColor
+                : "#eaeaeb"
           }
           style={{
             margin: progressStyle === "grip" ? "0 6px" : "0 0",
@@ -669,10 +668,10 @@ export const ProgressBar = ({
               i < progressvalue && progressStyle === "grip"
                 ? primaryColor
                 : progressStyle === "rectangle"
-                ? containerBackground[0] === "#"
-                  ? containerBackground
-                  : bgColor
-                : "#eaeaeb",
+                  ? containerBackground[0] === "#"
+                    ? containerBackground
+                    : bgColor
+                  : "#eaeaeb",
             borderRadius: progressStyle === "grip" ? "50px" : "disabled",
           }}
           size={progressStyle === "grip" ? 8 : 28}
@@ -709,12 +708,11 @@ export const ProgressBar = ({
       <div
         className="relative w-full"
         style={{
-          background: `${
-            typeof containerBackground === "string" &&
+          background: `${typeof containerBackground === "string" &&
             containerBackground[0] === "#"
-              ? containerBackground
-              : bgColor
-          }`,
+            ? containerBackground
+            : bgColor
+            }`,
           display: "flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -729,31 +727,31 @@ export const ProgressBar = ({
           fontFamily={fontFamily?.value}
           color={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           background={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           backgroundHover={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           borderHoverColor={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           colorHover={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
@@ -786,9 +784,8 @@ export const ProgressBar = ({
                   : (progressvalue / maxValue) * 100
               }
               // style={{ maxWidth: `${maxWidth}px` }}
-              className={`h-1 ${fullWidth ? "w-full" : ""} ${
-                size === "full" ? "" : "rounded-full"
-              }`}
+              className={`h-1 ${fullWidth ? "w-full" : ""} ${size === "full" ? "" : "rounded-full"
+                }`}
               indicatorColor={primaryColor || color}
             />
           ) : (
