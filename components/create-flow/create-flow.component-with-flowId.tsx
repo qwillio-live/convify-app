@@ -496,7 +496,7 @@ export function CreateFlowComponent({ flowId }) {
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
             <div
-              className={`section-body bg-white ${
+              className={`section-body  ${
                 (JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0 &&
                   headerMode) ||
                 (!headerMode &&
