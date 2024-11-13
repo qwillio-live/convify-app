@@ -10,7 +10,6 @@ export const CookieConsentComponent = ({forceShow = false}) => {
   const locale = params?.locale as string | undefined;
   useEffect(() => {
     setTimeout(()=> {
-
         CookieConsent.run(getConfig(locale ?? "en"));
         if(forceShow){
             CookieConsent.show(true)
