@@ -40,6 +40,7 @@ const UserContainerGenInner = styled.div<{ position: string }>`
   gap: 0px;
   border: 0px solid inherit;
   max-width: 100%;
+  
 `
 
 export const UserContainerGen = ({

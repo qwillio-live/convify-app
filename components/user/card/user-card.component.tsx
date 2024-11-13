@@ -266,8 +266,8 @@ export enum CardSizes {
 }
 const CardSizeValues = {
   small: "300px",
-  medium: "376px",
-  large: "576px",
+  medium: "800px",
+  large: "1000px",
   full: "100%",
 }
 
@@ -321,7 +321,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   paddingRight: "12",
   paddingBottom: "40",
   radius: "none",
-  flexDirection: "column",
+  flexDirection: "row",
   mobileFlexDirection: "column",
   fillSpace: "1",
   alignItems: "center",
@@ -331,7 +331,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   flexWrap: "nowrap",
   overflowY: "hidden",
   overflowX: "hidden",
-  gap: 20,
+  gap: 0,
   border: 0,
   borderColor: "transparent",
   size: CardSizes.medium,

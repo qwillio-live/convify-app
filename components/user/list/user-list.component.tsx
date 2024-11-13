@@ -1,6 +1,6 @@
 "use client"
 import React, { useCallback, useEffect, useState } from "react"
-import { useNode } from "@/lib/craftjs"
+import { useEditor, useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { ListSettings } from "./user-list.settings"
 import { StyleProperty } from "../types/style.types"
@@ -145,10 +145,24 @@ export const List = ({
     connectors: { connect, drag },
     selected,
     isHovered,
+    
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+
+  const {
+    parent,
+  } = useNode((node) => ({
+    parent: node.data.parent,
+  }))
+
+  const { actions, query } = useEditor();
+
+
+  console.log(parent, "parentMan")
+
+  
 
   const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
@@ -228,7 +242,7 @@ export const List = ({
           className="user-list-comp"
           size={size}
           verticalGap={verticalGap}
-          columnsDesktop={columnsDesktop}
+          columnsDesktop={parent !== "ROOT" ? 1 : columnsDesktop}
           columnsMobile={columnsMobile}
           mobileScreen={mobileScreen ?? false}
           maxWidth={ListSizeValues[size || "medium"]}

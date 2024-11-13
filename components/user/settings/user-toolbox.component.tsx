@@ -1212,7 +1212,7 @@ export const UserToolbox = () => {
             {!isHeaderFooterMode && (
               <AccordionItem value="item-4">
                 <AccordionTrigger className="pt-0 hover:no-underline">
-                  Display
+                  Displays
                 </AccordionTrigger>
 
                 <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
