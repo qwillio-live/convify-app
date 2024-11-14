@@ -56,6 +56,10 @@ import { unstable_setRequestLocale } from "next-intl/server"
 import { Analytics } from "@/components/analytics"
 import MetaGoogleAnalytics from "@/components/googleMetaAnalytics"
 import { StringToBoolean } from "class-variance-authority/dist/types"
+import { FAQGen } from "./faq/user-faq.component"
+import { LinksGen } from "./links/user-links.component"
+import { ImageStory, ImageStoryGen } from "./image-story/image-story.component"
+import { YoutubeVideoGen } from "./youtube-video/user-youtube-video.component"
 // import { cookies } from "next/headers"
 
 interface PageProps {
@@ -95,6 +99,10 @@ export default function StaticPublishedFile({
     [CRAFT_ELEMENTS.STEPS]: StepsGen,
     [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
     [CRAFT_ELEMENTS.LIST]: ListGen,
+    [CRAFT_ELEMENTS.FAQ]: FAQGen,
+    [CRAFT_ELEMENTS.YOUTUBEVIDEO]: YoutubeVideoGen,
+    [CRAFT_ELEMENTS.LINKS]: LinksGen,
+    [CRAFT_ELEMENTS.IMAGESTORY]:ImageStoryGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
     [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,

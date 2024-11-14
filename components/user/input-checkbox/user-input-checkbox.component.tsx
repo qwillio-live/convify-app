@@ -8,7 +8,7 @@ import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
+import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
 import { Checkbox as DefoCheckbox } from "@/components/ui/checkbox"
 
 import { Controller } from "../settings/controller.component"
@@ -20,6 +20,7 @@ import {
   setUpdateFilledCount,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
+import { TextEditor } from "@/components/TextEditor"
 
 export enum UserInputSizes {
   small = "small",
@@ -152,7 +153,11 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   fullWidth: true,
   size: UserInputSizes.medium,
   label:
-    "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
+    serialize([{
+      type: 'paragraph',
+      children: [
+        { text: "I agree with the terms and condition and I'm also happily subscribing to your newsletter." }]
+    }]),
   fieldName: "checkbox-" + produceRandomLetters(6),
   floatingLabel: false,
   enableIcon: true,
@@ -245,18 +250,18 @@ const Wrapper = styled.div<{
 
   @media (max-width: 600px) {
     ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.large) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 390px) {
     ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.medium) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 `
 
@@ -419,11 +424,10 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 className={`mb-1 flex text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${
-                    props.textColor !== "#ffffff"
-                      ? props.textColor
-                      : primaryTextColor
-                  }`,
+                  color: `${props.textColor !== "#ffffff"
+                    ? props.textColor
+                    : primaryTextColor
+                    }`,
                 }}
               >
                 {/* <DefoCheckbox
@@ -504,7 +508,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                     id={props.id}
                   />
                 )}
-                <div dangerouslySetInnerHTML={{ __html: props.label }} />
+                <TextEditor isReadOnly initValue={getComputedValueForTextEditor(props.label)} />
               </div>
             </UserInputCheckboxStyled>
           </div>
@@ -724,32 +728,27 @@ export const UserInputCheckbox = ({ ...props }) => {
                   : props.backgroundColor,
               }}
             >
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={props.label}
-                disabled={false}
-                tagName="div"
-                onChange={(e) =>
+              <div style={{
+                fontFamily: `var(${props.primaryFont.value})`,
+                color: `${props.textColor !== "#ffffff"
+                  ? props.textColor
+                  : getTextColor()
+                  }`,
+                zIndex: 10,
+              }}
+                className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+              >
+                <TextEditor initValue={getComputedValueForTextEditor(props.label)} onChange={(val) => {
                   setProp(
                     (props) =>
-                      (props.label = e.target.value.replace(
-                        /<\/?[^>]+(>|$)/g,
-                        ""
-                      )),
+                    (props.label = serialize(val).replace(
+                      /<\/?[^>]+(>|$)/g,
+                      ""
+                    )),
                     500
                   )
-                }
-                className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
-                style={{
-                  fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${
-                    props.textColor !== "#ffffff"
-                      ? props.textColor
-                      : getTextColor()
-                  }`,
-                  zIndex: 10,
-                }}
-              />
+                }} />
+              </div>
 
               {props.label.length === 0 ? null : (
                 <Checkbox

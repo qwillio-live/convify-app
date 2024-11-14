@@ -19,11 +19,8 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { HeadlineTextSettings } from "./headline-text-settings"
-import {
-  getBackgroundForPreset,
-  getHoverBackgroundForPreset,
-} from "./useHeadlineThemePresets"
-import { cn } from "@/lib/utils"
+import { cn, deserialize, serialize } from "@/lib/utils"
+import { TextEditor } from "@/components/TextEditor"
 
 const ContainerWidthValues = {
   small: "520px",
@@ -183,7 +180,7 @@ const StyledCustomHeadlineInput = ({
         "h-[var(--user-headline-height)]",
         borderColor && "border-[var(--user-headline-border-color)]",
         borderHoverColor &&
-          "focus:border-[var(--user-headline-border-hover-color)]",
+        "focus:border-[var(--user-headline-border-hover-color)]",
         `flex-${flexDirection || "row"}`,
         className
       )}
@@ -238,6 +235,24 @@ export const HeadlineTextGen = ({
     .replace(/<div><br><\/div>/g, "\n")
     .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
     .replace(/<br>/g, "\n") // Replace <br> tags with new lines
+
+
+  let val;
+  let computedValue = [{
+    type: 'paragraph',
+    children: [{ text: text }]
+  }]
+  try {
+    val = deserialize(text)
+    if (Array.isArray(val)) {
+      console.log(val, "check")
+      computedValue = val
+    }
+  }
+  catch (e) {
+    console.log(e)
+  }
+
 
   // console.log("container | bg", containerBackground, borderColor)
   return (
@@ -302,12 +317,7 @@ export const HeadlineTextGen = ({
             lineHeight: "1.5",
           }}
         >
-          {processedText.split("\n").map((line, index) => (
-            <span key={index}>
-              <div dangerouslySetInnerHTML={{ __html: line }} />
-              <br />
-            </span>
-          ))}
+          <TextEditor isReadOnly initValue={computedValue} />
         </h1>
       </StyledCustomHeadlineInput>
     </div>
@@ -445,18 +455,15 @@ export const HeadlineText = ({
   //   props.preset,
   // ])
 
-  const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.innerHTML
+  const handleTextChange =
+    (value) => {
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.text = value
           return { ...props }
         })
       }
-    },
-    [setProp]
-  )
+    }
 
   useEffect(() => {
     const currentRef = ref.current
@@ -496,6 +503,21 @@ export const HeadlineText = ({
   //   debouncedSetProp(property, value)
   // }
 
+
+  let val;
+  let finalValue = [{
+    type: 'paragraph',
+    children: [{ text: text }]
+  }]
+  try {
+    val = deserialize(text)
+    if (Array.isArray(val)) {
+      finalValue = val
+    }
+  }
+  catch (e) {
+    console.log(e)
+  }
   return (
     <div
       ref={(el: any) => connect(drag(el))}
@@ -550,7 +572,7 @@ export const HeadlineText = ({
         >
           <div className="flex min-h-4 min-w-8 max-w-full flex-col overflow-x-clip">
             {/** @ts-ignore */}
-            <ContentEditable
+            {/* <ContentEditable
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
               style={{
@@ -569,7 +591,24 @@ export const HeadlineText = ({
                 handleTextChange(e)
               }}
               tagName="h1"
-            />
+            /> */}
+            <div style={{
+              maxWidth: "960px",
+              transitionProperty: "all",
+              overflowX: "clip",
+              textOverflow: "ellipsis",
+              color: `${textColor !== "#ffffff" ? textColor : primaryTextColor
+                }`,
+              fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
+              fontWeight: `${fontWeight}`,
+            }}
+              className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
+            >
+
+              <TextEditor initValue={finalValue} onChange={val => {
+                handleTextChange(serialize(val))
+              }} />
+            </div>
           </div>
         </StyledCustomHeadlineInput>
       </div>
@@ -620,7 +659,11 @@ export enum TextContainerSize {
 }
 
 export const HeadlineTextDefaultProps: HeadlineTextProps = {
-  text: "HeadlineDescription",
+  text: serialize([{
+    type: 'paragraph',
+    children: [
+      { text: "HeadlineDescription" }]
+  }]),
   lineHeight: "1.5",
   fontFamily: {
     value: "inherit",

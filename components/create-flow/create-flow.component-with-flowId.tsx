@@ -92,6 +92,10 @@ import { SocialShareButton } from "../user/socialShareButton/share-component"
 import { Steps } from "../user/steps/user-steps.component"
 import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
 import { TextImageComponent } from "../user/textImage/user-textImage.component"
+import { FAQ } from "../user/faq/user-faq.component"
+import { Links } from "../user/links/user-links.component"
+import { ImageStory } from "../user/image-story/image-story.component"
+import { YoutubeVideo } from "../user/youtube-video/user-youtube-video.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -400,11 +404,15 @@ export function CreateFlowComponent({ flowId }) {
           Steps,
           Checklist,
           List,
+          FAQ,
+          Links,
           LogoBar,
           LayoutContainer,
           Loader,
           UserInputTextarea,
           Img,
+          ImageStory,
+          YoutubeVideo
         }}
         onRender={RenderNode}
       >

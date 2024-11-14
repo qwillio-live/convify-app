@@ -9,7 +9,7 @@ import styled from "styled-components"
 
 import { useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { cn } from "@/lib/utils"
+import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
 
 import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
@@ -18,6 +18,7 @@ import {
   ChecklistIconRenderer,
   ChecklistSettings,
 } from "./user-checklist.settings"
+import { TextEditor } from "@/components/TextEditor"
 
 export const ChecklistGen = ({
   checklistItems,
@@ -89,7 +90,8 @@ export const ChecklistGen = ({
                 fontSize: `${fontSize}px`,
               }}
             >
-              <div dangerouslySetInnerHTML={{ __html: item.value }} />
+              {/* <div dangerouslySetInnerHTML={{ __html: item.value }} /> */}
+              <TextEditor isReadOnly initValue={getComputedValueForTextEditor(item.value)} key={index} />
             </span>
           </li>
         ))}
@@ -191,6 +193,7 @@ export const Checklist = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
+        zIndex: '1'
       }}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
@@ -224,7 +227,7 @@ export const Checklist = ({
         >
           {checklistItems.map((item, index) => (
             <ChecklistItemSettings
-              key={index}
+              key={`${item.id}-${index}`}
               fontSize={fontSize}
               fontFamily={fontFamily}
               fontWeight={fontWeight}
@@ -259,6 +262,7 @@ const ChecklistItemSettings = ({
   index,
   onValueChange,
 }) => {
+  console.log(item.value, "check here")
   const [itemValue, setItemValue] = useState(item.value)
   console.log("ChecklistProps inside")
 
@@ -279,23 +283,23 @@ const ChecklistItemSettings = ({
       <div className="flex-1">
         {/** @ts-ignore */}
         {/** @ts-ignore */}
-        <ContentEditable
-          className="w-full px-1"
-          html={itemValue}
-          onChange={(e) => {
-            setItemValue(e.target.value)
-            onValueChange(e.target.value)
+        <div style={{
+          color: textColor,
+          fontFamily: `var(${fontFamily?.value})`,
+          fontWeight: fontWeight,
+          fontSize: `${fontSize}px`,
+          outlineColor: borderColor,
+          borderRadius: "4px",
+          wordBreak: "break-word",
+        }}
+          className="w-full px-1">
+          <TextEditor onChange={(val) => {
+            const serialized = serialize(val)
+            onValueChange(serialized)
           }}
-          style={{
-            color: textColor,
-            fontFamily: `var(${fontFamily?.value})`,
-            fontWeight: fontWeight,
-            fontSize: `${fontSize}px`,
-            outlineColor: borderColor,
-            borderRadius: "4px",
-            wordBreak: "break-word",
-          }}
-        />
+            initValue={getComputedValueForTextEditor(itemValue ?? '')}
+          />
+        </div>
       </div>
     </li>
   )

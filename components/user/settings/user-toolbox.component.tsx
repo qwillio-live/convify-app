@@ -46,6 +46,11 @@ import {
   MinusIcon,
   ListIcon,
   ServerIcon,
+  ListCollapse,
+  Link2,
+  CircleHelp,
+  ImagesIcon,
+  YoutubeIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
@@ -189,6 +194,14 @@ import {
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
 import hexoid from "hexoid"
+import { FAQ, FAQGen, FAQSizes } from "../faq/user-faq.component"
+import useFaqThemePresets from "../faq/useFaqThemePresets"
+import { Links, LinksGen } from "../links/user-links.component"
+import { useLinksThemePresets } from "../links/useLinksThemePresets"
+import { ImageStorySizes, useImageStoryThemePresets } from "../image-story/useImageStoryThemePresets"
+import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
+import { useYoutubeVideoThemePresets, YoutubeVideoSizes } from "../youtube-video/useYoutubeVideoThemePresets"
+import { YoutubeVideo, YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
 
 function HelperInformation({ infoText }: { infoText: string }) {
   return (
@@ -337,7 +350,12 @@ export const UserToolbox = () => {
     defaultIcon: listPreviewIcon,
   } = useListThemePresets()
 
+  const { preset: faqPresets } = useFaqThemePresets()
+  const { defaultItems: linksItems, defaultPresets: linksPresets } = useLinksThemePresets()
+
   const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
+  const { defaultPreset: imageStoryPreset } = useImageStoryThemePresets()
+  const { defaultPresets: youtubeVideoPreset } = useYoutubeVideoThemePresets()
   const { outlinedPresetChecbox, underlinedPresetChecbox } =
     useInputCheckboxThemePresets()
   const { outlinedPresetMail, underlinedPresetMail } =
@@ -520,7 +538,7 @@ export const UserToolbox = () => {
                           marginBottom={0}
                           text={t("Submit")}
                           gap={0}
-                          // paddingLeft={185}
+                        // paddingLeft={185}
                         />
                       </div>
                     </HoverCardComponent>
@@ -600,7 +618,7 @@ export const UserToolbox = () => {
                         label={t("InputMail")}
                         // label={t("Label")}
                         placeholder={t("InputMail")}
-                        // placeholder={t("Placeholder")}
+                      // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
@@ -626,7 +644,7 @@ export const UserToolbox = () => {
                         label={t("InputPhone")}
                         // label={t("Label")}
                         placeholder={t("InputPhone")}
-                        // placeholder={t("Placeholder")}
+                      // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
@@ -654,7 +672,7 @@ export const UserToolbox = () => {
                         // label={t("Label")}
                         placeholder={t("TextArea")}
                         inputValue={""}
-                        // placeholder={t("Placeholder")}
+                      // placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
@@ -1126,35 +1144,35 @@ export const UserToolbox = () => {
                         <ProgressBar
                           {...(isHeaderFooterMode
                             ? {
-                                ...ProgressBarDefaultProps,
-                                size: "full",
-                                forHeader: true,
-                                type: "header",
-                                marginTop: 0,
-                                marginBottom: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                              }
+                              ...ProgressBarDefaultProps,
+                              size: "full",
+                              forHeader: true,
+                              type: "header",
+                              marginTop: 0,
+                              marginBottom: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                            }
                             : {
-                                ...ProgressBarDefaultProps,
-                                forHeader: false,
-                                type: "body",
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                marginTop: 20,
-                                marginBottom: 20,
-                                maxValue: screensLength,
-                                progressvalue:
-                                  screensLength > 0 ? selectedScreen + 1 : 1,
-                              })}
+                              ...ProgressBarDefaultProps,
+                              forHeader: false,
+                              type: "body",
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              marginTop: 20,
+                              marginBottom: 20,
+                              maxValue: screensLength,
+                              progressvalue:
+                                screensLength > 0 ? selectedScreen + 1 : 1,
+                            })}
                         />
                       )
                     }
@@ -1168,43 +1186,76 @@ export const UserToolbox = () => {
                         <ProgressBarGen
                           {...(isHeaderFooterMode
                             ? {
-                                ...ProgressBarDefaultProps,
-                                size: "full",
-                                forHeader: true,
-                                type: "header",
-                                marginTop: 0,
-                                marginBottom: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                              }
+                              ...ProgressBarDefaultProps,
+                              size: "full",
+                              forHeader: true,
+                              type: "header",
+                              marginTop: 0,
+                              marginBottom: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                            }
                             : {
-                                ...ProgressBarDefaultProps,
-                                size: "full",
-                                forHeader: false,
-                                type: "body",
-                                paddingLeft: 0,
-                                paddingRight: 0,
-                                paddingBottom: 0,
-                                paddingTop: 0,
-                                marginLeft: 0,
-                                marginRight: 0,
-                                marginTop: 0,
-                                marginBottom: 0,
-                                radius: 0,
-                                maxValue: screensLength,
-                                progressvalue:
-                                  screensLength > 0 ? selectedScreen + 1 : 1,
-                              })}
-                          // Uncomment the following line if you need to set a value for the progress bar
-                          // value={50}
+                              ...ProgressBarDefaultProps,
+                              size: "full",
+                              forHeader: false,
+                              type: "body",
+                              paddingLeft: 0,
+                              paddingRight: 0,
+                              paddingBottom: 0,
+                              paddingTop: 0,
+                              marginLeft: 0,
+                              marginRight: 0,
+                              marginTop: 0,
+                              marginBottom: 0,
+                              radius: 0,
+                              maxValue: screensLength,
+                              progressvalue:
+                                screensLength > 0 ? selectedScreen + 1 : 1,
+                            })}
+                        // Uncomment the following line if you need to set a value for the progress bar
+                        // value={50}
                         />
                       </div>
                     </HoverCardComponent>
                   </div>
+                  <div
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        /** @ts-ignore */
+                        <Links
+                          {...linksPresets}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
+                  >
+                    <HoverCardComponent
+                      title={t("Links")}
+                      icon={<Icons.Links />}
+                    >
+                      <div className="p-3">
+                        {/** @ts-ignore */}
+                        {/** @ts-ignore */}
+                        <LinksGen
+                          {...linksPresets}
+                          marginTop={0}
+                          links={linksItems}
+                          marginBottom={0}
+                        />
+                      </div>
+                    </HoverCardComponent>
+                  </div>
+
                 </AccordionContent>
               </AccordionItem>
             )}
@@ -1320,6 +1371,65 @@ export const UserToolbox = () => {
                         />
                       </HoverCardComponent>
                     </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <ImageStory
+                            {...imageStoryPreset}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Image story")}
+                        icon={<Icons.ImageStory />}
+                      >
+                        { /** @ts-ignore */}
+                        <ImageStoryGen
+                          {...imageStoryPreset}
+                          size={ImageStorySizes.full}
+                          marginBottom={10}
+                          marginTop={10}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <YoutubeVideo
+                            {...youtubeVideoPreset}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={"Youtube"}
+                        icon={<YoutubeIcon className="size-4" />}
+                      >
+                        { /** @ts-ignore */}
+                        <YoutubeVideoGen
+                          {...youtubeVideoPreset}
+                          // marginLeft={10}
+                          // marginRight={10}
+                          size={YoutubeVideoSizes.full}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
                     <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
@@ -1575,6 +1685,73 @@ export const UserToolbox = () => {
                     <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
+
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <FAQ
+                            {...faqPresets}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("FAQ")}
+                        icon={<CircleHelp className="size-4" />}
+                      >
+                        <div>
+                          {/** @ts-ignore */}
+                          {/** @ts-ignore */}
+                          <FAQGen
+                            {...faqPresets}
+                            marginTop={0}
+                            size={FAQSizes.full}
+                            marginBottom={10}
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <Links
+                            {...linksPresets}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("Links")}
+                        icon={<Icons.Links />}
+                      >
+                        <div className="p-3">
+                          {/** @ts-ignore */}
+                          {/** @ts-ignore */}
+                          <LinksGen
+                            {...linksPresets}
+                            marginTop={0}
+                            links={linksItems}
+                            marginBottom={0}
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
                         connectors.create(
@@ -1681,35 +1858,35 @@ export const UserToolbox = () => {
                           <ProgressBar
                             {...(isHeaderFooterMode
                               ? {
-                                  ...ProgressBarDefaultProps,
-                                  size: "full",
-                                  forHeader: true,
-                                  type: "header",
-                                  marginTop: 0,
-                                  marginBottom: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                }
+                                ...ProgressBarDefaultProps,
+                                size: "full",
+                                forHeader: true,
+                                type: "header",
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                              }
                               : {
-                                  ...ProgressBarDefaultProps,
-                                  forHeader: false,
-                                  type: "body",
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  marginTop: 20,
-                                  marginBottom: 20,
-                                  maxValue: screensLength,
-                                  progressvalue:
-                                    screensLength > 0 ? selectedScreen + 1 : 1,
-                                })}
+                                ...ProgressBarDefaultProps,
+                                forHeader: false,
+                                type: "body",
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                marginTop: 20,
+                                marginBottom: 20,
+                                maxValue: screensLength,
+                                progressvalue:
+                                  screensLength > 0 ? selectedScreen + 1 : 1,
+                              })}
                           />
                         )
                       }
@@ -1740,39 +1917,39 @@ export const UserToolbox = () => {
                           <ProgressBarGen
                             {...(isHeaderFooterMode
                               ? {
-                                  ...ProgressBarDefaultProps,
-                                  size: "full",
-                                  forHeader: true,
-                                  type: "header",
-                                  marginTop: 0,
-                                  marginBottom: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                }
+                                ...ProgressBarDefaultProps,
+                                size: "full",
+                                forHeader: true,
+                                type: "header",
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                              }
                               : {
-                                  ...ProgressBarDefaultProps,
-                                  size: "full",
-                                  forHeader: false,
-                                  type: "body",
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  paddingBottom: 0,
-                                  paddingTop: 0,
-                                  marginLeft: 0,
-                                  marginRight: 0,
-                                  marginTop: 0,
-                                  marginBottom: 0,
-                                  radius: 0,
-                                  maxValue: screensLength,
-                                  progressvalue:
-                                    screensLength > 0 ? selectedScreen + 1 : 1,
-                                })}
-                            // Uncomment the following line if you need to set a value for the progress bar
-                            // value={50}
+                                ...ProgressBarDefaultProps,
+                                size: "full",
+                                forHeader: false,
+                                type: "body",
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                paddingBottom: 0,
+                                paddingTop: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                marginTop: 0,
+                                marginBottom: 0,
+                                radius: 0,
+                                maxValue: screensLength,
+                                progressvalue:
+                                  screensLength > 0 ? selectedScreen + 1 : 1,
+                              })}
+                          // Uncomment the following line if you need to set a value for the progress bar
+                          // value={50}
                           />
                         </div>
                       </HoverCardComponent>

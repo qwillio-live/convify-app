@@ -29,7 +29,8 @@ import {
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
 import { UserInputSizes } from "../input/user-input.component"
-import { cn } from "@/lib/utils"
+import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
+import { TextEditor } from "@/components/TextEditor"
 
 export enum TextContainerSize {
   small = "small",
@@ -154,7 +155,11 @@ export const TextInputDefaultProps: TextInputProps = {
   height: "40",
   size: TextContainerSize.medium,
   buttonSize: "medium",
-  text: "Text Description",
+  text: serialize([{
+    type: 'paragraph',
+    children: [
+      { text: "Text" }]
+  }]),
   marginLeft: 0,
   marginTop: 20,
   marginRight: 0,
@@ -304,9 +309,9 @@ const StyledCustomTextInput = ({
         radius && "rounded-[var(--user-text-border-radius)]",
         "h-[var(--user-text-height)]",
         borderColor &&
-          "border-[var(--user-text-border-color)]",
+        "border-[var(--user-text-border-color)]",
         borderHoverColor &&
-          "focus:border-[var(--user-text-border-hover-color)]",
+        "focus:border-[var(--user-text-border-hover-color)]",
         `flex-${flexDirection || "row"}`,
         generateWidthClass,
         className
@@ -362,6 +367,8 @@ export const UserTextInputGen = ({
     .replace(/<\/?div>/g, "\n")
     .replace(/<\/?[^>]+(>|$)/g, "") // Removes all other HTML tags
 
+
+  const computedText = getComputedValueForTextEditor(sanitizedText)
   return (
     <div
       className="relative w-full"
@@ -415,13 +422,13 @@ export const UserTextInputGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${
-              textColor !== "#ffffff" ? textColor : secondaryTextColor
-            }`,
+            color: `${textColor !== "#ffffff" ? textColor : secondaryTextColor
+              }`,
             lineHeight: "1.5",
           }}
         >
-          <div dangerouslySetInnerHTML={{ __html: text }} />
+          <TextEditor isReadOnly initValue={computedText} />
+          {/* <div dangerouslySetInnerHTML={{ __html: text }} /> */}
         </div>
       </StyledCustomTextInput>
     </div>
@@ -606,16 +613,16 @@ export const UserText = ({
     [debouncedSetProp]
   )
 
-  const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.value
-      if (typeof value === "string") {
-        // setLocalText(value)
-        handlePropChangeDebounced("text", value)
+  const handleTextChange =
+    (value) => {
+      if (typeof value === "string" && value.length) {
+        setProp((props) => {
+          props.text = value
+          console.log("saving text", value)
+          return { ...props }
+        })
       }
-    },
-    [handlePropChangeDebounced]
-  )
+    }
 
   return (
     <div
@@ -676,26 +683,25 @@ export const UserText = ({
         >
           <div className="flex flex-col overflow-x-clip">
             {/** @ts-ignore */}
-            <ContentEditable
-              html={text}
-              innerRef={ref}
+            <div
+
               style={{
                 maxWidth: "787px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${
-                  textColor !== "#ffffff" ? textColor : secondaryTextColor
-                }`,
+                color: `${textColor !== "#ffffff" ? textColor : secondaryTextColor
+                  }`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
-              onChange={(e) => {
-                handleTextChange(e)
-              }}
-              tagName="p"
-            />
+            >
+              <TextEditor initValue={getComputedValueForTextEditor(text)}
+                onChange={val => {
+                  handleTextChange(serialize(val))
+                }} />
+            </div>
           </div>
         </StyledCustomTextInput>
       </div>
