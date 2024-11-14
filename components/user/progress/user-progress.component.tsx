@@ -60,7 +60,7 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
+import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import { Progress } from "@/components/ui/progress-custom"
 import { Minus, Circle } from "lucide-react"
@@ -720,6 +720,10 @@ export const ProgressBar = ({
     [setProp]
   )
 
+  // useEffect(() => {
+  //   debouncedSetProp("maxVal")
+  // }, [screensLength]);
+
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
@@ -802,7 +806,14 @@ export const ProgressBar = ({
         debouncedSetProp("progressvalue", screensLength)
       }
     }
-  }, [screensLength])
+  }, [screensLength]);
+
+  useEffect(() => {
+    debouncedSetProp("maxValue", screensLength);
+    if (progressvalue > screensLength) {
+      debouncedSetProp("progressvalue", screensLength)
+    }
+  }, [screensLength]);
 
   return (
     <div
