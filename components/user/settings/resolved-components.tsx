@@ -98,19 +98,19 @@ const ResolvedComponentsFromCraftState = ({
           : null
 
         let filteredNodes = nodes
-        // if (resolvedName !== "AvatarComponent") {
-        //   const avatarComponents = nodes.filter(
-        //     (childNodeId) =>
-        //       craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
-        //   )
-        //   filteredNodes = nodes.filter(
-        //     (childNodeId) =>
-        //       craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
-        //   )
-        //   if (avatarComponents.length > 0) {
-        //     filteredNodes.push(avatarComponents[avatarComponents.length - 1])
-        //   }
-        // }
+        if (resolvedName !== "AvatarComponent") {
+          const avatarComponents = nodes.filter(
+            (childNodeId) =>
+              craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
+          )
+          filteredNodes = nodes.filter(
+            (childNodeId) =>
+              craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
+          )
+          if (avatarComponents.length > 0) {
+            filteredNodes.push(avatarComponents[avatarComponents.length - 1])
+          }
+        }
         const linkedNodesElements = filteredNodes
           .concat(Object.values(linkedNodes))
           .map((linkedNodeData: any) => {

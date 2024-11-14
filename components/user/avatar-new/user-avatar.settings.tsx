@@ -578,6 +578,7 @@ export const AvatarSettings = () => {
                 value={containerBackground}
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
+                  dispatch(setAvatarBackgroundColor(e.target.value))
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")

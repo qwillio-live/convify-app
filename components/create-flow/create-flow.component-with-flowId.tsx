@@ -360,7 +360,17 @@ export function CreateFlowComponent({ flowId }) {
           }
         }
       }
-
+      if (headerMode) {
+        Object.keys(data).forEach((key) => {
+          if (key !== "ROOT") {
+            console.log("data[key]", data[key], avatarBackgroundColor)
+            // Directly modify the style for all keys except 'ROOT'
+            let og = data[key].props.containerBackground
+            data[key].props.containerBackground = avatarBackgroundColor
+            data[key].props.background.value = avatarBackgroundColor
+          }
+        })
+      }
       console.log(" updated editorLoad", data)
       // Add the new class
       data.ROOT.props.className += ` !py-0 min-h-[80vh]` // Append the new class
@@ -554,9 +564,9 @@ export function CreateFlowComponent({ flowId }) {
                       id="editor-content"
                       style={{
                         paddingTop: !headerMode ? `30px` : "0px",
-                        backgroundColor: headerMode
-                          ? avatarBackgroundColor
-                          : "",
+                        // backgroundColor: headerMode
+                        //   ? avatarBackgroundColor
+                        //   : "",
                         minWidth: "100%",
                       }}
                     >
