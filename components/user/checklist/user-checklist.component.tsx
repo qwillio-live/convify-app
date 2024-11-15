@@ -40,6 +40,7 @@ export const ChecklistGen = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  column,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -64,11 +65,8 @@ export const ChecklistGen = ({
     >
       <Wrapper
         size={size}
+        columns={column}
         mobileScreen={false}
-        className="flex w-full gap-2"
-        style={{
-          flexDirection: layout,
-        }}
       >
         {checklistItems.map((item, index) => (
           <li key={index} className="flex flex-1 items-center gap-3">
@@ -98,10 +96,16 @@ export const ChecklistGen = ({
   )
 }
 
-const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
+const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns: number }>`
   margin-left: auto;
   margin-right: auto;
   max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(
+    ${(props) => props.mobileScreen ? 1 : props.columns},
+    minmax(0, 1fr)
+  );
+  align-items: center;
 
   /* @media (max-width: 1000px) {
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
@@ -147,6 +151,7 @@ export const Checklist = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  column,
   ...props
 }) => {
   console.log("ChecklistProps", size)
@@ -216,11 +221,9 @@ export const Checklist = ({
       >
         <Wrapper
           size={size}
+          columns={column}
           mobileScreen={!!mobileScreen}
-          className="user-checklist-comp flex w-full gap-2 "
-          style={{
-            flexDirection: layout,
-          }}
+          className="user-checklist-comp w-full gap-2 "
         >
           {checklistItems.map((item, index) => (
             <ChecklistItemSettings
@@ -342,7 +345,8 @@ export type ChecklistProps = {
   height: string | number
   fullWidth: boolean
   settingTabs: string[]
-  preset: ChecklistPresets
+  preset: ChecklistPresets,
+  column: number
 }
 
 export const ChecklistDefaultProps: ChecklistProps = {
@@ -374,6 +378,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fullWidth: true,
   settingTabs: ["content"],
   preset: ChecklistPresets.normal,
+  column: 2
 }
 
 Checklist.craft = {
