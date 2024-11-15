@@ -257,7 +257,7 @@ export const ProgressBarSettings = () => {
           defaultValue={["content"]}
           className="w-full"
         >
-          <AccordionItem value="design">
+          <AccordionItem value="content">
             <AccordionTrigger>{t("Design")}</AccordionTrigger>
             <AccordionContent className="space-y-4 pt-2">
               <div className="flex items-center justify-between">
