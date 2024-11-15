@@ -241,7 +241,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   enableIcon: true,
   width: "366",
   height: "auto",
-  size: IconButtonSizes.medium,
+  size: IconButtonSizes.large,
   buttonSize: "medium",
   text: "Get quote",
   marginLeft: 0,
