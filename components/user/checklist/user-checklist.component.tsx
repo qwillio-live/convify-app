@@ -41,6 +41,7 @@ export const ChecklistGen = ({
   paddingRight,
   paddingBottom,
   column,
+  toolbarPreview = false,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -67,6 +68,7 @@ export const ChecklistGen = ({
         size={size}
         columns={column}
         mobileScreen={false}
+        toolbarPreview={toolbarPreview}
       >
         {checklistItems.map((item, index) => (
           <li key={index} className="flex flex-1 items-center gap-3">
@@ -96,7 +98,7 @@ export const ChecklistGen = ({
   )
 }
 
-const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns: number }>`
+const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns: number, toolbarPreview?: boolean }>`
   margin-left: auto;
   margin-right: auto;
   max-width: 100%;
@@ -111,8 +113,8 @@ const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
   } */
 
-  ${({ size, mobileScreen }) => {
-    if (mobileScreen) {
+  ${({ size, mobileScreen, toolbarPreview }) => {
+    if (mobileScreen || toolbarPreview) {
       return { width: "calc(100% - 22px)" }
     }
 

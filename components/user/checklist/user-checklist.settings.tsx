@@ -418,7 +418,7 @@ export const ChecklistSettings = () => {
                     : {}),
                 }}
               >
-                <ChecklistGen textColor={"#ffffff"} {...normalPreset} />
+                <ChecklistGen textColor={"#ffffff"}  {...normalPreset} toolbarPreview={true} />
               </Card>
               <Card
                 onClick={() => {
@@ -433,7 +433,7 @@ export const ChecklistSettings = () => {
                     : {}),
                 }}
               >
-                <ChecklistGen textColor={"#ffffff"} {...boldPreset} />
+                <ChecklistGen textColor={"#ffffff"} {...boldPreset} toolbarPreview={true} />
               </Card>
             </div>
           </AccordionContent>
