@@ -55,6 +55,7 @@ export const ListGen = ({
   items,
   textColor,
   secTextColor,
+  toolbarPreview = false,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -89,6 +90,7 @@ export const ListGen = ({
         columnsMobile={columnsMobile}
         mobileScreen={false}
         maxWidth={ListSizeValues[size || "medium"]}
+        toolbarPreview={toolbarPreview}
       >
         {items.map((item, index) => (
           <ListItem
@@ -277,8 +279,8 @@ const ListItem = ({
 
   flexDirection,
   item,
-  onTitleChange = () => {},
-  onDescriptionChange = () => {},
+  onTitleChange = () => { },
+  onDescriptionChange = () => { },
 }: {
   disabled?: boolean
   titleFontFamily: string
@@ -386,6 +388,7 @@ type StyledListContainerProps = {
   maxWidth: string
   size: UserInputSizes
   isPreviewScreen: boolean
+  toolbarPreview?: boolean
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
@@ -394,7 +397,7 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   row-gap: ${({ verticalGap }) => `${verticalGap}px`};
   grid-template-columns: repeat(
     ${({ columnsDesktop, columnsMobile, mobileScreen }) =>
-      mobileScreen ? columnsMobile : columnsDesktop},
+    mobileScreen ? columnsMobile : columnsDesktop},
     minmax(0, 1fr)
   );
 
@@ -408,7 +411,11 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen, isPreviewScreen }) => {
+  ${({ size, mobileScreen, isPreviewScreen, toolbarPreview }) => {
+    if (toolbarPreview) return {
+      width: "calc(100% - 22px)"
+    }
+
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
         return { width: "376px" }
@@ -442,26 +449,26 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
 
   @media (max-width: 1000px) {
     ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.large) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 800px) {
     ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.medium) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 376px) {
     ${({ size }) => {
-      if (size === UserInputSizes.small) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.small) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 `
 
