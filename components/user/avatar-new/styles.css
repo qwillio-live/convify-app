@@ -11,7 +11,7 @@
 
 .avatar-top {
   transition: transform 0.3s ease-in-out;
-  transform: translateY(-104%) scale(0.65);
+  transform: translateY(-95%) scale(0.68);
 }
 
 .avatar-none {

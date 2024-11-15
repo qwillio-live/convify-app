@@ -180,6 +180,8 @@ export const UserLogo = ({
   const scrollY = useAppSelector((state) => state?.screen?.scrollY)
   const isMobileScreen = useMediaQuery("(max-width: 640px)")
   const bodyScrollY = useScrollPosition()
+  const screenData = useAppSelector((state) => state.screen?.screensHeader)
+  const lengthOfComp = Object.keys(JSON.parse(screenData)).length
   const hasComponentBeforeAvatar = useAppSelector(
     (state) => state?.screen?.hasComponentBeforeAvatar
   )
@@ -198,21 +200,29 @@ export const UserLogo = ({
   const mobileBaseSize = 60 // Base size for mobile
   const mobileMinimumSize = 50
   const pathname = usePathname()
+  //@ts-ignore
+  const getSafeNumber = (value: number | undefined | null): number => value ?? 0
+
   const mobileDynamicSize = Math.max(
     mobileBaseSize -
-      (isPreview || pathname?.includes("create-flow") ? scrollY : bodyScrollY) *
+      (isPreview || pathname?.includes("create-flow")
+        ? getSafeNumber(scrollY)
+        : getSafeNumber(bodyScrollY)) *
         sizeReductionFactor,
     mobileMinimumSize
   )
 
   const dynamicSize = Math.max(
     baseSize -
-      (isPreview || pathname?.includes("create-flow") ? scrollY : bodyScrollY) *
+      (isPreview || pathname?.includes("create-flow")
+        ? getSafeNumber(scrollY)
+        : getSafeNumber(bodyScrollY)) *
         sizeReductionFactor,
     minimumSize
   )
+
   const avatarClass = `${
-    hasComponentBeforeAvatar || pathname?.includes("create-flow")
+    hasComponentBeforeAvatar || lengthOfComp > 2
       ? (
           isPreview || pathname?.includes("create-flow")
             ? scrollY && scrollY > 50
@@ -381,7 +391,8 @@ export const AvatarComponent = ({
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
-
+  const screenData = useAppSelector((state) => state.screen?.screensHeader)
+  const lengthOfComp = Object.keys(JSON.parse(screenData)).length
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
@@ -483,6 +494,17 @@ export const AvatarComponent = ({
       }
     }
   }, [text, maxLength])
+  const checkComponentBeforeAvatar = () => {
+    const parsedEditor = JSON.parse(screenData)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    return avatarIndex > 0
+  }
 
   return (
     <div
@@ -500,8 +522,8 @@ export const AvatarComponent = ({
       <div
         className="relative h-[55px] w-full"
         style={{
-          background: !hasComponentBeforeAvatar
-            ? containerBackground
+          background: !checkComponentBeforeAvatar()
+            ? containerBackground || lengthOfComp < 4
             : `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",

@@ -367,7 +367,8 @@ export function CreateFlowComponent({ flowId }) {
             // Directly modify the style for all keys except 'ROOT'
             let og = data[key].props.containerBackground
             data[key].props.containerBackground = avatarBackgroundColor
-            data[key].props.background.value = avatarBackgroundColor
+            if (data[key].props.background)
+              data[key].props.background.value = avatarBackgroundColor
           }
         })
       }
