@@ -1265,8 +1265,10 @@ export const UserToolbox = () => {
                           ref,
                           <LineSelector
                             // {...IconButtonDefaultProps}
-                            {...LineSelectorDefaultProps}
+                            {...filledPreset}
+                            // {...LineSelectorDefaultProps}
                             // {...outLinePreset}
+                            size={"large"}
                             disabled={false}
                             enableLine={true}
                           />
