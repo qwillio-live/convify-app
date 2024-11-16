@@ -189,7 +189,9 @@ export const UserLogo = ({
   console.log(
     "anjit has component before avatar",
     hasComponentBeforeAvatar,
-    bodyScrollY
+    bodyScrollY,
+    isMobileScreen,
+    mobileScreen
   )
 
   const avatarRef = useRef(null)
@@ -228,7 +230,9 @@ export const UserLogo = ({
             ? scrollY && scrollY > 50
             : bodyScrollY > 50
         )
-        ? "avatar-top"
+        ? (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
+          ? "avatar-top-mobile"
+          : "avatar-top"
         : "avatar-half"
       : (
           isPreview || pathname?.includes("create-flow")
@@ -236,7 +240,7 @@ export const UserLogo = ({
             : bodyScrollY > 50
         )
       ? "avatar-none-scrolled"
-      : mobileScreen || isMobileScreen
+      : (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
       ? "avatar-none-mobile"
       : "avatar-none"
   }`
