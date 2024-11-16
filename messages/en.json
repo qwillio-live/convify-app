@@ -382,7 +382,8 @@
     "I would like to receive link for my account": "I would like to receive link for my account",
     "Please enter a valid email address": "Please enter a valid email address",
     "Please enter a valid phone number": "Please enter a valid phone number",
-    "Helper Information": "Click and hold a block from list, move it to the panel to the left and release it above the drop zone to add it."
+    "Helper Information": "Click and hold a block from list, move it to the panel to the left and release it above the drop zone to add it.",
+    "Range": "Range"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

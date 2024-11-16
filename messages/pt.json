@@ -378,7 +378,8 @@
     "I would like to receive link for my account": "Gostaria de receber link para minha conta",
     "Helper Information": "Clique e segure um bloco da lista, mova-o para o painel à esquerda e solte-o acima da zona de soltura para adicioná-lo.",
     "Please enter a valid email address": "Por favor insira um endereço de e-mail válido",
-    "Please enter a valid phone number": "Por favor insira um número de telefone válido"
+    "Please enter a valid phone number": "Por favor insira um número de telefone válido",
+    "Range": "Faixa"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",

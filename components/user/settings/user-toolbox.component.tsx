@@ -46,6 +46,7 @@ import {
   MinusIcon,
   ListIcon,
   ServerIcon,
+  MoveHorizontalIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
@@ -724,6 +725,49 @@ export const UserToolbox = () => {
                           choices: multipleChoicePreviewChoices,
                         }}
                       />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <PictureChoice
+                          labelColor={"#ffffff"}
+                          {...pictureChoiceOutlinedPreset}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Range")}
+                      icon={<MoveHorizontalIcon className="size-4" />}
+                    >
+
+                      <div className="flex w-full py-4">
+                        <SliderBarGen
+                          {...{
+                            ...ProgressBarDefaultProps,
+                            forHeader: false,
+                            type: "body",
+                            paddingLeft: 0,
+                            paddingRight: 0,
+                            paddingBottom: 0,
+                            paddingTop: 20,
+                            marginLeft: 0,
+                            marginRight: 0,
+                            marginTop: 0,
+                            marginBottom: 0,
+                            maxValue: screensLength,
+                            progressvalue:
+                              screensLength > 0 ? selectedScreen + 1 : 1,
+                          }}
+                        />
+                      </div>
                     </HoverCardComponent>
                   </div>
 
