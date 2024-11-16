@@ -191,6 +191,7 @@ import {
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
 import hexoid from "hexoid"
+import { SliderBar, SliderBarDefaultProps, SliderBarGen } from "../slider/user-slider.component"
 
 function HelperInformation({ infoText }: { infoText: string }) {
   return (
@@ -735,9 +736,23 @@ export const UserToolbox = () => {
                       ref &&
                       connectors.create(
                         ref,
-                        <PictureChoice
-                          labelColor={"#ffffff"}
-                          {...pictureChoiceOutlinedPreset}
+                        <SliderBar
+                          {...{
+                            ...SliderBarDefaultProps,
+                            forHeader: false,
+                            type: "body",
+                            paddingLeft: 0,
+                            paddingRight: 0,
+                            paddingBottom: 0,
+                            paddingTop: 0,
+                            marginLeft: 0,
+                            marginRight: 0,
+                            marginTop: 20,
+                            marginBottom: 20,
+                            maxValue: screensLength,
+                            progressvalue:
+                              screensLength > 0 ? selectedScreen + 1 : 1,
+                          }}
                         />
                       )
                     }

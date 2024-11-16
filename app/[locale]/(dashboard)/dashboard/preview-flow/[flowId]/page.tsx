@@ -51,6 +51,7 @@ import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/te
 // import lz from "lzutf8";
 import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { SliderBarGen } from "@/components/user/slider/user-slider.component"
 
 export default async function PreviewFlows({
   params,

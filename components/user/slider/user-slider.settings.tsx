@@ -37,6 +37,7 @@ import Image from "next/image"
 import dash_icon from "@/assets/images/dash_icon_new.svg"
 import dash_icon_selected from "@/assets/images/dash_icon_selected.svg"
 import { ColorInput } from "@/components/color-input"
+import { Checkbox } from "@/components/custom-checkbox"
 
 export const SliderBarSettings = () => {
     const t = useTranslations("Components")
@@ -86,6 +87,15 @@ export const SliderBarSettings = () => {
             progressStyle,
             progressvalue,
             maxValue,
+            showLabel,
+            bottomLabel,
+            lowerLimit,
+            upperLimit,
+            stepsize,
+            prefix,
+            suffix,
+            sliderColor,
+            defaultValue
         },
     } = useNode((node) => ({
         props: node.data.props,
@@ -131,6 +141,24 @@ export const SliderBarSettings = () => {
         }
     }, [screensLength])
 
+    const numberInputHandler = (key: string, value: string): void => {
+
+        const newValue = value;
+
+        if (newValue === "") {
+            setProp((props) => (props[key] = key === "upperLimit" ? lowerLimit + 1 : 0), 200);
+        } else {
+
+            const parsedValue = parseInt(newValue, 10);
+
+            if (!isNaN(parsedValue)) {
+                setProp((props) => (props[key] = parsedValue), 200);
+            }
+
+        }
+
+    }
+
     return (
         <Accordion
             value={settingsTab || "content"}
@@ -142,6 +170,131 @@ export const SliderBarSettings = () => {
             className="w-full"
         >
             <AccordionItem value="content">
+                <AccordionTrigger>{t("General")}</AccordionTrigger>
+                <AccordionContent className="space-y-4 pt-2">
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            checked={showLabel}
+                            onCheckedChange={(e) => {
+                                setProp((props) => (props.showLabel = e), 200)
+
+                                // setProp((props) => (props.error = !props.error),200)
+                            }}
+                            id="label"
+                        />
+                        <label
+                            htmlFor="label"
+                            className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            {t("Show Label")}
+                        </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            checked={bottomLabel}
+                            onCheckedChange={(e) => {
+                                setProp((props) => (props.bottomLabel = e), 200)
+
+                                // setProp((props) => (props.error = !props.error),200)
+                            }}
+                            id="bottomLabel"
+                        />
+                        <label
+                            htmlFor="bottomLabel"
+                            className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            {t("Bottom Label")}
+                        </label>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="lowerLimit">{t("Lower Limit")}</Label>
+                        <Input
+                            id="lowerLimit"
+                            value={lowerLimit === 0 ? "" : lowerLimit}
+                            onChange={(e) =>
+                                numberInputHandler("lowerLimit", e.target.value)
+                            }
+                            type="text"
+                            placeholder={t("Enter lower limit here")}
+                            min={0}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="lowerLimit">{t("Upper Limit")}</Label>
+                        <Input
+                            id="lowerLimit"
+                            value={upperLimit === 0 ? "" : upperLimit}
+                            onChange={(e) =>
+                                numberInputHandler("upperLimit", e.target.value)
+                            }
+                            type="text"
+                            placeholder={t("Enter upper limit here")}
+                            min={lowerLimit + 1}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="lowerLimit">{t("Default Value")}</Label>
+                        <Input
+                            id="defaultValue"
+                            value={defaultValue}
+                            onChange={(e) =>
+                                setProp((prop) => (prop.defaultValue = parseInt(e.target.value)), 200)
+                            }
+                            type="number"
+                            placeholder={t("Enter default value")}
+                            min={lowerLimit}
+                            max={upperLimit}
+                        />
+                    </div>
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="filled-elements">
+                                {t("Step Size")}
+                            </Label>
+                            <span className="text-muted-foreground text-xs">
+                                {stepsize}
+                            </span>
+                        </div>
+                        <Slider
+                            // defaultValue={[progressvalue]}
+                            value={[stepsize]}
+                            max={5}
+                            min={1}
+                            step={1}
+                            onValueChange={(e) =>
+                                // setProp((props) => (props.marginTop = e),200)
+                                // handlePropChange("marginTop",e)
+                                handlePropChangeDebounced("stepsize", e[0])
+                            }
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="prefix">{t("Prefix")}</Label>
+                        <Input
+                            id="prefix"
+                            value={prefix}
+                            onChange={(e) =>
+                                setProp((prop) => (prop.prefix = e.target.value), 200)
+                            }
+                            type="text"
+                            placeholder={t("Enter prefix here")}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="suffix">{t("Suffix")}</Label>
+                        <Input
+                            id="suffix"
+                            value={suffix}
+                            onChange={(e) =>
+                                setProp((prop) => (prop.suffix = e.target.value), 200)
+                            }
+                            type="text"
+                            placeholder={t("Enter suffix here")}
+                        />
+                    </div>
+                </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="design">
                 <AccordionTrigger>{t("Design")}</AccordionTrigger>
                 <AccordionContent className="space-y-4 pt-2">
                     <div className="flex items-center justify-between">
@@ -157,77 +310,17 @@ export const SliderBarSettings = () => {
                             id="backgroundcolor"
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label>{t("Styles")}</Label>
-                        <Tabs
-                            value={progressStyle}
-                            onValueChange={(value) => {
-                                setProp((props) => (props.progressStyle = value), 1000)
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor="slidercolor">{t("Slider Color")}</Label>
+                        <ColorInput
+                            value={sliderColor}
+                            handleChange={(e) => {
+                                debouncedSetProp("sliderColor", e.target.value)
                             }}
-                        >
-                            <TabsList className="grid  grid-cols-3  bg-[#EEEEEE]">
-                                <TabsTrigger className="rounded" value="minus">
-                                    <Minus size={16} />
-                                </TabsTrigger>
-                                <TabsTrigger className="rounded" value="rectangle">
-                                    <Image
-                                        src={
-                                            progressStyle === "rectangle"
-                                                ? dash_icon_selected
-                                                : dash_icon
-                                        }
-                                        alt={"rectangle grip"}
-                                        height={16}
-                                        width={20}
-                                    />
-                                </TabsTrigger>
-                                <TabsTrigger className="rounded" value="grip">
-                                    <Ellipsis size={16} />
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
-                    </div>
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="filled-elements">
-                                {t("Filled Elements")}
-                            </Label>
-                            <span className="text-muted-foreground text-xs">
-                                {progressvalue}
-                            </span>
-                        </div>
-                        <Slider
-                            // defaultValue={[progressvalue]}
-                            value={[progressvalue]}
-                            max={screensLength}
-                            min={0}
-                            step={1}
-                            onValueChange={(e) =>
-                                // setProp((props) => (props.marginTop = e),200)
-                                // handlePropChange("marginTop",e)
-                                handlePropChangeDebounced("progressvalue", e)
-                            }
-                        />
-                    </div>
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="total-elements">{t("Total Elements")}</Label>
-                            <span className="text-muted-foreground text-xs">
-                                {maxValue}
-                            </span>
-                        </div>
-                        <Slider
-                            className=""
-                            // defaultValue={[maxValue]}
-                            value={[maxValue]}
-                            max={screensLength}
-                            min={0}
-                            step={1}
-                            onValueChange={(e) =>
-                                // setProp((props) => (props.marginTop = e),200)
-                                // handlePropChange("marginTop",e)
-                                handlePropChangeDebounced("maxValue", e)
-                            }
+                            handleRemove={() => {
+                                debouncedSetProp("sliderColor", "")
+                            }}
+                            id="slidercolor"
                         />
                     </div>
                 </AccordionContent>

@@ -383,7 +383,21 @@
     "Please enter a valid email address": "Please enter a valid email address",
     "Please enter a valid phone number": "Please enter a valid phone number",
     "Helper Information": "Click and hold a block from list, move it to the panel to the left and release it above the drop zone to add it.",
-    "Range": "Range"
+    "Range": "Range",
+    "Show Label": "Show Label",
+    "Bottom Label": "Show Bottom Label",
+    "Upper Limit": "Upper Limit",
+    "Lower Limit": "Lower Limit",
+    "Step Size": "Step Size",
+    "Prefix": "Prefix",
+    "Suffix": "Suffix",
+    "Enter lower limit here": "Enter lower limit here",
+    "Enter upper limit here": "Enter upper limit here",
+    "Enter prefix here": "Enter prefix here",
+    "Enter suffix here": "Enter suffix here",
+    "Slider Color": "Slider Color",
+    "Default Value": "Default Value",
+    "Enter default value": "Enter default value here"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

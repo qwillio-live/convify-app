@@ -92,6 +92,7 @@ import { SocialShareButton } from "../user/socialShareButton/share-component"
 import { Steps } from "../user/steps/user-steps.component"
 import { TelegramShareButton } from "../user/telegramShareButton/telegram-component"
 import { TextImageComponent } from "../user/textImage/user-textImage.component"
+import { SliderBar } from "../user/slider/user-slider.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -405,6 +406,7 @@ export function CreateFlowComponent({ flowId }) {
           Loader,
           UserInputTextarea,
           Img,
+          SliderBar
         }}
         onRender={RenderNode}
       >
@@ -447,8 +449,8 @@ export function CreateFlowComponent({ flowId }) {
                       width: mobileScreen
                         ? "384px"
                         : headerPosition === "absolute"
-                        ? width + "px"
-                        : "100%",
+                          ? width + "px"
+                          : "100%",
                       top: "0",
                       zIndex: 20,
                       backgroundColor:

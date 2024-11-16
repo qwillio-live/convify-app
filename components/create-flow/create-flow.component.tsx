@@ -75,6 +75,7 @@ import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { Steps } from "../user/steps/user-steps.component"
+import { SliderBar } from "../user/slider/user-slider.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -312,6 +313,7 @@ export function CreateFlowComponent() {
           LayoutContainer,
           Loader,
           Img,
+          SliderBar
         }}
         onRender={RenderNode}
       >
@@ -362,8 +364,8 @@ export function CreateFlowComponent() {
                         width: mobileScreen
                           ? "384px"
                           : headerPosition === "absolute" && !mobileScreen
-                          ? width + "px"
-                          : "100%",
+                            ? width + "px"
+                            : "100%",
                         top:
                           headerPosition === "absolute" && !headerMode
                             ? "32px"

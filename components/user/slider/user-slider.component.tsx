@@ -4,6 +4,7 @@ import React, {
     useCallback,
     useRef,
     useReducer,
+    useState,
 } from "react"
 import {
     Activity,
@@ -67,6 +68,7 @@ import { string } from "prop-types"
 import { UserInputSizes } from "../input/user-input.component"
 import { UserSlider } from "@/components/ui/user-slider"
 import { SliderBarSettings } from "./user-slider.settings"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 const ButtonSizeValues = {
     small: ".8rem",
@@ -112,7 +114,8 @@ interface StyledCustomButtonProps {
     borderColor?: string
     borderHoverColor?: string
     mobileScreen: boolean,
-    headerMode?: boolean
+    headerMode?: boolean,
+    defaultValue?: number
 }
 const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
@@ -236,10 +239,21 @@ export const SliderBarGen = ({
     maxValue,
     forHeader,
     inputValue = 50,
+    label = "Label",
+    showLabel = true,
+    bottomLabel = true,
+    lowerLimit = 0,
+    upperLimit = 100,
+    stepsize = 1,
+    prefix = "",
+    suffix = "",
+    sliderColor = "",
+    defaultValue = 50,
     ...props
 }) => {
     const router = useRouter()
     const pathName = usePathname()
+    const [formValue, setFormValue] = useState<number>(defaultValue);
     const handleNavigateToContent = () => {
         // router.push(currentUrlWithHash);
     }
@@ -275,6 +289,42 @@ export const SliderBarGen = ({
     const bgColor = useAppSelector(
         (state) => state?.theme?.general?.backgroundColor
     )
+    const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
+    const primaryTextColor = useAppSelector(
+        (state) => state.theme?.text?.primaryColor
+    )
+
+    const [cardPosition, setCardPosition] = useState(0);
+    const sliderRef = useRef<HTMLDivElement | null>(null);
+    const cardRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+
+        if (sliderRef.current && cardRef.current) {
+
+            const sliderRect = sliderRef.current.getBoundingClientRect();
+            const cardRect = cardRef.current?.getBoundingClientRect();
+
+            const percentage = (formValue - lowerLimit) / (upperLimit - lowerLimit);
+
+            let newPosition = percentage * (sliderRect.width - 16);
+
+            const cardWidth = cardRect.width;
+            const minPosition = cardWidth / 2;
+            const maxPosition = sliderRect.width - (cardWidth / 2);
+
+            // Constrain position within bounds
+            if (newPosition < minPosition) {
+                newPosition = minPosition;
+            } else if (newPosition > maxPosition) {
+                newPosition = maxPosition;
+            }
+
+            setCardPosition(newPosition);
+
+        }
+
+    }, [formValue, size]);
 
 
     return (
@@ -350,7 +400,74 @@ export const SliderBarGen = ({
                 className="progress-comp text-[1rem]"
             >
 
-                <UserSlider value={[inputValue]} color={primaryColor}></UserSlider>
+                <div className="w-full space-y-0 py-4" ref={sliderRef}>
+
+                    {showLabel && (
+                        <div className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent text-left`}
+                            style={{
+                                fontFamily: `var(${primaryFont})`,
+                                color: primaryTextColor,
+                            }}>
+                            {label}
+                        </div>
+                        // <>
+                        //     {/** @ts-ignore */}
+                        //     {/** @ts-ignore */}
+                        //     <ContentEditable
+                        //         html={label}
+                        //         disabled={false}
+                        //         tagName="div"
+                        //         onChange={(e) =>
+                        //             setProp(
+                        //                 (props) =>
+                        //                 (props.label = e.target.value.replace(
+                        //                     /<\/?[^>]+(>|$)/g,
+                        //                     ""
+                        //                 )),
+                        //                 500
+                        //             )
+                        //         }
+                        //         className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent text-left`}
+                        //         style={{
+                        //             fontFamily: `var(${primaryFont})`,
+                        //             color: primaryTextColor,
+                        //         }}
+                        //     />
+                        // </>
+                    )}
+
+                    <UserSlider
+                        value={[formValue]}
+                        defaultValue={[defaultValue]}
+                        color={sliderColor ? sliderColor : primaryColor}
+                        min={lowerLimit}
+                        max={upperLimit}
+                        step={stepsize}
+                        onValueChange={(event) => {
+
+                            setFormValue(event[0]);
+
+                        }}
+                    >
+                    </UserSlider>
+
+                    <div ref={cardRef} className="absolute bottom-0 transform -translate-x-1/2 rounded text-sm px-4 py-2" style={{ left: `${cardPosition}px`, background: sliderColor ? sliderColor : primaryColor }}>
+
+                        <p>{prefix}{formValue} {suffix}</p>
+
+                    </div>
+
+                    {bottomLabel && (
+                        <div className="flex flex-row items-center justify-between text-sm" style={{ color: "black" }}>
+
+                            <label>{prefix}{lowerLimit} {suffix}</label>
+
+                            <label>{prefix}{upperLimit} {suffix}</label>
+
+                        </div>
+                    )}
+
+                </div>
 
             </StyledCustomButton>
         </div>
@@ -396,7 +513,17 @@ export const SliderBar = ({
     maxValue,
     progressStyle,
     forHeader,
-    inputValue,
+    inputValue = 50,
+    label = "Label",
+    showLabel = true,
+    bottomLabel = true,
+    lowerLimit = 0,
+    upperLimit = 100,
+    stepsize = 1,
+    prefix = "",
+    suffix = "",
+    sliderColor = "",
+    defaultValue = 50,
     ...props
 }) => {
     const {
@@ -411,6 +538,7 @@ export const SliderBar = ({
     const { actions } = useEditor((state, query) => ({
         enabled: state.options.enabled,
     }))
+    const [isFocused, setIsFocused] = useState(false);
     const [hover, setHover] = React.useState(false)
     const t = useTranslations("Components")
     const dispatch = useAppDispatch()
@@ -462,6 +590,9 @@ export const SliderBar = ({
     const isHeaderFooterMode = useAppSelector(
         (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
     )
+    const [cardPosition, setCardPosition] = useState(0);
+    const sliderRef = useRef<HTMLDivElement | null>(null);
+    const cardRef = useRef<HTMLDivElement | null>(null);
 
     const screenNames = useScreenNames()
 
@@ -615,9 +746,33 @@ export const SliderBar = ({
         [setProp]
     )
 
-    // useEffect(() => {
-    //   debouncedSetProp("maxVal")
-    // }, [screensLength]);
+    useEffect(() => {
+
+        if (sliderRef.current && cardRef.current) {
+
+            const sliderRect = sliderRef.current.getBoundingClientRect();
+            const cardRect = cardRef.current?.getBoundingClientRect();
+
+            const percentage = (inputValue - lowerLimit) / (upperLimit - lowerLimit);
+
+            let newPosition = percentage * (sliderRect.width - 16);
+
+            const cardWidth = cardRect.width;
+            const minPosition = cardWidth / 2;
+            const maxPosition = sliderRect.width - (cardWidth / 2);
+
+            // Constrain position within bounds
+            if (newPosition < minPosition) {
+                newPosition = minPosition;
+            } else if (newPosition > maxPosition) {
+                newPosition = maxPosition;
+            }
+
+            setCardPosition(newPosition);
+
+        }
+
+    }, [inputValue, size, upperLimit, lowerLimit]);
 
 
     return (
@@ -707,7 +862,72 @@ export const SliderBar = ({
                     className="progress-comp text-[1rem]"
                 >
 
-                    <UserSlider value={[inputValue]} color={primaryColor}></UserSlider>
+                    <div className="w-full space-y-0" ref={sliderRef} style={{ paddingTop: "16px", paddingBottom: "16px" }}>
+
+                        {showLabel && (
+                            <>
+                                {/** @ts-ignore */}
+                                {/** @ts-ignore */}
+                                <ContentEditable
+                                    html={label}
+                                    disabled={false}
+                                    tagName="div"
+                                    onChange={(e) =>
+                                        setProp(
+                                            (props) =>
+                                            (props.label = e.target.value.replace(
+                                                /<\/?[^>]+(>|$)/g,
+                                                ""
+                                            )),
+                                            500
+                                        )
+                                    }
+                                    className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent text-left`}
+                                    style={{
+                                        fontFamily: `var(${primaryFont})`,
+                                        color: primaryTextColor,
+                                    }}
+                                />
+                            </>
+                        )}
+
+                        <div className="w-full relative">
+                            <UserSlider
+                                value={[inputValue]}
+                                defaultValue={[defaultValue]}
+                                color={sliderColor ? sliderColor : primaryColor}
+                                min={lowerLimit}
+                                max={upperLimit}
+                                step={stepsize}
+                                onValueChange={(event) => {
+
+                                    debouncedSetProp("inputValue", event[0])
+
+                                }}
+                            >
+                            </UserSlider>
+
+                            <div ref={cardRef} className="absolute top-[100%] transform -translate-x-1/2 rounded text-sm px-4 py-2" style={{ left: `${cardPosition}px`, background: sliderColor ? sliderColor : primaryColor }}>
+
+                                <p>{prefix}{inputValue} {suffix}</p>
+
+                            </div>
+                        </div>
+
+                        <div className="flex flex-row items-center justify-between text-sm" style={{ color: "black" }}>
+                            {!bottomLabel && <label className="invisible">_</label>}
+
+                            {bottomLabel && (
+                                <>
+                                    <label>{prefix}{lowerLimit} {suffix}</label>
+
+                                    <label>{prefix}{upperLimit} {suffix}</label>
+                                </>
+                            )}
+
+                        </div>
+
+                    </div>
 
                 </StyledCustomButton>
             </div>
@@ -768,9 +988,20 @@ export type IconButtonProps = {
     maxValue: number
     progressStyle: string
     forHeader: boolean
+    inputValue: number
+    label: string
+    showLabel: boolean
+    bottomLabel: boolean
+    lowerLimit: number
+    upperLimit: number
+    stepsize: number
+    prefix: string
+    suffix: string
+    sliderColor: string
+    defaultValue: 50
 }
 
-export const ProgressBarDefaultProps: IconButtonProps = {
+export const SliderBarDefaultProps: IconButtonProps = {
     fontFamily: {
         value: "inherit",
         globalStyled: true,
@@ -848,10 +1079,21 @@ export const ProgressBarDefaultProps: IconButtonProps = {
     maxWidth: "366",
     progressStyle: "minus",
     forHeader: false,
+    inputValue: 50,
+    label: "Label",
+    showLabel: true,
+    bottomLabel: true,
+    lowerLimit: 0,
+    upperLimit: 100,
+    stepsize: 1,
+    prefix: "",
+    suffix: "",
+    sliderColor: "",
+    defaultValue: 50
 }
 
 SliderBar.craft = {
-    props: ProgressBarDefaultProps,
+    props: SliderBarDefaultProps,
     related: {
         settings: SliderBarSettings,
     },

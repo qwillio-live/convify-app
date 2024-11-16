@@ -41,6 +41,7 @@ import { LoaderComponentGen } from "../loader-new/user-loader.component"
 import { TextImageComponentGen } from "../textImage/user-textImage.component"
 import { SocialShareButtonGen } from "../socialShareButton/share-component"
 import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
+import { SliderBarGen } from "../slider/user-slider.component"
 
 export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -77,6 +78,7 @@ export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
   [CRAFT_ELEMENTS.FORM]: FormGen,
   [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+  [CRAFT_ELEMENTS.RANGE]: SliderBarGen
 }
 
 const ResolvedComponentsFromCraftState = ({
