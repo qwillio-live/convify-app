@@ -171,7 +171,7 @@ type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 export function CreateFlowComponent({ flowId }) {
   // const t = useTranslations("Components")
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const editorHeaderRef = React.useRef(null)
+  const editorHeaderRef = React.useRef<HTMLDivElement | null>(null)
   const [height, setHeight] = React.useState(90)
   const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
@@ -414,9 +414,11 @@ export function CreateFlowComponent({ flowId }) {
   useEffect(() => {
     if (editorHeaderRef.current) {
       // Ensure height is recalculated when the component renders
-      setHeaderHeight(editorHeaderRef.current?.clientHeight)
+      const height = editorHeaderRef.current.clientHeight // Access the height directly
+      setHeaderHeight(height || 0) // If clientHeight is 0 or undefined, fallback to 0
     }
-  }, [headerMode, footerMode])
+  }, [headerMode, footerMode]) // Dependencies to trigger this effect
+
   console.log("editorLoad", document.getElementById("editor-header"))
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
