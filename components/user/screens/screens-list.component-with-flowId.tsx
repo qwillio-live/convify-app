@@ -292,10 +292,7 @@ const ScreensList = ({ flowId }) => {
           <div className="  hidden md:block">
             <Card
               style={{
-                // backgroundColor:
-                //   avatarBackgroundColor !== "rgba(255,255,255,.1)"
-                //     ? avatarBackgroundColor
-                //     : backgroundColor,
+                backgroundColor: backgroundColor,
                 backgroundImage: backgroundImage,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
