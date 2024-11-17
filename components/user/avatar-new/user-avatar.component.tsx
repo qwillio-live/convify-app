@@ -239,7 +239,9 @@ export const UserLogo = ({
             ? scrollY && scrollY > 50
             : bodyScrollY > 50
         )
-      ? "avatar-none-scrolled"
+      ? (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
+        ? "avatar-none-scrolled-mobile"
+        : "avatar-none-scrolled"
       : (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
       ? "avatar-none-mobile"
       : "avatar-none"
@@ -286,8 +288,16 @@ export const UserLogo = ({
         alt={alt}
         src={src}
         style={{
-          width: mobileScreen ? `${mobileDynamicSize}px` : `${dynamicSize}px`,
-          height: mobileScreen ? `${mobileDynamicSize}px` : `${dynamicSize}px`,
+          width:
+            (mobileScreen && pathname?.includes("create-flow")) ||
+            isMobileScreen
+              ? `${mobileDynamicSize}px`
+              : `${dynamicSize}px`,
+          height:
+            (mobileScreen && pathname?.includes("create-flow")) ||
+            isMobileScreen
+              ? `${mobileDynamicSize}px`
+              : `${dynamicSize}px`,
           borderRadius: `${cornRad}px`,
           backgroundColor: "transparent",
           objectFit: "cover",

@@ -589,7 +589,12 @@ export function CreateFlowComponent({ flowId }) {
                       <div
                         id="editor-content"
                         style={{
-                          paddingTop: `${headerHeight}px`,
+                          paddingTop:
+                            !headerMode &&
+                            headerPosition === "absolute" &&
+                            JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
+                              ? `${headerHeight}px`
+                              : "0px",
                           backgroundColor: headerMode
                             ? avatarBackgroundColor
                             : "",

@@ -15,7 +15,7 @@
 }
 .avatar-top-mobile {
   transition: transform 0.3s ease-in-out;
-  transform: translateY(-115%) scale(0.68);
+  transform: translateY(-105%) scale(0.68);
 }
 
 .avatar-none {
@@ -29,6 +29,10 @@
 }
 
 .avatar-none-scrolled {
-  transform: translateY(-10%) scale(0.6);
+  transform: translateY(-12%) scale(0.6);
+  transition: transform 0.3s ease-in-out;
+}
+.avatar-none-scrolled-mobile {
+  transform: translateY(0%) scale(0.75);
   transition: transform 0.3s ease-in-out;
 }
