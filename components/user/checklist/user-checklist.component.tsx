@@ -113,6 +113,10 @@ const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns
   vertical-gap: 20px;
   align-items: center;
 
+  @media (max-width: 1000px) {
+    grid-template-columns:repeat(1, minmax(0, 1fr));
+  }
+
   /* @media (max-width: 1000px) {
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
   } */
