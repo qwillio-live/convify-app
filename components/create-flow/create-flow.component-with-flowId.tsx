@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { debounce } from "lodash"
 import {
   ArrowRight,
@@ -393,7 +393,7 @@ export function CreateFlowComponent({ flowId }) {
       if (!data.ROOT.props.style) {
         data.ROOT.props.style = {} // Create the style object
       }
-      data.ROOT.props.style.minHeight = "0vh" // Update to 80vh
+      data.ROOT.props.style.minHeight = "auto" // Update to 80vh
       data.ROOT.props.style.height = "auto" // Update to 80vh
 
       // Check for className and remove any class starting with "min-h-"
@@ -410,9 +410,14 @@ export function CreateFlowComponent({ flowId }) {
       return JSON.stringify(data)
     }
   }
-
-  // Update the editorLoad object
-  console.log("editorLoad", editorLoad)
+  const [headerHeight, setHeaderHeight] = useState(0)
+  useEffect(() => {
+    if (editorHeaderRef.current) {
+      // Ensure height is recalculated when the component renders
+      setHeaderHeight(editorHeaderRef.current?.clientHeight)
+    }
+  }, [headerMode, footerMode])
+  console.log("editorLoad", document.getElementById("editor-header"))
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -559,46 +564,40 @@ export function CreateFlowComponent({ flowId }) {
                       />
                     </div>
                   )}
-                {headerMode || footerMode ? (
-                  <>
-                    <div
-                      id="editor-content"
-                      style={{
-                        paddingTop: !headerMode ? `30px` : "0px",
-                        // backgroundColor: headerMode
-                        //   ? avatarBackgroundColor
-                        //   : "",
-                        minWidth: "100%",
-                      }}
-                    >
-                      <Frame
-                        data={updateMinHeightAndClassName(editorLoad)}
-                      ></Frame>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      id="editor-content"
-                      style={{
-                        paddingTop:
-                          !headerMode &&
-                          headerPosition === "absolute" &&
-                          JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
-                            ? `${
-                                document?.getElementById("editor-header")
-                                  ?.offsetHeight
-                              }px`
-                            : "0px",
-                        backgroundColor: headerMode
-                          ? avatarBackgroundColor
-                          : "",
-                      }}
-                    >
-                      <Frame data={editorLoad}></Frame>
-                    </div>
-                  </>
-                )}
+                <>
+                  {headerMode || footerMode ? (
+                    <>
+                      <div
+                        id="editor-content"
+                        style={{
+                          paddingTop: !headerMode ? `30px` : "0px",
+                          // backgroundColor: headerMode
+                          //   ? avatarBackgroundColor
+                          //   : "",
+                          minWidth: "100%",
+                        }}
+                      >
+                        <Frame
+                          data={updateMinHeightAndClassName(editorLoad)}
+                        ></Frame>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        id="editor-content"
+                        style={{
+                          paddingTop: `${headerHeight}px`,
+                          backgroundColor: headerMode
+                            ? avatarBackgroundColor
+                            : "",
+                        }}
+                      >
+                        <Frame data={editorLoad}></Frame>
+                      </div>
+                    </>
+                  )}
+                </>
 
                 {!headerMode && !footerMode && (
                   <ResolvedComponentsFromCraftState

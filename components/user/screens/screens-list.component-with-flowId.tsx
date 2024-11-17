@@ -412,6 +412,7 @@ const ScreensList = ({ flowId }) => {
                   "hover:border-2": !footerMode,
                 }
               )}
+              onClick={() => handleFooterScreenClick()}
             >
               <div className="absolute bottom-0 left-0 z-10 size-full bg-transparent"></div>
               <div className="text-muted-foreground absolute bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
@@ -459,8 +460,8 @@ const ScreensList = ({ flowId }) => {
                 id={screen.screenName + screen.screenId}
                 value={screen}
                 onClick={() => {
-                  dispatch(setSelectedComponent("ROOT")),
-                    dispatch(setHeaderFooterMode(false))
+                  dispatch(setSelectedComponent("ROOT"))
+                  dispatch(setHeaderFooterMode(false))
                 }}
                 // className="relative"
               >
@@ -558,6 +559,8 @@ const ScreensList = ({ flowId }) => {
                       )}
                       onClick={() => {
                         handleScreenClick(index)
+                        dispatch(setHeaderFooterMode(false))
+                        dispatch(setMobileScreen(false))
                       }}
                     >
                       {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
