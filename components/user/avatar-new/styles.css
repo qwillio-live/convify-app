@@ -33,6 +33,6 @@
   transition: transform 0.3s ease-in-out;
 }
 .avatar-none-scrolled-mobile {
-  transform: translateY(0%) scale(0.75);
+  transform: translateY(3%) scale(0.75);
   transition: transform 0.3s ease-in-out;
 }

@@ -82,9 +82,17 @@ const Wrapper = styled.div<{
         return { width: "376px" }
       }
     } else if (size === UserInputSizes.medium) {
-      return { width: "700px", maxWidth: 700 }
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+      } else {
+        return { width: "700px", maxWidth: 700 }
+      }
     } else if (size === UserInputSizes.large) {
-      return { width: "800px", maxWidth: 800 }
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+      } else {
+        return { width: "800px", maxWidth: 800 }
+      }
     } else {
       return {
         width: "calc(100% - 22px)",
@@ -1233,7 +1241,7 @@ export const TextImageComponent = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-
+  console.log("mobileScreen", mobileScreen)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
