@@ -298,7 +298,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 handleFontChange={(value) => {
                   handleStyleChange({ text: { primaryFont: value } })
                 }}
-                label="Primary Font"
+                label={t("Primary Font")}
                 open={open}
                 setOpen={setOpen}
               />

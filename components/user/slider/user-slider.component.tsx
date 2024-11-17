@@ -774,6 +774,12 @@ export const SliderBar = ({
 
     }, [inputValue, size, upperLimit, lowerLimit]);
 
+    useEffect(() => {
+
+        debouncedSetProp("inputValue", defaultValue);
+
+    }, [defaultValue]);
+
 
     return (
         <div

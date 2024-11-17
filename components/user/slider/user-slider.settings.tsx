@@ -238,9 +238,9 @@ export const SliderBarSettings = () => {
                             id="defaultValue"
                             value={defaultValue}
                             onChange={(e) =>
-                                setProp((prop) => (prop.defaultValue = parseInt(e.target.value)), 200)
+                                numberInputHandler("defaultValue", e.target.value)
                             }
-                            type="number"
+                            type="text"
                             placeholder={t("Enter default value")}
                             min={lowerLimit}
                             max={upperLimit}
