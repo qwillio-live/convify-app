@@ -393,7 +393,8 @@
     "Enter suffix here": "Insira o sufixo aqui",
     "Slider Color": "Cor do controle deslizante",
     "Default Value": "Valor padrão",
-    "Enter default value": "Insira o valor padrão aqui"
+    "Enter default value": "Insira o valor padrão aqui",
+    "Slider": "Faixa"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",

@@ -310,7 +310,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 handleFontChange={(value) => {
                   handleStyleChange({ text: { secondaryFont: value } })
                 }}
-                label="Secondary Font"
+                label={t("Secondary Font")}
                 open={secondaryOpen}
                 setOpen={setSecondaryOpen}
               />

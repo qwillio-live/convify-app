@@ -57,6 +57,7 @@ export const ChecklistGen = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        boxSizing: "border-box",
         // minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
@@ -69,9 +70,10 @@ export const ChecklistGen = ({
         columns={column}
         mobileScreen={false}
         toolbarPreview={toolbarPreview}
+        className="user-checklist-comp w-full"
       >
         {checklistItems.map((item, index) => (
-          <li key={index} className="flex flex-1 items-center gap-3">
+          <li key={index} className="flex w-full flex-1 items-center gap-3">
             <ChecklistIconRenderer
               iconName={icon}
               style={{
@@ -80,8 +82,8 @@ export const ChecklistGen = ({
                 color: iconColor,
               }}
             />
-            <span
-              className="flex-1"
+            <div
+              className="flex-1 w-1 break-words"
               style={{
                 color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                 fontFamily: `var(${fontFamily?.value})`,
@@ -90,7 +92,7 @@ export const ChecklistGen = ({
               }}
             >
               <div dangerouslySetInnerHTML={{ __html: item.value }} />
-            </span>
+            </div>
           </li>
         ))}
       </Wrapper>
@@ -107,6 +109,8 @@ const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns
     ${(props) => props.mobileScreen ? 1 : props.columns},
     minmax(0, 1fr)
   );
+  column-gap: 40px;
+  vertical-gap: 20px;
   align-items: center;
 
   /* @media (max-width: 1000px) {
@@ -225,7 +229,7 @@ export const Checklist = ({
           size={size}
           columns={column}
           mobileScreen={!!mobileScreen}
-          className="user-checklist-comp w-full gap-2 "
+          className="user-checklist-comp w-full"
         >
           {checklistItems.map((item, index) => (
             <ChecklistItemSettings

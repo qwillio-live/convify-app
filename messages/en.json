@@ -397,7 +397,8 @@
     "Enter suffix here": "Enter suffix here",
     "Slider Color": "Slider Color",
     "Default Value": "Default Value",
-    "Enter default value": "Enter default value here"
+    "Enter default value": "Enter default value here",
+    "Slider": "Range"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",
