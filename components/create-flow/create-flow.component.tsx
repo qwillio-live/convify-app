@@ -75,6 +75,10 @@ import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
 import { Steps } from "../user/steps/user-steps.component"
+import { FAQ } from "../user/faq/user-faq.component"
+import { Links } from "../user/links/user-links.component"
+import { ImageStory } from "../user/image-story/image-story.component"
+import { YoutubeVideo } from "../user/youtube-video/user-youtube-video.component"
 import { SliderBar } from "../user/slider/user-slider.component"
 
 enum VIEWS {
@@ -309,10 +313,14 @@ export function CreateFlowComponent() {
           Steps,
           Checklist,
           List,
+          Links,
+          FAQ,
           LogoBar,
           LayoutContainer,
           Loader,
           Img,
+          ImageStory,
+          YoutubeVideo,
           SliderBar
         }}
         onRender={RenderNode}

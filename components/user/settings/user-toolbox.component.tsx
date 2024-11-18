@@ -46,6 +46,11 @@ import {
   MinusIcon,
   ListIcon,
   ServerIcon,
+  ListCollapse,
+  Link2,
+  CircleHelp,
+  ImagesIcon,
+  YoutubeIcon,
   MoveHorizontalIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -191,6 +196,14 @@ import {
   TelegramShareButtonGen,
 } from "../telegramShareButton/telegram-component"
 import hexoid from "hexoid"
+import { FAQ, FAQGen, FAQSizes } from "../faq/user-faq.component"
+import useFaqThemePresets from "../faq/useFaqThemePresets"
+import { Links, LinksGen } from "../links/user-links.component"
+import { useLinksThemePresets } from "../links/useLinksThemePresets"
+import { ImageStorySizes, useImageStoryThemePresets } from "../image-story/useImageStoryThemePresets"
+import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
+import { useYoutubeVideoThemePresets, YoutubeVideoSizes } from "../youtube-video/useYoutubeVideoThemePresets"
+import { YoutubeVideo, YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
 import { SliderBar, SliderBarDefaultProps, SliderBarGen } from "../slider/user-slider.component"
 
 function HelperInformation({ infoText }: { infoText: string }) {
@@ -340,7 +353,12 @@ export const UserToolbox = () => {
     defaultIcon: listPreviewIcon,
   } = useListThemePresets()
 
+  const { preset: faqPresets } = useFaqThemePresets()
+  const { defaultItems: linksItems, defaultPresets: linksPresets } = useLinksThemePresets()
+
   const { defaultPreset: logoBarDefaultPreset } = useLogoBarThemePresets()
+  const { defaultPreset: imageStoryPreset } = useImageStoryThemePresets()
+  const { defaultPresets: youtubeVideoPreset } = useYoutubeVideoThemePresets()
   const { outlinedPresetChecbox, underlinedPresetChecbox } =
     useInputCheckboxThemePresets()
   const { outlinedPresetMail, underlinedPresetMail } =
@@ -1265,6 +1283,39 @@ export const UserToolbox = () => {
                       </div>
                     </HoverCardComponent>
                   </div>
+                  <div
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        /** @ts-ignore */
+                        <Links
+                          {...linksPresets}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-layout-container"
+                  >
+                    <HoverCardComponent
+                      title={t("Links")}
+                      icon={<Icons.Links />}
+                    >
+                      <div className="p-3">
+                        {/** @ts-ignore */}
+                        {/** @ts-ignore */}
+                        <LinksGen
+                          {...linksPresets}
+                          marginTop={0}
+                          links={linksItems}
+                          marginBottom={0}
+                        />
+                      </div>
+                    </HoverCardComponent>
+                  </div>
+
                 </AccordionContent>
               </AccordionItem>
             )}
@@ -1381,6 +1432,65 @@ export const UserToolbox = () => {
                         />
                       </HoverCardComponent>
                     </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <ImageStory
+                            {...imageStoryPreset}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={t("Image story")}
+                        icon={<Icons.ImageStory />}
+                      >
+                        { /** @ts-ignore */}
+                        <ImageStoryGen
+                          {...imageStoryPreset}
+                          size={ImageStorySizes.full}
+                          marginBottom={10}
+                          marginTop={10}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <YoutubeVideo
+                            {...youtubeVideoPreset}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-text"
+                    >
+                      <HoverCardComponent
+                        title={"Youtube"}
+                        icon={<YoutubeIcon className="size-4" />}
+                      >
+                        { /** @ts-ignore */}
+                        <YoutubeVideoGen
+                          {...youtubeVideoPreset}
+                          // marginLeft={10}
+                          // marginRight={10}
+                          size={YoutubeVideoSizes.full}
+                        />
+                      </HoverCardComponent>
+                    </div>
+
                     <div
                       className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
@@ -1630,6 +1740,73 @@ export const UserToolbox = () => {
                             columnsMobile: 1,
                           }}
                         />
+                      </HoverCardComponent>
+                    </div>
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <FAQ
+                            {...faqPresets}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("FAQ")}
+                        icon={<CircleHelp className="size-4" />}
+                      >
+                        <div>
+                          {/** @ts-ignore */}
+                          {/** @ts-ignore */}
+                          <FAQGen
+                            {...faqPresets}
+                            marginTop={0}
+                            size={FAQSizes.full}
+                            marginBottom={10}
+                          />
+                        </div>
+                      </HoverCardComponent>
+                    </div>
+
+
+                    <div
+                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                      //eslint-disable-next-line
+
+                      ref={(ref: any) =>
+                        ref &&
+                        connectors.create(
+                          ref,
+                          /** @ts-ignore */
+                          <Links
+                            {...linksPresets}
+                          />
+                        )
+                      }
+                      data-cy="toolbox-layout-container"
+                    >
+                      <HoverCardComponent
+                        title={t("Links")}
+                        icon={<Icons.Links />}
+                      >
+                        <div className="p-3">
+                          {/** @ts-ignore */}
+                          {/** @ts-ignore */}
+                          <LinksGen
+                            {...linksPresets}
+                            marginTop={0}
+                            links={linksItems}
+                            marginBottom={0}
+                          />
+                        </div>
                       </HoverCardComponent>
                     </div>
 

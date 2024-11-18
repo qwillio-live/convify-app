@@ -35,6 +35,10 @@ import { UserInputMailGen } from "../input-email/user-input-mail.component"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
 import { FormContentGen, FormGen } from "../form/user-form.component"
+import { FAQGen } from "../faq/user-faq.component"
+import { LinksGen } from "../links/user-links.component"
+import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
+import { YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
 
 const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -62,6 +66,10 @@ const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.STEPS]: StepsGen,
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
+  [CRAFT_ELEMENTS.LINKS]: LinksGen,
+  [CRAFT_ELEMENTS.FAQ]: FAQGen,
+  [CRAFT_ELEMENTS.YOUTUBEVIDEO]: YoutubeVideoGen,
+  [CRAFT_ELEMENTS.IMAGESTORY]: ImageStoryGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
   [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,

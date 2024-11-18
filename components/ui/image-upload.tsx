@@ -213,7 +213,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             }}
             initialAspectRatio={NaN}
             guides={false}
-            crop={onCrop}
+            // crop={onCrop}
             autoCropArea={1}
             src={image}
             minCropBoxHeight={100}

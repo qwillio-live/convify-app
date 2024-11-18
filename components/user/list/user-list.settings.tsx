@@ -46,6 +46,7 @@ import {
 } from "@/components/custom-select"
 import { ColorInput } from "@/components/color-input"
 import { Icons } from "@/components/icons"
+import { getTextContentOfEditor } from "@/lib/utils"
 
 export const ListSettings = () => {
   const t = useTranslations("Components")
@@ -533,9 +534,10 @@ export const ListItemSettings = ({
 
         <Input
           className="h-8.5 flex-1 text-xs"
-          value={item.title}
+          value={getTextContentOfEditor(item.title)}
+          disabled
           placeholder={`${t("Title")} ${index + 1}`}
-          onChange={(e) => handleItemTitleEdit(e.target.value)}
+          // onChange={(e) => handleItemTitleEdit(e.target.value)}
         />
 
         <Icons.Delete
@@ -552,9 +554,10 @@ export const ListItemSettings = ({
       <div className="pl-10 pr-11">
         <Input
           className="h-8.5 flex-1 text-xs text-[#5a5a5a]"
-          value={item.description}
+          value={getTextContentOfEditor(item.description)}
+          disabled
           placeholder={`${t("Enter Description")}`}
-          onChange={(e) => handleItemDescriptionEdit(e.target.value)}
+          // onChange={(e) => handleItemDescriptionEdit(e.target.value)}
         />
       </div>
     </Reorder.Item>
