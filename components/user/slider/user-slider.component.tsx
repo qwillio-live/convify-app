@@ -141,7 +141,6 @@ const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
 
   background: ${(props) => props.background};
   color: ${(props) => props.color};
-  overflow: hidden;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
@@ -305,20 +304,10 @@ export const SliderBarGen = ({
             const sliderRect = sliderRef.current.getBoundingClientRect();
             const cardRect = cardRef.current?.getBoundingClientRect();
 
-            const percentage = (formValue - lowerLimit) / (upperLimit - lowerLimit);
+            const percentage = ((formValue - lowerLimit) / (upperLimit - lowerLimit));
 
-            let newPosition = percentage * (sliderRect.width - 16);
+            let newPosition = (percentage * (sliderRect.width - 16)) + 8;
 
-            const cardWidth = cardRect.width;
-            const minPosition = cardWidth / 2;
-            const maxPosition = sliderRect.width - (cardWidth / 2);
-
-            // Constrain position within bounds
-            if (newPosition < minPosition) {
-                newPosition = minPosition;
-            } else if (newPosition > maxPosition) {
-                newPosition = maxPosition;
-            }
 
             setCardPosition(newPosition);
 
@@ -451,7 +440,7 @@ export const SliderBarGen = ({
                     >
                     </UserSlider>
 
-                    <div ref={cardRef} className="absolute bottom-0 transform -translate-x-1/2 rounded text-sm px-4 py-2" style={{ left: `${cardPosition}px`, background: sliderColor ? sliderColor : primaryColor }}>
+                    <div ref={cardRef} className="absolute bottom-0 transform -translate-x-1/2 -translate-y-[-6px] rounded-[8px] text-sm px-4 py-2 text-white" style={{ left: `${cardPosition}px`, background: sliderColor ? sliderColor : primaryColor }}>
 
                         <p>{prefix}{formValue} {suffix}</p>
 
@@ -755,18 +744,15 @@ export const SliderBar = ({
 
             const percentage = (inputValue - lowerLimit) / (upperLimit - lowerLimit);
 
-            let newPosition = percentage * (sliderRect.width - 16);
+            let newPosition = (percentage * (sliderRect.width - 16)) + 8;
 
-            const cardWidth = cardRect.width;
-            const minPosition = cardWidth / 2;
-            const maxPosition = sliderRect.width - (cardWidth / 2);
 
             // Constrain position within bounds
-            if (newPosition < minPosition) {
-                newPosition = minPosition;
-            } else if (newPosition > maxPosition) {
-                newPosition = maxPosition;
-            }
+            // if (newPosition < minPosition) {
+            //     newPosition = minPosition;
+            // } else if (newPosition > maxPosition) {
+            //     newPosition = maxPosition;
+            // }
 
             setCardPosition(newPosition);
 
@@ -789,6 +775,7 @@ export const SliderBar = ({
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
+                overflow: "visible"
             }}
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
@@ -811,6 +798,7 @@ export const SliderBar = ({
                     paddingBottom: `${props.paddingBottom}px`,
                     paddingLeft: `${props.paddingLeft}px`,
                     paddingRight: `${props.paddingRight}px`,
+                    overflow: "visible"
                 }}
             >
                 <StyledCustomButton
@@ -897,7 +885,7 @@ export const SliderBar = ({
                             </>
                         )}
 
-                        <div className="w-full relative">
+                        <div className="relative" style={{ overflow: "visible" }}>
                             <UserSlider
                                 value={[inputValue]}
                                 defaultValue={[defaultValue]}
@@ -913,7 +901,7 @@ export const SliderBar = ({
                             >
                             </UserSlider>
 
-                            <div ref={cardRef} className="absolute top-[100%] transform -translate-x-1/2 rounded text-sm px-4 py-2" style={{ left: `${cardPosition}px`, background: sliderColor ? sliderColor : primaryColor }}>
+                            <div ref={cardRef} className="absolute top-[100%] z-[100] transform -translate-x-1/2 -translate-y-[-6px] rounded-[8px] text-white text-sm px-4 py-2" style={{ left: `${cardPosition}px`, background: sliderColor ? sliderColor : primaryColor }}>
 
                                 <p>{prefix}{inputValue} {suffix}</p>
 

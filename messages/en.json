@@ -398,7 +398,8 @@
     "Slider Color": "Slider Color",
     "Default Value": "Default Value",
     "Enter default value": "Enter default value here",
-    "Slider": "Range"
+    "Slider": "Range",
+    "Enter step size": "Enter step size"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

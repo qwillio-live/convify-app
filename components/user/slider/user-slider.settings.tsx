@@ -210,7 +210,7 @@ export const SliderBarSettings = () => {
                         <Label htmlFor="lowerLimit">{t("Lower Limit")}</Label>
                         <Input
                             id="lowerLimit"
-                            value={lowerLimit === 0 ? "" : lowerLimit}
+                            value={lowerLimit}
                             onChange={(e) =>
                                 numberInputHandler("lowerLimit", e.target.value)
                             }
@@ -223,13 +223,13 @@ export const SliderBarSettings = () => {
                         <Label htmlFor="lowerLimit">{t("Upper Limit")}</Label>
                         <Input
                             id="lowerLimit"
-                            value={upperLimit === 0 ? "" : upperLimit}
+                            value={upperLimit}
                             onChange={(e) =>
                                 numberInputHandler("upperLimit", e.target.value)
                             }
                             type="text"
                             placeholder={t("Enter upper limit here")}
-                            min={lowerLimit + 1}
+                            min={0}
                         />
                     </div>
                     <div className="space-y-2">
@@ -246,26 +246,16 @@ export const SliderBarSettings = () => {
                             max={upperLimit}
                         />
                     </div>
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="filled-elements">
-                                {t("Step Size")}
-                            </Label>
-                            <span className="text-muted-foreground text-xs">
-                                {stepsize}
-                            </span>
-                        </div>
-                        <Slider
-                            // defaultValue={[progressvalue]}
-                            value={[stepsize]}
-                            max={5}
-                            min={1}
-                            step={1}
-                            onValueChange={(e) =>
-                                // setProp((props) => (props.marginTop = e),200)
-                                // handlePropChange("marginTop",e)
-                                handlePropChangeDebounced("stepsize", e[0])
+                    <div className="space-y-2">
+                        <Label htmlFor="prefix">{t("Step Size")}</Label>
+                        <Input
+                            id="stepsize"
+                            value={stepsize}
+                            onChange={(e) =>
+                                numberInputHandler("stepsize", e.target.value)
                             }
+                            type="text"
+                            placeholder={t("Enter step size")}
                         />
                     </div>
                     <div className="space-y-2">
