@@ -1,8 +1,6 @@
 import {
   ChangeEvent,
-  ChangeEventHandler,
   useCallback,
-  useEffect,
   useState,
 } from "react"
 import { debounce, throttle } from "lodash"
@@ -14,7 +12,6 @@ import {
   setPartialStyles,
 } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { RootState } from "@/lib/state/flows-state/store"
 import {
   Accordion,
   AccordionContent,
@@ -34,14 +31,14 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/custom-select"
-import { applyHeaderPosition } from "@/lib/state/flows-state/features/sagas/themeScreen.saga"
-import { updateHeaderPosition } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { X } from "lucide-react"
 import clsx from "clsx"
 import { Label } from "@/components/ui/label"
 import { useEditor } from "@craftjs/core"
 import { updateElementProps } from "./utils"
 import { Switch } from "@/components/custom-switch"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { ColorPickerWithSuggestions } from "@/components/ColorPickerWithSuggestions"
 
 type Props = {}
 
@@ -398,12 +395,61 @@ export const ColorInput = ({
   onColorChange,
   ...rest
 }: ColorInputProps) => {
+
+  const [open, setOpen] = useState(false);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onColorChange?.(e.target.value)
   }
   const handleRemove = () => {
     onColorChange?.(rest.defaultValue as string)
   }
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+      <div className="flex items-center gap-2">
+      <div
+       onClick={() => setOpen(true)}
+        style={{
+          backgroundColor: (value as string) ?? "transparent",
+        }}
+        className="relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
+      >
+        {!value && (
+          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
+            <span className="w-full text-center text-xs text-[#7B7D80]">
+              Choose
+            </span>
+          </div>
+        )}
+      
+      </div>
+      <span onClick={() => handleRemove()}>
+        <X
+          size={16}
+          className={clsx("text-muted-foreground", {
+            "pointer-events-none opacity-0":
+              !value || value === rest.defaultValue,
+          })}
+        />
+      </span>
+    </div>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+
+          <ColorPickerWithSuggestions onChange={(value) => {
+            handleChange({ target: { value } } as any)
+            // setOpen(false)
+          }} color={value} />
+
+        </div>
+      </PopoverContent>
+    </Popover>
+
+  )
+
+  
+
   return (
     <div className="flex items-center gap-2">
       <div
