@@ -189,13 +189,20 @@ export const ImageSettings = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      const crop = !/.*(svg|gif).*/i.test(file.type)
       setImageFile(file)
       const reader = new FileReader()
       reader.onload = () => {
         setImage(reader.result as any)
+        if (!crop) {
+          handleUpload(reader.result, file)
+
+        }
       }
       reader.readAsDataURL(file)
-      setShowDialog(true)
+      if (crop) {
+        setShowDialog(true)
+      }
     }
   }
 
@@ -261,31 +268,37 @@ export const ImageSettings = () => {
     }
   }
 
-  const handleUploadOriginal = async () => {
+  const handleUploadOriginal = () => handleUpload(image, imageFile);
+  const handleUpload = async (image, imageFile) => {
     if (image && imageFile) {
       setProp((props) => (props.src = image))
       setShowDialog(false)
       setIsLoading(true)
       const aspectRatio = await getAspectRatio(URL.createObjectURL(imageFile))
       const uploadedImage = await uploadToS3(imageFile, aspectRatio)
-      if (
-        uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.desktopSize]
-      ) {
-        setProp((props) => {
-          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
-          props.uploadedImageUrl =
-            uploadedImage.data.data[uploadedImage.desktopSize]
-        }, 1000)
-      }
-      if (
-        uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.mobileSize]
-      ) {
-        setProp((props) => {
-          props.uploadedImageMobileUrl =
-            uploadedImage.data.data.images[uploadedImage.mobileSize]
-        }, 1000)
+      if (uploadedImage) {
+        if (/.*(svg|gif).*/i.test(uploadedImage.data.data.file.type)) {
+          setProp((props) => {
+            props.src = uploadedImage.data.data.images.original
+            props.uploadedImageUrl =
+              uploadedImage.data.data.images.original
+          }, 1000)
+        }
+        else {
+          if (uploadedImage.data.data.images[uploadedImage.desktopSize]) {
+            setProp((props) => {
+              props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
+              props.uploadedImageUrl =
+                uploadedImage.data.data.images[uploadedImage.desktopSize]
+            }, 1000)
+          }
+          if (uploadedImage.data.data.images[uploadedImage.mobileSize]) {
+            setProp((props) => {
+              props.uploadedImageMobileUrl =
+                uploadedImage.data.data.images[uploadedImage.mobileSize]
+            }, 1000)
+          }
+        }
       }
       setIsLoading(false)
     }
@@ -327,9 +340,9 @@ export const ImageSettings = () => {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
       setProp(
         (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
+        (props.src = cropperRef.current?.cropper
+          .getCroppedCanvas()
+          .toDataURL()),
         1000
       )
       setProp((props) => (props.width = "100%"), 1000)
@@ -338,9 +351,9 @@ export const ImageSettings = () => {
       setActiveAspectRatioBtn("source")
       setProp(
         (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
+        (props.src = cropperRef.current?.cropper
+          .getCroppedCanvas()
+          .toDataURL()),
         1000
       )
       const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
@@ -375,7 +388,7 @@ export const ImageSettings = () => {
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
       cropperRef.current?.cropper.getImageData().width /
-        cropperRef.current?.cropper.getImageData().height
+      cropperRef.current?.cropper.getImageData().height
     )
     setActiveAspectRatioBtn("source")
   }
@@ -403,6 +416,10 @@ export const ImageSettings = () => {
   const themeBackgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+
+  const maxWidthPx = 800
+  const minWidthPx = 250
+  const imageSizePercentage = (((imageSize - minWidthPx) * 100) / (maxWidthPx - minWidthPx))
 
   return (
     <>
@@ -576,19 +593,19 @@ export const ImageSettings = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="size">{t("Size")}</Label>
                 <span className="text-muted-foreground text-xs">
-                  {imageSize}
+                  {imageSizePercentage.toFixed(0)}
                 </span>
               </div>
               <Slider
-                defaultValue={[imageSize]}
-                value={[imageSize]}
+                defaultValue={[imageSizePercentage]}
+                value={[imageSizePercentage]}
                 max={100}
                 min={0}
                 step={1}
                 onValueChange={(e) => {
                   const newWidthPercentage = e[0]
-                  const maxWidthPx = parseInt(maxWidth, 10)
-                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
+                  const maxMinGap = maxWidthPx - minWidthPx
+                  const newWidthPx = (newWidthPercentage / 100) * maxMinGap + minWidthPx
                   const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
                   const newHeightPx = newWidthPx * aspectRatio
 
@@ -599,12 +616,12 @@ export const ImageSettings = () => {
                   console.log("Aspect ratio:", aspectRatio)
                   console.log("New height in px:", newHeightPx)
 
-                  handlePropChangeDebounced("imageSize", e)
+                  handlePropChangeDebounced("imageSize", newWidthPx)
 
                   setProp((props) => {
                     props.width = `${newWidthPx}px`
                     // props.height = `${newHeightPx}px`;
-                    props.imageSize = `${newWidthPercentage}`
+                    props.imageSize = newWidthPx
                   }, 1000)
                 }}
               />
@@ -771,66 +788,60 @@ export const ImageSettings = () => {
             <div className="bg-secondary flex gap-0 rounded-lg p-1">
               <Button
                 variant="secondary"
-                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
-                  activeAspectRatioBtn === "source"
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${activeAspectRatioBtn === "source"
                     ? "border-input bg-white font-medium shadow hover:bg-white"
                     : "border-transparent bg-transparent hover:bg-transparent"
-                }`}
+                  }`}
                 onClick={aspectRatioSource}
               >
                 {t("Source")}
               </Button>
               <Button
                 variant="secondary"
-                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
-                  activeAspectRatioBtn === "square"
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${activeAspectRatioBtn === "square"
                     ? "border-input bg-white font-medium shadow hover:bg-white"
                     : "border-transparent bg-transparent hover:bg-transparent"
-                }`}
+                  }`}
                 onClick={aspectRatioSquare}
               >
                 1:1
               </Button>
               <Button
                 variant="secondary"
-                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
-                  activeAspectRatioBtn === "portrait"
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${activeAspectRatioBtn === "portrait"
                     ? "border-input bg-white font-medium shadow hover:bg-white"
                     : "border-transparent bg-transparent hover:bg-transparent"
-                }`}
+                  }`}
                 onClick={aspectRatioPortrait}
               >
                 4:3
               </Button>
               <Button
                 variant="secondary"
-                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
-                  activeAspectRatioBtn === "landscape"
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${activeAspectRatioBtn === "landscape"
                     ? "border-input bg-white font-medium shadow hover:bg-white"
                     : "border-transparent bg-transparent hover:bg-transparent"
-                }`}
+                  }`}
                 onClick={aspectRatioLandscape}
               >
                 16:9
               </Button>
               <Button
                 variant="secondary"
-                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
-                  activeAspectRatioBtn === "portraito"
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${activeAspectRatioBtn === "portraito"
                     ? "border-input bg-white font-medium shadow hover:bg-white"
                     : "border-transparent bg-transparent hover:bg-transparent"
-                }`}
+                  }`}
                 onClick={aspectRatioPortraitO}
               >
                 3:4
               </Button>
               <Button
                 variant="secondary"
-                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
-                  activeAspectRatioBtn === "landscapeo"
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${activeAspectRatioBtn === "landscapeo"
                     ? "border-input bg-white font-medium shadow hover:bg-white"
                     : "border-transparent bg-transparent hover:bg-transparent"
-                }`}
+                  }`}
                 onClick={aspectRatioLandscape0}
               >
                 9:16
@@ -867,9 +878,10 @@ export const ImageSettings = () => {
 
 export const DefaultPropsImg = {
   alt: "Image",
-  radiusCorner: 0,
+  radiusCorner: 15,
   size: "medium",
   // picSize: IconButtonSizes.medium,
+
   marginTop: "20px",
   marginBottom: "20px",
   marginLeft: "20px",
@@ -881,10 +893,11 @@ export const DefaultPropsImg = {
   background: "inherit",
   radius: "none",
   align: "center",
-  width: "90%",
+  width: "100%",
   height: "auto",
+
   enableLink: false,
-  imageSize: 100,
+  imageSize: 376,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,

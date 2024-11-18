@@ -496,7 +496,7 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
+            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-0px)]`
           )}
         >
           {
@@ -637,7 +637,7 @@ export const ImageDefaultProps: IconButtonProps = {
   align: "center",
   url: env.NEXT_PUBLIC_APP_URL,
   src: DefaultImagePlaceholder,
-  radiusCorner: 0,
+  radiusCorner: 15,
   disabled: false,
   enableLink: false,
   width: "100%",
@@ -645,7 +645,7 @@ export const ImageDefaultProps: IconButtonProps = {
   height: "auto",
   size: IconButtonSizes.medium,
   picSize: IconButtonSizes.medium,
-  imageSize: 100,
+  imageSize: 376,
   buttonSize: "small",
   time: 2,
   text: "Get quote",
