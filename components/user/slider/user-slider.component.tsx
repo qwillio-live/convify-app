@@ -68,7 +68,6 @@ import { string } from "prop-types"
 import { UserInputSizes } from "../input/user-input.component"
 import { UserSlider } from "@/components/ui/user-slider"
 import { SliderBarSettings } from "./user-slider.settings"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 const ButtonSizeValues = {
     small: ".8rem",
@@ -115,6 +114,7 @@ interface StyledCustomButtonProps {
     borderHoverColor?: string
     mobileScreen: boolean,
     headerMode?: boolean,
+    editMode?: boolean,
     defaultValue?: number
 }
 const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
@@ -157,24 +157,24 @@ const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
   cursor: default;
   border: none;
 
-  ${({ size, mobileScreen, headerMode }) => {
+  ${({ size, mobileScreen, headerMode, editMode }) => {
         if (headerMode) {
             return { width: "100%" }
         }
 
         if (size === UserInputSizes.small) {
-            return { width: "250px" }
+            return { width: "376px" }
         } else if (size === UserInputSizes.medium) {
             if (mobileScreen) {
                 return { width: "calc(100% - 22px)" }
             } else {
-                return { width: "376px" }
+                return { width: "576px" }
             }
         } else if (size === UserInputSizes.large) {
-            if (mobileScreen) {
+            if (mobileScreen || editMode) {
                 return { width: "calc(100% - 22px)" }
             } else {
-                return { width: "576px" }
+                return { width: "800px" }
             }
         } else {
             return {
@@ -852,6 +852,7 @@ export const SliderBar = ({
                     gap={gap}
                     mobileScreen={!!mobileScreen}
                     headerMode={isHeaderFooterMode}
+                    editMode={true}
                     {...props}
                     className="progress-comp text-[1rem]"
                 >
