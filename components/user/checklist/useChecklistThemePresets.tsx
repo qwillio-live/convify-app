@@ -26,14 +26,12 @@ const useChecklistThemePresets = () => {
     { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(1) },
     { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(2) },
     { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(3) },
+    { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(4) }
   ]
 
   const normalPreset: ChecklistProps = {
     checklistItems: [
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 4` },
+      ...defaultChecklistItems
     ],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -66,10 +64,7 @@ const useChecklistThemePresets = () => {
 
   const boldPreset: ChecklistProps = {
     checklistItems: [
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 4` },
+      ...defaultChecklistItems
     ],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
