@@ -95,6 +95,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+    [CRAFT_ELEMENTS.RANGE]: SliderBarGen
   }
 
   const screenName = searchParams?.screen || ""
