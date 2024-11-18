@@ -263,6 +263,19 @@ export function CreateFlowComponent({ flowId }) {
     return avatarIndex > 0
   }
 
+  const checkAvatar = () => {
+    const parsedEditor = JSON.parse(screensHeader)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
+    return avatarIndex !== -1
+  }
+
   useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
@@ -419,7 +432,7 @@ export function CreateFlowComponent({ flowId }) {
     }
   }, [headerMode, footerMode]) // Dependencies to trigger this effect
 
-  console.log("editorLoad", document.getElementById("editor-header"))
+  console.log("sdcsdc", Object.keys(JSON.parse(editorLoad)).length)
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -518,7 +531,7 @@ export function CreateFlowComponent({ flowId }) {
                 (JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0 &&
                   headerMode) ||
                 (!headerMode &&
-                  JSON.parse(screensHeader)?.ROOT?.nodes?.length === 0)
+                  Object.keys(JSON.parse(screensHeader)).length <= 1)
                   ? "mt-[2.5rem]"
                   : "mt-0"
               } w-full`}
@@ -593,7 +606,11 @@ export function CreateFlowComponent({ flowId }) {
                             !headerMode &&
                             headerPosition === "absolute" &&
                             JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
-                              ? `${headerHeight}px`
+                              ? `${
+                                  checkAvatar()
+                                    ? headerHeight + 44
+                                    : headerHeight
+                                }px`
                               : "0px",
                           backgroundColor: headerMode
                             ? avatarBackgroundColor

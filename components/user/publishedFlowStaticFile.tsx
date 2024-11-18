@@ -206,6 +206,18 @@ export default function StaticPublishedFile({
       return data
     }
   }
+  const checkAvatar = () => {
+    const parsedEditor = JSON.parse(data?.headerData)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
+    return avatarIndex !== -1
+  }
   console.log("filtered step: ", screenName, allScreens[0])
   return (
     <div
@@ -244,6 +256,7 @@ export default function StaticPublishedFile({
         style={{
           backgroundColor:
             data?.flowSettings?.general?.backgroundColor || "transparent",
+          paddingTop: checkAvatar() ? "44px" : "0px",
         }}
       >
         {filteredStep && (

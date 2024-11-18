@@ -217,7 +217,18 @@ export default async function PreviewFlows({
       return data
     }
   }
-
+  const checkAvatar = () => {
+    const parsedEditor = JSON.parse(data?.headerData)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
+    return avatarIndex !== -1
+  }
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -261,6 +272,7 @@ export default async function PreviewFlows({
               id={filteredStep.name}
               style={{
                 backgroundColor: data?.flowSettings?.general?.backgroundColor,
+                paddingTop: checkAvatar() ? "44px" : "0px",
               }}
               className="animate-flow relative min-w-full"
             >

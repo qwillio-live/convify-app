@@ -227,8 +227,8 @@ export const UserLogo = ({
     hasComponentBeforeAvatar || lengthOfComp > 2
       ? (
           isPreview || pathname?.includes("create-flow")
-            ? scrollY && scrollY > 50
-            : bodyScrollY > 50
+            ? scrollY && scrollY > 60
+            : bodyScrollY > 60
         )
         ? (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
           ? "avatar-top-mobile"
@@ -236,8 +236,8 @@ export const UserLogo = ({
         : "avatar-half"
       : (
           isPreview || pathname?.includes("create-flow")
-            ? scrollY && scrollY > 50
-            : bodyScrollY > 50
+            ? scrollY && scrollY > 60
+            : bodyScrollY > 60
         )
       ? (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
         ? "avatar-none-scrolled-mobile"
@@ -278,7 +278,7 @@ export const UserLogo = ({
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={cn("absolute ", avatarClass)}
+      className={cn("avatar absolute ", avatarClass, "mb-10")}
       // style={{
       //   transform: `translateY(${animation.y}) !important`,
       // }}
@@ -690,7 +690,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   url: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
-  enableLink: true,
+  enableLink: false,
   w: "auto",
   h: "60px",
   width: "85%",

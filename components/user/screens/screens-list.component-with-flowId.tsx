@@ -274,6 +274,18 @@ const ScreensList = ({ flowId }) => {
       return JSON.stringify(data)
     }
   }
+  const checkAvatar = () => {
+    const parsedEditor = JSON.parse(screensHeader)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
+    return avatarIndex !== -1
+  }
   return (
     <Accordion
       type="multiple"
@@ -586,7 +598,11 @@ const ScreensList = ({ flowId }) => {
                           />
                         </div>
 
-                        <div style={{ paddingTop: "0px" }}>
+                        <div
+                          style={{
+                            paddingTop: `${checkAvatar() ? 44 : 0}px`,
+                          }}
+                        >
                           {JSON.parse(screen.screenData)["ROOT"].nodes.length >
                           0 ? (
                             <ResolvedComponentsFromCraftState
