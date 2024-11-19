@@ -56,6 +56,7 @@ import { LinksGen } from "@/components/user/links/user-links.component"
 import { ImageStory, ImageStoryGen } from "@/components/user/image-story/image-story.component"
 import { YoutubeVideoGen } from "@/components/user/youtube-video/user-youtube-video.component"
 import { CookieConsentComponent } from "@/components/cookie-consent/CookieConsentComponent"
+import { fontDictionary } from "@/app/[locale]/fonts/fontDictionary"
 
 export default async function PreviewFlows({
   params,
@@ -122,11 +123,12 @@ export default async function PreviewFlows({
     next: { tags: ["previewFlow"] },
   })
   const data = await response.json()
+
   const filteredStep = data.steps?.find((screen) => screen.name === screenName)
     ? data.steps?.find((screen) => screen.name === screenName)
     : data?.steps?.[0]
 
-  const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup
+    const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup
 
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
@@ -199,11 +201,18 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
+
+
+  
   console.log("anjit", data?.flowSettings)
+  const primaryFontName = fontDictionary[ data?.flowSettings?.text?.primaryFont];
+  const {[primaryFontName]:primaryFont} = await import(`../../../../fonts/${primaryFontName}`);
+  const secondaryFontName = fontDictionary[ data?.flowSettings?.text?.secondaryFont];
+  const {[secondaryFontName]:secondaryFont} = await import(`../../../../fonts/${secondaryFontName}`);
 
   return (
     <>
-      <div className="flex h-screen flex-col">
+      <div className={cn("flex h-screen flex-col", primaryFont.variable,secondaryFont.variable)}>
       {showCookieConsentPopup && <CookieConsentComponent />}
         <div
           className={cn(
