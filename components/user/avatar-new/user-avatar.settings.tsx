@@ -538,7 +538,7 @@ export const AvatarSettings = () => {
                     {t("Open in")}
                   </p>
                   <Select
-                    defaultValue={"aperture"}
+                    defaultValue={"arrowright"}
                     value={
                       icon && icon === "arrowright" ? "arrowright" : "aperture"
                     }
