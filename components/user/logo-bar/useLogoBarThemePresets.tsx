@@ -57,7 +57,7 @@ const useLogoBarThemePresets = () => {
     marginRight: 0,
     marginBottom: 20,
     fullWidth: true,
-    settingTabs: ["content"],
+    settingTabs: ["design"],
     items: defaultItems,
   }
 

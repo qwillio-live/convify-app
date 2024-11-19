@@ -1078,9 +1078,9 @@ export const UserToolbox = () => {
                       connectors.create(
                         ref,
                         <LogoComponent
-                          {...LogoDefaultProps}
                           // {...filledPreset}
                           {...filledPreset}
+                          {...LogoDefaultProps}
                           // {...outLinePreset}
                           disabled={false}
                         />
@@ -1473,9 +1473,9 @@ export const UserToolbox = () => {
                         connectors.create(
                           ref,
                           <LogoComponent
-                            {...LogoDefaultProps}
                             // {...filledPreset}
                             {...filledPreset}
+                            {...LogoDefaultProps}
                             // {...outLinePreset}
                             disabled={false}
                           />

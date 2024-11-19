@@ -114,12 +114,12 @@ export const LogoBarSettings = () => {
   return (
     <>
       <Accordion
-        value={settingTabs || ["content"]}
+        value={settingTabs || ["design"]}
         onValueChange={(value) => {
           setProp((props) => (props.settingTabs = value), 200)
         }}
         type="multiple"
-        defaultValue={settingTabs || ["content"]}
+        defaultValue={settingTabs || ["design"]}
         className="w-full"
       >
         <AccordionItem value="content">

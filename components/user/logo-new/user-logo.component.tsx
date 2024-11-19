@@ -154,30 +154,56 @@ export const UserLogo = ({
   borderRad,
   ...props
 }) => {
+  if (w === 'auto'){
+    return (
+      <div
+        style={{
+          height: "58px",
+          width: w,
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
+        <img
+          alt={alt}
+          src={src}
+          style={{
+            width: w,
+            height: `calc(${60}px - ${top}px - ${bottom}px)`,
+            borderRadius: `${borderRad}px`,
+            backgroundColor: background,
+            objectFit: "cover",
+            transform: `translateY(${top}px)`,
+            marginLeft: `${left}px`,
+            marginRight: `${right}px`,
+          }}
+        />
+      </div>
+    )
+  }
   return (
     <div
+    style={{
+      height: "auto",
+      width: w,
+      overflow: "hidden",
+      position: "relative",
+    }}
+  >
+    <img
+      alt={alt}
+      src={src}
       style={{
-        height: "58px",
         width: w,
-        overflow: "hidden",
-        position: "relative",
+        height: `auto`,
+        borderRadius: `${borderRad}px`,
+        backgroundColor: background,
+        objectFit: "cover",
+        marginLeft: `${left}px`,
+        marginRight: `${right}px`,
       }}
-    >
-      <img
-        alt={alt}
-        src={src}
-        style={{
-          width: w,
-          height: `calc(${60}px - ${top}px - ${bottom}px)`,
-          borderRadius: `${borderRad}px`,
-          backgroundColor: background,
-          objectFit: "cover",
-          transform: `translateY(${top}px)`,
-          marginLeft: `${left}px`,
-          marginRight: `${right}px`,
-        }}
-      />
-    </div>
+    />
+  </div>
   )
 }
 
@@ -514,9 +540,9 @@ export const LogoDefaultProps: IconButtonProps = {
   src: `${ConvifyLogo.src}`,
   disabled: false,
   enableLink: false,
-  minWidth: "120px",
-  w: "auto",
-  h: "60px",
+  minWidth: "100px",
+  w: "120px",
+  h: "auto",
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,
@@ -543,7 +569,7 @@ export const LogoDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: "filled",
-  settingsTab: "content",
+  settingsTab: "design",
   tracking: false,
   trackingEvent: "button_clicked",
   nextScreen: "",
