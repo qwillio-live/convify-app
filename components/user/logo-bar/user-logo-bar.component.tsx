@@ -242,27 +242,43 @@ const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
   ${({ size, mobileScreen, isPreviewScreen }) => {
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
-        return { width: "376px" }
+        if (mobileScreen) {
+          return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+        } else {
+          return { width: "376px" }
+        }
       } else if (size === UserInputSizes.medium) {
-        return { width: "800px" }
+        if (mobileScreen) {
+          return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+        } else {
+          return { width: "600px" }
+        }
       } else if (size === UserInputSizes.large) {
-        return { width: "1000px" }
+        if (mobileScreen) {
+          return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+        } else {
+          return { width: "700px" }
+        }
       } else {
-        return {
-          width: "calc(100% - 22px)",
+        if (mobileScreen) {
+          return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+        } else {
+          return {
+            width: "calc(100% - 22px)",
+          }
         }
       }
     } else {
       if (size === UserInputSizes.small) {
         if (mobileScreen) {
-          return { width: "360px" }
+          return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
         } else {
-          return { width: "376px" }
+          return { width: "600px" }
         }
       } else if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)", maxWidth: 800 }
+        return { width: "700px", maxWidth: 700 }
       } else if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)", maxWidth: 1000 }
+        return { width: "800px", maxWidth: 800 }
       } else {
         return {
           width: "calc(100% - 22px)",

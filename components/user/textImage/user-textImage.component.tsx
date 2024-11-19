@@ -85,13 +85,13 @@ const Wrapper = styled.div<{
       if (mobileScreen) {
         return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
       } else {
-        return { width: "700px", maxWidth: 700 }
+        return { width: "600px", maxWidth: 600 }
       }
     } else if (size === UserInputSizes.large) {
       if (mobileScreen) {
         return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
       } else {
-        return { width: "800px", maxWidth: 800 }
+        return { width: "700px", maxWidth: 700 }
       }
     } else {
       return {
