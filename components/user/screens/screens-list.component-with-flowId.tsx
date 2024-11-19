@@ -55,6 +55,7 @@ import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { Input } from "@/components/input-custom"
 import { Card as UiCard } from "@/components/ui/card"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { ScreenFooter } from "./screen-footer.component"
 
 const ScreensList = ({ flowId }) => {
   const t = useTranslations("Components")
@@ -274,6 +275,26 @@ const ScreensList = ({ flowId }) => {
       return JSON.stringify(data)
     }
   }
+  const invertFooterComponents = () => {
+    let data
+    try {
+      data = JSON.parse(screensFooter)
+    } catch (e) {
+      console.log("erring", e)
+      data = data
+    }
+    if (data.ROOT && data.ROOT.props) {
+      // Check if the style object exists; if not, create it
+      if (!data.ROOT.props.style) {
+        data.ROOT.props.style = {} // Create the style object
+      }
+      data.ROOT.props.style.display = "flex" // Set the display to flex
+      data.ROOT.props.style.transform = "translateY(calc(188px - 100%))"
+      data.ROOT.props.style.justifyContent = "flex-end"
+
+      return JSON.stringify(data)
+    }
+  }
   const checkAvatar = () => {
     const parsedEditor = JSON.parse(screensHeader)
     const container = parsedEditor["ROOT"]
@@ -373,7 +394,7 @@ const ScreensList = ({ flowId }) => {
           <p className="text-sm">{t("Footer")}</p>
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
-          <div className="  hidden md:block">
+          <div className="hidden md:block">
             <Card
               style={{
                 backgroundColor: backgroundColor,
@@ -391,9 +412,23 @@ const ScreensList = ({ flowId }) => {
               )}
               onClick={() => handleFooterScreenClick()}
             >
-              {/* <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div> */}
-              <div className="text-muted-foreground mb-[9rem] h-auto  w-[40vw] scale-[.30] text-xs">
-                <ResolvedComponentsFromCraftState screen={screensFooter} />
+              {/* Use a wrapper div for the content */}
+              <div
+                className="text-muted-foreground no-hover-effects relative h-full w-full text-xs"
+                style={{
+                  // overflow: "hidden",
+                  zoom: "25%",
+                  scale: "1.01",
+                  // transform: "translateY(50%)", // Move the content upwards to show the bottom portion
+                  // marginTop: "-157%",
+                  pointerEvents: "none", // Prevent interactions
+                }}
+              >
+                <div className="flex flex-col-reverse">
+                  <ResolvedComponentsFromCraftState
+                    screen={invertFooterComponents()}
+                  />
+                </div>
               </div>
             </Card>
           </div>

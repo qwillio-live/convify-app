@@ -432,7 +432,7 @@ export function CreateFlowComponent({ flowId }) {
     }
   }, [headerMode, footerMode]) // Dependencies to trigger this effect
 
-  console.log("sdcsdc", Object.keys(JSON.parse(editorLoad)).length)
+  // console.log("sdcsdc", Object.keys(JSON.parse(editorLoad)).length)
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -545,7 +545,7 @@ export function CreateFlowComponent({ flowId }) {
                   backgroundPosition: "center",
                 }}
                 className={cn(
-                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-64px+96vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
+                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-74px+96vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                   footerMode ? "flex items-end justify-center" : "",
                   view == VIEWS.DESKTOP
                     ? "shahid w-full border-x border-t"

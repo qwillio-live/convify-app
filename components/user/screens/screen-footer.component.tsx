@@ -7,7 +7,7 @@ import { TextInputDefaultProps, UserText } from "../text/user-text.component"
 
 export const ScreenFooterGen = () => {
   return (
-    <div id="footer-gen " className="z-0 mt-5 w-full">
+    <div id="footer-gen " className="z-0 w-full">
       {/* <div className="flex basis-full flex-row items-center justify-center">
         as seen on <span>Convify blog</span>
       </div>
