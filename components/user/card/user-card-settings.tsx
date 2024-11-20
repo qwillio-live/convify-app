@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { debounce, throttle } from "lodash"
+import { debounce } from "lodash"
 import {
   AlignHorizontalJustifyCenter,
   AlignHorizontalJustifyEnd,
@@ -10,33 +10,18 @@ import {
   MoveHorizontal,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import styled from "styled-components"
 
-import { Element, Node, NodeHelpers, useNode } from "@/lib/craftjs"
+import { useNode } from "@/lib/craftjs"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Slider } from "@/components/custom-slider"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
-import { ScreenFooter } from "../screens/screen-footer.component"
-import { Controller } from "../settings/controller.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { ColorInput } from "@/components/color-input"
@@ -277,7 +262,14 @@ export const CardContainerSettings = () => {
                 defaultValue={size}
                 onValueChange={(value) => {
                   setProp((props) => (props.size = value), 1000)
-                }}
+                  const sizeMap = {
+                    small: "80%",
+                    medium: "90%",
+                    large: "95%",
+                    full: "100%",
+                  }
+                  setProp((props) => (props.width = sizeMap[value]), 1000)
+                                }}
               >
                 <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
                   <TabsTrigger

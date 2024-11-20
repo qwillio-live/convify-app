@@ -1,15 +1,11 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useNode } from "@/lib/craftjs"
 import { Controller } from "../settings/controller.component"
 import { ListSettings } from "./user-list.settings"
-import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { useTranslations } from "next-intl"
-import { rgba } from "polished"
 import styled from "styled-components"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import hexoid from "hexoid"
 import {
   ImagePictureTypes,
@@ -17,8 +13,6 @@ import {
   SvgRenderer,
 } from "@/components/PicturePicker"
 import { debounce } from "lodash"
-import ContentEditable from "react-contenteditable"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { UserInputSizes } from "../input/user-input.component"
 import { getComputedValueForTextEditor, serialize } from "@/lib/utils"
 import { TextEditor } from "@/components/TextEditor"
@@ -154,11 +148,52 @@ export const List = ({
     actions: { setProp },
     connectors: { connect, drag },
     selected,
+    id,
     isHovered,
   } = useNode((state) => ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
+    id: state.id
   }))
+
+  const selectedScreen =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+  const selectedScreenIdex =
+    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+
+  const screens = useAppSelector((state) => state?.screen?.screens || [])
+
+  const screenData = useMemo(() => {
+    try {
+      return JSON.parse(
+        screens[selectedScreenIdex].screenData
+      )
+    }
+    catch {
+      return {}
+    }
+  }, [selectedScreenIdex, screens[selectedScreenIdex].screenData])
+
+  const [preScreenData, setPreScreenData] = useState();
+  useEffect(() => {
+    if (Object.keys((preScreenData||{})).length > 0 && Object.keys(preScreenData!) < Object.keys(screenData)) {
+
+      const newNodeKey = Object.keys(screenData).find(n => Object.keys(preScreenData!).every(on => on !== n))
+      if (newNodeKey && newNodeKey === id) {
+        const newNode = screenData[newNodeKey];
+        if (newNode.displayName === "List" && newNode.parent && newNode) {
+          const parentId = newNode.parent
+          const parent = screenData[parentId]
+          if (parent.displayName === 'Card Content') {
+            setProp((props) => (props.columnsDesktop = 1), 200)
+          }
+        }
+      }
+    }
+
+    setPreScreenData(screenData)
+  }, [screenData, id])
+  
 
   const [hover, setHover] = useState(false)
   const t = useTranslations("Components")
@@ -202,7 +237,9 @@ export const List = ({
   useEffect(() => {
     setProp((props) => (props.iconColor = primaryColor || "#3182ce"), 200)
   }, [primaryColor])
-
+if(screenData == null){
+  return null
+}
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
