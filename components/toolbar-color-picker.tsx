@@ -7,6 +7,7 @@ import { Label } from "./ui/label"
 import { cn } from "@/lib/utils"
 import { debounce } from 'lodash'
 import "../styles/colorInput.css"
+import { ColorInput } from './color-input'
 
 
 interface ToolbarColorPickerProps {
@@ -18,13 +19,13 @@ interface ToolbarColorPickerProps {
 export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [tempColor, setTempColor] = useState(value)
-    const inputRef = useRef<HTMLInputElement>(null)
+    // const inputRef = useRef<HTMLInputElement>(null)
 
-    useEffect(() => {
-        if (isOpen && inputRef.current) {
-            inputRef.current.focus()
-        }
-    }, [isOpen])
+    // useEffect(() => {
+    //     if (isOpen && inputRef.current) {
+    //         inputRef.current.focus()
+    //     }
+    // }, [isOpen])
 
     const debouncedOnChange = useCallback(
         debounce((color: string) => {
@@ -46,7 +47,7 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
     }
     return (
         <div id="swatch" className='mx-2'>
-            <Input
+            {/* <Input
                 ref={inputRef}
                 type="color"
                 value={tempColor}
@@ -56,7 +57,16 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
                 // }}
                 id="color" name="color" 
                 // className="h-8 w-8 p-0 border-0 outline-none rounded-sm overflow-hidden"
-            />
+            /> */}
+            <ColorInput
+                id="backgroundcolor"
+                // ref={inputRef}
+                value={tempColor}
+                handleChange={(e) => {
+                    handleColorChange(e)
+                }}
+            
+              />
         </div>
     )
 

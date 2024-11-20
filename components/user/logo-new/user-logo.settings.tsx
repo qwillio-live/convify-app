@@ -132,9 +132,7 @@ export const LogoSettings = () => {
     },
   } = useNode((node) => ({
     props: node.data.props,
-  }))
-debugger;
-  
+  }))  
   useEffect(() => {
     if (mobileScreen && uploadedImageMobileUrl) {
       setProp((props) => (props.src = uploadedImageMobileUrl), 1000)
@@ -170,7 +168,6 @@ debugger;
   }
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    debugger;
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()

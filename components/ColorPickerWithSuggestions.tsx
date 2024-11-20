@@ -11,7 +11,7 @@ const ColorPicker = ({ color, onChange }) => {
         <div className="color-text-container">
           <input
             type="text"
-            value={color}
+            value={color||'#ffffff'}
             onChange={(e) => onChange(e.target.value)}
             className="focus:border-primary h-6 w-full rounded-sm border bg-white px-3 py-1 text-center text-xs font-normal leading-none focus:outline-none"
           />
@@ -40,7 +40,7 @@ const ColorPicker = ({ color, onChange }) => {
   
     return (
       <div className="rounded-lg border bg-white p-2">
-        <ColorPicker color={color} onChange={onChange} />
+        <ColorPicker color={color||'#ffffff'} onChange={onChange} />
         <div className="mt-2 grid grid-cols-5 gap-px">
           {suggestions.map((suggestion, index) => (
             <div

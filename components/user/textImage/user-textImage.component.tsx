@@ -14,14 +14,12 @@ import {
   Mountain,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
-import { Button as CustomButton } from "@/components/ui/button"
 
 import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
