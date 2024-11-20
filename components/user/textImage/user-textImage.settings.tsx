@@ -84,6 +84,7 @@ export const Img = ({
   secondaryFontFamily,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const {
@@ -108,6 +109,7 @@ export const Img = ({
       {
         /* eslint-disable-next-line @next/next/no-img-element */
         <UserLogo
+          showTitle={showTitle}
           secTextColor={secTextColor}
           fontFamily={fontFamily}
           color={color}

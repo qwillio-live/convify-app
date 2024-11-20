@@ -954,6 +954,7 @@ export const TextImageComponent = ({
   secondaryFontFamily,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const {
@@ -1202,6 +1203,7 @@ export const TextImageComponent = ({
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <UserLogo
+            showTitle={showTitle}
               fontFamily={fontFamily}
               color={color}
               setProp={setProp}
