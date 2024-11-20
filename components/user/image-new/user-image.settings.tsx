@@ -603,7 +603,8 @@ export const ImageSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) => {
-                  const newWidthPercentage = e[0]
+                  if(picSize !== 'full'){
+                    const newWidthPercentage = e[0]
                   const maxMinGap = maxWidthPx - minWidthPx
                   const newWidthPx = (newWidthPercentage / 100) * maxMinGap + minWidthPx
                   const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
@@ -623,6 +624,8 @@ export const ImageSettings = () => {
                     // props.height = `${newHeightPx}px`;
                     props.imageSize = newWidthPx
                   }, 1000)
+                  }
+                  
                 }}
               />
             </div>

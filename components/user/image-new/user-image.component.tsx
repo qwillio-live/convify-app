@@ -159,7 +159,7 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
+            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-0px)]`
           )}
         >
           {
