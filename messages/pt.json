@@ -405,7 +405,9 @@
     "Hide controls": "Ocultar controles",
     "Enter YouTube video link": "Insira o link do vídeo do YouTube",
     "Cookie consent popup": "Popup de consentimento de cookies",
-    "The popup will appear when the page loads": "O popup aparecerá quando a página for carregada"
+    "The popup will appear when the page loads": "O popup aparecerá quando a página for carregada",
+    "Show Title": "Show Title"
+
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",

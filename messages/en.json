@@ -410,7 +410,8 @@
     "Hide controls":"Hide controls",
     "Enter YouTube video link":"Enter YouTube video link",
     "Cookie consent popup":"Cookie consent popup",
-    "The popup will appear when the page loads":"The popup will appear when the page loads"
+    "The popup will appear when the page loads":"The popup will appear when the page loads",
+    "Show Title": "Show Title"
   },
   "CreateFlow": {
     "Dashboard": "Dashboard",

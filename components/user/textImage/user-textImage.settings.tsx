@@ -201,6 +201,7 @@ export const TextImageSettings = () => {
       textFontSize,
       titleFontWeight,
       textFontWeight,
+      showTitle
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -499,6 +500,16 @@ export const TextImageSettings = () => {
         <AccordionItem value="item-2">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
+          <div className="flex items-center space-x-2">
+              <Checkbox
+                checked={showTitle}
+                onCheckedChange={(e) => {
+                  setProp((props) => (props.showTitle = e), 1000)
+                }}
+                id="showTitle"
+              />
+              <Label htmlFor="required">{t("Show Title")}</Label>
+            </div>
             <div className="space-y-2">
               <Label>{t("Image Position")}</Label>
               <Tabs
