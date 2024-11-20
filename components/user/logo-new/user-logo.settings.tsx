@@ -371,20 +371,20 @@ export const LogoSettings = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="size">{t("Size")}</Label>
                 <span className="text-muted-foreground text-xs">
-                  {imageSizePercentage.toFixed(0)}
+                  {w}
                 </span>
               </div>
               <Slider
-                defaultValue={[imageSizePercentage]}
-                value={[imageSizePercentage]}
-                max={100}
-                min={0}
+                defaultValue={[parseInt(w)]}
+                value={[parseInt(w)]}
+                max={maxWidthPx}
+                min={minWidthPx}
                 step={1}
                 onValueChange={(e) => {
-                  const newWidthPercentage = e[0]
-                  const maxMinGap = maxWidthPx - minWidthPx
-                  const newWidthPx = (newWidthPercentage / 100) * maxMinGap + minWidthPx
-                  handlePropChangeDebounced("w", newWidthPx)
+                  const newWidthPx = e[0]
+                  // const maxMinGap = maxWidthPx - minWidthPx
+                  // const newWidthPx = (newWidthPercentage / 100) * maxMinGap + minWidthPx
+                  handlePropChangeDebounced("w", `${newWidthPx}px`)
 
                   setProp((props) => {
                     props.w = `${newWidthPx}px`
