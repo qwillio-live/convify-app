@@ -126,7 +126,6 @@ import { sans3 } from "@/app/[locale]/fonts/sans3"
 export default async function FlowsLayout({ children }: FlowsLayoutProps) {
   return <div
   className={cn(
-    "flex h-screen flex-col space-y-6 bg-white",
     roboto.variable,
     fontSans.variable,
     fontHeading.variable,
