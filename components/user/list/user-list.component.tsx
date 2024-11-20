@@ -65,6 +65,7 @@ export const ListGen = ({
   items,
   textColor,
   secTextColor,
+  toolbarPreview = false,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -99,6 +100,7 @@ export const ListGen = ({
         columnsMobile={columnsMobile}
         mobileScreen={false}
         maxWidth={ListSizeValues[size || "medium"]}
+        toolbarPreview={toolbarPreview}
       >
         {items.map((item, index) => (
           <ListItem
@@ -391,6 +393,7 @@ type StyledListContainerProps = {
   maxWidth: string
   size: UserInputSizes
   isPreviewScreen: boolean
+  toolbarPreview?: boolean
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
@@ -413,7 +416,11 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen, isPreviewScreen }) => {
+  ${({ size, mobileScreen, isPreviewScreen, toolbarPreview }) => {
+    if (toolbarPreview) return {
+      width: "calc(100% - 22px)"
+    }
+
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
         return { width: "376px" }

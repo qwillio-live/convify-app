@@ -51,6 +51,7 @@ import {
   CircleHelp,
   ImagesIcon,
   YoutubeIcon,
+  MoveHorizontalIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import styled from "styled-components"
@@ -140,6 +141,7 @@ import { UserInput, UserInputGen } from "../input/user-input.component"
 import {
   IconLineSeperator,
   LineSelector,
+  IconButtonDefaultProps as LineSelectorDefaultProps
 } from "../lineSeperator/line-seperator-component"
 import { LinkButton, LinkButtonGen } from "../link/link-component"
 import useLinkThemePresets from "../link/link-theme"
@@ -202,6 +204,7 @@ import { ImageStorySizes, useImageStoryThemePresets } from "../image-story/useIm
 import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
 import { useYoutubeVideoThemePresets, YoutubeVideoSizes } from "../youtube-video/useYoutubeVideoThemePresets"
 import { YoutubeVideo, YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
+import { SliderBar, SliderBarDefaultProps, SliderBarGen } from "../slider/user-slider.component"
 
 function HelperInformation({ infoText }: { infoText: string }) {
   return (
@@ -741,6 +744,63 @@ export const UserToolbox = () => {
                           choices: multipleChoicePreviewChoices,
                         }}
                       />
+                    </HoverCardComponent>
+                  </div>
+
+                  <div
+                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
+                    //eslint-disable-next-line
+                    ref={(ref: any) =>
+                      ref &&
+                      connectors.create(
+                        ref,
+                        <SliderBar
+                          {...{
+                            ...SliderBarDefaultProps,
+                            forHeader: false,
+                            type: "body",
+                            paddingLeft: 0,
+                            paddingRight: 0,
+                            paddingBottom: 0,
+                            paddingTop: 0,
+                            marginLeft: 0,
+                            marginRight: 0,
+                            marginTop: 20,
+                            marginBottom: 20,
+                            maxValue: screensLength,
+                            progressvalue:
+                              screensLength > 0 ? selectedScreen + 1 : 1,
+                          }}
+                        />
+                      )
+                    }
+                    data-cy="toolbox-text"
+                  >
+                    <HoverCardComponent
+                      title={t("Range")}
+                      icon={<MoveHorizontalIcon className="size-4" />}
+                    >
+
+                      <div className="flex w-full py-4">
+                        <SliderBarGen
+                          {...{
+                            ...ProgressBarDefaultProps,
+                            forHeader: false,
+                            type: "body",
+                            paddingLeft: 0,
+                            paddingRight: 0,
+                            paddingBottom: 0,
+                            paddingTop: 20,
+                            marginLeft: 0,
+                            marginRight: 0,
+                            marginTop: 0,
+                            marginBottom: 0,
+                            maxValue: screensLength,
+                            progressvalue:
+                              screensLength > 0 ? selectedScreen + 1 : 1,
+                          }}
+                        />
+                      </div>
                     </HoverCardComponent>
                   </div>
 
@@ -1315,9 +1375,10 @@ export const UserToolbox = () => {
                           ref,
                           <LineSelector
                             // {...IconButtonDefaultProps}
-                            // {...filledPreset}
                             {...filledPreset}
+                            // {...LineSelectorDefaultProps}
                             // {...outLinePreset}
+                            size={"large"}
                             disabled={false}
                             enableLine={true}
                           />

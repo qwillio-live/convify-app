@@ -41,6 +41,8 @@ export const ChecklistGen = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  column,
+  toolbarPreview = false,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -56,6 +58,7 @@ export const ChecklistGen = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        boxSizing: "border-box",
         // minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
@@ -65,14 +68,13 @@ export const ChecklistGen = ({
     >
       <Wrapper
         size={size}
+        columns={column}
         mobileScreen={false}
-        className="flex w-full gap-2"
-        style={{
-          flexDirection: layout,
-        }}
+        toolbarPreview={toolbarPreview}
+        className="user-checklist-comp w-full"
       >
         {checklistItems.map((item, index) => (
-          <li key={index} className="flex flex-1 items-center gap-3">
+          <li key={index} className="flex w-full flex-1 items-center gap-3">
             <ChecklistIconRenderer
               iconName={icon}
               style={{
@@ -81,8 +83,8 @@ export const ChecklistGen = ({
                 color: iconColor,
               }}
             />
-            <span
-              className="flex-1"
+            <div
+              className="flex-1 w-1 break-words"
               style={{
                 color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                 fontFamily: `var(${fontFamily?.value})`,
@@ -92,7 +94,7 @@ export const ChecklistGen = ({
             >
               {/* <div dangerouslySetInnerHTML={{ __html: item.value }} /> */}
               <TextEditor isReadOnly initValue={getComputedValueForTextEditor(item.value)} key={index} />
-            </span>
+            </div>
           </li>
         ))}
       </Wrapper>
@@ -100,17 +102,29 @@ export const ChecklistGen = ({
   )
 }
 
-const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean }>`
+const Wrapper = styled.ul<{ size: UserInputSizes; mobileScreen: boolean; columns: number, toolbarPreview?: boolean }>`
   margin-left: auto;
   margin-right: auto;
   max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(
+    ${(props) => props.mobileScreen ? 1 : props.columns},
+    minmax(0, 1fr)
+  );
+  column-gap: 40px;
+  vertical-gap: 20px;
+  align-items: center;
+
+  @media (max-width: 1000px) {
+    grid-template-columns:repeat(1, minmax(0, 1fr));
+  }
 
   /* @media (max-width: 1000px) {
     ${({ size }) => ({ width: "calc(100% - 22px)" })}
   } */
 
-  ${({ size, mobileScreen }) => {
-    if (mobileScreen) {
+  ${({ size, mobileScreen, toolbarPreview }) => {
+    if (mobileScreen || toolbarPreview) {
       return { width: "calc(100% - 22px)" }
     }
 
@@ -149,6 +163,7 @@ export const Checklist = ({
   paddingTop,
   paddingRight,
   paddingBottom,
+  column,
   ...props
 }) => {
   console.log("ChecklistProps", size)
@@ -219,11 +234,9 @@ export const Checklist = ({
       >
         <Wrapper
           size={size}
+          columns={column}
           mobileScreen={!!mobileScreen}
-          className="user-checklist-comp flex w-full gap-2 "
-          style={{
-            flexDirection: layout,
-          }}
+          className="user-checklist-comp w-full"
         >
           {checklistItems.map((item, index) => (
             <ChecklistItemSettings
@@ -346,7 +359,8 @@ export type ChecklistProps = {
   height: string | number
   fullWidth: boolean
   settingTabs: string[]
-  preset: ChecklistPresets
+  preset: ChecklistPresets,
+  column: number
 }
 
 export const ChecklistDefaultProps: ChecklistProps = {
@@ -378,6 +392,7 @@ export const ChecklistDefaultProps: ChecklistProps = {
   fullWidth: true,
   settingTabs: ["content"],
   preset: ChecklistPresets.normal,
+  column: 2
 }
 
 Checklist.craft = {

@@ -37,6 +37,7 @@ export const CRAFT_ELEMENTS = {
   TEXTAREA: "UserInputTextarea",
   FORM: "Form",
   FORMCONTENT: "FormContent",
+  RANGE: "SliderBar",
   IMAGESTORY: "ImageStory",
   YOUTUBEVIDEO: "YoutubeVideo",
 }

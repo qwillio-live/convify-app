@@ -45,6 +45,7 @@ import { FAQGen } from "../faq/user-faq.component"
 import { LinksGen } from "../links/user-links.component"
 import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
 import { YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
+import { SliderBarGen } from "../slider/user-slider.component"
 
 export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -85,6 +86,7 @@ export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
   [CRAFT_ELEMENTS.FORM]: FormGen,
   [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+  [CRAFT_ELEMENTS.RANGE]: SliderBarGen
 }
 
 const ResolvedComponentsFromCraftState = ({

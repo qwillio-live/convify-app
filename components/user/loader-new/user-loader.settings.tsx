@@ -308,7 +308,7 @@ export const LoaderSettings = () => {
         defaultValue={["content"]}
         className="w-full"
       >
-        <AccordionItem value="item-2">
+        <AccordionItem value="content">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
             <div className="flex items-center space-x-2">
@@ -344,8 +344,8 @@ export const LoaderSettings = () => {
                   buttonAction === "next-screen"
                     ? "next-screen"
                     : buttonAction === "custom-action" && nextScreen === ""
-                    ? "Do Nothing"
-                    : nextScreen
+                      ? "Do Nothing"
+                      : nextScreen
                 }
                 onValueChange={(e) => {
                   if (e === "next-screen") {

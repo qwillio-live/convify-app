@@ -51,6 +51,7 @@ import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/te
 // import lz from "lzutf8";
 import { UserTextInputGen } from "@/components/user/text/user-text.component"
 import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { SliderBarGen } from "@/components/user/slider/user-slider.component"
 import { FAQGen } from "@/components/user/faq/user-faq.component"
 import { LinksGen } from "@/components/user/links/user-links.component"
 import { ImageStory, ImageStoryGen } from "@/components/user/image-story/image-story.component"
@@ -103,6 +104,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+    [CRAFT_ELEMENTS.RANGE]: SliderBarGen
   }
 
   const screenName = searchParams?.screen || ""
@@ -204,7 +206,7 @@ export default async function PreviewFlows({
   return (
     <>
       <div className="flex h-screen flex-col">
-      {showCookieConsentPopup && <CookieConsentComponent />}
+        {showCookieConsentPopup && <CookieConsentComponent />}
         <div
           className={cn(
             `flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] z-20`,

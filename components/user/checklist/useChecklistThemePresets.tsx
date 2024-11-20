@@ -26,10 +26,13 @@ const useChecklistThemePresets = () => {
     { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(1) },
     { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(2) },
     { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(3) },
+    { id: `checklist-item-${hexoid(4)()}`, value: getDefaultContentForIndex(4) }
   ]
 
   const normalPreset: ChecklistProps = {
-    checklistItems: [...defaultChecklistItems],
+    checklistItems: [
+      ...defaultChecklistItems
+    ],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -56,10 +59,13 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.normal,
+    column: 2
   }
 
   const boldPreset: ChecklistProps = {
-    checklistItems: [...defaultChecklistItems],
+    checklistItems: [
+      ...defaultChecklistItems
+    ],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -86,6 +92,7 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.bold,
+    column: 2
   }
 
   return { normalPreset, boldPreset }

@@ -79,6 +79,7 @@ import { FAQ } from "../user/faq/user-faq.component"
 import { Links } from "../user/links/user-links.component"
 import { ImageStory } from "../user/image-story/image-story.component"
 import { YoutubeVideo } from "../user/youtube-video/user-youtube-video.component"
+import { SliderBar } from "../user/slider/user-slider.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -319,7 +320,8 @@ export function CreateFlowComponent() {
           Loader,
           Img,
           ImageStory,
-          YoutubeVideo
+          YoutubeVideo,
+          SliderBar
         }}
         onRender={RenderNode}
       >
@@ -370,8 +372,8 @@ export function CreateFlowComponent() {
                         width: mobileScreen
                           ? "384px"
                           : headerPosition === "absolute" && !mobileScreen
-                          ? width + "px"
-                          : "100%",
+                            ? width + "px"
+                            : "100%",
                         top:
                           headerPosition === "absolute" && !headerMode
                             ? "32px"

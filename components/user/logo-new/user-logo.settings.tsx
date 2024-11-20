@@ -314,7 +314,7 @@ export const LogoSettings = () => {
         defaultValue={["content"]}
         className="w-full"
       >
-        <AccordionItem value="item-2">
+        <AccordionItem value="content">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="space-y-2">
@@ -496,10 +496,10 @@ export const LogoSettings = () => {
               />
             </div>
             <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="marginLeft">{t("Left")}</Label>
-                  <span className="text-muted-foreground text-xs">{left}</span>
-                </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="marginLeft">{t("Left")}</Label>
+                <span className="text-muted-foreground text-xs">{left}</span>
+              </div>
               <Slider
                 defaultValue={[left]}
                 value={[left]}
