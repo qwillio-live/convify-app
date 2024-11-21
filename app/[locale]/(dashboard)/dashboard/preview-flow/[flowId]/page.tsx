@@ -204,15 +204,15 @@ export default async function PreviewFlows({
 
 
   
-  console.log("anjit", data?.flowSettings)
-  const primaryFontName = fontDictionary[ data?.flowSettings?.text?.primaryFont];
-  const {[primaryFontName]:primaryFont} = await import(`../../../../fonts/${primaryFontName}`);
-  const secondaryFontName = fontDictionary[ data?.flowSettings?.text?.secondaryFont];
-  const {[secondaryFontName]:secondaryFont} = await import(`../../../../fonts/${secondaryFontName}`);
+  // console.log("anjit", data?.flowSettings)
+  // const primaryFontName = fontDictionary[ data?.flowSettings?.text?.primaryFont];
+  // const {[primaryFontName]:primaryFont} = await import(`../../../../fonts/${primaryFontName}`);
+  // const secondaryFontName = fontDictionary[ data?.flowSettings?.text?.secondaryFont];
+  // const {[secondaryFontName]:secondaryFont} = await import(`../../../../fonts/${secondaryFontName}`);
 
   return (
     <>
-      <div className={cn("flex h-screen flex-col", primaryFont.variable,secondaryFont.variable)}>
+      <div className={cn("flex h-screen flex-col")}>
       {showCookieConsentPopup && <CookieConsentComponent />}
         <div
           className={cn(
