@@ -31,6 +31,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextImageThemePresets"
 import { TextImageSettings } from "./user-textImage.settings"
+import { usePathname } from "next/navigation"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -70,32 +71,50 @@ const Wrapper = styled.div<{
   size: UserInputSizes
   mobileScreen?: boolean
   isPreviewScreen: boolean
+  isEditorScreen?: boolean
 }>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen, isPreviewScreen }) => {
-    if (size === UserInputSizes.small) {
-      if (mobileScreen) {
-        return { width: "360px", maxWidth: "calc(100% - 22px)" }
-      } else {
+  ${({ size, mobileScreen, isPreviewScreen, isEditorScreen }) => {
+    console.log("isEditorScreensdksdcsdc", isEditorScreen)
+    if (mobileScreen) {
+      return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+    } else if (isPreviewScreen && !isEditorScreen) {
+      if (size === UserInputSizes.small) {
         return { width: "376px" }
-      }
-    } else if (size === UserInputSizes.medium) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "800px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "1000px" }
       } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    } else if (isPreviewScreen && isEditorScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
         return { width: "600px", maxWidth: 600 }
-      }
-    } else if (size === UserInputSizes.large) {
-      if (mobileScreen) {
-        return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
-      } else {
+      } else if (size === UserInputSizes.large) {
         return { width: "700px", maxWidth: 700 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     } else {
-      return {
-        width: "calc(100% - 22px)",
+      if (size === UserInputSizes.small) {
+        return { width: "600px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "700px", maxWidth: 700 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "800px", maxWidth: 800 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     }
   }};
@@ -366,7 +385,7 @@ export const TextImageComponentGen = ({
 
   const adjustedHorizontalGap = Math.min(horizontalGap, 100)
   const totalGap = adjustedHorizontalGap
-
+  const pathname = usePathname()
   return (
     <div
       style={{
@@ -393,6 +412,7 @@ export const TextImageComponentGen = ({
         <Wrapper
           isPreviewScreen={true}
           size={size}
+          isEditorScreen={pathname?.includes("create-flow")}
           className={cn(
             `relative flex flex-row justify-${align} max-w-[calc(100vw-22px)] border border-transparent`
           )}
@@ -1241,6 +1261,7 @@ export const TextImageComponent = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
+  const pathname = usePathname()
   console.log("mobileScreen", mobileScreen)
   return (
     <div
@@ -1272,6 +1293,7 @@ export const TextImageComponent = ({
       >
         <Wrapper
           isPreviewScreen={false}
+          isEditorScreen={pathname?.includes("create-flow")}
           size={size}
           mobileScreen={mobileScreen}
           ref={(ref: any) => connect(drag(ref))}

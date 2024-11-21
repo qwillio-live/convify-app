@@ -10,6 +10,7 @@ import hexoid from "hexoid"
 import { debounce } from "lodash"
 import { ImagePictureTypes } from "@/components/PicturePicker"
 import { UserInputSizes } from "../input/user-input.component"
+import { usePathname } from "next/navigation"
 
 export const LogoBarGen = ({
   size,
@@ -33,6 +34,7 @@ export const LogoBarGen = ({
   items,
   ...props
 }) => {
+  const pathname = usePathname()
   return (
     <div
       className="relative w-full"
@@ -58,6 +60,7 @@ export const LogoBarGen = ({
         mobileRowItems={mobileRowItems}
         isPreviewScreen={true}
         className="logobar-comp"
+        isEditorScreen={pathname?.includes("create-flow")}
       >
         {items.map((item, index) => (
           <li
@@ -138,7 +141,7 @@ export const LogoBar = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-
+  const pathname = usePathname()
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -177,6 +180,7 @@ export const LogoBar = ({
           mobileRowItems={mobileRowItems}
           className="logobar-comp"
           isPreviewScreen={false}
+          isEditorScreen={pathname?.includes("create-flow")}
         >
           {items.map((item, index) => (
             <li
@@ -218,6 +222,7 @@ type StyledLogoBarContainerProps = {
   mobileRowItems: number
   size: UserInputSizes
   isPreviewScreen: boolean
+  isEditorScreen?: boolean
 }
 
 const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
@@ -239,16 +244,29 @@ const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
   margin-left: auto;
   margin-right: auto;
 
-  ${({ size, mobileScreen, isPreviewScreen }) => {
+  ${({ size, mobileScreen, isPreviewScreen, isEditorScreen }) => {
+    console.log("isEditorScreensdksdcsdc", isEditorScreen)
     if (mobileScreen) {
       return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
-    } else if (isPreviewScreen) {
+    } else if (isPreviewScreen && !isEditorScreen) {
       if (size === UserInputSizes.small) {
         return { width: "376px" }
       } else if (size === UserInputSizes.medium) {
-        return { width: "600px" }
+        return { width: "800px" }
       } else if (size === UserInputSizes.large) {
-        return { width: "700px" }
+        return { width: "1000px" }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    } else if (isPreviewScreen && isEditorScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "600px", maxWidth: 600 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "700px", maxWidth: 700 }
       } else {
         return {
           width: "calc(100% - 22px)",
