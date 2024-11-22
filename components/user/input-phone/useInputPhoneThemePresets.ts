@@ -7,6 +7,7 @@ import {
   UserInputPhoneProps,
   UserInputSizes,
 } from "./user-input-phone.component"
+import { PictureTypes } from "@/components/PicturePicker"
 
 const useInputPhoneThemePresets = () => {
   const t = useTranslations("Components")
@@ -77,9 +78,10 @@ const useInputPhoneThemePresets = () => {
     size: UserInputSizes.medium,
     label: t("PhoneLabel"),
     fieldName: t("PhoneFieldName"),
-    floatingLabel: false,
+    floatingLabel: true,
     enableIcon: true,
-    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
+    icon: "📞",
+    iconType: PictureTypes.EMOJI,
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -149,9 +151,10 @@ const useInputPhoneThemePresets = () => {
     size: UserInputSizes.medium,
     label: t("PhoneLabel"),
     fieldName: t("PhoneFieldName"),
-    floatingLabel: false,
+    floatingLabel: true,
     enableIcon: true,
-    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
+    icon: "📞",
+    iconType: PictureTypes.EMOJI,
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",
@@ -223,7 +226,8 @@ const useInputPhoneThemePresets = () => {
     fieldName: t("PhoneFieldName"),
     floatingLabel: true,
     enableIcon: true,
-    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
+    icon: "📞",
+    iconType: PictureTypes.EMOJI,
     preset: "form",
     error: false,
     errorText: "Please specify an answer",

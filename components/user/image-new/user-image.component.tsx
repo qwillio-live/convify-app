@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { DefaultImagePlaceholder } from "@/constant"
 import { debounce, throttle } from "lodash"
@@ -31,6 +31,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
 import { ImageSettings } from "./user-image.settings"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -159,7 +160,7 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
           )}
         >
           {
@@ -212,12 +213,30 @@ export const UserLogo = ({
   ...props
 }) => {
   console.log("max width in the image is: ", maxWidth, width)
+  const [imgg, setImg] = useState("")
+  const [count, setCount] = useState(0)
+
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    console.log("updating src", src)
+    if (count === 0) {
+      setImg(src)
+    } else {
+      setCount((prev) => prev + 1)
+      const timeoutId = setTimeout(() => {
+        setImg(src) // Assuming you have setImg defined
+      }, 6000) // 5000 milliseconds = 5 seconds
+      // Cleanup the timeout on unmount or when `src` changes
+      return () => clearTimeout(timeoutId)
+    }
+  }, [src])
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
+
       <img
         alt={alt}
-        src={src}
+        src={imgg}
         width={parseFloat(width) ?? 346}
         height={parseFloat(height) || 212}
         style={{
@@ -496,7 +515,7 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent max-w-[calc(100%-22px)]`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
           )}
         >
           {

@@ -24,6 +24,7 @@ interface StyledNodeDivProps {
   isActive: boolean
   id: string
   name: string
+  new?: boolean
 }
 
 const StyledNodeDiv = styled.div<StyledNodeDivProps>`
@@ -82,6 +83,7 @@ const NewStyledNodeDiv = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & StyledNodeDivProps) => {
+  console.log("selected", selected)
   const borderWidth = useMemo(() => {
     if (
       id === "ROOT" ||
@@ -113,10 +115,11 @@ const NewStyledNodeDiv = ({
       : `border-[${borderColor}]`
   }, [selected, selectedComponent, id, isActive, borderColor, name])
 
-  return (
+  // return id !== "footer-node" ? (
+  return props.new ? (
     <div
       className={cn(
-        "relative z-10 hover:border-dotted hover:border-transparent",
+        "relative  hover:border-dotted hover:border-transparent",
         fullWidth ? "w-full" : "w-auto",
         name === "ProgressBar" ? "p-px" : "p-0",
         borderWidth,
@@ -126,7 +129,17 @@ const NewStyledNodeDiv = ({
       )}
       {...props}
     />
+  ) : (
+    <div
+      className={cn(
+        "!b-0 hover:b-0 relative h-1 bg-white",
+        fullWidth ? "w-full" : "w-auto"
+      )}
+      {...props}
+    />
   )
+  // ) : (
+  //   <div></div>
 }
 
 export default StyledNodeDiv
@@ -190,7 +203,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     (state) => state?.screen?.avatarComponentIds
   )
   useEffect(() => {
-    if (dom && id !== "ROOT") {
+    console.log("isdifs", id)
+    if (dom && id !== "ROOT" && id !== "footer-node") {
       if (isHover && !isSelected) {
         // If hover and not selected, add hover class
         dom.classList.add("component-hover")
@@ -244,7 +258,8 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   if (name === "AvatarComponent" && id !== avatarComponentId) {
     return null
   }
-  // console.log("name", name)
+
+  console.log("name", name, "selectedComponent"), selectedComponent
   return (
     <NewStyledNodeDiv
       selected={isSelected}
@@ -255,6 +270,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
       name={name}
       isActive={isActive}
       className="parent-component"
+      new={name === "Footer" ? false : true}
     >
       {render}
     </NewStyledNodeDiv>

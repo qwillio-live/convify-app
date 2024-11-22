@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
+
 import icons from "@/constant/streamline.json"
 import EmojiPicker, {
   EmojiClickData,
@@ -11,7 +12,7 @@ import {
   useInView,
   useMotionValue,
 } from "framer-motion"
-import { throttle } from "lodash"
+import { throttle, debounce } from "lodash"
 import {
   Activity,
   AlignHorizontalJustifyCenter,
@@ -105,6 +106,7 @@ import useInputMailThemePresets from "./useInputMailThemePresets"
 import { UserInputMail, UserInputMailGen } from "./user-input-mail.component"
 import { InputSettingsIconPicker } from "../input/user-input-icon-picker"
 import { ColorInput } from "@/components/color-input"
+import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 
 const IconRenderer = ({ iconName, onClick }) => {
   const ref = useRef(null)
@@ -279,6 +281,16 @@ export const UserInputMailSettings = () => {
     throttledSetProp(property, value)
   }
 
+  const handleMultiplePropChangeDebounced = useCallback(
+    debounce((properties) => {
+      setProp((prop) => {
+        Object.keys(properties).forEach((key) => {
+          prop[key] = properties[key]
+        })
+      }, 0)
+    }),
+    [setProp]
+  )
   return (
     <>
       <Accordion
@@ -380,12 +392,24 @@ export const UserInputMailSettings = () => {
             </div>
             {props.enableIcon && (
               <div className="flex items-center justify-between">
-                <Label>{tComponents("Select Icons")}</Label>
-                <InputSettingsIconPicker
-                  className="w-auto"
-                  icon={props.icon}
-                  onChange={(icon) => {
-                    handlePropChange("icon", icon)
+                <Label htmlFor="icon">Icon</Label>
+                <PicturePicker
+                  picture={
+                    props.iconType === PictureTypes.NULL ? (
+                      <ImageIcon className="text-muted-foreground size-4" />
+                    ) : (
+                      props.icon
+                    )
+                  }
+                  pictureType={props.iconType}
+                  maxWidthMobile={400}
+                  maxWidthDesktop={400}
+                  onChange={(icon, iconType) => {
+                    handleMultiplePropChangeDebounced({
+                      iconType,
+                      icon,
+                    })
+                    // debouncedSetProp("iconType", pictureType)
                   }}
                 />
               </div>

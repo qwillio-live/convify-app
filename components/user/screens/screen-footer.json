@@ -1,53 +1,40 @@
 {
-	"ROOT": {
-		"type": "UserContainer",
-		"isCanvas": true,
-		"props": {
-			"padding": 5,
+  "ROOT": {
+    "type": "UserContainer",
+    "isCanvas": true,
+    "props": {
+      "padding": 5,
       "fullWidth": true,
-			"background": "#ad2121",
-			"expanded": "true",
-      "style" : {
-        "minHeight": "200px",
-        "minWidth": "200px",
-        "width" : "100%",
+      "background": "#ad2121",
+      "expanded": "true",
+      "style": {
+        "minHeight": "80vh",
+        "width": "100%",
         "flexDirection": "column",
         "justifyContent": "end"
       },
-			"className": "flex flex-col items-center py-5"
-		},
-		"displayName": "Screen Footer",
-		"custom": {
-
-		},
-		"hidden": false,
-		"nodes": [
-      "footer-node"
-		],
-		"linkedNodes": {
-
-		}
-	},"footer-node": {
+      "className": "flex flex-col items-center"
+    },
+    "displayName": "Screen Footer",
+    "custom": {},
+    "hidden": false,
+    "nodes": ["footer-node"],
+    "linkedNodes": {}
+  },
+  "footer-node": {
     "type": {
       "resolvedName": "ScreenFooter"
     },
     "isCanvas": false,
-    "props": {
-
+    "props": {},
+    "style": {
+      "width": "100%"
     },
     "displayName": "Footer",
-    "custom": {
-
-    },
+    "custom": {},
     "parent": "ROOT",
     "hidden": false,
-    "nodes": [
-
-    ],
-    "linkedNodes": {
-
-    }
+    "nodes": [],
+    "linkedNodes": {}
   }
-
-
 }

@@ -93,6 +93,7 @@ export const UserTextInputSettings = () => {
       tagType,
       textColor,
       textAlign,
+      lineHeight,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -127,6 +128,7 @@ export const UserTextInputSettings = () => {
       "tagType",
       "textColor",
       "textAlign",
+      "lineHeight",
     ]
     setProp((props) => {
       Object.keys(preset).forEach((key) => {
@@ -252,6 +254,26 @@ export const UserTextInputSettings = () => {
                 min={12}
                 step={1}
                 onValueChange={(e) => handlePropChangeDebounced("fontSize", e)}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label>{t("Line Height")}</Label>
+                <span className="text-muted-foreground text-xs">
+                  {lineHeight}
+                </span>
+              </div>
+              <Slider
+                className=""
+                defaultValue={[lineHeight]}
+                value={[lineHeight]}
+                max={100}
+                min={18}
+                step={1}
+                onValueChange={(e) =>
+                  handlePropChangeDebounced("lineHeight", e)
+                }
               />
             </div>
 

@@ -1,7 +1,5 @@
 import React, { memo, useMemo } from "react"
-import {
-  UserContainerGen,
-} from "@/components/user/container/user-container.component"
+import { UserContainerGen } from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
@@ -19,12 +17,8 @@ import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import {
-  UserInputCheckboxGen,
-} from "../input-checkbox/user-input-checkbox.component"
-import {
-  UserInputMailGen,
-} from "../input-email/user-input-mail.component"
+import { UserInputCheckboxGen } from "../input-checkbox/user-input-checkbox.component"
+import { UserInputMailGen } from "../input-email/user-input-mail.component"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
 import { ImageComponentGen } from "../image-new/user-image.component"

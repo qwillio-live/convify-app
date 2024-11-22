@@ -2,10 +2,11 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
+import { LucideCross } from "lucide-react"
 
 import { toast } from "@/components/ui/use-toast"
 import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
-import { Button } from "@/components/ui/button"
+
 import facebook from "@/assets/icons/facebook.png"
 import linkedin from "@/assets/icons/linkedin.png"
 import {
@@ -18,6 +19,20 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 import { env } from "@/env.mjs"
 import {
   Mail,
@@ -49,6 +64,12 @@ const ShareFlowComponents = ({
   const [view, setView] = useState("desktop")
   const [innerview, setInnerView] = useState("desktop")
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
+  const [messageId, setMessageId] = useState(1)
+  const messages = {
+    1: "Create a custom link",
+    2: "Create a custom email link",
+    3: "Create a custom QR code",
+  }
   const [link, setLink] = useState(() => {
     return data && data.link ? data.link : "https://convify.io/survey-es"
   })
@@ -87,6 +108,7 @@ const ShareFlowComponents = ({
         <>
           <HeaderComponent
             setIsCustomLinkOpen={setIsCustomLinkOpen}
+            setMessageId={setMessageId}
             isPublished={isPublished}
             link={link}
             t={t}
@@ -154,69 +176,96 @@ const ShareFlowComponents = ({
           />
         </>
       )}
-      {isCustomLinkOpen && (
-        <div className="fixed inset-0 z-[99] flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
-          <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
-            <div className="z-[1] flex w-[512px] flex-col items-center p-8">
-              <div className="min-h-0 min-w-0 shrink-0 pb-2">
-                <span className="block text-center text-4xl font-light">
-                  {t("Create a custom link")}
-                </span>
-              </div>
-              <div className="min-h-0 min-w-0 shrink-0">
-                <span className="block text-center text-xl text-[rgb(115,115,115)]">
-                  {t(
-                    "Edit the link and let people know what your flow is about"
-                  )}
-                </span>
-              </div>
-              <div className="mb-10"></div>
-              <div className="min-h-0 min-w-0 shrink-0 pb-6">
-                <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
-                  {t("Available on these plans: Plus, Business, Enterprise")}
-                </span>
-              </div>
-              <div className="flex size-full items-center justify-center">
-                <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
-                  <div className="flex">
-                    <span className="block flex-[0_0_auto]">
-                      {t("Upgrade my plan")}
-                    </span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-          <button
-            aria-label="Close dialog"
-            color="#737373"
-            data-qa="upgrade-nag-screen-close-button"
-            className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
-          >
-            <div className="flex size-auto items-center justify-center ">
-              <span
-                onClick={() => setIsCustomLinkOpen(false)}
-                className="cursor-pointer"
-              >
-                {" "}
-                <svg
-                  width="28px"
-                  height="28px"
-                  viewBox="0 0 16 16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#000000"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
-                  />
-                </svg>
-              </span>
-            </div>
-          </button>
-        </div>
-      )}
+      {/* {isCustomLinkOpen && (
+        // <div className="fixed inset-0 z-[99] flex size-full items-center justify-center bg-[rgba(227,227,227,.8)] text-sm text-[rgb(38,38,39)] transition-all">
+        //   <div className="flex size-full items-center justify-center  from-white/0 to-white/90">
+        //     <div className="z-[1] flex w-[512px] flex-col items-center p-8">
+        //       <div className="min-h-0 min-w-0 shrink-0 pb-2">
+        //         <span className="block text-center text-4xl font-light">
+        //           {t(messages[messageId])}
+        //         </span>
+        //       </div>
+        //       <div className="mb-10"></div>
+        //       <div className="min-h-0 min-w-0 shrink-0 pb-6">
+        //         <span className="block text-center text-sm font-medium text-[rgb(2,80,65)]">
+         {t(messages[messageId])}
+        //           {t("Available on these plans: Plus, Business, Enterprise")}
+         {t("Upgrade my plan")}
+        //         </span>
+        //       </div>
+        //       <div className="flex size-full items-center justify-center">
+        //         <button className="relative inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[4px] border-0 bg-[rgb(2,100,81)] px-4 py-2 text-base text-white no-underline transition-all duration-300 hover:bg-[rgb(40,123,107)]">
+        //           <div className="flex">
+        //             <span className="block flex-[0_0_auto]">
+        //               {t("Upgrade my plan")}
+        //             </span>
+        //           </div>
+        //         </button>
+        //       </div>
+        //     </div>
+        //   </div>
+        //   <button
+        //     aria-label="Close dialog"
+        //     color="#737373"
+        //     data-qa="upgrade-nag-screen-close-button"
+        //     className="fixed right-2 top-2 size-10 cursor-pointer border border-solid border-transparent bg-transparent p-0 outline-none transition-all duration-300"
+        //   >
+        //     <div className="flex size-auto items-center justify-center ">
+        //       <span
+        //         onClick={() => setIsCustomLinkOpen(false)}
+        //         className="cursor-pointer"
+        //       >
+        //         {" "}
+        //         <svg
+        //           width="28px"
+        //           height="28px"
+        //           viewBox="0 0 16 16"
+        //           xmlns="http://www.w3.org/2000/svg"
+        //           fill="#000000"
+        //         >
+        //           <path
+        //             fillRule="evenodd"
+        //             clipRule="evenodd"
+        //             d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.707.708L7.293 8l-3.646 3.646.707.708L8 8.707z"
+        //           />
+        //         </svg>
+        //       </span>
+        //     </div>
+        //   </button>
+        // </div>
+        // <Dialog>
+        //   <DialogTrigger asChild>
+        //     <Button variant="outline">Share</Button>
+        //   </DialogTrigger>
+        //   <DialogContent className="sm:max-w-md">
+        //     <DialogHeader>
+        //       <DialogTitle>Share link</DialogTitle>
+        //       <DialogDescription>
+        //         Anyone who has this link will be able to view this.
+        //       </DialogDescription>
+        //     </DialogHeader>
+        //     <div className="flex items-center space-x-2">
+        //       <div className="grid flex-1 gap-2">
+        //         <Label htmlFor="link" className="sr-only">
+        //           Link
+        //         </Label>
+        //         <Input
+        //           id="link"
+        //           defaultValue="https://ui.shadcn.com/docs/installation"
+        //           readOnly
+        //         />
+        //       </div>
+        //     </div>
+        //     <DialogFooter className="sm:justify-start">
+        //       <DialogClose asChild>
+        //         <Button type="button" variant="secondary">
+        //           Close
+        //         </Button>
+        //       </DialogClose>
+        //     </DialogFooter>
+        //   </DialogContent>
+        // </Dialog>
+      )} */}
 
       <Drawer open={shareDrawerOpen} onOpenChange={setShareDrawerOpen}>
         <DrawerContent className="disable-after font-poppins m-2 rounded-[12px] outline-none">
@@ -292,7 +341,10 @@ const ShareFlowComponents = ({
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => setIsCustomLinkOpen(true)}
+                  onClick={() => {
+                    setIsCustomLinkOpen(true)
+                    setMessageId(2)
+                  }}
                   className="h-9 cursor-pointer gap-1 rounded-md border border-[#E6E2DD] px-4 text-sm font-normal text-[#23262C]"
                 >
                   <Mail className="h-4" />
@@ -300,7 +352,10 @@ const ShareFlowComponents = ({
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => setIsCustomLinkOpen(true)}
+                  onClick={() => {
+                    setIsCustomLinkOpen(true)
+                    setMessageId(3)
+                  }}
                   className="h-9 cursor-pointer gap-1 rounded-md border border-[#E6E2DD] px-4 text-sm font-normal text-[#23262C]"
                 >
                   <QrCode className="h-4" />
@@ -344,7 +399,18 @@ const ShareFlowComponents = ({
 
 export default ShareFlowComponents
 
-const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
+const HeaderComponent = ({
+  setIsCustomLinkOpen,
+  isPublished,
+  link,
+  t,
+  setMessageId,
+}) => {
+  const messages = {
+    1: "Create a custom link",
+    2: "Create a custom email link",
+    3: "Create a custom QR code",
+  }
   return (
     <div className="flex h-[88px] items-center justify-between border-b border-[#E6E2DD] bg-white px-2 md:px-10">
       <div className="flex w-full max-w-[480px] items-center">
@@ -370,30 +436,144 @@ const HeaderComponent = ({ setIsCustomLinkOpen, isPublished, link, t }) => {
         </Button>
       </div>
       <div className="flex items-center gap-2 text-[#23262C]">
-        <Button
-          variant="outline"
-          onClick={() => setIsCustomLinkOpen(true)}
-          className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
-        >
-          <PenLine className="h-4" />
-          {t("Customize link")}
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => setIsCustomLinkOpen(true)}
-          className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
-        >
-          <Mail className="h-4" />
-          {t("Email link")}
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => setIsCustomLinkOpen(true)}
-          className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
-        >
-          <QrCode className="h-4" />
-          {t("QR Code")}
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCustomLinkOpen(true)
+                setMessageId(1)
+              }}
+              className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
+            >
+              <PenLine className="h-4" />
+              {t("Customize link")}
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            className="flex h-[308px] w-[445px] justify-center !rounded-[12px]"
+            dialogueClassname="bg-[rgba(0,0,0,0.5)] !backdrop-blur-0"
+          >
+            <DialogHeader>
+              <DialogTitle className="relative left-[2.5rem] flex justify-end">
+                <DialogClose asChild>
+                  <Button
+                    className="!hover:bg-transparent"
+                    type="button"
+                    variant="ghost"
+                  >
+                    <X className="mr-[2px] mt-[-20px] size-6" color="#7B7D80" />
+                  </Button>
+                </DialogClose>
+              </DialogTitle>
+              <DialogDescription className=" flex-wrap content-center items-center  text-base font-normal">
+                <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[32px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
+                  {t(messages[1])}
+                </span>
+                <span className="!font-poppins mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center text-[#505050]">
+                  {t("Available on these plans: Plus, Business, Enterprise")}
+                </span>
+                <div className="flex w-full justify-center">
+                  <Button className="!font-poppins mx-auto h-[48px] w-[298px] bg-[#23262C] p-[12px] text-[16px] text-white ">
+                    {t("Upgrade my plan")}
+                  </Button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCustomLinkOpen(true)
+                setMessageId(2)
+              }}
+              className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
+            >
+              <Mail className="h-4" />
+              {t("Email link")}
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            className="flex h-[308px] w-[612px] justify-center !rounded-[12px]"
+            dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
+          >
+            <DialogHeader>
+              <DialogTitle className="relative left-[2.5rem] flex justify-end">
+                <DialogClose asChild>
+                  <Button
+                    className="!hover:bg-transparent"
+                    type="button"
+                    variant="ghost"
+                  >
+                    <X className="mr-[2px] mt-[-20px] size-6" color="#7B7D80" />
+                  </Button>
+                </DialogClose>
+              </DialogTitle>
+              <DialogDescription className=" flex-wrap content-center items-center  text-base font-normal ">
+                <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[30px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
+                  {t(messages[2])}
+                </span>
+                <span className="!font-poppins mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center">
+                  {t("Available on these plans: Plus, Business, Enterprise")}
+                </span>
+                <div className="flex w-full justify-center">
+                  <Button className="!font-poppins mx-auto h-[48px] w-[298px] bg-[#23262C] p-[12px] text-[16px] text-white ">
+                    {t("Upgrade my plan")}
+                  </Button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCustomLinkOpen(true)
+                setMessageId(3)
+              }}
+              className="h-10 cursor-pointer gap-1 rounded-lg border border-[#E6E2DD] px-4 text-base font-normal"
+            >
+              <QrCode className="h-4" />
+              {t("QR Code")}
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            className="flex h-[308px] min-w-[520px] justify-center !rounded-[12px]"
+            dialogueClassname="bg-[#919193]/80 !backdrop-blur-0"
+          >
+            <DialogHeader>
+              <DialogTitle className="relative left-[2.5rem] flex justify-end">
+                <DialogClose asChild>
+                  <Button
+                    className="!hover:bg-transparent"
+                    type="button"
+                    variant="ghost"
+                  >
+                    <X className="mr-[2px] mt-[-20px] size-6" color="#7B7D80" />
+                  </Button>
+                </DialogClose>
+              </DialogTitle>
+              <DialogDescription className=" flex-wrap content-center items-center  text-base font-normal ">
+                <span className="!font-poppins mb-3 flex justify-center space-x-8 text-[32px] font-semibold leading-[48px] tracking-wide text-[#23262C]">
+                  {t(messages[3])}
+                </span>
+                <span className="!font-poppins mx-auto mb-8 flex w-[290px] flex-wrap items-center justify-center text-center">
+                  {t("Available on these plans: Plus, Business, Enterprise")}
+                </span>
+                <div className="flex w-full justify-center">
+                  <Button className="!font-poppins mx-auto h-[48px] w-[298px] bg-[#23262C] p-[12px] text-[16px] text-white  ">
+                    {t("Upgrade my plan")}
+                  </Button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   )

@@ -95,12 +95,13 @@ export const PictureChoiceSettings = () => {
   const {
     filledPreset,
     semifilledPreset,
+    preFilledPresent,
     outlinedPreset,
     defaultIcon,
     defaultChoices,
     defaultSelections,
   } = usePictureChoiceThemePresets()
-
+  console.log("present", preset)
   const changePresetStyles = (preset) => {
     const updatedStyles = [
       "preset",
@@ -108,6 +109,7 @@ export const PictureChoiceSettings = () => {
       "contentReversed",
       "defaultStyles",
       "hoverStyles",
+      "prefilled",
       "selectedStyles",
     ]
     setProp((props) => {
@@ -426,6 +428,62 @@ export const PictureChoiceSettings = () => {
           <AccordionContent className="space-y-4 pt-2">
             <Card
               onClick={() => {
+                changePresetStyles(preFilledPresent)
+              }}
+              className="p-0 transition-all duration-300 hover:cursor-pointer"
+              style={{
+                ...(preset === PictureChoicePresets.prefilled
+                  ? {
+                      border: `1px solid #2B3398`,
+                    }
+                  : {}),
+              }}
+            >
+              <PictureChoiceGen
+                {...{
+                  ...preFilledPresent,
+                  multiSelect,
+                  disabled: true,
+                  marginTop: 16,
+                  marginBottom: 16,
+                  marginLeft: 16,
+                  marginRight: 6,
+                  labelColor: labelColor,
+                  selections: defaultSelections,
+                  choices: defaultChoices.slice(0, 2),
+                }}
+              />
+            </Card>
+            <Card
+              onClick={() => {
+                changePresetStyles(filledPreset)
+              }}
+              className="p-0 transition-all duration-300 hover:cursor-pointer"
+              style={{
+                ...(preset === PictureChoicePresets.filled
+                  ? {
+                      border: `1px solid #2B3398`,
+                    }
+                  : {}),
+              }}
+            >
+              <PictureChoiceGen
+                {...{
+                  ...filledPreset,
+                  multiSelect,
+                  disabled: true,
+                  marginTop: 16,
+                  marginBottom: 16,
+                  marginLeft: 16,
+                  marginRight: 6,
+                  labelColor: labelColor,
+                  selections: defaultSelections,
+                  choices: defaultChoices.slice(0, 2),
+                }}
+              />
+            </Card>
+            <Card
+              onClick={() => {
                 changePresetStyles(outlinedPreset)
               }}
               className="p-0 transition-all duration-300 hover:cursor-pointer"
@@ -468,34 +526,6 @@ export const PictureChoiceSettings = () => {
               <PictureChoiceGen
                 {...{
                   ...semifilledPreset,
-                  multiSelect,
-                  disabled: true,
-                  marginTop: 16,
-                  marginBottom: 16,
-                  marginLeft: 16,
-                  marginRight: 6,
-                  labelColor: labelColor,
-                  selections: defaultSelections,
-                  choices: defaultChoices.slice(0, 2),
-                }}
-              />
-            </Card>
-            <Card
-              onClick={() => {
-                changePresetStyles(filledPreset)
-              }}
-              className="p-0 transition-all duration-300 hover:cursor-pointer"
-              style={{
-                ...(preset === PictureChoicePresets.filled
-                  ? {
-                      border: `1px solid #2B3398`,
-                    }
-                  : {}),
-              }}
-            >
-              <PictureChoiceGen
-                {...{
-                  ...filledPreset,
                   multiSelect,
                   disabled: true,
                   marginTop: 16,

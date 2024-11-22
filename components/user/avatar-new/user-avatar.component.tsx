@@ -33,6 +33,7 @@ import Image from "next/image"
 import { env } from "@/env.mjs"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import useScrollPosition from "@/hooks/use-scroll-position"
+import { usePathname } from "next/navigation"
 
 const ButtonTextLimit = {
   small: 100,
@@ -89,6 +90,13 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
+  const avatarBackgroundColor = useAppSelector(
+    (state) => state?.screen?.avatarBackgroundColor
+  )
+  const hasComponentBeforeAvatar = useAppSelector(
+    (state) => state?.screen?.hasComponentBeforeAvatar
+  )
+
   return (
     <div
       className=""
@@ -100,9 +108,14 @@ export const AvatarComponentGen = ({
       }}
     >
       <div
-        className="relative w-full"
+        className="relative  w-full"
         style={{
-          background: `${"transparent"}`,
+          background: `${
+            containerBackground !== "rgba(255,255,255,.1)"
+              ? containerBackground
+              : "transparent"
+          }`,
+          height: !hasComponentBeforeAvatar ? "55px" : "auto",
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -167,63 +180,124 @@ export const UserLogo = ({
   const scrollY = useAppSelector((state) => state?.screen?.scrollY)
   const isMobileScreen = useMediaQuery("(max-width: 640px)")
   const bodyScrollY = useScrollPosition()
+  const screenData = useAppSelector((state) => state.screen?.screensHeader)
+  const lengthOfComp = Object.keys(JSON.parse(screenData)).length
   const hasComponentBeforeAvatar = useAppSelector(
     (state) => state?.screen?.hasComponentBeforeAvatar
   )
 
-  console.log("anjit has component before avatar", hasComponentBeforeAvatar)
+  console.log(
+    "anjit has component before avatar",
+    hasComponentBeforeAvatar,
+    bodyScrollY,
+    isMobileScreen,
+    mobileScreen
+  )
 
   const avatarRef = useRef(null)
 
-  // const avatarClass = `${
-  //   hasComponentBeforeAvatar
-  //     ? (isPreview ? bodyScrollY > 50 : scrollY && scrollY > 50)
-  //       ? "avatar-top"
-  //       : "avatar-half"
-  //     : scrollY && scrollY > 50
-  //     ? "avatar-none-scrolled"
-  //     : mobileScreen || isMobileScreen
-  //     ? "avatar-none-mobile"
-  //     : "avatar-none"
-  // }`
+  const baseSize = 90 // Initial base size of the avatar
+  const minimumSize = 70 // Minimum size of the avatar
+  const sizeReductionFactor = 0.2 // Control the rate of size reduction
+  const mobileBaseSize = 60 // Base size for mobile
+  const mobileMinimumSize = 50
+  const pathname = usePathname()
+  //@ts-ignore
+  const getSafeNumber = (value: number | undefined | null): number => value ?? 0
 
-  const animation = useMemo(() => {
-    // 130
-    let translateYPercent = Math.min(117, 50 + (scrollY || bodyScrollY || 0))
-    let box = Math.max(49, 90 - (scrollY || bodyScrollY || 0))
-    if (isMobileScreen || mobileScreen) {
-      translateYPercent = Math.min(124, 50 + (scrollY || bodyScrollY || 0))
-      box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
-    }
+  const mobileDynamicSize = Math.max(
+    mobileBaseSize -
+      (isPreview || pathname?.includes("create-flow")
+        ? getSafeNumber(scrollY)
+        : getSafeNumber(bodyScrollY)) *
+        sizeReductionFactor,
+    mobileMinimumSize
+  )
 
-    return {
-      y: hasComponentBeforeAvatar ? `calc(-${translateYPercent}%)` : "0px",
-      box: hasComponentBeforeAvatar ? `${box}px` : "90px",
-    }
-  }, [
-    scrollY,
-    bodyScrollY,
-    hasComponentBeforeAvatar,
-    isMobileScreen,
-    mobileScreen,
-  ])
+  const dynamicSize = Math.max(
+    baseSize -
+      (isPreview || pathname?.includes("create-flow")
+        ? getSafeNumber(scrollY)
+        : getSafeNumber(bodyScrollY)) *
+        sizeReductionFactor,
+    minimumSize
+  )
+
+  const avatarClass = `${
+    hasComponentBeforeAvatar || lengthOfComp > 2
+      ? (
+          isPreview || pathname?.includes("create-flow")
+            ? scrollY && scrollY > 60
+            : bodyScrollY > 60
+        )
+        ? (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
+          ? "avatar-top-mobile"
+          : "avatar-top"
+        : "avatar-half"
+      : (
+          isPreview || pathname?.includes("create-flow")
+            ? scrollY && scrollY > 60
+            : bodyScrollY > 60
+        )
+      ? (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
+        ? "avatar-none-scrolled-mobile"
+        : "avatar-none-scrolled"
+      : (mobileScreen && pathname?.includes("create-flow")) || isMobileScreen
+      ? "avatar-none-mobile"
+      : "avatar-none"
+  }`
+  console.log("avatarClass", avatarClass, isPreview, scrollY, bodyScrollY)
+  // const animation = useMemo(() => {
+  //   // 130
+  //   let translateYPercent = Math.min(117, 50 + (scrollY || bodyScrollY || 0))
+  //   let box = Math.max(49, 90 - (scrollY || bodyScrollY || 0))
+  //   if (isMobileScreen || mobileScreen) {
+  //     translateYPercent = Math.min(124, 50 + (scrollY || bodyScrollY || 0))
+  //     box = Math.max(44, 60 - (scrollY || bodyScrollY || 0))
+  //   }
+
+  //   return {
+  //     y: hasComponentBeforeAvatar
+  //       ? `calc(-${translateYPercent}%)`
+  //       : `calc(-${translateYPercent - 150}%)`,
+  //     box: hasComponentBeforeAvatar
+  //       ? box < 100
+  //         ? `${box}px`
+  //         : "100px"
+  //       : `${box}px`,
+  //   }
+  // }, [
+  //   scrollY,
+  //   bodyScrollY,
+  //   hasComponentBeforeAvatar,
+  //   isMobileScreen,
+  //   mobileScreen,
+  // ])
 
   return (
     <div
       id="avatar-component"
       ref={avatarRef}
-      className={cn("")}
-      style={{
-        transform: `translateY(${animation.y})`,
-      }}
+      className={cn("avatar absolute ", avatarClass, "mb-10")}
+      // style={{
+      //   transform: `translateY(${animation.y}) !important`,
+      // }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element*/}
       <img
         alt={alt}
         src={src}
         style={{
-          width: animation.box,
-          height: animation.box,
+          width:
+            (mobileScreen && pathname?.includes("create-flow")) ||
+            isMobileScreen
+              ? `${mobileDynamicSize}px`
+              : `${dynamicSize}px`,
+          height:
+            (mobileScreen && pathname?.includes("create-flow")) ||
+            isMobileScreen
+              ? `${mobileDynamicSize}px`
+              : `${dynamicSize}px`,
           borderRadius: `${cornRad}px`,
           backgroundColor: "transparent",
           objectFit: "cover",
@@ -331,7 +405,8 @@ export const AvatarComponent = ({
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
-
+  const screenData = useAppSelector((state) => state.screen?.screensHeader)
+  const lengthOfComp = Object.keys(JSON.parse(screenData)).length
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
@@ -433,6 +508,17 @@ export const AvatarComponent = ({
       }
     }
   }, [text, maxLength])
+  const checkComponentBeforeAvatar = () => {
+    const parsedEditor = JSON.parse(screenData)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    return avatarIndex > 0
+  }
 
   return (
     <div
@@ -448,9 +534,11 @@ export const AvatarComponent = ({
     >
       {displayController && <Controller nameOfComponent={t("Avatar")} />}
       <div
-        className="relative w-full"
+        className="relative h-[55px] w-full"
         style={{
-          background: `${"transparent"}`,
+          background: !checkComponentBeforeAvatar()
+            ? containerBackground || lengthOfComp < 4
+            : `${"transparent"}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -461,7 +549,7 @@ export const AvatarComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align}  w-full border border-transparent`
           )}
         >
           <UserLogo
@@ -482,7 +570,7 @@ export const AvatarComponent = ({
             height={height}
             w={w}
             h={h}
-            isPreview
+            isPreview={true}
             src={src}
             {...props}
           />
@@ -599,7 +687,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: env.NEXT_PUBLIC_APP_URL,
+  url: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
   src: `${AvatarPlaceholder.src}`,
   disabled: false,
   enableLink: false,
@@ -608,7 +696,7 @@ export const AvatarDefaultProps: IconButtonProps = {
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,
-  imageSize: 90,
+  imageSize: 100,
   buttonSize: "medium",
   time: 2,
   text: "Get quote",

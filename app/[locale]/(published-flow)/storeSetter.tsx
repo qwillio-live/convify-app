@@ -80,7 +80,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       } catch (error) {
         console.error("Error sending response event:", error)
       }
-    }, 3000)
+    }, 1000)
   }
 
   async function sendVisitEvent(stepId) {

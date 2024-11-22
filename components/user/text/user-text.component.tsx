@@ -71,6 +71,7 @@ interface StyleCustomTextContainerProps {
   borderRadius?: string
   padding?: string
   preset?: string
+  lineHeight?: string | number
 }
 
 export type TextInputProps = {
@@ -106,6 +107,7 @@ export type TextInputProps = {
   fullWidth: boolean
   preset: string
   buttonSize: string
+  lineHeight: string | number
 }
 
 export const TextInputDefaultProps: TextInputProps = {
@@ -155,16 +157,18 @@ export const TextInputDefaultProps: TextInputProps = {
   height: "40",
   size: TextContainerSize.medium,
   buttonSize: "medium",
-  text: serialize([{
-    type: 'paragraph',
-    children: [
-      { text: "Text" }]
-  }]),
+  text: serialize([
+    {
+      type: "paragraph",
+      children: [{ text: "Text" }],
+    },
+  ]),
   marginLeft: 0,
   marginTop: 20,
   marginRight: 0,
   marginBottom: 20,
   fontSize: 18,
+  lineHeight: 23,
   fontWeight: "400",
   textAlign: "center",
   paddingLeft: "12",
@@ -308,10 +312,9 @@ const StyledCustomTextInput = ({
         marginBottom && "mb-[var(--user-text-margin-bottom)]",
         radius && "rounded-[var(--user-text-border-radius)]",
         "h-[var(--user-text-height)]",
-        borderColor &&
-        "border-[var(--user-text-border-color)]",
+        borderColor && "border-[var(--user-text-border-color)]",
         borderHoverColor &&
-        "focus:border-[var(--user-text-border-hover-color)]",
+          "focus:border-[var(--user-text-border-hover-color)]",
         `flex-${flexDirection || "row"}`,
         generateWidthClass,
         className
@@ -353,6 +356,7 @@ export const UserTextInputGen = ({
   border,
   borderColor,
   borderHoverColor,
+  lineHeight,
   ...props
 }) => {
   const secondaryTextColor = useAppSelector(
@@ -366,7 +370,6 @@ export const UserTextInputGen = ({
     .replace(/<br>/g, "\n")
     .replace(/<\/?div>/g, "\n")
     .replace(/<\/?[^>]+(>|$)/g, "") // Removes all other HTML tags
-
 
   const computedText = getComputedValueForTextEditor(sanitizedText)
   return (
@@ -413,6 +416,7 @@ export const UserTextInputGen = ({
         alignItems={alignItems}
         mobileScreen={false}
         textAlign={textAlign}
+        lineHeight={lineHeight}
         {...props}
         className="user-text-comp text-[1rem]"
       >
@@ -422,8 +426,9 @@ export const UserTextInputGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${textColor !== "#ffffff" ? textColor : secondaryTextColor
-              }`,
+            color: `${
+              textColor !== "#ffffff" ? textColor : secondaryTextColor
+            }`,
             lineHeight: "1.5",
           }}
         >
@@ -466,6 +471,7 @@ export const UserText = ({
   border,
   borderColor,
   textColor,
+  lineHeight,
   ...props
 }) => {
   paddingLeft = 16
@@ -613,16 +619,15 @@ export const UserText = ({
     [debouncedSetProp]
   )
 
-  const handleTextChange =
-    (value) => {
-      if (typeof value === "string" && value.length) {
-        setProp((props) => {
-          props.text = value
-          console.log("saving text", value)
-          return { ...props }
-        })
-      }
+  const handleTextChange = (value) => {
+    if (typeof value === "string" && value.length) {
+      setProp((props) => {
+        props.text = value
+        console.log("saving text", value)
+        return { ...props }
+      })
     }
+  }
 
   return (
     <div
@@ -678,29 +683,33 @@ export const UserText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          lineHeight={lineHeight}
           className="user-text-comp"
           {...props}
         >
           <div className="flex flex-col overflow-x-clip">
             {/** @ts-ignore */}
             <div
-
               style={{
                 maxWidth: "787px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${textColor !== "#ffffff" ? textColor : secondaryTextColor
-                  }`,
+                color: `${
+                  textColor !== "#ffffff" ? textColor : secondaryTextColor
+                }`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
+                lineHeight: `${lineHeight}px`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
             >
-              <TextEditor initValue={getComputedValueForTextEditor(text)}
-                onChange={val => {
+              <TextEditor
+                initValue={getComputedValueForTextEditor(text)}
+                onChange={(val) => {
                   handleTextChange(serialize(val))
-                }} />
+                }}
+              />
             </div>
           </div>
         </StyledCustomTextInput>
