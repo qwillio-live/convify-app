@@ -9,10 +9,12 @@ import { ColorInput } from './color-input'
 interface ToolbarColorPickerProps {
     value: string
     onChange: (color: string) => void
-    className?: string
+    className?: string,
+    onOpenChanged:(boolean)=>void,
+    width?: number
 }
 
-export function ToolbarColorPicker({ value, onChange }: ToolbarColorPickerProps) {
+export function ToolbarColorPicker({ value, onChange,onOpenChanged ,width}: ToolbarColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [tempColor, setTempColor] = useState(value)
 
@@ -34,7 +36,11 @@ export function ToolbarColorPicker({ value, onChange }: ToolbarColorPickerProps)
         
             <ColorInput
                 id="backgroundcolor"
+                width={width}
                 value={tempColor}
+                onOpenChanged={(open)=>{if(onOpenChanged){
+                    onOpenChanged(open)
+                }}}
                 handleChange={(e) => {
                     handleColorChange(e)
                 }}

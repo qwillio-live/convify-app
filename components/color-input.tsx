@@ -9,6 +9,8 @@ interface ColorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleRemove?: () => void
+  onOpenChanged?:(boolean)=>void
+  width?: number
 }
 
 export function ColorInput({
@@ -16,23 +18,29 @@ export function ColorInput({
   handleChange,
   handleRemove,
   className,
+  onOpenChanged,
+  width,
   ...rest
 }: ColorInputProps) {
   console.log(value)
+
   const [open, setOpen] = useState(false);
   return (
-    <Popover>
+    <Popover onOpenChange={(open)=>{if (onOpenChanged){
+      onOpenChanged(open)
+    }}}>
       <PopoverTrigger asChild>
         <div className={cn("flex items-center gap-2", className)}>
 
           <div
             style={{
+              width:width||62,
               backgroundColor:
                 typeof value === "string" && value[0] === "#"
                   ? value
                   : "transparent",
             }}
-            className="relative h-[32px] w-[62px] overflow-hidden rounded-md"
+            className={`relative h-[32px]  overflow-hidden rounded-md`}
             onClick={() => setOpen(true)}
           >
             {!(typeof value === "string" && value[0] === "#") && (
@@ -53,7 +61,12 @@ export function ColorInput({
             : null}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="w-80" style={{
+ padding: 0,
+ background: 'transparent',
+ border: 'none',
+
+}}>
         <div className="grid gap-4">
 
           <ColorPickerWithSuggestions onChange={(value) => {

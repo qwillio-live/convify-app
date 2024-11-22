@@ -220,6 +220,7 @@ const FloatingToolbar = () => {
     const [linkUrl, setLinkUrl] = useState('')
     const inFocus = useFocused()
     const [textColor, setTextColor] = useState('#000000')
+    const [openColorPicker, setOpenColorPicker] = useState(false)
 
 
     useEffect(() => {
@@ -231,10 +232,11 @@ const FloatingToolbar = () => {
         }
 
         if (
-            !selection ||
+            !openColorPicker&&
+            (!selection ||
             !inFocus ||
             Range.isCollapsed(selection) ||
-            Editor.string(editor, selection) === ''
+            Editor.string(editor, selection) === '')
         ) {
             // el.style.display = 'none'
             el.style.opacity = '0'
@@ -293,6 +295,8 @@ const FloatingToolbar = () => {
                         <ToolbarItem icon={<Highlighter className="h-4 w-4" />} label="Highligh" onClickHandler={() => toggleMark(editor, 'highlight')} isActive={isMarkActive(editor, 'highlight')} />
                         <ToolbarColorPicker
                             value={textColor}
+                            width={32}
+                            onOpenChanged={(open)=>{setOpenColorPicker(open)}}
                             onChange={addColor}
                             className="ml-1"
                         />
