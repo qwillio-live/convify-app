@@ -42,7 +42,6 @@ import { Icons } from "@/components/icons"
 
 import { Controller } from "../settings/controller.component"
 import { UserLogo } from "./user-avatar.component"
-import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
   alt,
@@ -146,7 +145,6 @@ export const AvatarSettings = () => {
       uploadedImageUrl,
       uploadedImageMobileUrl,
       cornRad,
-      background,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -209,23 +207,6 @@ export const AvatarSettings = () => {
     })
   }
 
-  const getDimensions = (
-    imageSrc: string
-  ): Promise<{ width: number; height: number }> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => {
-        const width = img.naturalWidth
-        const height = img.naturalHeight
-        resolve({ width, height })
-      }
-      img.onerror = (error) => {
-        reject(error)
-      }
-      img.src = imageSrc
-    })
-  }
-
   const calculateImageDimensions = (aspectRatio, maxWidth) => {
     const height = maxWidth / aspectRatio
     return {
@@ -250,7 +231,7 @@ export const AvatarSettings = () => {
     formData.append("image", imageData)
     formData.append("file", imageData)
     formData.append("sizes[0]", `60x60`)
-    formData.append("sizes[1]", `1000x1000`)
+    formData.append("sizes[1]", `100x100`)
     formData.append("bucket_name", "convify-images")
 
     try {
@@ -258,7 +239,7 @@ export const AvatarSettings = () => {
       return {
         data: response.data,
         mobileSize: `60x60`,
-        desktopSize: `1000x1000`,
+        desktopSize: `100x100`,
       }
     } catch (error) {
       console.error("Error uploading image to S3:", error)
@@ -275,18 +256,10 @@ export const AvatarSettings = () => {
       const uploadedImage = await uploadToS3(imageFile, aspectRatio)
       if (
         uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.desktopSize] &&
-        uploadedImage.data.data.images.original
+        uploadedImage.data.data.images[uploadedImage.desktopSize]
       ) {
-        const { width: srcWidth, height: srcHeight } = await getDimensions(
-          uploadedImage.data.data.images.original
-        )
-        const srcImage =
-          srcWidth > 1000 || srcHeight > 1000
-            ? uploadedImage.data.data.images[uploadedImage.desktopSize]
-            : uploadedImage.data.data.images.original
         setProp((props) => {
-          props.src = srcImage
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
           props.uploadedImageUrl =
             uploadedImage.data.data.images[uploadedImage.desktopSize]
         }, 1000)
@@ -363,18 +336,10 @@ export const AvatarSettings = () => {
       const uploadedImage = await uploadToS3(file, aspectRatio)
       if (
         uploadedImage &&
-        uploadedImage.data.data.images[uploadedImage.desktopSize] &&
-        uploadedImage.data.data.images.original
+        uploadedImage.data.data.images[uploadedImage.desktopSize]
       ) {
-        const { width: srcWidth, height: srcHeight } = await getDimensions(
-          uploadedImage.data.data.images.original
-        )
-        const srcImage =
-          srcWidth > 1000 || srcHeight > 1000
-            ? uploadedImage.data.data.images[uploadedImage.desktopSize]
-            : uploadedImage.data.data.images.original
         setProp((props) => {
-          props.src = srcImage
+          props.src = uploadedImage.data.data.images[uploadedImage.desktopSize]
           props.uploadedImageUrl =
             uploadedImage.data.data.images[uploadedImage.desktopSize]
         }, 1000)
@@ -538,7 +503,7 @@ export const AvatarSettings = () => {
                     {t("Open in")}
                   </p>
                   <Select
-                    defaultValue={"arrowright"}
+                    defaultValue={"aperture"}
                     value={
                       icon && icon === "arrowright" ? "arrowright" : "aperture"
                     }
@@ -570,21 +535,6 @@ export const AvatarSettings = () => {
             <span className="text-sm font-medium">{t("Design")} </span>
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
-            <div className="col-span-2 flex w-full items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
-
-              <ColorInput
-                id="backgroundcolor"
-                value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
-                  dispatch(setAvatarBackgroundColor(e.target.value))
-                }}
-                handleRemove={() =>
-                  debouncedSetProp("containerBackground", "transparent")
-                }
-              />
-            </div>
             <div className="style-control col-span-2 flex w-full grow-0 basis-full flex-col gap-2">
               <div className="flex w-full basis-full flex-row items-center justify-between gap-2">
                 <Label htmlFor="marginTop">{t("Corner Radius")}</Label>

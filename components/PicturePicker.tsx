@@ -272,7 +272,7 @@ export const PicturePicker = ({
             >
               <div className="flex flex-row flex-wrap items-center gap-3">
                 <Button
-                  className={`border-input !size-8 border bg-[#FAFAFA] p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
+                  className={`border-input bg-[#FAFAFA] !size-8 border p-0 [&>:first-child]:hover:block [&>:last-child]:hover:!hidden`}
                   variant="ghost"
                 >
                   <CloudUpload className="hidden size-4" />
@@ -309,12 +309,12 @@ export const PicturePicker = ({
           <DropdownMenuContent className="w-40">
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => setIconPickerDialogOpen(true)}>
-                <ThumbsUp className="mr-2 size-[18px]" />
+                <ThumbsUp className="mr-2 size-4" />
                 <span>{t("PictureChoice.icon")}</span>
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => setEmojiPickerPopoverOpen(true)}>
-                <span className="mr-2 text-lg">😀 </span>
+                <SmilePlus className="mr-2 size-4" />
                 <span>{t("PictureChoice.emoji")}</span>
               </DropdownMenuItem>
 
@@ -323,7 +323,7 @@ export const PicturePicker = ({
                   (imagePickerRef.current as HTMLInputElement)?.click()
                 }
               >
-                <span className="mr-2 text-lg">🖼️</span>
+                <ImageIcon className="mr-2 size-4" />
                 <span>{t("PictureChoice.image")}</span>
               </DropdownMenuItem>
 

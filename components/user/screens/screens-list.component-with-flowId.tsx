@@ -54,8 +54,6 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { Input } from "@/components/input-custom"
 import { Card as UiCard } from "@/components/ui/card"
-import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { ScreenFooter } from "./screen-footer.component"
 
 const ScreensList = ({ flowId }) => {
   const t = useTranslations("Components")
@@ -208,14 +206,12 @@ const ScreensList = ({ flowId }) => {
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setFooterMode(true))
-
     actions.deserialize(screensFooter)
   }
 
   const handleHeaderScreenClick = async () => {
     // dispatch(setHeaderFooterMode(false));
     dispatch(setHeaderMode(true))
-
     await actions.deserialize(screensHeader)
   }
 
@@ -246,67 +242,7 @@ const ScreensList = ({ flowId }) => {
       }
     }
   }, [])
-  const revertMinHeightAndClassName = (data) => {
-    console.log("reverting editorload in screensss", data)
-    try {
-      data = JSON.parse(data)
-    } catch (e) {
-      console.log("erring", e)
-      data = data
-    }
-    console.log("pop", data)
-    if (data.ROOT && data.ROOT.props) {
-      // Check if the style object exists; if not, create it
-      if (!data.ROOT.props.style) {
-        data.ROOT.props.style = {} // Create the style object
-      }
-      data.ROOT.props.style.minHeight = "none" // Update to 80vh
-      data.ROOT.props.style.height = "auto" // Update to 80vh
 
-      // Check for className and remove any class starting with "min-h-"
-      if (data.ROOT.props.className) {
-        data.ROOT.props.className = data.ROOT.props.className
-          .split(" ") // Split into an array of class names
-          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
-          .join(" ") // Join back into a string
-      }
-      console.log(" reverted editorLoad", data)
-      data.ROOT.props.className += ` !py-0` // Append the new class
-      return JSON.stringify(data)
-    }
-  }
-  const invertFooterComponents = () => {
-    let data
-    try {
-      data = JSON.parse(screensFooter)
-    } catch (e) {
-      console.log("erring", e)
-      data = data
-    }
-    if (data.ROOT && data.ROOT.props) {
-      // Check if the style object exists; if not, create it
-      if (!data.ROOT.props.style) {
-        data.ROOT.props.style = {} // Create the style object
-      }
-      data.ROOT.props.style.display = "flex" // Set the display to flex
-      data.ROOT.props.style.transform = "translateY(calc(188px - 100%))"
-      data.ROOT.props.style.justifyContent = "flex-end"
-
-      return JSON.stringify(data)
-    }
-  }
-  const checkAvatar = () => {
-    const parsedEditor = JSON.parse(screensHeader)
-    const container = parsedEditor["ROOT"]
-    if (!container) {
-      return false
-    }
-    const avatarIndex = container.nodes.findIndex(
-      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
-    )
-    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
-    return avatarIndex !== -1
-  }
   return (
     <Accordion
       type="multiple"
@@ -325,7 +261,10 @@ const ScreensList = ({ flowId }) => {
           <div className="  hidden md:block">
             <Card
               style={{
-                backgroundColor: backgroundColor,
+                backgroundColor:
+                  avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                    ? avatarBackgroundColor
+                    : backgroundColor,
                 backgroundImage: backgroundImage,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
@@ -335,20 +274,12 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": headerMode,
-                  "hover:border-2": !headerMode,
+                  "hover:border-4": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
             >
-              <div
-                className="text-muted-foreground no-hover-effects relative w-full text-xs"
-                style={{
-                  overflow: "hidden", // Hide content that overflows
-                  transform: "scale(1.01)", // Zoom out vertically
-                  zoom: "25%",
-                  pointerEvents: "none",
-                }}
-              >
+              <div className="text-muted-foreground absolute bottom-[70%] top-0 h-auto w-[40vw] scale-[.30] text-xs">
                 <ResolvedComponentsFromCraftState screen={screensHeader} />
               </div>
               <div className="absolute left-0 top-0 z-10 size-full bg-transparent"></div>
@@ -378,8 +309,6 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": headerMode,
-
-                  "hover:border-2": !headerMode,
                 }
               )}
               onClick={() => handleHeaderScreenClick()}
@@ -394,7 +323,7 @@ const ScreensList = ({ flowId }) => {
           <p className="text-sm">{t("Footer")}</p>
 
           {/*  ------- Desktop View CARD without Share Redirect Linking ------- */}
-          <div className="hidden md:block">
+          <div className="  hidden md:block">
             <Card
               style={{
                 backgroundColor: backgroundColor,
@@ -407,28 +336,14 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": footerMode,
-                  "hover:border-2": !footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
               onClick={() => handleFooterScreenClick()}
             >
-              {/* Use a wrapper div for the content */}
-              <div
-                className="text-muted-foreground no-hover-effects relative h-full w-full text-xs"
-                style={{
-                  // overflow: "hidden",
-                  zoom: "25%",
-                  scale: "1.01",
-                  // transform: "translateY(50%)", // Move the content upwards to show the bottom portion
-                  // marginTop: "-157%",
-                  pointerEvents: "none", // Prevent interactions
-                }}
-              >
-                <div className="flex flex-col-reverse">
-                  <ResolvedComponentsFromCraftState
-                    screen={invertFooterComponents()}
-                  />
-                </div>
+              {/* <div className="absolute size-full z-10 bg-transparent bottom-0 left-0"></div> */}
+              <div className="text-muted-foreground bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
+                <ResolvedComponentsFromCraftState screen={screensFooter} />
               </div>
             </Card>
           </div>
@@ -453,10 +368,9 @@ const ScreensList = ({ flowId }) => {
                 "relative mt-1 flex h-12 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:w-[13.5vw]",
                 {
                   "border-[#2B3398]": footerMode,
-                  "hover:border-2": !footerMode,
+                  "hover:border-4": !footerMode,
                 }
               )}
-              onClick={() => handleFooterScreenClick()}
             >
               <div className="absolute bottom-0 left-0 z-10 size-full bg-transparent"></div>
               <div className="text-muted-foreground absolute bottom-0 top-[-130%] h-auto w-[40vw] scale-[.30] text-xs">
@@ -469,10 +383,7 @@ const ScreensList = ({ flowId }) => {
       <AccordionItem value="item-2" className="border-b-0 border-t">
         <AccordionTrigger
           className=" hover:no-underline"
-          onClick={() => {
-            dispatch(setHeaderFooterMode(false))
-            dispatch(setMobileScreen(false))
-          }}
+          onClick={() => dispatch(setHeaderFooterMode(false))}
         >
           {t("Screens")}
         </AccordionTrigger>
@@ -504,8 +415,8 @@ const ScreensList = ({ flowId }) => {
                 id={screen.screenName + screen.screenId}
                 value={screen}
                 onClick={() => {
-                  dispatch(setSelectedComponent("ROOT"))
-                  dispatch(setHeaderFooterMode(false))
+                  dispatch(setSelectedComponent("ROOT")),
+                    dispatch(setHeaderFooterMode(false))
                 }}
                 // className="relative"
               >
@@ -540,12 +451,12 @@ const ScreensList = ({ flowId }) => {
                           backgroundPosition: "center",
                         }}
                         className={cn(
-                          "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer hover:border-2 md:hidden md:h-32 md:w-[13.5vw]",
-
+                          "relative mt-1 flex h-52 w-[94vw] flex-col items-center justify-center overflow-hidden border hover:cursor-pointer md:hidden md:h-32 md:w-[13.5vw]",
                           {
-                            "!border-[#2B3398] p-0 hover:!border-[#2B3398]":
+                            "border-[#2B3398]":
                               selectedScreenIndex === index &&
                               !headerFooterMode,
+                            "hover:border-4": selectedScreenIndex !== index,
                           }
                         )}
                       >
@@ -573,13 +484,13 @@ const ScreensList = ({ flowId }) => {
                           </div>
                           <div style={{ paddingTop: "50px" }}>
                             <ResolvedComponentsFromCraftState
-                              screen={revertMinHeightAndClassName(
+                              screen={
                                 screen.screenData ? screen.screenData : {}
-                              )}
+                              }
                             />
                           </div>
                           <ResolvedComponentsFromCraftState
-                            screen={revertMinHeightAndClassName(screensFooter)}
+                            screen={screensFooter}
                           />
                         </div>
                       </Card>
@@ -594,17 +505,15 @@ const ScreensList = ({ flowId }) => {
                         backgroundPosition: "center",
                       }}
                       className={cn(
-                        "relative mt-1  hidden h-32 w-[94vw] flex-col overflow-hidden border p-[1px] hover:cursor-pointer hover:border-2 hover:p-0 md:flex md:w-[13.5vw]",
-
+                        "relative mt-1 hidden h-32 w-[94vw] flex-col overflow-hidden  border p-[3px] hover:cursor-pointer hover:p-0 md:flex md:w-[13.5vw]",
                         {
-                          "hover:border-1 !border-[#2B3398] p-0 hover:!border-[#2B3398]":
+                          "border-blue-500 p-0":
                             selectedScreenIndex === index && !headerFooterMode,
+                          "hover:border-4": selectedScreenIndex !== index,
                         }
                       )}
                       onClick={() => {
                         handleScreenClick(index)
-                        dispatch(setHeaderFooterMode(false))
-                        dispatch(setMobileScreen(false))
                       }}
                     >
                       {/* <div className="absolute size-full size-full z-10 bg-transparent top-0 left-0"></div> */}
@@ -612,7 +521,7 @@ const ScreensList = ({ flowId }) => {
                         className="text-muted-foreground no-hover-effects relative text-xs"
                         style={{
                           overflow: "hidden", // Hide content that overflows
-                          transform: "scale(1.01)", // Zoom out vertically
+                          transform: "scale(1,1)", // Zoom out vertically
                           zoom: "25%",
                           pointerEvents: "none",
                         }}
@@ -629,15 +538,11 @@ const ScreensList = ({ flowId }) => {
                           }}
                         >
                           <ResolvedComponentsFromCraftState
-                            screen={revertMinHeightAndClassName(screensHeader)}
+                            screen={screensHeader}
                           />
                         </div>
 
-                        <div
-                          style={{
-                            paddingTop: `${checkAvatar() ? 44 : 0}px`,
-                          }}
-                        >
+                        <div style={{ paddingTop: "50px" }}>
                           {JSON.parse(screen.screenData)["ROOT"].nodes.length >
                           0 ? (
                             <ResolvedComponentsFromCraftState
@@ -646,11 +551,9 @@ const ScreensList = ({ flowId }) => {
                               }
                             />
                           ) : (
-                            <div style={{ paddingTop: "24rem" }}>
+                            <div style={{ paddingTop: "15%" }}>
                               <ResolvedComponentsFromCraftState
-                                screen={revertMinHeightAndClassName(
-                                  screensFooter
-                                )}
+                                screen={screensFooter}
                               />
                             </div>
                           )}
@@ -706,21 +609,16 @@ const EditScreenName = ({ screenId, screenName }) => {
   const [editing, setEditing] = React.useState(false)
   const [name, setName] = React.useState(screenName)
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  const errorId = "screen-name-error"
+
   const handleChange = (inputName) => {
     if (!checkDuplicateName(inputName)) {
       dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
       setName(inputName)
+      toast.success("Screen name changed successfully")
       setEditing(false)
     } else {
-      // Dismiss the previous toast and show a new one immediately
-
-      toast.error("Screen name already exists", {
-        id: errorId, // Use a unique ID for the toast
-      })
-      toast.dismiss(errorId)
-
-      // ref?.current?.focus();
+      toast.error("Screen name already exists")
+      ref?.current?.focus()
     }
   }
 

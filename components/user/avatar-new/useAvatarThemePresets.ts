@@ -1,21 +1,15 @@
-import { IconButtonProps, IconButtonSizes } from "./user-avatar.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import { darken, rgba } from "polished"
-import { useTranslations } from "next-intl"
-import hexoid from "hexoid"
+import { IconButtonProps, IconButtonSizes } from './user-avatar.component';
+import { useAppSelector } from "@/lib/state/flows-state/hooks";
+import { darken, rgba } from "polished";
+import { useTranslations } from "next-intl";
+import hexoid from "hexoid";
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 
 const useLogoThemePresets = () => {
   const t = useTranslations("Components")
-  const theme = useAppSelector((state) => state.theme)
-  const darkenedPrimaryColor = darken(
-    0.05,
-    theme?.general?.primaryColor || "#3182ce"
-  )
-  const alphaBackgroundColor = rgba(
-    theme?.general?.primaryColor || "#3182ce",
-    0.1
-  )
+  const theme = useAppSelector((state) => state.theme);
+  const darkenedPrimaryColor = darken(0.05, theme?.general?.primaryColor || "#3182ce");
+  const alphaBackgroundColor = rgba(theme?.general?.primaryColor || "#3182ce", 0.1);
   const filledPreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
@@ -24,10 +18,7 @@ const useLogoThemePresets = () => {
     },
     containerBackground: "transparent",
     background: {
-      value: getBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
-        "filled"
-      ),
+      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "filled"),
       globalStyled: true,
       isCustomized: false,
     },
@@ -37,10 +28,7 @@ const useLogoThemePresets = () => {
       isCustomized: true,
     },
     backgroundHover: {
-      value: getHoverBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
-        "filled"
-      ),
+      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "filled"),
       globalStyled: true,
       isCustomized: false,
     },
@@ -67,7 +55,7 @@ const useLogoThemePresets = () => {
     justifyContent: "space-between",
     disabled: false,
     enableLink: false,
-    width: "85%",
+    width: '85%',
     height: "auto",
     size: IconButtonSizes.medium,
     text: t("Continue"),
@@ -85,16 +73,16 @@ const useLogoThemePresets = () => {
     gap: 4,
     border: 2,
     fullWidth: true,
-    preset: "filled",
-    settingsTab: "content",
-    buttonSize: "medium",
+    preset: 'filled',
+    settingsTab: 'content',
+    buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
-    nextScreen: "",
+    nextScreen: '',
     buttonAction: "next-screen",
     alt: "Image",
     align: "center",
-    src: "https://convify.io/images/convify_logo_black.svg",
+    src: 'https://convify.io/images/convify_logo_black.svg',
     url: "",
     time: 0,
     top: 0,
@@ -102,12 +90,12 @@ const useLogoThemePresets = () => {
     left: 0,
     right: 0,
     imageSize: 0,
-    w: "auto",
-    uploadedImageUrl: "",
-    uploadedImageMobileUrl: "",
+    w: 'auto',
+    uploadedImageUrl: '',
+    uploadedImageMobileUrl: '',
     cornRad: 0,
-    h: "60px",
-  }
+    h: '60px'
+  };
 
   const outLinePreset: IconButtonProps = {
     fontFamily: {
@@ -115,12 +103,9 @@ const useLogoThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "transparent",
+    containerBackground: 'transparent',
     background: {
-      value: getBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
-        "outline"
-      ),
+      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "outline"),
       globalStyled: true,
       isCustomized: false,
     },
@@ -130,10 +115,7 @@ const useLogoThemePresets = () => {
       isCustomized: false,
     },
     backgroundHover: {
-      value: getHoverBackgroundForPreset(
-        theme?.general?.primaryColor || "#3182ce",
-        "outline"
-      ),
+      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce", "outline"),
       globalStyled: true,
       isCustomized: false,
     },
@@ -160,7 +142,7 @@ const useLogoThemePresets = () => {
     justifyContent: "space-between",
     disabled: false,
     enableLink: false,
-    width: "85%",
+    width: '85%',
     height: "auto",
     size: IconButtonSizes.medium,
     text: t("Continue"),
@@ -169,8 +151,8 @@ const useLogoThemePresets = () => {
     marginRight: 20,
     cornRad: 0,
     marginBottom: 20,
-    uploadedImageUrl: "",
-    uploadedImageMobileUrl: "",
+    uploadedImageUrl: '',
+    uploadedImageMobileUrl: '',
     icon: "arrowright",
     paddingLeft: "16",
     paddingTop: "14",
@@ -181,16 +163,16 @@ const useLogoThemePresets = () => {
     gap: 4,
     border: 2,
     fullWidth: true,
-    preset: "outline",
-    settingsTab: "content",
-    buttonSize: "medium",
+    preset: 'outline',
+    settingsTab: 'content',
+    buttonSize: 'medium',
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
-    nextScreen: "",
+    nextScreen: '',
     buttonAction: "next-screen",
     alt: "Image",
     align: "center",
-    src: "https://convify.io/images/convify_logo_black.svg",
+    src: 'https://convify.io/images/convify_logo_black.svg',
     url: "",
     time: 2,
     top: 0,
@@ -198,33 +180,36 @@ const useLogoThemePresets = () => {
     left: 0,
     right: 0,
     imageSize: 0,
-    w: "auto",
-    h: "60px",
-  }
+    w: 'auto',
+    h: '60px'
+  };
 
-  return { filledPreset, outLinePreset }
-}
+  return { filledPreset, outLinePreset };
+};
 
 export const getBackgroundForPreset = (color, preset) => {
   switch (preset) {
     case "filled":
-      return color
+      return color;
     case "outline":
-      return rgba(color, 0.1)
+      return rgba(color, 0.1);
     default:
-      return color
+      return color;
+
   }
 }
 
 export const getHoverBackgroundForPreset = (color, preset) => {
+
   switch (preset) {
     case "filled":
-      return darken(0.03, color)
+      return darken(0.03, color);
     case "outline":
-      return rgba(color, 0.1)
+      return rgba(color, 0.1);
     default:
-      return color
+      return color;
+
   }
 }
 
-export default useLogoThemePresets
+export default useLogoThemePresets;

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { debounce } from "lodash"
 import {
   ArrowRight,
@@ -176,7 +176,7 @@ type Position = "static" | "relative" | "absolute" | "sticky" | "absolute"
 export function CreateFlowComponent({ flowId }) {
   // const t = useTranslations("Components")
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const editorHeaderRef = React.useRef<HTMLDivElement | null>(null)
+  const editorHeaderRef = React.useRef(null)
   const [height, setHeight] = React.useState(90)
   const [width, setWidth] = React.useState(0)
   const [view, setView] = React.useState<string>(VIEWS.DESKTOP)
@@ -268,19 +268,6 @@ export function CreateFlowComponent({ flowId }) {
     return avatarIndex > 0
   }
 
-  const checkAvatar = () => {
-    const parsedEditor = JSON.parse(screensHeader)
-    const container = parsedEditor["ROOT"]
-    if (!container) {
-      return false
-    }
-    const avatarIndex = container.nodes.findIndex(
-      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
-    )
-    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
-    return avatarIndex !== -1
-  }
-
   useEffect(() => {
     dispatch(setMobileScreen(false))
     dispatch(
@@ -345,99 +332,7 @@ export function CreateFlowComponent({ flowId }) {
       return () => window.removeEventListener("resize", updateWidth)
     }
   }, [headerMode, height, mobileScreen, width])
-  const updateMinHeightAndClassName = (data) => {
-    console.log("updating editorload")
-    data = JSON.parse(data)
-    if (data.ROOT && data.ROOT.props) {
-      // Check if the style object exists; if not, create it
-      if (!data.ROOT.props.style) {
-        data.ROOT.props.style = {} // Create the style object
-      }
-      data.ROOT.props.style.minHeight = "80vh" // Update to 80vh
 
-      // Check for className and remove any class starting with "min-h-"
-      if (data.ROOT.props.className) {
-        data.ROOT.props.className = data.ROOT.props.className
-          .split(" ") // Split into an array of class names
-          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
-          .join(" ") // Join back into a string
-      }
-      const footer = document.getElementById("footer-gen")
-      console.log("headermode | fpptermode", headerMode, footerMode, footer)
-      if (footerMode) {
-        console.log("footermonde is true", data)
-        if (footer) {
-          if (data.ROOT.nodes.length > 1) {
-            // Remove "footer-node" from ROOT's nodes array
-            data.ROOT.nodes = data.ROOT.nodes.filter(
-              (node) => node !== "footer-node"
-            )
-
-            // Remove the "footer-node" object from the data
-            delete data["footer-node"]
-          }
-        }
-      }
-      if (headerMode) {
-        Object.keys(data).forEach((key) => {
-          if (key !== "ROOT") {
-            console.log("data[key]", data[key], avatarBackgroundColor)
-            // Directly modify the style for all keys except 'ROOT'
-            let og = data[key].props.containerBackground
-            data[key].props.containerBackground = avatarBackgroundColor
-            if (data[key].props.background)
-              data[key].props.background.value = avatarBackgroundColor
-          }
-        })
-      }
-      console.log(" updated editorLoad", data)
-      // Add the new class
-      data.ROOT.props.className += ` !py-0 min-h-[80vh]` // Append the new class
-      return data
-    }
-  }
-
-  const revertMinHeightAndClassName = (data) => {
-    console.log("reverting editorloadddd", data)
-    try {
-      data = JSON.parse(data)
-    } catch (e) {
-      console.log("erring", e)
-      data = data
-    }
-    console.log("pop", data)
-    if (data.ROOT && data.ROOT.props) {
-      // Check if the style object exists; if not, create it
-      if (!data.ROOT.props.style) {
-        data.ROOT.props.style = {} // Create the style object
-      }
-      data.ROOT.props.style.minHeight = "auto" // Update to 80vh
-      data.ROOT.props.style.height = "auto" // Update to 80vh
-
-      // Check for className and remove any class starting with "min-h-"
-      if (data.ROOT.props.className) {
-        data.ROOT.props.className = data.ROOT.props.className
-          .split(" ") // Split into an array of class names
-          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
-          .join(" ") // Join back into a string
-      }
-      console.log(" reverted editorLoadasdasdasd", data)
-      data.ROOT.props.className += ` h-[${
-        document?.getElementById("editor-content")?.offsetHeight || 0
-      }px]` // Append the new class
-      return JSON.stringify(data)
-    }
-  }
-  const [headerHeight, setHeaderHeight] = useState(0)
-  useEffect(() => {
-    if (editorHeaderRef.current) {
-      // Ensure height is recalculated when the component renders
-      const height = editorHeaderRef.current.clientHeight // Access the height directly
-      setHeaderHeight(height || 0) // If clientHeight is 0 or undefined, fallback to 0
-    }
-  }, [headerMode, footerMode]) // Dependencies to trigger this effect
-
-  // console.log("sdcsdc", Object.keys(JSON.parse(editorLoad)).length)
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -519,7 +414,7 @@ export function CreateFlowComponent({ flowId }) {
           Img,
           ImageStory,
           YoutubeVideo,
-          SliderBar,
+          SliderBar
         }}
         onRender={RenderNode}
       >
@@ -536,16 +431,7 @@ export function CreateFlowComponent({ flowId }) {
             onScroll={handleScroll}
           >
             {/* <div className="section-header mt-8 flex items-center justify-between"></div> */}
-            <div
-              className={`section-body  ${
-                (Object.keys(JSON.parse(screensHeader)).length >= 1 &&
-                  headerMode) ||
-                (!headerMode &&
-                  Object.keys(JSON.parse(screensHeader)).length <= 1)
-                  ? "mt-[2.5rem]"
-                  : "mt-0"
-              } w-full`}
-            >
+            <div className="section-body w-full">
               <div
                 style={{
                   backgroundColor: backgroundColor,
@@ -555,88 +441,49 @@ export function CreateFlowComponent({ flowId }) {
                   backgroundPosition: "center",
                 }}
                 className={cn(
-                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-74px+96vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
+                  "page-container z-20 mx-auto mt-0 box-content grid min-h-[calc(-52px+99vh)] grid-cols-1 grid-rows-[1fr_auto] py-0 font-sans antialiased",
                   footerMode ? "flex items-end justify-center" : "",
                   view == VIEWS.DESKTOP
-                    ? "shahid w-full border-x border-t"
-                    : "w-96 border-x border-t px-0"
+                    ? "shahid w-full border-0"
+                    : "w-96 border px-0"
                 )}
               >
-                {!headerMode &&
-                  !footerMode &&
-                  JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0 && (
-                    <div
-                      ref={editorHeaderRef}
-                      id="editor-header"
-                      style={{
-                        position: headerPosition as Position,
-                        width: mobileScreen
-                          ? "384px"
-                          : headerPosition === "absolute"
+                {!headerMode && !footerMode && (
+                  <div
+                    ref={editorHeaderRef}
+                    id="editor-header"
+                    style={{
+                      position: headerPosition as Position,
+                      width: mobileScreen
+                        ? "384px"
+                        : headerPosition === "absolute"
                           ? width + "px"
                           : "100%",
-                        top: "0",
-                        zIndex: 20,
-                        height: "auto",
-                        backgroundColor:
-                          avatarBackgroundColor !== "rgba(255,255,255,.1)"
-                            ? avatarBackgroundColor
-                            : backgroundColor,
-                      }}
-                    >
-                      <ResolvedComponentsFromCraftState
-                        screen={revertMinHeightAndClassName(screensHeader)}
-                      />
-                    </div>
-                  )}
-                <>
-                  {headerMode || footerMode ? (
-                    <>
-                      <div
-                        id="editor-content"
-                        style={{
-                          paddingTop: !headerMode ? `30px` : "0px",
-                          // backgroundColor: headerMode
-                          //   ? avatarBackgroundColor
-                          //   : "",
-                          minWidth: "100%",
-                        }}
-                      >
-                        <Frame
-                          data={updateMinHeightAndClassName(editorLoad)}
-                        ></Frame>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        id="editor-content"
-                        style={{
-                          paddingTop:
-                            !headerMode &&
-                            headerPosition === "absolute" &&
-                            JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
-                              ? `${
-                                  checkAvatar()
-                                    ? headerHeight + 44
-                                    : headerHeight
-                                }px`
-                              : "0px",
-                          backgroundColor: headerMode
-                            ? avatarBackgroundColor
-                            : "",
-                        }}
-                      >
-                        <Frame data={editorLoad}></Frame>
-                      </div>
-                    </>
-                  )}
-                </>
-
+                      top: "0",
+                      zIndex: 20,
+                      backgroundColor:
+                        avatarBackgroundColor !== "rgba(255,255,255,.1)"
+                          ? avatarBackgroundColor
+                          : backgroundColor,
+                    }}
+                  >
+                    <ResolvedComponentsFromCraftState screen={screensHeader} />
+                  </div>
+                )}
+                <div
+                  id="editor-content"
+                  style={{
+                    paddingTop:
+                      !headerMode && headerPosition === "absolute"
+                        ? `${height + 40}px`
+                        : "40px",
+                    backgroundColor: headerMode ? avatarBackgroundColor : "",
+                  }}
+                >
+                  <Frame data={editorLoad}></Frame>
+                </div>
                 {!headerMode && !footerMode && (
-                  <ResolvedComponentsFromCraftState
-                    screen={revertMinHeightAndClassName(screensFooter)}
-                  />
+                  <ResolvedComponentsFromCraftState screen={screensFooter} />
                 )}
               </div>
               <div className="w-100 absolute bottom-2 left-2 z-20 flex bg-transparent">

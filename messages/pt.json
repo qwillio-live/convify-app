@@ -82,7 +82,6 @@
     "Are you sure want to delete the Flow": "Tem certeza de que deseja excluir o Fluxo?"
   },
   "Components": {
-    "line height": "Altura da linha",
     "Label Color": "Cor da etiqueta",
     "Text Color": "Cor do texto",
     "Title Color": "Cor do título",
@@ -98,7 +97,6 @@
     "textarea": "área de texto",
     "InputMail": "Email",
     "FontSize": "Tamanho da Fonte",
-    "LineHeight": "Altura da Linha",
     "InputPhone": "Telefone",
     "FontWeight": "Peso da Fonte",
     "Checkbox": "Caixa de Seleção",
@@ -343,9 +341,7 @@
     "QR Code": "Código QR",
     "Publish your typeform to preview it here": "Publique seu typeform para visualizá-lo aqui",
     "CUSTOM LINK": "LINK PERSONALIZADO",
-    "Create a custom link": "Crie um link personalizado",
-    "Create a custom email link": "Crie um link de e-mail personalizado",
-    "Create a custom QR code": "Crie um código QR personalizado",
+    "Create a custom link": "Criar um link personalizado",
     "Edit the link and let people know what your typeform is about": "Edite o link e informe às pessoas sobre o que é o seu typeform.",
     "Available on these plans: Plus, Business, Enterprise": "Disponível nestes planos: Plus, Business, Enterprise",
     "Upgrade my plan": "Atualizar meu plano",
