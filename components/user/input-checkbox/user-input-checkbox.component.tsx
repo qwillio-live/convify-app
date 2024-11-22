@@ -152,12 +152,16 @@ export const UserInputCheckboxDefaultProps: UserInputCheckboxProps = {
   inputRequired: true,
   fullWidth: true,
   size: UserInputSizes.medium,
-  label:
-    serialize([{
-      type: 'paragraph',
+  label: serialize([
+    {
+      type: "paragraph",
       children: [
-        { text: "I agree with the terms and condition and I'm also happily subscribing to your newsletter." }]
-    }]),
+        {
+          text: "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
+        },
+      ],
+    },
+  ]),
   fieldName: "checkbox-" + produceRandomLetters(6),
   floatingLabel: false,
   enableIcon: true,
@@ -250,18 +254,18 @@ const Wrapper = styled.div<{
 
   @media (max-width: 600px) {
     ${({ size }) => {
-    if (size === UserInputSizes.large) {
-      return { width: "calc(100% - 22px)" }
-    }
-  }}
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 
   @media (max-width: 390px) {
     ${({ size }) => {
-    if (size === UserInputSizes.medium) {
-      return { width: "calc(100% - 22px)" }
-    }
-  }}
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 
@@ -507,7 +511,10 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                     id={props.id}
                   />
                 )}
-                <TextEditor isReadOnly initValue={getComputedValueForTextEditor(props.label)} />
+                <TextEditor
+                  isReadOnly
+                  initValue={getComputedValueForTextEditor(props.label)}
+                />
               </div>
             </UserInputCheckboxStyled>
           </div>
@@ -718,26 +725,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                   : props.backgroundColor,
               }}
             >
-              <div style={{
-                fontFamily: `var(${props.primaryFont.value})`,
-                color: `${props.textColor !== "#ffffff"
-                  ? props.textColor
-                  : getTextColor()
-                  }`,
-                zIndex: 10,
-              }}
-                className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
-              >
-                <TextEditor initValue={getComputedValueForTextEditor(props.label)} onChange={(val) => {
-                  setProp(
-                    (props) =>
-                    (props.label = serialize(val).replace(
-                      /<\/?[^>]+(>|$)/g,
-                      ""
-                    )),
-                    500
-                  )
-                }
+              <div
                 className={`relative border-none pl-6 text-[14.4px] leading-[19.44px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
@@ -746,7 +734,21 @@ export const UserInputCheckbox = ({ ...props }) => {
                   }`,
                   zIndex: 10,
                 }}
-              />
+              >
+                <TextEditor
+                  initValue={getComputedValueForTextEditor(props.label)}
+                  onChange={(val) => {
+                    setProp(
+                      (props) =>
+                        (props.label = serialize(val).replace(
+                          /<\/?[^>]+(>|$)/g,
+                          ""
+                        )),
+                      500
+                    )
+                  }}
+                />
+              </div>
 
               {props.label.length === 0 ? null : (
                 <Checkbox
