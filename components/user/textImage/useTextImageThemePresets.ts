@@ -6,12 +6,18 @@ import { darken, rgba } from "polished";
 import { useTranslations } from "next-intl";
 import hexoid from "hexoid";
 import ImagePlaceholder from "@/assets/images/default-image.webp"
+import { serialize } from "@/lib/utils";
 
 const useButtonThemePresets = () => {
     const t = useTranslations("Components")
     const theme = useAppSelector((state) => state.theme);
     const darkenedPrimaryColor = darken(0.05, theme?.general?.primaryColor || "#3182ce");
     const alphaBackgroundColor = rgba(theme?.general?.primaryColor || "#3182ce", 0.1);
+    const defaultContentText = serialize([{
+        type: 'paragraph',
+        children: [
+            { text: t("Continue") }]
+    }]);
     const filledPreset: IconButtonProps = {
         secondaryFontFamily: {
             value: "inherit",
@@ -69,7 +75,7 @@ const useButtonThemePresets = () => {
         split: 6,
         horizontalGap: 20,
         verticalGap: 10,
-        text: t("Continue"),
+        text:defaultContentText,
         marginLeft: 0,
         marginTop: 20,
         marginRight: 0,
@@ -172,7 +178,7 @@ const useButtonThemePresets = () => {
         textFontSize: 17,
         titleFontWeight: 'bold',
         textFontWeight: 'normal',
-        text: t("Continue"),
+        text: defaultContentText,
         marginLeft: 0,
         marginTop: 20,
         position: 'left',

@@ -625,21 +625,21 @@ export const IconButton = ({
     (state: RootState) => state.screen?.selectedScreen ?? 0
   )
 
-  const nextScreenName =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-        ]?.screenName
-    ) || ""
-  const nextScreenId =
-    useAppSelector(
-      (state: RootState) =>
-        state?.screen?.screens[
-          selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-        ]?.screenId
-    ) || ""
-  const screenNames = useScreenNames()
+  // const nextScreenName =
+  //   useAppSelector(
+  //     (state: RootState) =>
+  //       state?.screen?.screens[
+  //         selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+  //       ]?.screenName
+  //   ) || ""
+  // const nextScreenId =
+  //   useAppSelector(
+  //     (state: RootState) =>
+  //       state?.screen?.screens[
+  //         selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+  //       ]?.screenId
+  //   ) || ""
+  // const screenNames = useScreenNames()
 
   // editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName
@@ -774,12 +774,11 @@ export const IconButton = ({
   }
 
   const debouncedSetProp = useCallback(
-    (property, value) =>
-      debounce(() => {
-        setProp((prop) => {
-          prop[property] = value
-        }, 0)
-      }),
+    debounce((property, value) => {
+      setProp((prop) => {
+        prop[property] = value
+      }, 0)
+    }),
     [setProp]
   )
 

@@ -59,8 +59,8 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
     selected?.name !== "ScreenFooter" ? (
     <div
       className={cn(
-        className,
-        "special absolute bottom-full left-0 z-50 flex flex-row items-center gap-4 border-0 bg-blue-500 p-2 text-xs text-white"
+        "special z-1 absolute bottom-full left-0 flex flex-row items-center gap-4 border-0 bg-blue-500 p-2 text-xs text-white",
+        className
       )}
     >
       <span className="uppercase hover:cursor-default">{nameOfComponent}</span>

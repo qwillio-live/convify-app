@@ -9,9 +9,15 @@ import {
   UserInputCheckboxProps,
   UserInputSizes,
 } from "./user-input-checkbox.component"
+import { serialize } from "@/lib/utils"
 
 const useInputCheckboxThemePresets = () => {
   const t = useTranslations("Components")
+  const defaultContent = serialize([{
+    type: 'paragraph',
+    children: [
+      { text: t("CheckboxPlaceholder") }]
+  }]);
 
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
@@ -36,7 +42,7 @@ const useInputCheckboxThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: t("CheckboxPlaceholder"),
+    placeholder: defaultContent,
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -76,7 +82,7 @@ const useInputCheckboxThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: t("CheckboxPlaceholder"),
+    label: defaultContent,
     fieldName: t("checkbox") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,

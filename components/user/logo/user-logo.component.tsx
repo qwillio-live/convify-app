@@ -170,7 +170,7 @@ export const LogoSettings = () => {
         </CardContent>
       </Card>
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-2">
+        <AccordionItem value="content">
           <AccordionTrigger className="flex w-full basis-full flex-row flex-wrap justify-between p-2  hover:no-underline">
             <span className="text-sm font-medium">General </span>
           </AccordionTrigger>

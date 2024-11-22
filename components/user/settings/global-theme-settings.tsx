@@ -41,6 +41,7 @@ import clsx from "clsx"
 import { Label } from "@/components/ui/label"
 import { useEditor } from "@craftjs/core"
 import { updateElementProps } from "./utils"
+import { Switch } from "@/components/custom-switch"
 
 type Props = {}
 
@@ -75,6 +76,10 @@ export const GlobalThemeSettings = (props: Props) => {
   )
   const backgroundImage = useAppSelector(
     (state) => state.theme?.general?.backgroundImage
+  )
+
+  const showCookieConsentPopup = useAppSelector(
+    (state) => state.theme?.general?.showCookieConsentPopup
   )
   const defaultBackgroundColor = useAppSelector(
     (state) => state.theme?.defaultGeneral?.backgroundColor
@@ -286,6 +291,32 @@ export const GlobalThemeSettings = (props: Props) => {
                   removeSelectedImage={removeSelectedImage}
                 />
               </div>
+              <div className="space-y-2 pt-2">
+                {/* <Input
+                  onChange={handleFileChange}
+                  multiple={false}
+                  className="basis-full"
+                  type={"file"}
+                  placeholder="Upload Image"
+                  accept="image/*"
+                  id="backgroundimage"
+                /> */}
+                <div className="flex items-center justify-between gap-2 pb-2">
+                  <span className="text-xs">{t("Cookie consent popup")}</span>
+                  <Switch
+                    checked={showCookieConsentPopup}
+                    onCheckedChange={checked => {
+                      handleStyleChangeDebounced({
+                        general: { showCookieConsentPopup: checked },
+                      })
+                    }}
+                  />
+                </div>
+                {showCookieConsentPopup &&
+                  (<span className="text-muted-foreground text-xs mt-4">
+                    {t("The popup will appear when the page loads")}
+                  </span>)}
+              </div>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
@@ -298,7 +329,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 handleFontChange={(value) => {
                   handleStyleChange({ text: { primaryFont: value } })
                 }}
-                label="Primary Font"
+                label={t("Primary Font")}
                 open={open}
                 setOpen={setOpen}
               />
@@ -310,7 +341,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 handleFontChange={(value) => {
                   handleStyleChange({ text: { secondaryFont: value } })
                 }}
-                label="Secondary Font"
+                label={t("Secondary Font")}
                 open={secondaryOpen}
                 setOpen={setSecondaryOpen}
               />

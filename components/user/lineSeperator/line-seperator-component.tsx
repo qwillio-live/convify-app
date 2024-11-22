@@ -22,9 +22,9 @@ import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "./line-seperator-settings"
 
 const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "376px",
+  medium: "576px",
+  large: "800px",
   full: "100%",
 }
 
@@ -86,7 +86,7 @@ interface StyledCustomButtonProps {
   borderHoverColor?: string
   mobileScreen: boolean
 }
-const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   display: flex;
   flex-direction: row;
@@ -100,14 +100,14 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   &:hover {
     border-style: solid;
     border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
+    props.borderHoverColor}; /* Change to your desired hover border color */
     background: ${(props) => props.backgroundHover};
     color: ${(props) => props.colorHover};
   }
 
   &:focus {
     border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
+    props.borderHoverColor}; /* Change to your desired focus border color */
   }
 
   background: ${(props) => props.background};
@@ -241,7 +241,7 @@ export const IconButtonDefaultProps: IconButtonProps = {
   enableIcon: true,
   width: "366",
   height: "auto",
-  size: IconButtonSizes.medium,
+  size: IconButtonSizes.large,
   buttonSize: "medium",
   text: "Get quote",
   marginLeft: 0,
@@ -468,10 +468,10 @@ export const LineSelector = ({
     if (buttonAction === "next-screen") {
       setProp(
         (props) =>
-          (props.nextScreen = {
-            screenName: nextScreenName,
-            screenId: nextScreenId,
-          }),
+        (props.nextScreen = {
+          screenName: nextScreenName,
+          screenId: nextScreenId,
+        }),
         200
       )
     } else if (buttonAction === "custom-action") {
@@ -479,10 +479,10 @@ export const LineSelector = ({
         if (screen.screenId === nextScreen.screenId) {
           setProp(
             (props) =>
-              (props.nextScreen = {
-                screenName: screen.screenName,
-                screenId: screen.screenId,
-              }),
+            (props.nextScreen = {
+              screenName: screen.screenName,
+              screenId: screen.screenId,
+            }),
             200
           )
           screenNameChanged = true
@@ -492,10 +492,10 @@ export const LineSelector = ({
         setProp((props) => (props.buttonAction = "next-screen"), 200)
         setProp(
           (props) =>
-            (props.nextScreen = {
-              screenId: nextScreenId,
-              screenName: nextScreenName,
-            })
+          (props.nextScreen = {
+            screenId: nextScreenId,
+            screenName: nextScreenName,
+          })
         )
       }
     }

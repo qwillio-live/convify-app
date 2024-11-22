@@ -46,6 +46,7 @@ import {
 } from "@/components/custom-select"
 import { ColorInput } from "@/components/color-input"
 import { Icons } from "@/components/icons"
+import { getTextContentOfEditor } from "@/lib/utils"
 
 export const ListSettings = () => {
   const t = useTranslations("Components")
@@ -255,25 +256,6 @@ export const ListSettings = () => {
                 }
               />
             </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label>{t("Columns Mobile")}</Label>
-                <span className="text-muted-foreground text-xs">
-                  {columnsMobile}
-                </span>
-              </div>
-              <Slider
-                defaultValue={[columnsMobile]}
-                value={[columnsMobile]}
-                max={5}
-                min={1}
-                step={1}
-                onValueChange={(e) =>
-                  handlePropChangeDebounced("columnsMobile", e)
-                }
-              />
-            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -409,14 +391,15 @@ export const ListSettings = () => {
                 style={{
                   ...(preset === ListPresets.horizontal
                     ? {
-                        border: `1px solid #2B3398`,
-                      }
+                      border: `1px solid #2B3398`,
+                    }
                     : {}),
                 }}
               >
                 <ListGen
                   textColor={"#ffffff"}
                   secTextColor={"#ffffff"}
+                  toolbarPreview
                   {...{
                     ...horizontalPreset,
                     columnsDesktop: 1,
@@ -439,14 +422,15 @@ export const ListSettings = () => {
                 style={{
                   ...(preset === ListPresets.vertical
                     ? {
-                        border: `1px solid #2B3398`,
-                      }
+                      border: `1px solid #2B3398`,
+                    }
                     : {}),
                 }}
               >
                 <ListGen
                   textColor={"#ffffff"}
                   secTextColor={"#ffffff"}
+                  toolbarPreview
                   {...{
                     ...verticalPreset,
                     columnsDesktop: 1,
@@ -550,9 +534,10 @@ export const ListItemSettings = ({
 
         <Input
           className="h-8.5 flex-1 text-xs"
-          value={item.title}
+          value={getTextContentOfEditor(item.title)}
+          disabled
           placeholder={`${t("Title")} ${index + 1}`}
-          onChange={(e) => handleItemTitleEdit(e.target.value)}
+          // onChange={(e) => handleItemTitleEdit(e.target.value)}
         />
 
         <Icons.Delete
@@ -569,9 +554,10 @@ export const ListItemSettings = ({
       <div className="pl-10 pr-11">
         <Input
           className="h-8.5 flex-1 text-xs text-[#5a5a5a]"
-          value={item.description}
+          value={getTextContentOfEditor(item.description)}
+          disabled
           placeholder={`${t("Enter Description")}`}
-          onChange={(e) => handleItemDescriptionEdit(e.target.value)}
+          // onChange={(e) => handleItemDescriptionEdit(e.target.value)}
         />
       </div>
     </Reorder.Item>

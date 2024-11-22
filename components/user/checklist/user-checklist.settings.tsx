@@ -59,6 +59,7 @@ import {
 import { ColorInput } from "@/components/color-input"
 import { Icons } from "@/components/icons"
 import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
+import { getTextContentOfEditor } from "@/lib/utils"
 
 export const ChecklistSettings = () => {
   const t = useTranslations("Components")
@@ -92,6 +93,7 @@ export const ChecklistSettings = () => {
       preset,
       textColor,
       iconType,
+      column,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -266,7 +268,21 @@ export const ChecklistSettings = () => {
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label>{t("Columns Desktop")}</Label>
+                <span className="text-muted-foreground text-xs">{column}</span>
+              </div>
+              <Slider
+                defaultValue={[column]}
+                value={[column]}
+                max={5}
+                min={1}
+                step={1}
+                onValueChange={(e) => handlePropChangeDebounced("column", e)}
+              />
+            </div>
+            {/* <div className="space-y-2">
               <Label htmlFor="layout">{t("Layout")}</Label>
               <Tabs
                 value={layout}
@@ -285,7 +301,7 @@ export const ChecklistSettings = () => {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-            </div>
+            </div> */}
           </AccordionContent>
         </AccordionItem>
 
@@ -427,7 +443,11 @@ export const ChecklistSettings = () => {
                     : {}),
                 }}
               >
-                <ChecklistGen textColor={"#ffffff"} {...normalPreset} />
+                <ChecklistGen
+                  textColor={"#ffffff"}
+                  {...normalPreset}
+                  toolbarPreview={true}
+                />
               </Card>
               <Card
                 onClick={() => {
@@ -442,7 +462,11 @@ export const ChecklistSettings = () => {
                     : {}),
                 }}
               >
-                <ChecklistGen textColor={"#ffffff"} {...boldPreset} />
+                <ChecklistGen
+                  textColor={"#ffffff"}
+                  {...boldPreset}
+                  toolbarPreview={true}
+                />
               </Card>
             </div>
           </AccordionContent>
@@ -503,7 +527,7 @@ export const ChecklistItemSettings = ({
     >
       <Input
         className="h-8.5 flex-1 text-xs"
-        value={item.value}
+        value={getTextContentOfEditor(item.value)}
         placeholder={`${t("Item")} ${index + 1}`}
         onChange={(e) => handleItemValueEdit(e.target.value)}
         // onBlur={() =>

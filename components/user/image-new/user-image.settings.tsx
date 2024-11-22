@@ -331,6 +331,25 @@ export const ImageSettings = () => {
   const getCropData = async () => {
     setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
+      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
+      setProp(
+        (props) =>
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
+        1000
+      )
+      setProp((props) => (props.width = "100%"), 1000)
+      setProp((props) => (props.height = "auto"), 1000)
+      setShowDialog(false)
+      setActiveAspectRatioBtn("source")
+      setProp(
+        (props) =>
+          (props.src = cropperRef.current?.cropper
+            .getCroppedCanvas()
+            .toDataURL()),
+        1000
+      )
       const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
       const croppedDataUrl = croppedCanvas.toDataURL()
 
@@ -463,7 +482,7 @@ export const ImageSettings = () => {
         defaultValue={["content"]}
         className="mb-10 w-full"
       >
-        <AccordionItem value="item-2">
+        <AccordionItem value="content">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="space-y-2">

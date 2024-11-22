@@ -4,8 +4,17 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
+import { serialize } from "@/lib/utils"
 
 const useListThemePresets = () => {
+  const getDefaultContentForIndex = (content) => {
+    return serialize([
+      {
+        type: "paragraph",
+        children: [{ text: content }],
+      },
+    ])
+  }
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
 

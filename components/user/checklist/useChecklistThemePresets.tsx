@@ -10,17 +10,40 @@ import {
   ChecklistSizes,
 } from "./user-checklist.component"
 import { PictureTypes } from "@/components/PicturePicker"
+import { serialize } from "@/lib/utils"
 
 const useChecklistThemePresets = () => {
+  const getDefaultContentForIndex = (idx) => {
+    return serialize([
+      {
+        type: "paragraph",
+        children: [{ text: `${t("Item")} ${idx}` }],
+      },
+    ])
+  }
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
+  const defaultChecklistItems = [
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(1),
+    },
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(2),
+    },
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(3),
+    },
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(4),
+    },
+  ]
 
   const normalPreset: ChecklistProps = {
-    checklistItems: [
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
-    ],
+    checklistItems: [...defaultChecklistItems],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -48,14 +71,11 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.normal,
+    column: 2,
   }
 
   const boldPreset: ChecklistProps = {
-    checklistItems: [
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
-    ],
+    checklistItems: [...defaultChecklistItems],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -83,6 +103,7 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.bold,
+    column: 2,
   }
 
   return { normalPreset, boldPreset }

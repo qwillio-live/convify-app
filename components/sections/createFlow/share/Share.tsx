@@ -127,6 +127,7 @@ const ShareFlowComponents = ({
                   {!!isPublished ? (
                     <iframe
                       src={link ? link : "https://convify.io/survey"}
+                      name="preview"
                       frameBorder="0"
                       className="size-full rounded-[20px] border border-[#E9E9E9]"
                       style={{ background: "#e21af3 !important" }}
