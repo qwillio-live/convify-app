@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from "react"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { useTranslations } from "next-intl"
-import { ComponentProps, Data } from "@/types"
 
 import { env } from "@/env.mjs"
 import { useNode } from "@/lib/craftjs"
@@ -75,19 +74,6 @@ export const LogoComponentGen = ({
 
   ...props
 }) => {
-  const headerData = useAppSelector((state) => state.screen?.screensHeader)
-  const avatarContainerColor: Data = JSON.parse(headerData)
-
-  // Loop through the data and find the first AvatarComponent
-  const avatarComponent = Object.values(avatarContainerColor).find(
-    (item) => item.displayName === "AvatarComponent"
-  )
-
-  // Check if the component is found and return its containerBackground
-  const avatarContainerBackground = avatarComponent
-    ? avatarComponent.props.containerBackground
-    : null
-
   return (
     <div
       className=""
@@ -100,12 +86,7 @@ export const LogoComponentGen = ({
       <div
         className="relative w-full"
         style={{
-          background: `${
-            avatarContainerBackground &&
-            avatarContainerBackground !== "transparent"
-              ? avatarContainerBackground
-              : containerBackground
-          }`,
+          background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -358,19 +339,7 @@ export const LogoComponent = ({
       }
     }
   }, [text, maxLength])
-  const headerData = useAppSelector((state) => state.screen?.screensHeader)
-  const avatarContainerColor: Data = JSON.parse(headerData)
 
-  // Loop through the data and find the first AvatarComponent
-  const avatarComponent = Object.values(avatarContainerColor).find(
-    (item) => item.displayName === "AvatarComponent"
-  )
-
-  // Check if the component is found and return its containerBackground
-  const avatarContainerBackground = avatarComponent
-    ? avatarComponent.props.containerBackground
-    : null
-  console.log("avatarContainerBackground", avatarContainerBackground)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -387,12 +356,7 @@ export const LogoComponent = ({
       <div
         className="relative w-full"
         style={{
-          background: `${
-            avatarContainerBackground &&
-            avatarContainerBackground !== "transparent"
-              ? avatarContainerBackground
-              : containerBackground
-          }`,
+          background: `${containerBackground}`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",

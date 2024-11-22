@@ -29,8 +29,7 @@ const defaultContent = serialize([{
 }])
 
   const h1Preset: HeadlineTextProps = {
-    lineHeight: 40,
-    mobileLineHeight:30,
+    lineHeight: "1.5",
     fontSize: 32,
     fontWeight: "700",
     fontFamily: {
@@ -152,8 +151,7 @@ const defaultContent = serialize([{
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    lineHeight: 40,
-    mobileLineHeight: 30,
+    lineHeight: "1.5",
     paddingLeft: "12",
     paddingTop: "14",
     paddingRight: "12",

@@ -274,7 +274,7 @@ export const UserInputGen = ({ ...props }) => {
           {!props.floatingLabel && (
             <>
               <div
-                className={`relative mb-1  transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
                 }}
@@ -292,7 +292,7 @@ export const UserInputGen = ({ ...props }) => {
                   focusInput() // Focus the input when placeholder is clicked
                 }
               }}
-              className={`absolute line-clamp-1 text-ellipsis  transition-all duration-200 ease-in-out  hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
+              className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
                 (inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
@@ -306,8 +306,6 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                fontSize: "15px",
-                fontWeight: 330,
               }}
             >
               {props.floatingLabel && props.label}
@@ -413,7 +411,7 @@ export const UserInputGen = ({ ...props }) => {
                         }),
                         dispatch(
                           setPreviewScreenData({
-                            nodeId: props.nodeId,
+                            nodeId,
                             isArray: false,
                             entity: "inputValue",
                             newSelections: [e.target.value],
@@ -433,7 +431,7 @@ export const UserInputGen = ({ ...props }) => {
                       }),
                       dispatch(
                         setPreviewScreenData({
-                          nodeId: props.nodeId,
+                          nodeId,
                           isArray: false,
                           entity: "inputValue",
                           newSelections: [e.target.value],
@@ -663,7 +661,7 @@ const UserInputStyled = React.forwardRef<
 
 UserInputStyled.displayName = "UserInputStyled"
 
-export const UserInput = ({ textColor, ...props }) => {
+export const UserInput = ({ ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
@@ -694,7 +692,7 @@ export const UserInput = ({ textColor, ...props }) => {
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
-  const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
+  // const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector(
     (state) => state?.screen?.selectedScreen || 0
   )
@@ -723,9 +721,9 @@ export const UserInput = ({ textColor, ...props }) => {
     (!fieldValue || fieldValue == null) &&
     screenValidated
 
-  const secondaryFont = useAppSelector(
-    (state) => state?.theme?.text?.secondaryFont
-  )
+  // const secondaryFont = useAppSelector(
+  //   (state) => state?.theme?.text?.secondaryFont
+  // )
   const primaryColor = useAppSelector(
     (state) => state?.theme?.general?.primaryColor
   )
@@ -776,17 +774,17 @@ export const UserInput = ({ textColor, ...props }) => {
     }
   }, [parentContainer])
 
-  useEffect(() => {
-    if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
-      setProp((props) => (props.primaryFont.value = primaryFont), 200)
-    }
-  }, [primaryFont])
+  // useEffect(() => {
+  //   if (props.primaryFont.globalStyled && !props.primaryFont.isCustomized) {
+  //     setProp((props) => (props.primaryFont.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont])
 
-  useEffect(() => {
-    if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
-      setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
-    }
-  }, [secondaryFont])
+  // useEffect(() => {
+  //   if (props.secondaryFont.globalStyled && !props.secondaryFont.isCustomized) {
+  //     setProp((props) => (props.secondaryFont.value = secondaryFont), 200)
+  //   }
+  // }, [secondaryFont])
 
   useEffect(() => {
     if (
@@ -856,7 +854,6 @@ export const UserInput = ({ textColor, ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: textColor !== "#ffffff" ? textColor : "#505051",
                 }}
               />
             </>
@@ -884,8 +881,6 @@ export const UserInput = ({ textColor, ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                fontSize: "15px",
-                fontWeight: 330,
               }}
             >
               {props.floatingLabel && props.label}

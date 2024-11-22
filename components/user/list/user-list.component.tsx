@@ -20,17 +20,15 @@ import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { UserInputSizes } from "../input/user-input.component"
-import { usePathname } from "next/navigation"
 import { getComputedValueForTextEditor, serialize } from "@/lib/utils"
 import { TextEditor } from "@/components/TextEditor"
 
 const getDefaultContent = (content) => {
-  return serialize([
-    {
-      type: "paragraph",
-      children: [{ text: content }],
-    },
-  ])
+  return serialize([{
+    type: 'paragraph',
+    children: [
+      { text: content }]
+  }])
 }
 
 const ListSizeValues = {
@@ -76,7 +74,6 @@ export const ListGen = ({
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
-  const pathname = usePathname()
   return (
     <div
       className="relative w-full"
@@ -95,7 +92,7 @@ export const ListGen = ({
       }}
     >
       <StyledListContainer
-        isPreviewScreen={pathname?.includes("create-flow") ? false : true}
+        isPreviewScreen={true}
         className="user-list-comp"
         size={size}
         verticalGap={verticalGap}
@@ -291,8 +288,8 @@ const ListItem = ({
   descriptionColor,
   flexDirection,
   item,
-  onTitleChange = () => {},
-  onDescriptionChange = () => {},
+  onTitleChange = () => { },
+  onDescriptionChange = () => { },
 }: {
   disabled?: boolean
   titleFontFamily: string
@@ -367,29 +364,21 @@ const ListItem = ({
           className="w-fit max-w-full whitespace-break-spaces px-1 font-bold"
           style={{ wordBreak: "break-word" }}
         >
-          <TextEditor
-            isReadOnly={disabled}
-            initValue={getComputedValueForTextEditor(titleValue)}
-            onChange={(val) => {
-              const serialized = serialize(val)
-              setTitleValue(serialized)
-              onTitleChange(serialized)
-            }}
-          />
+          <TextEditor isReadOnly={disabled} initValue={getComputedValueForTextEditor(titleValue)} onChange={val => {
+            const serialized = serialize(val)
+            setTitleValue(serialized)
+            onTitleChange(serialized)
+          }} />
         </div>
         <div
           className="w-fit max-w-full gap-x-0 whitespace-break-spaces px-1 text-sm"
           style={{ wordBreak: "break-word" }}
         >
-          <TextEditor
-            isReadOnly={disabled}
-            initValue={getComputedValueForTextEditor(descriptionValue)}
-            onChange={(val) => {
-              const serialized = serialize(val)
-              setDescriptionValue(serialized)
-              onDescriptionChange(serialized)
-            }}
-          />
+          <TextEditor isReadOnly={disabled} initValue={getComputedValueForTextEditor(descriptionValue)} onChange={val => {
+            const serialized = serialize(val)
+            setDescriptionValue(serialized)
+            onDescriptionChange(serialized)
+          }} />
         </div>
       </div>
     </StyledListItem>
@@ -413,7 +402,7 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   row-gap: ${({ verticalGap }) => `${verticalGap}px`};
   grid-template-columns: repeat(
     ${({ columnsDesktop, columnsMobile, mobileScreen }) =>
-      mobileScreen ? columnsMobile : columnsDesktop},
+    mobileScreen ? columnsMobile : columnsDesktop},
     minmax(0, 1fr)
   );
 
@@ -428,76 +417,63 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
   margin-right: auto;
 
   ${({ size, mobileScreen, isPreviewScreen, toolbarPreview }) => {
-    if (toolbarPreview)
-      return {
-        width: "calc(100% - 22px)",
-      }
+    if (toolbarPreview) return {
+      width: "calc(100% - 22px)"
+    }
 
     if (isPreviewScreen) {
       if (size === UserInputSizes.small) {
-        if (mobileScreen) {
-          return { width: "360px" }
-        } else {
-          return { width: "auto", maxWidth: 376 }
-        }
+        return { width: "376px" }
       } else if (size === UserInputSizes.medium) {
-        return mobileScreen
-          ? { width: "360px" }
-          : { width: "auto", maxWidth: 600 }
+        return { width: "800px" }
       } else if (size === UserInputSizes.large) {
-        return mobileScreen
-          ? { width: "360px" }
-          : { width: "auto", maxWidth: 700 }
+        return { width: "1000px" }
       } else {
-        return mobileScreen
-          ? { width: "360px" }
-          : { width: "auto", maxWidth: "calc(100% - 22px)" }
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     } else {
       if (size === UserInputSizes.small) {
         if (mobileScreen) {
           return { width: "360px" }
         } else {
-          return { width: "auto", maxWidth: 376 }
+          return { width: "376px" }
         }
       } else if (size === UserInputSizes.medium) {
-        return mobileScreen
-          ? { width: "360px" }
-          : { width: "auto", maxWidth: 600 }
+        return { width: "calc(100% - 22px)", maxWidth: 800 }
       } else if (size === UserInputSizes.large) {
-        return mobileScreen
-          ? { width: "360px" }
-          : { width: "auto", maxWidth: 700 }
+        return { width: "calc(100% - 22px)", maxWidth: 1000 }
       } else {
-        return mobileScreen
-          ? { width: "360px" }
-          : { width: "auto", maxWidth: "calc(100% - 22px)" }
+        return {
+          width: "calc(100% - 22px)",
+        }
       }
     }
   }};
 
   @media (max-width: 1000px) {
     ${({ size }) => {
-      if (size === UserInputSizes.large) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.large) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 800px) {
     ${({ size }) => {
-      if (size === UserInputSizes.medium) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.medium) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 
   @media (max-width: 376px) {
     ${({ size }) => {
-      if (size === UserInputSizes.small) {
-        return { width: "calc(100% - 22px)" }
-      }
-    }}
+    if (size === UserInputSizes.small) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 `
 

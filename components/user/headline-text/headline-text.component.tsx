@@ -1,5 +1,12 @@
 "use client"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { debounce, throttle } from "lodash"
 import { useTranslations } from "next-intl"
 import ContentEditable from "react-contenteditable"
@@ -12,10 +19,8 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { HeadlineTextSettings } from "./headline-text-settings"
-import {
-  getBackgroundForPreset,
-  getHoverBackgroundForPreset,
-} from "./useHeadlineThemePresets"
+import { cn, deserialize, serialize } from "@/lib/utils"
+import { TextEditor } from "@/components/TextEditor"
 
 const ContainerWidthValues = {
   small: "520px",
@@ -71,58 +76,119 @@ interface StyledCustomHeadlineInput {
   padding?: string
   preset?: string
   settingsTab?: string
-  lineHeight?: string | number
-  textAlign?: string
-  mobileLineHeight?: string | number
-  mobileFontSize?: string | number
 }
-const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  background: ${(props) => `var(${props?.background})`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  font-size: ${(props) => `${props?.fontSize}`}px;
-  font-weight: ${(props) => `${props?.fontWeight}`};
-  border: 1px dashed transparent;
-  text-align: ${(props) => `${props?.textAlign}`};
+// const StyledCustomHeadlineInput = styled.div<StyledCustomHeadlineInput>`
+//   font-family: ${(props) => `var(${props?.fontFamily})`};
+//   background: ${(props) => `var(${props?.background})`};
+//   display: flex;
+//   flex-direction: row;
+//   position: relative;
+//   font-size: ${(props) => `${props?.fontSize}`}px;
+//   font-weight: ${(props) => `${props?.fontWeight}`};
+//   border: 1px dashed transparent;
+//   transition: all 0.2s ease;
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+//   &:focus {
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired focus border color */
+//   }
 
-  color: ${(props) => `var(${props?.color})`};
+//   color: ${(props) => `var(${props?.color})`};
 
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height}px;
-  line-height: ${(props) => props.lineHeight}px;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: calc(100% - 20px);
-    ${(props) =>
-      props.mobileFontSize && `font-size: ${props.mobileFontSize}px`};
-    ${(props) =>
-      props.mobileLineHeight && `line-height: ${props.mobileLineHeight}px`};
-  }
-`
+//   max-width: ${(props) =>
+//     props.mobileScreen
+//       ? MobileContainerWidthValues[props.size || "medium"]
+//       : ContainerWidthValues[props.size || "medium"]};
+//   width: 100%;
+//   box-sizing: border-box;
+//   height: ${(props) => props.height}px;
+//   margin-top: ${(props) => props.marginTop}px;
+//   margin-left: ${(props) => props.marginLeft}px;
+//   margin-right: ${(props) => props.marginRight}px;
+//   margin-bottom: ${(props) => props.marginBottom}px;
+//   flex-direction: ${(props) => props.flexDirection};
+//   align-items: ${(props) => props.alignItems};
+//   justify-content: ${(props) => props.justifyContent};
+//   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+//   @media (max-width: 760px) {
+//     width: 100%; /* Make the container take the full width on smaller screens */
+//     max-width: 600px;
+//   }
+//   @media (max-width: 660px) {
+//     width: 100%; /* Make the container take the full width on smaller screens */
+//     max-width: calc(100% - 20px);
+//   }
+// `
+
+const StyledCustomHeadlineInput = ({
+  fontFamily,
+  borderHoverColor,
+  colorHover,
+  background,
+  color,
+  height,
+  marginTop,
+  marginLeft,
+  marginRight,
+  marginBottom,
+  fontSize,
+  fontWeight,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  borderColor,
+  border,
+  mobileScreen,
+  size,
+  className,
+  style,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLDivElement> & StyledCustomHeadlineInput) => {
+  const customStyles: CSSProperties = {
+    fontFamily: `var(${fontFamily})`,
+    "--user-headline-background": background,
+    "--user-headline-size": fontSize,
+    fontWeight,
+    "--user-headline-border-color": borderColor,
+    "--user-headline-border-hover-color": borderHoverColor,
+    color,
+    "--user-headline-max-width": mobileScreen
+      ? MobileContainerWidthValues[size || "medium"]
+      : ContainerWidthValues[size || "medium"],
+    "--user-headline-height": height === "auto" ? "auto" : `${height}px`,
+    "--user-headline-margin-top": `${marginTop}px`,
+    "--user-headline-margin-left": `${marginLeft}px`,
+    "--user-headline-margin-right": `${marginRight}px`,
+    "--user-headline-margin-bottom": `${marginBottom}px`,
+    alignItems,
+    justifyContent,
+    borderWidth: border,
+    ...style,
+  } as CSSProperties
+
+  return (
+    <div
+      className={cn(
+        "relative box-border flex w-full overflow-hidden border-solid transition-all max-[760px]:max-w-[600px] max-[660px]:max-w-[calc(100%-20px)]",
+        fontSize && "text-[var(--user-headline-size)]",
+        "max-w-[var(--user-headline-max-width)]",
+        background && "bg-[var(--user-headline-background)]",
+        marginTop && "mt-[var(--user-headline-margin-top)]",
+        marginLeft && "ml-[var(--user-headline-margin-left)]",
+        marginRight && "mr-[var(--user-headline-margin-right)]",
+        marginBottom && "mb-[var(--user-headline-margin-bottom)]",
+        "h-[var(--user-headline-height)]",
+        borderColor && "border-[var(--user-headline-border-color)]",
+        borderHoverColor &&
+        "focus:border-[var(--user-headline-border-hover-color)]",
+        `flex-${flexDirection || "row"}`,
+        className
+      )}
+      {...props}
+      style={customStyles}
+    />
+  )
+}
 
 export const HeadlineTextGen = ({
   fontFamily,
@@ -153,9 +219,6 @@ export const HeadlineTextGen = ({
   borderColor,
   borderHoverColor,
   textColor,
-  lineHeight,
-  mobileLineHeight,
-  mobileFontSize,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
@@ -173,10 +236,28 @@ export const HeadlineTextGen = ({
     .replace(/<\/?div>/g, "\n") // Replace remaining <div> tags with new lines
     .replace(/<br>/g, "\n") // Replace <br> tags with new lines
 
+
+  let val;
+  let computedValue = [{
+    type: 'paragraph',
+    children: [{ text: text }]
+  }]
+  try {
+    val = deserialize(text)
+    if (Array.isArray(val)) {
+      console.log(val, "check")
+      computedValue = val
+    }
+  }
+  catch (e) {
+    console.log(e)
+  }
+
+
   // console.log("container | bg", containerBackground, borderColor)
   return (
     <div
-      className="heading-text-comp relative w-full"
+      className="heading-text-comp relative mt-7 w-full"
       style={{
         width: "100%",
         background: `${containerBackground}`,
@@ -199,8 +280,8 @@ export const HeadlineTextGen = ({
         colorHover={colorHover?.value}
         flexDirection={flexDirection}
         fontSize={fontSize}
-        mobileFontSize={mobileFontSize}
         fontWeight={fontWeight}
+        // textAlign={textAlign?.value}
         justifyContent={justifyContent}
         borderColor={primarycolor}
         border={border}
@@ -218,12 +299,9 @@ export const HeadlineTextGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
-        lineHeight={lineHeight}
-        mobileLineHeight={mobileLineHeight}
         text={t("HeadlineDescription")}
-        textAlign={props.textAlign}
         {...props}
-        className={`user-headline-comp items-center`}
+        className={`!text-[24px] md:text-[${fontSize}px] user-headline-comp items-center`}
         onClick={() => console.log(text)}
       >
         <h1
@@ -236,14 +314,10 @@ export const HeadlineTextGen = ({
             fontWeight: `${fontWeight.value}`,
             height: "fit-content",
             wordWrap: "break-word",
-            // lineHeight: `${lineHeight}px`,
+            lineHeight: "1.5",
           }}
         >
-          {processedText.split("\n").map((line, index) => (
-            <span key={index}>
-              <div dangerouslySetInnerHTML={{ __html: line }} />
-            </span>
-          ))}
+          <TextEditor isReadOnly initValue={computedValue} />
         </h1>
       </StyledCustomHeadlineInput>
     </div>
@@ -280,8 +354,6 @@ export const HeadlineText = ({
   border,
   borderColor,
   mobileFontSize,
-  mobileLineHeight,
-  lineHeight,
   ...props
 }) => {
   const {
@@ -383,18 +455,15 @@ export const HeadlineText = ({
   //   props.preset,
   // ])
 
-  const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.innerHTML
+  const handleTextChange =
+    (value) => {
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.text = value
           return { ...props }
         })
       }
-    },
-    [setProp]
-  )
+    }
 
   useEffect(() => {
     const currentRef = ref.current
@@ -434,6 +503,21 @@ export const HeadlineText = ({
   //   debouncedSetProp(property, value)
   // }
 
+
+  let val;
+  let finalValue = [{
+    type: 'paragraph',
+    children: [{ text: text }]
+  }]
+  try {
+    val = deserialize(text)
+    if (Array.isArray(val)) {
+      finalValue = val
+    }
+  }
+  catch (e) {
+    console.log(e)
+  }
   return (
     <div
       ref={(el: any) => connect(drag(el))}
@@ -448,7 +532,7 @@ export const HeadlineText = ({
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
-          justifyContent: "center",
+          justifyContent: `${justifyContent}`,
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
@@ -460,10 +544,7 @@ export const HeadlineText = ({
       >
         <StyledCustomHeadlineInput
           fontFamily={primaryFont}
-          fontSize={fontSize}
-          lineHeight={lineHeight}
-          mobileFontSize={mobileFontSize}
-          mobileLineHeight={mobileLineHeight}
+          fontSize={`${mobileScreen ? mobileFontSize : fontSize}px`}
           color={color.value}
           colorHover={colorHover.value}
           flexDirection={flexDirection}
@@ -486,13 +567,12 @@ export const HeadlineText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
-          textAlign={props.textAlign}
           {...props}
           text={t("HeadlineDescription")}
         >
           <div className="flex min-h-4 min-w-8 max-w-full flex-col overflow-x-clip">
             {/** @ts-ignore */}
-            <ContentEditable
+            {/* <ContentEditable
               html={text.replace(/\n/g, "<br>")}
               innerRef={ref}
               style={{
@@ -505,14 +585,30 @@ export const HeadlineText = ({
                 }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
-                lineHeight: `${mobileScreen ? mobileLineHeight : lineHeight}px`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
               onChange={(e) => {
                 handleTextChange(e)
               }}
               tagName="h1"
-            />
+            /> */}
+            <div style={{
+              maxWidth: "960px",
+              transitionProperty: "all",
+              overflowX: "clip",
+              textOverflow: "ellipsis",
+              color: `${textColor !== "#ffffff" ? textColor : primaryTextColor
+                }`,
+              fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
+              fontWeight: `${fontWeight}`,
+            }}
+              className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
+            >
+
+              <TextEditor initValue={finalValue} onChange={val => {
+                handleTextChange(serialize(val))
+              }} />
+            </div>
           </div>
         </StyledCustomHeadlineInput>
       </div>
@@ -553,9 +649,7 @@ export type HeadlineTextProps = {
   preset: string
   lineHeight: string | number
   mobileFontSize: number
-  mobileLineHeight: number
   textColor?: string
-  textAlign?: string
 }
 export enum TextContainerSize {
   small = "small",
@@ -565,8 +659,12 @@ export enum TextContainerSize {
 }
 
 export const HeadlineTextDefaultProps: HeadlineTextProps = {
-  text: "HeadlineDescription",
-  lineHeight: 38,
+  text: serialize([{
+    type: 'paragraph',
+    children: [
+      { text: "HeadlineDescription" }]
+  }]),
+  lineHeight: "1.5",
   fontFamily: {
     value: "inherit",
     globalStyled: true,
@@ -625,9 +723,7 @@ export const HeadlineTextDefaultProps: HeadlineTextProps = {
   tagType: "h1",
   preset: "h2",
   mobileFontSize: 24,
-  mobileLineHeight: 32,
   textColor: "#ffffff",
-  textAlign: "center",
 }
 
 HeadlineText.craft = {
