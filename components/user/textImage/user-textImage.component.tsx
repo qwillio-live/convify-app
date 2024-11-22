@@ -1420,7 +1420,7 @@ export const TextImageDefaultProps: IconButtonProps = {
   uploadedImageMobileUrl: "",
   textColor: "#ffffff",
   secTextColor: "#ffffff",
-  showTitle: true
+  showTitle: false
 }
 
 TextImageComponent.craft = {

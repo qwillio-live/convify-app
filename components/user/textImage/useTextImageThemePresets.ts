@@ -116,7 +116,7 @@ const useButtonThemePresets = () => {
         bothAlign: 'top',
         uploadedImageUrl: '',
         uploadedImageMobileUrl: '',
-        showTitle: true,
+        showTitle: false,
     };
 
     const outLinePreset: IconButtonProps = {
@@ -216,7 +216,7 @@ const useButtonThemePresets = () => {
         imageSize: 0,
         uploadedImageUrl: '',
         uploadedImageMobileUrl: '',
-        showTitle: true
+        showTitle: false
     };
 
     return { filledPreset, outLinePreset };
