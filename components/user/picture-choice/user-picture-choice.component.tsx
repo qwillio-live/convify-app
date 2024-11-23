@@ -1053,15 +1053,12 @@ const StyledPictureChoiceItem = styled(Button)<StyledPictureChoiceItemProps>`
     border-bottom-left-radius: 13px;
     border-bottom-right-radius: 13px;
 
-    width: calc(100% + 2px);
-    margin-left: -1px;
-    margin-bottom: -1px;
+    width: calc(100%);
   }
 
   &:hover > div:last-child {
-    width: calc(100% + 2px);
-    margin-left: -1px;
-    margin-bottom: -1px;
+    width: calc(100%);
+
     border-top-color: ${({ hoverStyles }) => hoverStyles.textTopBorderColor};
     background-color: ${({ hoverStyles }) => hoverStyles.textBackgroundColor};
   }
@@ -1174,7 +1171,7 @@ export const PictureChoiceDefaultProps: PictureChoiceProps = {
   settingTabs: ["content"],
   multiSelect: false,
   checkboxVisible: false,
-  preset: PictureChoicePresets.filled,
+  preset: PictureChoicePresets.prefilled,
   defaultStyles: {
     checkBoxIconColor: "transparent",
     checkboxBorderColor: "#eaeaeb",
