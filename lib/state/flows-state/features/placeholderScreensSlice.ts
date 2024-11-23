@@ -215,22 +215,12 @@ export const screensSlice = createSlice({
       let prevScreenData = JSON.parse(
         JSON.stringify(state.screens[state.selectedScreen])
       )
-      console.log(
-        "inside setPreviewScreenData",
-        action.payload.nodeId,
-        action.payload.entity,
-        action.payload.isArray,
-        action.payload.newSelections
-      )
+
       // Parse the screenData to access the individual nodes
       let screenData = JSON.parse(prevScreenData.screenData)
 
       // Update the selections for the specified nodeId
       if (screenData[action.payload.nodeId]) {
-        console.log(
-          "if true",
-          screenData[action.payload.nodeId].props[action.payload.entity]
-        )
         screenData[action.payload.nodeId].props[action.payload.entity] = action
           .payload.isArray
           ? action.payload.newSelections
@@ -301,7 +291,6 @@ export const screensSlice = createSlice({
       console.log("curret screen while getting answers", state.selectedScreen)
       let eachScreen = JSON.parse(JSON.stringify(screen))
       let screenData = JSON.parse(eachScreen.screenData)
-      console.log("sccccc", screenData)
       state.filledContent = []
       Object.entries(screenData).forEach(([key, node]: [string, any]) => {
         const dataLabel =
@@ -309,17 +298,8 @@ export const screensSlice = createSlice({
           node.props?.label ||
           node?.displayName ||
           node.props?.id
-        const dataId = key || node.props?.id || node?.displayName
-        console.log(
-          "node",
-          node,
-          "data-label",
-          dataLabel,
-          "key",
-          key,
-          "dataId",
-          dataId
-        )
+        const dataId = node.props?.id || key || node?.displayName
+        console.log("node", node, "data-label", dataLabel, "key", key)
         if (
           node.type !== "UserContainer" &&
           ((node.props?.selections && node.props?.selections.length > 0) ||
@@ -342,8 +322,6 @@ export const screensSlice = createSlice({
               value: node.props?.selections?.length > 1 ? result : result[0],
               type:
                 node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
             }
           } else if (
             node.props?.inputValue &&
@@ -352,8 +330,6 @@ export const screensSlice = createSlice({
             totalFilled[dataId] = {
               label: dataLabel,
               value: node.props.inputValue,
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
             }
           } else if (node.props?.selectedOptionId) {
             const selectResult = node.props?.selectOptions?.find(
@@ -363,15 +339,11 @@ export const screensSlice = createSlice({
             totalFilled[dataId] = {
               label: dataLabel,
               value: matchedValue,
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
             }
           } else if (node.props?.input) {
             totalFilled[dataId] = {
               label: dataLabel,
               value: node.props.input,
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
             }
           }
         }

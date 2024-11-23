@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import { IconButton } from "../icon-button/user-icon-button.component"
 import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
-
+import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
 import useInputMailThemePresets from "../input-email/useInputMailThemePresets"
 import {
   UserInputMail,
@@ -21,8 +21,6 @@ import {
 } from "../input-email/user-input-mail.component"
 import formPresetPhone from "../input-phone/useInputPhoneThemePresets"
 import { UserInputPhone } from "../input-phone/user-input-phone.component"
-import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
-
 import formPreset from "../input/useInputThemePresets"
 import { UserInput, UserInputGen } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
@@ -31,7 +29,6 @@ import { FormSettings } from "./user-form-settings"
 import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 import useInputThemePresets from "../input/useInputThemePresets"
 import useBackThemePresets from "../backButton/back-theme"
-import { PictureTypes } from "@/components/PicturePicker"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -416,7 +413,6 @@ export const Form = ({ children, ...props }) => {
     useInputMailThemePresets()
   const { formPresets } = useInputThemePresets()
   const { formPreset } = useButtonThemePresets()
-  const { outlinedPresetChecbox } = useInputCheckboxThemePresets()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   const adjustWidth = props.size
@@ -474,8 +470,7 @@ export const Form = ({ children, ...props }) => {
           <Element
             canvas
             is={UserInput}
-            {...formPresets}
-            textColor="#505051"
+            {...formPreset}
             label={t("FirstName")}
             placeholder="Enter your first name"
             floatingLabel={true}
@@ -495,7 +490,6 @@ export const Form = ({ children, ...props }) => {
             is={UserInput}
             {...formPresets}
             floatingLabel={true}
-            textColor="#505051"
             label={t("LastName")}
             placeholder="Enter your last name"
             backgroundColor={"transparent"}
@@ -521,9 +515,6 @@ export const Form = ({ children, ...props }) => {
           paddingRight={"4px"}
           label={t("EmailLabel")}
           fieldName={t("EmailFieldName")}
-          icon={"✉️"}
-          iconType={PictureTypes.EMOJI}
-          iconLa
           size={"full"}
         />
         <Element
@@ -532,8 +523,7 @@ export const Form = ({ children, ...props }) => {
           {...formPresetPhone}
           floatingLabel={true}
           backgroundColor={"transparent"}
-          icon={"📞"}
-          iconType={PictureTypes.EMOJI}
+          icon={"phone-telephone-android-phone-mobile-device-smartphone-iphone"}
           marginTop={0}
           marginBottom={0}
           label={t("PhoneLabel")}
@@ -542,7 +532,6 @@ export const Form = ({ children, ...props }) => {
         />
         <Element
           canvas
-          {...outlinedPresetChecbox}
           is={UserInputCheckbox}
           marginTop={0}
           marginBottom={0}

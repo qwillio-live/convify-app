@@ -54,10 +54,7 @@ import { TextImageComponentGen } from "@/components/user/textImage/user-textImag
 import { SliderBarGen } from "@/components/user/slider/user-slider.component"
 import { FAQGen } from "@/components/user/faq/user-faq.component"
 import { LinksGen } from "@/components/user/links/user-links.component"
-import {
-  ImageStory,
-  ImageStoryGen,
-} from "@/components/user/image-story/image-story.component"
+import { ImageStory, ImageStoryGen } from "@/components/user/image-story/image-story.component"
 import { YoutubeVideoGen } from "@/components/user/youtube-video/user-youtube-video.component"
 import { CookieConsentComponent } from "@/components/cookie-consent/CookieConsentComponent"
 
@@ -107,7 +104,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
-    [CRAFT_ELEMENTS.RANGE]: SliderBarGen,
+    [CRAFT_ELEMENTS.RANGE]: SliderBarGen
   }
 
   const screenName = searchParams?.screen || ""
@@ -131,8 +128,7 @@ export default async function PreviewFlows({
     ? data.steps?.find((screen) => screen.name === screenName)
     : data?.steps?.[0]
 
-  const showCookieConsentPopup =
-    data?.flowSettings?.general?.showCookieConsentPopup
+  const showCookieConsentPopup = data?.flowSettings?.general?.showCookieConsentPopup
 
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
@@ -205,47 +201,8 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
-  console.log("anjit", data?.flowSettings?.header)
-  const revertMinHeightAndClassName = (data) => {
-    console.log("reverting editorload", data)
-    try {
-      data = JSON.parse(data)
-    } catch (e) {
-      console.log("erring", e)
-      data = data
-    }
-    console.log("pop", data)
-    if (data.ROOT && data.ROOT.props) {
-      // Check if the style object exists; if not, create it
-      if (!data.ROOT.props.style) {
-        data.ROOT.props.style = {} // Create the style object
-      }
-      data.ROOT.props.style.minHeight = "none" // Update to 80vh
-      data.ROOT.props.style.height = "auto" // Update to 80vh
+  console.log("anjit", data?.flowSettings)
 
-      // Check for className and remove any class starting with "min-h-"
-      if (data.ROOT.props.className) {
-        data.ROOT.props.className = data.ROOT.props.className
-          .split(" ") // Split into an array of class names
-          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
-          .join(" ") // Join back into a string
-      }
-      console.log(" reverted editorLoad", data)
-      return data
-    }
-  }
-  const checkAvatar = () => {
-    const parsedEditor = JSON.parse(data?.headerData)
-    const container = parsedEditor["ROOT"]
-    if (!container) {
-      return false
-    }
-    const avatarIndex = container.nodes.findIndex(
-      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
-    )
-    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
-    return avatarIndex !== -1
-  }
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -262,22 +219,9 @@ export default async function PreviewFlows({
           }}
         >
           {data?.headerData &&
-            resolveComponents(revertMinHeightAndClassName(data?.headerData))}
+            resolveComponents(JSON.parse(data?.headerData || {}))}
         </div>
-        {data?.flowSettings?.header?.headerPosition === "absolute" && (
-          <div
-            className={cn(
-              `flex w-full flex-col  !bg-[${data?.flowSettings?.general?.backgroundColor}]`
-            )}
-            style={{
-              backgroundColor: data?.flowSettings?.general?.backgroundColor,
-              visibility: "hidden", // This hides the content but keeps the space
-            }}
-          >
-            {data?.headerData &&
-              resolveComponents(revertMinHeightAndClassName(data?.headerData))}
-          </div>
-        )}
+
         <div
           className={`flex w-full flex-1 flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
           style={{
@@ -290,7 +234,6 @@ export default async function PreviewFlows({
               id={filteredStep.name}
               style={{
                 backgroundColor: data?.flowSettings?.general?.backgroundColor,
-                paddingTop: checkAvatar() ? "44px" : "0px",
               }}
               className="animate-flow relative min-w-full"
             >
@@ -306,9 +249,7 @@ export default async function PreviewFlows({
               backgroundColor: data?.flowSettings?.general?.backgroundColor,
             }}
           >
-            {resolveComponents(
-              revertMinHeightAndClassName(data?.footerData || {})
-            )}
+            {resolveComponents(JSON.parse(data?.footerData || {}))}
           </div>
         )}
       </div>

@@ -18,11 +18,10 @@ const authMiddleware = withAuth(
     const isAuth = !!token
     const isAuthPage =
       req.nextUrl.pathname.startsWith("/login") ||
-      req.nextUrl.pathname.startsWith("/register") ||
-      req.nextUrl.pathname === "/"
+      req.nextUrl.pathname.startsWith("/register")
     if (isAuthPage && isAuth) {
       // Redirect to dashboard if user is authenticated and trying to access auth pages
-      return NextResponse.redirect(new URL("/dashboard", req.url))
+      // return NextResponse.redirect(new URL("/dashboard", req.url))
     }
 
     if (!isAuth) {
@@ -56,13 +55,11 @@ export default async function middleware(req: NextRequest) {
     locales.join("|") +
     "))?/(dashboard|editor|mobile|select-template)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
-  const isPublicPage =
-    !publicPathnameRegex.test(req.nextUrl.pathname) &&
-    req.nextUrl.pathname !== "/"
+  const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
 
   const token = await getToken({ req })
   const isPreviewPage = req.nextUrl.pathname.includes("cron-preview")
-  console.log("ispublicpage", isPublicPage, token)
+
   if (isPreviewPage) {
     // Allow preview page without authentication
     console.log("Preview page accessed without authentication")

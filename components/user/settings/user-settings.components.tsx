@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { GlobalThemeSettings } from "./global-theme-settings"
 import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
 
+
 export const SettingsPanel = () => {
   const t = useTranslations("Components")
   const dispatch = useAppDispatch()
@@ -90,7 +91,7 @@ export const SettingsPanel = () => {
                 >
                   {selected.settings && React.createElement(selected.settings)}
                 </div>
-                {selected.isDeletable && selectedComponent !== "footer-node" ? (
+                {selected.isDeletable ? (
                   <Button
                     onClick={() => {
                       actions.delete(selected.id),

@@ -528,7 +528,7 @@ const StyledCustomButton = ({
   return (
     <button
       className={cn(
-        `relative box-border flex overflow-hidden font-medium hover:border-solid`,
+        `relative box-border flex overflow-hidden font-medium transition-all duration-200 hover:border-solid`,
         borderColor && "border-[var(--icon-button-border-color)]",
         gap && "gap-[var(--icon-button-gap)]",
         "h-[var(--icon-button-height)]",

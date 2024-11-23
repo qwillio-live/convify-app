@@ -589,7 +589,7 @@ export const LinkButtonSettings = () => {
         <AccordionItem value="styles">
           <AccordionTrigger>{t("Styles")}</AccordionTrigger>
           <AccordionContent className="pt-2">
-            <div className="space-y-4 max-w-[255px]">
+            <div className="space-y-4">
               <Card
                 onClick={() => {
                   addPresetStyles(linkFilledPreset)

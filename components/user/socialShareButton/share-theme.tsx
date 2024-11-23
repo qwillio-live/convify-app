@@ -70,7 +70,7 @@ const useShareButtonTheme = () => {
     justifyContent: "center",
     disabled: false,
     enableIcon: true,
-    width: IconButtonSizes.medium,
+    width: IconButtonSizes.small,
     height: "auto",
     size: IconButtonSizes.medium,
     text: t("WhatsApp"),

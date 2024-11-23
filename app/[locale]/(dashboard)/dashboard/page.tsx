@@ -216,30 +216,30 @@ export default function DashboardPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link className="cursor-pointer" href={"/dashboard"}>
-                  {t("Dashboard")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/dashboard/flows/create-flow/select-template"
-                  className="cursor-pointer"
-                >
-                  {t("Create flow")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                {t("Logout")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
+                <DropdownMenuLabel>{t("My Account")}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link className="cursor-pointer" href={"/dashboard"}>
+                    {t("Dashboard")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/dashboard/flows/create-flow/select-template"
+                    className="cursor-pointer"
+                  >
+                    {t("Create flow")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  {t("Logout")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
-      <div className="grid h-full w-full flex-1 overflow-y-auto bg-[#F6F6F6] md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="grid h-full w-full flex-1 overflow-y-auto md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div className="sticky top-0 hidden h-[calc(100vh-60px)] border-r border-r-[#E6E2DD] bg-[#F6F6F6] md:block">
           <div className="flex h-full flex-col gap-2 md:w-[220px] lg:w-[280px]">
             <div className="h-[88px] md:border-b md:border-b-[#E6E2DD]">
@@ -300,7 +300,13 @@ export default function DashboardPage() {
               </Link>
             </div>
           </div>
-          <main className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8`}>
+          <main
+            className={`flex flex-col bg-[#F6F6F6] p-4 lg:p-8 ${
+              openCreateFlow
+                ? "h-[calc(100%-88px)]"
+                : "h-[calc(100%-24px)] md:h-[calc(100%-88px)]"
+            }`}
+          >
             {loading ? (
               <div
                 className={`flex flex-1 items-center justify-center rounded-lg border-none`}

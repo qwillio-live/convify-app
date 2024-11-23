@@ -81,7 +81,6 @@
     "Are you sure want to delete the Flow": "Are you sure want to delete the Flow?"
   },
   "Components": {
-    "Line Height": "Line Height",
     "Text Color": "Text Color",
     "Label Color": "Label Color",
     "Title Color": "Title Color",
@@ -97,7 +96,6 @@
     "textarea": "textarea",
     "InputMail": "Email",
     "FontSize": "Font Size",
-    "LineHeight": "Line Height",
     "FontWeight": "Font Weight",
     "InputPhone": "Phone",
     "Checkbox": "Checkbox",
@@ -348,8 +346,6 @@
     "Publish your typeform to preview it here": "Publish your typeform to preview it here",
     "CUSTOM LINK": "CUSTOM LINK",
     "Create a custom link": "Create a custom link",
-    "Create a custom email link": "Create a custom email link",
-    "Create a custom QR code": "Create a custom QR code",
     "Edit the link and let people know what your typeform is about": "Edit the link and let people know what your typeform is about.",
     "Available on these plans: Plus, Business, Enterprise": "Available on these plans: Plus, Business, Enterprise",
     "Upgrade my plan": "Upgrade my plan",
@@ -359,6 +355,7 @@
     "Share": "Share",
     "Results": "Results",
     "Publish": "Publish",
+    "Preview": "Preview",
     "My Account": "My Account",
     "Settings": "Settings",
     "Support": "Support",

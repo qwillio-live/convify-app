@@ -11,11 +11,7 @@
 
 .avatar-top {
   transition: transform 0.3s ease-in-out;
-  transform: translateY(-90%) scale(0.68);
-}
-.avatar-top-mobile {
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(-108%) scale(1);
+  transform: translateY(-104%) scale(0.65);
 }
 
 .avatar-none {
@@ -24,15 +20,11 @@
 }
 
 .avatar-none-mobile {
-  transform: translateY(44%) scale(1);
+  transform: translateY(34%) scale(1);
   transition: transform 0.3s ease-in-out;
 }
 
 .avatar-none-scrolled {
-  transform: translateY(-12%) scale(0.75);
-  transition: transform 0.3s ease-in-out;
-}
-.avatar-none-scrolled-mobile {
-  transform: translateY(3%) scale(1);
+  transform: translateY(0%) scale(1);
   transition: transform 0.3s ease-in-out;
 }

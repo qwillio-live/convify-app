@@ -11,7 +11,7 @@ export default function PreviewFlowsLayout({
     <div className="h-full">
       {/* <FlowLayout isHeader={true} /> */}
       {children}
-      {/* <FlowLayout isHeader={false} check={true} /> */}
+      <FlowLayout isHeader={false} check={true} />
     </div>
   )
 }
