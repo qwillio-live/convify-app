@@ -81,14 +81,32 @@ export const ChecklistGen = ({
       >
         {checklistItems.map((item, index) => (
           <li key={index} className="flex w-full flex-1 items-center gap-3">
-            <ChecklistIconRenderer
-              iconName={icon}
-              style={{
-                width: `${fontSize}px`,
-                height: `${fontSize}px`,
-                color: iconColor,
-              }}
-            />
+            {iconType === PictureTypes.NULL && (icon as React.ReactNode)}
+            {iconType === PictureTypes.ICON && (
+              <SvgRenderer iconName={icon as string} />
+            )}
+            {iconType === PictureTypes.EMOJI && (
+              <span className="flex size-5 items-center justify-center text-[18px] leading-[20px]">
+                {icon as string}
+              </span>
+            )}
+            {iconType === PictureTypes.IMAGE && (
+              <picture>
+                <source
+                  media="(min-width:1080px)"
+                  srcSet={(icon as ImagePictureTypes).desktop}
+                />
+                <source
+                  media="(min-width:560px)"
+                  srcSet={(icon as ImagePictureTypes).mobile}
+                />
+                <img
+                  src={(icon as ImagePictureTypes).original}
+                  alt="icon"
+                  className="size-5 object-contain"
+                />
+              </picture>
+            )}
             <div
               className="w-1 flex-1 break-words"
               style={{

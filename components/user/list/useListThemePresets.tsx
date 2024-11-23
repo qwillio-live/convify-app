@@ -25,32 +25,39 @@ const useListThemePresets = () => {
       id: `list-item-${hexoid(6)()}`,
       picture: "📌",
       pictureType: PictureTypes.EMOJI,
-      title: t("Streamlined Access"),
-      description: t("Quick entry points to all features"),
+      title: getDefaultContentForIndex(t("Streamlined Access")),
+      description: getDefaultContentForIndex(
+        t("Quick entry points to all features")
+      ),
     },
     {
       id: `list-item-${hexoid(6)()}`,
       picture: "🖌️",
       pictureType: PictureTypes.EMOJI,
-      title: t("Customizable Interface"),
-      description: t("Tailor your workspace to your needs"),
+      title: getDefaultContentForIndex(t("Customizable Interface")),
+      description: getDefaultContentForIndex(
+        t("Tailor your workspace to your needs")
+      ),
     },
     {
       id: `list-item-${hexoid(6)()}`,
       picture: "💯",
       pictureType: PictureTypes.EMOJI,
-      title: t("Rock-Solid Reliability"),
-      description: t("Depend on consistent, uninterrupted service"),
+      title: getDefaultContentForIndex(t("Rock-Solid Reliability")),
+      description: getDefaultContentForIndex(
+        t("Depend on consistent, uninterrupted service")
+      ),
     },
     {
       id: `list-item-${hexoid(6)()}`,
       picture: "📑",
       pictureType: PictureTypes.EMOJI,
-      title: t("Behavioral Analytics"),
-      description: t("Explore comprehensive user activity data"),
+      title: getDefaultContentForIndex(t("Behavioral Analytics")),
+      description: getDefaultContentForIndex(
+        t("Explore comprehensive user activity data")
+      ),
     },
   ]
-
   const horizontalPreset: ListProps = {
     titleFontFamily: theme?.text?.primaryFont || "inherit",
     descriptionFontFamily: theme?.text?.secondaryFont || "inherit",
