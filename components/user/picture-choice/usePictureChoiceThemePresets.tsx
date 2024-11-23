@@ -8,6 +8,8 @@ import hexoid from "hexoid"
 import { rgba } from "polished"
 import { useTranslations } from "next-intl"
 import { PictureTypes } from "@/components/PicturePicker"
+import img1 from "@/assets/images/img_1.png"
+import img2 from "@/assets/images/img_2.png"
 
 const usePictureChoiceThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
@@ -36,8 +38,11 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture: "camera-video",
-      pictureType: PictureTypes.ICON,
+      pictureType: PictureTypes.IMAGE,
+      picture: {
+        desktop: "https://img-uploads.b-cdn.net/400x289_1730661889335_blob",
+        mobile: "https://img-uploads.b-cdn.net/400x289_1730661889335_blob",
+      },
       value: t("Video"),
       buttonAction: "custom-action",
       nextScreen: "none",
@@ -45,9 +50,11 @@ const usePictureChoiceThemePresets = () => {
     },
     {
       id: `input-${hexoid(6)()}`,
-      picture:
-        "image-photo-four-photos-camera-picture-photography-pictures-four-photo",
-      pictureType: PictureTypes.ICON,
+      picture: {
+        desktop: "https://img-uploads.b-cdn.net/400x289_1730661937116_blob",
+        mobile: "https://img-uploads.b-cdn.net/400x289_1730661937116_blob",
+      },
+      pictureType: PictureTypes.IMAGE,
       value: t("Gallery"),
       buttonAction: "custom-action",
       nextScreen: "none",
@@ -252,6 +259,71 @@ const usePictureChoiceThemePresets = () => {
     choices: defaultChoices,
     tracking: false,
   }
+  const preFilledPresent: PictureChoiceProps = {
+    fontFamily: {
+      value: theme?.text?.primaryFont || "inherit",
+      globalStyled: true,
+      isCustomized: false,
+    },
+    size: PictureChoiceSizes.medium,
+    label: t("Please select an option"),
+    required: false,
+    fieldName: `${t("Picture Choice")
+      .replaceAll(" ", "-")
+      .toLowerCase()}-${hexoid(6)()}`,
+    labelColor: "#ffffff",
+    labelBorderColor: theme?.general?.primaryColor || "#3182ce",
+    containerBackground: "transparent",
+    paddingLeft: "16",
+    paddingTop: "20",
+    paddingRight: "16",
+    paddingBottom: "20",
+    marginLeft: 0,
+    marginTop: 20,
+    marginRight: 0,
+    marginBottom: 20,
+    fullWidth: true,
+    settingTabs: ["content"],
+    multiSelect: false,
+    checkboxVisible: true,
+    preset: PictureChoicePresets.prefilled,
+    defaultStyles: {
+      checkBoxIconColor: "transparent",
+      checkboxBorderColor: "transparent",
+      checkBoxBackgroundColor: "transparent",
+      iconColor: "#ffffff",
+      textColor: "#ffffff",
+      textTopBorderColor: "transparent",
+      textBackgroundColor: "transparent",
+      borderColor: "#eaeaeb",
+      backgroundColor: theme?.general?.primaryColor || "#3182ce",
+    },
+    hoverStyles: {
+      checkBoxIconColor: "transparent",
+      checkboxBorderColor: "transparent",
+      checkBoxBackgroundColor: "transparent",
+      iconColor: "white",
+      textColor: "#ffffff",
+      textTopBorderColor: "transparent",
+      textBackgroundColor: "transparent",
+      borderColor: theme?.general?.primaryColor || "#3182ce",
+      backgroundColor: theme?.general?.primaryColor || "#3182ce",
+    },
+    selectedStyles: {
+      checkBoxIconColor: "transparent",
+      checkboxBorderColor: "transparent",
+      checkBoxBackgroundColor: "transparent",
+      iconColor: "white",
+      textColor: "#ffffff",
+      textTopBorderColor: "transparent",
+      textBackgroundColor: "transparent",
+      borderColor: theme?.general?.primaryColor || "#3182ce",
+      backgroundColor: theme?.general?.primaryColor || "#3182ce",
+    },
+    selections: [],
+    choices: defaultChoices,
+    tracking: false,
+  }
 
   return {
     outlinedPreset,
@@ -260,6 +332,7 @@ const usePictureChoiceThemePresets = () => {
     defaultIcon,
     defaultSelections,
     defaultChoices,
+    preFilledPresent,
   }
 }
 

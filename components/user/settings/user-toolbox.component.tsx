@@ -294,7 +294,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
-        className="flex w-full flex-row items-center justify-between text-lg hover:cursor-move"
+        className="bg-card flex w-full flex-row items-center justify-between rounded-lg border p-3 pl-4 text-lg hover:cursor-move hover:bg-inherit hover:text-inherit"
       >
         <span className="flex flex-row items-center gap-2 text-xs">
           {icon} {title}
@@ -357,6 +357,8 @@ export const UserToolbox = () => {
     outlinedPreset: pictureChoiceOutlinedPreset,
     defaultChoices: pictureChoiceDefaultChoices,
     defaultSelections: pictureChoiceDefaultSelections,
+    filledPreset: pictureChoiceFilledSelections,
+    preFilledPresent: pictureChoicePreFilledSelections,
   } = usePictureChoiceThemePresets()
 
   const { defaultPreset: stepsDefaultPreset } = useStepsThemePresets()
@@ -416,7 +418,6 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -432,10 +433,18 @@ export const UserToolbox = () => {
                     icon={<HeadingIcon size={12} className="size-4" />}
                     data-cy="toolbox-text"
                   >
-                    <div className="flex w-fit flex-row items-center justify-center gap-2 p-4">
+                    <div className="flex ">
                       <HeadlineTextGen
                         textColor={"#ffffff"}
                         {...h2Preset}
+                        paddingBottom={0}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        paddingTop={0}
+                        marginBottom={30}
+                        marginLeft={0}
+                        marginRight={0}
+                        marginTop={30}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
                       />
@@ -444,7 +453,6 @@ export const UserToolbox = () => {
                 </div>
 
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -480,7 +488,6 @@ export const UserToolbox = () => {
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       //@ts-ignore
@@ -562,11 +569,13 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
-                      connectors.create(ref, <UserInput {...outlinedPreset} />)
+                      connectors.create(
+                        ref,
+                        <UserInput textColor="#505051" {...outlinedPreset} />
+                      )
                     }
                     data-cy="toolbox-text"
                   >
@@ -577,13 +586,13 @@ export const UserToolbox = () => {
                       <UserInputGen
                         {...outlinedPreset}
                         label={t("Label")}
+                        textColor="#505051"
                         placeholder={t("Placeholder")}
                       />
                     </HoverCardComponent>
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -615,7 +624,6 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -641,7 +649,6 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -667,7 +674,6 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -695,7 +701,6 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -715,7 +720,7 @@ export const UserToolbox = () => {
                       icon={<MousePointer className="size-4" />}
                     >
                       <SelectGen
-                        labelColor={"#ffffff"}
+                        labelColor={"#000000"}
                         className="w-full"
                         {...selectPreset}
                         size="small"
@@ -727,7 +732,6 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -762,7 +766,6 @@ export const UserToolbox = () => {
                   </div>
 
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -826,7 +829,7 @@ export const UserToolbox = () => {
                         ref,
                         <PictureChoice
                           labelColor={"#ffffff"}
-                          {...pictureChoiceOutlinedPreset}
+                          {...pictureChoicePreFilledSelections}
                         />
                       )
                     }
@@ -864,7 +867,6 @@ export const UserToolbox = () => {
               </AccordionTrigger>
               <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -900,7 +902,6 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -912,7 +913,6 @@ export const UserToolbox = () => {
                         disabled={false}
                         text={t("Back")}
                         justifyContent={"center"}
-                        size={"large"}
                         marginTop={20}
                         marginBottom={20}
                         paddingLeft={0}
@@ -944,7 +944,6 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -956,7 +955,7 @@ export const UserToolbox = () => {
                         disabled={false}
                         text={t("WhatsApp")}
                         justifyContent={"center"}
-                        size={"small"}
+                        size={"medium"}
                         marginTop={20}
                         marginBottom={20}
                         marginLeft={0}
@@ -1013,7 +1012,6 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -1025,7 +1023,7 @@ export const UserToolbox = () => {
                         disabled={false}
                         text={t("Telegram")}
                         justifyContent={"center"}
-                        size={"small"}
+                        size={"medium"}
                         marginTop={20}
                         marginBottom={20}
                         marginLeft={0}
@@ -1061,7 +1059,6 @@ export const UserToolbox = () => {
                   </HoverCardComponent>
                 </div>
                 <div
-                  className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                   //eslint-disable-next-line
                   ref={(ref: any) =>
                     ref &&
@@ -1113,7 +1110,6 @@ export const UserToolbox = () => {
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -1124,6 +1120,7 @@ export const UserToolbox = () => {
                           // {...filledPreset}
                           {...filledPreset}
                           // {...outLinePreset}
+                          icon={"arrowright"}
                           disabled={false}
                         />
                       )
@@ -1146,7 +1143,6 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -1210,7 +1206,6 @@ export const UserToolbox = () => {
                     </HoverCardComponent>
                   </div>
                   <div
-                    className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                     //eslint-disable-next-line
                     ref={(ref: any) =>
                       ref &&
@@ -1340,7 +1335,6 @@ export const UserToolbox = () => {
                 <AccordionContent className="flex w-full basis-full flex-col gap-2 pb-0">
                   <>
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         //@ts-ignore
@@ -1378,7 +1372,6 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1413,7 +1406,6 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1499,7 +1491,6 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1534,7 +1525,6 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1598,7 +1588,6 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1666,7 +1655,6 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1718,7 +1706,6 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1751,7 +1738,6 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
 
                       ref={(ref: any) =>
@@ -1890,7 +1876,6 @@ export const UserToolbox = () => {
                     </div>
 
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
@@ -1910,7 +1895,6 @@ export const UserToolbox = () => {
                       </HoverCardComponent>
                     </div>
                     <div
-                      className="bg-card rounded-lg border p-3 pl-4 hover:bg-inherit hover:text-inherit"
                       //eslint-disable-next-line
                       ref={(ref: any) =>
                         ref &&
