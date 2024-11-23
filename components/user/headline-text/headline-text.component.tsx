@@ -466,34 +466,15 @@ export const HeadlineText = ({
   //   props.preset,
   // ])
 
-  const handleTextChange = useCallback(
-    (event: InputEvent) => {
-      const inputElement = event.target as HTMLInputElement // Type the target as HTMLInputElement to access 'value'
-      if (inputElement && inputElement?.value) {
-        const value = inputElement.value // Get the value of the input element
-
-        if (typeof value === "string" && value.length) {
-          setProp((props) => {
-            props.text = value // Update the text prop
-            return { ...props } // Return the updated props object
-          })
-        }
-      }
-    },
-    [setProp] // Memoize the callback based on `setProp`
-  )
-
-  useEffect(() => {
-    const currentRef = ref.current
-    if (currentRef) {
-      currentRef.addEventListener("input", handleTextChange)
+  const handleTextChange = (value) => {
+    if (typeof value === "string" && value.length) {
+      setProp((props) => {
+        props.text = value
+        console.log("saving text", value)
+        return { ...props }
+      })
     }
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener("input", handleTextChange)
-      }
-    }
-  }, [handleTextChange])
+  }
 
   // const throttledSetProp = useCallback(
   //   throttle((property, value) => {
