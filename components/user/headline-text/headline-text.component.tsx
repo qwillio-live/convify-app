@@ -219,6 +219,7 @@ export const HeadlineTextGen = ({
   borderColor,
   borderHoverColor,
   textColor,
+  lineHeight,
   ...props
 }) => {
   const primaryFont = useAppSelector((state) => state.theme?.text?.primaryFont)
