@@ -11,6 +11,7 @@ import {
   Anchor,
   Aperture,
   ArrowRight,
+  CodeSquare,
   Disc,
   DollarSign,
   GripHorizontal,
@@ -59,11 +60,12 @@ import { RootState } from "@/lib/state/flows-state/store"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
+import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import { Progress } from "@/components/ui/progress-custom"
 import { Minus, Circle } from "lucide-react"
 import { string } from "prop-types"
+import { UserInputSizes } from "../input/user-input.component"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -87,31 +89,10 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
   )
 }
 
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-  auto: "auto",
-}
-
 const ButtonSizeValues = {
   small: ".8rem",
   medium: "1rem",
   large: "1.2rem",
-}
-const IconSizeValues = {
-  small: 18,
-  medium: 22,
-  large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-  auto: "auto",
 }
 
 const ButtonTextLimit = {
@@ -151,9 +132,10 @@ interface StyledCustomButtonProps {
   border?: number
   borderColor?: string
   borderHoverColor?: string
-  mobileScreen: boolean
+  mobileScreen: boolean,
+  headerMode?: boolean
 }
-const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
+const StyledCustomButton = styled(CustomButton) <StyledCustomButtonProps>`
   font-family: ${(props) => `var(${props?.fontFamily})`};
   display: flex;
   flex-direction: row;
@@ -165,33 +147,26 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
 
   &:hover {
     border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired hover border color */
+    props.borderHoverColor}; /* Change to your desired hover border color */
     background: ${(props) => props.backgroundHover};
     color: ${(props) => props.colorHover};
   }
 
   &:focus {
     border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
+    props.borderHoverColor}; /* Change to your desired focus border color */
   }
 
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? IconButtonMobileSizeValues[props.size || "medium"]
-      : IconButtonSizeValues[props.size || "medium"]};
-  width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  padding-left: ${(props) => props.paddingLeft}px;
   padding-top: ${(props) => props.paddingTop};
-  padding-right: ${(props) => props.paddingRight}px;
   padding-bottom: ${(props) => props.paddingBottom}px;
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
@@ -200,13 +175,47 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   gap: ${(props) => props.gap}px;
   cursor: default;
   border: none;
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
+
+  ${({ size, mobileScreen, headerMode }) => {
+    if (headerMode) {
+      return { width: "100%" }
+    }
+
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+    if (size === UserInputSizes.large) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+    if (size === UserInputSizes.medium) {
+      return { width: "calc(100% - 22px)" }
+    }
+  }}
   }
 `
 export const ProgressBarGen = ({
@@ -240,6 +249,7 @@ export const ProgressBarGen = ({
   borderColor,
   borderHoverColor,
   nextScreen,
+  progressStyle,
   color,
   maxWidth,
   fullWidth,
@@ -265,6 +275,7 @@ export const ProgressBarGen = ({
   const isHeaderFooterMode = useAppSelector(
     (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
   )
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const selectedScreenName =
     useAppSelector(
       (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
@@ -281,30 +292,91 @@ export const ProgressBarGen = ({
   //       props.nodeId
   //     ].props.progressvalue
   // )
-  console.log(
-    "selectedScreen, screensLength",
-    selectedScreen,
-    screensLength,
-    ((selectedScreen + 1) / screensLength) * 100,
-    isHeaderFooterMode,
-    forHeader,
-    selectedScreenName
-    // mv
-  )
   const bgColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
+
+  const renderIcons = () => {
+    const icons: React.ReactElement[] = []
+    const progressComponents = {
+      rectangle: Minus,
+      grip: Circle,
+    }
+    const SelectedComponent =
+      progressComponents[progressStyle] || progressComponents["rectangle"]
+    for (let i = 0; i < maxValue; i++) {
+
+      if (progressStyle === "rectangle") {
+        icons.push(
+          <div
+            className="flex-1 h-1 rounded-full"
+            style={{
+              background: i < progressvalue ? primaryColor : "#eaeaeb"
+            }}
+          />
+        )
+      }
+
+      if (progressStyle === "grip") {
+        icons.push(
+          <SelectedComponent
+            color={
+              i < progressvalue && progressStyle === "grip"
+                ? primaryColor
+                : i < progressvalue && progressStyle === "rectangle"
+                  ? primaryColor
+                  : "#eaeaeb"
+            }
+            style={{
+              margin: progressStyle === "grip" ? "0 6px" : "0 0",
+              background:
+                i < progressvalue && progressStyle === "grip"
+                  ? primaryColor
+                  : progressStyle === "rectangle"
+                    ? containerBackground[0] === "#"
+                      ? containerBackground
+                      : bgColor
+                    : "#eaeaeb",
+              borderRadius: progressStyle === "grip" ? "50px" : "disabled",
+            }}
+            size={progressStyle === "grip" ? 8 : 28}
+          />
+        )
+      }
+    }
+
+    return icons
+  }
+
+  const calculateWidth = () => {
+    if (size === UserInputSizes.small) {
+      return "250px"
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return "calc(100% - 22px)"
+      } else {
+        return "376px"
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return "calc(100% - 22px)"
+      } else {
+        return "576px"
+      }
+    } else {
+      return "calc(100%)"
+    }
+  }
 
   return (
     <div
       className="relative w-full"
       style={{
-        background: `${
-          typeof containerBackground === "string" &&
+        background: `${typeof containerBackground === "string" &&
           containerBackground[0] === "#"
-            ? containerBackground
-            : bgColor
-        }`,
+          ? containerBackground
+          : bgColor
+          }`,
         display: "flex",
         justifyContent: "center",
         boxSizing: "border-box",
@@ -319,31 +391,31 @@ export const ProgressBarGen = ({
         fontFamily={fontFamily?.value}
         color={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         background={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         backgroundHover={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         borderHoverColor={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
         colorHover={
           typeof containerBackground === "string" &&
-          containerBackground[0] === "#"
+            containerBackground[0] === "#"
             ? containerBackground
             : bgColor
         }
@@ -364,28 +436,28 @@ export const ProgressBarGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         gap={gap}
-        mobileScreen={false}
+        mobileScreen={!!mobileScreen}
         {...props}
-        className="text-[1rem]"
-        // onClick={disabled}
+        className="progress-comp text-[1rem]"
+      // onClick={disabled}
       >
-        <Progress
-          value={
-            // progressvalue === 1 && maxValue === 5
-            // ? ((selectedScreen + 1) / screensLength) * 100
-            // : (progressvalue / maxValue) * 100
-            ((selectedScreen + 1) / screensLength) * 100
-          }
-          style={{
-            marginTop: `${props.marginTop}px`,
-            marginBottom: `${props.marginBottom}px`,
-            marginLeft: `${props.marginLeft}px`,
-            marginRight: `${props.marginRight}px`,
-          }}
-          // style={{ maxWidth: `${maxWidth}px` }}
-          className={`h-1 ${fullWidth ? "w-full" : ""} `}
-          indicatorColor={primaryColor || color}
-        />
+        {progressStyle === "minus" ? (
+          <Progress
+            value={
+              progressvalue === 1 && maxValue === 5
+                ? ((selectedScreen + 1) / screensLength) * 100
+                : (progressvalue / maxValue) * 100
+            }
+            // style={{ maxWidth: `${maxWidth}px` }}
+            className={`h-1 ${fullWidth ? "w-full" : ""} ${size === "full" ? "" : "rounded-full"
+              }`}
+            indicatorColor={primaryColor || color}
+          />
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: size === "small" ? "8px" : "16px", width: calculateWidth() }}>
+            {renderIcons()}
+          </div>
+        )}
       </StyledCustomButton>
     </div>
   )
@@ -505,10 +577,10 @@ export const ProgressBar = ({
     if (buttonAction === "next-screen") {
       setProp(
         (props) =>
-          (props.nextScreen = {
-            screenName: nextScreenName,
-            screenId: nextScreenId,
-          }),
+        (props.nextScreen = {
+          screenName: nextScreenName,
+          screenId: nextScreenId,
+        }),
         200
       )
     } else if (buttonAction === "custom-action") {
@@ -516,10 +588,10 @@ export const ProgressBar = ({
         if (screen.screenId === nextScreen.screenId) {
           setProp(
             (props) =>
-              (props.nextScreen = {
-                screenName: screen.screenName,
-                screenId: screen.screenId,
-              }),
+            (props.nextScreen = {
+              screenName: screen.screenName,
+              screenId: screen.screenId,
+            }),
             200
           )
           screenNameChanged = true
@@ -529,10 +601,10 @@ export const ProgressBar = ({
         setProp((props) => (props.buttonAction = "next-screen"), 200)
         setProp(
           (props) =>
-            (props.nextScreen = {
-              screenId: nextScreenId,
-              screenName: nextScreenName,
-            })
+          (props.nextScreen = {
+            screenId: nextScreenId,
+            screenName: nextScreenName,
+          })
         )
       }
     }
@@ -648,6 +720,10 @@ export const ProgressBar = ({
     [setProp]
   )
 
+  // useEffect(() => {
+  //   debouncedSetProp("maxVal")
+  // }, [screensLength]);
+
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
@@ -660,33 +736,67 @@ export const ProgressBar = ({
     const SelectedComponent =
       progressComponents[progressStyle] || progressComponents["rectangle"]
     for (let i = 0; i < maxValue; i++) {
-      icons.push(
-        <SelectedComponent
-          color={
-            i < progressvalue && progressStyle === "grip"
-              ? primaryColor
-              : i < progressvalue && progressStyle === "rectangle"
-              ? primaryColor
-              : "#eaeaeb"
-          }
-          style={{
-            margin: progressStyle === "grip" ? "0 6px" : "0 0",
-            background:
+
+      if (progressStyle === "rectangle") {
+        icons.push(
+          <div
+            className="flex-1 h-1 rounded-full"
+            style={{
+              background: i < progressvalue ? primaryColor : "#eaeaeb"
+            }}
+          />
+        )
+      }
+
+      if (progressStyle === "grip") {
+        icons.push(
+          <SelectedComponent
+            color={
               i < progressvalue && progressStyle === "grip"
                 ? primaryColor
-                : progressStyle === "rectangle"
-                ? containerBackground[0] === "#"
-                  ? containerBackground
-                  : bgColor
-                : "#eaeaeb",
-            borderRadius: progressStyle === "grip" ? "50px" : "disabled",
-          }}
-          size={progressStyle === "grip" ? 8 : 28}
-        />
-      )
+                : i < progressvalue && progressStyle === "rectangle"
+                  ? primaryColor
+                  : "#eaeaeb"
+            }
+            style={{
+              margin: progressStyle === "grip" ? "0 6px" : "0 0",
+              background:
+                i < progressvalue && progressStyle === "grip"
+                  ? primaryColor
+                  : progressStyle === "rectangle"
+                    ? containerBackground[0] === "#"
+                      ? containerBackground
+                      : bgColor
+                    : "#eaeaeb",
+              borderRadius: progressStyle === "grip" ? "50px" : "disabled",
+            }}
+            size={progressStyle === "grip" ? 8 : 28}
+          />
+        )
+      }
     }
 
     return icons
+  }
+
+  const calculateWidth = () => {
+    if (size === UserInputSizes.small) {
+      return "250px"
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return "calc(100% - 22px)"
+      } else {
+        return "376px"
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return "calc(100% - 22px)"
+      } else {
+        return "576px"
+      }
+    } else {
+      return "calc(100%)"
+    }
   }
 
   useEffect(() => {
@@ -696,7 +806,14 @@ export const ProgressBar = ({
         debouncedSetProp("progressvalue", screensLength)
       }
     }
-  }, [screensLength])
+  }, [screensLength]);
+
+  useEffect(() => {
+    debouncedSetProp("maxValue", screensLength);
+    if (progressvalue > screensLength) {
+      debouncedSetProp("progressvalue", screensLength)
+    }
+  }, [screensLength]);
 
   return (
     <div
@@ -715,12 +832,11 @@ export const ProgressBar = ({
       <div
         className="relative w-full"
         style={{
-          background: `${
-            typeof containerBackground === "string" &&
+          background: `${typeof containerBackground === "string" &&
             containerBackground[0] === "#"
-              ? containerBackground
-              : bgColor
-          }`,
+            ? containerBackground
+            : bgColor
+            }`,
           display: "flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -735,31 +851,31 @@ export const ProgressBar = ({
           fontFamily={fontFamily?.value}
           color={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           background={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           backgroundHover={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           borderHoverColor={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
           colorHover={
             typeof containerBackground === "string" &&
-            containerBackground[0] === "#"
+              containerBackground[0] === "#"
               ? containerBackground
               : bgColor
           }
@@ -780,9 +896,10 @@ export const ProgressBar = ({
           paddingBottom={paddingBottom}
           alignItems={alignItems}
           gap={gap}
-          mobileScreen={false}
+          mobileScreen={!!mobileScreen}
+          headerMode={isHeaderFooterMode}
           {...props}
-          className="text-[1rem]"
+          className="progress-comp text-[1rem]"
         >
           {progressStyle === "minus" ? (
             <Progress
@@ -792,13 +909,12 @@ export const ProgressBar = ({
                   : (progressvalue / maxValue) * 100
               }
               // style={{ maxWidth: `${maxWidth}px` }}
-              className={`h-1 ${fullWidth ? "w-full" : ""} ${
-                size === "full" ? "" : "rounded-full"
-              }`}
+              className={`h-1 ${fullWidth ? "w-full" : ""} ${size === "full" ? "" : "rounded-full"
+                }`}
               indicatorColor={primaryColor || color}
             />
           ) : (
-            <div className="" style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: size === "small" ? "8px" : "16px", width: calculateWidth() }}>
               {renderIcons()}
             </div>
           )}

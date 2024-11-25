@@ -3,14 +3,21 @@ import { useTranslations } from "next-intl"
 import { darken, rgba } from "polished"
 
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 
 import {
   UserInputCheckboxProps,
   UserInputSizes,
 } from "./user-input-checkbox.component"
+import { serialize } from "@/lib/utils"
 
 const useInputCheckboxThemePresets = () => {
   const t = useTranslations("Components")
+  const defaultContent = serialize([{
+    type: 'paragraph',
+    children: [
+      { text: t("CheckboxPlaceholder") }]
+  }]);
 
   const theme = useAppSelector((state) => state.theme)
   const backgroundImage = useAppSelector(
@@ -24,8 +31,8 @@ const useInputCheckboxThemePresets = () => {
   const outlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
-    width: 366,
+    textColor: "#ffffff",
+    width: "unset",
     fontWeight: "normal",
     marginLeft: 0,
     marginRight: 0,
@@ -35,7 +42,7 @@ const useInputCheckboxThemePresets = () => {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-    placeholder: t("CheckboxPlaceholder"),
+    placeholder: defaultContent,
     backgroundColor: "transparent",
     backgroundImage: theme?.general?.backgroundImage,
     backgroundPosition: "center",
@@ -75,8 +82,8 @@ const useInputCheckboxThemePresets = () => {
     inputRequired: false,
     fullWidth: true,
     size: UserInputSizes.medium,
-    label: t("CheckboxPlaceholder"),
-    fieldName: t("CheckboxFieldName"),
+    label: defaultContent,
+    fieldName: t("checkbox") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",
@@ -100,8 +107,8 @@ const useInputCheckboxThemePresets = () => {
   const underlinedPresetChecbox: UserInputCheckboxProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
-    width: 366,
+    textColor: "#ffffff",
+    width: "unset",
     fontWeight: "normal",
     marginLeft: 0,
     marginRight: 0,
@@ -149,7 +156,7 @@ const useInputCheckboxThemePresets = () => {
     size: UserInputSizes.medium,
     label:
       "I agree with the terms and condition and I'm also happily subscribing to your newsletter.",
-    fieldName: "Agreement",
+    fieldName: t("checkbox") + "-" + produceRandomLetters(6),
     floatingLabel: false,
     enableIcon: false,
     icon: "arrowright",

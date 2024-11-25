@@ -1,23 +1,17 @@
 {
-	"ROOT": {
-		"type": "UserContainer",
-		"isCanvas": true,
-		"props": {
-			"padding": 5,
-			"background": "transparent",
-			"expanded": "true",
-			"className": "min-h-[400px] min-w-full flex flex-col items-center py-5 new-screens"
-		},
-		"displayName": "New Screen",
-		"custom": {
-
-		},
-		"hidden": false,
-		"nodes": [
-
-		],
-		"linkedNodes": {
-
-		}
-	}
+  "ROOT": {
+    "type": "UserContainer",
+    "isCanvas": true,
+    "props": {
+      "padding": 5,
+      "background": "transparent",
+      "expanded": "true",
+      "className": "min-h-[65vh] min-w-full flex flex-col items-center new-screens"
+    },
+    "displayName": "New Screen",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {}
+  }
 }

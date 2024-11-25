@@ -1,5 +1,12 @@
 "use client"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import local from "next/font/local"
 import { usePathname, useRouter } from "next/navigation"
 import { track } from "@vercel/analytics/react"
@@ -21,19 +28,9 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextThemePresets"
 import { UserTextInputSettings } from "./user-text-settings"
-
-const ContainerWidthValues = {
-  small: "520px",
-  medium: "647px",
-  large: "770px",
-  full: "100%",
-}
-const MobileContainerWidthValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
+import { UserInputSizes } from "../input/user-input.component"
+import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
+import { TextEditor } from "@/components/TextEditor"
 
 export enum TextContainerSize {
   small = "small",
@@ -74,6 +71,7 @@ interface StyleCustomTextContainerProps {
   borderRadius?: string
   padding?: string
   preset?: string
+  lineHeight?: string | number
 }
 
 export type TextInputProps = {
@@ -81,13 +79,14 @@ export type TextInputProps = {
   size: TextContainerSize
   fontSize: number
   fontWeight: string | number
-  textAlign: StyleProperty
+  textAlign: string
   containerBackground: string
   background: StyleProperty
   backgroundHover: StyleProperty
   color: StyleProperty
   colorHover: StyleProperty
   text: string
+  textColor?: string
   paddingLeft: string | number
   paddingTop: string | number
   paddingRight: string | number
@@ -108,6 +107,7 @@ export type TextInputProps = {
   fullWidth: boolean
   preset: string
   buttonSize: string
+  lineHeight: string | number
 }
 
 export const TextInputDefaultProps: TextInputProps = {
@@ -157,21 +157,23 @@ export const TextInputDefaultProps: TextInputProps = {
   height: "40",
   size: TextContainerSize.medium,
   buttonSize: "medium",
-  text: "Text Description",
+  text: serialize([
+    {
+      type: "paragraph",
+      children: [{ text: "Text" }],
+    },
+  ]),
   marginLeft: 0,
   marginTop: 20,
   marginRight: 0,
   marginBottom: 20,
   fontSize: 18,
+  lineHeight: 23,
   fontWeight: "400",
-  textAlign: {
-    value: "center",
-    globalStyled: false,
-    isCustomized: false,
-  },
-  paddingLeft: "0",
+  textAlign: "center",
+  paddingLeft: "12",
   paddingTop: "0",
-  paddingRight: "0",
+  paddingRight: "12",
   paddingBottom: "0",
   flexDirection: "row",
   alignItems: "center",
@@ -180,49 +182,148 @@ export const TextInputDefaultProps: TextInputProps = {
   preset: "paragraph",
 }
 
-const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
-  font-family: ${(props) => `var(${props?.fontFamily})`};
-  background: ${(props) => `${props?.background}`};
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  font-size: ${(props) => `${props?.fontSize}`}px;
-  font-weight: ${(props) => `${props?.fontWeight}`};
-  border: 1px dashed transparent;
-  transition: all 0.2s ease;
+// const StyledCustomTextInput = styled.div<StyleCustomTextContainerProps>`
+//   font-family: ${(props) => `var(${props?.fontFamily})`};
+//   background: ${(props) => `${props?.background}`};
+//   display: flex;
+//   flex-direction: row;
+//   position: relative;
+//   font-size: ${(props) => `${props?.fontSize}`}px;
+//   font-weight: ${(props) => `${props?.fontWeight}`};
+//   border: 1px dashed transparent;
+//   transition: all 0.2s ease;
+//   text-align: ${(props) => `${props?.textAlign}`};
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+//   &:focus {
+//     border-color: ${(props) =>
+//       props.borderHoverColor}; /* Change to your desired focus border color */
+//   }
 
-  color: ${(props) => `${props?.color}`};
-  overflow: hidden;
-  max-width: ${(props) =>
-    props.mobileScreen
-      ? MobileContainerWidthValues[props.size || "medium"]
-      : ContainerWidthValues[props.size || "medium"]};
-  width: 100%;
-  box-sizing: border-box;
-  height: ${(props) => props.height};
-  margin-top: ${(props) => props.marginTop}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  border-radius: ${(props) => props.radius}px;
-  flex-direction: ${(props) => props.flexDirection};
-  align-items: ${(props) => props.alignItems};
-  justify-content: ${(props) => props.justifyContent};
-  border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the container take the full width on smaller screens */
-    max-width: 400px;
-  }
-`
+//   color: ${(props) => `${props?.color}`};
+//   overflow: hidden;
+//   box-sizing: border-box;
+//   height: ${(props) => props.height};
+//   margin-top: ${(props) => props.marginTop}px;
+//   margin-left: ${(props) => props.marginLeft}px;
+//   margin-right: ${(props) => props.marginRight}px;
+//   margin-bottom: ${(props) => props.marginBottom}px;
+//   border-radius: ${(props) => props.radius}px;
+//   flex-direction: ${(props) => props.flexDirection};
+//   align-items: ${(props) => props.alignItems};
+//   justify-content: ${(props) => props.justifyContent};
+//   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
+
+//   margin-left: auto;
+//   margin-right: auto;
+
+//   ${({ size, mobileScreen }) => {
+//     if (mobileScreen) {
+//       return { width: "calc(100% - 20px)" }
+//     } else {
+//       if (size === UserInputSizes.small) {
+//         return { width: "520px" }
+//       } else if (size === UserInputSizes.medium) {
+//         return { width: "650px" }
+//       } else if (size === UserInputSizes.large) {
+//         return { width: "770px" }
+//       } else {
+//         return { width: "calc(100% - 20px)" }
+//       }
+//     }
+//   }};
+
+//   @media (max-width: 520px) {
+//     width: calc(100% - 20px);
+//   }
+// `
+
+const StyledCustomTextInput = ({
+  fontFamily,
+  borderHoverColor,
+  colorHover,
+  background,
+  color,
+  height,
+  marginTop,
+  marginLeft,
+  marginRight,
+  marginBottom,
+  radius,
+  textAlign,
+  fontSize,
+  fontWeight,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  borderColor,
+  border,
+  mobileScreen,
+  size,
+  className,
+  style,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLDivElement> &
+  StyleCustomTextContainerProps) => {
+  const customStyles: CSSProperties = {
+    fontFamily: `var(${fontFamily})`,
+    "--user-text-background": background,
+    "--user-text-size": fontSize,
+    fontWeight,
+    textAlign,
+    "--user-text-border-color": borderColor,
+    "--user-text-border-hover-color": borderHoverColor,
+    color,
+    "--user-text-height": height === "auto" ? "auto" : `${height}px`,
+    "--user-text-margin-top": `${marginTop}px`,
+    "--user-text-margin-left": `${marginLeft}px`,
+    "--user-text-margin-right": `${marginRight}px`,
+    "--user-text-margin-bottom": `${marginBottom}px`,
+    "--user-text-border-radius": `${radius}px`,
+    alignItems,
+    justifyContent,
+    borderWidth: border,
+    ...style,
+  } as CSSProperties
+
+  const generateWidthClass = useMemo(() => {
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-20px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[770px]"
+      case UserInputSizes.medium:
+        return "w-[650px]"
+      case UserInputSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-20px)]"
+    }
+  }, [size, mobileScreen])
+
+  return (
+    <div
+      className={cn(
+        "relative box-border flex overflow-hidden border-solid transition-all max-[520px]:w-[calc(100%-20px)]",
+        fontSize && "text-[var(--user-text-size)]",
+        background && "bg-[var(--user-text-background)]",
+        marginTop && "mt-[var(--user-text-margin-top)]",
+        marginLeft && "ml-[var(--user-text-margin-left)]",
+        marginRight && "mr-[var(--user-text-margin-right)]",
+        marginBottom && "mb-[var(--user-text-margin-bottom)]",
+        radius && "rounded-[var(--user-text-border-radius)]",
+        "h-[var(--user-text-height)]",
+        borderColor && "border-[var(--user-text-border-color)]",
+        borderHoverColor &&
+          "focus:border-[var(--user-text-border-hover-color)]",
+        `flex-${flexDirection || "row"}`,
+        generateWidthClass,
+        className
+      )}
+      {...props}
+      style={customStyles}
+    />
+  )
+}
 
 export const UserTextInputGen = ({
   fontFamily,
@@ -230,6 +331,7 @@ export const UserTextInputGen = ({
   buttonSize,
   color,
   text,
+  textColor,
   marginLeft,
   width: width,
   height: height,
@@ -254,6 +356,7 @@ export const UserTextInputGen = ({
   border,
   borderColor,
   borderHoverColor,
+  lineHeight,
   ...props
 }) => {
   const secondaryTextColor = useAppSelector(
@@ -268,6 +371,7 @@ export const UserTextInputGen = ({
     .replace(/<\/?div>/g, "\n")
     .replace(/<\/?[^>]+(>|$)/g, "") // Removes all other HTML tags
 
+  const computedText = getComputedValueForTextEditor(sanitizedText)
   return (
     <div
       className="relative w-full"
@@ -311,8 +415,10 @@ export const UserTextInputGen = ({
         paddingBottom={paddingBottom}
         alignItems={alignItems}
         mobileScreen={false}
+        textAlign={textAlign}
+        lineHeight={lineHeight}
         {...props}
-        className="text-[1rem]"
+        className="user-text-comp text-[1rem]"
       >
         <div
           style={{
@@ -320,10 +426,14 @@ export const UserTextInputGen = ({
             transitionProperty: "all",
             overflowX: "clip",
             textOverflow: "ellipsis",
-            color: `${secondaryTextColor}`,
+            color: `${
+              textColor !== "#ffffff" ? textColor : secondaryTextColor
+            }`,
+            lineHeight: "1.5",
           }}
         >
-          {text}
+          <TextEditor isReadOnly initValue={computedText} />
+          {/* <div dangerouslySetInnerHTML={{ __html: text }} /> */}
         </div>
       </StyledCustomTextInput>
     </div>
@@ -360,114 +470,113 @@ export const UserText = ({
   justifyContent,
   border,
   borderColor,
+  textColor,
+  lineHeight,
   ...props
 }) => {
+  paddingLeft = 16
+  paddingRight = 16
   const {
     actions: { setProp },
     connectors: { connect, drag },
-    selected,
-    isHovered,
-  } = useNode((state) => ({
-    selected: state.events.selected,
-    isHovered: state.events.hovered,
-  }))
-  const { actions } = useEditor((state, query) => ({
-    enabled: state.options.enabled,
-  }))
+  } = useNode()
+  // const { actions } = useEditor((state, query) => ({
+  //   enabled: state.options.enabled,
+  // }))
   const t = useTranslations("Components")
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
   const [displayController, setDisplayController] = React.useState(false)
-  const [localText, setLocalText] = useState(text)
+  // const [localText, setLocalText] = useState(text)
 
-  const primaryTextColor = useAppSelector(
-    (state) => state.theme?.text?.primaryColor
-  )
+  // const primaryTextColor = useAppSelector(
+  //   (state) => state.theme?.text?.primaryColor
+  // )
   const secondaryTextColor = useAppSelector(
     (state) => state.theme?.text?.secondaryColor
   )
   const primaryFont = useAppSelector(
     (state) => state.theme?.text?.secondaryFont
   )
-  const primaryColor = useAppSelector(
-    (state) => state.theme?.general?.primaryColor
-  )
-  const secondaryColor = useAppSelector(
-    (state) => state.theme?.general?.secondaryColor
-  )
+  // const primaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.primaryColor
+  // )
+  // const secondaryColor = useAppSelector(
+  //   (state) => state.theme?.general?.secondaryColor
+  // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
-  const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
-  )
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
+  // const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  // const screensLength = useAppSelector(
+  //   (state: RootState) => state?.screen?.screens?.length ?? 0
+  // )
+  // const selectedScreen = useAppSelector(
+  //   (state: RootState) => state.screen?.selectedScreen ?? 0
+  // )
 
-  useEffect(() => {
-    if (fontFamily.globalStyled && !fontFamily.isCustomized) {
-      setProp((props) => (props.fontFamily.value = primaryFont), 200)
-    }
-  }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
+  // useEffect(() => {
+  //   if (fontFamily.globalStyled && !fontFamily.isCustomized) {
+  //     setProp((props) => (props.fontFamily.value = primaryFont), 200)
+  //   }
+  // }, [primaryFont, fontFamily.globalStyled, fontFamily.isCustomized, setProp])
 
-  useEffect(() => {
-    if (primaryColor) {
-      const backgroundPrimaryColor = getBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
-      const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
-        primaryColor,
-        props.preset
-      )
+  // useEffect(() => {
+  //   if (primaryColor) {
+  //     const backgroundPrimaryColor = getBackgroundForPreset(
+  //       primaryColor,
+  //       props.preset
+  //     )
+  //     const hoverBackgroundPrimaryColor = getHoverBackgroundForPreset(
+  //       primaryColor,
+  //       props.preset
+  //     )
 
-      if (background.globalStyled && !background.isCustomized) {
-        setProp(
-          (props) => (props.background.value = backgroundPrimaryColor),
-          200
-        )
-      }
-      if (color.globalStyled && !color.isCustomized) {
-        setProp((props) => (props.color.value = secondaryTextColor), 200)
-      }
-      if (borderColor.globalStyled && !borderColor.isCustomized) {
-        setProp((props) => (props.borderColor.value = primaryColor), 200)
-      }
+  //     if (background.globalStyled && !background.isCustomized) {
+  //       setProp(
+  //         (props) => (props.background.value = backgroundPrimaryColor),
+  //         200
+  //       )
+  //     }
+  //     if (color.globalStyled && !color.isCustomized) {
+  //       setProp((props) => (props.color.value = secondaryTextColor), 200)
+  //     }
+  //     if (borderColor.globalStyled && !borderColor.isCustomized) {
+  //       setProp((props) => (props.borderColor.value = primaryColor), 200)
+  //     }
 
-      // hover colors
+  //     // hover colors
 
-      if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
-        setProp(
-          (props) =>
-            (props.backgroundHover.value = hoverBackgroundPrimaryColor),
-          200
-        )
-      }
-      if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
-        setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
-      }
-      if (colorHover.globalStyled && !colorHover.isCustomized) {
-        setProp((props) => (props.colorHover.value = primaryColor), 200)
-      }
-    }
-  }, [
-    primaryColor,
-    secondaryTextColor,
-    setProp,
-    background.globalStyled,
-    background.isCustomized,
-    backgroundHover.globalStyled,
-    backgroundHover.isCustomized,
-    borderColor.globalStyled,
-    borderColor.isCustomized,
-    borderHoverColor.globalStyled,
-    borderHoverColor.isCustomized,
-    color.globalStyled,
-    color.isCustomized,
-    colorHover.globalStyled,
-    colorHover.isCustomized,
-    props.preset,
-  ])
+  //     if (backgroundHover.globalStyled && !backgroundHover.isCustomized) {
+  //       setProp(
+  //         (props) =>
+  //           (props.backgroundHover.value = hoverBackgroundPrimaryColor),
+  //         200
+  //       )
+  //     }
+  //     if (borderHoverColor.globalStyled && !borderHoverColor.isCustomized) {
+  //       setProp((props) => (props.borderHoverColor.value = primaryColor), 200)
+  //     }
+  //     if (colorHover.globalStyled && !colorHover.isCustomized) {
+  //       setProp((props) => (props.colorHover.value = primaryColor), 200)
+  //     }
+  //   }
+  // }, [
+  //   primaryColor,
+  //   secondaryTextColor,
+  //   setProp,
+  //   background.globalStyled,
+  //   background.isCustomized,
+  //   backgroundHover.globalStyled,
+  //   backgroundHover.isCustomized,
+  //   borderColor.globalStyled,
+  //   borderColor.isCustomized,
+  //   borderHoverColor.globalStyled,
+  //   borderHoverColor.isCustomized,
+  //   color.globalStyled,
+  //   color.isCustomized,
+  //   colorHover.globalStyled,
+  //   colorHover.isCustomized,
+  //   props.preset,
+  // ])
 
   // useEffect(() => {
   //   const currentRef = ref.current
@@ -510,16 +619,15 @@ export const UserText = ({
     [debouncedSetProp]
   )
 
-  const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.value
-      if (typeof value === "string") {
-        // setLocalText(value)
-        handlePropChangeDebounced("text", value)
-      }
-    },
-    [handlePropChangeDebounced]
-  )
+  const handleTextChange = (value) => {
+    if (typeof value === "string" && value.length) {
+      setProp((props) => {
+        props.text = value
+        console.log("saving text", value)
+        return { ...props }
+      })
+    }
+  }
 
   return (
     <div
@@ -575,28 +683,34 @@ export const UserText = ({
           alignItems={alignItems}
           size={size}
           buttonSize={buttonSize}
+          lineHeight={lineHeight}
+          className="user-text-comp"
           {...props}
         >
           <div className="flex flex-col overflow-x-clip">
             {/** @ts-ignore */}
-            <ContentEditable
-              html={text}
-              innerRef={ref}
+            <div
               style={{
                 maxWidth: "787px",
                 transitionProperty: "all",
                 overflowX: "clip",
                 textOverflow: "ellipsis",
-                color: `${secondaryTextColor}`,
+                color: `${
+                  textColor !== "#ffffff" ? textColor : secondaryTextColor
+                }`,
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
+                lineHeight: `${lineHeight}px`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
-              onChange={(e) => {
-                handleTextChange(e)
-              }}
-              tagName="p"
-            />
+            >
+              <TextEditor
+                initValue={getComputedValueForTextEditor(text)}
+                onChange={(val) => {
+                  handleTextChange(serialize(val))
+                }}
+              />
+            </div>
           </div>
         </StyledCustomTextInput>
       </div>

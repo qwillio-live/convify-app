@@ -1,18 +1,23 @@
 "use client"
+
 import React, { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import ConvifyLogo from "@/assets/convify_logo_black.png"
+import { useTranslations } from "next-intl"
+import { ComponentProps, Data } from "@/types"
+
+import { env } from "@/env.mjs"
 import { useNode } from "@/lib/craftjs"
-import { Controller } from "../settings/controller.component"
-import { LogoSettings } from "./user-logo.settings"
-import { StyleProperty } from "../types/style.types"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
+
+import { Controller } from "../settings/controller.component"
+import { StyleProperty } from "../types/style.types"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useLogoThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import ConvifyLogo from "@/assets/convify_logo_black.png"
+import { LogoSettings } from "./user-logo.settings"
 
 const ButtonTextLimit = {
   small: 100,
@@ -70,6 +75,19 @@ export const LogoComponentGen = ({
 
   ...props
 }) => {
+  const headerData = useAppSelector((state) => state.screen?.screensHeader)
+  const avatarContainerColor: Data = JSON.parse(headerData)
+
+  // Loop through the data and find the first AvatarComponent
+  const avatarComponent = Object.values(avatarContainerColor).find(
+    (item) => item.displayName === "AvatarComponent"
+  )
+
+  // Check if the component is found and return its containerBackground
+  const avatarContainerBackground = avatarComponent
+    ? avatarComponent.props.containerBackground
+    : null
+
   return (
     <div
       className=""
@@ -82,7 +100,12 @@ export const LogoComponentGen = ({
       <div
         className="relative w-full"
         style={{
-          background: `${containerBackground}`,
+          background: `${
+            avatarContainerBackground &&
+            avatarContainerBackground !== "transparent"
+              ? avatarContainerBackground
+              : containerBackground
+          }`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -152,14 +175,19 @@ export const UserLogo = ({
 }) => {
   return (
     <div
-      style={{ height: h, width: w, overflow: "hidden", position: "relative" }}
+      style={{
+        height: "58px",
+        width: w,
+        overflow: "hidden",
+        position: "relative",
+      }}
     >
       <img
         alt={alt}
         src={src}
         style={{
           width: w,
-          height: `calc(${80}px - ${top}px - ${bottom}px)`,
+          height: `calc(${60}px - ${top}px - ${bottom}px)`,
           borderRadius: `${borderRad}px`,
           backgroundColor: background,
           objectFit: "cover",
@@ -330,7 +358,19 @@ export const LogoComponent = ({
       }
     }
   }, [text, maxLength])
+  const headerData = useAppSelector((state) => state.screen?.screensHeader)
+  const avatarContainerColor: Data = JSON.parse(headerData)
 
+  // Loop through the data and find the first AvatarComponent
+  const avatarComponent = Object.values(avatarContainerColor).find(
+    (item) => item.displayName === "AvatarComponent"
+  )
+
+  // Check if the component is found and return its containerBackground
+  const avatarContainerBackground = avatarComponent
+    ? avatarComponent.props.containerBackground
+    : null
+  console.log("avatarContainerBackground", avatarContainerBackground)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -347,7 +387,12 @@ export const LogoComponent = ({
       <div
         className="relative w-full"
         style={{
-          background: `${containerBackground}`,
+          background: `${
+            avatarContainerBackground &&
+            avatarContainerBackground !== "transparent"
+              ? avatarContainerBackground
+              : containerBackground
+          }`,
           display: "inline-flex",
           justifyContent: "center",
           boxSizing: "border-box",
@@ -501,13 +546,13 @@ export const LogoDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: "https://convify.io",
+  url: env.NEXT_PUBLIC_APP_URL,
   src: `${ConvifyLogo.src}`,
   disabled: false,
   enableLink: false,
   minWidth: "120px",
   w: "auto",
-  h: "80px",
+  h: "60px",
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,
@@ -515,8 +560,8 @@ export const LogoDefaultProps: IconButtonProps = {
   buttonSize: "medium",
   time: 2,
   text: "Get quote",
-  top: 0,
-  bottom: 0,
+  top: 10,
+  bottom: 10,
   left: 0,
   right: 0,
   marginLeft: 0,

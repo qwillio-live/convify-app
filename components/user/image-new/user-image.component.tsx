@@ -1,6 +1,9 @@
 "use client"
-import React, { useCallback, useEffect, useRef } from "react"
-import ImagePlaceholder from "@/assets/images/default-image.webp"
+
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import Image from "next/image"
+import { DefaultImagePlaceholder } from "@/constant"
+import { debounce, throttle } from "lodash"
 import {
   Activity,
   Anchor,
@@ -10,22 +13,25 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 import styled from "styled-components"
-import { throttle, debounce } from "lodash"
+
+import { env } from "@/env.mjs"
 import { useEditor, useNode } from "@/lib/craftjs"
+import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn } from "@/lib/utils"
 import { Button as CustomButton } from "@/components/ui/button"
+
 import { Controller } from "../settings/controller.component"
-import { ImageSettings } from "./user-image.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { ImageSettings } from "./user-image.settings"
+import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -154,7 +160,7 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
           )}
         >
           {
@@ -162,7 +168,7 @@ export const ImageComponentGen = ({
             <UserLogo
               alt={alt}
               marginTop={marginTop}
-              maxWidth={maxWidth}
+              maxWidth={"100%"}
               marginBottom={marginBottom}
               marginLeft={marginLeft}
               marginRight={marginRight}
@@ -207,11 +213,32 @@ export const UserLogo = ({
   ...props
 }) => {
   console.log("max width in the image is: ", maxWidth, width)
+  const [imgg, setImg] = useState("")
+  const [count, setCount] = useState(0)
+
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    console.log("updating src", src)
+    if (count === 0) {
+      setImg(src)
+    } else {
+      setCount((prev) => prev + 1)
+      const timeoutId = setTimeout(() => {
+        setImg(src) // Assuming you have setImg defined
+      }, 6000) // 5000 milliseconds = 5 seconds
+      // Cleanup the timeout on unmount or when `src` changes
+      return () => clearTimeout(timeoutId)
+    }
+  }, [src])
   return (
     <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+
       <img
         alt={alt}
-        src={src}
+        src={imgg}
+        width={parseFloat(width) ?? 346}
+        height={parseFloat(height) || 212}
         style={{
           width: width,
           maxWidth: maxWidth,
@@ -314,75 +341,36 @@ export const ImageComponent = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (mobileScreen && picSize == "small") {
+      if (picSize == "small") {
         setProp(
           (props) => (
-            (props.maxWidth = "300px"),
-            (props.picSize = "small"),
-            (props.width = `${props.imageSize}%`)
+            (props.width = "250px"), (props.picSize = "small")
+            // (props.maxWidth = `100%`)
           ),
           1000
         )
-      } else if (mobileScreen && picSize == "medium") {
+      } else if (picSize == "medium") {
         setProp(
           (props) => (
-            (props.maxWidth = "300px"),
-            (props.picSize = "medium"),
-            (props.width = `${props.imageSize}%`)
+            (props.width = mobileScreen ? "360px" : "376px"),
+            (props.picSize = "medium")
+            // (props.width = `${props.imageSize}%`)
           ),
           1000
         )
-      } else if (mobileScreen && picSize == "large") {
+      } else if (picSize == "large") {
         setProp(
           (props) => (
-            (props.maxWidth = "300px"),
-            (props.picSize = "large"),
-            (props.width = `${props.imageSize}%`)
+            (props.width = "800px"), (props.picSize = "large")
+            // (props.width = `${props.imageSize}%`)
           ),
           1000
         )
-      } else if (mobileScreen && picSize == "full") {
+      } else {
         setProp(
           (props) => (
-            (props.maxWidth = "330px"),
-            (props.picSize = "full"),
-            (props.width = `${props.imageSize}%`)
-          ),
-          1000
-        )
-      } else if (!mobileScreen && picSize == "small") {
-        setProp(
-          (props) => (
-            (props.maxWidth = "400px"),
-            (props.picSize = "small"),
-            (props.width = `${props.imageSize}%`)
-          ),
-          1000
-        )
-      } else if (!mobileScreen && picSize == "medium") {
-        setProp(
-          (props) => (
-            (props.maxWidth = "800px"),
-            (props.picSize = "medium"),
-            (props.width = `${props.imageSize}%`)
-          ),
-          1000
-        )
-      } else if (!mobileScreen && picSize == "large") {
-        setProp(
-          (props) => (
-            (props.maxWidth = "850px"),
-            (props.picSize = "large"),
-            (props.width = `${props.imageSize}%`)
-          ),
-          1000
-        )
-      } else if (!mobileScreen && picSize == "full") {
-        setProp(
-          (props) => (
-            (props.maxWidth = "870px"),
-            (props.picSize = "full"),
-            (props.width = `${props.imageSize}%`)
+            (props.width = "100%"), (props.picSize = "full")
+            // (props.width = `${props.imageSize}%`)
           ),
           1000
         )
@@ -527,7 +515,7 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
           )}
         >
           {
@@ -535,7 +523,7 @@ export const ImageComponent = ({
             <UserLogo
               alt={alt}
               marginTop={marginTop}
-              maxWidth={maxWidth}
+              maxWidth={"100%"}
               marginBottom={marginBottom}
               marginLeft={marginLeft}
               marginRight={marginRight}
@@ -666,16 +654,16 @@ export const ImageDefaultProps: IconButtonProps = {
   },
   alt: "Image",
   align: "center",
-  url: "https://convify.io",
-  src: ImagePlaceholder.src,
+  url: env.NEXT_PUBLIC_APP_URL,
+  src: DefaultImagePlaceholder,
   radiusCorner: 0,
   disabled: false,
   enableLink: false,
   width: "100%",
   maxWidth: "400px",
   height: "auto",
-  size: IconButtonSizes.small,
-  picSize: IconButtonSizes.small,
+  size: IconButtonSizes.medium,
+  picSize: IconButtonSizes.medium,
   imageSize: 100,
   buttonSize: "small",
   time: 2,

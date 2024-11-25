@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { UserAccountNav } from "@/components/user-account-nav"
 import StoreProvider from "@/lib/state/flows-state/store-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { getTranslations } from "next-intl/server"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -63,9 +64,14 @@ const geist = localFont({
     },
   ],
 })
-const APP_NAME = env.NEXT_PUBLIC_APP_NAME
-export const metadata: Metadata = {
-  title: `${APP_NAME} - Flows`,
+const APP_NAME = process.env.APP_NAME
+
+export async function generateMetadata() {
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${APP_NAME} - ${t("flows")}`, // Use translations for title
+  }
 }
 import {
   anton,
@@ -125,6 +131,9 @@ import {
 import { cn } from "@/lib/utils"
 import { env } from "@/env.mjs"
 import { Metadata } from "next"
+import { useTranslations } from "next-intl"
+import { ScreenshotsProvider } from "./thumbnailCronProvider"
+
 export default async function DashboardLayout({
   children,
   params: { locale },
@@ -137,69 +146,71 @@ export default async function DashboardLayout({
 
   return (
     <StoreProvider>
-      <div
-        className={cn(
-          "flex h-screen flex-col space-y-6 ",
-          roboto.className,
-          fontSans.className,
-          fontHeading.className,
-          inter.className,
-          roboto_mono.className,
-          geist.className,
-          open_sans.className,
-          montserrat.className,
-          lato.className,
-          oswald.className,
-          raleway.className,
-          pt_sans.className,
-          merriweather.className,
-          nunito.className,
-          playfair_display.className,
-          poppins.className,
-          ubuntu.className,
-          mukta.className,
-          rubik.className,
-          work_sans.className,
-          roboto_condensed.className,
-          noto_sans.className,
-          fira_sans.className,
-          quicksand.className,
-          karla.className,
-          cabin.className,
-          barlow.className,
-          arimo.className,
-          teko.className,
-          catamaran.className,
-          libre_franklin.className,
-          oxygen.className,
-          heebo.className,
-          asap.className,
-          bitter.className,
-          ibm_plex_sans.className,
-          exo_2.className,
-          dosis.className,
-          pt_serif.className,
-          overpass.className,
-          varela_round.className,
-          questrial.className,
-          inconsolata.className,
-          rokkitt.className,
-          red_hat_display.className,
-          cairo.className,
-          lora.className,
-          titillium_web.className,
-          bebas_neue.className,
-          anton.className,
-          zilla_slab.className,
-          nunito_sans.className,
-          roboto_slab.className,
-          sans3.className
-        )}
-      >
-        <main>{children}</main>
-        <Toaster />
-        {/* <SiteFooter className="border-t" /> */}
-      </div>
+      <ScreenshotsProvider>
+        <div
+          className={cn(
+            "flex h-screen flex-col space-y-6 bg-white",
+            roboto.variable,
+            fontSans.variable,
+            fontHeading.variable,
+            inter.variable,
+            roboto_mono.variable,
+            geist.variable,
+            open_sans.variable,
+            montserrat.variable,
+            lato.variable,
+            oswald.variable,
+            raleway.variable,
+            pt_sans.variable,
+            merriweather.variable,
+            nunito.variable,
+            playfair_display.variable,
+            poppins.variable,
+            ubuntu.variable,
+            mukta.variable,
+            rubik.variable,
+            work_sans.variable,
+            roboto_condensed.variable,
+            noto_sans.variable,
+            fira_sans.variable,
+            quicksand.variable,
+            karla.variable,
+            cabin.variable,
+            barlow.variable,
+            arimo.variable,
+            teko.variable,
+            catamaran.variable,
+            libre_franklin.variable,
+            oxygen.variable,
+            heebo.variable,
+            asap.variable,
+            bitter.variable,
+            ibm_plex_sans.variable,
+            exo_2.variable,
+            dosis.variable,
+            pt_serif.variable,
+            overpass.variable,
+            varela_round.variable,
+            questrial.variable,
+            inconsolata.variable,
+            rokkitt.variable,
+            red_hat_display.variable,
+            cairo.variable,
+            lora.variable,
+            titillium_web.variable,
+            bebas_neue.variable,
+            anton.variable,
+            zilla_slab.variable,
+            nunito_sans.variable,
+            roboto_slab.variable,
+            sans3.variable
+          )}
+        >
+          <main>{children}</main>
+          <Toaster />
+          {/* <SiteFooter className="border-t" /> */}
+        </div>
+      </ScreenshotsProvider>
     </StoreProvider>
   )
 }

@@ -1,56 +1,65 @@
-import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
+// export const runtime = "edge"
 import React, { Suspense } from "react"
+import { cookies } from "next/headers"
+import { usePathname, useSearchParams } from "next/navigation"
+import { User } from "lucide-react"
+import { getServerSession } from "next-auth"
 
-import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
-import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
-import { UserLogo } from "@/components/user/logo/user-logo.component"
-// import lz from "lzutf8";
-import { UserTextInputGen } from "@/components/user/text/user-text.component"
-import { UserInputGen } from "@/components/user/input/user-input.component"
-import { LogoBarGen } from "@/components/user/logo-bar/user-logo-bar.component"
-import { ProgressBarGen } from "@/components/user/progress/user-progress.component"
+import { env } from "@/env.mjs"
+import { authOptions } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/session"
+import { cn } from "@/lib/utils"
+import FlowLayout from "@/components/flow-preview/flow-preview-server"
+import { AvatarComponentGen } from "@/components/user/avatar-new/user-avatar.component"
+import { BackButtonGen } from "@/components/user/backButton/back-component"
 import {
-  FormContentGen,
-  FormContent,
-  FormGen,
-} from "@/components/user/form/user-form.component"
-import { PictureChoiceGen } from "@/components/user/picture-choice/user-picture-choice.component"
-import { MultipleChoiceGen } from "@/components/user/multiple-choice/user-multiple-choice.component"
-import { ScreenFooterGen } from "@/components/user/screens/screen-footer.component"
-import {
-  CardContentGen,
   CardContent,
+  CardContentGen,
   CardGen,
 } from "@/components/user/card/user-card.component"
-
+import { ChecklistGen } from "@/components/user/checklist/user-checklist.component"
+import { UserContainerGen } from "@/components/user/container/user-container.component"
+import {
+  FormContent,
+  FormContentGen,
+  FormGen,
+} from "@/components/user/form/user-form.component"
+import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
+import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
+import { ImageComponentGen } from "@/components/user/image-new/user-image.component"
 import { UserInputCheckboxGen } from "@/components/user/input-checkbox/user-input-checkbox.component"
 import { UserInputMailGen } from "@/components/user/input-email/user-input-mail.component"
-import { User } from "lucide-react"
 import { UserInputPhoneGen } from "@/components/user/input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "@/components/user/input-textarea/user-input-textarea.component"
-import { ImageComponentGen } from "@/components/user/image-new/user-image.component"
-import { SelectGen } from "@/components/user/select/user-select.component"
-import { ChecklistGen } from "@/components/user/checklist/user-checklist.component"
-import { ListGen } from "@/components/user/list/user-list.component"
-import { StepsGen } from "@/components/user/steps/user-steps.component"
+import { UserInputGen } from "@/components/user/input/user-input.component"
 import { IconLineSeperator } from "@/components/user/lineSeperator/line-seperator-component"
-import { BackButtonGen } from "@/components/user/backButton/back-component"
 import { LinkButtonGen } from "@/components/user/link/link-component"
-import { AvatarComponentGen } from "@/components/user/avatar-new/user-avatar.component"
-import { LogoComponentGen } from "@/components/user/logo-new/user-logo.component"
+import { ListGen } from "@/components/user/list/user-list.component"
 import { LoaderComponentGen } from "@/components/user/loader-new/user-loader.component"
-import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { LogoBarGen } from "@/components/user/logo-bar/user-logo-bar.component"
+import { LogoComponentGen } from "@/components/user/logo-new/user-logo.component"
+import { UserLogo } from "@/components/user/logo/user-logo.component"
+import { MultipleChoiceGen } from "@/components/user/multiple-choice/user-multiple-choice.component"
+import { PictureChoiceGen } from "@/components/user/picture-choice/user-picture-choice.component"
+import { ProgressBarGen } from "@/components/user/progress/user-progress.component"
+import { ScreenFooterGen } from "@/components/user/screens/screen-footer.component"
+import { SelectGen } from "@/components/user/select/user-select.component"
+import { CRAFT_ELEMENTS } from "@/components/user/settings/craft-elements"
 import { SocialShareButtonGen } from "@/components/user/socialShareButton/share-component"
+import { StepsGen } from "@/components/user/steps/user-steps.component"
 import { TelegramShareButtonGen } from "@/components/user/telegramShareButton/telegram-component"
-import { UserContainerGen } from "@/components/user/container/user-container.component"
-import { getCurrentUser } from "@/lib/session"
-import { authOptions } from "@/lib/auth"
-import { getServerSession } from "next-auth"
-import { cookies } from "next/headers"
-import { useSearchParams } from "next/navigation"
-import { usePathname } from "next/navigation"
-import FlowLayout from "@/components/flow-preview/flow-preview-server"
-import { env } from "@/env.mjs"
+// import lz from "lzutf8";
+import { UserTextInputGen } from "@/components/user/text/user-text.component"
+import { TextImageComponentGen } from "@/components/user/textImage/user-textImage.component"
+import { SliderBarGen } from "@/components/user/slider/user-slider.component"
+import { FAQGen } from "@/components/user/faq/user-faq.component"
+import { LinksGen } from "@/components/user/links/user-links.component"
+import {
+  ImageStory,
+  ImageStoryGen,
+} from "@/components/user/image-story/image-story.component"
+import { YoutubeVideoGen } from "@/components/user/youtube-video/user-youtube-video.component"
+import { CookieConsentComponent } from "@/components/cookie-consent/CookieConsentComponent"
 
 export default async function PreviewFlows({
   params,
@@ -85,6 +94,10 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.STEPS]: StepsGen,
     [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
     [CRAFT_ELEMENTS.LIST]: ListGen,
+    [CRAFT_ELEMENTS.LINKS]: LinksGen,
+    [CRAFT_ELEMENTS.FAQ]: FAQGen,
+    [CRAFT_ELEMENTS.YOUTUBEVIDEO]: YoutubeVideoGen,
+    [CRAFT_ELEMENTS.IMAGESTORY]: ImageStoryGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
     [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
@@ -94,6 +107,7 @@ export default async function PreviewFlows({
     [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
     [CRAFT_ELEMENTS.FORM]: FormGen,
     [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
+    [CRAFT_ELEMENTS.RANGE]: SliderBarGen,
   }
 
   const screenName = searchParams?.screen || ""
@@ -109,13 +123,17 @@ export default async function PreviewFlows({
     headers: {
       Cookie: cookieString,
     },
-    cache: "default",
+    cache: "force-cache",
     next: { tags: ["previewFlow"] },
   })
   const data = await response.json()
-  const filteredStep = data.steps.find((screen) => screen.name === screenName)
-    ? data.steps.find((screen) => screen.name === screenName)
-    : data.steps[0]
+  const filteredStep = data.steps?.find((screen) => screen.name === screenName)
+    ? data.steps?.find((screen) => screen.name === screenName)
+    : data?.steps?.[0]
+
+  const showCookieConsentPopup =
+    data?.flowSettings?.general?.showCookieConsentPopup
+
   const resolveComponents = (screenContent) => {
     if (!screenContent) return <></>
 
@@ -187,52 +205,113 @@ export default async function PreviewFlows({
     return parse("ROOT") || <></>
   }
 
+  console.log("anjit", data?.flowSettings?.header)
+  const revertMinHeightAndClassName = (data) => {
+    console.log("reverting editorload", data)
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      console.log("erring", e)
+      data = data
+    }
+    console.log("pop", data)
+    if (data.ROOT && data.ROOT.props) {
+      // Check if the style object exists; if not, create it
+      if (!data.ROOT.props.style) {
+        data.ROOT.props.style = {} // Create the style object
+      }
+      data.ROOT.props.style.minHeight = "none" // Update to 80vh
+      data.ROOT.props.style.height = "auto" // Update to 80vh
+
+      // Check for className and remove any class starting with "min-h-"
+      if (data.ROOT.props.className) {
+        data.ROOT.props.className = data.ROOT.props.className
+          .split(" ") // Split into an array of class names
+          .filter((className) => !className.startsWith("min-h-")) // Remove classes starting with "min-h-"
+          .join(" ") // Join back into a string
+      }
+      console.log(" reverted editorLoad", data)
+      return data
+    }
+  }
+  const checkAvatar = () => {
+    const parsedEditor = JSON.parse(data?.headerData)
+    const container = parsedEditor["ROOT"]
+    if (!container) {
+      return false
+    }
+    const avatarIndex = container.nodes.findIndex(
+      (nodeId) => parsedEditor[nodeId].type.resolvedName === "AvatarComponent"
+    )
+    console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
+    return avatarIndex !== -1
+  }
   return (
     <>
-      <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
-        style={{
-          backgroundColor: data?.flowSettings?.general?.backgroundColor,
-        }}
-      >
-        {data?.headerData &&
-          resolveComponents(JSON.parse(data?.headerData || {}))}
-      </div>
-      <div
-        className={`flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] min-h-[71vh]`}
-        style={{
-          backgroundColor: data?.flowSettings?.general?.backgroundColor,
-        }}
-      >
-        {filteredStep && (
-          <div
-            key={`${filteredStep.name}`}
-            id={filteredStep.name}
-            style={{
-              backgroundColor: data?.flowSettings?.general?.backgroundColor,
-            }}
-            className="
-            animate-flow
-relative
-min-w-full
-shrink-0
-basis-full
-"
-          >
-            {resolveComponents(filteredStep.content)}
-          </div>
-        )}
-      </div>
-      {data?.footerData && (
+      <div className="flex h-screen flex-col">
+        {showCookieConsentPopup && <CookieConsentComponent />}
         <div
-          className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+          className={cn(
+            `flex w-full flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}] z-20`,
+            {
+              fixed: data?.flowSettings?.header?.headerPosition === "absolute",
+            }
+          )}
           style={{
             backgroundColor: data?.flowSettings?.general?.backgroundColor,
           }}
         >
-          {resolveComponents(JSON.parse(data?.footerData || {}))}
+          {data?.headerData &&
+            resolveComponents(revertMinHeightAndClassName(data?.headerData))}
         </div>
-      )}
+        {data?.flowSettings?.header?.headerPosition === "absolute" && (
+          <div
+            className={cn(
+              `flex w-full flex-col  !bg-[${data?.flowSettings?.general?.backgroundColor}]`
+            )}
+            style={{
+              backgroundColor: data?.flowSettings?.general?.backgroundColor,
+              visibility: "hidden", // This hides the content but keeps the space
+            }}
+          >
+            {data?.headerData &&
+              resolveComponents(revertMinHeightAndClassName(data?.headerData))}
+          </div>
+        )}
+        <div
+          className={`flex w-full flex-1 flex-col !bg-[${data?.flowSettings?.general?.backgroundColor}]`}
+          style={{
+            backgroundColor: data?.flowSettings?.general?.backgroundColor,
+          }}
+        >
+          {filteredStep && (
+            <div
+              key={`${filteredStep.name}`}
+              id={filteredStep.name}
+              style={{
+                backgroundColor: data?.flowSettings?.general?.backgroundColor,
+                paddingTop: checkAvatar() ? "44px" : "0px",
+              }}
+              className="animate-flow relative min-w-full"
+            >
+              {resolveComponents(filteredStep.content)}
+            </div>
+          )}
+        </div>
+
+        {data?.footerData && (
+          <div
+            className={`font-geist !bg-[${data?.flowSettings?.general?.backgroundColor}] flex w-full flex-col`}
+            style={{
+              backgroundColor: data?.flowSettings?.general?.backgroundColor,
+            }}
+          >
+            {resolveComponents(
+              revertMinHeightAndClassName(data?.footerData || {})
+            )}
+          </div>
+        )}
+      </div>
     </>
   )
 }

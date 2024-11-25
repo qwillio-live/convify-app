@@ -13,6 +13,7 @@ import defaultLogo4 from "@/assets/images/logo-bar-default-logo-4.svg"
 import defaultLogoImage from "@/assets/images/logo-bar-default-logo.svg"
 import { ImagePictureTypes } from "@/components/PicturePicker"
 
+
 const useLogoBarThemePresets = () => {
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")

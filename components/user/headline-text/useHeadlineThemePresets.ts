@@ -7,6 +7,8 @@ import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalT
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import { HeadlineTextProps, TextContainerSize } from "./headline-text.component"
+import { serialize } from "@/lib/utils"
+
 
 const useHeadlineThemePresets = () => {
   const t = useTranslations("Components")
@@ -20,8 +22,15 @@ const useHeadlineThemePresets = () => {
     0.1
   )
 
+const defaultContent = serialize([{
+    type: 'paragraph',
+    children: [
+        { text:  t("HeadlineDescription") }]
+}])
+
   const h1Preset: HeadlineTextProps = {
-    lineHeight: "1.5",
+    lineHeight: 40,
+    mobileLineHeight:30,
     fontSize: 32,
     fontWeight: "700",
     fontFamily: {
@@ -70,14 +79,14 @@ const useHeadlineThemePresets = () => {
     width: TextContainerSize.medium,
     height: "auto",
     size: TextContainerSize.medium,
-    text: t("HeadlineDescription"),
+    text:defaultContent,
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    paddingLeft: "16",
+    paddingLeft: "12",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "12",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -86,7 +95,7 @@ const useHeadlineThemePresets = () => {
     buttonSize: "medium",
     tagType: "h1",
     preset: "h1",
-    mobileFontSize: 24
+    mobileFontSize: 24,
   }
 
   const h2Preset: HeadlineTextProps = {
@@ -138,15 +147,16 @@ const useHeadlineThemePresets = () => {
     width: "fit-content",
     height: "fit-content",
     size: TextContainerSize.medium,
-    text: t("HeadlineDescription"),
+    text: defaultContent,
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
     marginBottom: 20,
-    lineHeight: "1.5",
-    paddingLeft: "16",
+    lineHeight: 40,
+    mobileLineHeight: 30,
+    paddingLeft: "12",
     paddingTop: "14",
-    paddingRight: "16",
+    paddingRight: "12",
     paddingBottom: "14",
     flexDirection: "row",
     alignItems: "center",
@@ -155,7 +165,7 @@ const useHeadlineThemePresets = () => {
     buttonSize: "medium",
     tagType: "h2",
     preset: "h2",
-    mobileFontSize: 24
+    mobileFontSize: 24,
   }
 
   return { h1Preset, h2Preset }

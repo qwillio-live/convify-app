@@ -1,23 +1,49 @@
+import hexoid from "hexoid"
+import { useTranslations } from "next-intl"
+
+import { useAppSelector } from "@/lib/state/flows-state/hooks"
+
 import {
   ChecklistLayouts,
   ChecklistPresets,
   ChecklistProps,
   ChecklistSizes,
 } from "./user-checklist.component"
-import { useAppSelector } from "@/lib/state/flows-state/hooks"
-import hexoid from "hexoid"
-import { useTranslations } from "next-intl"
+import { PictureTypes } from "@/components/PicturePicker"
+import { serialize } from "@/lib/utils"
 
 const useChecklistThemePresets = () => {
+  const getDefaultContentForIndex = (idx) => {
+    return serialize([
+      {
+        type: "paragraph",
+        children: [{ text: `${t("Item")} ${idx}` }],
+      },
+    ])
+  }
   const theme = useAppSelector((state) => state.theme)
   const t = useTranslations("Components")
+  const defaultChecklistItems = [
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(1),
+    },
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(2),
+    },
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(3),
+    },
+    {
+      id: `checklist-item-${hexoid(4)()}`,
+      value: getDefaultContentForIndex(4),
+    },
+  ]
 
   const normalPreset: ChecklistProps = {
-    checklistItems: [
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
-    ],
+    checklistItems: [...defaultChecklistItems],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -25,15 +51,15 @@ const useChecklistThemePresets = () => {
     },
     fontWeight: "normal",
     fontSize: 16,
-    icon: "interface-validation-check-circle-checkmark-addition-circle-success-check-validation-add-form",
-    textColor: theme?.text?.primaryColor || "#000000",
+    icon: "👉",
+    iconType: PictureTypes.EMOJI,
     layout: ChecklistLayouts.column,
     borderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     iconColor: "#30AB66",
-    width: ChecklistSizes.small,
+    width: ChecklistSizes.medium,
     height: 50,
-    size: ChecklistSizes.small,
+    size: ChecklistSizes.medium,
     marginLeft: 0,
     marginTop: 20,
     marginRight: 0,
@@ -45,14 +71,11 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.normal,
+    column: 2,
   }
 
   const boldPreset: ChecklistProps = {
-    checklistItems: [
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 1` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 2` },
-      { id: `checklist-item-${hexoid(4)()}`, value: `${t("Item")} 3` },
-    ],
+    checklistItems: [...defaultChecklistItems],
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
@@ -60,9 +83,9 @@ const useChecklistThemePresets = () => {
     },
     fontWeight: "600",
     fontSize: 18,
-    icon: "interface-validation-check-circle-checkmark-addition-circle-success-check-validation-add-form",
+    icon: "👉",
+    iconType: PictureTypes.EMOJI,
     layout: ChecklistLayouts.column,
-    textColor: theme?.text?.primaryColor || "#000000",
     borderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     iconColor: "#30AB66",
@@ -80,6 +103,7 @@ const useChecklistThemePresets = () => {
     fullWidth: true,
     settingTabs: ["content"],
     preset: ChecklistPresets.bold,
+    column: 2,
   }
 
   return { normalPreset, boldPreset }

@@ -1,127 +1,131 @@
 "use client"
-import { useRouter } from "next/navigation"
+
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 
+import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
+import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  setFlowSettings,
+  setMobileScreen,
+} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BreadCrumbs } from "@/components/breadcrumbs"
 import { CreateFlowComponent } from "@/components/create-flow/create-flow.component-with-flowId"
 import ConnectFlowComponents from "@/components/sections/createFlow/connect/Connect"
 // sections
 import ResultFlowComponents from "@/components/sections/createFlow/result/Result"
+
 import Header from "../constants/headerEls"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { reset } from "@/lib/state/flows-state/features/theme/globalewTheme"
-import { resetScreens } from "@/lib/state/flows-state/features/newScreens"
-import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { setFlowSettings } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
+
+const fontMappings: Record<string, string> = {
+  "--font-roboto": "Roboto:wght@100;300;400;500;700;900",
+  "--font-inter": "Inter:wght@100;300;400;500;600;700;800;900",
+  "--font-roboto-mono": "Roboto+Mono:wght@100;300;400;500;700",
+  "--font-open-sans": "Open+Sans:wght@300;400;600;700",
+  "--font-montserrat": "Montserrat:wght@100;300;400;500;600;700;800;900",
+  "--font-lato": "Lato:wght@100;300;400;700;900",
+  "--font-oswald": "Oswald:wght@400;700",
+  "--font-raleway": "Raleway:wght@100;300;400;500;600;700;800;900",
+  "--font-pt-sans": "PT+Sans:wght@400",
+  "--font-merriweather": "Merriweather:wght@300;400;700;900",
+  "--font-nunito": "Nunito:wght@200;300;400;600;700;800;900",
+  "--font-playfair-display": "Playfair+Display:wght@400;700",
+  "--font-poppins": "Poppins:wght@100;300;400;500;600;700;800;900",
+  "--font-ubuntu": "Ubuntu:wght@300;400;500;700",
+  "--font-mukta": "Mukta:wght@200;300;400;500;600;700",
+  "--font-rubik": "Rubik:wght@300;400;500;600;700;900",
+  "--font-work-sans": "Work+Sans:wght@100;300;400;500;600;700;800;900",
+  "--font-roboto-condensed": "Roboto+Condensed:wght@300;400;700",
+  "--font-noto-sans": "Noto+Sans:wght@100;300;400;500;700",
+  "--font-fira-sans": "Fira+Sans:wght@100;300;400;500;700;900",
+  "--font-quicksand": "Quicksand:wght@300;400;500;600;700",
+  "--font-karla": "Karla:wght@300;400;500;600;700",
+  "--font-cabin": "Cabin:wght@400;500;600;700",
+  "--font-barlow": "Barlow:wght@100;300;400;500;600;700;900",
+  "--font-arimo": "Arimo:wght@400;500;600;700",
+  "--font-teko": "Teko:wght@300;400;500;600;700",
+  "--font-catamaran": "Catamaran:wght@100;300;400;500;700;900",
+  "--font-libre-franklin":
+    "Libre+Franklin:wght@100;300;400;500;600;700;800;900",
+  "--font-oxygen": "Oxygen:wght@300;400;700",
+  "--font-heebo": "Heebo:wght@100;300;400;500;700;900",
+  "--font-asap": "Asap:wght@100;300;400;500;700;900",
+  "--font-bitter": "Bitter:wght@100;300;400;500;700;900",
+  "--font-ibm-plex-sans": "IBM+Plex+Sans:wght@100;300;400;500;600;700",
+  "--font-exo-2": "Exo+2:wght@100;300;400;500;600;700;800;900",
+  "--font-dosis": "Dosis:wght@300;400;500;600;700",
+  "--font-pt-serif": "PT+Serif:wght@400;700",
+  "--font-overpass": "Overpass:wght@100;300;400;500;600;700;900",
+  "--font-varela-round": "Varela+Round:wght@400",
+  "--font-questrial": "Questrial:wght@400",
+  "--font-inconsolata": "Inconsolata:wght@200;300;400;500;600;700;900",
+  "--font-rokkitt": "Rokkitt:wght@100;300;400;500;700;900",
+  "--font-red-hat-display": "Red+Hat+Display:wght@300;400;500;700;900",
+  "--font-cairo": "Cairo:wght@200;300;400;500;600;700;900",
+  "--font-lora": "Lora:wght@400;500;600;700",
+  "--font-titillium-web": "Titillium+Web:wght@200;300;400;600;700;900",
+  "--font-bebas-neue": "Bebas+Neue:wght@400",
+  "--font-anton": "Anton:wght@400",
+  "--font-zilla-slab": "Zilla+Slab:wght@300;400;500;600;700",
+  "--font-nunito-sans": "Nunito+Sans:wght@200;300;400;500;600;700;900",
+  "--font-roboto-slab": "Roboto+Slab:wght@100;300;400;500;600;700;900",
+  "--font-sans3": "Source+Sans+3:wght@200;300;400;500;600;700;800;900",
+}
 
 export default function CreateFlowsPage({
   params,
 }: {
   params: { flowId: string; en: string }
 }) {
-  const fontMappings: Record<string, string> = {
-    "--font-roboto": "Roboto:wght@100;300;400;500;700;900",
-    "--font-inter": "Inter:wght@100;300;400;500;600;700;800;900",
-    "--font-roboto-mono": "Roboto+Mono:wght@100;300;400;500;700",
-    "--font-open-sans": "Open+Sans:wght@300;400;600;700",
-    "--font-montserrat": "Montserrat:wght@100;300;400;500;600;700;800;900",
-    "--font-lato": "Lato:wght@100;300;400;700;900",
-    "--font-oswald": "Oswald:wght@400;700",
-    "--font-raleway": "Raleway:wght@100;300;400;500;600;700;800;900",
-    "--font-pt-sans": "PT+Sans:wght@400",
-    "--font-merriweather": "Merriweather:wght@300;400;700;900",
-    "--font-nunito": "Nunito:wght@200;300;400;600;700;800;900",
-    "--font-playfair-display": "Playfair+Display:wght@400;700",
-    "--font-poppins": "Poppins:wght@100;300;400;500;600;700;800;900",
-    "--font-ubuntu": "Ubuntu:wght@300;400;500;700",
-    "--font-mukta": "Mukta:wght@200;300;400;500;600;700",
-    "--font-rubik": "Rubik:wght@300;400;500;600;700;900",
-    "--font-work-sans": "Work+Sans:wght@100;300;400;500;600;700;800;900",
-    "--font-roboto-condensed": "Roboto+Condensed:wght@300;400;700",
-    "--font-noto-sans": "Noto+Sans:wght@100;300;400;500;700",
-    "--font-fira-sans": "Fira+Sans:wght@100;300;400;500;700;900",
-    "--font-quicksand": "Quicksand:wght@300;400;500;600;700",
-    "--font-karla": "Karla:wght@300;400;500;600;700",
-    "--font-cabin": "Cabin:wght@400;500;600;700",
-    "--font-barlow": "Barlow:wght@100;300;400;500;600;700;900",
-    "--font-arimo": "Arimo:wght@400;500;600;700",
-    "--font-teko": "Teko:wght@300;400;500;600;700",
-    "--font-catamaran": "Catamaran:wght@100;300;400;500;700;900",
-    "--font-libre-franklin":
-      "Libre+Franklin:wght@100;300;400;500;600;700;800;900",
-    "--font-oxygen": "Oxygen:wght@300;400;700",
-    "--font-heebo": "Heebo:wght@100;300;400;500;700;900",
-    "--font-asap": "Asap:wght@100;300;400;500;700;900",
-    "--font-bitter": "Bitter:wght@100;300;400;500;700;900",
-    "--font-ibm-plex-sans": "IBM+Plex+Sans:wght@100;300;400;500;600;700",
-    "--font-exo-2": "Exo+2:wght@100;300;400;500;600;700;800;900",
-    "--font-dosis": "Dosis:wght@300;400;500;600;700",
-    "--font-pt-serif": "PT+Serif:wght@400;700",
-    "--font-overpass": "Overpass:wght@100;300;400;500;600;700;900",
-    "--font-varela-round": "Varela+Round:wght@400",
-    "--font-questrial": "Questrial:wght@400",
-    "--font-inconsolata": "Inconsolata:wght@200;300;400;500;600;700;900",
-    "--font-rokkitt": "Rokkitt:wght@100;300;400;500;700;900",
-    "--font-red-hat-display": "Red+Hat+Display:wght@300;400;500;700;900",
-    "--font-cairo": "Cairo:wght@200;300;400;500;600;700;900",
-    "--font-lora": "Lora:wght@400;500;600;700",
-    "--font-titillium-web": "Titillium+Web:wght@200;300;400;600;700;900",
-    "--font-bebas-neue": "Bebas+Neue:wght@400",
-    "--font-anton": "Anton:wght@400",
-    "--font-zilla-slab": "Zilla+Slab:wght@300;400;500;600;700",
-    "--font-nunito-sans": "Nunito+Sans:wght@200;300;400;500;600;700;900",
-    "--font-roboto-slab": "Roboto+Slab:wght@100;300;400;500;600;700;900",
-    "--font-sans3": "Source+Sans+3:wght@200;300;400;500;600;700;800;900",
-  }
-  const router = useRouter()
+  // const router = useRouter()
   const flowId = params?.flowId
-  console.log("flowId", flowId)
+  // console.log("flowId", flowId)
   const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const [customCss, setCustomCsss] = useState("")
-  const [link, setLink] = useState(
-    "https://fgd01i1rvh5.typeform.com/to/jGXtoJYM"
-  )
 
   const dispatch = useAppDispatch()
-  const firstScreenName =
-    useAppSelector((state) => state?.screen?.firstScreenName) || ""
+  // const firstScreenName =
+  //   useAppSelector((state) => state?.screen?.firstScreenName) || ""
 
   const [tab, setTab] = useState("create")
 
   const t = useTranslations("Components")
 
   // store the current tab value
-  const onTabChange = (value: string) => {
-    setTab(value)
-    // router.replace(`/dashboard/flows/${value}`);
-  }
+  // const onTabChange = (value: string) => {
+  //   setTab(value)
+  //   // router.replace(`/dashboard/flows/${value}`);
+  // }
 
   useEffect(() => {
     const getFlowData = async () => {
       try {
         const response = await fetch(`/api/flows/${flowId}`)
         const flowData = await response.json()
-        console.log("flowData", flowData)
+        // console.log("flowData", flowData)
         dispatch(setScreensData(flowData))
         dispatch(setFlowSettings(flowData.flowSettings ?? {}))
+        dispatch(setMobileScreen(false))
         const primaryFontKey =
           flowData?.flowSettings?.text?.primaryFont || "--font-roboto"
 
-        const getFontImport = (fontKeys: string[]) => {
-          const fontQueries = fontKeys
-            .map((fontKey) => fontMappings[fontKey])
-            .filter(Boolean)
-            .join("&family=")
+        // const getFontImport = (fontKeys: string[]) => {
+        //   const fontQueries = fontKeys
+        //     .map((fontKey) => fontMappings[fontKey])
+        //     .filter(Boolean)
+        //     .join("&family=")
 
-          return fontQueries
-            ? `@import url('https://fonts.googleapis.com/css2?family=${fontQueries}&display=swap');`
-            : ""
-        }
+        //   return fontQueries
+        //     ? `@import url('https://fonts.googleapis.com/css2?family=${fontQueries}&display=swap');`
+        //     : ""
+        // }
 
-        const primaryFontImport = getFontImport([primaryFontKey])
+        // const primaryFontImport = getFontImport([primaryFontKey])
         setCustomCsss(`
         :root {
           ${flowData?.flowSettings?.text?.primaryFont}: ${fontMappings[
@@ -151,25 +155,19 @@ export default function CreateFlowsPage({
             ${customCss}
           `}
       </style>
-      <div className="fixed min-h-screen w-full font-sans">
-        <Tabs
-          defaultValue="create"
-          onValueChange={onTabChange}
-          className="flex min-h-screen flex-col"
-        >
+      <div className="fixed min-h-screen w-full">
+        <div className="flex min-h-screen flex-col">
           <div className="sticky top-0 z-[60]">
             <Header flowId={flowId} />
           </div>
           <main
-            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#FAFAFA] ${
+            className={`content relative z-50 flex-1 overflow-hidden border-t bg-[#F6F6F6] ${
               tab === "results" ? "" : tab === "share" ? "" : ""
             }`}
           >
             {/* --New Commit-- */}
             <div className="tabs-content">
-              <TabsContent className="mt-0" value="create">
-                <CreateFlowComponent flowId={flowId} />
-              </TabsContent>
+              <CreateFlowComponent flowId={flowId} />
 
               {/* <TabsContent className="mt-0" value="connect">
               <ConnectFlowComponents />
@@ -255,7 +253,7 @@ export default function CreateFlowsPage({
         </TabsContent> */}
             </div>
           </main>
-        </Tabs>
+        </div>
         {/* <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all delay-0 duration-200 ease-in-out">
         <button className="relative size-8 cursor-pointer rounded-[50%] border border-solid border-transparent bg-white p-0 shadow-[rgba(0,0,0,0.08)_0px_2px_4px,rgba(0,0,0,0.06)_0px_2px_12px,rgba(0,0,0,0.04)_0px_8px_14px,rgba(0,0,0,0.02)_0px_12px_16px] outline-none transition-all duration-500 ease-in hover:bg-[rgb(231,231,231)]">
           <div className="flex size-auto cursor-pointer items-center justify-center">

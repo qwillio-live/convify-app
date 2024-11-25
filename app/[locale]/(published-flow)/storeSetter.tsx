@@ -28,7 +28,8 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const screen = searchParams?.get("screen") || ""
   const dispatch = useAppDispatch()
   const state = useAppSelector((state) => state.screen)
-  const totalFilled = useAppSelector((state) => state.screen?.filledContent)
+  const totalFilled =
+    useAppSelector((state) => state.screen?.filledContent) || []
   const index = screenNames.findIndex((screenn) => screenn === screen)
   const VISITED_STORAGE_PREFIX = "visited-"
   const RESPONSE_BUTTON_CLASS = "send-response"
@@ -36,51 +37,52 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
 
   const RESPONSE_EXPIRY_MINUTES = 30 // 3
   let storage = {}
-  console.log("entered setter", flowData, screen, index)
 
-  async function sendResponseEvent(
-    stepId,
-    content,
-    responseId: string | null = null,
-    state
-  ) {
-    console.log("entered sendResponseEvent")
-    const method = responseId ? "PUT" : "POST"
-    const url = responseId
-      ? `/api/flows/${flowData.id}/responses/${responseId}`
-      : `/api/flows/${flowData.id}/responses`
-    const data = {
-      ...storage,
-      content,
-    }
-    console.log("entered sendResponseEvent", method, url, data)
-    storage = data
-    await fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: data,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Response event sent:", data)
+  async function sendResponseEvent(stepId, responseId) {
+    console.log("entered sendResponseEvent", responseId)
+
+    setTimeout(async () => {
+      const method = responseId ? "PUT" : "POST"
+      const url = responseId
+        ? `/api/flows/${flowData.id}/responses/${responseId}`
+        : `/api/flows/${flowData.id}/responses`
+
+      // Use the updated totalFilled from Redux state
+      const data = {
+        ...storage,
+        ...totalFilled, // Use the latest value of totalFilled
+      }
+
+      console.log("Sending response event", method, url, "data", data)
+      storage = data
+
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: { ...totalFilled } }),
+        })
+
+        const responseData = await response.json()
+        console.log("Response event sent:", responseData)
+
         if (!responseId) {
           localStorage.setItem(
             `${RESPONSE_BUTTON_CLASS}${flowData.id}`,
             JSON.stringify({
-              responseId: data.id,
+              responseId: responseData.id,
               expiry: Date.now() + RESPONSE_EXPIRY_MINUTES * 60 * 1000,
             })
           ) // 30 minutes
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error sending response event:", error)
-      })
+      }
+    }, 1000)
   }
+
   async function sendVisitEvent(stepId) {
     console.log("entered sendVisitEvent", stepId, flowData.id)
     await fetch(`/api/flows/${flowData.id}/visits`, {
@@ -131,10 +133,10 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
       ) // 1440 minutes = 24 hours
     }
   }
-  function handleSendResponse(stepId, state) {
+  function handleSendResponse(stepId) {
     console.log("entered handleSendResponse", stepId)
 
-    const name = `${RESPONSES_STORAGE_PREFIX}${flowData.id}`
+    const name = `${RESPONSE_BUTTON_CLASS}${flowData.id}`
     console.log("entered handleSendResponse", totalFilled, name)
     // Get the responseLocal item from local storage
     const responseLocal = getLocalStorageItem(name)
@@ -155,8 +157,8 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
     } catch (e) {
       localStorage.removeItem(name) // Remove item if parsing fails
     }
-
-    sendResponseEvent(stepId, totalFilled, responseId, state)
+    console.log("responseId", responseId)
+    sendResponseEvent(stepId, responseId)
   }
 
   useEffect(() => {
@@ -171,15 +173,22 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   }, []) // Add dependencies
   useEffect(() => {
     console.log("Selected screen called", index !== -1 ? index : 1)
+
     dispatch(setSelectedScreen(index))
     const stepId = screen
     console.log("StepIDddd", stepId)
     if (stepId) {
       handleStepVisit(stepId)
     }
-    dispatch(getAllFilledAnswers(true))
-    if (index === screenNames.length - 1) handleSendResponse(state, stepId)
   }, [screen])
+  useEffect(() => {
+    console.log("entered in send response", totalFilled, typeof totalFilled)
+    const stepId = screen
+    if (Object.keys(totalFilled).length > 0) {
+      console.log("enreteing handlesendresponse")
+      handleSendResponse(stepId)
+    }
+  }, [totalFilled])
 
   return null // This component does not need to render anything
 }

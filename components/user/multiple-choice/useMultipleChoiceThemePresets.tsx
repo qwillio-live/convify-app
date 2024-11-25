@@ -106,7 +106,6 @@ const useMultipleChoiceThemePresets = () => {
       .replace(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
-    labelColor: "#000000",
     labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",
@@ -252,7 +251,6 @@ const useMultipleChoiceThemePresets = () => {
       .replace(" ", "-")
       .toLowerCase()}-${hexoid(6)()}`,
     layout: MultipleChoiceLayouts.collapsed,
-    labelColor: "#000000",
     labelBorderColor: theme?.general?.primaryColor || "#3182ce",
     containerBackground: "transparent",
     paddingLeft: "16",

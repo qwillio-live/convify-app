@@ -95,8 +95,8 @@ const IconButtonSizeValues = {
 
 const ButtonSizeValues = {
   small: ".8rem",
-  medium: "1.1rem",
-  large: "1.3rem",
+  medium: "1rem",
+  large: "1.2rem",
 }
 const paddingValues = {
   small: "9.1px 9.5px",
@@ -127,7 +127,6 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
-const APP_URL = env.NEXT_PUBLIC_APP_URL
 export const LinkButtonGen = ({
   disabled,
   // windowTarget,
@@ -167,19 +166,13 @@ export const LinkButtonGen = ({
   ...props
 }) => {
   const pathname = usePathname()
+
   const searchParams = useSearchParams()
-  const { replace } = useRouter()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
-  function handleSearch(term: string) {
-    const params = new URLSearchParams(searchParams || undefined)
-    if (term) {
-      params.set("screen", term)
-    }
-    console.log("new path", `${pathname}?${params.toString()}`)
-    replace(`${pathname}?${params.toString()}`)
-  }
+
   const handleNavigateToContent = () => {
     dispatch(
       validateScreen({
@@ -187,14 +180,19 @@ export const LinkButtonGen = ({
         next: nextScreen.screenName,
       })
     )
-    // if(screenValidated){
-    //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
-    //   router.push(`${pathName}#${nextScreen?.screenName}`);
-    //   dispatch(setCurrentScreenName(nextScreen?.screenName));
-    // }else{
-    //   console.log("SCREEN NOT VALIDATED", screenValidated)
-    // }
+    const params = new URLSearchParams(searchParams || undefined)
+    params.set("screen", nextScreen.screenName)
+    console.log("new path", `${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`)
   }
+  // if(screenValidated){
+  //   console.log("SCREEN NOT VALIDATED BUT YES",screenValidated)
+  //   router.push(`${pathName}#${nextScreen?.screenName}`);
+  //   dispatch(setCurrentScreenName(nextScreen?.screenName));
+  // }else{
+  //   console.log("SCREEN NOT VALIDATED", screenValidated)
+  // }
+
   return (
     <div
       className="relative w-full"
@@ -213,12 +211,15 @@ export const LinkButtonGen = ({
       <Link
         href={`${
           buttonAction === "redirect"
-            ? props?.href?.includes("https://")
+            ? props?.href?.includes("https://") ||
+              props?.href?.includes("http://")
               ? props.href
               : "https://" + props.href
-            : pathname + "#" + nextScreen?.screenName
+            : pathname + "?screen=" + nextScreen?.screenName
         }`}
-        target={`${props.windowTarget ? "_blank" : ""}`}
+        target={`${
+          props.windowTarget && buttonAction === "redirect" ? "_blank" : ""
+        }`}
         className="contents"
       >
         <StyledCustomButton
@@ -322,11 +323,11 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   display: flex;
   flex-direction: row;
   position: relative;
+  overflow: hidden;
   gap: 6px;
   font-size: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   font-weight: 400;
   border: 1px dashed transparent;
-  transition: all 0.2s ease;
 
   &:hover {
     border-style: solid;
@@ -344,28 +345,59 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-
-  width: auto;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
   margin-bottom: ${(props) => props.marginBottom}px;
-  padding: ${(props) => paddingValues[props.buttonSize || "medium"]};
+  padding-left: ${(props) => props.paddingLeft}px;
+  padding-top: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
+  padding-right: ${(props) => props.paddingRight}px;
+  padding-bottom: ${(props) => ButtonSizeValues[props.buttonSize || "medium"]};
   border-radius: ${(props) => props.radius}px;
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
+
+  ${({ size, mobileScreen }) => {
+    if (size === IconButtonSizes.small) {
+      return { width: "250px" }
+    } else if (size === IconButtonSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === IconButtonSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === IconButtonSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === IconButtonSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 
@@ -686,6 +718,7 @@ export const LinkButton = ({
               innerRef={ref}
               disabled={disabled}
               style={{
+                fontSize: "1rem",
                 maxWidth: "100%",
                 position: "relative",
                 border: text?.length <= 0 && "1px dotted white",
@@ -779,7 +812,7 @@ export type IconButtonProps = {
     screenId: string
     screenName: string
   }
-  href?: string
+  href: string
   windowTarget?: boolean
   iconType?: PictureTypes
 }
@@ -858,8 +891,8 @@ export const IconButtonDefaultProps: IconButtonProps = {
   },
   buttonAction: "next-screen",
   windowTarget: true,
-  href: APP_URL,
   iconType: PictureTypes.NULL,
+  href: process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid",
 }
 
 LinkButton.craft = {

@@ -168,31 +168,8 @@ export const newScreensSlice = createSlice({
       // state.screensHeader = JSON.stringify(headerSlice);
       return
     },
-    addField: (state, action: PayloadAction<ScreenFieldType>) => {
-      const selectedScreen = state.selectedScreen
-      const selectedScreenObj = state.screens[selectedScreen]
-      const field = action.payload
 
-      if (!selectedScreenObj) {
-        // Handle case where selected screen is not found
-        console.error(`Selected screen (${selectedScreen}) not found in state.`)
-        return
-      }
-
-      // Clone the existing screenFields to avoid mutating state directly
-      const screenFields = { ...selectedScreenObj.screenFields }
-
-      // Update the screenFields with the new field
-      screenFields[field.fieldId] = field
-
-      // Update state with the modified screenFields
-      state.screens[selectedScreen].screenFields = screenFields
-
-      // Update screensFieldsList with the modified screenFields
-      const selectedId = selectedScreenObj.screenId
-      state.screensFieldsList[selectedId] = screenFields
-    },
-    removeField: (state, action: PayloadAction<string>) => {
+    removeFields: (state, action: PayloadAction<string>) => {
       const selectedScreen = state.selectedScreen
       const selectedScreenId = state.screens[selectedScreen]?.screenId
       const fieldId = action.payload
@@ -229,7 +206,7 @@ export const newScreensSlice = createSlice({
         state.screens[selectedScreen].screenFields = screenFields
       }
       const screenFieldsList = state.screensFieldsList
-      console.log("SCREEN FIELDS LIST IS: ", screenFieldsList)
+      // console.log("SCREEN FIELDS LIST IS: ", screenFieldsList)
       const screenListItem = screenFieldsList[selectedScreenId]
       if (screenListItem) {
         const field = screenListItem[fieldId]
@@ -317,28 +294,28 @@ export const newScreensSlice = createSlice({
       // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
       state.editorLoad = state.screens[state.selectedScreen].screenData
     },
-    setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = action.payload
+    // setEditorLoad: (state, action: PayloadAction<any>) => {
+    //   state.editorLoad = action.payload
 
-      if (state.headerMode === true) {
-        state.screensHeader = action.payload
-      } else if (state.footerMode === true) {
-        state.screensFooter = action.payload
-      } else {
-        const selectedScreen = state.screens[state.selectedScreen]
+    //   if (state.headerMode === true) {
+    //     state.screensHeader = action.payload
+    //   } else if (state.footerMode === true) {
+    //     state.screensFooter = action.payload
+    //   } else {
+    //     const selectedScreen = state.screens[state.selectedScreen]
 
-        if (!selectedScreen) {
-          // Handle case where selected screen is not found
-          console.error(
-            `Selected screen (${state.selectedScreen}) not found in state.`
-          )
-          return
-        }
+    //     if (!selectedScreen) {
+    //       // Handle case where selected screen is not found
+    //       console.error(
+    //         `Selected screen (${state.selectedScreen}) not found in state.`
+    //       )
+    //       return
+    //     }
 
-        // Update screenData of the selected screen
-        selectedScreen.screenData = action.payload
-      }
-    },
+    //     // Update screenData of the selected screen
+    //     selectedScreen.screenData = action.payload
+    //   }
+    // },
 
     setScreenHeader: (state, action: PayloadAction<any>) => {
       state.screensHeader = JSON.stringify(action.payload)
@@ -523,7 +500,9 @@ export const newScreensSlice = createSlice({
       } else if (screen) {
         screen.screenName = screenName
       }
-state.firstScreenName = state.screens[0]? state.screens[0].screenName: ''
+      state.firstScreenName = state.screens[0]
+        ? state.screens[0].screenName
+        : ""
     },
     setRenamingScreen: (state, action: PayloadAction<boolean>) => {
       state.renamingScreen = action.payload

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+
 import { FONTS, PrimaryFontType, SecondaryFontType } from "./fonts"
 
 export interface GlobalThemeState {
@@ -22,6 +23,7 @@ export interface GlobalThemeState {
     secondaryColor?: string | undefined
     backgroundColor?: string | undefined
     backgroundImage?: string | undefined
+    showCookieConsentPopup?: boolean | undefined
   }
   defaultText?: {
     primaryFont?: string

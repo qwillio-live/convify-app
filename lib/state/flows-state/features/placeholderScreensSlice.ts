@@ -69,7 +69,8 @@ export interface ScreensState {
   scrollY: number
   hasComponentBeforeAvatar: boolean
   avatarBackgroundColor: string | undefined
-  filledContent: string
+  filledContent: []
+  isUpdating?: boolean
 }
 
 const initialState: ScreensState = {
@@ -131,7 +132,8 @@ const initialState: ScreensState = {
   editorLoad: {},
   screenRoller: "",
   scrollY: 0,
-  filledContent: "",
+  filledContent: [],
+  isUpdating: false,
 }
 
 export const screensSlice = createSlice({
@@ -144,16 +146,25 @@ export const screensSlice = createSlice({
       state.firstScreenName = action.payload.steps[0]?.name
       state.currentScreenName = action.payload.steps[0]?.name
       const screensFieldsList = {}
+      const screenNames: string[] = []
 
-      action.payload.steps.forEach((screen: any) => {
-        screensFieldsList[screen.id] = {}
+      // Step 1: Build screensFieldsList and check for unique screen names
+      const uniqueSteps = action.payload.steps.filter((screen: any) => {
+        if (screenNames.includes(screen.name)) {
+          console.warn(`Duplicate screen name detected: ${screen.name}`)
+          return false // Skip duplicate screen
+        }
+        screenNames.push(screen.name) // Track this name
+        screensFieldsList[screen.id] = {} // Add to the fields list
+        return true
       })
 
+      // Step 2: Set the rest of the state using the unique steps
       state.screensFieldsList = screensFieldsList
       state.screensHeader = action.payload.headerData ?? state.screensHeader
       state.screensFooter = action.payload.footerData ?? state.screensFooter
       state.selectedScreen = 0
-      state.screens = action.payload.steps.map((screen: any) => ({
+      state.screens = uniqueSteps.map((screen: any) => ({
         screenId: screen.id,
         screenName: screen.name,
         screenData: JSON.stringify(screen.content),
@@ -166,18 +177,26 @@ export const screensSlice = createSlice({
         errorCount: 0,
         isVisible: false,
       }))
-      if (state.screens[state.selectedScreen]?.isVisible)
+
+      // Set the first screen to visible if applicable
+      if (state.screens[state.selectedScreen]?.isVisible) {
         state.screens[state.selectedScreen].isVisible = true
+      }
+
+      // Load the editor with the selected screen's data
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
+    },
+    setIsUpdating: (state, action: PayloadAction<boolean>) => {
+      state.isUpdating = action.payload
     },
     setSelectedData: (state, action: PayloadAction<string[]>) => {
       const screens = JSON.parse(JSON.stringify(state.screens[0]))
-      console.log(
-        "changing selected data",
-        action.payload,
-        screens,
-        state.selectedScreen
-      )
+      // console.log(
+      //   "changing selected data",
+      //   action.payload,
+      //   screens,
+      //   state.selectedScreen
+      // )
       state.screens[state.selectedScreen] = {
         ...state.screens[state.selectedScreen],
         selectedData: action.payload,
@@ -196,12 +215,22 @@ export const screensSlice = createSlice({
       let prevScreenData = JSON.parse(
         JSON.stringify(state.screens[state.selectedScreen])
       )
-
+      console.log(
+        "inside setPreviewScreenData",
+        action.payload.nodeId,
+        action.payload.entity,
+        action.payload.isArray,
+        action.payload.newSelections
+      )
       // Parse the screenData to access the individual nodes
       let screenData = JSON.parse(prevScreenData.screenData)
 
       // Update the selections for the specified nodeId
       if (screenData[action.payload.nodeId]) {
+        console.log(
+          "if true",
+          screenData[action.payload.nodeId].props[action.payload.entity]
+        )
         screenData[action.payload.nodeId].props[action.payload.entity] = action
           .payload.isArray
           ? action.payload.newSelections
@@ -265,45 +294,87 @@ export const screensSlice = createSlice({
     },
     getAllFilledAnswers: (state, action: PayloadAction<boolean>) => {
       // Initialize an array to hold the filled data for each screen
-      let totalFilled: Array<any[]> = [] // Adjust type as needed
+      let totalFilled: any = [] // Adjust type as needed
 
-      state.screens.forEach((screen) => {
-        // Deep clone screen and parse screenData
-        let eachScreen = JSON.parse(JSON.stringify(screen))
-        let screenData = JSON.parse(eachScreen.screenData)
+      // Deep clone screen and parse screenData
+      const screen = state.screens[state.selectedScreen]
+      console.log("curret screen while getting answers", state.selectedScreen)
+      let eachScreen = JSON.parse(JSON.stringify(screen))
+      let screenData = JSON.parse(eachScreen.screenData)
+      console.log("sccccc", screenData)
+      state.filledContent = []
+      Object.entries(screenData).forEach(([key, node]: [string, any]) => {
+        const dataLabel =
+          node.props?.fieldName ||
+          node.props?.label ||
+          node?.displayName ||
+          node.props?.id
+        const dataId = key || node.props?.id || node?.displayName
+        console.log(
+          "node",
+          node,
+          "data-label",
+          dataLabel,
+          "key",
+          key,
+          "dataId",
+          dataId
+        )
+        if (
+          node.type !== "UserContainer" &&
+          ((node.props?.selections && node.props?.selections.length > 0) ||
+            (node.props?.inputValue &&
+              node.props.inputValue !== "Components.Text Area") ||
+            node.props?.input ||
+            node.props?.selectedOptionId)
+        ) {
+          // Extract one of the values that meet the conditions
+          if (node.props?.selections && node.props.selections.length > 0) {
+            //node.props.fieldName || node.props.label node.displayName || node.props.id
+            const options = node.props?.choices
+            //
+            const result = options
+              .filter((choice) => node.props?.selections?.includes(choice.id))
+              .map((choice) => ({ id: choice.id, value: choice.value }))
 
-        Object.values(screenData).forEach((node: any) => {
-          if (
-            node.type !== "UserContainer" &&
-            (node.props?.required === true ||
-              node.props?.inputRequired === true) &&
-            ((node.props?.selections && node.props?.selections.length > 0) ||
-              (node.props?.inputValue &&
-                node.props.inputValue.trim() !== "" &&
-                node.props.inputValue !== "Components.Text Area") ||
-              (node.props?.selectedOptionId &&
-                node.props.selectedOptionId.trim() !== "") ||
-              (node.props?.input && node.props.input.trim() !== ""))
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props?.selections?.length > 1 ? result : result[0],
+              type:
+                node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
+              order: state.selectedScreen,
+              screenId: state.screens[state.selectedScreen].screenId,
+            }
+          } else if (
+            node.props?.inputValue &&
+            node.props.inputValue !== "Components.Text Area"
           ) {
-            // Extract one of the values that meet the conditions
-            if (node.props?.selections && node.props.selections.length > 0) {
-              totalFilled.push(node.props.selections)
-            } else if (
-              node.props?.inputValue &&
-              node.props.inputValue.trim() !== "" &&
-              node.props.inputValue !== "Components.Text Area"
-            ) {
-              totalFilled.push(node.props.inputValue)
-            } else if (
-              node.props?.selectedOptionId &&
-              node.props.selectedOptionId.trim() !== ""
-            ) {
-              totalFilled.push(node.props.selectedOptionId)
-            } else if (node.props?.input && node.props.input.trim() !== "") {
-              totalFilled.push(node.props.input)
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props.inputValue,
+              order: state.selectedScreen,
+              screenId: state.screens[state.selectedScreen].screenId,
+            }
+          } else if (node.props?.selectedOptionId) {
+            const selectResult = node.props?.selectOptions?.find(
+              (option) => option.id === node.props?.selectedOptionId
+            )
+            const matchedValue = selectResult ? selectResult.value : null
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: matchedValue,
+              order: state.selectedScreen,
+              screenId: state.screens[state.selectedScreen].screenId,
+            }
+          } else if (node.props?.input) {
+            totalFilled[dataId] = {
+              label: dataLabel,
+              value: node.props.input,
+              order: state.selectedScreen,
+              screenId: state.screens[state.selectedScreen].screenId,
             }
           }
-        })
+        }
       })
 
       // Convert totalFilled to a JSON string
@@ -313,9 +384,9 @@ export const screensSlice = createSlice({
       console.log(
         "Total Filled Answers by Screen:",
         totalFilled,
-        JSON.stringify(totalFilled)
+        totalFilled.length
       )
-      state.filledContent = JSON.stringify(totalFilled)
+      state.filledContent = totalFilled
       // Optionally, update the state with the totalFilled array if needed
       // state.filledAnswers = totalFilled; // Adjust according to your state shape
     },
@@ -413,9 +484,9 @@ export const screensSlice = createSlice({
       const screenFields = state.screens[selectedScreen]?.screenFields
 
       if (!screenFields || !screenFields[fieldId]) {
-        console.error(
-          `Field with fieldId ${fieldId} not found in screenFields.`
-        )
+        // console.error(
+        //   `Field with fieldId ${fieldId} not found in screenFields.`
+        // )
         return
       }
 
@@ -471,7 +542,7 @@ export const screensSlice = createSlice({
       let screenIndex = -1 // Initialize to -1 for easier error checking
 
       state.screens.forEach((screen, index) => {
-        console.log("SCREEN NAMES ARE: ", screen.screenName)
+        // console.log("SCREEN NAMES ARE: ", screen.screenName)
         if (screen.screenName === screenName) {
           screenId = screen.screenId
           screenIndex = index
@@ -545,13 +616,61 @@ export const screensSlice = createSlice({
       state.editorLoad = state.screens[state.selectedScreen]?.screenData
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
-      state.editorLoad = action.payload
+      const newEditorLoad = action.payload
+
+      // Depending on mode, update the appropriate part of the state
       if (state.headerMode === true) {
-        state.screensHeader = action.payload
+        state.screensHeader = newEditorLoad
       } else if (state.footerMode === true) {
-        state.screensFooter = action.payload
+        state.screensFooter = newEditorLoad
       } else {
-        state.screens[state.selectedScreen].screenData = action.payload
+        state.screens[state.selectedScreen].screenData = newEditorLoad
+      }
+    },
+    setEditorSelectedComponent: (state, action: PayloadAction<any>) => {
+      const newEditorLoad = action.payload
+
+      // Function to find the first non-matching key in new vs. old objects
+      function filterCommonKeys(newObj, oldObj) {
+        for (const key in newObj) {
+          if (!(key in oldObj)) {
+            return key // Return the first non-matching key.
+          }
+        }
+        return null // Return null if all keys match.
+      }
+
+      try {
+        const oldEditorLoad = JSON.parse(
+          state.screens[state.selectedScreen].screenData
+        )
+
+        if (
+          newEditorLoad?.ROOT?.nodes?.length >
+          oldEditorLoad?.ROOT?.nodes?.length
+        ) {
+          const filteredNewEditorLoad = filterCommonKeys(
+            newEditorLoad,
+            oldEditorLoad
+          )
+
+          if (filteredNewEditorLoad) {
+            state.selectedComponent = filteredNewEditorLoad
+          }
+        } else {
+          // for (const key in oldEditorLoad) {
+          //   const oldValue = oldEditorLoad[key]
+          //   if (oldValue.displayName === "Form Content") {
+          //     const newValue = newEditorLoad[key]
+          //     if (newValue && newValue.nodes.length > oldValue.nodes.length) {
+          //       state.selectedComponent = key // Early return
+          //       break // Stop the loop
+          //     }
+          //   }
+          // }
+        }
+      } catch (err) {
+        console.error("Error in setEditorData:", err)
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
@@ -819,6 +938,8 @@ export const {
   setResetTotalFilled,
   resetScreen,
   getAllFilledAnswers,
+  setEditorSelectedComponent,
+  setIsUpdating,
 } = screensSlice.actions
 
 export default screensSlice.reducer

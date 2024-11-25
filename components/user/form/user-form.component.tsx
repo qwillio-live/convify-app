@@ -1,4 +1,5 @@
 "use client"
+
 import React from "react"
 import { transform } from "next/dist/build/swc"
 import hexoid from "hexoid"
@@ -12,7 +13,7 @@ import { cn } from "@/lib/utils"
 import useButtonThemePresets from "../icon-button/useButtonThemePresets"
 import { IconButton } from "../icon-button/user-icon-button.component"
 import useInputCheckboxThemePresets from "../input-checkbox/useInputCheckboxThemePresets"
-import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
+
 import useInputMailThemePresets from "../input-email/useInputMailThemePresets"
 import {
   UserInputMail,
@@ -20,11 +21,17 @@ import {
 } from "../input-email/user-input-mail.component"
 import formPresetPhone from "../input-phone/useInputPhoneThemePresets"
 import { UserInputPhone } from "../input-phone/user-input-phone.component"
+import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
+
 import formPreset from "../input/useInputThemePresets"
-import { UserInput } from "../input/user-input.component"
+import { UserInput, UserInputGen } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { FormSettings } from "./user-form-settings"
+import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
+import useInputThemePresets from "../input/useInputThemePresets"
+import useBackThemePresets from "../backButton/back-theme"
+import { PictureTypes } from "@/components/PicturePicker"
 
 interface FormOuterStyles {
   fullWidth: boolean
@@ -120,6 +127,9 @@ const FormContentInner = styled.form<FormInnerStyles>`
     justify-content: ${(props) => props.mobileJustifyContent};
   }
   overflow: visible;
+  .text-input-comp {
+    width: 100%;
+  }
 `
 
 export const FormContentGen = ({ children, ...props }) => {
@@ -198,8 +208,8 @@ export const FormContent = ({ children, ...props }) => {
       ref={(ref: any) => connect(drag(ref))}
       style={{ width: "100%", height: "100%" }}
       className={cn(
-        `relative border border-transparent`,
-        isHovered ? "border border-dotted border-blue-500" : ""
+        `relative`
+        // isHovered ? "border border-dotted border-blue-500" : ""
       )}
     >
       <FormContentGen
@@ -345,9 +355,48 @@ const FormContainer = styled.div<{
   background: ${({ background }) => background};
   max-width: fit-content;
   width: 100%;
+
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp,
+  .textarea-input-comp,
+  .button-input-comp,
+  .mcq-input-comp,
+  .separator-comp,
+  .progress-comp,
+  .user-headline-comp,
+  .user-text-comp,
+  .user-picture-choice-component,
+  .logobar-comp,
+  .user-list-comp,
+  .user-checklist-comp {
+    width: 100%;
+  }
+`
+const FormGenWrapper = styled.div<{}>`
+  width: 100%;
+  height: 100%;
+  .text-input-comp,
+  .email-input-comp,
+  .phone-input-comp,
+  .checkbox-input-comp,
+  .textarea-input-comp,
+  .button-input-comp,
+  .mcq-input-comp,
+  .separator-comp,
+  .progress-comp,
+  .user-headline-comp,
+  .user-text-comp,
+  .user-picture-choice-component,
+  .logobar-comp,
+  .user-list-comp,
+  .user-checklist-comp {
+    width: 100%;
+  }
 `
 export const FormGen = ({ children, ...props }) => {
-  return <div style={{ width: "100%", height: "100%" }}>{children}</div>
+  return <FormGenWrapper>{children}</FormGenWrapper>
 }
 
 export const Form = ({ children, ...props }) => {
@@ -365,7 +414,9 @@ export const Form = ({ children, ...props }) => {
   const t = useTranslations("Components")
   const { outlinedPresetMail, underlinedPresetMail } =
     useInputMailThemePresets()
-  const { outLinePreset, filledPreset, formPreset } = useButtonThemePresets()
+  const { formPresets } = useInputThemePresets()
+  const { formPreset } = useButtonThemePresets()
+  const { outlinedPresetChecbox } = useInputCheckboxThemePresets()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   const adjustWidth = props.size
@@ -383,7 +434,7 @@ export const Form = ({ children, ...props }) => {
         e.stopPropagation()
         setHover(false)
       }}
-      style={{ minWidth: "100%", height: "100%", transform: "scale(1.01, 1)" }}
+      style={{ minWidth: "100%", height: "100%" }}
       id={props.id}
     >
       {hover && <Controller nameOfComponent={t("Form")} />}
@@ -398,9 +449,7 @@ export const Form = ({ children, ...props }) => {
         gap="5"
         ref={(ref: any) => connect(drag(ref))}
         style={{ width: "100%", height: "100%" }}
-        className={`${
-          isHovered ? "border border-dotted border-blue-500" : ""
-        } relative border border-transparent`}
+        className={` relative border border-transparent`}
       >
         {innerHover && <Controller nameOfComponent={t("Input Container")} />}
         <Element
@@ -425,7 +474,8 @@ export const Form = ({ children, ...props }) => {
           <Element
             canvas
             is={UserInput}
-            {...formPreset}
+            {...formPresets}
+            textColor="#505051"
             label={t("FirstName")}
             placeholder="Enter your first name"
             floatingLabel={true}
@@ -437,13 +487,15 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             size={"full"}
             enableIcon={false}
+            id={`input-010101`}
             style={{ overflow: "visible" }}
           />
           <Element
             canvas
             is={UserInput}
+            {...formPresets}
             floatingLabel={true}
-            {...formPreset}
+            textColor="#505051"
             label={t("LastName")}
             placeholder="Enter your last name"
             backgroundColor={"transparent"}
@@ -455,6 +507,7 @@ export const Form = ({ children, ...props }) => {
             marginTop={0}
             enableIcon={false}
             size={"full"}
+            id={`input-000111`}
             style={{ overflow: "visible" }}
           />
         </Element>
@@ -468,6 +521,9 @@ export const Form = ({ children, ...props }) => {
           paddingRight={"4px"}
           label={t("EmailLabel")}
           fieldName={t("EmailFieldName")}
+          icon={"✉️"}
+          iconType={PictureTypes.EMOJI}
+          iconLa
           size={"full"}
         />
         <Element
@@ -476,7 +532,8 @@ export const Form = ({ children, ...props }) => {
           {...formPresetPhone}
           floatingLabel={true}
           backgroundColor={"transparent"}
-          icon={"phone-telephone-android-phone-mobile-device-smartphone-iphone"}
+          icon={"📞"}
+          iconType={PictureTypes.EMOJI}
           marginTop={0}
           marginBottom={0}
           label={t("PhoneLabel")}
@@ -485,11 +542,12 @@ export const Form = ({ children, ...props }) => {
         />
         <Element
           canvas
+          {...outlinedPresetChecbox}
           is={UserInputCheckbox}
           marginTop={0}
           marginBottom={0}
           label={t("CheckboxPlaceholder")}
-          fieldName={t("CheckboxFieldName")}
+          fieldName={t("checkbox") + "-" + produceRandomLetters(6)}
           inputRequired={false}
           size={"full"}
         />

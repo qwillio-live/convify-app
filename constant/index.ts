@@ -325,3 +325,10 @@ export const templates: Template[] = [
     isPopular: false,
   },
 ]
+
+export const DefaultImagePlaceholder =
+  "https://siteimages.b-cdn.net/flow/default-image.30d08cea.webp"
+
+
+export const TERMS_URL = 'https://policies.google.com/terms'
+export const PRIVACY_URL = "https://policies.google.com/privacy"

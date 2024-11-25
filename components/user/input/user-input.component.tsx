@@ -1,5 +1,6 @@
 "use client"
-import React, { useEffect, useRef, useState } from "react"
+
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import hexoid from "hexoid"
 import {
   Activity,
@@ -14,8 +15,8 @@ import {
 import { useTranslations } from "next-intl"
 import { rgba } from "polished"
 import ContentEditable from "react-contenteditable"
-import { useForm, useFormContext } from "react-hook-form"
-import styled from "styled-components"
+// import { useForm, useFormContext } from "react-hook-form"
+// import styled from "styled-components"
 
 import { useEditor, useNode } from "@/lib/craftjs"
 import {
@@ -27,29 +28,29 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import {
-  ImagePictureTypes,
-  PictureTypes,
-  SvgRenderer,
-} from "@/components/PicturePicker"
-import { Input } from "@/components/input-custom"
+// import { Label } from "@/components/ui/label"
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select"
+// import { Slider } from "@/components/ui/slider"
+// import {
+//   ImagePictureTypes,
+//   PictureTypes,
+//   SvgRenderer,
+// } from "@/components/PicturePicker"
+import { Input, InputProps } from "@/components/input-custom"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
-import { UserInputSettings } from "./user-input-settings.component"
 import { InputIconRenderer } from "./user-input-icon-picker"
+import { UserInputSettings } from "./user-input-settings.component"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -70,13 +71,6 @@ export enum UserInputSizes {
   medium = "medium",
   large = "large",
   full = "full",
-}
-
-const UserInputSizeValues = {
-  small: "260px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
 }
 
 export const UserInputGen = ({ ...props }) => {
@@ -114,7 +108,7 @@ export const UserInputGen = ({ ...props }) => {
   const screenData =
     parsedData.length > 0 ? parsedData[0]?.props?.inputValue : ""
   const nodeId = parsedData.length > 0 && parsedData[0].props.compId
-  console.log("user input", screenData, nodeId, parsedData, props)
+  // console.log("user input", screenData, nodeId, parsedData, props)
   useEffect(() => {
     setInputValue(screenData)
     if (inputRef.current) {
@@ -200,7 +194,7 @@ export const UserInputGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [error, setError] = useState(props.error)
+  // const [error, setError] = useState(props.error)
 
   // useEffect(() => {
   //   setInputValue(fieldValue)
@@ -250,13 +244,8 @@ export const UserInputGen = ({ ...props }) => {
     <div
       ref={itemRefNew}
       className={cn(
-        "relative focus-visible:ring-0 focus-visible:ring-transparent"
+        "relative flex w-full justify-center focus-visible:ring-0 focus-visible:ring-transparent"
       )}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
     >
       <div
         className="relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
@@ -273,25 +262,21 @@ export const UserInputGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
+        <Wrapper
+          size={props.size}
           className={cn(
-            "relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
+            "text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent",
             {
               "animate-shake": fieldError,
             }
           )}
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
         >
           {!props.floatingLabel && (
             <>
               <div
-                className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
+                className={`relative mb-1  transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  minWidth: `${UserInputSizeValues[props.size]}`,
-                  width: `${UserInputSizeValues[props.size]}`,
                 }}
               >
                 {props.label}
@@ -307,7 +292,7 @@ export const UserInputGen = ({ ...props }) => {
                   focusInput() // Focus the input when placeholder is clicked
                 }
               }}
-              className={`absolute line-clamp-1  text-ellipsis transition-all duration-200 ease-in-out hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
+              className={`absolute line-clamp-1 text-ellipsis  transition-all duration-200 ease-in-out  hover:cursor-text focus-visible:ring-0 focus-visible:ring-transparent ${
                 (isActive && props.floatingLabel) ||
                 (inputValue?.length > 0 && props.floatingLabel)
                   ? "top-0 pl-3 pt-1 text-sm text-gray-400"
@@ -321,8 +306,8 @@ export const UserInputGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                // minWidth: `${UserInputSizeValues[props.size]}`,
-                // width: `${UserInputSizeValues[props.size]}`,
+                fontSize: "15px",
+                fontWeight: 330,
               }}
             >
               {props.floatingLabel && props.label}
@@ -333,7 +318,7 @@ export const UserInputGen = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  "flex min-h-[49px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#ffffff",
@@ -397,9 +382,9 @@ export const UserInputGen = ({ ...props }) => {
                     !props.floatingLabel,
                   "rounded-l-none": props.enableIcon,
                 },
-                `outline-none
+                `ring-opacity/0
+          outline-none
           ring-0
-          ring-opacity-0
           transition-all
           duration-200
           ease-in-out
@@ -428,7 +413,7 @@ export const UserInputGen = ({ ...props }) => {
                         }),
                         dispatch(
                           setPreviewScreenData({
-                            nodeId,
+                            nodeId: props.nodeId,
                             isArray: false,
                             entity: "inputValue",
                             newSelections: [e.target.value],
@@ -448,7 +433,7 @@ export const UserInputGen = ({ ...props }) => {
                       }),
                       dispatch(
                         setPreviewScreenData({
-                          nodeId,
+                          nodeId: props.nodeId,
                           isArray: false,
                           entity: "inputValue",
                           newSelections: [e.target.value],
@@ -486,13 +471,125 @@ export const UserInputGen = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
 }
 
-const UserInputStyled = styled(Input)<{
+// const Wrapper = styled.div<{
+//   size: UserInputSizes
+//   mobileScreen?: boolean
+// }>`
+//   margin-left: auto;
+//   margin-right: auto;
+
+//   ${({ size, mobileScreen }) => {
+//     if (size === UserInputSizes.small) {
+//       return { width: "250px" }
+//     } else if (size === UserInputSizes.medium) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return { width: "376px" }
+//       }
+//     } else if (size === UserInputSizes.large) {
+//       if (mobileScreen) {
+//         return { width: "calc(100% - 22px)" }
+//       } else {
+//         return { width: "576px" }
+//       }
+//     } else {
+//       return {
+//         width: "calc(100% - 22px)",
+//       }
+//     }
+//   }};
+
+//   @media (max-width: 600px) {
+//     ${({ size }) => {
+//       if (size === UserInputSizes.large) {
+//         return { width: "calc(100% - 22px)" }
+//       }
+//     }}
+//   }
+
+//   @media (max-width: 390px) {
+//     ${({ size }) => {
+//       if (size === UserInputSizes.medium) {
+//         return { width: "calc(100% - 22px)" }
+//       }
+//     }}
+//   }
+// `
+
+const Wrapper = ({
+  mobileScreen,
+  size,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  size: UserInputSizes
+  mobileScreen?: boolean
+}) => {
+  const generateWidthClass = useMemo(() => {
+    if (size !== UserInputSizes.small && mobileScreen)
+      return "w-[calc(100%-22px)]"
+    switch (size) {
+      case UserInputSizes.large:
+        return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+      case UserInputSizes.medium:
+        return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      case UserInputSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-22px)]"
+    }
+  }, [size, mobileScreen])
+  return (
+    <div className={cn("mx-auto", generateWidthClass, className)} {...props} />
+  )
+}
+
+// const UserInputStyled = styled(Input)<{
+//   textColor: string
+//   width: number
+//   backgroundColor: string
+//   borderColor: string
+//   borderWidth: number
+//   borderRadius: number
+//   topLeftRadius: number
+//   topRightRadius: number
+//   bottomLeftRadius: number
+//   bottomRightRadius: number
+//   borderTopWidth: number
+//   borderBottomWidth: number
+//   borderLeftWidth: number
+//   borderRightWidth: number
+//   primaryFont: string
+//   size: UserInputSizes
+//   error: boolean
+// }>`
+//   color: ${(props) => props.textColor};
+//   max-width: 100%;
+//   min-height: 50px;
+//   background: #ffffff;
+//   font-family: ${(props) => `var(${props?.primaryFont})`};
+//   border-top-right-radius: ${(props) => props.topRightRadius}px;
+//   border-top-left-radius: ${(props) => props.topLeftRadius}px;
+//   border-bottom-right-radius: ${(props) =>
+//     props.error ? 0 : props.bottomRightRadius}px;
+//   border-bottom-left-radius: ${(props) =>
+//     props.error ? 0 : props.bottomLeftRadius}px;
+//   border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
+//   border-top-width: ${(props) => props.borderTopWidth}px;
+//   border-bottom-width: ${(props) => props.borderBottomWidth}px;
+//   border-left-width: ${(props) => props.borderLeftWidth}px;
+//   border-right-width: ${(props) => props.borderRightWidth}px;
+//   align-self: center;
+// `
+
+type UserInputStyledProps = {
   textColor: string
   width: number
   backgroundColor: string
@@ -508,56 +605,92 @@ const UserInputStyled = styled(Input)<{
   borderLeftWidth: number
   borderRightWidth: number
   primaryFont: string
-  size: UserInputSizes
+  // size: UserInputSizes
   error: boolean
-}>`
-  color: ${(props) => props.textColor};
-  max-width: 100%;
-  min-height: 50px;
-  background: #ffffff;
-  font-family: ${(props) => `var(${props?.primaryFont})`};
-  border-top-right-radius: ${(props) => props.topRightRadius}px;
-  border-top-left-radius: ${(props) => props.topLeftRadius}px;
-  border-bottom-right-radius: ${(props) =>
-    props.error ? 0 : props.bottomRightRadius}px;
-  border-bottom-left-radius: ${(props) =>
-    props.error ? 0 : props.bottomLeftRadius}px;
-  border-color: ${(props) => (props.error ? "#cc0000" : props.borderColor)};
-  border-top-width: ${(props) => props.borderTopWidth}px;
-  border-bottom-width: ${(props) => props.borderBottomWidth}px;
-  border-left-width: ${(props) => props.borderLeftWidth}px;
-  border-right-width: ${(props) => props.borderRightWidth}px;
+}
 
-  align-self: center;
-`
+const UserInputStyled = React.forwardRef<
+  HTMLInputElement,
+  InputProps & UserInputStyledProps
+>(
+  (
+    {
+      textColor,
+      width,
+      backgroundColor,
+      borderColor,
+      borderWidth,
+      borderRadius,
+      topLeftRadius,
+      topRightRadius,
+      bottomLeftRadius,
+      bottomRightRadius,
+      borderTopWidth,
+      borderBottomWidth,
+      borderLeftWidth,
+      borderRightWidth,
+      primaryFont,
+      error,
+      className,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Input
+        className={cn("m-h-[50px] max-w-full self-center", className)}
+        {...props}
+        ref={ref}
+        style={{
+          color: textColor,
+          borderTopRightRadius: topRightRadius,
+          borderTopLeftRadius: topLeftRadius,
+          borderBottomRightRadius: error ? 0 : bottomRightRadius,
+          borderBottomLeftRadius: error ? 0 : bottomLeftRadius,
+          borderTopWidth,
+          borderBottomWidth,
+          borderLeftWidth,
+          borderRightWidth,
+          fontFamily: `var(${primaryFont})`,
+          borderColor: error ? "#cc0000" : borderColor,
+          ...style,
+        }}
+      />
+    )
+  }
+)
 
-export const UserInput = ({ ...props }) => {
+UserInputStyled.displayName = "UserInputStyled"
+
+export const UserInput = ({ textColor, ...props }) => {
   const {
     connectors: { connect, drag },
     compId,
     parent,
-    selected,
-    isHovered,
+    // selected,
+    // isHovered,
     actions: { setProp },
     props: { icon },
   } = useNode((state) => ({
     compId: state.id,
     props: state.data.props,
     parent: state.data.parent,
-    selected: state.events.selected,
+    // selected: state.events.selected,
     dragged: state.events.dragged,
-    isHovered: state.events.hovered,
+    // isHovered: state.events.hovered,
   }))
   const {
     // query,
     query: { node },
   } = useEditor()
   const dispatch = useAppDispatch()
+  const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
 
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
   const parentContainer = node(parent || "").get()
-  const [hover, setHover] = useState(false)
+  // const [hover, setHover] = useState(false)
 
   const t = useTranslations("Components")
   const inputRef = useRef<HTMLInputElement>(null)
@@ -578,12 +711,12 @@ export const UserInput = ({ ...props }) => {
         ?.fieldValue
   )
   // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
-  const fieldRequired =
-    useAppSelector(
-      (state) =>
-        state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
-          ?.fieldRequired
-    ) || false
+  // const fieldRequired =
+  //   useAppSelector(
+  //     (state) =>
+  //       state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+  //         ?.fieldRequired
+  //   ) || false
   // const fieldError = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenFields[compId]?.toggleError && props.inputRequired && !props?.inputValue && !screenValidated)
   const fieldError =
     props.inputRequired &&
@@ -672,43 +805,35 @@ export const UserInput = ({ ...props }) => {
   return (
     <div
       className={cn(
-        "relative focus-visible:ring-0 focus-visible:ring-transparent",
+        "group/input relative flex w-full justify-center focus-visible:ring-0 focus-visible:ring-transparent",
         {
           "animate-shake": fieldError,
         }
       )}
       ref={(ref: any) => ref && connect(drag(ref))}
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
     >
-      {hover && <Controller nameOfComponent={t("Input Field")} />}
+      <Controller
+        className="invisible group-hover/input:visible"
+        nameOfComponent={t("Input Field")}
+      />
       <div
         className={cn(
-          "relative w-full transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
+          "relative flex w-full min-w-full justify-center transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent"
           // { "animate-shake": props.inputRequired }
         )}
         style={{
-          display: "flex",
-          justifyContent: "center",
           backgroundColor: `${props.backgroundColor}`,
           backgroundImage: `${props.backgroundImage}`,
-          minWidth: "100%",
           paddingTop: `${props.marginTop}px`,
           paddingBottom: `${props.marginBottom}px`,
           paddingLeft: `${props.marginLeft}px`,
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -731,8 +856,7 @@ export const UserInput = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  minWidth: `${UserInputSizeValues[props.size]}`,
-                  width: `${UserInputSizeValues[props.size]}`,
+                  color: textColor !== "#ffffff" ? textColor : "#505051",
                 }}
               />
             </>
@@ -760,8 +884,8 @@ export const UserInput = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                // minWidth: `${UserInputSizeValues[props.size]}`,
-                // width: `${UserInputSizeValues[props.size]}`,
+                fontSize: "15px",
+                fontWeight: 330,
               }}
             >
               {props.floatingLabel && props.label}
@@ -772,16 +896,16 @@ export const UserInput = ({ ...props }) => {
             {props.enableIcon && (
               <div
                 className={cn(
-                  "flex min-h-[50px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
+                  "flex min-h-[49px] min-w-[49px] shrink-0 items-center justify-center rounded-l-md bg-inherit shadow-none transition-all duration-200"
                 )}
                 style={{
                   backgroundColor: "#ffffff",
-                  borderColor: props.error
+                  borderColor: fieldError
                     ? "#cc0000"
                     : props.isActive
                     ? props.activeBorderColor.value
                     : props.borderColor.value,
-                  borderBottomLeftRadius: props.error
+                  borderBottomLeftRadius: fieldError
                     ? 0
                     : props.bottomLeftRadius,
                   borderTopLeftRadius: props.topLeftRadius,
@@ -895,7 +1019,7 @@ export const UserInput = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -907,7 +1031,7 @@ export type UserInputProps = {
   fieldType: "data" | "action" | "design"
   required: boolean
   fontSize: number
-  textColor: string
+  textColor?: string
   parentScreenId: string
   fontWeight: string
   marginLeft: number

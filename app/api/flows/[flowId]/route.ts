@@ -24,28 +24,29 @@ const FlowUpdateRequestSchema = z.object({
   steps: z.array(StepSchema).optional(),
 })
 
+export const maxDuration = 60
 export async function GET(
   req: NextRequest,
   { params }: { params: { flowId: string } }
 ) {
   const { flowId } = params
-  const data = await getServerSession(authOptions)
+  // const data = await getServerSession(authOptions)
 
-  if (!data) {
-    const statusCode = 401
-    const errorMessage = "User is not authenticated"
-    const userId = 0
-    const requestUrl = req.url
-    await logError({ statusCode, errorMessage, userId, requestUrl })
-    return NextResponse.json({ error: errorMessage }, { status: statusCode })
-  }
+  // if (!data) {
+  //   const statusCode = 401
+  //   const errorMessage = "User is not authenticated"
+  //   const userId = 0
+  //   const requestUrl = req.url
+  //   await logError({ statusCode, errorMessage, userId, requestUrl })
+  //   return NextResponse.json({ error: errorMessage }, { status: statusCode })
+  // }
 
-  const userId = data.user.id
+  // const userId = data.user.id
   try {
     const flow = await prisma.flow.findFirst({
       where: {
         id: String(flowId),
-        userId,
+        // userId,
         isDeleted: false,
       },
       include: {
@@ -67,7 +68,7 @@ export async function GET(
       },
     })
     flow.steps = flowSteps.sort((a, b) => a.order - b.order)
-
+    // console.log("returning flow", flow)
     return NextResponse.json(flow)
   } catch (error) {
     const statusCode = 500
@@ -130,6 +131,7 @@ export async function PUT(
     }
 
     if (data.steps) {
+      // console.log("data.steps", data.steps)
       const existingSteps = await prisma.FlowStep.findMany({
         where: {
           flowId: String(flowId),
@@ -137,21 +139,22 @@ export async function PUT(
         },
       })
       const newStepIds = new Set(data.steps.map((step) => step.id))
-
-      // Mark missing steps as isDeleted: true
+      // // console.log("existig.steps,newStepIds", existingSteps, newStepIds)
+      // // Mark missing steps as isDeleted: true
       for (const step of existingSteps) {
         if (!newStepIds.has(step.id)) {
-          await prisma.FlowStep.update({
-            where: {
-              id: step.id,
-            },
-            data: {
-              isDeleted: true,
-            },
-          })
+          try {
+            await prisma.FlowStep.delete({
+              where: {
+                id: step.id,
+              },
+            })
+          } catch (err) {
+            console.log("step not found")
+          }
         }
       }
-
+      let order = 0
       // Upsert steps (Insert ignore on duplicate key update)
       for (const step of data.steps) {
         const existingStep = await prisma.FlowStep.findUnique({
@@ -160,8 +163,9 @@ export async function PUT(
             flowId: String(flowId),
           },
         })
-
+        // console.log("existingStep", existingStep)
         if (existingStep) {
+          // console.log(`Updating ${existingStep}`)
           await prisma.FlowStep.update({
             where: {
               id: step.id,
@@ -170,24 +174,28 @@ export async function PUT(
             data: {
               link: step.link,
               content: step.content,
-              order: step.order,
+              order: order,
               name: step.name || "",
               templateId: step.templateId || "",
+              updatedAt: new Date(),
             },
           })
         } else {
+          console.log(`creating new `)
           await prisma.FlowStep.create({
             data: {
               name: step.name || "",
               flowId: String(flowId),
               link: step.link,
               content: step.content,
-              order: step.order,
+              order: order,
               templateId: step.templateId || "",
               isDeleted: false,
+              updatedAt: new Date(),
             },
           })
         }
+        order += 1
       }
 
       // Update numberOfSteps in Flows table

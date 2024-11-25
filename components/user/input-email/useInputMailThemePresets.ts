@@ -5,6 +5,7 @@ import hexoid from "hexoid"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 
 import { UserInputMailProps, UserInputSizes } from "./user-input-mail.component"
+import { PictureTypes } from "@/components/PicturePicker"
 
 const useInputMailThemePresets = () => {
   const t = useTranslations("Components")
@@ -21,7 +22,6 @@ const useInputMailThemePresets = () => {
   const outlinedPresetMail: UserInputMailProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -74,9 +74,10 @@ const useInputMailThemePresets = () => {
     size: UserInputSizes.medium,
     label: t("EmailLabel"),
     fieldName: t("EmailFieldName"),
-    floatingLabel: false,
+    floatingLabel: true,
     enableIcon: true,
-    icon: "mail-send-envelope",
+    icon: "✉️",
+    iconType: PictureTypes.EMOJI,
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -91,14 +92,12 @@ const useInputMailThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-
+    id: `input-${hexoid(6)()}`,
   }
 
   const underlinedPresetMail: UserInputMailProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -147,9 +146,10 @@ const useInputMailThemePresets = () => {
     size: UserInputSizes.medium,
     label: t("EmailLabel"),
     fieldName: t("EmailFieldName"),
-    floatingLabel: false,
+    floatingLabel: true,
     enableIcon: true,
-    icon: "mail-send-envelope",
+    icon: "✉️",
+    iconType: PictureTypes.EMOJI,
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",
@@ -164,14 +164,12 @@ const useInputMailThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-
+    id: `input-${hexoid(6)()}`,
   }
 
   const formPresetMail: UserInputMailProps = {
     inputValue: "",
     fontSize: 16,
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -226,7 +224,8 @@ const useInputMailThemePresets = () => {
     fieldName: t("EmailFieldName"),
     floatingLabel: false,
     enableIcon: true,
-    icon: "mail-send-envelope",
+    icon: "✉️",
+    iconType: PictureTypes.EMOJI,
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -241,9 +240,8 @@ const useInputMailThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
-
 
   return { outlinedPresetMail, underlinedPresetMail, formPresetMail }
 }

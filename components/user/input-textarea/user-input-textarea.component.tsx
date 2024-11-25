@@ -50,24 +50,10 @@ export enum UserInputSizes {
   full = "full",
 }
 
-const UserInputSizeValues = {
-  small: "260px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const UserInputMobileSizeValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
-  full: "100%",
-}
-
 export type UserInputTextareaProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -128,7 +114,7 @@ export type UserInputTextareaProps = {
 export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -197,6 +183,52 @@ export const UserInputTextareaDefaultProps: UserInputTextareaProps = {
   settingsTab: "content",
   id: `input-${hexoid(6)()}`,
 }
+
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
 
 export const UserInputTextareaGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
@@ -282,28 +314,29 @@ export const UserInputTextareaGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          className="textarea-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           <div
             className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
-              minWidth: `${UserInputSizeValues[props.size]}`,
-              width: `${UserInputSizeValues[props.size]}`,
-              color: `${primaryTextColor}`,
+              // minWidth: `${UserInputSizeValues[props.size]}`,
+              // width: `${UserInputSizeValues[props.size]}`,
+              color: `${
+                props.textColor !== "#ffffff" ? props.textColor : "#505051"
+              }`,
             }}
           >
-            {props.label}
+            <div dangerouslySetInnerHTML={{ __html: props.label }} />
           </div>
 
           <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             <UserInputTextareaStyled
+              data-label={props?.fieldName || ""}
               value={inputValue}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -406,7 +439,7 @@ export const UserInputTextareaGen = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -555,15 +588,10 @@ export const UserInputTextarea = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${
-              mobileScreen
-                ? UserInputMobileSizeValues[props.size]
-                : UserInputSizeValues[props.size]
-            }`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="textarea-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {/** @ts-ignore */}
           <ContentEditable
@@ -580,9 +608,11 @@ export const UserInputTextarea = ({ ...props }) => {
             className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
             style={{
               fontFamily: `var(${props.primaryFont.value})`,
-              minWidth: `${UserInputSizeValues[props.size]}`,
-              width: `${UserInputSizeValues[props.size]}`,
-              color: `${primaryTextColor}`,
+              // minWidth: `${UserInputSizeValues[props.size]}`,
+              // width: `${UserInputSizeValues[props.size]}`,
+              color: `${
+                props.textColor !== "#ffffff" ? props.textColor : "#505051"
+              }`,
             }}
           />
 
@@ -617,7 +647,7 @@ export const UserInputTextarea = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={textAreaRef}
-              textColor={`${primaryTextColor}`}
+              textColor={`#fff`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -688,7 +718,7 @@ export const UserInputTextarea = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

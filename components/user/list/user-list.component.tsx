@@ -19,6 +19,19 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { UserInputSizes } from "../input/user-input.component"
+import { usePathname } from "next/navigation"
+import { getComputedValueForTextEditor, serialize } from "@/lib/utils"
+import { TextEditor } from "@/components/TextEditor"
+
+const getDefaultContent = (content) => {
+  return serialize([
+    {
+      type: "paragraph",
+      children: [{ text: content }],
+    },
+  ])
+}
 
 const ListSizeValues = {
   small: "400px",
@@ -52,8 +65,18 @@ export const ListGen = ({
   settingTabs,
   preset,
   items,
+  textColor,
+  secTextColor,
+  toolbarPreview = false,
   ...props
 }) => {
+  const primaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.primaryColor
+  )
+  const secondaryTextColor = useAppSelector(
+    (state) => state.theme?.text?.secondaryColor
+  )
+  const pathname = usePathname()
   return (
     <div
       className="relative w-full"
@@ -67,27 +90,33 @@ export const ListGen = ({
         minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
-        paddingLeft: `${marginLeft + 10}px`,
-        paddingRight: `${marginRight + 10}px`,
+        paddingLeft: `${marginLeft}px`,
+        paddingRight: `${marginRight}px`,
       }}
     >
       <StyledListContainer
+        isPreviewScreen={pathname?.includes("create-flow") ? false : true}
+        className="user-list-comp"
+        size={size}
         verticalGap={verticalGap}
         columnsDesktop={columnsDesktop}
         columnsMobile={columnsMobile}
         mobileScreen={false}
         maxWidth={ListSizeValues[size || "medium"]}
+        toolbarPreview={toolbarPreview}
       >
         {items.map((item, index) => (
           <ListItem
-            key={index}
+            key={`${item.id}-${index}`}
             disabled={true}
             titleFontFamily={titleFontFamily}
             descriptionFontFamily={descriptionFontFamily}
             iconColor={iconColor}
             textAlign={textAlign}
-            titleColor={titleColor}
-            descriptionColor={descriptionColor}
+            titleColor={textColor !== "#ffffff" ? textColor : primaryTextColor}
+            descriptionColor={
+              secTextColor !== "#ffffff" ? secTextColor : secondaryTextColor
+            }
             flexDirection={flexDirection}
             item={item}
           />
@@ -122,6 +151,8 @@ export const List = ({
   settingTabs,
   preset,
   items,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const {
@@ -174,17 +205,6 @@ export const List = ({
   }, [secondaryFont])
 
   useEffect(() => {
-    setProp((props) => (props.titleColor = primaryTextColor || "#000000"), 200)
-  }, [primaryTextColor])
-
-  useEffect(() => {
-    setProp(
-      (props) => (props.descriptionColor = secondaryTextColor || "#5a5a5a"),
-      200
-    )
-  }, [secondaryTextColor])
-
-  useEffect(() => {
     setProp((props) => (props.iconColor = primaryColor || "#3182ce"), 200)
   }, [primaryColor])
 
@@ -214,11 +234,14 @@ export const List = ({
           maxWidth: "100%",
           paddingTop: `${marginTop}px`,
           paddingBottom: `${marginBottom}px`,
-          paddingLeft: `${marginLeft + 10}px`,
-          paddingRight: `${marginRight + 10}px`,
+          paddingLeft: `${marginLeft}px`,
+          paddingRight: `${marginRight}px`,
         }}
       >
         <StyledListContainer
+          isPreviewScreen={false}
+          className="user-list-comp"
+          size={size}
           verticalGap={verticalGap}
           columnsDesktop={columnsDesktop}
           columnsMobile={columnsMobile}
@@ -227,13 +250,17 @@ export const List = ({
         >
           {items.map((item, index) => (
             <ListItem
-              key={index}
+              key={`${item.id}-${index}`}
               titleFontFamily={titleFontFamily}
               descriptionFontFamily={descriptionFontFamily}
               iconColor={iconColor}
               textAlign={textAlign}
-              titleColor={titleColor}
-              descriptionColor={descriptionColor}
+              titleColor={
+                textColor !== "#ffffff" ? textColor : primaryTextColor
+              }
+              descriptionColor={
+                secTextColor !== "#ffffff" ? secTextColor : secondaryTextColor
+              }
               flexDirection={flexDirection}
               item={item}
               onTitleChange={(updatedTitle) => {
@@ -275,6 +302,7 @@ const ListItem = ({
   titleColor: string
   descriptionColor: string
   flexDirection: string
+
   item: {
     id: string
     picture: ImagePictureTypes | string | null
@@ -335,30 +363,34 @@ const ListItem = ({
           ))}
       </div>
       <div className="flex flex-1 flex-col justify-center gap-1">
-        {/** @ts-ignore */}
-        {/** @ts-ignore */}
-        <ContentEditable
+        <div
           className="w-fit max-w-full whitespace-break-spaces px-1 font-bold"
           style={{ wordBreak: "break-word" }}
-          disabled={disabled}
-          html={titleValue}
-          onChange={(e) => {
-            setTitleValue(e.target.value)
-            onTitleChange(e.target.value)
-          }}
-        />
-        {/** @ts-ignore */}
-        {/** @ts-ignore */}
-        <ContentEditable
+        >
+          <TextEditor
+            isReadOnly={disabled}
+            initValue={getComputedValueForTextEditor(titleValue)}
+            onChange={(val) => {
+              const serialized = serialize(val)
+              setTitleValue(serialized)
+              onTitleChange(serialized)
+            }}
+          />
+        </div>
+        <div
           className="w-fit max-w-full gap-x-0 whitespace-break-spaces px-1 text-sm"
           style={{ wordBreak: "break-word" }}
-          disabled={disabled}
-          html={descriptionValue}
-          onChange={(e) => {
-            setDescriptionValue(e.target.value)
-            onDescriptionChange(e.target.value)
-          }}
-        />
+        >
+          <TextEditor
+            isReadOnly={disabled}
+            initValue={getComputedValueForTextEditor(descriptionValue)}
+            onChange={(val) => {
+              const serialized = serialize(val)
+              setDescriptionValue(serialized)
+              onDescriptionChange(serialized)
+            }}
+          />
+        </div>
       </div>
     </StyledListItem>
   )
@@ -370,11 +402,12 @@ type StyledListContainerProps = {
   columnsMobile: number
   mobileScreen: boolean
   maxWidth: string
+  size: UserInputSizes
+  isPreviewScreen: boolean
+  toolbarPreview?: boolean
 }
 
 const StyledListContainer = styled.ul<StyledListContainerProps>`
-  width: 100%;
-  max-width: ${({ maxWidth }) => maxWidth};
   display: grid;
   column-gap: 40px;
   row-gap: ${({ verticalGap }) => `${verticalGap}px`};
@@ -389,6 +422,82 @@ const StyledListContainer = styled.ul<StyledListContainerProps>`
       ${({ columnsMobile }) => columnsMobile},
       minmax(0, 1fr)
     );
+  }
+
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen, isPreviewScreen, toolbarPreview }) => {
+    if (toolbarPreview)
+      return {
+        width: "calc(100% - 22px)",
+      }
+
+    if (isPreviewScreen) {
+      if (size === UserInputSizes.small) {
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "auto", maxWidth: 376 }
+        }
+      } else if (size === UserInputSizes.medium) {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 600 }
+      } else if (size === UserInputSizes.large) {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 700 }
+      } else {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: "calc(100% - 22px)" }
+      }
+    } else {
+      if (size === UserInputSizes.small) {
+        if (mobileScreen) {
+          return { width: "360px" }
+        } else {
+          return { width: "auto", maxWidth: 376 }
+        }
+      } else if (size === UserInputSizes.medium) {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 600 }
+      } else if (size === UserInputSizes.large) {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: 700 }
+      } else {
+        return mobileScreen
+          ? { width: "360px" }
+          : { width: "auto", maxWidth: "calc(100% - 22px)" }
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
   }
 `
 
@@ -447,6 +556,8 @@ export enum ListPresets {
 }
 
 export type ListProps = {
+  textColor?: string
+  secTextColor?: string
   titleFontFamily: string
   descriptionFontFamily: string
   textAlign: string
@@ -480,6 +591,8 @@ export type ListProps = {
 }
 
 export const ListDefaultProps: ListProps = {
+  textColor: "#ffffff",
+  secTextColor: "#ffffff",
   titleFontFamily: "inherit",
   descriptionFontFamily: "inherit",
   textAlign: "start",
@@ -508,29 +621,29 @@ export const ListDefaultProps: ListProps = {
       id: `list-${hexoid(6)()}`,
       picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
       pictureType: PictureTypes.ICON,
-      title: "Item Text 1",
-      description: "ItSubtm Text 1",
+      title: getDefaultContent("Item Text 1"),
+      description: getDefaultContent("ItSubtm Text 1"),
     },
     {
       id: `input-${hexoid(6)()}`,
       picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
       pictureType: PictureTypes.ICON,
-      title: "Item Text 2",
-      description: "Item Subtext 2",
+      title: getDefaultContent("Item Text 2"),
+      description: getDefaultContent("Item Subtext 2"),
     },
     {
       id: `input-${hexoid(6)()}`,
       picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
       pictureType: PictureTypes.ICON,
-      title: "Item Text 3",
-      description: "Item Subtext 3",
+      title: getDefaultContent("Item Text 3"),
+      description: getDefaultContent("Item Subtext 3"),
     },
     {
       id: `input-${hexoid(6)()}`,
       picture: `<path fill=\"none\" stroke=\"currentColor\" strokeLinecap=\"round\" strokeLinejoin=\"round\" d=\"M7 13.5a6.5 6.5 0 1 0 0-13a6.5 6.5 0 0 0 0 13M7 4v6M4 7h6\"/>`,
       pictureType: PictureTypes.ICON,
-      title: "Item Text 4",
-      description: "Item Subtext 4",
+      title: getDefaultContent("Item Text 4"),
+      description: getDefaultContent("Item Subtext 4"),
     },
   ],
 }

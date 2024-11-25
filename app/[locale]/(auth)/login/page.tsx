@@ -8,29 +8,22 @@ import convifyLogo from "@/assets/convify_logo_black.svg"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import { env } from "@/env.mjs"
+import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-  title: "Log in | " + env.NEXT_PUBLIC_APP_NAME,
-  description: "Login to your account",
+export async function generateMetadata() {
+  const APP_NAME = process.env.APP_NAME
+  const t = await getTranslations("Components") // Fetch translations
+
+  return {
+    title: `${t("Log in")} | ${APP_NAME}`, // Use translations for title
+    description: t("Login to your account"),
+  }
 }
-
 export default function LoginPage() {
   const t = useTranslations("Login")
 
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <Link
-        href="/"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute left-4 top-4 md:left-8 md:top-8"
-        )}
-      >
-        <>
-          <Icons.chevronLeft className="mr-2 size-4" />
-          {t("Back")}
-        </>
-      </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex justify-center">
           <img

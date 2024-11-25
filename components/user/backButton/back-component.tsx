@@ -178,7 +178,6 @@ export const BackButtonGen = ({
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
     if (term) {
@@ -295,7 +294,9 @@ export const BackButtonGen = ({
             )}
           </div>
         )}
-        <span className="text-md ml-2">{text}</span>
+        <span className="text-md ml-2">
+          <div dangerouslySetInnerHTML={{ __html: text }} />
+        </span>
       </StyledCustomButton>
     </div>
   )
@@ -356,8 +357,8 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   background: ${(props) => props.background};
   color: ${(props) => props.color};
   overflow: hidden;
-
   width: auto;
+
   box-sizing: border-box;
   height: ${(props) => props.height}px;
   margin-top: ${(props) => props.marginTop}px;
@@ -371,14 +372,6 @@ const StyledCustomButton = styled(CustomButton)<StyledCustomButtonProps>`
   justify-content: ${(props) => props.justifyContent};
   gap: ${(props) => props.gap}px;
   border: ${(props) => props.border}px solid ${(props) => props.borderColor};
-  @media (max-width: 760px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 600px;
-  }
-  @media (max-width: 660px) {
-    width: 100%; /* Make the button take the full width on smaller screens */
-    max-width: 400px;
-  }
 `
 
 export const BackButton = ({

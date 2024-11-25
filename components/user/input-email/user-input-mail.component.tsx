@@ -31,6 +31,11 @@ import {
   setPreviewScreenData,
   setUpdateFilledCount,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import {
+  ImagePictureTypes,
+  PictureTypes,
+  SvgRenderer,
+} from "@/components/PicturePicker"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -56,23 +61,16 @@ export enum UserInputSizes {
 }
 
 const UserInputSizeValues = {
-  small: "260px",
+  small: "250px",
   medium: "376px",
   large: "576px",
-  full: "100%",
-}
-
-const UserInputMobileSizeValues = {
-  small: "300px",
-  medium: "354px",
-  large: "376px",
   full: "100%",
 }
 
 export type UserInputMailProps = {
   inputValue: string
   fontSize: number
-  textColor: string
+  textColor?: string
   fontWeight: string
   marginLeft: number
   marginRight: number
@@ -127,11 +125,12 @@ export type UserInputMailProps = {
   }
   settingsTab: string
   id: string
+  iconType?: PictureTypes
 }
 export const UserInputMailDefaultProps: UserInputMailProps = {
   inputValue: "",
   fontSize: 16,
-  textColor: "#000",
+  textColor: "#ffffff",
   width: 366,
   fontWeight: "normal",
   marginLeft: 0,
@@ -245,6 +244,52 @@ const convertToSvg = (svgBody) => {
   height="33.5">${svgBody}</svg>`
 }
 
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen }) => {
+    if (size === UserInputSizes.small) {
+      return { width: "250px" }
+    } else if (size === UserInputSizes.medium) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "376px" }
+      }
+    } else if (size === UserInputSizes.large) {
+      if (mobileScreen) {
+        return { width: "calc(100% - 22px)" }
+      } else {
+        return { width: "576px" }
+      }
+    } else {
+      return {
+        width: "calc(100% - 22px)",
+      }
+    }
+  }};
+
+  @media (max-width: 600px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 390px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
+
 export const UserInputMailGen = ({ ...props }) => {
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
@@ -356,11 +401,9 @@ export const UserInputMailGen = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${UserInputSizeValues[props.size]}`,
-          }}
+        <Wrapper
+          size={props.size}
+          className="email-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -368,12 +411,14 @@ export const UserInputMailGen = ({ ...props }) => {
                 className={`relative mb-1 transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
                 style={{
                   fontFamily: `var(${props.primaryFont.value})`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff" ? props.textColor : "#505051"
+                  }`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
                 }}
               >
-                {props.label}
+                <div dangerouslySetInnerHTML={{ __html: props.label }} />
               </div>
             </>
           )}
@@ -400,7 +445,11 @@ export const UserInputMailGen = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `#9CA3AF`,
+                color: `${
+                  props.textColor !== "#ffffff" ? props.textColor : "#9ca3af"
+                }`,
+                fontSize: "15px",
+                fontWeight: 330,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -409,7 +458,7 @@ export const UserInputMailGen = ({ ...props }) => {
             </div>
           )}
 
-          <div className="field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
+          <div className="field-container flex w-auto flex-row gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent">
             {props.enableIcon && (
               <div
                 className={cn(
@@ -436,20 +485,41 @@ export const UserInputMailGen = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: convertToSvg(icons[props.icon]?.body),
-                  }}
-                  style={{
-                    color: `#505051`,
-                  }}
-                />
+                {props.iconType !== PictureTypes.NULL && (
+                  <div className="flex items-center justify-center">
+                    {props.iconType === PictureTypes.ICON ? (
+                      <SvgRenderer
+                        iconName={props.icon}
+                        width="1em"
+                        height="1em"
+                      />
+                    ) : props.iconType === PictureTypes.EMOJI ? (
+                      <span className="text-[1em] leading-[1em]">
+                        {props.icon}
+                      </span>
+                    ) : (
+                      <picture key={(props.icon as ImagePictureTypes).desktop}>
+                        <source
+                          media="(min-width:560px)"
+                          srcSet={(props.icon as ImagePictureTypes).mobile}
+                        />
+                        <img
+                          src={(props.icon as ImagePictureTypes).desktop}
+                          className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                          style={{ height: "1em", width: "auto" }}
+                          loading="lazy"
+                        />
+                      </picture>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             <UserInputMailStyled
+              data-label={props?.fieldName || ""}
               // ref={inputRef}
               value={inputValue}
-              textColor={props.textColor}
+              textColor={"#000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 isActive
@@ -616,7 +686,7 @@ export const UserInputMailGen = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -691,12 +761,6 @@ export const UserInputMail = ({ ...props }) => {
     }
   }, [primaryColor, props.activeBorderColor, setProp])
 
-  useEffect(() => {
-    if (props.textColor.globalStyled && !props.textColor.isCustomized) {
-      setProp((props) => (props.textColor.value = primaryTextColor), 200)
-    }
-  }, [primaryTextColor, props.textColor, setProp])
-
   const focusInput = () => {
     if (inputRef.current) {
       inputRef.current.focus()
@@ -733,15 +797,10 @@ export const UserInputMail = ({ ...props }) => {
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
-          className="relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
-          style={{
-            width: `${
-              mobileScreen
-                ? UserInputMobileSizeValues[props.size]
-                : UserInputSizeValues[props.size]
-            }`,
-          }}
+        <Wrapper
+          size={props.size}
+          mobileScreen={mobileScreen}
+          className="email-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           {!props.floatingLabel && (
             <>
@@ -765,7 +824,9 @@ export const UserInputMail = ({ ...props }) => {
                   fontFamily: `var(${props.primaryFont.value})`,
                   minWidth: `${UserInputSizeValues[props.size]}`,
                   width: `${UserInputSizeValues[props.size]}`,
-                  color: `${primaryTextColor}`,
+                  color: `${
+                    props.textColor !== "#ffffff" ? props.textColor : "#505051"
+                  }`,
                 }}
               />
             </>
@@ -793,7 +854,11 @@ export const UserInputMail = ({ ...props }) => {
       `}
               style={{
                 fontFamily: `var(${props.primaryFont.value})`,
-                color: `#9CA3AF`,
+                color: `${
+                  props.textColor !== "#ffffff" ? props.textColor : "#9ca3af"
+                }`,
+                fontSize: "15px",
+                fontWeight: 330,
                 // minWidth: `${UserInputSizeValues[props.size]}`,
                 // width: `${UserInputSizeValues[props.size]}`,
               }}
@@ -825,14 +890,34 @@ export const UserInputMail = ({ ...props }) => {
                   borderRightWidth: 0,
                 }}
               >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: convertToSvg(icons[props.icon]?.body),
-                  }}
-                  style={{
-                    color: `#505051`,
-                  }}
-                />
+                {props.iconType !== PictureTypes.NULL && (
+                  <div className="flex items-center justify-center">
+                    {props.iconType === PictureTypes.ICON ? (
+                      <SvgRenderer
+                        iconName={props.icon}
+                        width="1em"
+                        height="1em"
+                      />
+                    ) : props.iconType === PictureTypes.EMOJI ? (
+                      <span className="text-[1em] leading-[1em]">
+                        {props.icon}
+                      </span>
+                    ) : (
+                      <picture key={(props.icon as ImagePictureTypes).desktop}>
+                        <source
+                          media="(min-width:560px)"
+                          srcSet={(props.icon as ImagePictureTypes).mobile}
+                        />
+                        <img
+                          src={(props.icon as ImagePictureTypes).desktop}
+                          className="h-auto w-auto overflow-hidden rounded-t-[13px] object-cover"
+                          style={{ height: "1em", width: "auto" }}
+                          loading="lazy"
+                        />
+                      </picture>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             <UserInputMailStyled
@@ -840,7 +925,7 @@ export const UserInputMail = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={inputRef}
-              textColor={`${primaryTextColor}`}
+              textColor={`#000`}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
@@ -916,7 +1001,7 @@ export const UserInputMail = ({ ...props }) => {
             </div>
           )}
           {/** End error container */}
-        </div>
+        </Wrapper>
       </div>
     </div>
   )

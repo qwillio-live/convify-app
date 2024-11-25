@@ -92,3 +92,15 @@ export type Template = {
   isRecommended: boolean
   category: string
 }
+
+export interface ComponentProps {
+  displayName: string
+  props: {
+    containerBackground: string
+    [key: string]: any // Any additional properties in the component
+  }
+}
+
+export interface Data {
+  [key: string]: ComponentProps
+}

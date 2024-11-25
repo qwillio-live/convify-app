@@ -1,5 +1,9 @@
 "use client"
 
+import { clear } from "console"
+import React, { useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { debounce, throttle } from "lodash"
 import {
   ArrowRight,
   Check,
@@ -8,30 +12,31 @@ import {
   Github,
   Globe,
   Image,
-  Linkedin,
-  Smartphone,
   Laptop,
+  Linkedin,
   PlusCircle,
+  Smartphone,
 } from "lucide-react"
-import React, { useCallback } from "react"
-import { throttle, debounce } from "lodash"
+import { useTranslations } from "next-intl"
 
 import { Editor, Element, Frame, useEditor } from "@/lib/craftjs"
 import {
+  addScreen,
   setCurrentScreenName,
   setEditorLoad,
   setFirstScreenName,
   setSelectedComponent,
-  setValidateScreen,
-  addScreen,
   setSelectedScreen,
+  setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
 // import { ProgressBar } from "../progress-bar.component"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import ScreensList from "@/components/user/screens/screens-list.component"
 import { SettingsPanel } from "@/components/user/settings/user-settings.components"
 import { UserToolbox } from "@/components/user/settings/user-toolbox.component"
@@ -42,17 +47,19 @@ import { Progress } from "../ui/progress-custom"
 import { ScrollArea } from "../ui/scroll-area"
 import { Button as UserButton } from "../user/button/user-button.component"
 import { Card, CardContent } from "../user/card/user-card.component"
+import { Checklist } from "../user/checklist/user-checklist.component"
 import {
   Container,
   UserContainer,
 } from "../user/container/user-container.component"
 import { HeadlineText } from "../user/headline-text/headline-text.component"
 import { IconButton } from "../user/icon-button/user-icon-button.component"
-import { Select } from "../user/select/user-select.component"
 import { Img } from "../user/image/user-image-component"
 import { UserInput } from "../user/input/user-input.component"
 import { LayoutContainer } from "../user/layout-container/layout-container.component"
+import { List } from "../user/list/user-list.component"
 import { Loader } from "../user/loader/user-loader.component"
+import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Logo } from "../user/logo/user-logo.component"
 import { MultipleChoice } from "../user/multiple-choice/user-multiple-choice.component"
 import { PictureChoice } from "../user/picture-choice/user-picture-choice.component"
@@ -63,18 +70,16 @@ import { ScreenFooter } from "../user/screens/screen-footer.component"
 import { ScreenHeader } from "../user/screens/screen-header.component"
 import { ScreenOneChoice } from "../user/screens/screen-one-choice.component"
 import { ScreenOneInput } from "../user/screens/screen-one-input.component"
+import { Select } from "../user/select/user-select.component"
 import { Controller } from "../user/settings/controller.component"
 import { RenderNode } from "../user/settings/render-node"
 import ResolvedComponentsFromCraftState from "../user/settings/resolved-components"
-import { Checklist } from "../user/checklist/user-checklist.component"
-import { List } from "../user/list/user-list.component"
-import { LogoBar } from "../user/logo-bar/user-logo-bar.component"
 import { Steps } from "../user/steps/user-steps.component"
-import { useRouter } from "next/navigation"
-import { RootState } from "@/lib/state/flows-state/store"
-import { clear } from "console"
-import { useTranslations } from "next-intl"
-import emptyScreenData from "@/components/user/screens/empty-screen.json"
+import { FAQ } from "../user/faq/user-faq.component"
+import { Links } from "../user/links/user-links.component"
+import { ImageStory } from "../user/image-story/image-story.component"
+import { YoutubeVideo } from "../user/youtube-video/user-youtube-video.component"
+import { SliderBar } from "../user/slider/user-slider.component"
 
 enum VIEWS {
   MOBILE = "mobile",
@@ -261,7 +266,7 @@ export function CreateFlowComponent() {
         onNodesChange={(query) => {
           let json = query.getSerializedNodes()
           debouncedSetEditorLoad(json)
-
+          // dispatch(setSelectedComponent("ROOT"))
           // }else{
           // console.log("RE-REnder NOT called")
           // return;
@@ -308,16 +313,21 @@ export function CreateFlowComponent() {
           Steps,
           Checklist,
           List,
+          Links,
+          FAQ,
           LogoBar,
           LayoutContainer,
           Loader,
           Img,
+          ImageStory,
+          YoutubeVideo,
+          SliderBar
         }}
         onRender={RenderNode}
       >
         <div className="h-[calc(-52px+99vh)] max-h-[calc(-52px+99vh)] flex-row justify-between gap-0 md:flex">
           <ScrollArea className="max-h-screen overflow-y-auto border-r px-2 py-6 md:basis-[15%]">
-            <div className="section-body">
+            <div className="section-body p-5">
               <ScreensList />
             </div>
           </ScrollArea>
@@ -362,8 +372,8 @@ export function CreateFlowComponent() {
                         width: mobileScreen
                           ? "384px"
                           : headerPosition === "absolute" && !mobileScreen
-                          ? width + "px"
-                          : "100%",
+                            ? width + "px"
+                            : "100%",
                         top:
                           headerPosition === "absolute" && !headerMode
                             ? "32px"
@@ -414,7 +424,7 @@ export function CreateFlowComponent() {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body">
+            <div className="section-body py-6">
               <UserToolbox />
             </div>
           </ScrollArea>
@@ -422,7 +432,7 @@ export function CreateFlowComponent() {
             <div className="section-header flex items-center justify-between">
               <h4 className="text-base font-normal tracking-tight"></h4>
             </div>
-            <div className="section-body overflow-y-auto">
+            <div className="section-body overflow-y-auto bg-[#f6f6f6]">
               <SettingsPanel />
             </div>
           </ScrollArea>

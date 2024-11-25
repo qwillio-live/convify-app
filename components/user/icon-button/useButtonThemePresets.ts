@@ -26,7 +26,7 @@ const useButtonThemePresets = () => {
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "rgba(255,255,255,0)",
+    containerBackground: "transparent",
     background: {
       value: getBackgroundForPreset(
         theme?.general?.primaryColor || "#3182ce",
@@ -93,7 +93,7 @@ const useButtonThemePresets = () => {
     border: 2,
     fullWidth: true,
     preset: "filled",
-    settingsTab: "content",
+    settingsTab: ["content"],
     buttonSize: "medium",
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
@@ -102,6 +102,7 @@ const useButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
+    id: `input-${hexoid(6)()}`,
   }
 
   const outLinePreset: IconButtonProps = {
@@ -177,7 +178,7 @@ const useButtonThemePresets = () => {
     border: 2,
     fullWidth: true,
     preset: "outline",
-    settingsTab: "content",
+    settingsTab: ["content"],
     buttonSize: "medium",
     tracking: false,
     trackingEvent: "button-" + hexoid(6)().toLowerCase(),
@@ -186,16 +187,20 @@ const useButtonThemePresets = () => {
       screenName: "",
     },
     buttonAction: "next-screen",
-  };
+    id: `input-${hexoid(6)()}`,
+  }
   const formPreset: IconButtonProps = {
     fontFamily: {
       value: theme?.text?.primaryFont || "inherit",
       globalStyled: true,
       isCustomized: false,
     },
-    containerBackground: "rgba(255,255,255,0)",
+    containerBackground: "transparent",
     background: {
-      value: getBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
+      value: getBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
+      ),
       globalStyled: true,
       isCustomized: false,
     },
@@ -205,7 +210,10 @@ const useButtonThemePresets = () => {
       isCustomized: true,
     },
     backgroundHover: {
-      value: getHoverBackgroundForPreset(theme?.general?.primaryColor || "#3182ce","filled"),
+      value: getHoverBackgroundForPreset(
+        theme?.general?.primaryColor || "#3182ce",
+        "filled"
+      ),
       globalStyled: true,
       isCustomized: false,
     },
@@ -214,7 +222,7 @@ const useButtonThemePresets = () => {
       globalStyled: false,
       isCustomized: true,
     },
-    radius:{
+    radius: {
       value: "8",
       globalStyled: false,
       isCustomized: false,
@@ -253,20 +261,21 @@ const useButtonThemePresets = () => {
     gap: 4,
     border: 2,
     fullWidth: true,
-    preset: 'filled',
-    settingsTab: 'content',
-    buttonSize: 'medium',
+    preset: "filled",
+    settingsTab: ["content"],
+    buttonSize: "medium",
     tracking: false,
-    trackingEvent: "button-"+hexoid(6)().toLowerCase(),
+    trackingEvent: "button-" + hexoid(6)().toLowerCase(),
     nextScreen: {
       screenId: "",
       screenName: "",
     },
     buttonAction: "next-screen",
-  };
+    id: `input-${hexoid(6)()}`,
+  }
 
-  return { filledPreset, outLinePreset, formPreset };
-};
+  return { filledPreset, outLinePreset, formPreset }
+}
 
 export const getBackgroundForPreset = (color, preset) => {
   switch (preset) {

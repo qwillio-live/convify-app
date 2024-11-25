@@ -1,7 +1,18 @@
 "use client"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import hexoid from "hexoid"
+import { debounce } from "lodash"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
+
 import { useNode } from "@/lib/craftjs"
+import {
+  setPreviewScreenData,
+  setUpdateFilledCount,
+} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   Select as CustomSelect,
   SelectContent,
@@ -9,32 +20,52 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
 import { Controller } from "../settings/controller.component"
-import { SelectSettings } from "./user-select.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { useTranslations } from "next-intl"
-import hexoid from "hexoid"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
-import ContentEditable from "react-contenteditable"
-import { debounce } from "lodash"
-import {
-  setPreviewScreenData,
-  setUpdateFilledCount,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
+import { SelectSettings } from "./user-select.settings"
+import { cn } from "@/lib/utils"
 
 const SelectSizeValues = {
-  small: "300px",
+  small: "250px",
   medium: "376px",
   large: "576px",
-  full: "100%",
+  full: "99px",
 }
 
 const SelectMobileSizeValues = {
-  small: "300px",
+  small: "250px",
   medium: "330px",
   large: "360px",
-  full: "100%",
+  full: "360px",
+}
+
+const Wrapper = ({
+  mobileScreen,
+  size,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  size: SelectSizes
+  mobileScreen?: boolean
+}) => {
+  const generateWidthClass = useMemo(() => {
+    if (size !== SelectSizes.small && mobileScreen) return "w-[calc(100%-22px)]"
+    switch (size) {
+      case SelectSizes.large:
+        return "w-[576px] max-[600px]:w-[calc(100%-22px)]"
+      case SelectSizes.medium:
+        return "w-[376px] max-[390px]:w-[calc(100%-22px)]"
+      case SelectSizes.small:
+        return "w-[250px]"
+      default:
+        return "w-[calc(100%-22px)]"
+    }
+  }, [size, mobileScreen])
+  return (
+    <div className={cn("mx-auto", generateWidthClass, className)} {...props} />
+  )
 }
 
 export const SelectGen = ({
@@ -92,9 +123,9 @@ export const SelectGen = ({
     return false
   })
   useEffect(() => {
-    console.log("setting filled true", screenData)
+    // console.log("setting filled true", screenData)
     if (screenData !== undefined) {
-      console.log("setting filled true", screenData)
+      // console.log("setting filled true", screenData)
       setIsFiiled(true)
     }
     if (screenData?.length > 0) setSelectedOptionId(screenData)
@@ -126,29 +157,30 @@ export const SelectGen = ({
       shakeItem() // Call shake function when alarm is updated
     }
   }, [counttt]) // Depend on alarm state
-  console.log(
-    "in sselect",
-    screenData,
-    selectedOptionId,
-    isFilled,
-    isRequired,
-    "placeGolder",
-    placeholder,
-    "fontfamily",
-    fontFamily
-  )
+  // console.log(
+  //   "in sselect",
+  //   screenData,
+  //   selectedOptionId,
+  //   isFilled,
+  //   isRequired,
+  //   "placeGolder",
+  //   placeholder,
+  //   "fontfamily",
+  //   fontFamily
+  // )
+  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
   return (
     <div
       ref={itemRefNew}
-      className="relative w-full"
+      className="relative w-full max-w-[calc(100%-20px)] px-4"
       style={{
-        width: "100%",
+        // width: "100%",
         background: `${containerBackground}`,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        minWidth: "100%",
+        // minWidth: "100%",
         paddingTop: `${marginTop}px`,
         paddingBottom: `${marginBottom}px`,
         paddingLeft: `${marginLeft}px`,
@@ -177,9 +209,11 @@ export const SelectGen = ({
         <div
           className={`w-full p-1 `}
           style={{
-            color: labelColor,
+            color: labelColor !== "#ffffff" ? labelColor : "#505051",
             fontFamily: `var(${fontFamily?.value})`,
-            maxWidth: SelectSizeValues[size || "medium"],
+            maxWidth: mobileScreen
+              ? SelectMobileSizeValues[size || "small"]
+              : SelectSizeValues[size || "small"],
           }}
         >
           <label>{label}</label>
@@ -256,16 +290,13 @@ const StyledCustomSelectTrigger = styled(SelectTrigger)<StyledSelectProps>`
       props.borderHoverColor}; /* Change to your desired hover border color */
   }
 
-  &:focus {
-    border-color: ${(props) =>
-      props.borderHoverColor}; /* Change to your desired focus border color */
-  }
+  /* &:focus {
+    border-color: ${(props) => props.borderHoverColor};
+  } */
 
   overflow: hidden;
   max-width: ${(props) =>
-    props.mobileScreen
-      ? SelectMobileSizeValues[props.size || "medium"]
-      : SelectSizeValues[props.size || "medium"]};
+    props.mobileScreen ? "100%" : SelectSizeValues[props.size || "medium"]};
   width: 100%;
   box-sizing: border-box;
   height: ${(props) => props.height}px;
@@ -377,12 +408,6 @@ export const Select = ({
     }
   }, [primaryColor])
 
-  useEffect(() => {
-    if (primaryTextColor) {
-      setProp((props) => (props.labelColor = primaryTextColor), 200)
-    }
-  }, [primaryTextColor])
-
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -414,89 +439,96 @@ export const Select = ({
           paddingRight: `${marginRight}px`,
         }}
       >
-        <input
-          className="input-select"
-          data-field-name={fieldName}
-          data-value={
-            selectOptions.find((option) => option.id === selectedOptionId)
-              ?.value || ""
-          }
-          {...(required ? { required: true } : {})}
-          style={{ display: "none" }}
-        />
-        <CustomSelect
-          value={selectedOptionId}
-          onValueChange={(value) =>
-            setProp((props) => (props.selectedOptionId = value))
-          }
+        <Wrapper
+          size={size}
+          mobileScreen={mobileScreen}
+          className="text-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
-          <div
-            className="w-full py-1"
-            style={{
-              fontFamily: `var(${fontFamily?.value})`,
-              maxWidth: mobileScreen
-                ? SelectMobileSizeValues[size || "small"]
-                : SelectSizeValues[size || "small"],
-            }}
+          <input
+            className="input-select"
+            data-field-name={fieldName}
+            data-value={
+              selectOptions.find((option) => option.id === selectedOptionId)
+                ?.value || ""
+            }
+            {...(required ? { required: true } : {})}
+            style={{ display: "none" }}
+          />
+          <CustomSelect
+            value={selectedOptionId}
+            onValueChange={(value) =>
+              setProp((props) => (props.selectedOptionId = value))
+            }
           >
-            {/** @ts-ignore */}
-            {/** @ts-ignore */}
-            <ContentEditable
-              className="px-1"
-              html={label}
-              onChange={(e) => {
-                setLabel(e.target.value)
-                handlePropChangeDebounced("label", e.target.value)
-              }}
+            <div
+              className="w-full py-1"
               style={{
-                color: labelColor,
-                outlineColor: borderHoverColor.value,
-                borderRadius: "4px",
+                fontFamily: `var(${fontFamily?.value})`,
+                maxWidth: mobileScreen
+                  ? SelectMobileSizeValues[size || "small"]
+                  : SelectSizeValues[size || "small"],
               }}
-            />
-          </div>
-          <StyledCustomSelectTrigger
-            className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
-              !selectedOptionId ? "text-muted-foreground" : ""
-            }`}
-            fontFamily={fontFamily.value}
-            borderColor={borderColor.value}
-            borderHoverColor={borderHoverColor.value}
-            border={border}
-            mobileScreen={mobileScreen || false}
-            width={width}
-            height={height}
-            paddingLeft={paddingLeft}
-            paddingTop={paddingTop}
-            paddingRight={paddingRight}
-            paddingBottom={paddingBottom}
-            size={size}
-            {...props}
-          >
-            <SelectValue placeholder={placeholder} />
-          </StyledCustomSelectTrigger>
-          <SelectContent>
-            {getSortedSelectOptions(selectOptions, sortAlphabetically).map(
-              (item, index) => (
-                <SelectItem
-                  key={item.id}
-                  value={item.id}
-                  style={{
-                    fontFamily: `var(${fontFamily?.value})`,
-                    ...(selectedOptionId === item.id
-                      ? {
-                          backgroundColor: selectedOptionBackgroundColor.value,
-                          color: selectedOptionTextColor,
-                        }
-                      : {}),
-                  }}
-                >
-                  {item.value}
-                </SelectItem>
-              )
-            )}
-          </SelectContent>
-        </CustomSelect>
+            >
+              {/** @ts-ignore */}
+              {/** @ts-ignore */}
+              <ContentEditable
+                className="px-1"
+                html={label}
+                onChange={(e) => {
+                  setLabel(e.target.value)
+                  handlePropChangeDebounced("label", e.target.value)
+                }}
+                style={{
+                  color: labelColor !== "#ffffff" ? labelColor : "#505051",
+                  outlineColor: borderHoverColor.value,
+                  borderRadius: "4px",
+                }}
+              />
+            </div>
+            <StyledCustomSelectTrigger
+              className={`!outline-none !ring-transparent [&>span]:line-clamp-1 [&>span]:text-ellipsis [&>span]:break-all ${
+                !selectedOptionId ? "text-muted-foreground" : ""
+              }`}
+              fontFamily={fontFamily.value}
+              borderColor={borderColor.value}
+              borderHoverColor={borderHoverColor.value}
+              border={border}
+              mobileScreen={mobileScreen || false}
+              width={width}
+              height={height}
+              paddingLeft={paddingLeft}
+              paddingTop={paddingTop}
+              paddingRight={paddingRight}
+              paddingBottom={paddingBottom}
+              size={size}
+              {...props}
+            >
+              <SelectValue placeholder={placeholder} />
+            </StyledCustomSelectTrigger>
+            <SelectContent>
+              {getSortedSelectOptions(selectOptions, sortAlphabetically).map(
+                (item, index) => (
+                  <SelectItem
+                    key={item.id}
+                    value={item.id}
+                    style={{
+                      fontFamily: `var(${fontFamily?.value})`,
+                      ...(selectedOptionId === item.id
+                        ? {
+                            backgroundColor:
+                              selectedOptionBackgroundColor.value,
+                            color: selectedOptionTextColor,
+                          }
+                        : {}),
+                    }}
+                  >
+                    {item.value}
+                  </SelectItem>
+                )
+              )}
+            </SelectContent>
+          </CustomSelect>
+        </Wrapper>
       </div>
     </div>
   )
@@ -513,7 +545,7 @@ export type SelectProps = {
   selectOptions: object[]
   selectedOptionId: string | undefined
   fontFamily: StyleProperty
-  labelColor: string
+  labelColor?: string
   containerBackground: string
   disabled: boolean
   required: boolean
@@ -558,7 +590,7 @@ export const SelectDefaultProps: SelectProps = {
   labelColor: "#000000",
   containerBackground: "transparent",
   borderColor: {
-    value: "inherit",
+    value: "#eaeaeb",
     globalStyled: false,
     isCustomized: false,
   },

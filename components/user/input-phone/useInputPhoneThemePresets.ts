@@ -7,6 +7,7 @@ import {
   UserInputPhoneProps,
   UserInputSizes,
 } from "./user-input-phone.component"
+import { PictureTypes } from "@/components/PicturePicker"
 
 const useInputPhoneThemePresets = () => {
   const t = useTranslations("Components")
@@ -25,7 +26,6 @@ const useInputPhoneThemePresets = () => {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#9CA3AF",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -78,9 +78,10 @@ const useInputPhoneThemePresets = () => {
     size: UserInputSizes.medium,
     label: t("PhoneLabel"),
     fieldName: t("PhoneFieldName"),
-    floatingLabel: false,
+    floatingLabel: true,
     enableIcon: true,
-    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
+    icon: "📞",
+    iconType: PictureTypes.EMOJI,
     preset: "outlined",
     error: false,
     errorText: "Please specify an answer",
@@ -95,15 +96,13 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 8,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-
+    id: `input-${hexoid(6)()}`,
   }
 
   const underlinedPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -152,9 +151,10 @@ const useInputPhoneThemePresets = () => {
     size: UserInputSizes.medium,
     label: t("PhoneLabel"),
     fieldName: t("PhoneFieldName"),
-    floatingLabel: false,
+    floatingLabel: true,
     enableIcon: true,
-    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
+    icon: "📞",
+    iconType: PictureTypes.EMOJI,
     preset: "underlined",
     error: false,
     errorText: "Please specify an answer",
@@ -169,15 +169,13 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
-
+    id: `input-${hexoid(6)()}`,
   }
 
   const formPresetPhone: UserInputPhoneProps = {
     inputValue: "",
     fontSize: 16,
     color: "#000",
-    textColor: "#000",
     width: 366,
     fontWeight: "normal",
     marginLeft: 0,
@@ -228,7 +226,8 @@ const useInputPhoneThemePresets = () => {
     fieldName: t("PhoneFieldName"),
     floatingLabel: true,
     enableIcon: true,
-    icon: "phone-telephone-android-phone-mobile-device-smartphone-iphone",
+    icon: "📞",
+    iconType: PictureTypes.EMOJI,
     preset: "form",
     error: false,
     errorText: "Please specify an answer",
@@ -243,7 +242,7 @@ const useInputPhoneThemePresets = () => {
       bottomRightRadius: 0,
     },
     settingsTab: "content",
-    id: `input-${hexoid(6)()}`
+    id: `input-${hexoid(6)()}`,
   }
   return { outlinedPresetPhone, underlinedPresetPhone, formPresetPhone }
 }

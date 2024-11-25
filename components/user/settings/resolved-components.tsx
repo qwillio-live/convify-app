@@ -1,8 +1,5 @@
-import React, { Suspense, useEffect, useState } from "react"
-import {
-  UserContainer,
-  UserContainerGen,
-} from "@/components/user/container/user-container.component"
+import React, { memo, useMemo } from "react"
+import { UserContainerGen } from "@/components/user/container/user-container.component"
 import { HeadlineTextGen } from "@/components/user/headline-text/headline-text.component"
 import { IconButtonGen } from "@/components/user/icon-button/user-icon-button.component"
 import { UserLogo } from "@/components/user/logo/user-logo.component"
@@ -18,21 +15,10 @@ import { PictureChoiceGen } from "../picture-choice/user-picture-choice.componen
 import { MultipleChoiceGen } from "../multiple-choice/user-multiple-choice.component"
 import { ScreenFooterGen } from "../screens/screen-footer.component"
 import { CardContentGen, CardGen } from "../card/user-card.component"
-import globalThemeSlice, {
-  setPartialStyles,
-  themeSlice,
-} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
-import {
-  UserInputCheckboxGen,
-  UserInputCheckbox,
-} from "../input-checkbox/user-input-checkbox.component"
-import {
-  UserInputMailGen,
-  UserInputMail,
-} from "../input-email/user-input-mail.component"
-import { User } from "lucide-react"
+import { UserInputCheckboxGen } from "../input-checkbox/user-input-checkbox.component"
+import { UserInputMailGen } from "../input-email/user-input-mail.component"
 import { UserInputPhoneGen } from "../input-phone/user-input-phone.component"
 import { UserInputTextareaGen } from "../input-textarea/user-input-textarea.component"
 import { ImageComponentGen } from "../image-new/user-image.component"
@@ -49,6 +35,11 @@ import { LoaderComponentGen } from "../loader-new/user-loader.component"
 import { TextImageComponentGen } from "../textImage/user-textImage.component"
 import { SocialShareButtonGen } from "../socialShareButton/share-component"
 import { TelegramShareButtonGen } from "../telegramShareButton/telegram-component"
+import { FAQGen } from "../faq/user-faq.component"
+import { LinksGen } from "../links/user-links.component"
+import { ImageStory, ImageStoryGen } from "../image-story/image-story.component"
+import { YoutubeVideoGen } from "../youtube-video/user-youtube-video.component"
+import { SliderBarGen } from "../slider/user-slider.component"
 
 export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.USERCONTAINER]: UserContainerGen,
@@ -76,6 +67,10 @@ export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.STEPS]: StepsGen,
   [CRAFT_ELEMENTS.CHECKLIST]: ChecklistGen,
   [CRAFT_ELEMENTS.LIST]: ListGen,
+  [CRAFT_ELEMENTS.LINKS]: LinksGen,
+  [CRAFT_ELEMENTS.FAQ]: FAQGen,
+  [CRAFT_ELEMENTS.YOUTUBEVIDEO]: YoutubeVideoGen,
+  [CRAFT_ELEMENTS.IMAGESTORY]: ImageStoryGen,
   [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
   [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
   [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
@@ -85,99 +80,87 @@ export const CraftJsUserComponents = {
   [CRAFT_ELEMENTS.TEXTAREA]: UserInputTextareaGen,
   [CRAFT_ELEMENTS.FORM]: FormGen,
   [CRAFT_ELEMENTS.FORMCONTENT]: FormContentGen,
-}
-
-interface Props {
-  compressedCraftState: string
+  [CRAFT_ELEMENTS.RANGE]: SliderBarGen
 }
 
 const ResolvedComponentsFromCraftState = ({
   screen,
 }): React.ReactElement | null => {
-  const [toRender, setToRender] = useState<React.ReactElement | null>(null)
   const globalTheme = useAppSelector((state: RootState) => state?.theme)
 
-  useEffect(() => {
+  const toRender = useMemo(() => {
     try {
       const craftState = JSON.parse(screen)
-      console.log("Parsed Craft State:", craftState) // Log parsed JSON data
+      // console.log("Parsed Craft State:", craftState) // Log parsed JSON data
 
-      const resolveComponents = () => {
-        const parsedNodes = {}
+      const parsedNodes = {}
 
-        const parse = (nodeId: string, parentNodeId?: string) => {
-          if (parsedNodes[nodeId]) return parsedNodes[nodeId]
-          console.log(`Parsing node: ${parsedNodes[nodeId]}`)
+      const parse = (nodeId: string, parentNodeId?: string) => {
+        if (parsedNodes[nodeId]) return parsedNodes[nodeId]
 
-          const nodeData = craftState[nodeId]
-          if (!nodeData) return null
+        const nodeData = craftState[nodeId]
+        if (!nodeData) return null
 
-          const { type, props, nodes = [], linkedNodes = {} } = nodeData
-          const resolvedName = type?.resolvedName
-          const ReactComponent = resolvedName
-            ? CraftJsUserComponents[resolvedName]
-            : null
+        const { type, props, nodes = [], linkedNodes = {} } = nodeData
+        const resolvedName = type?.resolvedName
+        const ReactComponent = resolvedName
+          ? CraftJsUserComponents[resolvedName]
+          : null
 
-          let filteredNodes = nodes
-          if (resolvedName !== "AvatarComponent") {
-            const avatarComponents = nodes.filter(
-              (childNodeId) =>
-                craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
-            )
-            filteredNodes = nodes.filter(
-              (childNodeId) =>
-                craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
-            )
-            if (avatarComponents.length > 0) {
-              filteredNodes.push(avatarComponents[avatarComponents.length - 1])
-            }
+        let filteredNodes = nodes
+        if (resolvedName !== "AvatarComponent") {
+          const avatarComponents = nodes.filter(
+            (childNodeId) =>
+              craftState[childNodeId]?.type.resolvedName === "AvatarComponent"
+          )
+          filteredNodes = nodes.filter(
+            (childNodeId) =>
+              craftState[childNodeId]?.type.resolvedName !== "AvatarComponent"
+          )
+          if (avatarComponents.length > 0) {
+            filteredNodes.push(avatarComponents[avatarComponents.length - 1])
           }
-
-          const childNodes = filteredNodes.map((childNodeId: string) =>
-            parse(childNodeId, nodeId)
-          )
-          const linkedNodesElements = filteredNodes
-            .concat(Object.values(linkedNodes))
-            .map((linkedNodeData: any) => {
-              const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
-              return parse(linkedNodeId, nodeId)
-            })
-
-          const parsedNode = ReactComponent ? (
-            <ReactComponent
-              {...props}
-              parentNodeId={parentNodeId}
-              nodeId={nodeId}
-              key={nodeId}
-              scrollY={scrollY}
-            >
-              {linkedNodesElements}
-            </ReactComponent>
-          ) : (
-            <div
-              {...props}
-              parentNodeId={parentNodeId}
-              nodeId={nodeId}
-              key={nodeId}
-            >
-              {linkedNodesElements}
-            </div>
-          )
-
-          parsedNodes[nodeId] = parsedNode
-          return parsedNode
         }
+        const linkedNodesElements = filteredNodes
+          .concat(Object.values(linkedNodes))
+          .map((linkedNodeData: any) => {
+            const linkedNodeId = linkedNodeData.nodeId || linkedNodeData
+            return parse(linkedNodeId, nodeId)
+          })
 
-        return parse("ROOT") || <></>
+        const parsedNode = ReactComponent ? (
+          <ReactComponent
+            {...props}
+            parentNodeId={parentNodeId}
+            nodeId={nodeId}
+            key={nodeId}
+            scrollY={scrollY}
+          >
+            {linkedNodesElements}
+          </ReactComponent>
+        ) : (
+          <div
+            {...props}
+            parentNodeId={parentNodeId}
+            nodeId={nodeId}
+            key={nodeId}
+          >
+            {linkedNodesElements}
+          </div>
+        )
+
+        parsedNodes[nodeId] = parsedNode
+        return parsedNode
       }
 
-      setToRender(resolveComponents())
+      return parse("ROOT") || <></>
     } catch (error) {
       console.error("Error parsing craft state: ", error)
-      setToRender(<div>Error loading components.</div>)
+      return <div>Error loading components.</div>
     }
   }, [screen, globalTheme])
-  return <Suspense fallback={<h2>Loading...</h2>}>{toRender}</Suspense>
+
+  return <>{toRender}</>
 }
 
-export default ResolvedComponentsFromCraftState
+export default memo(ResolvedComponentsFromCraftState)

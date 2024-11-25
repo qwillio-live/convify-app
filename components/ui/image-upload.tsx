@@ -121,7 +121,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         <div {...getRootProps()} className="h-auto">
           <label
             htmlFor="dropzone-file"
-            className="relative flex flex-col items-center justify-center p-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 w-full visually-hidden-focusable h-full"
+            className="dark:hover:bg-bray-800 visually-hidden-focusable bg-card relative flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             {/* {loading && (
             <div className="text-center max-w-md">
@@ -136,21 +136,21 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
             {!backgroundImage && (
               <div className="text-center">
-                <div className="border p-2 rounded-md max-w-min mx-auto">
-                  <UploadCloud />
+                <div className="mx-auto max-w-min">
+                  <UploadCloud className="size-5" />
                 </div>
 
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-2 text-xs font-medium text-[#7B7D80]">
                   <span className="font-semibold">{t("Drag an image")}</span>
                 </p>
-                <p className="text-xs text-gray-400 dark:text-gray-400">
+                <p className="text-muted-foreground text-xs">
                   {t("Select a image or drag here to upload directly")}
                 </p>
               </div>
             )}
 
             {backgroundImage && (
-              <div className="text-center space-y-2">
+              <div className="space-y-2 text-center">
                 {backgroundImage && (
                   <div
                     style={{
@@ -186,7 +186,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         </div>
 
         {backgroundImage && (
-          <div className="flex items-center justify-between w-full h-10">
+          <div className="flex h-10 w-full items-center justify-between">
             <div></div>
 
             <Button
@@ -202,7 +202,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       </div>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent
-          className="z-[9999999] max-h-[calc(100vh-10%)] h-[calc(100vh-10%)] max-w-[95%] sm:max-w-[70%] relative flex flex-col gap-4 p-4 sm:p-8"
+          className="relative z-[9999999] flex h-[calc(100vh-10%)] max-h-[calc(100vh-10%)] max-w-[95%] flex-col gap-4 p-4 sm:max-w-[70%] sm:p-8"
           ref={dialogRef}
         >
           <Cropper
@@ -213,7 +213,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             }}
             initialAspectRatio={NaN}
             guides={false}
-            crop={onCrop}
+            // crop={onCrop}
             autoCropArea={1}
             src={image}
             minCropBoxHeight={100}
@@ -223,13 +223,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             responsive={true}
           />
           <div className="flex items-center justify-between gap-4">
-            <div className="p-1 flex gap-0 bg-secondary rounded-lg">
+            <div className="bg-secondary flex gap-0 rounded-lg p-1">
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
                   activeAspectRatioBtn === "source"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
                 }`}
                 onClick={aspectRatioSource}
               >
@@ -237,10 +237,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
                   activeAspectRatioBtn === "square"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
                 }`}
                 onClick={aspectRatioSquare}
               >
@@ -248,10 +248,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
                   activeAspectRatioBtn === "portrait"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
                 }`}
                 onClick={aspectRatioPortrait}
               >
@@ -259,10 +259,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
                   activeAspectRatioBtn === "landscape"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
                 }`}
                 onClick={aspectRatioLandscape}
               >
@@ -270,10 +270,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
                   activeAspectRatioBtn === "portraito"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
                 }`}
                 onClick={aspectRatioPortraitO}
               >
@@ -281,10 +281,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
               <Button
                 variant="secondary"
-                className={`text-sm rounded-md border py-2 px-3 leading-none h-auto ${
+                className={`h-auto rounded-md border px-3 py-2 text-sm leading-none ${
                   activeAspectRatioBtn === "landscapeo"
-                    ? "bg-white border-input shadow font-medium hover:bg-white"
-                    : "bg-transparent border-transparent hover:bg-transparent"
+                    ? "border-input bg-white font-medium shadow hover:bg-white"
+                    : "border-transparent bg-transparent hover:bg-transparent"
                 }`}
                 onClick={aspectRatioLandscape0}
               >

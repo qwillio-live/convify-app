@@ -37,6 +37,7 @@ export async function GET(
       console.log("solo", finalFlow, flowId)
       return NextResponse.json(finalFlow)
     }
+    return NextResponse.json([])
   } catch (error) {
     console.error(error)
 
@@ -51,8 +52,7 @@ export async function GET(
 
 // Helper function to generate random letters
 const generateRandomLetters = (length: number) => {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789"
   let result = ""
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length))
@@ -62,13 +62,13 @@ const generateRandomLetters = (length: number) => {
 
 // Function to generate a unique published name
 const generateUniqueName = async (baseName: string) => {
-  let uniqueName = baseName
+  let uniqueName = baseName.replaceAll(" ", "-")
   let isUnique = await checkPublishedNameExists(uniqueName)
 
   // Generate a unique publishedName if needed
   while (!isUnique) {
     const randomSuffix = generateRandomLetters(6) // Append 6 random characters
-    uniqueName = `${baseName}-${randomSuffix}`
+    uniqueName = `${baseName.replaceAll(" ", "-")}-${randomSuffix}`
     isUnique = await checkPublishedNameExists(uniqueName)
   }
 
@@ -95,7 +95,7 @@ export async function POST(
   { params }: { params: { flowId: string } }
 ) {
   try {
-    const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN
+    const flowDomain = process.env.NEXT_PUBLIC_FLOW_DOMAIN || ""
     const { flowId } = params
 
     // Fetch the flow and its steps

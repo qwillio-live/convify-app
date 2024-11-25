@@ -1,8 +1,10 @@
+import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { withAuth } from "next-auth/middleware"
 import createMiddleware from "next-intl/middleware"
-import { NextRequest, NextResponse } from "next/server"
+
 import { defaultLocale, locales } from "./constant"
+import next from "next/types"
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -16,8 +18,8 @@ const authMiddleware = withAuth(
     const isAuth = !!token
     const isAuthPage =
       req.nextUrl.pathname.startsWith("/login") ||
-      req.nextUrl.pathname.startsWith("/register")
-
+      req.nextUrl.pathname.startsWith("/register") ||
+      req.nextUrl.pathname === "/"
     if (isAuthPage && isAuth) {
       // Redirect to dashboard if user is authenticated and trying to access auth pages
       return NextResponse.redirect(new URL("/dashboard", req.url))
@@ -50,14 +52,28 @@ const authMiddleware = withAuth(
 
 export default async function middleware(req: NextRequest) {
   const excludePattern =
-    "^(/(" + locales.join("|") + "))?/(dashboard|editor|mobile)/?.*?$"
+    "^(/(" +
+    locales.join("|") +
+    "))?/(dashboard|editor|mobile|select-template)/?.*?$"
   const publicPathnameRegex = RegExp(excludePattern, "i")
-  const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname)
-  console.log("isPublicPage", isPublicPage)
+  const isPublicPage =
+    !publicPathnameRegex.test(req.nextUrl.pathname) &&
+    req.nextUrl.pathname !== "/"
+
   const token = await getToken({ req })
+  const isPreviewPage = req.nextUrl.pathname.includes("cron-preview")
+  console.log("ispublicpage", isPublicPage, token)
+  if (isPreviewPage) {
+    // Allow preview page without authentication
+    console.log("Preview page accessed without authentication")
+    return intlMiddleware(req)
+  }
+
   if (isPublicPage && !token) {
+    // Use internationalization middleware for public pages
     return intlMiddleware(req)
   } else {
+    // For other pages, apply authentication middleware
     return (authMiddleware as any)(req)
   }
 }

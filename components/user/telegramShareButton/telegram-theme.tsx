@@ -70,7 +70,7 @@ const useTelegramButtonTheme = () => {
     justifyContent: "center",
     disabled: false,
     enableIcon: true,
-    width: IconButtonSizes.small,
+    width: IconButtonSizes.medium,
     height: "auto",
     size: IconButtonSizes.medium,
     text: t("Telegram"),

@@ -1,6 +1,9 @@
 "use client"
+
 import React, { useCallback, useEffect, useRef } from "react"
-import ImagePlaceholder from "@/assets/images/default-image.webp"
+import Image from "next/image"
+import { DefaultImagePlaceholder } from "@/constant"
+import { debounce, throttle } from "lodash"
 import {
   Activity,
   Anchor,
@@ -10,23 +13,26 @@ import {
   DollarSign,
   Mountain,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
+import ContentEditable from "react-contenteditable"
 import styled from "styled-components"
-import { throttle, debounce } from "lodash"
+
 import { useEditor, useNode } from "@/lib/craftjs"
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
+import { RootState } from "@/lib/state/flows-state/store"
+import { cn, getComputedValueForTextEditor, serialize } from "@/lib/utils"
 import { Button as CustomButton } from "@/components/ui/button"
+
+import { UserInputSizes } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
-import { TextImageSettings } from "./user-textImage.settings"
 import { StyleProperty } from "../types/style.types"
-import { useAppSelector, useAppDispatch } from "@/lib/state/flows-state/hooks"
 import {
   getBackgroundForPreset,
   getHoverBackgroundForPreset,
 } from "./useTextImageThemePresets"
-import { useTranslations } from "next-intl"
-import { RootState } from "@/lib/state/flows-state/store"
-import Image from "next/image"
-import ContentEditable from "react-contenteditable"
+import { TextImageSettings } from "./user-textImage.settings"
+import { usePathname } from "next/navigation"
+import { TextEditor } from "@/components/TextEditor"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -50,31 +56,6 @@ const IconGenerator = ({ icon, size, className = "", ...rest }) => {
   )
 }
 
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1rem",
-  large: "1.2rem",
-}
-const IconSizeValues = {
-  small: 18,
-  medium: 22,
-  large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
-
 const ButtonTextLimit = {
   small: 100,
   // small: 22,
@@ -86,6 +67,83 @@ const ButtonTextLimit = {
   large: 100,
   full: 100,
 }
+
+const Wrapper = styled.div<{
+  size: UserInputSizes
+  mobileScreen?: boolean
+  isPreviewScreen: boolean
+  isEditorScreen?: boolean
+}>`
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ size, mobileScreen, isPreviewScreen, isEditorScreen }) => {
+    console.log("isEditorScreensdksdcsdc", isEditorScreen)
+    if (mobileScreen) {
+      return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
+    } else if (isPreviewScreen && !isEditorScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "800px" }
+      } else if (size === UserInputSizes.large) {
+        return { width: "1000px" }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    } else if (isPreviewScreen && isEditorScreen) {
+      if (size === UserInputSizes.small) {
+        return { width: "376px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "600px", maxWidth: 600 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "700px", maxWidth: 700 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    } else {
+      if (size === UserInputSizes.small) {
+        return { width: "600px" }
+      } else if (size === UserInputSizes.medium) {
+        return { width: "700px", maxWidth: 700 }
+      } else if (size === UserInputSizes.large) {
+        return { width: "800px", maxWidth: 800 }
+      } else {
+        return {
+          width: "calc(100% - 22px)",
+        }
+      }
+    }
+  }};
+
+  @media (max-width: 1000px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.large) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 800px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.medium) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 376px) {
+    ${({ size }) => {
+      if (size === UserInputSizes.small) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+`
 
 export const TextImageComponentPreview = ({
   disabled,
@@ -125,6 +183,8 @@ export const TextImageComponentPreview = ({
   titleFontSize,
   textFontSize,
   title,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const t = useTranslations("Components")
@@ -154,7 +214,7 @@ export const TextImageComponentPreview = ({
   return (
     <div className="flex w-full flex-col items-center justify-between ">
       <Image
-        src={ImagePlaceholder.src}
+        src={DefaultImagePlaceholder}
         alt="Text+Image component"
         width={300}
         height={200}
@@ -167,7 +227,7 @@ export const TextImageComponentPreview = ({
             maxWidth: "100%",
             fontWeight: `${fontWeightMap[titleFontWeight]} !important`,
             fontFamily: `var(${primaryFont})`,
-            color: primaryTextColor,
+            color: textColor !== "#ffffff" ? textColor : primaryTextColor,
             fontSize: `${titleFontSize}px`,
             transitionProperty: "all",
             overflowX: "clip",
@@ -181,7 +241,8 @@ export const TextImageComponentPreview = ({
           style={{
             maxWidth: "100%",
             fontWeight: fontWeightMap[textFontWeight],
-            color: secondaryTextColor,
+            color:
+              secTextColor !== "#ffffff" ? secTextColor : secondaryTextColor,
             fontFamily: `var(${secondaryFont})`,
             fontSize: `${textFontSize}px`,
             transitionProperty: "all",
@@ -249,9 +310,10 @@ export const TextImageComponentGen = ({
   alt,
   setProp,
   Text,
+  textColor,
+  secTextColor,
   ...props
 }) => {
-  const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -322,28 +384,15 @@ export const TextImageComponentGen = ({
     extrabold: 800,
   }
 
-  const mobileVerticalGapStyle = {
-    marginBottom: mobileScreen ? `${verticalGap}px` : "0",
-  }
-
   const adjustedHorizontalGap = Math.min(horizontalGap, 100)
-  const totalGap = adjustedHorizontalGap * (mobileScreen ? 0 : 1)
-
+  const totalGap = adjustedHorizontalGap
+  const pathname = usePathname()
   return (
     <div
       style={{
-        width:
-          size == "small"
-            ? "600px"
-            : size == "medium"
-            ? "800px"
-            : size == "large"
-            ? "1200px"
-            : size == "full"
-            ? "1400px"
-            : "100%",
         display: "flex",
         justifyContent: "center",
+        width: "100%",
       }}
     >
       <div
@@ -361,21 +410,22 @@ export const TextImageComponentGen = ({
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
+        <Wrapper
+          isPreviewScreen={true}
+          size={size}
+          isEditorScreen={pathname?.includes("create-flow")}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} max-w-[calc(100vw-22px)] border border-transparent`
           )}
         >
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <div
+              className="flex-col md:flex-row "
               style={{
                 display: "flex",
-                flexDirection: "row",
                 width: "100%",
-                gap: !mobileScreen
-                  ? `${adjustedHorizontalGap}px`
-                  : `${verticalGap}px`,
+                gap: `${totalGap}px`,
                 marginLeft: `${Left}px`,
                 marginRight: `${Right}px`,
                 marginTop: `${Top}px`,
@@ -388,22 +438,16 @@ export const TextImageComponentGen = ({
                 <>
                   <div
                     style={{
-                      flex: `0 0 calc(${(adjustedSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      maxWidth: `calc(${(adjustedSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
                       alignSelf: `${bothAlign}`,
                       display: "flex",
                       justifyContent: "center",
+                      flex: "50%",
                     }}
                   >
                     <img
                       alt={alt}
                       src={src}
                       style={{
-                        width: width === "medium" ? "90%" : width,
                         height: height,
                         borderRadius: `${cornerRadius}px`,
                         backgroundColor: background,
@@ -413,47 +457,40 @@ export const TextImageComponentGen = ({
                   <div
                     className={`items-center text-start`}
                     style={{
-                      flex: `0 0 calc(${(textSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      maxWidth: `calc(${(textSplit / 12) * 100}% - ${
-                        totalGap / 2
-                      }px)`,
-                      marginTop: bothAlign == "start" ? "20px" : "",
                       alignSelf: `${bothAlign}`,
+                      flex: "50%",
+                      // marginTop: bothAlign == "start" ? "20px" : "",
                     }}
                   >
-                    {/** @ts-ignore */}
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={title}
-                      innerRef={titleRef}
-                      disabled={true}
+                    <div
                       style={{
                         maxWidth: "100%",
                         fontWeight: `${fontWeightMap[titleFontWeight]}`,
                         fontFamily: `var(${fontFamily.value})`,
-                        color: primaryTextColor,
+                        color:
+                          textColor !== "#ffffff"
+                            ? textColor
+                            : primaryTextColor,
                         fontSize: `${titleFontSize}px`,
                         transitionProperty: "all",
                         overflowX: "clip",
                         textOverflow: "ellipsis",
                       }}
-                      onChange={(e) => {
-                        handleTitleChange(e)
-                      }}
-                      tagName="h1"
-                    />
-                    {/** @ts-ignore */}
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={Text}
-                      innerRef={ref}
-                      disabled={true}
+                      role="heading"
+                    >
+                      <TextEditor
+                        isReadOnly
+                        initValue={getComputedValueForTextEditor(title)}
+                      />
+                    </div>
+                    <div
                       style={{
                         maxWidth: "100%",
                         fontWeight: fontWeightMap[textFontWeight],
-                        color: secondaryTextColor,
+                        color:
+                          secTextColor !== "#ffffff"
+                            ? secTextColor
+                            : secondaryTextColor,
                         marginTop: "15px",
                         fontFamily: `var(${secondaryFontFamily.value})`,
                         fontSize: `${textFontSize}px`,
@@ -461,11 +498,13 @@ export const TextImageComponentGen = ({
                         overflowX: "clip",
                         textOverflow: "ellipsis",
                       }}
-                      onChange={(e) => {
-                        handleTextChange(e)
-                      }}
-                      tagName="div"
-                    />
+                      role="contentinfo"
+                    >
+                      <TextEditor
+                        isReadOnly
+                        initValue={getComputedValueForTextEditor(Text)}
+                      />
+                    </div>
                   </div>
                 </>
               ) : (
@@ -483,49 +522,49 @@ export const TextImageComponentGen = ({
                       alignSelf: `${bothAlign}`,
                     }}
                   >
-                    {/** @ts-ignore */}
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={title}
-                      innerRef={titleRef}
-                      disabled={true}
+                    <div
                       style={{
                         maxWidth: "100%",
                         fontWeight: `${fontWeightMap[titleFontWeight]}`,
                         fontFamily: `var(${fontFamily.value})`,
-                        color: primaryTextColor,
+                        color:
+                          textColor !== "#ffffff"
+                            ? textColor
+                            : primaryTextColor,
                         fontSize: `${titleFontSize}px`,
                         transitionProperty: "all",
                         overflowX: "clip",
                         textOverflow: "ellipsis",
                       }}
-                      onChange={(e) => {
-                        handleTitleChange(e)
-                      }}
-                      tagName="h1"
-                    />
-                    {/** @ts-ignore */}
-                    {/** @ts-ignore */}
-                    <ContentEditable
-                      html={Text}
-                      innerRef={ref}
-                      disabled={true}
+                      role="heading"
+                    >
+                      <TextEditor
+                        isReadOnly
+                        initValue={getComputedValueForTextEditor(title)}
+                      />
+                    </div>
+                    <div
                       style={{
                         maxWidth: "100%",
                         transitionProperty: "all",
                         marginTop: "15px",
                         fontSize: `${textFontSize}px`,
-                        color: secondaryTextColor,
+                        color:
+                          secTextColor !== "#ffffff"
+                            ? secTextColor
+                            : secondaryTextColor,
                         fontWeight: fontWeightMap[textFontWeight],
                         fontFamily: `var(${secondaryFontFamily.value})`,
                         overflowX: "clip",
                         textOverflow: "ellipsis",
                       }}
-                      onChange={(e) => {
-                        handleTextChange(e)
-                      }}
-                      tagName="div"
-                    />
+                      role="contentinfo"
+                    >
+                      <TextEditor
+                        isReadOnly
+                        initValue={getComputedValueForTextEditor(Text)}
+                      />
+                    </div>
                   </div>
                   <div
                     style={{
@@ -555,7 +594,7 @@ export const TextImageComponentGen = ({
               )}
             </div>
           }
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -595,6 +634,8 @@ export const UserLogo = ({
   titleFontWeight,
   textFontWeight,
   secondaryFontFamily,
+  secTextColor,
+  textColor,
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
@@ -613,8 +654,7 @@ export const UserLogo = ({
   const titleRef = useRef<HTMLDivElement>(null)
 
   const handleTextChange = useCallback(
-    (e) => {
-      const value = e.target.value
+    (value) => {
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.Text = value
@@ -625,8 +665,7 @@ export const UserLogo = ({
     [setProp]
   )
   const handleTitleChange = useCallback(
-    (e) => {
-      const value = e.target.value
+    (value) => {
       if (typeof value === "string" && value.length) {
         setProp((props) => {
           props.title = value
@@ -747,47 +786,43 @@ export const UserLogo = ({
                 alignSelf: `${bothAlign}`,
               }}
             >
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={title}
-                innerRef={titleRef}
+              <div
                 style={{
                   maxWidth: "100%",
                   fontWeight: `${fontWeightMap[titleFontWeight]}`,
                   fontFamily: `var(${fontFamily.value})`,
-                  color: primaryTextColor,
+                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                   fontSize: `${titleFontSize}px`,
                   transitionProperty: "all",
                   overflowX: "clip",
                   textOverflow: "ellipsis",
                 }}
-                onChange={(e) => {
-                  handleTitleChange(e)
-                }}
-                tagName="h1"
-              />
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={Text}
-                innerRef={ref}
-                disabled={disabled}
+              >
+                <TextEditor
+                  onChange={(val) => handleTitleChange(serialize(val))}
+                  initValue={getComputedValueForTextEditor(title)}
+                />
+              </div>
+              <div
                 style={{
                   maxWidth: "100%",
                   fontWeight: fontWeightMap[textFontWeight],
-                  color: secondaryTextColor,
+                  color:
+                    secTextColor !== "#ffffff"
+                      ? secTextColor
+                      : secondaryTextColor,
                   fontFamily: `var(${secondaryFontFamily.value})`,
                   fontSize: `${textFontSize}px`,
                   transitionProperty: "all",
                   overflowX: "clip",
                   textOverflow: "ellipsis",
                 }}
-                onChange={(e) => {
-                  handleTextChange(e)
-                }}
-                tagName="div"
-              />
+              >
+                <TextEditor
+                  onChange={(val) => handleTextChange(serialize(val))}
+                  initValue={getComputedValueForTextEditor(Text)}
+                />
+              </div>
             </div>
           </>
         ) : (
@@ -804,48 +839,43 @@ export const UserLogo = ({
                 alignSelf: `${bothAlign}`,
               }}
             >
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={title}
-                innerRef={titleRef}
-                disabled={disabled}
+              <div
                 style={{
                   maxWidth: "100%",
                   fontWeight: `${fontWeightMap[titleFontWeight]}`,
                   fontFamily: `var(${fontFamily.value})`,
-                  color: primaryTextColor,
+                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                   fontSize: `${titleFontSize}px`,
                   transitionProperty: "all",
                   overflowX: "clip",
                   textOverflow: "ellipsis",
                 }}
-                onChange={(e) => {
-                  handleTitleChange(e)
-                }}
-                tagName="h1"
-              />
-              {/** @ts-ignore */}
-              {/** @ts-ignore */}
-              <ContentEditable
-                html={Text}
-                innerRef={ref}
-                disabled={disabled}
+              >
+                <TextEditor
+                  onChange={(val) => handleTitleChange(serialize(val))}
+                  initValue={getComputedValueForTextEditor(title)}
+                />
+              </div>
+              <div
                 style={{
                   maxWidth: "100%",
                   transitionProperty: "all",
                   fontSize: `${textFontSize}px`,
-                  color: secondaryTextColor,
+                  color:
+                    secTextColor !== "#ffffff"
+                      ? secTextColor
+                      : secondaryTextColor,
                   fontWeight: fontWeightMap[textFontWeight],
                   fontFamily: `var(${secondaryFontFamily.value})`,
                   overflowX: "clip",
                   textOverflow: "ellipsis",
                 }}
-                onChange={(e) => {
-                  handleTextChange(e)
-                }}
-                tagName="div"
-              />
+              >
+                <TextEditor
+                  onChange={(val) => handleTextChange(serialize(val))}
+                  initValue={getComputedValueForTextEditor(Text)}
+                />
+              </div>
             </div>
             <div
               style={{
@@ -880,7 +910,6 @@ export const UserLogo = ({
               alt={alt}
               src={src}
               style={{
-                width: width === "medium" ? "85%" : width,
                 height: height,
                 borderRadius: `${cornerRadius}px`,
                 backgroundColor: background,
@@ -891,13 +920,8 @@ export const UserLogo = ({
               }}
             />
           </div>
-          <div className="m-auto w-[85%] items-start self-center text-start">
-            {/** @ts-ignore */}
-            {/** @ts-ignore */}
-            <ContentEditable
-              html={title}
-              innerRef={titleRef}
-              disabled={disabled}
+          <div className="m-auto w-full items-start self-center text-start">
+            <div
               style={{
                 maxWidth: "100%",
                 fontSize: `${titleFontSize}px`,
@@ -908,17 +932,13 @@ export const UserLogo = ({
                 overflowX: "clip",
                 textOverflow: "ellipsis",
               }}
-              onChange={(e) => {
-                handleTitleChange(e)
-              }}
-              tagName="h1"
-            />
-            {/** @ts-ignore */}
-            {/** @ts-ignore */}
-            <ContentEditable
-              html={Text}
-              innerRef={ref}
-              disabled={disabled}
+            >
+              <TextEditor
+                onChange={(val) => handleTitleChange(serialize(val))}
+                initValue={getComputedValueForTextEditor(title)}
+              />
+            </div>
+            <div
               style={{
                 maxWidth: "100%",
                 fontSize: `${textFontSize}px`,
@@ -929,12 +949,12 @@ export const UserLogo = ({
                 overflowX: "clip",
                 textOverflow: "ellipsis",
               }}
-              className={`min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500`}
-              onChange={(e) => {
-                handleTextChange(e)
-              }}
-              tagName="div"
-            />
+            >
+              <TextEditor
+                onChange={(val) => handleTextChange(serialize(val))}
+                initValue={getComputedValueForTextEditor(Text)}
+              />
+            </div>
           </div>
         </>
       )}
@@ -996,6 +1016,8 @@ export const TextImageComponent = ({
   uploadedImageUrl,
   uploadedImageMobileUrl,
   secondaryFontFamily,
+  textColor,
+  secTextColor,
   ...props
 }) => {
   const {
@@ -1203,7 +1225,8 @@ export const TextImageComponent = ({
   const handlePropChangeDebounced = (property, value) => {
     debouncedSetProp(property, value)
   }
-
+  const pathname = usePathname()
+  console.log("mobileScreen", mobileScreen)
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -1232,10 +1255,14 @@ export const TextImageComponent = ({
           paddingRight: `${props.marginRight}px`,
         }}
       >
-        <div
+        <Wrapper
+          isPreviewScreen={false}
+          isEditorScreen={pathname?.includes("create-flow")}
+          size={size}
+          mobileScreen={mobileScreen}
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full border border-transparent`
+            `relative flex flex-row justify-${align} border border-transparent`
           )}
         >
           {
@@ -1274,10 +1301,12 @@ export const TextImageComponent = ({
               height={height}
               position={position}
               src={src}
+              textColor={textColor}
+              secTextColor={secTextColor}
               {...props}
             />
           }
-        </div>
+        </Wrapper>
       </div>
     </div>
   )
@@ -1351,6 +1380,8 @@ export type IconButtonProps = {
   textFontSize: number
   uploadedImageUrl: string
   uploadedImageMobileUrl: string
+  textColor?: string
+  secTextColor?: string
 }
 
 export const TextImageDefaultProps: IconButtonProps = {
@@ -1404,7 +1435,7 @@ export const TextImageDefaultProps: IconButtonProps = {
   alt: "Image",
   align: "center",
   url: "https://convify.io",
-  src: ImagePlaceholder.src,
+  src: DefaultImagePlaceholder,
   disabled: false,
   enableLink: false,
   width: "90%",
@@ -1417,8 +1448,8 @@ export const TextImageDefaultProps: IconButtonProps = {
   text: "Get quote",
   Top: 20,
   Bottom: 20,
-  Left: 20,
-  Right: 20,
+  Left: 0,
+  Right: 0,
   marginLeft: 0,
   marginTop: 0,
   marginRight: 0,
@@ -1450,6 +1481,8 @@ export const TextImageDefaultProps: IconButtonProps = {
   textFontSize: 17,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
+  textColor: "#ffffff",
+  secTextColor: "#ffffff",
 }
 
 TextImageComponent.craft = {

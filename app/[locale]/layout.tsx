@@ -7,7 +7,14 @@ import localFont from "next/font/local"
 
 import "@/styles/globals.css"
 import { NextIntlClientProvider, useMessages } from "next-intl"
-import { env } from "@/env.mjs"
+import { Poppins } from "next/font/google"
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  display: "swap",
+  weight: ["100", "300", "400", "500", "700", "900"],
+})
 
 const fontSans = localFont({
   src: "../../assets/fonts/Inter-Regular.ttf",
@@ -17,7 +24,7 @@ interface RootLayoutProps {
   children: React.ReactNode
   params: { locale: string }
 }
-const APP_NAME = env.NEXT_PUBLIC_APP_NAME
+const APP_NAME = process.env.APP_NAME
 export const metadata = {
   title: {
     default: APP_NAME,
@@ -57,9 +64,9 @@ export const metadata = {
     creator: "@shadcn",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon_logo_blue.ico",
     shortcut: "/icon_logo_blue.png",
-    apple: "/apple-touch-icon.png",
+    apple: "/icon_logo_blue.png",
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
 }
@@ -75,7 +82,8 @@ export default function RootLayout({
       <body
         className={cn(
           "bg-background min-h-screen font-sans antialiased ",
-          fontSans.variable
+          fontSans.variable,
+          poppins.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
