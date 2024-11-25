@@ -339,7 +339,7 @@ export const ImageSettings = () => {
             .toDataURL()),
         1000
       )
-      setProp((props) => (props.width = "100%"), 1000)
+      // setProp((props) => (props.width = "100%"), 1000)
       setProp((props) => (props.height = "auto"), 1000)
       setShowDialog(false)
       setActiveAspectRatioBtn("source")

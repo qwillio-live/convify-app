@@ -51,7 +51,7 @@ export const ScreenshotsProvider = ({ children }) => {
     const interval = setInterval(
       () => {
         console.log("calling screenshot")
-        fetchLinksAndTakeScreenshots() // Call the function every interval
+        // fetchLinksAndTakeScreenshots() // Call the function every interval
       },
       autoScreenshotTime,
       10
