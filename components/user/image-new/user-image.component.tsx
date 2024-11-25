@@ -656,7 +656,7 @@ export const ImageDefaultProps: IconButtonProps = {
   align: "center",
   url: env.NEXT_PUBLIC_APP_URL,
   src: DefaultImagePlaceholder,
-  radiusCorner: 0,
+  radiusCorner: 15,
   disabled: false,
   enableLink: false,
   width: "100%",
