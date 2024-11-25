@@ -193,7 +193,7 @@ export const GlobalThemeSettings = (props: Props) => {
       <ScrollArea>
         <Accordion
           type="multiple"
-          defaultValue={["item-1"]}
+          defaultValue={["item-1", "item-2"]}
           className="font-poppins bg-[#f6f6f6] p-4 pt-0"
         >
           <AccordionItem value="item-1">

@@ -111,11 +111,14 @@ interface CreateFlowLayoutProps {
   children?: React.ReactNode
 }
 
-export default async function CreateFlowLayout({ children }: CreateFlowLayoutProps) {
-  return <div
-  className={
-    cn(
-      roboto.variable,
+export default async function CreateFlowLayout({
+  children,
+}: CreateFlowLayoutProps) {
+  return (
+    <div
+      id="create-flow-layout"
+      className={cn(
+        roboto.variable,
         fontSans.variable,
         fontHeading.variable,
         inter.variable,
@@ -169,7 +172,9 @@ export default async function CreateFlowLayout({ children }: CreateFlowLayoutPro
         nunito_sans.variable,
         roboto_slab.variable,
         sans3.variable
-    )
-  }
-  >{children}</div>
+      )}
+    >
+      {children}
+    </div>
+  )
 }

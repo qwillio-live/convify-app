@@ -58,7 +58,7 @@ export const FontSelector = ({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverPortal>
+      <PopoverPortal container={document.getElementById("create-flow-layout")}>
         <PopoverContent className="z-10 w-[--radix-popover-trigger-width] p-0">
           <ScrollArea className="h-72 rounded-md border">
             <Command>
