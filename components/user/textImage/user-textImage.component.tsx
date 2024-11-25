@@ -312,6 +312,7 @@ export const TextImageComponentGen = ({
   Text,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const primaryTextColor = useAppSelector(
@@ -462,27 +463,31 @@ export const TextImageComponentGen = ({
                       // marginTop: bothAlign == "start" ? "20px" : "",
                     }}
                   >
-                    <div
-                      style={{
-                        maxWidth: "100%",
-                        fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                        fontFamily: `var(${fontFamily.value})`,
-                        color:
-                          textColor !== "#ffffff"
-                            ? textColor
-                            : primaryTextColor,
-                        fontSize: `${titleFontSize}px`,
-                        transitionProperty: "all",
-                        overflowX: "clip",
-                        textOverflow: "ellipsis",
-                      }}
-                      role="heading"
-                    >
-                      <TextEditor
-                        isReadOnly
-                        initValue={getComputedValueForTextEditor(title)}
-                      />
-                    </div>
+                    {
+                      showTitle ?
+                      <div
+                        style={{
+                          maxWidth: "100%",
+                          fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                          fontFamily: `var(${fontFamily.value})`,
+                          color:
+                            textColor !== "#ffffff"
+                              ? textColor
+                              : primaryTextColor,
+                          fontSize: `${titleFontSize}px`,
+                          transitionProperty: "all",
+                          overflowX: "clip",
+                          textOverflow: "ellipsis",
+                        }}
+                        role="heading"
+                      >
+                        <TextEditor
+                          isReadOnly
+                          initValue={getComputedValueForTextEditor(title)}
+                        />
+                      </div>
+                      : null
+                    }
                     <div
                       style={{
                         maxWidth: "100%",
@@ -491,7 +496,7 @@ export const TextImageComponentGen = ({
                           secTextColor !== "#ffffff"
                             ? secTextColor
                             : secondaryTextColor,
-                        marginTop: "15px",
+                        marginTop: showTitle ? "15px" : undefined,
                         fontFamily: `var(${secondaryFontFamily.value})`,
                         fontSize: `${textFontSize}px`,
                         transitionProperty: "all",
@@ -522,32 +527,36 @@ export const TextImageComponentGen = ({
                       alignSelf: `${bothAlign}`,
                     }}
                   >
+                    {
+                      showTitle ?
+                      <div
+                        style={{
+                          maxWidth: "100%",
+                          fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                          fontFamily: `var(${fontFamily.value})`,
+                          color:
+                            textColor !== "#ffffff"
+                              ? textColor
+                              : primaryTextColor,
+                          fontSize: `${titleFontSize}px`,
+                          transitionProperty: "all",
+                          overflowX: "clip",
+                          textOverflow: "ellipsis",
+                        }}
+                        role="heading"
+                      >
+                        <TextEditor
+                          isReadOnly
+                          initValue={getComputedValueForTextEditor(title)}
+                        />
+                      </div>
+                      : null
+                    }
                     <div
                       style={{
                         maxWidth: "100%",
-                        fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                        fontFamily: `var(${fontFamily.value})`,
-                        color:
-                          textColor !== "#ffffff"
-                            ? textColor
-                            : primaryTextColor,
-                        fontSize: `${titleFontSize}px`,
                         transitionProperty: "all",
-                        overflowX: "clip",
-                        textOverflow: "ellipsis",
-                      }}
-                      role="heading"
-                    >
-                      <TextEditor
-                        isReadOnly
-                        initValue={getComputedValueForTextEditor(title)}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        maxWidth: "100%",
-                        transitionProperty: "all",
-                        marginTop: "15px",
+                        marginTop: showTitle ? "15px" : undefined,
                         fontSize: `${textFontSize}px`,
                         color:
                           secTextColor !== "#ffffff"
@@ -636,6 +645,7 @@ export const UserLogo = ({
   secondaryFontFamily,
   secTextColor,
   textColor,
+  showTitle,
   ...props
 }) => {
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
@@ -786,23 +796,28 @@ export const UserLogo = ({
                 alignSelf: `${bothAlign}`,
               }}
             >
-              <div
-                style={{
-                  maxWidth: "100%",
-                  fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                  fontFamily: `var(${fontFamily.value})`,
-                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
-                  fontSize: `${titleFontSize}px`,
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                <TextEditor
-                  onChange={(val) => handleTitleChange(serialize(val))}
-                  initValue={getComputedValueForTextEditor(title)}
-                />
-              </div>
+              {
+                showTitle ?
+                <div
+                  style={{
+                    maxWidth: "100%",
+                    fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                    fontFamily: `var(${fontFamily.value})`,
+                    color: textColor !== "#ffffff" ? textColor : primaryTextColor,
+                    fontSize: `${titleFontSize}px`,
+                    transitionProperty: "all",
+                    overflowX: "clip",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  <TextEditor
+                    onChange={(val) => handleTitleChange(serialize(val))}
+                    initValue={getComputedValueForTextEditor(title)}
+                  />
+                </div>
+                : null
+              }
+
               <div
                 style={{
                   maxWidth: "100%",
@@ -839,23 +854,28 @@ export const UserLogo = ({
                 alignSelf: `${bothAlign}`,
               }}
             >
-              <div
-                style={{
-                  maxWidth: "100%",
-                  fontWeight: `${fontWeightMap[titleFontWeight]}`,
-                  fontFamily: `var(${fontFamily.value})`,
-                  color: textColor !== "#ffffff" ? textColor : primaryTextColor,
-                  fontSize: `${titleFontSize}px`,
-                  transitionProperty: "all",
-                  overflowX: "clip",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                <TextEditor
-                  onChange={(val) => handleTitleChange(serialize(val))}
-                  initValue={getComputedValueForTextEditor(title)}
-                />
-              </div>
+              {
+                showTitle ?
+                <div
+                  style={{
+                    maxWidth: "100%",
+                    fontWeight: `${fontWeightMap[titleFontWeight]}`,
+                    fontFamily: `var(${fontFamily.value})`,
+                    color: textColor !== "#ffffff" ? textColor : primaryTextColor,
+                    fontSize: `${titleFontSize}px`,
+                    transitionProperty: "all",
+                    overflowX: "clip",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  <TextEditor
+                    onChange={(val) => handleTitleChange(serialize(val))}
+                    initValue={getComputedValueForTextEditor(title)}
+                  />
+                </div>
+                : null
+              }
+
               <div
                 style={{
                   maxWidth: "100%",
@@ -1018,6 +1038,7 @@ export const TextImageComponent = ({
   secondaryFontFamily,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const {
@@ -1303,6 +1324,7 @@ export const TextImageComponent = ({
               src={src}
               textColor={textColor}
               secTextColor={secTextColor}
+              showTitle={showTitle}
               {...props}
             />
           }
@@ -1382,6 +1404,7 @@ export type IconButtonProps = {
   uploadedImageMobileUrl: string
   textColor?: string
   secTextColor?: string
+  showTitle: boolean
 }
 
 export const TextImageDefaultProps: IconButtonProps = {
@@ -1483,6 +1506,7 @@ export const TextImageDefaultProps: IconButtonProps = {
   uploadedImageMobileUrl: "",
   textColor: "#ffffff",
   secTextColor: "#ffffff",
+  showTitle: true,
 }
 
 TextImageComponent.craft = {

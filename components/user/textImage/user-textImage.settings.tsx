@@ -84,6 +84,7 @@ export const Img = ({
   secondaryFontFamily,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const {
@@ -143,6 +144,7 @@ export const Img = ({
           height={height}
           src={src}
           textColor={textColor}
+          showTitle={showTitle}
           {...props}
         />
       }
@@ -193,6 +195,7 @@ export const TextImageSettings = () => {
       uploadedImageMobileUrl,
       position,
       split,
+      showTitle,
       bothAlign,
       horizontalGap,
       verticalGap,
@@ -499,6 +502,21 @@ export const TextImageSettings = () => {
         <AccordionItem value="content">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                  checked={showTitle}
+                  onCheckedChange={(checked) => {
+                    setProp((props) => (props.showTitle = checked), 200)
+                  }}
+                  id="label"
+              />
+              <label
+                  htmlFor="label"
+                  className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                  {t("Show Title")}
+              </label>
+            </div>
             <div className="space-y-2">
               <Label>{t("Image Position")}</Label>
               <Tabs
@@ -1044,6 +1062,7 @@ export const DefaultPropsTextImg = {
   height: "auto",
   enableLink: false,
   split: 6,
+  showTitle: true,
   imageSize: 100,
   size: "",
   title: "title",
