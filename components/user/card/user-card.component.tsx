@@ -3,7 +3,7 @@ import { Element, useEditor, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import { Button } from "../button/user-button.component"
@@ -18,6 +18,7 @@ import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { CardContainerSettings } from "./user-card-settings"
+import { CRAFT_ELEMENTS } from "../settings/craft-elements"
 
 interface CardOuterStyles {
   fullWidth: boolean
@@ -176,7 +177,7 @@ export const CardContentGen = ({ children, ...props }) => {
   )
 }
 export const CardContent = ({ children, ...props }) => {
-  const { query } = useEditor()
+  const { query, actions: { setProp: setNodeProp } } = useEditor()
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -184,11 +185,15 @@ export const CardContent = ({ children, ...props }) => {
     isHovered,
     id,
     parent,
+    childNodes,
+    nodeProps
   } = useNode((state) => ({
-    id: state.id,
+    id: state.data,
     selected: state.events.selected,
     isHovered: state.events.hovered,
     parent: state.data.parent,
+    childNodes: state.data.nodes,
+    nodeProps: state.data.props
   }))
   const { parentHovered } = useNode((node) => ({
     parentHovered: query.node(parent || "").isHovered(),
@@ -202,6 +207,24 @@ export const CardContent = ({ children, ...props }) => {
   const selectedComponent = useAppSelector(
     (state) => state?.screen?.selectedComponent
   )
+
+  // Update List desktopColumn Props to 1
+  // When new Component added to Container with horizontal alignment
+  useEffect(() => {
+    if(nodeProps.flexDirection !== "row") return
+
+    childNodes.forEach((nodeId) => {
+      const node = query.node(nodeId).get()
+
+      if(node.data.name !== CRAFT_ELEMENTS.LIST) return
+
+      setNodeProp(nodeId, (nodeProp) => {
+        nodeProp.columnsDesktop = childNodes.length > 1 ? 1 : 2
+      })
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[childNodes, nodeProps])
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -265,9 +288,9 @@ export enum CardSizes {
   full = "full",
 }
 const CardSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "376px",
+  medium: "576px",
+  large: "800px",
   full: "100%",
 }
 
@@ -321,7 +344,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   paddingRight: "12",
   paddingBottom: "40",
   radius: "none",
-  flexDirection: "column",
+  flexDirection: "row",
   mobileFlexDirection: "column",
   fillSpace: "1",
   alignItems: "center",
