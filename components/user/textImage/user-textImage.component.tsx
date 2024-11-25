@@ -452,6 +452,7 @@ export const TextImageComponentGen = ({
                         height: height,
                         borderRadius: `${cornerRadius}px`,
                         backgroundColor: background,
+                        width: width === "medium" ? "90%" : width,
                       }}
                     />
                   </div>
