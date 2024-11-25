@@ -618,7 +618,9 @@ export function CreateFlowComponent({ flowId }) {
                             JSON.parse(screensHeader)?.ROOT?.nodes?.length > 0
                               ? `${
                                   checkAvatar()
-                                    ? headerHeight + 44
+                                    ? view === VIEWS.MOBILE
+                                      ? headerHeight + 32
+                                      : headerHeight + 44
                                     : headerHeight
                                 }px`
                               : "0px",
