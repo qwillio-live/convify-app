@@ -3,7 +3,7 @@ import { Element, useEditor, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 
 import { Button } from "../button/user-button.component"
@@ -19,6 +19,7 @@ import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { CardContainerSettings } from "./user-card-settings"
 import { CRAFT_ELEMENTS } from "../settings/craft-elements"
+import { usePathname } from "next/navigation"
 
 interface CardOuterStyles {
   fullWidth: boolean
@@ -185,19 +186,21 @@ export const CardContent = ({ children, ...props }) => {
     isHovered,
     id,
     parent,
+    parentHovered,
     childNodes,
-    nodeProps
+    nodeProps,
   } = useNode((state) => ({
     id: state.data,
     selected: state.events.selected,
     isHovered: state.events.hovered,
     parent: state.data.parent,
     childNodes: state.data.nodes,
-    nodeProps: state.data.props
+    nodeProps: state.data.props,
+    parentHovered: query.node(state.data.parent || "").isHovered(),
   }))
-  const { parentHovered } = useNode((node) => ({
-    parentHovered: query.node(parent || "").isHovered(),
-  }))
+  const pathname = usePathname()
+  const childNodeCount = useRef(childNodes.length)
+
   if (parentHovered) {
     console.log("PARENT HOVERED", parentHovered)
   }
@@ -211,7 +214,15 @@ export const CardContent = ({ children, ...props }) => {
   // Update List desktopColumn Props to 1
   // When new Component added to Container with horizontal alignment
   useEffect(() => {
+    // skip if not in editor mode
+    if(!pathname?.includes("create-flow")) return
+
+    // skip if not horizontally aligned
     if(nodeProps.flexDirection !== "row") return
+    if(childNodes.length < 2) return
+
+    // only adjust if previous child count is 1
+    if(childNodeCount.current !== 1) return
 
     childNodes.forEach((nodeId) => {
       const node = query.node(nodeId).get()
@@ -219,11 +230,15 @@ export const CardContent = ({ children, ...props }) => {
       if(node.data.name !== CRAFT_ELEMENTS.LIST) return
 
       setNodeProp(nodeId, (nodeProp) => {
-        nodeProp.columnsDesktop = childNodes.length > 1 ? 1 : 2
+        nodeProp.columnsDesktop = 1
       })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[childNodes, nodeProps])
+
+  useEffect(() => {
+    childNodeCount.current = childNodes.length
+  },[childNodes])
 
   return (
     <div
