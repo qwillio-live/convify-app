@@ -279,8 +279,8 @@ const StyledCustomTextInput = ({
     "--user-text-margin-right": `${marginRight}px`,
     "--user-text-margin-bottom": `${marginBottom}px`,
     "--user-text-border-radius": `${radius}px`,
-    alignItems,
-    justifyContent,
+    // alignItems,
+    // justifyContent,
     borderWidth: border,
     ...style,
   } as CSSProperties
@@ -430,6 +430,7 @@ export const UserTextInputGen = ({
               textColor !== "#ffffff" ? textColor : secondaryTextColor
             }`,
             lineHeight: "1.5",
+            alignItems: alignItems,
           }}
         >
           <TextEditor isReadOnly initValue={computedText} />
@@ -646,7 +647,7 @@ export const UserText = ({
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
-          justifyContent: `${justifyContent}`,
+          justifyContent: `center`,
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
@@ -701,6 +702,7 @@ export const UserText = ({
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
                 lineHeight: `${lineHeight}px`,
+                alignItems: alignItems,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
             >

@@ -146,6 +146,9 @@ const StyledCustomHeadlineInput = ({
   size,
   className,
   style,
+  textAlign,
+  lineHeight,
+  mobileLineHeight,
   ...props
 }: React.ButtonHTMLAttributes<HTMLDivElement> & StyledCustomHeadlineInput) => {
   const customStyles: CSSProperties = {
@@ -165,8 +168,10 @@ const StyledCustomHeadlineInput = ({
     "--user-headline-margin-right": `${marginRight}px`,
     "--user-headline-margin-bottom": `${marginBottom}px`,
     alignItems,
-    justifyContent,
+    // justifyContent,
     borderWidth: border,
+    textAlign: textAlign,
+    lineHeight: lineHeight,
     ...style,
   } as CSSProperties
 
@@ -324,6 +329,7 @@ export const HeadlineTextGen = ({
             height: "fit-content",
             wordWrap: "break-word",
             lineHeight: `${lineHeight}px`,
+            alignItems: alignItems,
           }}
         >
           <TextEditor isReadOnly initValue={computedValue} />
@@ -607,6 +613,8 @@ export const HeadlineText = ({
                 }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
+                lineHeight: `${lineHeight}px`,
+                alignItems: alignItems,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
             >
