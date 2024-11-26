@@ -1062,7 +1062,7 @@ export const DefaultPropsTextImg = {
   height: "auto",
   enableLink: false,
   split: 6,
-  showTitle: true,
+  showTitle: false,
   imageSize: 100,
   size: "",
   title: "title",

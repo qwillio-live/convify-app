@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useReducer, useRef } from "react"
 import Image from "next/image"
 import { DefaultImagePlaceholder } from "@/constant"
 import { debounce, throttle } from "lodash"
@@ -324,6 +324,16 @@ export const TextImageComponentGen = ({
   const ref = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
 
+  // force update textEditor
+  // if there's some performance degradation later on
+  // please consider to remove it
+  const [editorKey, forceUpdate] = useReducer((x:number) => x + 1, 0);
+
+  useEffect(() => {
+    forceUpdate()
+  },[title, Text])
+  // end force update
+
   const handleTextChange = useCallback(
     (e) => {
       const value = e.target.value
@@ -483,6 +493,7 @@ export const TextImageComponentGen = ({
                         role="heading"
                       >
                         <TextEditor
+                          key={`title-text-editor-${editorKey}`}
                           isReadOnly
                           initValue={getComputedValueForTextEditor(title)}
                         />
@@ -507,6 +518,7 @@ export const TextImageComponentGen = ({
                       role="contentinfo"
                     >
                       <TextEditor
+                        key={`content-text-editor-${editorKey}`}
                         isReadOnly
                         initValue={getComputedValueForTextEditor(Text)}
                       />
@@ -547,6 +559,7 @@ export const TextImageComponentGen = ({
                         role="heading"
                       >
                         <TextEditor
+                          key={`title-text-editor-${editorKey}`}
                           isReadOnly
                           initValue={getComputedValueForTextEditor(title)}
                         />
@@ -571,6 +584,7 @@ export const TextImageComponentGen = ({
                       role="contentinfo"
                     >
                       <TextEditor
+                        key={`content-text-editor-${editorKey}`}
                         isReadOnly
                         initValue={getComputedValueForTextEditor(Text)}
                       />
@@ -677,10 +691,11 @@ export const UserLogo = ({
   )
   const handleTitleChange = useCallback(
     (value) => {
+      console.log('zamzam', value)
       if (typeof value === "string" && value.length) {
         setProp((props) => {
+          console.log('zamzam2')
           props.title = value
-          return { ...props }
         })
       }
     },
@@ -1507,7 +1522,7 @@ export const TextImageDefaultProps: IconButtonProps = {
   uploadedImageMobileUrl: "",
   textColor: "#ffffff",
   secTextColor: "#ffffff",
-  showTitle: true,
+  showTitle: false,
 }
 
 TextImageComponent.craft = {
