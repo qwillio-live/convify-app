@@ -619,7 +619,7 @@ export function CreateFlowComponent({ flowId }) {
                               ? `${
                                   checkAvatar()
                                     ? view === VIEWS.MOBILE
-                                      ? headerHeight + 32
+                                      ? headerHeight + 30
                                       : headerHeight + 44
                                     : headerHeight
                                 }px`

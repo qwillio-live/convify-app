@@ -56,6 +56,7 @@ import { Input } from "@/components/input-custom"
 import { Card as UiCard } from "@/components/ui/card"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
 import { ScreenFooter } from "./screen-footer.component"
+import { isMobile } from "react-device-detect"
 
 const ScreensList = ({ flowId }) => {
   const t = useTranslations("Components")
@@ -635,7 +636,9 @@ const ScreensList = ({ flowId }) => {
 
                         <div
                           style={{
-                            paddingTop: `${checkAvatar() ? 44 : 0}px`,
+                            paddingTop: `${
+                              checkAvatar() ? (isMobile ? 30 : 44) : 0
+                            }px`,
                           }}
                         >
                           {JSON.parse(screen.screenData)["ROOT"].nodes.length >
