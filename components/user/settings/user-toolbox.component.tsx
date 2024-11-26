@@ -472,6 +472,14 @@ export const UserToolbox = () => {
                       <UserTextInputGen
                         textColor={"#ffffff"}
                         {...spanPreset}
+                        paddingBottom={0}
+                        paddingLeft={0}
+                        paddingRight={0}
+                        paddingTop={0}
+                        marginBottom={0}
+                        marginLeft={0}
+                        marginRight={0}
+                        marginTop={20}
                         label={t("Text")}
                         placeholder={t("Placeholder")}
                       />

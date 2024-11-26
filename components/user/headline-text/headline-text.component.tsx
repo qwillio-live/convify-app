@@ -168,7 +168,7 @@ const StyledCustomHeadlineInput = ({
     "--user-headline-margin-right": `${marginRight}px`,
     "--user-headline-margin-bottom": `${marginBottom}px`,
     alignItems,
-    // justifyContent,
+    justifyContent,
     borderWidth: border,
     textAlign: textAlign,
     lineHeight: lineHeight,
@@ -293,7 +293,7 @@ export const HeadlineTextGen = ({
         fontSize={fontSize}
         mobileFontSize={mobileFontSize}
         fontWeight={fontWeight}
-        justifyContent={justifyContent}
+        justifyContent={"center"}
         borderColor={primarycolor}
         border={border}
         marginLeft={marginLeft}
@@ -557,7 +557,7 @@ export const HeadlineText = ({
           colorHover={colorHover.value}
           flexDirection={flexDirection}
           fontWeight={fontWeight.value}
-          justifyContent={justifyContent}
+          justifyContent={"center"}
           borderColor={borderColor.value}
           borderHoverColor={borderHoverColor.value}
           border={border}
