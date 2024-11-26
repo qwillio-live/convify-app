@@ -68,7 +68,7 @@ const useButtonThemePresets = () => {
         justifyContent: "space-between",
         disabled: false,
         enableLink: false,
-        
+
         width: '85%',
         height: "auto",
         size: IconButtonSizes.medium,
@@ -115,7 +115,8 @@ const useButtonThemePresets = () => {
         imageSize: 0,
         bothAlign: 'top',
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false
     };
 
     const outLinePreset: IconButtonProps = {
@@ -214,7 +215,8 @@ const useButtonThemePresets = () => {
         Right: 0,
         imageSize: 0,
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false
     };
 
     return { filledPreset, outLinePreset };
