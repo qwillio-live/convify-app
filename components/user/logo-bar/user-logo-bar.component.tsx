@@ -287,25 +287,25 @@ const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
     }
   }};
 
-  @media (max-width: 1000px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
+  @media (max-width: 1600px) {
+    ${({ size, isEditorScreen }) => {
+      if (size === UserInputSizes.large && isEditorScreen) {
         return { width: "calc(100% - 22px)" }
       }
     }}
   }
 
-  @media (max-width: 800px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
+  @media (max-width: 1350px) {
+    ${({ size, isEditorScreen }) => {
+      if (size === UserInputSizes.medium && isEditorScreen) {
         return { width: "calc(100% - 22px)" }
       }
     }}
   }
 
-  @media (max-width: 376px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.small) {
+  @media (max-width: 1185px) {
+    ${({ size, isEditorScreen }) => {
+      if (size === UserInputSizes.small && isEditorScreen) {
         return { width: "calc(100% - 22px)" }
       }
     }}
