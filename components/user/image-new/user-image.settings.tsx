@@ -722,7 +722,6 @@ export const ImageSettings = () => {
                 />
               </div>
               <div className="space-y-3">
-                c
                 <div className="flex items-center justify-between">
                   <Label htmlFor="marginBottom">{t("Bottom")}</Label>
                   <span className="text-muted-foreground text-xs">
