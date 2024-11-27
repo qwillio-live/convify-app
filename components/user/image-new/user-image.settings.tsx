@@ -111,6 +111,8 @@ export const Img = ({
   )
 }
 
+const ORIGINAL_IMAGE_TYPES = ["image/gif", "image/svg+xml"]
+
 export const ImageSettings = () => {
   const t = useTranslations("Components")
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -185,17 +187,25 @@ export const ImageSettings = () => {
     debouncedSetProp(property, value)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
-      const reader = new FileReader()
-      reader.onload = () => {
-        setImage(reader.result as any)
+
+    if(!file) return
+
+    setImageFile(file)
+    const reader = new FileReader()
+    reader.onload = () => {
+      setImage(reader.result as any)
+
+
+      if(ORIGINAL_IMAGE_TYPES.includes(file.type)) {
+        handleUploadOriginal(file, reader.result)
+        return
       }
-      reader.readAsDataURL(file)
+
       setShowDialog(true)
     }
+    reader.readAsDataURL(file)
   }
 
   const getAspectRatio = (imageSrc) => {
@@ -260,7 +270,7 @@ export const ImageSettings = () => {
     }
   }
 
-  const handleUploadOriginal = async () => {
+  const handleUploadOriginal = async (imageFile, image) => {
     if (image && imageFile) {
       setProp((props) => (props.src = image))
       setShowDialog(false)
@@ -270,13 +280,24 @@ export const ImageSettings = () => {
       const uploadedImage = await uploadToS3(imageFile, aspectRatio)
 
       if (uploadedImage) {
-        const desktopImage =
+        let desktopImage =
           uploadedImage.data.data.images[uploadedImage.desktopSize]
-        const mobileImage =
+        let mobileImage =
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
         // Set props with a timeout of 6 seconds
         setTimeout(() => {
+          // If the image is a SVG, we need to set the src to the original image
+          // because the SVG doesn't have desktop and mobile sizes
+          // also SVG is able to resize itself
+          if(imageFile.type === "image/svg+xml") {
+            setProp((props) => {
+              props.src = image
+              props.uploadedImageUrl = uploadedImage.data.data.original
+            })
+            return
+          }
+
           if (desktopImage) {
             setProp((props) => {
               props.src = desktopImage
@@ -440,6 +461,7 @@ export const ImageSettings = () => {
           <Input
             type="file"
             className="hidden"
+            accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/svg+xml"
             ref={inputRef}
             onChange={handleInputChange}
           />
@@ -862,7 +884,7 @@ export const ImageSettings = () => {
             </div>
             <div className="flex gap-2">
               <Button
-                onClick={handleUploadOriginal}
+                onClick={() => handleUploadOriginal(imageFile, image)}
                 variant="secondary"
                 disabled={isLoading}
               >
