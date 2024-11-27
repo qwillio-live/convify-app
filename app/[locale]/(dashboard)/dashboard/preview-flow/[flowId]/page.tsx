@@ -290,9 +290,10 @@ export default async function PreviewFlows({
               id={filteredStep.name}
               style={{
                 backgroundColor: data?.flowSettings?.general?.backgroundColor,
-                paddingTop: checkAvatar() ? "44px" : "0px",
               }}
-              className="animate-flow relative min-w-full"
+              className={`animate-flow relative min-w-full ${
+                checkAvatar() ? "pt-8 lg:pt-11" : ""
+              }`}
             >
               {resolveComponents(filteredStep.content)}
             </div>

@@ -287,25 +287,52 @@ const StyledLogoBarContainer = styled.ul<StyledLogoBarContainerProps>`
     }
   }};
 
+  @media (max-width: 1600px) {
+    ${({ size, isEditorScreen, isPreviewScreen }) => {
+      if (size === UserInputSizes.large && isEditorScreen && isPreviewScreen) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 1350px) {
+    ${({ size, isEditorScreen, isPreviewScreen }) => {
+      if (size === UserInputSizes.medium && isEditorScreen && isPreviewScreen) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
+
+  @media (max-width: 1185px) {
+    ${({ size, isEditorScreen, isPreviewScreen }) => {
+      if (size === UserInputSizes.small && isEditorScreen && isPreviewScreen) {
+        return { width: "calc(100% - 22px)" }
+      }
+    }}
+  }
   @media (max-width: 1000px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.large) {
+    ${({ size, isEditorScreen, isPreviewScreen }) => {
+      if (size === UserInputSizes.large && !isEditorScreen && isPreviewScreen) {
         return { width: "calc(100% - 22px)" }
       }
     }}
   }
 
   @media (max-width: 800px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.medium) {
+    ${({ size, isEditorScreen, isPreviewScreen }) => {
+      if (
+        size === UserInputSizes.medium &&
+        !isEditorScreen &&
+        isPreviewScreen
+      ) {
         return { width: "calc(100% - 22px)" }
       }
     }}
   }
 
   @media (max-width: 376px) {
-    ${({ size }) => {
-      if (size === UserInputSizes.small) {
+    ${({ size, isEditorScreen, isPreviewScreen }) => {
+      if (size === UserInputSizes.small && !isEditorScreen && isPreviewScreen) {
         return { width: "calc(100% - 22px)" }
       }
     }}

@@ -279,7 +279,7 @@ const StyledCustomTextInput = ({
     "--user-text-margin-right": `${marginRight}px`,
     "--user-text-margin-bottom": `${marginBottom}px`,
     "--user-text-border-radius": `${radius}px`,
-    alignItems,
+    // alignItems,
     justifyContent,
     borderWidth: border,
     ...style,
@@ -398,7 +398,7 @@ export const UserTextInputGen = ({
         colorHover={colorHover?.value}
         radius={radius?.value}
         flexDirection={flexDirection}
-        justifyContent={justifyContent}
+        justifyContent={"center"}
         borderColor={borderColor?.value}
         border={0}
         marginLeft={marginLeft}
@@ -430,6 +430,8 @@ export const UserTextInputGen = ({
               textColor !== "#ffffff" ? textColor : secondaryTextColor
             }`,
             lineHeight: "1.5",
+            alignItems: alignItems,
+            justifyContent: `center`,
           }}
         >
           <TextEditor isReadOnly initValue={computedText} />
@@ -646,7 +648,7 @@ export const UserText = ({
         style={{
           background: `${containerBackground}`,
           display: "inline-flex",
-          justifyContent: `${justifyContent}`,
+          justifyContent: `center`,
           boxSizing: "border-box",
           minWidth: "100%",
           maxWidth: "100%",
@@ -665,7 +667,7 @@ export const UserText = ({
           flexDirection={flexDirection}
           fontWeight={fontWeight.value}
           textAlign={textAlign}
-          justifyContent={justifyContent}
+          justifyContent={"center"}
           borderColor={borderColor.value}
           borderHoverColor={borderHoverColor.value}
           border={0}
@@ -701,6 +703,8 @@ export const UserText = ({
                 fontSize: `${fontSize}px`,
                 fontWeight: `${fontWeight}`,
                 lineHeight: `${lineHeight}px`,
+                alignItems: alignItems,
+                justifyContent: `center`,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
             >

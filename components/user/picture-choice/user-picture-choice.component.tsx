@@ -430,6 +430,13 @@ export const PictureChoice = ({
         ["selectedStyles", "borderColor"],
         ["selectedStyles", "backgroundColor"],
       ],
+      [PictureChoicePresets.prefilled]: [
+        ["defaultStyles", "backgroundColor"],
+        ["hoverStyles", "borderColor"],
+        ["hoverStyles", "backgroundColor"],
+        ["selectedStyles", "borderColor"],
+        ["selectedStyles", "backgroundColor"],
+      ],
     }
 
     setProp(
