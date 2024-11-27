@@ -43,6 +43,13 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { IconButtonSizes, UserLogo } from "./user-image.component"
 import { ColorInput } from "@/components/color-input"
 
+const IMAGE_SIZE_MAPPER = {
+  small: 250,
+  medium: 376,
+  large: 800,
+  full: 850,
+}
+
 export const Img = ({
   alt,
   marginTop,
@@ -622,35 +629,33 @@ export const ImageSettings = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="size">{t("Size")}</Label>
                 <span className="text-muted-foreground text-xs">
-                  {imageSize}
+                  {imageSize}px
                 </span>
               </div>
               <Slider
                 defaultValue={[imageSize]}
                 value={[imageSize]}
-                max={100}
-                min={0}
+                max={800}
+                min={250}
                 step={1}
-                onValueChange={(e) => {
-                  const newWidthPercentage = e[0]
-                  const maxWidthPx = parseInt(maxWidth, 10)
-                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
-                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
-                  const newHeightPx = newWidthPx * aspectRatio
-
-                  // Logging to see the calculated values
-                  console.log("New width percentage:", newWidthPercentage)
-                  console.log("Max width in px:", maxWidthPx)
-                  console.log("New width in px:", newWidthPx)
-                  console.log("Aspect ratio:", aspectRatio)
-                  console.log("New height in px:", newHeightPx)
-
-                  handlePropChangeDebounced("imageSize", e)
+                onValueChange={(value) => {
+                  const newWidth = value[0]
 
                   setProp((props) => {
-                    props.width = `${newWidthPx}px`
+                    console.log("newWidth", newWidth)
+                    if(newWidth >= IMAGE_SIZE_MAPPER.large) {
+                      console.log("newWidthSmall")
+                      props.picSize = "large"
+                    } else if(newWidth >= IMAGE_SIZE_MAPPER.medium) {
+                      props.picSize = "medium"
+                    } else if(newWidth >= 0) {
+                      props.picSize = "small"
+                    }
+                    props.width = `${newWidth}px`
+                    props.imageSize = newWidth
+
                     // props.height = `${newHeightPx}px`;
-                    props.imageSize = `${newWidthPercentage}`
+                    // props.imageSize = `${newWidthPercentage}` // not used anymore
                   }, 1000)
                 }}
               />
@@ -688,14 +693,10 @@ export const ImageSettings = () => {
                 value={picSize}
                 defaultValue={picSize}
                 onValueChange={(value) => {
-                  setProp((props) => (props.picSize = value), 1000)
-                  const sizeMap = {
-                    small: "400px",
-                    medium: "800px",
-                    large: "850px",
-                    full: "870px",
-                  }
-                  setProp((props) => (props.maxWidth = sizeMap[value]), 1000)
+                  setProp((props) => {
+                    props.imageSize = IMAGE_SIZE_MAPPER[value]
+                    props.picSize = value
+                  }, 1000)
                 }}
               >
                 <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
@@ -930,7 +931,7 @@ export const DefaultPropsImg = {
   width: "90%",
   height: "auto",
   enableLink: false,
-  imageSize: 100,
+  imageSize: 376,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,
