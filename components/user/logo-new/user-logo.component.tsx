@@ -388,8 +388,9 @@ export const LogoComponent = ({
         className="relative w-full"
         style={{
           background: `${
-            avatarContainerBackground &&
-            avatarContainerBackground !== "transparent"
+            (avatarContainerBackground &&
+              avatarContainerBackground !== "transparent") ||
+            avatarContainerBackground !== "rgba(255,255,255,.1)"
               ? avatarContainerBackground
               : containerBackground
           }`,

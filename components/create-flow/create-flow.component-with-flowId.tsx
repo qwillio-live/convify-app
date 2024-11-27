@@ -438,6 +438,21 @@ export function CreateFlowComponent({ flowId }) {
   }, [headerMode, footerMode]) // Dependencies to trigger this effect
 
   // console.log("sdcsdc", Object.keys(JSON.parse(editorLoad)).length)
+  const avatarContainerColor = JSON.parse(screensHeader)
+
+  // Loop through the data and find the first AvatarComponent
+  const avatarComponent = Object.values(avatarContainerColor).find(
+    //@ts-ignore
+    (item) => item.displayName === "AvatarComponent"
+  )
+
+  // Check if the component is found and return its containerBackground
+  //@ts-ignore
+  const avatarContainerBackground = avatarComponent
+    ? //@ts-ignore
+      avatarComponent?.props?.containerBackground
+    : null
+
   return (
     <div className="max-h-[calc(-60px+100vh)] w-full">
       <Editor
@@ -579,8 +594,9 @@ export function CreateFlowComponent({ flowId }) {
                         zIndex: 20,
                         height: "auto",
                         backgroundColor:
-                          avatarBackgroundColor !== "rgba(255,255,255,.1)"
-                            ? avatarBackgroundColor
+                          avatarContainerBackground &&
+                          avatarContainerBackground !== "rgba(255,255,255,.1)"
+                            ? avatarContainerBackground
                             : backgroundColor,
                       }}
                     >
