@@ -87,7 +87,7 @@ export const LogoComponentGen = ({
   const avatarContainerBackground = avatarComponent
     ? avatarComponent.props.containerBackground
     : null
-
+  console.log("avatarContainerBackground", avatarContainerBackground)
   return (
     <div
       className=""
@@ -388,9 +388,8 @@ export const LogoComponent = ({
         className="relative w-full"
         style={{
           background: `${
-            (avatarContainerBackground &&
-              avatarContainerBackground !== "transparent") ||
-            avatarContainerBackground !== "rgba(255,255,255,.1)"
+            avatarContainerBackground &&
+            avatarContainerBackground !== "transparent"
               ? avatarContainerBackground
               : containerBackground
           }`,
