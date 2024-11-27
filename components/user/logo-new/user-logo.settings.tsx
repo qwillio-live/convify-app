@@ -394,16 +394,15 @@ export const LogoSettings = () => {
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
             <div className="flex flex-row items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
                 }
-                id="backgroundcolor"
               />
             </div>
 

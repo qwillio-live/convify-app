@@ -647,33 +647,30 @@ export const TextImageSettings = () => {
               <Label>{t("Background Color")}</Label>
               <ColorInput
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
                 }
-                id="backgroundcolor"
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="textColor">{t("Title Color")}</Label>
+              <Label>{t("Title Color")}</Label>
               <ColorInput
-                id="textColor"
-                value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  handlePropChange("textColor", e.target.value)
+                value={textColor === "#ffffff" ? undefined : textColor}
+                handleChange={(value) => {
+                  handlePropChange("textColor", value)
                 }}
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="secTextColor">{t("Subtitle Color")}</Label>
+              <Label>{t("Subtitle Color")}</Label>
               <ColorInput
-                id="secTextColor"
-                value={secTextColor === "#ffffff" ? null : secTextColor}
-                handleChange={(e) => {
-                  handlePropChange("secTextColor", e.target.value)
+                value={secTextColor === "#ffffff" ? undefined : secTextColor}
+                handleChange={(value) => {
+                  handlePropChange("secTextColor", value)
                 }}
                 handleRemove={() => handlePropChange("secTextColor", "#ffffff")}
               />

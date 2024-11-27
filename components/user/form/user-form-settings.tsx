@@ -259,12 +259,11 @@ export const FormSettings = () => {
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
-                id="backgroundcolor"
                 value={background}
-                handleChange={(e) => {
-                  debouncedSetProp("background", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("background", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("background", "transparent")

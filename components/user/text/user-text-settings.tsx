@@ -216,12 +216,11 @@ export const UserTextInputSettings = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
-                id="backgroundcolor"
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
@@ -231,10 +230,9 @@ export const UserTextInputSettings = () => {
             <div className="flex items-center justify-between">
               <Label htmlFor="textColor">{t("Text Color")}</Label>
               <ColorInput
-                id="textColor"
                 value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  debouncedSetProp("textColor", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("textColor", value)
                 }}
                 handleRemove={() => debouncedSetProp("textColor", "#ffffff")}
               />

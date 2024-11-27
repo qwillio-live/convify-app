@@ -214,12 +214,11 @@ export const SelectSettings = () => {
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
-                id="backgroundcolor"
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
@@ -227,12 +226,11 @@ export const SelectSettings = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="labelColor">{t("Label Color")}</Label>
+              <Label>{t("Label Color")}</Label>
               <ColorInput
-                id="labelColor"
                 value={labelColor === "#ffffff" ? null : labelColor}
-                handleChange={(e) => {
-                  handlePropChange("labelColor", e.target.value)
+                handleChange={(value) => {
+                  handlePropChange("labelColor", value)
                 }}
                 handleRemove={() => handlePropChange("labelColor", "#ffffff")}
               />

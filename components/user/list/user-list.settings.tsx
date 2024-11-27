@@ -185,36 +185,33 @@ export const ListSettings = () => {
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() => {
                   debouncedSetProp("containerBackground", "transparent")
                 }}
-                id="backgroundcolor"
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="textColor">{t("Title Color")}</Label>
+              <Label>{t("Title Color")}</Label>
               <ColorInput
-                id="textColor"
                 value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  handlePropChange("textColor", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("textColor", value)
                 }}
-                handleRemove={() => handlePropChange("textColor", "#ffffff")}
+                handleRemove={() => debouncedSetProp("textColor", "#ffffff")}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="secTextColor">{t("Subtitle Color")}</Label>
+              <Label>{t("Subtitle Color")}</Label>
               <ColorInput
-                id="secTextColor"
                 value={secTextColor === "#ffffff" ? null : secTextColor}
-                handleChange={(e) => {
-                  handlePropChange("secTextColor", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("secTextColor", value)
                 }}
                 handleRemove={() => handlePropChange("secTextColor", "#ffffff")}
               />

@@ -234,36 +234,33 @@ export const ChecklistSettings = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <Label htmlFor="iconcolor">{t("Icon Color")}</Label>
+              <Label>{t("Icon Color")}</Label>
               <ColorInput
                 value={iconColor}
-                handleChange={(e) => {
-                  debouncedSetProp("iconColor", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("iconColor", value)
                 }}
-                id="iconcolor"
               />
             </div>
 
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() => {
                   debouncedSetProp("containerBackground", "transparent")
                 }}
-                id="backgroundcolor"
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="textColor">{t("Text Color")}</Label>
+              <Label>{t("Text Color")}</Label>
               <ColorInput
-                id="textColor"
                 value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  handlePropChange("textColor", e.target.value)
+                handleChange={(value) => {
+                  handlePropChange("textColor", value)
                 }}
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />
