@@ -221,7 +221,6 @@ const FloatingToolbar = () => {
     const inFocus = useFocused()
     const [textColor, setTextColor] = useState('#000000')
 
-
     useEffect(() => {
         const el = editorRef.current
         const { selection } = editor
@@ -261,6 +260,8 @@ const FloatingToolbar = () => {
                 return !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any).type === 'link'
             },
         })
+
+
         console.log(linkNode, "linkNode")
         setLinkUrl(linkNode ? (linkNode[0] as any).url : '')
         const marks = Editor.marks(editor)

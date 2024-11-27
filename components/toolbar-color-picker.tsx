@@ -7,6 +7,8 @@ import { Label } from "./ui/label"
 import { cn } from "@/lib/utils"
 import { debounce } from 'lodash'
 import "../styles/colorInput.css"
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { HexColorInput, HexColorPicker } from 'react-colorful'
 
 
 interface ToolbarColorPickerProps {
@@ -18,13 +20,6 @@ interface ToolbarColorPickerProps {
 export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [tempColor, setTempColor] = useState(value)
-    const inputRef = useRef<HTMLInputElement>(null)
-
-    useEffect(() => {
-        if (isOpen && inputRef.current) {
-            inputRef.current.focus()
-        }
-    }, [isOpen])
 
     const debouncedOnChange = useCallback(
         debounce((color: string) => {
@@ -32,8 +27,8 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
         }, 100),
         [onChange]
     )
-    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newColor = e.target.value
+    const handleColorChange = (value: string) => {
+        const newColor = value
         setTempColor(newColor)
         debouncedOnChange(newColor)
     }
@@ -45,19 +40,32 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
         }
     }
     return (
-        <div id="swatch" className='mx-2'>
-            <Input
-                ref={inputRef}
-                type="color"
-                value={tempColor}
-                onChange={handleColorChange}
-                // style={{
-                //     borderRadius: '2px', height: '2rem', width: '2rem', padding: '0', border: '0'
-                // }}
-                id="color" name="color" 
-                // className="h-8 w-8 p-0 border-0 outline-none rounded-sm overflow-hidden"
-            />
-        </div>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild >
+          <button className='mx-2' onClick={(e) => {
+            e.preventDefault()
+            toggleColorPicker()
+          }}>
+            <div
+            style={{
+              backgroundColor: value
+            }}
+            className="border-input size-6 rounded-md">
+            </div>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+        onOpenAutoFocus={e => e.preventDefault()}
+        onCloseAutoFocus={e => e.preventDefault()}
+        className="p-2 w-64 left-0" side="right">
+          <HexColorPicker color={tempColor} onChange={handleColorChange}/>
+          <HexColorInput
+            prefixed
+            color={tempColor} onChange={handleColorChange}
+            className="w-full mt-2 border rounded text-center"/>
+        </PopoverContent>
+      </Popover>
+
     )
 
     return (
