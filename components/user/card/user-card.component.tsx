@@ -369,7 +369,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   flexWrap: "nowrap",
   overflowY: "hidden",
   overflowX: "hidden",
-  gap: 20,
+  gap: 0,
   border: 0,
   borderColor: "transparent",
   size: CardSizes.medium,
