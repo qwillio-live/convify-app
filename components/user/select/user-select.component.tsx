@@ -31,7 +31,7 @@ const SelectSizeValues = {
   small: "250px",
   medium: "376px",
   large: "576px",
-  full: "99px",
+  full: "99.5%",
 }
 
 const SelectMobileSizeValues = {

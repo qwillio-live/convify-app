@@ -146,6 +146,9 @@ const StyledCustomHeadlineInput = ({
   size,
   className,
   style,
+  textAlign,
+  lineHeight,
+  mobileLineHeight,
   ...props
 }: React.ButtonHTMLAttributes<HTMLDivElement> & StyledCustomHeadlineInput) => {
   const customStyles: CSSProperties = {
@@ -167,6 +170,8 @@ const StyledCustomHeadlineInput = ({
     alignItems,
     justifyContent,
     borderWidth: border,
+    textAlign: textAlign,
+    lineHeight: lineHeight,
     ...style,
   } as CSSProperties
 
@@ -288,7 +293,7 @@ export const HeadlineTextGen = ({
         fontSize={fontSize}
         mobileFontSize={mobileFontSize}
         fontWeight={fontWeight}
-        justifyContent={justifyContent}
+        justifyContent={"center"}
         borderColor={primarycolor}
         border={border}
         marginLeft={marginLeft}
@@ -324,6 +329,7 @@ export const HeadlineTextGen = ({
             height: "fit-content",
             wordWrap: "break-word",
             lineHeight: `${lineHeight}px`,
+            alignItems: alignItems,
           }}
         >
           <TextEditor isReadOnly initValue={computedValue} />
@@ -551,7 +557,7 @@ export const HeadlineText = ({
           colorHover={colorHover.value}
           flexDirection={flexDirection}
           fontWeight={fontWeight.value}
-          justifyContent={justifyContent}
+          justifyContent={"center"}
           borderColor={borderColor.value}
           borderHoverColor={borderHoverColor.value}
           border={border}
@@ -607,6 +613,8 @@ export const HeadlineText = ({
                 }`,
                 fontSize: `${mobileScreen ? mobileFontSize : fontSize}px`,
                 fontWeight: `${fontWeight}`,
+                lineHeight: `${lineHeight}px`,
+                alignItems: alignItems,
               }}
               className="min-w-16 border-dotted border-transparent leading-relaxed hover:border-blue-500"
             >

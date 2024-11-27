@@ -339,7 +339,7 @@ export const ImageSettings = () => {
             .toDataURL()),
         1000
       )
-      setProp((props) => (props.width = "100%"), 1000)
+      // setProp((props) => (props.width = "100%"), 1000)
       setProp((props) => (props.height = "auto"), 1000)
       setShowDialog(false)
       setActiveAspectRatioBtn("source")
@@ -722,7 +722,6 @@ export const ImageSettings = () => {
                 />
               </div>
               <div className="space-y-3">
-                c
                 <div className="flex items-center justify-between">
                   <Label htmlFor="marginBottom">{t("Bottom")}</Label>
                   <span className="text-muted-foreground text-xs">

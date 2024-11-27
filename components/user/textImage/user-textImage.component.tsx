@@ -471,7 +471,9 @@ export const TextImageComponentGen = ({
                     style={{
                       alignSelf: `${bothAlign}`,
                       flex: "50%",
-                      // marginTop: bothAlign == "start" ? "20px" : "",
+                      marginTop: pathname?.includes("create-flow")
+                        ? "20px"
+                        : "",
                     }}
                   >
                     {
@@ -821,6 +823,7 @@ export const UserLogo = ({
                     fontFamily: `var(${fontFamily.value})`,
                     color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                     fontSize: `${titleFontSize}px`,
+                    lineHeight: `${titleFontSize * 1.5}px`,
                     transitionProperty: "all",
                     overflowX: "clip",
                     textOverflow: "ellipsis",
@@ -879,6 +882,7 @@ export const UserLogo = ({
                     fontFamily: `var(${fontFamily.value})`,
                     color: textColor !== "#ffffff" ? textColor : primaryTextColor,
                     fontSize: `${titleFontSize}px`,
+                    lineHeight: `${titleFontSize * 1.5}px`,
                     transitionProperty: "all",
                     overflowX: "clip",
                     textOverflow: "ellipsis",

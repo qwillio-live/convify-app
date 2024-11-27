@@ -102,7 +102,7 @@ export default function StaticPublishedFile({
     [CRAFT_ELEMENTS.FAQ]: FAQGen,
     [CRAFT_ELEMENTS.YOUTUBEVIDEO]: YoutubeVideoGen,
     [CRAFT_ELEMENTS.LINKS]: LinksGen,
-    [CRAFT_ELEMENTS.IMAGESTORY]:ImageStoryGen,
+    [CRAFT_ELEMENTS.IMAGESTORY]: ImageStoryGen,
     [CRAFT_ELEMENTS.SCREENFOOTER]: ScreenFooterGen,
     [CRAFT_ELEMENTS.SOCIALSHAREBUTTON]: SocialShareButtonGen,
     [CRAFT_ELEMENTS.TELEGRAMSHAREBUTTON]: TelegramShareButtonGen,
@@ -260,11 +260,12 @@ export default function StaticPublishedFile({
         </div>
       )}
       <div
-        className={`flex  w-full flex-1 flex-col`}
+        className={`flex  w-full flex-1 flex-col ${
+          checkAvatar() ? "pt-8 lg:pt-11" : ""
+        }`}
         style={{
           backgroundColor:
             data?.flowSettings?.general?.backgroundColor || "transparent",
-          paddingTop: checkAvatar() ? "44px" : "0px",
         }}
       >
         {filteredStep && (
