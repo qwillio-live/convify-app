@@ -200,6 +200,15 @@ export const LogoSettings = () => {
 
           const logoSize = `${uploadedImage.logoSize.width}x${uploadedImage.logoSize.height}`
 
+          if(file.type === "image/svg+xml") {
+            setProp((props) => {
+              props.w = `${uploadedImage.logoSize.width}px`
+              props.src = uploadedImage.data.data.images.original
+              props.uploadedImageUrl = uploadedImage.data.data.images.original
+            }, 1000)
+            return
+          }
+
           if (
             uploadedImage.data.data.images[logoSize]
           ) {
@@ -240,8 +249,8 @@ export const LogoSettings = () => {
     actualHeight
   ) => {
     let logoDimensions = {
-      width: actualWidth,
-      height: actualHeight
+      width: Math.round(actualWidth),
+      height: Math.round(actualHeight)
     }
 
     const formData = new FormData()
