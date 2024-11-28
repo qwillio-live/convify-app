@@ -176,7 +176,6 @@ export const UserLogo = ({
   return (
     <div
       style={{
-        height: "58px",
         width: w,
         overflow: "hidden",
         position: "relative",
@@ -185,13 +184,13 @@ export const UserLogo = ({
       <img
         alt={alt}
         src={src}
+        width={(!w || w === "auto") ? 120: w}
         style={{
-          width: w,
-          height: `calc(${60}px - ${top}px - ${bottom}px)`,
+          maxWidth: "300px",
           borderRadius: `${borderRad}px`,
           backgroundColor: background,
           objectFit: "cover",
-          transform: `translateY(${top}px)`,
+          // transform: `translateY(${top}px)`,
           marginLeft: `${left}px`,
           marginRight: `${right}px`,
         }}
@@ -551,8 +550,8 @@ export const LogoDefaultProps: IconButtonProps = {
   disabled: false,
   enableLink: false,
   minWidth: "120px",
-  w: "auto",
-  h: "60px",
+  w: 120,
+  h: "auto",
   width: "85%",
   height: "auto",
   size: IconButtonSizes.medium,

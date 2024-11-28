@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import hexoid from "hexoid";
 import ImagePlaceholder from "@/assets/images/default-image.webp"
 
+export const MAX_WIDTH_LOGO = 300
+
 const useLogoThemePresets = () => {
   const t = useTranslations("Components")
   const theme = useAppSelector((state) => state.theme);
@@ -91,7 +93,7 @@ const useLogoThemePresets = () => {
     right: 0,
     imageSize: 0,
     minWidth: '120px',
-    w: "",
+    w: 120,
     h: "",
     borderRad: 0,
   };
@@ -178,7 +180,7 @@ const useLogoThemePresets = () => {
     left: 0,
     right: 0,
     imageSize: 0,
-    w: "120px",
+    w: 120,
     h: "auto"
   };
 

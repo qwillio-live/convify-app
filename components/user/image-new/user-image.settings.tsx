@@ -642,9 +642,7 @@ export const ImageSettings = () => {
                   const newWidth = value[0]
 
                   setProp((props) => {
-                    console.log("newWidth", newWidth)
                     if(newWidth >= IMAGE_SIZE_MAPPER.large) {
-                      console.log("newWidthSmall")
                       props.picSize = "large"
                     } else if(newWidth >= IMAGE_SIZE_MAPPER.medium) {
                       props.picSize = "medium"
