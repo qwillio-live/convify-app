@@ -228,7 +228,7 @@ export const LogoSettings = () => {
   const calculateImageDimensions = (aspectRatio, maxWidth) => {
     const height = maxWidth / aspectRatio
     return {
-      width: maxWidth,
+      width: Math.round(maxWidth),
       height: Math.round(height),
     }
   }
@@ -247,7 +247,7 @@ export const LogoSettings = () => {
     const formData = new FormData()
     formData.append("image", imageData)
     formData.append("file", imageData)
-    formData.append("sizes[0]", `${actualWidth}x${actualHeight}`)
+    formData.append("sizes[0]", `${Math.round(actualWidth)}x${Math.round(actualHeight)}`)
 
     if(actualWidth > MAX_WIDTH_LOGO) {
       logoDimensions = calculateImageDimensions(aspectRatio, MAX_WIDTH_LOGO)
