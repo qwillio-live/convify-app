@@ -3,6 +3,7 @@ import {
   ChangeEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react"
 import { debounce, throttle } from "lodash"
@@ -44,6 +45,8 @@ import { updateElementProps } from "./utils"
 import { Switch } from "@/components/custom-switch"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { HexColorInput, HexColorPicker } from "react-colorful"
+import tinycolor from "tinycolor2"
+import { Separator } from "@/components/ui/separator"
 
 type Props = {}
 
@@ -392,12 +395,28 @@ export const ColorInput = ({
   onColorChange,
   defaultValue,
 }: ColorInputProps) => {
+  const t = useTranslations("Components")
+
   const handleChange = (newColor: string) => {
     onColorChange?.(newColor)
   }
   const handleRemove = () => {
     onColorChange?.(defaultValue as string)
   }
+
+  const generateSuggestions = (baseColor) => {
+    const colorObj = tinycolor(baseColor)
+    return [
+      colorObj.darken(10).toHexString(),
+      colorObj.desaturate(10).toHexString(),
+      colorObj.lighten(5).toHexString(),
+      colorObj.lighten(20).toHexString(),
+      colorObj.lighten(10).toHexString(),
+    ]
+  }
+
+  const suggestions = useMemo(() => generateSuggestions(value), [value])
+
   return (
     <Popover>
       <div className="flex items-center gap-2">
@@ -406,10 +425,10 @@ export const ColorInput = ({
             style={{
               backgroundColor: (value as string) ?? "transparent",
             }}
-            className="relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
+            className="cursor-pointer relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
           >
             {!value && (
-              <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
+              <div className="pointer-events-none absolute left-1/2 top-1/2 flex size-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
                 <span className="w-full text-center text-xs text-[#7B7D80]">
                   Choose
                 </span>
@@ -423,6 +442,20 @@ export const ColorInput = ({
           prefixed
           color={value as string} onChange={handleChange}
           className="w-full mt-2 border rounded text-center"/>
+        <Separator className="!mt-3" />
+        <span className="flex w-full justify-start text-xs font-normal text-[#7B7D80] mt-1">
+          {t("suggestions")}
+        </span>
+        <div className="mt-2 grid grid-cols-5 gap-px">
+          {suggestions.map((suggestion, index) => (
+            <div
+              key={index}
+              className="h-9 cursor-pointer rounded-sm"
+              style={{ backgroundColor: suggestion }}
+              onClick={() => handleChange(suggestion)}
+            />
+          ))}
+        </div>
       </PopoverContent>
 
         <span onClick={() => handleRemove()}>
