@@ -68,48 +68,48 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
 
     )
 
-    return (
-        <div className={cn("relative", className)}>
-            <Button
-                variant="ghost"
-                size="icon"
-                className={cn("p-0 w-6 h-6 rounded-sm", className)}
-                style={{ backgroundColor: value }}
-                onClick={toggleColorPicker}
-                aria-label="Select text color"
-            />
-            {isOpen && (
-                <div className="absolute top-full mt-1 left-0 bg-popover p-2 rounded-md shadow-md z-50">
-                    <div className="flex flex-col space-y-2">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="color-input" className="text-xs">Color</Label>
-                            <div
-                                className="w-4 h-4 rounded-sm border border-border"
-                                style={{ backgroundColor: tempColor }}
-                            />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Input
-                                ref={inputRef}
-                                id="color-input"
-                                type="color"
-                                value={tempColor}
-                                onChange={handleColorChange}
-                                className="h-8 w-8 p-0 border-0"
-                            />
-                            <Input
-                                type="text"
-                                value={tempColor}
-                                onChange={(e) => {
-                                    setTempColor(e.target.value)
-                                    onChange(e.target.value)
-                                }}
-                                className="flex-grow h-8 text-xs"
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
+    // return (
+    //     <div className={cn("relative", className)}>
+    //         <Button
+    //             variant="ghost"
+    //             size="icon"
+    //             className={cn("p-0 w-6 h-6 rounded-sm", className)}
+    //             style={{ backgroundColor: value }}
+    //             onClick={toggleColorPicker}
+    //             aria-label="Select text color"
+    //         />
+    //         {isOpen && (
+    //             <div className="absolute top-full mt-1 left-0 bg-popover p-2 rounded-md shadow-md z-50">
+    //                 <div className="flex flex-col space-y-2">
+    //                     <div className="flex items-center justify-between">
+    //                         <Label htmlFor="color-input" className="text-xs">Color</Label>
+    //                         <div
+    //                             className="w-4 h-4 rounded-sm border border-border"
+    //                             style={{ backgroundColor: tempColor }}
+    //                         />
+    //                     </div>
+    //                     <div className="flex items-center space-x-2">
+    //                         <Input
+    //                             ref={inputRef}
+    //                             id="color-input"
+    //                             type="color"
+    //                             value={tempColor}
+    //                             onChange={handleColorChange}
+    //                             className="h-8 w-8 p-0 border-0"
+    //                         />
+    //                         <Input
+    //                             type="text"
+    //                             value={tempColor}
+    //                             onChange={(e) => {
+    //                                 setTempColor(e.target.value)
+    //                                 onChange(e.target.value)
+    //                             }}
+    //                             className="flex-grow h-8 text-xs"
+    //                         />
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         )}
+    //     </div>
+    // )
 }
