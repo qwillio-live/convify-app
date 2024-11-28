@@ -74,7 +74,8 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
         onOpenAutoFocus={e => e.preventDefault()}
         onCloseAutoFocus={e => e.preventDefault()}
         onMouseUp={() => setIsOpen(false)}
-        className="p-2 w-64 left-0" side="right">
+        avoidCollisions
+        className="p-2 w-64 left-0">
           <HexColorPicker color={tempColor} onChange={handleColorChange}/>
           <HexColorInput
             prefixed

@@ -282,7 +282,7 @@ const FloatingToolbar = () => {
             // prevent toolbar from taking focus away from editor
             e.preventDefault()
         }}
-            className="fixed z-1000 transition-opacity duration-200"
+            className="fixed z-1000 transition-opacity duration-200 hidden md:block"
         >
             <div className="flex justify-center p-4">
                 <div className="bg-white rounded-lg shadow-md border border-gray-200 p-2 flex items-center space-x-2">

@@ -176,7 +176,6 @@ export const UserLogo = ({
   return (
     <div
       style={{
-        width: w,
         overflow: "hidden",
         position: "relative",
       }}

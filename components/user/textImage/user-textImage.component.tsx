@@ -458,6 +458,7 @@ export const TextImageComponentGen = ({
                     <img
                       alt={alt}
                       src={src}
+                      key={src}
                       style={{
                         height: height,
                         borderRadius: `${cornerRadius}px`,
@@ -1516,8 +1517,8 @@ export const TextImageDefaultProps: IconButtonProps = {
   split: 6,
   buttonAction: "next-screen",
   bothAlign: "start",
-  horizontalGap: 20,
-  verticalGap: 10,
+  horizontalGap: 0,
+  verticalGap: 0,
   titleFontSize: 32,
   titleFontWeight: "bold",
   textFontWeight: "normal",
