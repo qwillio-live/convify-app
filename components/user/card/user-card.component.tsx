@@ -49,6 +49,14 @@ interface CardOuterStyles {
   borderColor: string
   isHovered: boolean
   selected: boolean
+  size: string
+}
+
+const CardMinHeightValues = {
+  small: "176px",
+  medium: "218px",
+  large: "253px",
+  full: "258px",
 }
 
 const CardContentOuter = styled.div<CardOuterStyles>`
@@ -81,6 +89,7 @@ const CardContentOuter = styled.div<CardOuterStyles>`
   border-style: ${(props) =>
     props.selected || props.parentHovered ? "dotted" : "solid"};
   border-width: 1px;
+  min-height: ${(props) => CardMinHeightValues[props.size || "medium"]};
   &:hover {
     border-color: ${(props) => props.isHovered && "#60A5FA"};
     border-style: dotted;
@@ -142,6 +151,7 @@ export const CardContentGen = ({ children, ...props }) => {
       isHovered={props.isHovered}
       paddingLeft={props.paddingLeft}
       paddingTop={props.paddingTop}
+      size={props.size}
       paddingRight={props.paddingRight}
       paddingBottom={props.paddingBottom}
       radius={props.radius}
@@ -355,9 +365,9 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   marginRight: "2",
   marginBottom: "2",
   paddingLeft: "12",
-  paddingTop: "40",
+  paddingTop: "20",
   paddingRight: "12",
-  paddingBottom: "40",
+  paddingBottom: "20",
   radius: "none",
   flexDirection: "row",
   mobileFlexDirection: "column",
