@@ -84,6 +84,7 @@ export const Img = ({
   secondaryFontFamily,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const {
@@ -143,6 +144,7 @@ export const Img = ({
           height={height}
           src={src}
           textColor={textColor}
+          showTitle={showTitle}
           {...props}
         />
       }
@@ -193,6 +195,7 @@ export const TextImageSettings = () => {
       uploadedImageMobileUrl,
       position,
       split,
+      showTitle,
       bothAlign,
       horizontalGap,
       verticalGap,
@@ -499,6 +502,21 @@ export const TextImageSettings = () => {
         <AccordionItem value="content">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                  checked={showTitle}
+                  onCheckedChange={(checked) => {
+                    setProp((props) => (props.showTitle = checked), 200)
+                  }}
+                  id="label"
+              />
+              <label
+                  htmlFor="label"
+                  className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                  {t("Show Title")}
+              </label>
+            </div>
             <div className="space-y-2">
               <Label>{t("Image Position")}</Label>
               <Tabs
@@ -629,33 +647,30 @@ export const TextImageSettings = () => {
               <Label>{t("Background Color")}</Label>
               <ColorInput
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
                 }
-                id="backgroundcolor"
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="textColor">{t("Title Color")}</Label>
+              <Label>{t("Title Color")}</Label>
               <ColorInput
-                id="textColor"
-                value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  handlePropChange("textColor", e.target.value)
+                value={textColor === "#ffffff" ? undefined : textColor}
+                handleChange={(value) => {
+                  handlePropChange("textColor", value)
                 }}
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="secTextColor">{t("Subtitle Color")}</Label>
+              <Label>{t("Subtitle Color")}</Label>
               <ColorInput
-                id="secTextColor"
-                value={secTextColor === "#ffffff" ? null : secTextColor}
-                handleChange={(e) => {
-                  handlePropChange("secTextColor", e.target.value)
+                value={secTextColor === "#ffffff" ? undefined : secTextColor}
+                handleChange={(value) => {
+                  handlePropChange("secTextColor", value)
                 }}
                 handleRemove={() => handlePropChange("secTextColor", "#ffffff")}
               />
@@ -1044,6 +1059,7 @@ export const DefaultPropsTextImg = {
   height: "auto",
   enableLink: false,
   split: 6,
+  showTitle: false,
   imageSize: 100,
   size: "",
   title: "title",
@@ -1054,8 +1070,8 @@ export const DefaultPropsTextImg = {
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,
   bothAlign: "start",
-  horizontalGap: 20,
-  verticalGap: 10,
+  horizontalGap: 0,
+  verticalGap: 0,
   titleFontSize: 32,
   textFontSize: 17,
   titleFontWeight: "bold",

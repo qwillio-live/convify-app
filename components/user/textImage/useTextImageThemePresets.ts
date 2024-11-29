@@ -68,13 +68,13 @@ const useButtonThemePresets = () => {
         justifyContent: "space-between",
         disabled: false,
         enableLink: false,
-        
+
         width: '85%',
         height: "auto",
         size: IconButtonSizes.medium,
         split: 6,
-        horizontalGap: 20,
-        verticalGap: 10,
+        horizontalGap: 0,
+        verticalGap: 0,
         text:defaultContentText,
         marginLeft: 0,
         marginTop: 20,
@@ -115,7 +115,8 @@ const useButtonThemePresets = () => {
         imageSize: 0,
         bothAlign: 'top',
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false
     };
 
     const outLinePreset: IconButtonProps = {
@@ -172,8 +173,8 @@ const useButtonThemePresets = () => {
         height: "auto",
         size: IconButtonSizes.medium,
         cornerRadius: 10,
-        horizontalGap: 20,
-        verticalGap: 10,
+        horizontalGap: 0,
+        verticalGap: 0,
         titleFontSize: 32,
         textFontSize: 17,
         titleFontWeight: 'bold',
@@ -214,7 +215,8 @@ const useButtonThemePresets = () => {
         Right: 0,
         imageSize: 0,
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false
     };
 
     return { filledPreset, outLinePreset };

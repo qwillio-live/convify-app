@@ -132,6 +132,7 @@ export const ImageComponentGen = ({
   Right,
   radiusCorner,
   src,
+  picSize,
   ...props
 }) => {
   return (
@@ -160,7 +161,8 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
+            `relative flex flex-row justify-${align} w-full border border-transparent`,
+            picSize !== "full" ? "max-w-[calc(100%-22px)]" : ""
           )}
         >
           {
@@ -241,7 +243,7 @@ export const UserLogo = ({
         height={parseFloat(height) || 212}
         style={{
           width: width,
-          maxWidth: maxWidth,
+          // maxWidth: maxWidth, // currently not used
           height: height,
           borderRadius: `${radiusCorner}px`,
           backgroundColor: background,
@@ -515,7 +517,8 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
+            `relative flex flex-row justify-${align} w-full border border-transparent`,
+            picSize !== "full" ? "max-w-[calc(100%-22px)]" : ""
           )}
         >
           {
@@ -656,7 +659,7 @@ export const ImageDefaultProps: IconButtonProps = {
   align: "center",
   url: env.NEXT_PUBLIC_APP_URL,
   src: DefaultImagePlaceholder,
-  radiusCorner: 0,
+  radiusCorner: 15,
   disabled: false,
   enableLink: false,
   width: "100%",
@@ -664,7 +667,7 @@ export const ImageDefaultProps: IconButtonProps = {
   height: "auto",
   size: IconButtonSizes.medium,
   picSize: IconButtonSizes.medium,
-  imageSize: 100,
+  imageSize: 376,
   buttonSize: "small",
   time: 2,
   text: "Get quote",

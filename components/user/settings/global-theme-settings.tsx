@@ -3,6 +3,7 @@ import {
   ChangeEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react"
 import { debounce, throttle } from "lodash"
@@ -42,6 +43,10 @@ import { Label } from "@/components/ui/label"
 import { useEditor } from "@craftjs/core"
 import { updateElementProps } from "./utils"
 import { Switch } from "@/components/custom-switch"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { HexColorInput, HexColorPicker } from "react-colorful"
+import tinycolor from "tinycolor2"
+import { Separator } from "@/components/ui/separator"
 
 type Props = {}
 
@@ -193,7 +198,7 @@ export const GlobalThemeSettings = (props: Props) => {
       <ScrollArea>
         <Accordion
           type="multiple"
-          defaultValue={["item-1"]}
+          defaultValue={["item-1", "item-2"]}
           className="font-poppins bg-[#f6f6f6] p-4 pt-0"
         >
           <AccordionItem value="item-1">
@@ -226,7 +231,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 </Select>
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="primarycolor">{t("Primary Color")}</Label>
+                <Label>{t("Primary Color")}</Label>
                 <ColorInput
                   defaultValue={defaultPrimaryColor}
                   value={primaryColor}
@@ -237,13 +242,11 @@ export const GlobalThemeSettings = (props: Props) => {
                       general: { primaryColor: e },
                     })
                   }}
-                  type={"color"}
-                  id="primarycolor"
                 />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label htmlFor="secondarycolor">{t("Secondary Color")}</Label>
+                <Label>{t("Secondary Color")}</Label>
                 <ColorInput
                   defaultValue={defaultSecondaryColor}
                   value={secondaryColor}
@@ -253,13 +256,11 @@ export const GlobalThemeSettings = (props: Props) => {
                       general: { secondaryColor: e },
                     })
                   }}
-                  type={"color"}
-                  id="secondarycolor"
                 />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+                <Label>{t("Background Color")}</Label>
                 <ColorInput
                   value={backgroundColor}
                   onColorChange={(e) => {
@@ -269,8 +270,6 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
-                  type={"color"}
-                  id="backgroundcolor"
                 />
               </div>
 
@@ -347,7 +346,7 @@ export const GlobalThemeSettings = (props: Props) => {
               />
 
               <div className="flex items-center justify-between pt-2">
-                <Label htmlFor="primarytextcolor">
+                <Label>
                   {t("Primary Text Color")}
                 </Label>
                 <ColorInput
@@ -359,13 +358,11 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }}
-                  type={"color"}
-                  id="primarytextcolor"
                 />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label htmlFor="secondarytextcolor">
+                <Label>
                   {t("Secondary Text Color")}
                 </Label>
                 <ColorInput
@@ -377,8 +374,6 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }}
-                  type={"color"}
-                  id="secondarytextcolor"
                 />
               </div>
             </AccordionContent>
@@ -390,50 +385,89 @@ export const GlobalThemeSettings = (props: Props) => {
 }
 
 interface ColorInputProps extends React.HTMLProps<HTMLInputElement> {
-  onColorChange?: (color: string | undefined) => void
+  value?: string;
+  defaultValue?: string;
+  onColorChange?: (color: string | undefined) => void;
 }
 
 export const ColorInput = ({
   value,
   onColorChange,
-  ...rest
+  defaultValue,
 }: ColorInputProps) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onColorChange?.(e.target.value)
+  const t = useTranslations("Components")
+
+  const handleChange = (newColor: string) => {
+    onColorChange?.(newColor)
   }
   const handleRemove = () => {
-    onColorChange?.(rest.defaultValue as string)
+    onColorChange?.(defaultValue as string)
   }
+
+  const generateSuggestions = (baseColor) => {
+    const colorObj = tinycolor(baseColor)
+    return [
+      colorObj.darken(10).toHexString(),
+      colorObj.desaturate(10).toHexString(),
+      colorObj.lighten(5).toHexString(),
+      colorObj.lighten(20).toHexString(),
+      colorObj.lighten(10).toHexString(),
+    ]
+  }
+
+  const suggestions = useMemo(() => generateSuggestions(value), [value])
+
   return (
-    <div className="flex items-center gap-2">
-      <div
-        style={{
-          backgroundColor: (value as string) ?? "transparent",
-        }}
-        className="relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
-      >
-        {!value && (
-          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
-            <span className="w-full text-center text-xs text-[#7B7D80]">
-              Choose
-            </span>
+    <Popover>
+      <div className="flex items-center gap-2">
+        <PopoverTrigger asChild>
+          <div
+            style={{
+              backgroundColor: (value as string) ?? "transparent",
+            }}
+            className="cursor-pointer relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
+          >
+            {!value && (
+              <div className="pointer-events-none absolute left-1/2 top-1/2 flex size-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
+                <span className="w-full text-center text-xs text-[#7B7D80]">
+                  Choose
+                </span>
+              </div>
+            )}
           </div>
-        )}
-        <Input
-          {...rest}
-          onChange={(e) => handleChange(e)}
-          className="opacity-0"
-        />
-      </div>
-      <span onClick={() => handleRemove()}>
-        <X
-          size={16}
-          className={clsx("text-muted-foreground", {
-            "pointer-events-none opacity-0":
-              !value || value === rest.defaultValue,
-          })}
-        />
-      </span>
-    </div>
+      </PopoverTrigger>
+      <PopoverContent className="p-2 w-64 left-0" side="left">
+        <HexColorPicker color={value as string} onChange={handleChange}/>
+        <HexColorInput
+          prefixed
+          color={value as string} onChange={handleChange}
+          className="w-full mt-2 border rounded text-center"/>
+        <Separator className="!mt-3" />
+        <span className="flex w-full justify-start text-xs font-normal text-[#7B7D80] mt-1">
+          {t("suggestions")}
+        </span>
+        <div className="mt-2 grid grid-cols-5 gap-px">
+          {suggestions.map((suggestion, index) => (
+            <div
+              key={index}
+              className="h-9 cursor-pointer rounded-sm"
+              style={{ backgroundColor: suggestion }}
+              onClick={() => handleChange(suggestion)}
+            />
+          ))}
+        </div>
+      </PopoverContent>
+
+        <span onClick={() => handleRemove()}>
+          <X
+            size={16}
+            className={clsx("text-muted-foreground", {
+              "pointer-events-none opacity-0":
+                !value || value === defaultValue,
+            })}
+          />
+        </span>
+        </div>
+    </Popover>
   )
 }

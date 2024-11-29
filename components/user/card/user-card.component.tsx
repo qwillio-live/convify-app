@@ -3,7 +3,7 @@ import { Element, useEditor, useNode } from "@/lib/craftjs"
 import { useAppSelector } from "@/lib/state/flows-state/hooks"
 import { Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 
 import { Button } from "../button/user-button.component"
@@ -18,6 +18,8 @@ import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
 import { UserText } from "../text/user-text.component"
 import { CardContainerSettings } from "./user-card-settings"
+import { CRAFT_ELEMENTS } from "../settings/craft-elements"
+import { usePathname } from "next/navigation"
 
 interface CardOuterStyles {
   fullWidth: boolean
@@ -47,6 +49,14 @@ interface CardOuterStyles {
   borderColor: string
   isHovered: boolean
   selected: boolean
+  size: string
+}
+
+const CardMinHeightValues = {
+  small: "176px",
+  medium: "218px",
+  large: "253px",
+  full: "258px",
 }
 
 const CardContentOuter = styled.div<CardOuterStyles>`
@@ -79,6 +89,7 @@ const CardContentOuter = styled.div<CardOuterStyles>`
   border-style: ${(props) =>
     props.selected || props.parentHovered ? "dotted" : "solid"};
   border-width: 1px;
+  min-height: ${(props) => CardMinHeightValues[props.size || "medium"]};
   &:hover {
     border-color: ${(props) => props.isHovered && "#60A5FA"};
     border-style: dotted;
@@ -140,6 +151,7 @@ export const CardContentGen = ({ children, ...props }) => {
       isHovered={props.isHovered}
       paddingLeft={props.paddingLeft}
       paddingTop={props.paddingTop}
+      size={props.size}
       paddingRight={props.paddingRight}
       paddingBottom={props.paddingBottom}
       radius={props.radius}
@@ -176,7 +188,7 @@ export const CardContentGen = ({ children, ...props }) => {
   )
 }
 export const CardContent = ({ children, ...props }) => {
-  const { query } = useEditor()
+  const { query, actions: { setProp: setNodeProp } } = useEditor()
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -184,15 +196,21 @@ export const CardContent = ({ children, ...props }) => {
     isHovered,
     id,
     parent,
+    parentHovered,
+    childNodes,
+    nodeProps,
   } = useNode((state) => ({
-    id: state.id,
+    id: state.data,
     selected: state.events.selected,
     isHovered: state.events.hovered,
     parent: state.data.parent,
+    childNodes: state.data.nodes,
+    nodeProps: state.data.props,
+    parentHovered: query.node(state.data.parent || "").isHovered(),
   }))
-  const { parentHovered } = useNode((node) => ({
-    parentHovered: query.node(parent || "").isHovered(),
-  }))
+  const pathname = usePathname()
+  const childNodeCount = useRef(childNodes.length)
+
   if (parentHovered) {
     console.log("PARENT HOVERED", parentHovered)
   }
@@ -202,6 +220,36 @@ export const CardContent = ({ children, ...props }) => {
   const selectedComponent = useAppSelector(
     (state) => state?.screen?.selectedComponent
   )
+
+  // Update List desktopColumn Props to 1
+  // When new Component added to Container with horizontal alignment
+  useEffect(() => {
+    // skip if not in editor mode
+    if(!pathname?.includes("create-flow")) return
+
+    // skip if not horizontally aligned
+    if(nodeProps.flexDirection !== "row") return
+    if(childNodes.length < 2) return
+
+    // only adjust if previous child count is 1
+    if(childNodeCount.current !== 1) return
+
+    childNodes.forEach((nodeId) => {
+      const node = query.node(nodeId).get()
+
+      if(node.data.name !== CRAFT_ELEMENTS.LIST) return
+
+      setNodeProp(nodeId, (nodeProp) => {
+        nodeProp.columnsDesktop = 1
+      })
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[childNodes, nodeProps])
+
+  useEffect(() => {
+    childNodeCount.current = childNodes.length
+  },[childNodes])
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -265,9 +313,9 @@ export enum CardSizes {
   full = "full",
 }
 const CardSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "376px",
+  medium: "576px",
+  large: "800px",
   full: "100%",
 }
 
@@ -317,11 +365,11 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   marginRight: "2",
   marginBottom: "2",
   paddingLeft: "12",
-  paddingTop: "40",
+  paddingTop: "20",
   paddingRight: "12",
-  paddingBottom: "40",
+  paddingBottom: "20",
   radius: "none",
-  flexDirection: "column",
+  flexDirection: "row",
   mobileFlexDirection: "column",
   fillSpace: "1",
   alignItems: "center",
@@ -331,7 +379,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   flexWrap: "nowrap",
   overflowY: "hidden",
   overflowX: "hidden",
-  gap: 20,
+  gap: 0,
   border: 0,
   borderColor: "transparent",
   size: CardSizes.medium,

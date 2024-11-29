@@ -571,14 +571,12 @@ export const AvatarSettings = () => {
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 gap-y-4 p-2">
             <div className="col-span-2 flex w-full items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
-
+              <Label>{t("Background Color")}</Label>
               <ColorInput
-                id="backgroundcolor"
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
-                  dispatch(setAvatarBackgroundColor(e.target.value))
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
+                  dispatch(setAvatarBackgroundColor(value))
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")

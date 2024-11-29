@@ -43,6 +43,13 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { IconButtonSizes, UserLogo } from "./user-image.component"
 import { ColorInput } from "@/components/color-input"
 
+const IMAGE_SIZE_MAPPER = {
+  small: 250,
+  medium: 376,
+  large: 800,
+  full: 850,
+}
+
 export const Img = ({
   alt,
   marginTop,
@@ -110,6 +117,8 @@ export const Img = ({
     </div>
   )
 }
+
+const ORIGINAL_IMAGE_TYPES = ["image/gif", "image/svg+xml"]
 
 export const ImageSettings = () => {
   const t = useTranslations("Components")
@@ -185,17 +194,25 @@ export const ImageSettings = () => {
     debouncedSetProp(property, value)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
-      const reader = new FileReader()
-      reader.onload = () => {
-        setImage(reader.result as any)
+
+    if(!file) return
+
+    setImageFile(file)
+    const reader = new FileReader()
+    reader.onload = () => {
+      setImage(reader.result as any)
+
+
+      if(ORIGINAL_IMAGE_TYPES.includes(file.type)) {
+        handleUploadOriginal(file, reader.result)
+        return
       }
-      reader.readAsDataURL(file)
+
       setShowDialog(true)
     }
+    reader.readAsDataURL(file)
   }
 
   const getAspectRatio = (imageSrc) => {
@@ -260,7 +277,7 @@ export const ImageSettings = () => {
     }
   }
 
-  const handleUploadOriginal = async () => {
+  const handleUploadOriginal = async (imageFile, image) => {
     if (image && imageFile) {
       setProp((props) => (props.src = image))
       setShowDialog(false)
@@ -270,13 +287,24 @@ export const ImageSettings = () => {
       const uploadedImage = await uploadToS3(imageFile, aspectRatio)
 
       if (uploadedImage) {
-        const desktopImage =
+        let desktopImage =
           uploadedImage.data.data.images[uploadedImage.desktopSize]
-        const mobileImage =
+        let mobileImage =
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
         // Set props with a timeout of 6 seconds
         setTimeout(() => {
+          // If the image is a SVG, we need to set the src to the original image
+          // because the SVG doesn't have desktop and mobile sizes
+          // also SVG is able to resize itself
+          if(imageFile.type === "image/svg+xml") {
+            setProp((props) => {
+              props.src = image
+              props.uploadedImageUrl = uploadedImage.data.data.original
+            })
+            return
+          }
+
           if (desktopImage) {
             setProp((props) => {
               props.src = desktopImage
@@ -440,6 +468,7 @@ export const ImageSettings = () => {
           <Input
             type="file"
             className="hidden"
+            accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/svg+xml"
             ref={inputRef}
             onChange={handleInputChange}
           />
@@ -565,12 +594,11 @@ export const ImageSettings = () => {
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
-                id="background-color"
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
@@ -601,35 +629,31 @@ export const ImageSettings = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="size">{t("Size")}</Label>
                 <span className="text-muted-foreground text-xs">
-                  {imageSize}
+                  {imageSize}px
                 </span>
               </div>
               <Slider
                 defaultValue={[imageSize]}
                 value={[imageSize]}
-                max={100}
-                min={0}
+                max={800}
+                min={250}
                 step={1}
-                onValueChange={(e) => {
-                  const newWidthPercentage = e[0]
-                  const maxWidthPx = parseInt(maxWidth, 10)
-                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
-                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
-                  const newHeightPx = newWidthPx * aspectRatio
-
-                  // Logging to see the calculated values
-                  console.log("New width percentage:", newWidthPercentage)
-                  console.log("Max width in px:", maxWidthPx)
-                  console.log("New width in px:", newWidthPx)
-                  console.log("Aspect ratio:", aspectRatio)
-                  console.log("New height in px:", newHeightPx)
-
-                  handlePropChangeDebounced("imageSize", e)
+                onValueChange={(value) => {
+                  const newWidth = value[0]
 
                   setProp((props) => {
-                    props.width = `${newWidthPx}px`
+                    if(newWidth >= IMAGE_SIZE_MAPPER.large) {
+                      props.picSize = "large"
+                    } else if(newWidth >= IMAGE_SIZE_MAPPER.medium) {
+                      props.picSize = "medium"
+                    } else if(newWidth >= 0) {
+                      props.picSize = "small"
+                    }
+                    props.width = `${newWidth}px`
+                    props.imageSize = newWidth
+
                     // props.height = `${newHeightPx}px`;
-                    props.imageSize = `${newWidthPercentage}`
+                    // props.imageSize = `${newWidthPercentage}` // not used anymore
                   }, 1000)
                 }}
               />
@@ -667,14 +691,10 @@ export const ImageSettings = () => {
                 value={picSize}
                 defaultValue={picSize}
                 onValueChange={(value) => {
-                  setProp((props) => (props.picSize = value), 1000)
-                  const sizeMap = {
-                    small: "400px",
-                    medium: "800px",
-                    large: "850px",
-                    full: "870px",
-                  }
-                  setProp((props) => (props.maxWidth = sizeMap[value]), 1000)
+                  setProp((props) => {
+                    props.imageSize = IMAGE_SIZE_MAPPER[value]
+                    props.picSize = value
+                  }, 1000)
                 }}
               >
                 <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
@@ -863,7 +883,7 @@ export const ImageSettings = () => {
             </div>
             <div className="flex gap-2">
               <Button
-                onClick={handleUploadOriginal}
+                onClick={() => handleUploadOriginal(imageFile, image)}
                 variant="secondary"
                 disabled={isLoading}
               >
@@ -909,7 +929,7 @@ export const DefaultPropsImg = {
   width: "90%",
   height: "auto",
   enableLink: false,
-  imageSize: 100,
+  imageSize: 376,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,

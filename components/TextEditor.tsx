@@ -221,7 +221,6 @@ const FloatingToolbar = () => {
     const inFocus = useFocused()
     const [textColor, setTextColor] = useState('#000000')
 
-
     useEffect(() => {
         const el = editorRef.current
         const { selection } = editor
@@ -261,6 +260,8 @@ const FloatingToolbar = () => {
                 return !Editor.isEditor(n) && SlateElement.isElement(n) && (n as any).type === 'link'
             },
         })
+
+
         console.log(linkNode, "linkNode")
         setLinkUrl(linkNode ? (linkNode[0] as any).url : '')
         const marks = Editor.marks(editor)
@@ -281,7 +282,7 @@ const FloatingToolbar = () => {
             // prevent toolbar from taking focus away from editor
             e.preventDefault()
         }}
-            className="fixed z-1000 transition-opacity duration-200"
+            className="fixed z-1000 transition-opacity duration-200 hidden md:block"
         >
             <div className="flex justify-center p-4">
                 <div className="bg-white rounded-lg shadow-md border border-gray-200 p-2 flex items-center space-x-2">

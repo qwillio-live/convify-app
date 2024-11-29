@@ -245,12 +245,11 @@ export const UserInputCheckboxSettings = () => {
               </div>
             )}
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
-                id="backgroundcolor"
                 value={props.backgroundColor}
-                handleChange={(e) => {
-                  handlePropChange("backgroundColor", e.target.value)
+                handleChange={(value) => {
+                  handlePropChange("backgroundColor", value)
                 }}
                 handleRemove={() =>
                   handlePropChange("backgroundColor", "transparent")
@@ -258,12 +257,11 @@ export const UserInputCheckboxSettings = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="textColor">{t("Text Color")}</Label>
+              <Label>{t("Text Color")}</Label>
               <ColorInput
-                id="textColor"
                 value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  handlePropChange("textColor", e.target.value)
+                handleChange={(value) => {
+                  handlePropChange("textColor", value)
                 }}
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />

@@ -164,16 +164,15 @@ export const FAQSettings = () => {
                     <AccordionTrigger>{t("Design")}</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-2">
                         <div className="flex items-center justify-between">
-                            <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+                            <Label>{t("Background Color")}</Label>
                             <ColorInput
                                 value={containerBackground}
-                                handleChange={(e) => {
-                                    debouncedSetProp("containerBackground", e.target.value)
+                                handleChange={(value) => {
+                                    debouncedSetProp("containerBackground", value)
                                 }}
                                 handleRemove={() => {
                                     debouncedSetProp("containerBackground", "transparent")
                                 }}
-                                id="backgroundcolor"
                             />
                         </div>
 
@@ -202,7 +201,7 @@ export const FAQSettings = () => {
                             </Tabs>
                         </div>
                         {/* <div className="flex items-center justify-between">
-                            <Label htmlFor="questionColor">{t("Question Color")}</Label>
+                            <Label>{t("Question Color")}</Label>
                             <ColorInput
                                 value={titleColor}
                                 handleChange={(e) => {
@@ -211,11 +210,10 @@ export const FAQSettings = () => {
                                 handleRemove={() => {
                                     debouncedSetProp("titleColor", primaryColor)
                                 }}
-                                id="questionColor"
                             />
                         </div>
                         <div className="flex items-center justify-between">
-                            <Label htmlFor="answerColor">{t("Answer Color")}</Label>
+                            <Label>{t("Answer Color")}</Label>
                             <ColorInput
                                 value={contentColor}
                                 handleChange={(e) => {
@@ -224,21 +222,19 @@ export const FAQSettings = () => {
                                 handleRemove={() => {
                                     debouncedSetProp("contentColor", secondaryColor)
                                 }}
-                                id="answerColor"
                             />
                         </div> */}
 
                         {presetType === FAQPresetType.blocked && <div className="flex items-center justify-between">
-                            <Label htmlFor="blockColor">{t("Block Color")}</Label>
+                            <Label>{t("Block Color")}</Label>
                             <ColorInput
                                 value={blockColor}
-                                handleChange={(e) => {
-                                    debouncedSetProp("blockColor", e.target.value)
+                                handleChange={(value) => {
+                                    debouncedSetProp("blockColor", value)
                                 }}
                                 handleRemove={() => {
                                     debouncedSetProp("blockColor", "#f5f5f5")
                                 }}
-                                id="blockColor"
                             />
                         </div>}
 

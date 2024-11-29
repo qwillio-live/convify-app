@@ -413,14 +413,11 @@ export const UserInputPhoneSettings = () => {
               </div>
             )}
             <div className="flex items-center justify-between">
-              <Label htmlFor="backgroundcolor">
-                {tComponents("Background Color")}
-              </Label>
+              <Label>{tComponents("Background Color")}</Label>
               <ColorInput
-                id="backgroundcolor"
                 value={props.backgroundColor}
-                handleChange={(e) => {
-                  handlePropChange("backgroundColor", e.target.value)
+                handleChange={(value) => {
+                  handlePropChange("backgroundColor", value)
                 }}
                 handleRemove={() =>
                   handlePropChange("backgroundColor", "transparent")
@@ -428,12 +425,11 @@ export const UserInputPhoneSettings = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="textColor">{tComponents("Label Color")}</Label>
+              <Label>{tComponents("Label Color")}</Label>
               <ColorInput
-                id="textColor"
                 value={textColor === "#ffffff" ? null : textColor}
-                handleChange={(e) => {
-                  handlePropChange("textColor", e.target.value)
+                handleChange={(value) => {
+                  handlePropChange("textColor", value)
                 }}
                 handleRemove={() => handlePropChange("textColor", "#ffffff")}
               />

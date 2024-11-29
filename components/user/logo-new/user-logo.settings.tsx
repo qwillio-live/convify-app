@@ -35,6 +35,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 import { Controller } from "../settings/controller.component"
 import { UserLogo } from "./user-logo.component"
 import { ColorInput } from "@/components/color-input"
+import { MAX_WIDTH_LOGO } from "./useLogoThemePresets"
 
 export const Img = ({
   alt,
@@ -131,6 +132,7 @@ export const LogoSettings = () => {
       uploadedImageUrl,
       uploadedImageMobileUrl,
       borderRad,
+      w,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -181,7 +183,7 @@ export const LogoSettings = () => {
         image.src = imageSrc
         image.onload = async () => {
           let { width, height } = image
-          const maxWidth = 120
+          const maxWidth = MAX_WIDTH_LOGO
           if (width > maxWidth) {
             height = (height * maxWidth) / width
             width = maxWidth
@@ -193,23 +195,37 @@ export const LogoSettings = () => {
             width,
             height
           )
+
+          if(!uploadedImage) return
+
+          const logoSize = `${uploadedImage.logoSize.width}x${uploadedImage.logoSize.height}`
+
+          if(file.type === "image/svg+xml") {
+            setProp((props) => {
+              props.w = `${uploadedImage.logoSize.width}px`
+              props.src = uploadedImage.data.data.images.original
+              props.uploadedImageUrl = uploadedImage.data.data.images.original
+            }, 1000)
+            return
+          }
+
           if (
-            uploadedImage &&
-            uploadedImage.data.data.images[uploadedImage.logoSize]
+            uploadedImage.data.data.images[logoSize]
           ) {
             setProp((props) => {
-              props.src = uploadedImage.data.data.images[uploadedImage.logoSize]
+              props.w = `${uploadedImage.logoSize.width}px`
+              props.src = uploadedImage.data.data.images[logoSize]
               props.uploadedImageUrl =
-                uploadedImage.data.data.images[uploadedImage.logoSize]
+                uploadedImage.data.data.images[logoSize]
             }, 1000)
           }
           if (
             uploadedImage &&
-            uploadedImage.data.data.images[uploadedImage.logoSize]
+            uploadedImage.data.data.images[logoSize]
           ) {
             setProp((props) => {
               props.uploadedImageMobileUrl =
-                uploadedImage.data.data.images[uploadedImage.logoSize]
+                uploadedImage.data.data.images[logoSize]
             }, 1000)
           }
         }
@@ -221,7 +237,7 @@ export const LogoSettings = () => {
   const calculateImageDimensions = (aspectRatio, maxWidth) => {
     const height = maxWidth / aspectRatio
     return {
-      width: maxWidth,
+      width: Math.round(maxWidth),
       height: Math.round(height),
     }
   }
@@ -232,24 +248,33 @@ export const LogoSettings = () => {
     actualWidth,
     actualHeight
   ) => {
-    const maxWidthLogo = 120
-    const logoDimensions = calculateImageDimensions(aspectRatio, maxWidthLogo)
+    let logoDimensions = {
+      width: Math.round(actualWidth),
+      height: Math.round(actualHeight)
+    }
 
     const formData = new FormData()
     formData.append("image", imageData)
     formData.append("file", imageData)
-    formData.append(
-      "sizes[0]",
-      `${logoDimensions.width}x${logoDimensions.height}`
-    )
-    formData.append("sizes[1]", `${actualWidth}x${actualHeight}`)
+    formData.append("sizes[0]", `${Math.round(actualWidth)}x${Math.round(actualHeight)}`)
+
+    if(actualWidth > MAX_WIDTH_LOGO) {
+      logoDimensions = calculateImageDimensions(aspectRatio, MAX_WIDTH_LOGO)
+      formData.append(
+        "sizes[1]",
+        `${logoDimensions.width}x${logoDimensions.height}`
+      )
+    }
     formData.append("bucket_name", "convify-images")
 
     try {
       const response = await axios.post("/api/upload", formData)
       return {
         data: response.data,
-        logoSize: `${logoDimensions.width}x${logoDimensions.height}`,
+        logoSize: {
+          width: logoDimensions.width,
+          height: logoDimensions.height
+        },
       }
     } catch (error) {
       console.error("Error uploading image to S3:", error)
@@ -272,6 +297,7 @@ export const LogoSettings = () => {
           <Input
             type="file"
             className="hidden"
+            accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/svg+xml"
             ref={inputRef}
             onChange={handleInputChange}
           />
@@ -311,7 +337,7 @@ export const LogoSettings = () => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
         type="multiple"
-        defaultValue={["content"]}
+        defaultValue={["content", "design"]}
         className="w-full"
       >
         <AccordionItem value="content">
@@ -394,16 +420,15 @@ export const LogoSettings = () => {
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
             <div className="flex flex-row items-center justify-between">
-              <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
+              <Label>{t("Background Color")}</Label>
               <ColorInput
                 value={containerBackground}
-                handleChange={(e) => {
-                  debouncedSetProp("containerBackground", e.target.value)
+                handleChange={(value) => {
+                  debouncedSetProp("containerBackground", value)
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")
                 }
-                id="backgroundcolor"
               />
             </div>
 
@@ -421,6 +446,27 @@ export const LogoSettings = () => {
                 min={0}
                 step={1}
                 onValueChange={(e) => handlePropChangeDebounced("borderRad", e)}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="size">{t("Size")}</Label>
+                <span className="text-muted-foreground text-xs">
+                  {w}px
+                </span>
+              </div>
+              <Slider
+                defaultValue={[w]}
+                value={[w]}
+                max={300}
+                min={100}
+                step={1}
+                onValueChange={(value) => {
+                  setProp((props) => {
+                    props.w = `${value[0]}`
+                  }, 1000)
+                }}
               />
             </div>
 
