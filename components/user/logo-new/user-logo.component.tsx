@@ -87,7 +87,7 @@ export const LogoComponentGen = ({
   const avatarContainerBackground = avatarComponent
     ? avatarComponent.props.containerBackground
     : null
-
+  console.log("avatarContainerBackground", avatarContainerBackground)
   return (
     <div
       className=""

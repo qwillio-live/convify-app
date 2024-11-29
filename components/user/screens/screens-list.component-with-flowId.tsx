@@ -308,6 +308,19 @@ const ScreensList = ({ flowId }) => {
     console.log("avatarIndex > 0", parsedEditor, avatarIndex > 0)
     return avatarIndex !== -1
   }
+  const avatarContainerColor = JSON.parse(screensHeader)
+
+  // Loop through the data and find the first AvatarComponent
+  const avatarComponent = Object.values(avatarContainerColor).find(
+    //@ts-ignore
+    (item) => item.displayName === "AvatarComponent"
+  )
+
+  // Check if the component is found and return its containerBackground
+  const avatarContainerBackground = avatarComponent
+    ? //@ts-ignore
+      avatarComponent?.props?.containerBackground
+    : null
   return (
     <Accordion
       type="multiple"
@@ -563,8 +576,10 @@ const ScreensList = ({ flowId }) => {
                           <div
                             style={{
                               background:
-                                avatarBackgroundColor !== "rgba(255,255,255,.1)"
-                                  ? avatarBackgroundColor
+                                avatarContainerBackground &&
+                                avatarContainerBackground !==
+                                  "rgba(255,255,255,.1)"
+                                  ? avatarContainerBackground
                                   : backgroundColor,
                             }}
                           >
@@ -622,10 +637,12 @@ const ScreensList = ({ flowId }) => {
                         <div
                           style={{
                             background:
-                              avatarBackgroundColor !== "rgba(255,255,255,.1)"
-                                ? avatarBackgroundColor
+                              avatarContainerBackground &&
+                              avatarContainerBackground !==
+                                "rgba(255,255,255,.1)"
+                                ? avatarContainerBackground
                                 : backgroundColor,
-
+                            // backgroundColor: backgroundColor,
                             // overflow: "auto", // Make content scrollable within the 30% area
                           }}
                         >
