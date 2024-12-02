@@ -591,7 +591,7 @@ export function CreateFlowComponent({ flowId }) {
                           ? width + "px"
                           : "100%",
                         top: "0",
-                        zIndex: 20,
+                        zIndex: 1,
                         height: "auto",
                         backgroundColor:
                           avatarContainerBackground &&

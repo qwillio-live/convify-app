@@ -12,6 +12,7 @@ import { debounce } from 'lodash'
 import { UserInputSizes } from '../input/user-input.component'
 import { borderWidth } from 'polished'
 import { IconType } from './useFaqThemePresets'
+import { TextEditor } from '@/components/TextEditor'
 
 export enum FAQSizes {
   small = "small",
@@ -294,7 +295,7 @@ const FAQItem = ({
   paddingValueBlocked = 20,
   paddingValueNonBlocked = 16,
   onQuestionChange = (updatedQuestion: string) => { },
-  onAnswerChange = (updatedAnswer: string) => { },
+  onAnswerChange = (updatedAnswer: string | undefined) => { },
 }) => {
   const [isOpen, setIsOpen] = useState(item.defaultOpen ?? false)
   const [questionValue, setQuestionValue] = useState(item.question)
@@ -316,7 +317,7 @@ const FAQItem = ({
 
   useEffect(() => {
     setAnswerValue(item.answer)
-  }, [item.answer])
+  }, [item.answer])  
 
   const DropdownIcon = iconType === IconType.plus ? <Plus size={24} /> : <ChevronDown size={24} />
   return (
@@ -367,7 +368,7 @@ const FAQItem = ({
           <div ref={answerRef}>
             {/** @ts-ignore */}
             {/** @ts-ignore */}
-            <ContentEditable
+            {/* <ContentEditable
               className="answer-text"
               html={answerValue}
               disabled={disabled}
@@ -375,7 +376,17 @@ const FAQItem = ({
                 setAnswerValue(e.target.value)
                 onAnswerChange(e.target.value)
               }}
-            />
+            /> */}
+            <TextEditor
+              initValue={[{
+                type: "paragraph",
+                children : [{text : answerValue}]
+                }]}
+              onChange={(val) => {
+                  setAnswerValue(val?.[0]?.children?.[0]?.text)
+                onAnswerChange(val?.[0]?.children?.[0]?.text)
+                }}
+              />
           </div>
         </div>
       </div>
