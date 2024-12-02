@@ -376,18 +376,15 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           className="checkbox-input-comp relative overflow-hidden focus-visible:ring-0 focus-visible:ring-transparent"
         >
           <div
-            className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
-            style={{
-              backgroundColor: containerHover
-                ? darkenedBg
-                : props.backgroundColor,
-            }}
+            className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent`}
           >
             <UserInputCheckboxStyled
               data-label={props?.fieldName || ""}
               ref={inputRef}
               textColor={props.textColor}
-              backgroundColor={props.backgroundColor}
+              backgroundColor={containerHover
+                ? darkenedBg
+                : props.backgroundColor}
               borderColor={
                 containerHover || isFilled
                   ? props.activeBorderColor.value
@@ -516,7 +513,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                       }
                     }}
                     checkmarkColor={checkmarkColor}
-                    checkmarkBorder={checkmarkBorder}
+                    checkmarkBorder={props.activeBorderColor.value}
                     style={{
                       zIndex: 10,
                     }}
