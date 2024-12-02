@@ -405,7 +405,21 @@ export const UserInputCheckboxGen = ({ ...props }) => {
               topRightRadius={props.topRightRadius}
               bottomLeftRadius={props.bottomLeftRadius}
               bottomRightRadius={props.bottomRightRadius}
+              onMouseEnter={(e) => {
+                e.stopPropagation()
+                setContainerHover(true)
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation()
+                setContainerHover(false)
+              }}
               // width={props.width}
+              style={{
+                backgroundColor:
+                  containerHover || isFilled
+                    ? darkenedBg
+                    : props.backgroundColor,
+              }}
               size={props.size}
               className={cn(
                 `ring-opacity-0/0 w-full px-3 py-2 text-base font-normal
