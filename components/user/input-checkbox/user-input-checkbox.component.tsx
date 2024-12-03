@@ -771,7 +771,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                   isChecked={isChecked}
                   onCheckedChange={handleCheckChange}
                   checkmarkColor={checkmarkColor}
-                  checkmarkBorder={checkmarkBorder}
+                  checkmarkBorder={props.activeBorderColor.value}
                   style={{
                     zIndex: 10,
                   }}

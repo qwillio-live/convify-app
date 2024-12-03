@@ -59,7 +59,7 @@ export const Controller = ({ nameOfComponent, className }: Props) => {
     selected?.name !== "ScreenFooter" ? (
     <div
       className={cn(
-        "special absolute bottom-full left-0 z-[5] flex flex-row items-center gap-4 border-0 bg-blue-500 p-2 text-xs text-white",
+        "special absolute bottom-full left-0 z-[1] flex flex-row items-center gap-4 border-0 bg-blue-500 p-2 text-xs text-white",
         className
       )}
     >

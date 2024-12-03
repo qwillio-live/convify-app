@@ -121,6 +121,7 @@ export const FAQGen = ({
             item={item}
             hideBorder={index === (len - 1)}
             disabled={true}
+
           />
         ))}
       </StyledFAQContainer>
@@ -158,7 +159,7 @@ export const FAQ = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-
+  
   const [hover, setHover] = useState(false)
   const t = useTranslations('Components')
 
@@ -385,7 +386,8 @@ const FAQItem = ({
               onChange={(val) => {
                   setAnswerValue(val?.[0]?.children?.[0]?.text)
                 onAnswerChange(val?.[0]?.children?.[0]?.text)
-                }}
+              }}
+              isReadOnly={disabled ? true : false}
               />
           </div>
         </div>
