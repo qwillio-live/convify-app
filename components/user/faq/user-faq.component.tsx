@@ -13,6 +13,18 @@ import { UserInputSizes } from '../input/user-input.component'
 import { borderWidth } from 'polished'
 import { IconType } from './useFaqThemePresets'
 import { TextEditor } from '@/components/TextEditor'
+import { getComputedValueForTextEditor, serialize } from '@/lib/utils'
+
+function parseInput(input) {
+  try {
+    const parsed = JSON.parse(input);
+    if (typeof parsed === 'object' && parsed !== null) {
+      return parsed;
+    }
+  } catch (e) {
+    return input;
+  }
+}
 
 export enum FAQSizes {
   small = "small",
@@ -121,7 +133,6 @@ export const FAQGen = ({
             item={item}
             hideBorder={index === (len - 1)}
             disabled={true}
-
           />
         ))}
       </StyledFAQContainer>
@@ -159,7 +170,7 @@ export const FAQ = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
-  
+
   const [hover, setHover] = useState(false)
   const t = useTranslations('Components')
 
@@ -317,7 +328,19 @@ const FAQItem = ({
   }, [item.question])
 
   useEffect(() => {
-    setAnswerValue(item.answer)
+    const parsedAnswer = parseInput(item?.answer);
+
+    if (typeof parsedAnswer !== 'string') {
+      setAnswerValue(parsedAnswer);
+    } else {
+      // setAnswerValue([
+      //   {
+      //     type: "paragraph",
+      //     children: [{ text: parsedAnswer }],
+      //   },
+      // ]);
+      setAnswerValue(item?.answer);
+    }
   }, [item.answer])  
 
   const DropdownIcon = iconType === IconType.plus ? <Plus size={24} /> : <ChevronDown size={24} />
@@ -379,13 +402,11 @@ const FAQItem = ({
               }}
             /> */}
             <TextEditor
-              initValue={[{
-                type: "paragraph",
-                children : [{text : answerValue}]
-                }]}
+              initValue={getComputedValueForTextEditor(answerValue)}
               onChange={(val) => {
-                  setAnswerValue(val?.[0]?.children?.[0]?.text)
-                onAnswerChange(val?.[0]?.children?.[0]?.text)
+                const serialized = serialize(val)
+                  setAnswerValue(serialized)
+                onAnswerChange(serialized)
               }}
               isReadOnly={disabled ? true : false}
               />
