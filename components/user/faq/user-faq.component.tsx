@@ -13,7 +13,7 @@ import { UserInputSizes } from '../input/user-input.component'
 import { borderWidth } from 'polished'
 import { IconType } from './useFaqThemePresets'
 import { TextEditor } from '@/components/TextEditor'
-import { getComputedValueForTextEditor ,sanitizeHtmlValue,serialize} from '@/lib/utils'
+import { getComputedValueForTextEditor,serialize} from '@/lib/utils'
 
 export enum FAQSizes {
   small = "small",
