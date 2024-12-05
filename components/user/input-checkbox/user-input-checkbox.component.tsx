@@ -295,6 +295,8 @@ export const UserInputCheckboxGen = ({ ...props }) => {
       ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
       : false
   })
+
+  console.log('console::',isRequired)
   useEffect(() => {
     // if (inputRef.current) inputRef.current.value = screenData
     setInputValue(screenData)
@@ -348,6 +350,12 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   }
   const darkenedBg = getHoverBackgroundForPreset(primaryColor)
 
+  const changeColor = (checked) => {
+    console.log('checked::',checked)
+    setCheckmarkColor(checked ? primaryColor || "#748BA7" : "#748BA7")
+    setCheckmarkBorder(checked ? primaryColor || "#dfdfdf" : "#dfdfdf")
+  }
+
   // console.log("props.textColor", props.textColor)
   return (
     <div
@@ -378,7 +386,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
           <div
             className={`field-container flex w-auto flex-row items-center gap-0 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-transparent `}
             style={{
-              backgroundColor: containerHover
+              backgroundColor: containerHover || isFilled
                 ? darkenedBg
                 : props.backgroundColor,
             }}
@@ -423,6 +431,14 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 ${alarm && isRequired && !isFilled && "!border-red-600"}
                 `
               )}
+              onMouseEnter={(e) => {
+                e.stopPropagation()
+                setContainerHover(true)
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation()
+                setContainerHover(false)
+              }}
             >
               <div
                 className={`mb-1 flex text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
@@ -455,7 +471,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                     isActive={props.isActive}
                     isHovered={containerHover}
                     isChecked={isFilled}
-                    onCheckedChange={() => {
+                    onCheckedChange={(e) => {
                       if (isRequired) {
                         if (isFilled) {
                           // If the checkbox is already filled, uncheck it
@@ -500,7 +516,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                           return newState // Return the new state value
                         })
                       }
+                      changeColor(e)
                     }}
+                    
                     checkmarkColor={checkmarkColor}
                     checkmarkBorder={checkmarkBorder}
                     style={{
@@ -575,6 +593,8 @@ export const UserInputCheckbox = ({ ...props }) => {
 
   const handleCheckChange = (checked: boolean) => {
     setIsChecked(checked)
+    setCheckmarkColor(checked ? primaryColor || "#748BA7" : "#748BA7");
+    setCheckmarkBorder(checked ? primaryColor || "#748BA7" : '#dfdfdf');
     setProp((props) => (props.isActive = checked))
   }
 
@@ -719,7 +739,7 @@ export const UserInputCheckbox = ({ ...props }) => {
                 }
               }}
               style={{
-                zIndex: 1,
+                zIndex: containerHover ? 50 : 1,
                 backgroundColor: containerHover
                   ? darkenedBg
                   : props.backgroundColor,
