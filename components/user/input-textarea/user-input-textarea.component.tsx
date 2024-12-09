@@ -647,7 +647,7 @@ export const UserInputTextarea = ({ ...props }) => {
               data-value={props.inputValue}
               id={props.id}
               ref={textAreaRef}
-              textColor={`#fff`}
+              textColor={props.textColor || "#000000"}
               backgroundColor={props.backgroundColor}
               borderColor={
                 props.isActive
