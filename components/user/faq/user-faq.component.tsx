@@ -13,7 +13,7 @@ import { UserInputSizes } from '../input/user-input.component'
 import { borderWidth } from 'polished'
 import { IconType } from './useFaqThemePresets'
 import { TextEditor } from '@/components/TextEditor'
-import { getComputedValueForTextEditor,serialize} from '@/lib/utils'
+import { getComputedValueForTextEditor,serialize , deserialize, getTextContentOfEditor} from '@/lib/utils'
 
 export enum FAQSizes {
   small = "small",
@@ -373,9 +373,8 @@ const FAQItem = ({
             isReadOnly={disabled}
             initValue={getComputedValueForTextEditor(answerValue)}
             onChange={(val) => {
-              const serialized = serialize(val)
-              setAnswerValue(serialized)
-                onAnswerChange(serialized)
+              setAnswerValue(val)
+              onAnswerChange((val))
             }}
           />
           </div>
