@@ -12,6 +12,8 @@ import { debounce } from 'lodash'
 import { UserInputSizes } from '../input/user-input.component'
 import { borderWidth } from 'polished'
 import { IconType } from './useFaqThemePresets'
+import { TextEditor } from '@/components/TextEditor'
+import { getComputedValueForTextEditor,serialize , deserialize, getTextContentOfEditor} from '@/lib/utils'
 
 export enum FAQSizes {
   small = "small",
@@ -367,15 +369,14 @@ const FAQItem = ({
           <div ref={answerRef}>
             {/** @ts-ignore */}
             {/** @ts-ignore */}
-            <ContentEditable
-              className="answer-text"
-              html={answerValue}
-              disabled={disabled}
-              onChange={(e) => {
-                setAnswerValue(e.target.value)
-                onAnswerChange(e.target.value)
-              }}
-            />
+            <TextEditor
+            isReadOnly={disabled}
+            initValue={getComputedValueForTextEditor(answerValue)}
+            onChange={(val) => {
+              setAnswerValue(val)
+              onAnswerChange((val))
+            }}
+          />
           </div>
         </div>
       </div>

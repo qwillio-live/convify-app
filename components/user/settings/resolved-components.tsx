@@ -133,7 +133,7 @@ const ResolvedComponentsFromCraftState = ({
             {...props}
             parentNodeId={parentNodeId}
             nodeId={nodeId}
-            key={nodeId}
+            key={`${nodeId}-${JSON.stringify(props)}`}
             scrollY={scrollY}
           >
             {linkedNodesElements}
@@ -143,7 +143,7 @@ const ResolvedComponentsFromCraftState = ({
             {...props}
             parentNodeId={parentNodeId}
             nodeId={nodeId}
-            key={nodeId}
+            key={`${nodeId}-${JSON.stringify(props)}`}
           >
             {linkedNodesElements}
           </div>
@@ -158,7 +158,7 @@ const ResolvedComponentsFromCraftState = ({
       console.error("Error parsing craft state: ", error)
       return <div>Error loading components.</div>
     }
-  }, [screen, globalTheme])
+  }, [JSON.stringify(screen), globalTheme])
 
   return <>{toRender}</>
 }

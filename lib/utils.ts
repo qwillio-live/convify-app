@@ -77,22 +77,26 @@ export const deserialize = string => {
 }
 
 export const getComputedValueForTextEditor = text => {
-  let val;
-  let computedValue = [{
-    type: 'paragraph',
-    children: [{ text: text }]
-  }]
-  try {
-    val = deserialize(text)
-    if (Array.isArray(val)) {
-      console.log(val, "check")
-      computedValue = val
+  if(typeof text !== 'string') {
+    return text
+  }else{
+    let val;
+    let computedValue = [{
+      type: 'paragraph',
+      children: [{ text: text }]
+    }]
+    try {
+      val = deserialize(text)
+      if (Array.isArray(val)) {
+        console.log(val, "check")
+        computedValue = val
+      }
     }
+    catch (e) {
+      console.log(e)
+    }
+    return computedValue
   }
-  catch (e) {
-    console.log(e)
-  }
-  return computedValue
 }
 
 export const getTextContentOfEditor = (value) => {
