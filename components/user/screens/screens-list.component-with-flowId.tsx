@@ -73,7 +73,7 @@ const ScreensList = ({ flowId }) => {
   const headerMode = useAppSelector((state) => state?.screen?.headerMode)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
   const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
+    (state) => state?.screen?.screens[selectedScreen?.screenId ?? 0]?.avatarBackgroundColor
   )
 
   const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(false)

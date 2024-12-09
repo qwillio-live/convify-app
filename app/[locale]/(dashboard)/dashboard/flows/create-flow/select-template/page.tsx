@@ -1,34 +1,31 @@
-"use client"
-import React, { useState, useRef, useEffect } from "react"
-import { Separator } from "@/components/ui/separator"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Badge } from "@/components/ui/badge"
-import cardDemo from "@/assets/images/card_demo.png"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, Loader2 } from "lucide-react"
-import { useTranslations } from "next-intl"
-import Link from "next/link"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { json } from "stream/consumers"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import {
-  setNewFlowSettings,
-  setTemplateId,
-  setTemplateLink,
-} from "@/lib/state/flows-state/features/theme/globalewTheme"
-import { Drawer } from "@/components/ui/drawer"
-import { DrawerContent } from "@/components/ui/drawerDesctop"
-import { env } from "@/env.mjs"
-import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare"
-import { cn } from "@/lib/utils"
+"use client";
+
+import { json } from "stream/consumers";
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import cardDemo from "@/assets/images/card_demo.png";
+import { ChevronLeft, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+
+
+import { env } from "@/env.mjs";
+import { setNewFlowSettings, setTemplateId, setTemplateLink } from "@/lib/state/flows-state/features/theme/globalewTheme";
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Drawer } from "@/components/ui/drawer";
+import { DrawerContent } from "@/components/ui/drawerDesctop";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { ShareDrawerDesktop } from "@/components/sections/createFlow/share/drawerDesktopShare";
+
+
+
+
 
 export default function SelectTemplate() {
   const [loadingCardIndex, setLoadingCardIndex] = useState<number | null>(null)
@@ -234,7 +231,7 @@ export default function SelectTemplate() {
                           setNewFlowSettings(scratchTemplate?.templateSettings)
                         )
                         dispatch(setTemplateId(scratchTemplate?.id))
-                        router.push("./select-color")
+                        router.push("/dashboard/flows/create-flow/select-color")
                       }}
                     >
                       {t("startFromScratch")}
