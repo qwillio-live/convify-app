@@ -211,7 +211,7 @@ export function CreateFlowComponent({ flowId }) {
   // const previousAvatarComponentId = useAppSelector(
   //   (state) => state.screen?.previousAvatarComponentId
   // )
-  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader ?? "")
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
   const avatarBackgroundColor = useAppSelector(

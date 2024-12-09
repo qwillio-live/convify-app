@@ -200,11 +200,6 @@ export function CreateFlowComponent() {
   const headerPosition =
     useAppSelector((state) => state?.theme?.header?.headerPosition) ||
     "relative"
-  const firstScreenName =
-    useAppSelector((state) => state?.screen?.firstScreenName) || ""
-  const editorLoadLength = useAppSelector(
-    (state) => Object.keys(state?.screen?.editorLoad).length
-  )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
