@@ -388,6 +388,7 @@ export const TextImageComponentGen = ({
   const adjustedHorizontalGap = Math.min(horizontalGap, 100)
   const totalGap = adjustedHorizontalGap
   const pathname = usePathname()
+  console.log("CHECKL", width);
   return (
     <div
       style={{
@@ -449,6 +450,7 @@ export const TextImageComponentGen = ({
                       alt={alt}
                       src={src}
                       style={{
+                        width: width === "medium" ? "90%" : width,
                         height: height,
                         borderRadius: `${cornerRadius}px`,
                         backgroundColor: background,
@@ -1497,8 +1499,8 @@ export const TextImageDefaultProps: TextImageProps = {
   split: 6,
   buttonAction: "next-screen",
   bothAlign: "start",
-  horizontalGap: 20,
-  verticalGap: 10,
+  horizontalGap: 0,
+  verticalGap: 0,
   titleFontSize: 32,
   titleFontWeight: "bold",
   textFontWeight: "normal",
