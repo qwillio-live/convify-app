@@ -7,6 +7,7 @@ import { ChangeEventHandler, forwardRef } from "react"
 interface ColorPickerWithSuggestionsProps {
   className?: string
   color?: string
+  style?: React.CSSProperties
   onChange: ChangeEventHandler<HTMLInputElement> | ((color: string) => void)
 }
 
@@ -34,7 +35,7 @@ const ColorPicker = ({ color, onChange, ...rest }) => {
 }
 
 export const ColorPickerWithSuggestions = forwardRef<HTMLDivElement, ColorPickerWithSuggestionsProps>((props, ref) => {
-  const { className = '', color, onChange, ...rest } = props
+  const { style = {}, className = '', color, onChange, ...rest } = props
 
   const generateSuggestions = (baseColor) => {
     const colorObj = tinycolor(baseColor)
@@ -50,7 +51,7 @@ export const ColorPickerWithSuggestions = forwardRef<HTMLDivElement, ColorPicker
   const suggestions = generateSuggestions(color)
 
   return (
-    <div ref={ref} className={`rounded-lg border bg-white p-2 ${className}`}>
+    <div ref={ref} style={style} className={`rounded-lg border bg-white p-2 ${className}`}>
       <ColorPicker color={color} onChange={onChange} {...rest} />
       <div className="mt-2 grid grid-cols-5 gap-px">
         {suggestions.map((suggestion, index) => (
