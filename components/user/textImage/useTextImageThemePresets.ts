@@ -115,7 +115,8 @@ const useButtonThemePresets = () => {
         imageSize: 0,
         bothAlign: 'top',
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false,
     };
 
     const outLinePreset: TextImageProps = {
@@ -214,7 +215,8 @@ const useButtonThemePresets = () => {
         Right: 0,
         imageSize: 0,
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false,
     };
 
     return { filledPreset, outLinePreset };
