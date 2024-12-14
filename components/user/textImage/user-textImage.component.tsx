@@ -388,7 +388,6 @@ export const TextImageComponentGen = ({
   const adjustedHorizontalGap = Math.min(horizontalGap, 100)
   const totalGap = adjustedHorizontalGap
   const pathname = usePathname()
-  console.log("CHECKL", width);
   return (
     <div
       style={{

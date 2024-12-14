@@ -1,6 +1,8 @@
 import { X } from "lucide-react"
-import { Input } from "./ui/input"
 import { cn } from "@/lib/utils"
+import { ColorPickerWithSuggestions } from "./color-picker-with-suggestions"
+import { useRef, useState } from "react"
+import { useOnClickOutside } from "@/hooks/use-click-outside"
 
 interface ColorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string
@@ -15,10 +17,25 @@ export function ColorInput({
   className,
   ...rest
 }: ColorInputProps) {
-  console.log(value)
+  const pickerRef = useRef<HTMLDivElement>(null)
+  const [isPickerVisible, setIsPickerVisible] = useState(false)
+
+  const onChange = (color: string) => {
+    handleChange({ target: { value: color } } as React.ChangeEvent<HTMLInputElement>)
+  }
+
+  const handleClick = () => {
+    setIsPickerVisible((visible) => !visible)
+  }
+
+  const handleClose = () => {
+    setIsPickerVisible(false)
+  }
+
+  useOnClickOutside(pickerRef, handleClose)
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("relative flex items-center gap-2", className)}>
       <div
         style={{
           backgroundColor:
@@ -33,15 +50,20 @@ export function ColorInput({
             Choose
           </div>
         )}
-
-        <Input
-          type="color"
-          onChange={handleChange}
-          value={value}
-          className="h-8.5 opacity-0"
-          {...rest}
-        />
+        <button className="absolute w-full h-full opacity-0 cursor-pointer left-0 top-0" onClick={handleClick} />
       </div>
+      <ColorPickerWithSuggestions
+        ref={pickerRef}
+        className={cn(
+          'hidden absolute min-w-52 right-0 top-9 z-30',
+          {
+            'block': isPickerVisible,
+          }
+        )}
+        color={value}
+        onChange={onChange}
+        {...rest}
+      />
       {!!handleRemove
         ? typeof value === "string" &&
           value[0] === "#" && (
