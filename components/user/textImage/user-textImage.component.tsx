@@ -448,11 +448,20 @@ export const TextImageComponentGen = ({
                     <img
                       alt={alt}
                       src={src}
+                      className={cn(
+                        `w-100% md:w-[${width}] md:!m-0`,
+                        {
+                          'md:w-[90%]': width === "medium",
+                        }
+                      )}
                       style={{
-                        width: width === "medium" ? "90%" : width,
                         height: height,
                         borderRadius: `${cornerRadius}px`,
                         backgroundColor: background,
+                        marginLeft: `${Left}px`,
+                        marginRight: `${Right}px`,
+                        marginTop: `${Top}px`,
+                        marginBottom: `${Bottom}px`,
                       }}
                     />
                   </div>
