@@ -6,7 +6,7 @@ import { ChangeEventHandler, forwardRef } from "react"
 
 interface ColorPickerWithSuggestionsProps {
   className?: string
-  color: string
+  color?: string
   onChange: ChangeEventHandler<HTMLInputElement> | ((color: string) => void)
 }
 
@@ -65,3 +65,5 @@ export const ColorPickerWithSuggestions = forwardRef<HTMLDivElement, ColorPicker
     </div>
   )
 })
+
+ColorPickerWithSuggestions.displayName = "ColorPickerWithSuggestions"
