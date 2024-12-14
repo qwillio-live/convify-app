@@ -423,6 +423,14 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 ${alarm && isRequired && !isFilled && "!border-red-600"}
                 `
               )}
+              onMouseEnter={(e) => {
+                e.stopPropagation()
+                setContainerHover(true)
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation()
+                setContainerHover(false)
+              }}
             >
               <div
                 className={`mb-1 flex text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
