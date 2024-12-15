@@ -425,10 +425,6 @@ export const ImageSettings = () => {
     setActiveAspectRatioBtn("landscapeo")
   }
 
-  const themeBackgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
-
   return (
     <>
       <Card className="mb-2 mt-4 p-2">
@@ -588,7 +584,7 @@ export const ImageSettings = () => {
               <Slider
                 defaultValue={[radiusCorner]}
                 value={[radiusCorner]}
-                max={200}
+                max={15}
                 min={0}
                 step={1}
                 onValueChange={(e) =>
@@ -601,35 +597,33 @@ export const ImageSettings = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="size">{t("Size")}</Label>
                 <span className="text-muted-foreground text-xs">
-                  {imageSize}
+                  {imageSize === "full" ? imageSize : parseInt(imageSize, 10)}
                 </span>
               </div>
               <Slider
-                defaultValue={[imageSize]}
-                value={[imageSize]}
-                max={100}
-                min={0}
+                defaultValue={[imageSize === "full" ? 800 : parseInt(imageSize, 10)]}
+                value={[imageSize === "full" ? 800 : parseInt(imageSize, 10)]}
+                max={800}
+                min={250}
                 step={1}
                 onValueChange={(e) => {
-                  const newWidthPercentage = e[0]
-                  const maxWidthPx = parseInt(maxWidth, 10)
-                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
-                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
-                  const newHeightPx = newWidthPx * aspectRatio
+                  const newWidthPx = e[0]
+                  let picSize = IconButtonSizes.full
 
-                  // Logging to see the calculated values
-                  console.log("New width percentage:", newWidthPercentage)
-                  console.log("Max width in px:", maxWidthPx)
-                  console.log("New width in px:", newWidthPx)
-                  console.log("Aspect ratio:", aspectRatio)
-                  console.log("New height in px:", newHeightPx)
+                  if (newWidthPx >= 250 && newWidthPx < 376) {
+                    picSize = IconButtonSizes.small
+                  } else if (newWidthPx >= 376 && newWidthPx < 800) {
+                    picSize = IconButtonSizes.medium
+                  } else if (newWidthPx >= 800) {
+                    picSize = IconButtonSizes.large
+                  }
 
                   handlePropChangeDebounced("imageSize", e)
 
                   setProp((props) => {
+                    props.picSize = picSize
                     props.width = `${newWidthPx}px`
-                    // props.height = `${newHeightPx}px`;
-                    props.imageSize = `${newWidthPercentage}`
+                    props.imageSize = `${newWidthPx}px`
                   }, 1000)
                 }}
               />
@@ -667,14 +661,22 @@ export const ImageSettings = () => {
                 value={picSize}
                 defaultValue={picSize}
                 onValueChange={(value) => {
-                  setProp((props) => (props.picSize = value), 1000)
                   const sizeMap = {
+                    small: "250px",
+                    medium: "376px",
+                    large: "800px",
+                    full: "full",
+                  }
+                  setProp((props) => (props.imageSize = sizeMap[value]), 1000)
+                  setProp((props) => (props.width = sizeMap[value] === "full" ? "100%" : sizeMap[value]), 1000)
+                  setProp((props) => (props.picSize = value), 1000)
+                  const maxSizeMap = {
                     small: "400px",
                     medium: "800px",
                     large: "850px",
                     full: "870px",
                   }
-                  setProp((props) => (props.maxWidth = sizeMap[value]), 1000)
+                  setProp((props) => (props.maxWidth = maxSizeMap[value]), 1000)
                 }}
               >
                 <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
@@ -892,7 +894,7 @@ export const ImageSettings = () => {
 
 export const DefaultPropsImg = {
   alt: "Image",
-  radiusCorner: 0,
+  radiusCorner: 15,
   size: "medium",
   // picSize: IconButtonSizes.medium,
   marginTop: "20px",
@@ -909,7 +911,7 @@ export const DefaultPropsImg = {
   width: "90%",
   height: "auto",
   enableLink: false,
-  imageSize: 100,
+  imageSize: "376px",
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,
