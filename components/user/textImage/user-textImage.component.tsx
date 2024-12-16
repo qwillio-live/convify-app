@@ -78,7 +78,6 @@ const Wrapper = styled.div<{
   margin-right: auto;
 
   ${({ size, mobileScreen, isPreviewScreen, isEditorScreen }) => {
-    console.log("isEditorScreensdksdcsdc", isEditorScreen)
     if (mobileScreen) {
       return { width: "calc(100% - 22px)", maxWidth: "calc(100% - 22px)" }
     } else if (isPreviewScreen && !isEditorScreen) {
@@ -449,9 +448,11 @@ export const TextImageComponentGen = ({
                       alt={alt}
                       src={src}
                       className={cn(
-                        `w-100% md:w-[${width}] md:!m-0`,
+                        `w-100% md:!m-0`,
                         {
-                          'md:w-[90%]': width === "medium",
+                          'md:w-[80%]': size === TextImageSizes.small,
+                          'md:w-[90%]': size === TextImageSizes.medium,
+                          'md:w-[95%]': size === TextImageSizes.large,
                         }
                       )}
                       style={{
@@ -608,6 +609,10 @@ export const TextImageComponentGen = ({
                         height: height,
                         borderRadius: `${cornerRadius}px`,
                         backgroundColor: background,
+                        marginLeft: `${Left}px`,
+                        marginRight: `${Right}px`,
+                        marginTop: `${Top}px`,
+                        marginBottom: `${Bottom}px`,
                       }}
                     />
                   </div>

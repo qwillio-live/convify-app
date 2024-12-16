@@ -6,17 +6,7 @@ import { useTranslations } from "next-intl"
 import React from "react"
 import styled from "styled-components"
 
-import { Button } from "../button/user-button.component"
-import {
-  Container,
-  ContainerDefaultProps,
-  UserContainerSettings,
-} from "../container/user-container.component"
-import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
-import { UserInputMail } from "../input-email/user-input-mail.component"
-import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
-import { UserText } from "../text/user-text.component"
 import { CardContainerSettings } from "./user-card-settings"
 
 interface CardOuterStyles {
@@ -265,9 +255,9 @@ export enum CardSizes {
   full = "full",
 }
 const CardSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "376px",
+  medium: "800px",
+  large: "1000px",
   full: "100%",
 }
 
