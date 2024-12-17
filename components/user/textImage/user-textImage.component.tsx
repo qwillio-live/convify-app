@@ -33,6 +33,7 @@ import {
 import { TextImageSettings } from "./user-textImage.settings"
 import { usePathname } from "next/navigation"
 import { TextEditor } from "@/components/TextEditor"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 const IconsList = {
   aperture: (props) => <Aperture {...props} />,
@@ -314,6 +315,7 @@ export const TextImageComponentGen = ({
   showTitle,
   ...props
 }) => {
+  const isMobileScreen = useMediaQuery("(max-width: 768px)")
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -387,6 +389,7 @@ export const TextImageComponentGen = ({
   const adjustedHorizontalGap = Math.min(horizontalGap, 100)
   const totalGap = adjustedHorizontalGap
   const pathname = usePathname()
+
   return (
     <div
       style={{
@@ -421,11 +424,11 @@ export const TextImageComponentGen = ({
           {
             /* eslint-disable-next-line @next/next/no-img-element */
             <div
-              className="flex-col md:flex-row "
+              className="flex-col md:flex-row"
               style={{
                 display: "flex",
                 width: "100%",
-                gap: `${totalGap}px`,
+                gap: isMobileScreen ? `${verticalGap}px` : `${totalGap}px`,
                 marginLeft: `${Left}px`,
                 marginRight: `${Right}px`,
                 marginTop: `${Top}px`,
@@ -442,19 +445,17 @@ export const TextImageComponentGen = ({
                       display: "flex",
                       justifyContent: "center",
                       flex: "50%",
+                      marginBottom: isMobileScreen ? `${verticalGap}px` : "0",
                     }}
                   >
                     <img
                       alt={alt}
                       src={src}
-                      className={cn(
-                        `w-100% md:!m-0`,
-                        {
-                          'md:w-[80%]': size === TextImageSizes.small,
-                          'md:w-[90%]': size === TextImageSizes.medium,
-                          'md:w-[95%]': size === TextImageSizes.large,
-                        }
-                      )}
+                      className={cn(`w-100% md:!m-0`, {
+                        "md:w-[80%]": size === TextImageSizes.small,
+                        "md:w-[90%]": size === TextImageSizes.medium,
+                        "md:w-[95%]": size === TextImageSizes.large,
+                      })}
                       style={{
                         height: height,
                         borderRadius: `${cornerRadius}px`,
@@ -498,9 +499,9 @@ export const TextImageComponentGen = ({
                           initValue={getComputedValueForTextEditor(title)}
                         />
                       </div>
-                      ) : (
-                        ""
-                      )}
+                    ) : (
+                      ""
+                    )}
                     <div
                       style={{
                         maxWidth: "100%",
@@ -562,9 +563,9 @@ export const TextImageComponentGen = ({
                           initValue={getComputedValueForTextEditor(title)}
                         />
                       </div>
-                      ) : (
-                        ""
-                      )}
+                    ) : (
+                      ""
+                    )}
                     <div
                       style={{
                         maxWidth: "100%",
