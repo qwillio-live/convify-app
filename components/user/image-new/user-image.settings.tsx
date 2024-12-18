@@ -222,6 +222,25 @@ export const ImageSettings = () => {
     }
   }
 
+  const loadImageAndSetSrc = (imageUrl: string) => {
+    const img = new Image()
+    img.onload = () => {
+      // Image is accessible, set it as the src
+      setProp((props) => {
+        props.src = imageUrl
+        props.uploadedImageUrl = imageUrl
+      })
+    }
+    img.onerror = () => {
+      // Image not accessible yet, retry after a delay
+      setTimeout(() => {
+        loadImageAndSetSrc(imageUrl)
+      }, 1000) // retry after 1 second
+    }
+    img.src = imageUrl
+  }
+
+
   const uploadToS3 = async (imageData, aspectRatio) => {
     const maxWidthMobile = 500
     const maxWidthDesktop = 1000
@@ -275,27 +294,22 @@ export const ImageSettings = () => {
         const mobileImage =
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
-        // Set props with a timeout of 6 seconds
-        setTimeout(() => {
-          if (desktopImage) {
-            setProp((props) => {
-              props.src = desktopImage
-              props.uploadedImageUrl =
-                uploadedImage.data.data[uploadedImage.desktopSize]
-            })
-          }
+        if (desktopImage) {
+          // Instead of setTimeout, use the loadImageAndSetSrc function
+          loadImageAndSetSrc(desktopImage)
+        }
 
-          if (mobileImage) {
-            setProp((props) => {
-              props.uploadedImageMobileUrl = mobileImage
-            })
-          }
-        }, 6000) // 6000 milliseconds = 6 seconds
+        if (mobileImage) {
+          setProp((props) => {
+            props.uploadedImageMobileUrl = mobileImage
+          })
+        }
       }
 
       setIsLoading(false)
     }
   }
+
 
   console.log("src is: ", src)
 
@@ -331,44 +345,19 @@ export const ImageSettings = () => {
   const getCropData = async () => {
     setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
-      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
-      setProp(
-        (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
-        1000
-      )
-      // setProp((props) => (props.width = "100%"), 1000)
-      setProp((props) => (props.height = "auto"), 1000)
-      setShowDialog(false)
-      setActiveAspectRatioBtn("source")
-      setProp(
-        (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
-        1000
-      )
       const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
       const croppedDataUrl = croppedCanvas.toDataURL()
 
-      // Set crop data immediately
       setCropData(croppedDataUrl)
-
-      // Set props with a timeout of 6 seconds
-      setTimeout(() => {
-        setProp((props) => (props.src = croppedDataUrl))
-        setShowDialog(false)
-        setActiveAspectRatioBtn("source")
-      }, 6000)
+      setProp((props) => (props.src = croppedDataUrl))
+      setShowDialog(false)
+      setActiveAspectRatioBtn("source")
 
       const imageData = croppedCanvas.toDataURL("image/png")
       const blob = base64ToBlob(imageData, "image/png")
       const file = new File([blob], "cropped-image.png", { type: "image/png" })
       const aspectRatio = croppedCanvas.width / croppedCanvas.height
       const uploadedImage = await uploadToS3(file, aspectRatio)
-      console.log("uploadedImage", uploadedImage)
 
       if (uploadedImage) {
         const desktopImage =
@@ -376,26 +365,22 @@ export const ImageSettings = () => {
         const mobileImage =
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
-        // Set props with a timeout of 6 seconds
-        setTimeout(() => {
-          if (desktopImage) {
-            setProp((props) => {
-              props.src = desktopImage
-              props.uploadedImageUrl = desktopImage
-            })
-          }
+        if (desktopImage) {
+          // Use the loadImageAndSetSrc function here as well
+          loadImageAndSetSrc(desktopImage)
+        }
 
-          if (mobileImage) {
-            setProp((props) => {
-              props.uploadedImageMobileUrl = mobileImage
-            })
-          }
-        }, 6000)
+        if (mobileImage) {
+          setProp((props) => {
+            props.uploadedImageMobileUrl = mobileImage
+          })
+        }
       }
 
       setIsLoading(false)
     }
   }
+
 
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
@@ -465,7 +450,7 @@ export const ImageSettings = () => {
                 {t("Upload")}
               </span>
             </div>
-            <img src={src} alt={alt} className="w-30" />
+            <img src={src} alt={alt} className="w-30"  />
           </div>
         </CardContent>
       </Card>
