@@ -1,9 +1,6 @@
 "use client"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Separator } from "@/components/ui/separator"
-import { HexColorPicker } from "react-colorful"
-import tinycolor from "tinycolor2"
-import { debounce, throttle } from "lodash"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,93 +12,24 @@ import {
 import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import { useTranslations } from "next-intl"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import {
   setNewBackgroundColor,
-  setNewFlowSettings,
-  setNewPartialSyles,
   setNewPrimaryColor,
   setNewTextColor,
 } from "@/lib/state/flows-state/features/theme/globalewTheme"
-import FlowPreview from "@/components/flow-preview/flow-preview.component"
-import { setScreensData } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import ResolvedComponentsFromCraftState from "@/components/user/settings/resolved-components"
 import { setNewScreensData } from "@/lib/state/flows-state/features/newScreens"
+import { ColorPickerWithSuggestions } from "@/components/color-picker-with-suggestions"
 import NewFlowPreview from "@/components/flow-preview/flow-preview-new.cpmponent"
-import {
-  setBackgroundColors,
-  setPartialStyles,
-  setPrimaryColors,
-  setTextColors,
-} from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
-import { GlobalThemeSettings } from "@/components/user/settings/global-theme-settings"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Drawer } from "@/components/ui/drawer"
-import { DrawerContent } from "@/components/ui/drawerDesctop"
-import { env } from "@/env.mjs"
-
-const ColorPicker = ({ color, onChange }) => {
-  const t = useTranslations("Components")
-  return (
-    <div className="space-y-2">
-      <HexColorPicker color={color} onChange={onChange} />
-      <div className="color-text-container">
-        <input
-          type="text"
-          value={color}
-          onChange={(e) => onChange(e.target.value)}
-          className="focus:border-primary h-6 w-full rounded-sm border bg-white px-3 py-1 text-center text-xs font-normal leading-none focus:outline-none"
-        />
-      </div>
-      <Separator className="!mt-3" />
-      <span className="flex w-full justify-start text-xs font-normal text-[#7B7D80]">
-        {t("suggestions")}
-      </span>
-    </div>
-  )
-}
-
-const ColorPickerWithSuggestions = ({ color, onChange }) => {
-  const generateSuggestions = (baseColor) => {
-    const colorObj = tinycolor(baseColor)
-    return [
-      colorObj.darken(10).toHexString(),
-      colorObj.desaturate(10).toHexString(),
-      colorObj.lighten(5).toHexString(),
-      colorObj.lighten(20).toHexString(),
-      colorObj.lighten(10).toHexString(),
-    ]
-  }
-
-  const suggestions = generateSuggestions(color)
-
-  return (
-    <div className="rounded-lg border bg-white p-2">
-      <ColorPicker color={color} onChange={onChange} />
-      <div className="mt-2 grid grid-cols-5 gap-px">
-        {suggestions.map((suggestion, index) => (
-          <div
-            key={index}
-            className="h-9 cursor-pointer rounded-sm"
-            style={{ backgroundColor: suggestion }}
-            onClick={() => onChange(suggestion)}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export default function SelectColor() {
   const templateSetting = useAppSelector((state) => state.newTheme)
   const [desktopDrawerOpen, setDesktopDrawerOpen] = useState<boolean>(true)
-  const [shareDrawerOpen, setShareDrawerOpen] = useState<boolean>(false)
   const [view, setView] = useState("desktop")
   const [innerview, setInnerView] = useState("desktop")
-  const [isCustomLinkOpen, setIsCustomLinkOpen] = useState(false)
   const query = useSearchParams()
   const isAllowed = query?.get("allow") || false
   const updateView = () => {

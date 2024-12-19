@@ -94,7 +94,7 @@ const useButtonThemePresets = () => {
     Right: 0,
     uploadedImageUrl: '',
     uploadedImageMobileUrl: '',
-    imageSize: 0,
+    imageSize: "0px",
     picSize: IconButtonSizes.small,
     maxWidth: '800px',
   };
@@ -183,7 +183,7 @@ const useButtonThemePresets = () => {
     Bottom: 0,
     Left: 0,
     Right: 0,
-    imageSize: 0
+    imageSize: "0px"
   };
 
   return { filledPreset, outLinePreset };

@@ -426,7 +426,8 @@
     "Default Value": "Valor padrão",
     "Enter default value": "Insira o valor padrão aqui",
     "Slider": "Faixa",
-    "Enter step size": "Insira o tamanho do passo"
+    "Enter step size": "Insira o tamanho do passo",
+    "Show Title": "Mostrar Título"
   },
   "CreateFlow": {
     "My new form": "Meu novo formulário",

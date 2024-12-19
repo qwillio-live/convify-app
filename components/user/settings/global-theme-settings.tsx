@@ -42,6 +42,7 @@ import { Label } from "@/components/ui/label"
 import { useEditor } from "@craftjs/core"
 import { updateElementProps } from "./utils"
 import { Switch } from "@/components/custom-switch"
+import { ColorInput } from "@/components/color-input"
 
 type Props = {}
 
@@ -227,7 +228,7 @@ export const GlobalThemeSettings = (props: Props) => {
               </div>
               <div className="flex items-center justify-between">
                 <Label htmlFor="primarycolor">{t("Primary Color")}</Label>
-                <ColorInput
+                <ColorInputWrapper
                   defaultValue={defaultPrimaryColor}
                   value={primaryColor}
                   onColorChange={(e) => {
@@ -237,14 +238,13 @@ export const GlobalThemeSettings = (props: Props) => {
                       general: { primaryColor: e },
                     })
                   }}
-                  type={"color"}
                   id="primarycolor"
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <Label htmlFor="secondarycolor">{t("Secondary Color")}</Label>
-                <ColorInput
+                <ColorInputWrapper
                   defaultValue={defaultSecondaryColor}
                   value={secondaryColor}
                   onColorChange={(e) => {
@@ -253,14 +253,13 @@ export const GlobalThemeSettings = (props: Props) => {
                       general: { secondaryColor: e },
                     })
                   }}
-                  type={"color"}
                   id="secondarycolor"
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
-                <ColorInput
+                <ColorInputWrapper
                   value={backgroundColor}
                   onColorChange={(e) => {
                     // dispatch(setBackgroundColor(e.target.value))
@@ -269,7 +268,6 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // dispatch({type: "APPLY_THEME_BACKGROUND_AND_CYCLE_SCREENS", payload: e.target.value})
                   }}
-                  type={"color"}
                   id="backgroundcolor"
                 />
               </div>
@@ -350,7 +348,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Label htmlFor="primarytextcolor">
                   {t("Primary Text Color")}
                 </Label>
-                <ColorInput
+                <ColorInputWrapper
                   defaultValue={defaultPrimaryTextColor}
                   value={primaryTextColor}
                   onColorChange={(e) => {
@@ -359,7 +357,6 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // handleApplyTheme({text: { primaryColor: e.target.value}})
                   }}
-                  type={"color"}
                   id="primarytextcolor"
                 />
               </div>
@@ -368,7 +365,7 @@ export const GlobalThemeSettings = (props: Props) => {
                 <Label htmlFor="secondarytextcolor">
                   {t("Secondary Text Color")}
                 </Label>
-                <ColorInput
+                <ColorInputWrapper
                   defaultValue={defaultSecondaryTextColor}
                   value={secondaryTextColor}
                   onColorChange={(e) => {
@@ -377,7 +374,6 @@ export const GlobalThemeSettings = (props: Props) => {
                     })
                     // handleApplyTheme({text: { secondaryColor: e.target.value}})
                   }}
-                  type={"color"}
                   id="secondarytextcolor"
                 />
               </div>
@@ -390,10 +386,11 @@ export const GlobalThemeSettings = (props: Props) => {
 }
 
 interface ColorInputProps extends React.HTMLProps<HTMLInputElement> {
+  value?: string
   onColorChange?: (color: string | undefined) => void
 }
 
-export const ColorInput = ({
+export const ColorInputWrapper = ({
   value,
   onColorChange,
   ...rest
@@ -405,35 +402,11 @@ export const ColorInput = ({
     onColorChange?.(rest.defaultValue as string)
   }
   return (
-    <div className="flex items-center gap-2">
-      <div
-        style={{
-          backgroundColor: (value as string) ?? "transparent",
-        }}
-        className="relative ml-1 flex h-[32px] w-[62px] items-center justify-center rounded-sm"
-      >
-        {!value && (
-          <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border bg-[#FAFAFA]">
-            <span className="w-full text-center text-xs text-[#7B7D80]">
-              Choose
-            </span>
-          </div>
-        )}
-        <Input
-          {...rest}
-          onChange={(e) => handleChange(e)}
-          className="opacity-0"
-        />
-      </div>
-      <span onClick={() => handleRemove()}>
-        <X
-          size={16}
-          className={clsx("text-muted-foreground", {
-            "pointer-events-none opacity-0":
-              !value || value === rest.defaultValue,
-          })}
-        />
-      </span>
-    </div>
+    <ColorInput
+      value={value ?? "transparent"}
+      handleChange={handleChange}
+      handleRemove={value === rest.defaultValue ? undefined : handleRemove}
+      {...rest}
+    />
   )
 }

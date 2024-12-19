@@ -114,18 +114,20 @@ export const LogoSettings = () => {
   const {
     actions: { setProp },
     props: {
-      windowTarget,
       enableLink,
+      imageSize,
       src,
       containerBackground,
       url,
       icon,
-      radius,
       alt,
       top,
       bottom,
       left,
       right,
+      width,
+      height,
+      maxWidth,
       settingsTab,
       align,
       uploadedImageUrl,
@@ -181,15 +183,9 @@ export const LogoSettings = () => {
         image.src = imageSrc
         image.onload = async () => {
           let { width, height } = image
-          const maxWidth = 120
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width
-            width = maxWidth
-          }
           const aspectRatio = width / height
           const uploadedImage = await uploadToS3(
             file,
-            aspectRatio,
             width,
             height
           )
@@ -218,48 +214,28 @@ export const LogoSettings = () => {
     }
   }
 
-  const calculateImageDimensions = (aspectRatio, maxWidth) => {
-    const height = maxWidth / aspectRatio
-    return {
-      width: maxWidth,
-      height: Math.round(height),
-    }
-  }
-
   const uploadToS3 = async (
     imageData,
-    aspectRatio,
-    actualWidth,
-    actualHeight
+    width,
+    height,
   ) => {
-    const maxWidthLogo = 120
-    const logoDimensions = calculateImageDimensions(aspectRatio, maxWidthLogo)
-
     const formData = new FormData()
     formData.append("image", imageData)
     formData.append("file", imageData)
-    formData.append(
-      "sizes[0]",
-      `${logoDimensions.width}x${logoDimensions.height}`
-    )
-    formData.append("sizes[1]", `${actualWidth}x${actualHeight}`)
+    formData.append("sizes[0]", `${width}x${height}`)
     formData.append("bucket_name", "convify-images")
 
     try {
       const response = await axios.post("/api/upload", formData)
       return {
         data: response.data,
-        logoSize: `${logoDimensions.width}x${logoDimensions.height}`,
+        logoSize: `${width}x${height}`,
       }
     } catch (error) {
       console.error("Error uploading image to S3:", error)
       return null
     }
   }
-
-  const themeBackgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
 
   return (
     <>
@@ -306,12 +282,12 @@ export const LogoSettings = () => {
         </CardContent>
       </Card>
       <Accordion
-        value={settingsTab || "content"}
+        value={settingsTab || "design"}
         onValueChange={(value) => {
           setProp((props) => (props.settingsTab = value), 200)
         }}
         type="multiple"
-        defaultValue={["content"]}
+        defaultValue={["design"]}
         className="w-full"
       >
         <AccordionItem value="content">
@@ -393,6 +369,44 @@ export const LogoSettings = () => {
         <AccordionItem value="design">
           <AccordionTrigger>{t("Design")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
+            {/* <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="size">{t("Size")}</Label>
+                <span className="text-muted-foreground text-xs">
+                  {imageSize}
+                </span>
+              </div>
+              <Slider
+                defaultValue={[imageSize]}
+                value={[imageSize]}
+                max={100}
+                min={0}
+                step={1}
+                onValueChange={(e) => {
+                  const newWidthPercentage = e[0]
+                  const maxWidthPx = parseInt(maxWidth, 10)
+                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
+                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
+                  const newHeightPx = newWidthPx * aspectRatio
+
+                  // Logging to see the calculated values
+                  console.log("New width percentage:", newWidthPercentage)
+                  console.log("Max width in px:", maxWidthPx)
+                  console.log("New width in px:", newWidthPx)
+                  console.log("Aspect ratio:", aspectRatio)
+                  console.log("New height in px:", newHeightPx)
+
+                  handlePropChangeDebounced("imageSize", e)
+
+                  setProp((props) => {
+                    props.width = `${newWidthPx}px`
+                    // props.height = `${newHeightPx}px`;
+                    props.imageSize = `${newWidthPercentage}`
+                  }, 1000)
+                }}
+              />
+            </div> */}
+
             <div className="flex flex-row items-center justify-between">
               <Label htmlFor="backgroundcolor">{t("Background Color")}</Label>
               <ColorInput
@@ -531,12 +545,13 @@ export const DefaultPropsLogo = {
   borderRad: 0,
   align: "center",
   width: "85%",
-  maxWidth: "120px",
+  maxWidth: "300px",
+  minWidth: "100px",
   w: "",
   h: "",
   height: "auto",
   enableLink: false,
-  imageSize: 100,
+  imageSize: 120,
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: "https://convify.io/images/convify_logo_black.svg",

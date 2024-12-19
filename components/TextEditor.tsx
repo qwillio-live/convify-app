@@ -236,7 +236,7 @@ const FloatingToolbar = () => {
             Range.isCollapsed(selection) ||
             Editor.string(editor, selection) === ''
         ) {
-            // el.style.display = 'none'
+            el.style.display = 'none'
             el.style.opacity = '0'
             el.style.pointerEvents = 'none'
             return
@@ -248,7 +248,7 @@ const FloatingToolbar = () => {
         }
         const domRange = domSelection.getRangeAt(0)
         const rect = domRange.getBoundingClientRect()
-        // el.style.display = 'block'
+        el.style.display = 'block'
         el.style.opacity = '1'
         el.style.pointerEvents = 'auto'
         el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`
