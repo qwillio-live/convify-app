@@ -222,22 +222,38 @@ export const ImageSettings = () => {
     }
   }
 
-  const loadImageAndSetSrc = (imageUrl: string) => {
-    const img = new Image()
-    img.onload = () => {
-      // Image is accessible, set it as the src
-      setProp((props) => {
-        props.src = imageUrl
-        props.uploadedImageUrl = imageUrl
-      })
-    }
-    img.onerror = () => {
-      // Image not accessible yet, retry after a delay
-      setTimeout(() => {
-        loadImageAndSetSrc(imageUrl)
-      }, 1000) // retry after 1 second
-    }
-    img.src = imageUrl
+  const loadImageAndSetSrc = (
+    imageUrl: string,
+    attempt = 1,
+    maxAttempts = 10
+  ): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      const onLoad = () => {
+        setProp((props) => {
+          props.src = imageUrl
+          props.uploadedImageUrl = imageUrl
+        })
+        resolve(true)
+      }
+
+      const onError = () => {
+        if (attempt >= maxAttempts) {
+          reject("Image not accessible after maximum retries")
+          return
+        }
+
+        setTimeout(() => {
+          loadImageAndSetSrc(imageUrl, attempt + 1, maxAttempts)
+            .then(resolve)
+            .catch(reject)
+        }, attempt * 1000) // Exponential backoff or any delay strategy
+      }
+
+      img.onload = onLoad
+      img.onerror = onError
+      img.src = imageUrl
+    })
   }
 
 
@@ -295,8 +311,7 @@ export const ImageSettings = () => {
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
         if (desktopImage) {
-          // Instead of setTimeout, use the loadImageAndSetSrc function
-          loadImageAndSetSrc(desktopImage)
+          await loadImageAndSetSrc(desktopImage)
         }
 
         if (mobileImage) {
@@ -366,8 +381,7 @@ export const ImageSettings = () => {
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
         if (desktopImage) {
-          // Use the loadImageAndSetSrc function here as well
-          loadImageAndSetSrc(desktopImage)
+          await loadImageAndSetSrc(desktopImage)
         }
 
         if (mobileImage) {

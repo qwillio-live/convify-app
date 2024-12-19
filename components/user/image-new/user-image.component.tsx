@@ -281,49 +281,45 @@ export const ImageComponent = ({
         ]?.screenName
     ) || ""
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (picSize == "small") {
-  //       setProp(
-  //         (props) => (
-  //           (props.width = "250px"), (props.picSize = "small")
-  //           // (props.maxWidth = `100%`)
-  //         ),
-  //         1000
-  //       )
-  //     } else if (picSize == "medium") {
-  //       setProp(
-  //         (props) => (
-  //           (props.width = mobileScreen ? "360px" : "376px"),
-  //           (props.picSize = "medium")
-  //           // (props.width = `${props.imageSize}%`)
-  //         ),
-  //         1000
-  //       )
-  //     } else if (picSize == "large") {
-  //       setProp(
-  //         (props) => (
-  //           (props.width = "800px"), (props.picSize = "large")
-  //           // (props.width = `${props.imageSize}%`)
-  //         ),
-  //         1000
-  //       )
-  //     } else {
-  //       setProp(
-  //         (props) => (
-  //           (props.width = "100%"), (props.picSize = "full")
-  //           // (props.width = `${props.imageSize}%`)
-  //         ),
-  //         1000
-  //       )
-  //     }
-  //   }
-  //   window.addEventListener("resize", handleResize)
-  //   handleResize()
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize)
-  //   }
-  // }, [mobileScreen, picSize])
+  useEffect(() => {
+    const handleResize = () => {
+      if (picSize == "small") {
+        setProp(
+          (props) => (
+            (props.width = "250px"), (props.picSize = "small")
+            // (props.maxWidth = `100%`)
+          ),
+          1000
+        )
+      } else if (picSize == "medium") {
+        setProp(
+          (props) => (
+            (props.width = mobileScreen ? "360px" : "376px"),
+            (props.picSize = "medium")
+            // (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else if (picSize == "large") {
+        setProp(
+          (props) => (
+            (props.width = "800px"), (props.picSize = "large")
+            // (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      } else {
+        setProp(
+          (props) => (
+            (props.width = "100%"), (props.picSize = "full")
+            // (props.width = `${props.imageSize}%`)
+          ),
+          1000
+        )
+      }
+    }
+    handleResize()
+  }, [])
 
   useEffect(() => {
     if (mobileScreen && uploadedImageMobileUrl) {
