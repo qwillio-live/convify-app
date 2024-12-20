@@ -9,14 +9,14 @@ type ColorInputType = "primary" | "squared"
 
 interface ColorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string
-  type?: ColorInputType
+  inputType?: ColorInputType
   inputSize?: "sm" | "md" | "lg"
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleRemove?: () => void
 }
 
 export function ColorInput({
-  type = "primary",
+  inputType = "primary",
   inputSize = "md",
   value,
   handleChange,
@@ -88,12 +88,12 @@ export function ColorInput({
                 : "transparent",
           }}
           className={cn("relative overflow-hidden rounded-md", {
-            "h-[24px] w-[48px]": type === "primary" && inputSize === "sm",
-            "h-[32px] w-[62px]": type === "primary" && inputSize === "md",
-            "h-[40px] w-[80px]": type === "primary" && inputSize === "lg",
-            "h-[24px] w-[24px]": type === "squared" && inputSize === "sm",
-            "h-[32px] w-[32px]": type === "squared" && inputSize === "md",
-            "h-[40px] w-[40px]": type === "squared" && inputSize === "lg",
+            "h-[24px] w-[48px]": inputType === "primary" && inputSize === "sm",
+            "h-[32px] w-[62px]": inputType === "primary" && inputSize === "md",
+            "h-[40px] w-[80px]": inputType === "primary" && inputSize === "lg",
+            "h-[24px] w-[24px]": inputType === "squared" && inputSize === "sm",
+            "h-[32px] w-[32px]": inputType === "squared" && inputSize === "md",
+            "h-[40px] w-[40px]": inputType === "squared" && inputSize === "lg",
           })}
         >
           {!(typeof value === "string" && value[0] === "#") && (
