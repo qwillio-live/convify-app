@@ -35,6 +35,8 @@ export function ToolbarColorPicker({ value, onChange, className }: ToolbarColorP
       <div id="swatch" className="relative mx-2">
         <ColorInput
           id="color"
+          type="squared"
+          inputSize="sm"
           value={tempColor}
           handleChange={handleColorChange}
         />
