@@ -42,12 +42,10 @@ export type ScreenType = {
   isVisible: boolean
 }
 
-export interface ScreensState {
+export interface FlowState {
   flowName: string
   selectedComponent: string
   selectedScreen: number
-  firstScreenName: string
-  currentScreenName: string
   screenNameToId:
     | {
         [screenName: string]: string
@@ -69,15 +67,13 @@ export interface ScreensState {
   scrollY: number
   hasComponentBeforeAvatar: boolean
   avatarBackgroundColor: string | undefined
-  filledContent: []
+  filledContent: any[]
   isUpdating?: boolean
 }
 
-const initialState: ScreensState = {
+const initialFlowState = {
   flowName: "",
   selectedComponent: "ROOT",
-  firstScreenName: "",
-  currentScreenName: "",
   screenNameToId: {},
   headerId: "",
   selectedScreen: 0,
@@ -88,46 +84,10 @@ const initialState: ScreensState = {
   headerMode: false,
   hasComponentBeforeAvatar: false,
   avatarBackgroundColor: "rgba(255,255,255,.1)",
-  screensFieldsList: {
-    // "1": {},
-    // "2": {},
-    // "3": {},
-  },
+  screensFieldsList: {},
   footerMode: false,
   renamingScreen: false,
-  // screens: [JSON.stringify(buttonChoiceData), JSON.stringify(oneChoiceData), JSON.stringify(oneInputData)],
-  screens: [
-    // {
-    //   screenId: "1",
-    //   screenName: "button-choice",
-    //   screenData: JSON.stringify(buttonChoiceData),
-    //   screenFields: {},
-    //   screenLink: "",
-    //   screenTemplateId: "",
-    //   screenValidated: false,
-    //   screenToggleError: false,
-    // },
-    // {
-    //   screenId: "2",
-    //   screenName: "one-choice",
-    //   screenData: JSON.stringify(oneChoiceData),
-    //   screenFields: {},
-    //   screenLink: "",
-    //   screenTemplateId: "",
-    //   screenValidated: false,
-    //   screenToggleError: false,
-    // },
-    // {
-    //   screenId: "3",
-    //   screenName: "one-input",
-    //   screenData: JSON.stringify(oneInputData),
-    //   screenFields: {},
-    //   screenLink: "",
-    //   screenTemplateId: "",
-    //   screenValidated: false,
-    //   screenToggleError: false,
-    // },
-  ],
+  screens: [],
   screensFooter: JSON.stringify(footerScreenData),
   editorLoad: {},
   screenRoller: "",
@@ -136,15 +96,39 @@ const initialState: ScreensState = {
   isUpdating: false,
 }
 
+export interface ScreensState {
+  flows: Record<string, FlowState>
+  firstScreenName: string
+  currentScreenName: string
+}
+
+const initialState: ScreensState = {
+  flows: {},
+  firstScreenName: "",
+  currentScreenName: "",
+}
+
+const validateInitialFlow = (state, flowId) => {
+  if (!flowId) {
+    throw new Error("Flow ID is required to set screens data.")
+  }
+  if (!state.flows[flowId]) {
+    state.flows[flowId] = initialFlowState
+  }
+}
+
 export const screensSlice = createSlice({
   name: "screen",
   initialState,
   reducers: {
-    resetScreen: (state) => initialState,
+    resetScreen: () => {},
     setScreensData: (state, action: PayloadAction<any>) => {
-      state.flowName = action.payload.name
-      state.firstScreenName = action.payload.steps[0]?.name
-      state.currentScreenName = action.payload.steps[0]?.name
+      validateInitialFlow(state, action.payload.flowId)
+      state.flows[action.payload.flowId].flowName = action.payload.name
+      state.firstScreenName =
+        action.payload.steps[0]?.name
+      state.currentScreenName =
+        action.payload.steps[0]?.name
       const screensFieldsList = {}
       const screenNames: string[] = []
 
@@ -160,11 +144,13 @@ export const screensSlice = createSlice({
       })
 
       // Step 2: Set the rest of the state using the unique steps
-      state.screensFieldsList = screensFieldsList
-      state.screensHeader = action.payload.headerData ?? state.screensHeader
-      state.screensFooter = action.payload.footerData ?? state.screensFooter
-      state.selectedScreen = 0
-      state.screens = uniqueSteps.map((screen: any) => ({
+      state.flows[action.payload.flowId].screensFieldsList = screensFieldsList
+      state.flows[action.payload.flowId].screensHeader =
+        action.payload.headerData ?? state.flows[action.payload.flowId].screensHeader
+      state.flows[action.payload.flowId].screensFooter =
+        action.payload.footerData ?? state.flows[action.payload.flowId].screensFooter
+      state.flows[action.payload.flowId].selectedScreen = 0
+      state.flows[action.payload.flowId].screens = uniqueSteps.map((screen: any) => ({
         screenId: screen.id,
         screenName: screen.name,
         screenData: JSON.stringify(screen.content),
@@ -179,41 +165,59 @@ export const screensSlice = createSlice({
       }))
 
       // Set the first screen to visible if applicable
-      if (state.screens[state.selectedScreen]?.isVisible) {
-        state.screens[state.selectedScreen].isVisible = true
+      if (
+        state.flows[action.payload.flowId].screens[
+          state.flows[action.payload.flowId].selectedScreen
+        ]?.isVisible
+      ) {
+        state.flows[action.payload.flowId].screens[
+          state.flows[action.payload.flowId].selectedScreen
+        ].isVisible = true
       }
 
       // Load the editor with the selected screen's data
-      state.editorLoad = state.screens[state.selectedScreen]?.screenData
+      state.flows[action.payload.flowId].editorLoad =
+        state.flows[action.payload.flowId].screens[
+          state.flows[action.payload.flowId].selectedScreen
+        ]?.screenData
     },
-    setIsUpdating: (state, action: PayloadAction<boolean>) => {
-      state.isUpdating = action.payload
+    setIsUpdating: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      state.flows[action.payload.flowId].isUpdating = action.payload.value
     },
-    setSelectedData: (state, action: PayloadAction<string[]>) => {
-      const screens = JSON.parse(JSON.stringify(state.screens[0]))
-      // console.log(
-      //   "changing selected data",
-      //   action.payload,
-      //   screens,
-      //   state.selectedScreen
-      // )
-      state.screens[state.selectedScreen] = {
-        ...state.screens[state.selectedScreen],
-        selectedData: action.payload,
+    setSelectedData: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string[] }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+
+      state.flows[action.payload.flowId].screens[
+        state.flows[action.payload.flowId].selectedScreen
+      ] = {
+        ...state.flows[action.payload.flowId].screens[
+          state.flows[action.payload.flowId].selectedScreen
+        ],
+        selectedData: action.payload.value,
       }
     },
     setPreviewScreenData: (
       state,
       action: PayloadAction<{
+        flowId: string
         nodeId: number
         entity: string
         isArray: boolean
         newSelections: string[]
       }>
     ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       // Clone the current screen data
       let prevScreenData = JSON.parse(
-        JSON.stringify(state.screens[state.selectedScreen])
+        JSON.stringify(state.flows[flowId].screens[state.flows[flowId].selectedScreen])
       )
       console.log(
         "inside setPreviewScreenData",
@@ -241,22 +245,39 @@ export const screensSlice = createSlice({
       prevScreenData.screenData = JSON.stringify(screenData)
 
       // Update the state with the modified screen data
-      state.screens[state.selectedScreen] = {
+      state.flows[flowId].screens[state.flows[flowId].selectedScreen] = {
         ...prevScreenData,
       }
       let newScreenData = JSON.parse(
-        JSON.stringify(state.screens[state.selectedScreen])
+        JSON.stringify(state.flows[flowId].screens[state.flows[flowId].selectedScreen])
       )
       console.log("newScreenData", JSON.parse(newScreenData.screenData))
     },
-    setAlarm: (state, action: PayloadAction<boolean>) => {
-      state.screens[state.selectedScreen].alarm = action.payload
+    setAlarm: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screens[state.flows[flowId].selectedScreen].alarm =
+        action.payload.value
     },
-    setErrorCount: (state, action: PayloadAction<number>) => {
-      state.screens[state.selectedScreen].errorCount = action.payload
+    setErrorCount: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screens[state.flows[flowId].selectedScreen].errorCount =
+        action.payload.value
     },
-    setTotalRequired: (state, action: PayloadAction<boolean>) => {
-      state.screens.map((screen, index) => {
+    setTotalRequired: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screens.map((screen, index) => {
         let eachScreen = JSON.parse(JSON.stringify(screen))
         let screenData = JSON.parse(eachScreen.screenData)
         console.log(
@@ -289,20 +310,28 @@ export const screensSlice = createSlice({
         screen.totalFilled = count2.length
         screen.errorCount = 0
       })
-      if (state.screens[state.selectedScreen]?.isVisible)
-        state.screens[state.selectedScreen].isVisible = true
+      if (state.flows[flowId].screens[state.flows[flowId].selectedScreen]?.isVisible)
+        state.flows[flowId].screens[state.flows[flowId].selectedScreen].isVisible = true
     },
-    getAllFilledAnswers: (state, action: PayloadAction<boolean>) => {
+    getAllFilledAnswers: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       // Initialize an array to hold the filled data for each screen
       let totalFilled: any = [] // Adjust type as needed
 
       // Deep clone screen and parse screenData
-      const screen = state.screens[state.selectedScreen]
-      console.log("curret screen while getting answers", state.selectedScreen)
+      const screen = state.flows[flowId].screens[state.flows[flowId].selectedScreen]
+      console.log(
+        "curret screen while getting answers",
+        state.flows[flowId].selectedScreen
+      )
       let eachScreen = JSON.parse(JSON.stringify(screen))
       let screenData = JSON.parse(eachScreen.screenData)
       console.log("sccccc", screenData)
-      state.filledContent = []
+      state.flows[flowId].filledContent = []
       Object.entries(screenData).forEach(([key, node]: [string, any]) => {
         const dataLabel =
           node.props?.fieldName ||
@@ -342,8 +371,9 @@ export const screensSlice = createSlice({
               value: node.props?.selections?.length > 1 ? result : result[0],
               type:
                 node.props?.selections?.length > 1 ? "m-choice" : "s-choice",
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
+              order: state.flows[flowId].selectedScreen,
+              screenId:
+                state.flows[flowId].screens[state.flows[flowId].selectedScreen].screenId,
             }
           } else if (
             node.props?.inputValue &&
@@ -352,8 +382,9 @@ export const screensSlice = createSlice({
             totalFilled[dataId] = {
               label: dataLabel,
               value: node.props.inputValue,
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
+              order: state.flows[flowId].selectedScreen,
+              screenId:
+                state.flows[flowId].screens[state.flows[flowId].selectedScreen].screenId,
             }
           } else if (node.props?.selectedOptionId) {
             const selectResult = node.props?.selectOptions?.find(
@@ -363,15 +394,17 @@ export const screensSlice = createSlice({
             totalFilled[dataId] = {
               label: dataLabel,
               value: matchedValue,
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
+              order: state.flows[flowId].selectedScreen,
+              screenId:
+                state.flows[flowId].screens[state.flows[flowId].selectedScreen].screenId,
             }
           } else if (node.props?.input) {
             totalFilled[dataId] = {
               label: dataLabel,
               value: node.props.input,
-              order: state.selectedScreen,
-              screenId: state.screens[state.selectedScreen].screenId,
+              order: state.flows[flowId].selectedScreen,
+              screenId:
+                state.flows[flowId].screens[state.flows[flowId].selectedScreen].screenId,
             }
           }
         }
@@ -386,12 +419,17 @@ export const screensSlice = createSlice({
         totalFilled,
         totalFilled.length
       )
-      state.filledContent = totalFilled
+      state.flows[flowId].filledContent = totalFilled
       // Optionally, update the state with the totalFilled array if needed
       // state.filledAnswers = totalFilled; // Adjust according to your state shape
     },
-    setResetTotalFilled: (state, action: PayloadAction<boolean>) => {
-      state.screens.forEach((screen) => {
+    setResetTotalFilled: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screens.forEach((screen) => {
         // Changed map to forEach
         let eachScreen = JSON.parse(JSON.stringify(screen))
         let screenData = JSON.parse(eachScreen.screenData)
@@ -426,13 +464,24 @@ export const screensSlice = createSlice({
       })
     },
 
-    setSelectedComponent: (state, action: PayloadAction<string>) => {
-      state.selectedComponent = action.payload
+    setSelectedComponent: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].selectedComponent = action.payload.value
     },
-    setUpdateFilledCount: (state, action: PayloadAction<number>) => {
+    setUpdateFilledCount: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       if (action.payload) {
-        state.screens[state.selectedScreen].totalFilled =
-          state.screens[state.selectedScreen].totalFilled + action.payload
+        state.flows[flowId].screens[state.flows[flowId].selectedScreen].totalFilled =
+          state.flows[flowId].screens[state.flows[flowId].selectedScreen].totalFilled +
+          action.payload.value
       }
     },
     updateHeaderPosition: (state, action: PayloadAction<string>) => {
@@ -442,46 +491,59 @@ export const screensSlice = createSlice({
       // state.screensHeader = JSON.stringify(headerSlice);
       return
     },
-    addField: (state, action: PayloadAction<ScreenFieldType>) => {
+    addField: (
+      state,
+      action: PayloadAction<{ flowId: string; value: ScreenFieldType }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       // console.log("Add field");
-      const selectedScreen = state.selectedScreen
-      const selectedId = state.screens[selectedScreen].screenId
-      const field = action.payload
-      const screenFields = state.screens[selectedScreen]?.screenFields
+      const selectedScreen = state.flows[flowId].selectedScreen
+      const selectedId = state.flows[flowId].screens[selectedScreen].screenId
+      const field = action.payload.value
+      const screenFields = state.flows[flowId].screens[selectedScreen]?.screenFields
       screenFields[field.fieldId] = field
-      state.screens[selectedScreen].screenFields = screenFields
-      state.screensFieldsList[selectedId] = screenFields
+      state.flows[flowId].screens[selectedScreen].screenFields = screenFields
+      state.flows[flowId].screensFieldsList[selectedId] = screenFields
     },
-    removeField: (state, action: PayloadAction<string>) => {
-      const selectedScreen = state.selectedScreen
-      const selectedScreenId = state.screens[selectedScreen].screenId
-      const fieldId = action.payload
-      const screenFields = state.screens[selectedScreen]?.screenFields
+    removeField: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      const selectedScreen = state.flows[flowId].selectedScreen
+      const selectedScreenId = state.flows[flowId].screens[selectedScreen].screenId
+      const fieldId = action.payload.value
+      const screenFields = state.flows[flowId].screens[selectedScreen]?.screenFields
 
       delete screenFields[fieldId]
-      state.screens[selectedScreen].screenFields = screenFields
-      const screenFieldsList = state.screensFieldsList
+      state.flows[flowId].screens[selectedScreen].screenFields = screenFields
+      const screenFieldsList = state.flows[flowId].screensFieldsList
       const screenListItem = screenFieldsList[selectedScreenId]
       if (screenListItem) {
         delete screenListItem[fieldId]
         screenFieldsList[selectedScreenId] = screenListItem
       }
-      state.screensFieldsList = screenFieldsList
+      state.flows[flowId].screensFieldsList = screenFieldsList
     },
     setFieldProp: (
       state,
       action: PayloadAction<{
+        flowId: string
         screenId: string
         fieldId: string
         fieldName: string
         fieldValue: any
       }>
     ) => {
-      const { screenId, fieldId, fieldName, fieldValue } = action.payload
+      const { screenId, fieldId, fieldName, fieldValue, flowId } =
+        action.payload
+      validateInitialFlow(state, flowId)
 
       // Update screenFields in selected screen
-      const selectedScreen = state.selectedScreen
-      const screenFields = state.screens[selectedScreen]?.screenFields
+      const selectedScreen = state.flows[flowId].selectedScreen
+      const screenFields = state.flows[flowId].screens[selectedScreen]?.screenFields
 
       if (!screenFields || !screenFields[fieldId]) {
         // console.error(
@@ -496,13 +558,13 @@ export const screensSlice = createSlice({
       }
 
       // Update state with updated screenFields for selected screen
-      state.screens[selectedScreen].screenFields = {
+      state.flows[flowId].screens[selectedScreen].screenFields = {
         ...screenFields,
         [fieldId]: updatedField,
       }
 
       // Update screenFieldsList
-      const screenFieldsList = state.screensFieldsList
+      const screenFieldsList = state.flows[flowId].screensFieldsList
       const screenListItem = screenFieldsList[screenId]
 
       if (screenListItem && screenListItem[fieldId]) {
@@ -514,7 +576,7 @@ export const screensSlice = createSlice({
           },
         }
 
-        state.screensFieldsList = {
+        state.flows[flowId].screensFieldsList = {
           ...screenFieldsList,
           [screenId]: updatedListItem,
         }
@@ -527,13 +589,19 @@ export const screensSlice = createSlice({
 
     validateScreen: (
       state,
-      action: PayloadAction<{ current: number | string; next: string }>
+      action: PayloadAction<{
+        flowId: string
+        current: number | string
+        next: string
+      }>
     ) => {
       console.log("SCREEN NAMES ENTRY: ", action.payload)
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
 
       let screenName = ""
       if (typeof action.payload.current === "number") {
-        screenName = state.screens[action.payload.current].screenName
+        screenName = state.flows[flowId].screens[action.payload.current].screenName
       } else {
         screenName = action.payload.current
       }
@@ -541,7 +609,7 @@ export const screensSlice = createSlice({
       let screenId = ""
       let screenIndex = -1 // Initialize to -1 for easier error checking
 
-      state.screens.forEach((screen, index) => {
+      state.flows[flowId].screens.forEach((screen, index) => {
         // console.log("SCREEN NAMES ARE: ", screen.screenName)
         if (screen.screenName === screenName) {
           screenId = screen.screenId
@@ -557,7 +625,7 @@ export const screensSlice = createSlice({
       console.log("SCREEN ID GOT: ", screenId)
 
       // Get the fields for the found screen
-      const screenFields = state.screensFieldsList[screenId] || {}
+      const screenFields = state.flows[flowId].screensFieldsList[screenId] || {}
 
       let errors = false
 
@@ -572,8 +640,8 @@ export const screensSlice = createSlice({
       })
 
       // Update screen validation status
-      state.screens[screenIndex].screenValidated = true
-      state.screens[screenIndex].screenToggleError = errors
+      state.flows[flowId].screens[screenIndex].screenValidated = true
+      state.flows[flowId].screens[screenIndex].screenToggleError = errors
 
       // Update current screen name if there are no errors and the next screen is different
       if (
@@ -585,19 +653,22 @@ export const screensSlice = createSlice({
       }
 
       // Update the fields and fields list in the state
-      state.screens[screenIndex].screenFields = screenFields
-      state.screensFieldsList[screenId] = screenFields
+      state.flows[flowId].screens[screenIndex].screenFields = screenFields
+      state.flows[flowId].screensFieldsList[screenId] = screenFields
     },
     setValidateScreen: (
       state,
       action: PayloadAction<{
+        flowId: string
         screenId: string
         screenValidated: boolean
         screenToggleError: boolean
       }>
     ) => {
-      const { screenId, screenValidated, screenToggleError } = action.payload
-      const screen = state.screens.find(
+      const { flowId, screenId, screenValidated, screenToggleError } =
+        action.payload
+      validateInitialFlow(state, flowId)
+      const screen = state.flows[flowId].screens.find(
         (screen) => screen.screenId === screenId
       )
       if (screen) {
@@ -605,29 +676,37 @@ export const screensSlice = createSlice({
         screen.screenToggleError = screenToggleError
       }
     },
-    resetScreensState: (state) => {
-      state.selectedScreen = 0
-      state.headerId = ""
-      state.headerMode = false
-      state.footerMode = false
-      state.screensHeader = headerScreenData
-      state.screensFooter = footerScreenData
-      // state.screens = [buttonChoiceData, oneChoiceData, oneInputData];
-      state.editorLoad = state.screens[state.selectedScreen]?.screenData
+    resetScreensState: (state, action: PayloadAction<{ flowId: string }>) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].selectedScreen = 0
+      state.flows[flowId].headerId = ""
+      state.flows[flowId].headerMode = false
+      state.flows[flowId].footerMode = false
+      state.flows[flowId].screensHeader = headerScreenData
+      state.flows[flowId].screensFooter = footerScreenData
+      // state.flows[flowId].screens = [buttonChoiceData, oneChoiceData, oneInputData];
+      state.flows[flowId].editorLoad =
+        state.flows[flowId].screens[state.flows[flowId].selectedScreen]?.screenData
     },
     setEditorLoad: (state, action: PayloadAction<any>) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       const newEditorLoad = action.payload
 
       // Depending on mode, update the appropriate part of the state
-      if (state.headerMode === true) {
-        state.screensHeader = newEditorLoad
-      } else if (state.footerMode === true) {
-        state.screensFooter = newEditorLoad
+      if (state.flows[flowId].headerMode === true) {
+        state.flows[flowId].screensHeader = newEditorLoad
+      } else if (state.flows[flowId].footerMode === true) {
+        state.flows[flowId].screensFooter = newEditorLoad
       } else {
-        state.screens[state.selectedScreen].screenData = newEditorLoad
+        state.flows[flowId].screens[state.flows[flowId].selectedScreen].screenData =
+          newEditorLoad
       }
     },
     setEditorSelectedComponent: (state, action: PayloadAction<any>) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       const newEditorLoad = action.payload
 
       // Function to find the first non-matching key in new vs. old objects
@@ -642,7 +721,7 @@ export const screensSlice = createSlice({
 
       try {
         const oldEditorLoad = JSON.parse(
-          state.screens[state.selectedScreen].screenData
+          state.flows[flowId].screens[state.flows[flowId].selectedScreen].screenData
         )
 
         if (
@@ -655,7 +734,7 @@ export const screensSlice = createSlice({
           )
 
           if (filteredNewEditorLoad) {
-            state.selectedComponent = filteredNewEditorLoad
+            state.flows[flowId].selectedComponent = filteredNewEditorLoad
           }
         } else {
           // for (const key in oldEditorLoad) {
@@ -663,7 +742,7 @@ export const screensSlice = createSlice({
           //   if (oldValue.displayName === "Form Content") {
           //     const newValue = newEditorLoad[key]
           //     if (newValue && newValue.nodes.length > oldValue.nodes.length) {
-          //       state.selectedComponent = key // Early return
+          //       state.flows[flowId].selectedComponent = key // Early return
           //       break // Stop the loop
           //     }
           //   }
@@ -674,83 +753,149 @@ export const screensSlice = createSlice({
       }
     },
     setScreenHeader: (state, action: PayloadAction<any>) => {
-      state.screensHeader = JSON.stringify(action.payload)
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screensHeader = JSON.stringify(action.payload)
     },
-    setScrollY: (state, action: PayloadAction<number>) => {
-      state.scrollY = action.payload
+    setScrollY: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].scrollY = action.payload.value
     },
     setScreenFooter: (state, action: PayloadAction<any>) => {
-      state.screensFooter = JSON.stringify(action.payload)
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screensFooter = JSON.stringify(action.payload)
     },
-    setHeaderId: (state, action: PayloadAction<string>) => {
-      state.headerId = action.payload
+    setHeaderId: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].headerId = action.payload.value
     },
-    setHeaderMode: (state, action: PayloadAction<boolean>) => {
-      state.selectedComponent = "ROOT"
-      state.footerMode = false
-      state.headerMode = action.payload
-      state.editorLoad = state.screensHeader // Ensure new reference
+    setHeaderMode: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].selectedComponent = "ROOT"
+      state.flows[flowId].footerMode = false
+      state.flows[flowId].headerMode = action.payload.value
+      state.flows[flowId].editorLoad = state.flows[flowId].screensHeader // Ensure new reference
     },
-    setFooterMode: (state, action: PayloadAction<boolean>) => {
-      state.selectedComponent = "ROOT"
-      state.headerMode = false
-      state.footerMode = action.payload
-      state.editorLoad = state.screensFooter // Ensure new reference
+    setFooterMode: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].selectedComponent = "ROOT"
+      state.flows[flowId].headerMode = false
+      state.flows[flowId].footerMode = action.payload.value
+      state.flows[flowId].editorLoad = state.flows[flowId].screensFooter // Ensure new reference
     },
-    setHeaderFooterMode: (state, action: PayloadAction<boolean>) => {
-      state.selectedComponent = "ROOT"
-      state.headerMode = action.payload
-      state.footerMode = action.payload
+    setHeaderFooterMode: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].selectedComponent = "ROOT"
+      state.flows[flowId].headerMode = action.payload.value
+      state.flows[flowId].footerMode = action.payload.value
     },
-    setScreens: (state, action: PayloadAction<any[]>) => {
-      state.screens = [...action.payload]
+    setScreens: (
+      state,
+      action: PayloadAction<{ flowId: string; value: any[] }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screens = [...action.payload.value]
       // state.firstScreenName = state.screens[0].screenName
     },
-    setSelectedScreen: (state, action: PayloadAction<number>) => {
-      state.headerMode = false
-      state.footerMode = false
-      if (state.screens[state.selectedScreen]?.isVisible)
-        state.screens[state.selectedScreen].isVisible = false
-      state.selectedScreen = action.payload
-      if (state.screens[action.payload]?.isVisible)
-        state.screens[action.payload].isVisible = true
-      state.editorLoad = state.screens[action.payload]?.screenData // Ensure new reference
+    setSelectedScreen: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].headerMode = false
+      state.flows[flowId].footerMode = false
+      if (state.flows[flowId].screens[state.flows[flowId].selectedScreen]?.isVisible)
+        state.flows[flowId].screens[state.flows[flowId].selectedScreen].isVisible = false
+      state.flows[flowId].selectedScreen = action.payload.value
+      if (state.flows[flowId].screens[action.payload.value]?.isVisible)
+        state.flows[flowId].screens[action.payload.value].isVisible = true
+      state.flows[flowId].editorLoad =
+        state.flows[flowId].screens[action.payload.value]?.screenData // Ensure new reference
     },
-    addAvatarComponentId(state, action) {
-      if (!state.avatarComponentIds) {
-        state.avatarComponentIds = []
+    addAvatarComponentId(
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+
+      if (!state.flows[flowId].avatarComponentIds) {
+        state.flows[flowId].avatarComponentIds = []
       }
-      state.avatarComponentIds.push(action.payload)
-      state.previousAvatarComponentId = state.avatarComponentId
-      state.avatarComponentId = action.payload
+      state.flows[flowId].avatarComponentIds.push(action.payload.value)
+      state.flows[flowId].previousAvatarComponentId = state.flows[flowId].avatarComponentId
+      state.flows[flowId].avatarComponentId = action.payload.value
     },
-    removeAvatarComponentId(state, action) {
-      if (state.avatarComponentIds) {
-        state.avatarComponentIds = state.avatarComponentIds.filter(
-          (id) => id !== action.payload
-        )
-        state.previousAvatarComponentId = state.avatarComponentId
-        state.avatarComponentId =
-          state.avatarComponentIds[state.avatarComponentIds.length - 1] || null
+    removeAvatarComponentId(
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+
+      if (state.flows[flowId].avatarComponentIds) {
+        state.flows[flowId].avatarComponentIds = state.flows[
+          flowId
+        ].avatarComponentIds.filter((id) => id !== action.payload.value)
+        state.flows[flowId].previousAvatarComponentId =
+          state.flows[flowId].avatarComponentId
+        state.flows[flowId].avatarComponentId =
+          state.flows[flowId].avatarComponentIds[
+            state.flows[flowId].avatarComponentIds.length - 1
+          ] || null
       }
     },
     reorderScreens: (
       state,
-      action: PayloadAction<{ startIndex: number; endIndex: number }>
+      action: PayloadAction<{
+        flowId: string
+        startIndex: number
+        endIndex: number
+      }>
     ) => {
-      const { startIndex, endIndex } = action.payload
-      const result = [...state.screens] // Create new array
+      validateInitialFlow(state, action.payload.flowId)
+      const { flowId, startIndex, endIndex } = action.payload
+      const result = [...state.flows[flowId].screens] // Create new array
       const [removed] = result.splice(startIndex, 1)
       result.splice(endIndex, 0, removed)
-      state.screens = result
-      state.firstScreenName = state.screens[0].screenName
+      state.flows[flowId].screens = result
+      state.firstScreenName = state.flows[flowId].screens[0].screenName
     },
-    addScreen: (state, action: PayloadAction<number>) => {
+    addScreen: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+
       const newId = hexoid(8)()
-      const newScreens = [...state.screens] // Create new array
+      const newScreens = [...state.flows[flowId].screens] // Create new array
       const screenName = "screen-" + newId
-      state.screensFieldsList[newId] = {}
-      newScreens.splice(action.payload + 1, 0, {
+      state.flows[flowId].screensFieldsList[newId] = {}
+      newScreens.splice(action.payload.value + 1, 0, {
         screenId: newId,
         screenName: screenName,
         screenData: JSON.stringify(emptyScreenData),
@@ -766,33 +911,44 @@ export const screensSlice = createSlice({
         errorCount: 0,
         isVisible: true,
       })
-      state.screens = newScreens
-      state.screens[state.selectedScreen].isVisible = false
-      state.selectedScreen = action.payload + 1
-      state.screens[action.payload + 1].isVisible = true
-      state.editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
-      state.firstScreenName = state.screens[0].screenName
+      state.flows[flowId].screens = newScreens
+      state.flows[flowId].screens[state.flows[flowId].selectedScreen].isVisible = false
+      state.flows[flowId].selectedScreen = action.payload.value + 1
+      state.flows[flowId].screens[action.payload.value + 1].isVisible = true
+      state.flows[flowId].editorLoad = JSON.stringify(emptyScreenData) // Ensure new reference
+      state.firstScreenName = state.flows[flowId].screens[0].screenName
     },
-    setCurrentScreenName: (state, action: PayloadAction<string>) => {
+    setCurrentScreenName: (
+      state,
+      action: PayloadAction<string>
+    ) => {
       state.currentScreenName = action.payload
     },
-    setFirstScreenName: (state, action: PayloadAction<string>) => {
+    setFirstScreenName: (
+      state,
+      action: PayloadAction<string>
+    ) => {
       state.firstScreenName = action.payload
     },
-    duplicateScreen: (state, action: PayloadAction<number>) => {
+    duplicateScreen: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
       console.log("entered placeholders")
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
 
       // Create a copy of the current screens array
-      const newScreens = [...state.screens]
+      const newScreens = [...state.flows[flowId].screens]
 
       // Generate a new unique ID
       const newId = hexoid(8)()
 
       // Get the index of the screen to duplicate
-      const indexToDuplicate = action.payload
+      const indexToDuplicate = action.payload.value
 
       // Get the screen data to duplicate
-      const screenToDuplicate = state.screens[indexToDuplicate]
+      const screenToDuplicate = state.flows[flowId].screens[indexToDuplicate]
 
       // Create a new screen object, copying all properties except the ID
       const newScreen = {
@@ -816,51 +972,63 @@ export const screensSlice = createSlice({
       newScreens.splice(indexToDuplicate + 1, 0, newScreen)
 
       // Update the screens array in the state
-      state.screens = newScreens
+      state.flows[flowId].screens = newScreens
 
       // Ensure the new screen data is loaded in the editor
-      state.editorLoad = newScreen.screenData
+      state.flows[flowId].editorLoad = newScreen.screenData
 
       // Update selectedScreen to point to the newly duplicated screen
-      state.screens[state.selectedScreen].isVisible = false
-      state.selectedScreen = indexToDuplicate + 1
-      state.screens[indexToDuplicate + 1].isVisible = true
+      state.flows[flowId].screens[state.flows[flowId].selectedScreen].isVisible = false
+      state.flows[flowId].selectedScreen = indexToDuplicate + 1
+      state.flows[flowId].screens[indexToDuplicate + 1].isVisible = true
       // Update the screensFieldsList if necessary
-      state.screensFieldsList[newId] =
-        state.screensFieldsList[screenToDuplicate.screenId]
+      state.flows[flowId].screensFieldsList[newId] =
+        state.flows[flowId].screensFieldsList[screenToDuplicate.screenId]
 
       // Update the first screen name if necessary
-      state.firstScreenName = state.screens[0].screenName
+      state.firstScreenName = state.flows[flowId].screens[0].screenName
     },
 
-    deleteScreen: (state, action: PayloadAction<number>) => {
-      if (state.screens.length === 1) return
-      const screenToDelete = action.payload
-      const screenIdToDelete = state.screens[screenToDelete].screenId
-      delete state.screensFieldsList[screenIdToDelete]
-      const newScreens = [...state.screens] // Create new array
+    deleteScreen: (
+      state,
+      action: PayloadAction<{ flowId: string; value: number }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      if (state.flows[flowId].screens.length === 1) return
+      const screenToDelete = action.payload.value
+      const screenIdToDelete = state.flows[flowId].screens[screenToDelete].screenId
+      delete state.flows[flowId].screensFieldsList[screenIdToDelete]
+      const newScreens = [...state.flows[flowId].screens] // Create new array
       newScreens.splice(screenToDelete, 1)
-      state.screens = newScreens
+      state.flows[flowId].screens = newScreens
 
       // If 0th screen is deleted, move to the next screen; if > 0, move to the previous screen
-      if (action.payload === 0) {
-        state.selectedScreen = 0 // Move to the new first screen
+      if (action.payload.value === 0) {
+        state.flows[flowId].selectedScreen = 0 // Move to the new first screen
       } else {
-        state.selectedScreen = Math.max(0, action.payload - 1) // Move to the previous screen
+        state.flows[flowId].selectedScreen = Math.max(0, action.payload.value - 1) // Move to the previous screen
       }
 
-      state.editorLoad = state.screens[state.selectedScreen] // Ensure new reference
-      state.firstScreenName = state.screens[0].screenName
+      state.flows[flowId].editorLoad =
+        state.flows[flowId].screens[state.flows[flowId].selectedScreen] // Ensure new reference
+      state.firstScreenName = state.flows[flowId].screens[0].screenName
     },
     setScreenName: (
       state,
-      action: PayloadAction<{ screenId: string; screenName: string }>
+      action: PayloadAction<{
+        flowId: string
+        screenId: string
+        screenName: string
+      }>
     ) => {
-      const { screenId, screenName } = action.payload
-      const screen = state.screens.find(
+      validateInitialFlow(state, action.payload.flowId)
+      const { flowId, screenId, screenName } = action.payload
+
+      const screen = state.flows[flowId].screens.find(
         (screen) => screen.screenId === screenId
       )
-      const duplicateName = state.screens.find(
+      const duplicateName = state.flows[flowId].screens.find(
         (screen) => screen.screenName === screenName
       )
       if (duplicateName) {
@@ -868,29 +1036,54 @@ export const screensSlice = createSlice({
       } else if (screen) {
         screen.screenName = screenName
       }
-      state.firstScreenName = state.screens[0].screenName
+      state.firstScreenName = state.flows[flowId].screens[0].screenName
     },
-    setRenamingScreen: (state, action: PayloadAction<boolean>) => {
-      state.renamingScreen = action.payload
+    setRenamingScreen: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].renamingScreen = action.payload.value
     },
-    navigateToScreen: (state, action: PayloadAction<string>) => {
-      const screen = state.screens.find(
-        (screen) => screen.screenName === action.payload
+    navigateToScreen: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      const screen = state.flows[flowId].screens.find(
+        (screen) => screen.screenName === action.payload.value
       )
       if (screen) {
-        state.selectedScreen = state.screens.indexOf(screen)
-        state.editorLoad = screen.screenData
+        state.flows[flowId].selectedScreen = state.flows[flowId].screens.indexOf(screen)
+        state.flows[flowId].editorLoad = screen.screenData
       }
     },
-    rollScreens: (state, action: PayloadAction<string>) => {
-      state.screenRoller = action.payload
+    rollScreens: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].screenRoller = action.payload.value
     },
-    setComponentBeforeAvatar: (state, action: PayloadAction<boolean>) => {
+    setComponentBeforeAvatar: (
+      state,
+      action: PayloadAction<{ flowId: string; value: boolean }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
       // Action payload is the container component ID
-      state.hasComponentBeforeAvatar = action.payload
+      state.flows[flowId].hasComponentBeforeAvatar = action.payload.value
     },
-    setAvatarBackgroundColor: (state, action: PayloadAction<string>) => {
-      state.avatarBackgroundColor = action.payload
+    setAvatarBackgroundColor: (
+      state,
+      action: PayloadAction<{ flowId: string; value: string }>
+    ) => {
+      validateInitialFlow(state, action.payload.flowId)
+      const flowId = action.payload.flowId
+      state.flows[flowId].avatarBackgroundColor = action.payload.value
     },
   },
 })

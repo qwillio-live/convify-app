@@ -1,36 +1,28 @@
-"use client"
+"use client";
 
-import { memo, useEffect, useState } from "react"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { revalidateFlow } from "@/actions/flow/revalidateFlow"
-import { Eye, Plus } from "lucide-react"
-import { signOut } from "next-auth/react"
-import { useTranslations } from "next-intl"
+import { memo, useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { revalidateFlow } from "@/actions/flow/revalidateFlow";
+import { Eye, Plus } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
-import { env } from "@/env.mjs"
-import {
-  setResetTotalFilled,
-  setSelectedScreen,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId"
-import {
-  setIsUpdating,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { Icons } from "@/components/icons"
 
-import { User } from "../../page"
+
+import { env } from "@/env.mjs";
+import { setIsUpdating, setResetTotalFilled, setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId";
+import { Icons } from "@/components/icons";
+
+
+
+import { User } from "../../page";
+
 
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -50,16 +42,12 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
-  const localFlowData = useAppSelector((state) => state?.screen)
+  const localFlowData = useAppSelector((state) => state?.screen?.flows[flowId])
   const localFlowSettings = useAppSelector((state) => state?.theme)
   // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
-    (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
+    (state) => state?.screen?.flows[flowId]?.screens[state?.screen?.flows[flowId]?.selectedScreen]?.screenName
   )
-  const isUpdating =
-    useAppSelector((state) => state?.screen?.isUpdating) || false
-  const selectedScreen =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
 
   useEffect(() => {
     fetch("/api/users")
@@ -104,7 +92,7 @@ const Header = ({ flowId }) => {
   const publishFlow = async () => {
     try {
       setIsLoading(true)
-      dispatch(setIsUpdating(true))
+      dispatch(setIsUpdating({ flowId, value: true }))
       const steps = localFlowData?.screens
         ? Array.from(
             new Set(localFlowData.screens.map((step) => step.screenName))
@@ -163,7 +151,7 @@ const Header = ({ flowId }) => {
           router.push(`./share`)
         }
         setIsLoading(false)
-        dispatch(setIsUpdating(false))
+        dispatch(setIsUpdating({ flowId, value: false }))
         router.push(`./share`)
       }, 6000)
       // }
@@ -229,8 +217,7 @@ const Header = ({ flowId }) => {
       <div
         className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full"
         onClick={() => {
-          dispatch(setResetTotalFilled(true))
-          dispatch(setSelectedScreen(selectedScreen))
+          dispatch(setResetTotalFilled({ flowId, value: true }))
           revalidateFlow({ tag: "previewFlow" })
         }}
       >

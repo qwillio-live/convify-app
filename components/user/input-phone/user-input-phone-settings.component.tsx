@@ -106,6 +106,7 @@ import { UserInputPhone, UserInputPhoneGen } from "./user-input-phone.component"
 import { InputSettingsIconPicker } from "../input/user-input-icon-picker"
 import { ColorInput } from "@/components/color-input"
 import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
+import { useParams } from "next/navigation"
 
 const IconRenderer = ({ iconName, onClick }) => {
   const ref = useRef(null)
@@ -198,13 +199,14 @@ export const UserInputPhoneSettings = () => {
   const [open, setOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [disableSize, setDisableSize] = useState(false)
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
 
   const closePopover = () => {
     setPopoverOpen(false)
   }
-  const screensLength = useScreensLength()
+  const screensLength = useScreensLength(flowId)
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
 
   useEffect(() => {

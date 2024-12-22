@@ -47,19 +47,21 @@ import {
 } from "@/lib/state/flows-state/features/screenHooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { ColorInput } from "@/components/color-input"
+import { useParams } from "next/navigation"
 
 export const LineSelectorSettings = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
+  const screenNames = useScreenNames(flowId)
   console.log("SCREEN NAMES: ", screenNames)
-  const screensLength = useScreensLength()
+  const screensLength = useScreensLength(flowId)
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < (screensLength || 0)
             ? selectedScreen + 1
             : selectedScreen
@@ -69,7 +71,7 @@ export const LineSelectorSettings = () => {
   const nextScreenId =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
         ]?.screenId
     ) || ""

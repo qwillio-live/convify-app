@@ -36,6 +36,7 @@ import {
   PictureTypes,
   SvgRenderer,
 } from "@/components/PicturePicker"
+import { useParams } from "next/navigation"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -287,6 +288,7 @@ const Wrapper = styled.div<{
 `
 
 export const UserInputPhoneGen = ({ ...props }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -299,12 +301,17 @@ export const UserInputPhoneGen = ({ ...props }) => {
   const dispatch = useAppDispatch()
   const fullScreenData = useAppSelector((state) => {
     const screenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     return screenData ? JSON.parse(screenData) : {}
   })
 
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
+    (state) =>
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm
   )
 
   // Access inputValue safely
@@ -313,7 +320,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
   // Check if inputRequired is present and parse it safely
   const isRequired = useAppSelector((state) => {
     const screenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     return screenData
       ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
       : false
@@ -346,7 +355,9 @@ export const UserInputPhoneGen = ({ ...props }) => {
 
   const counttt = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.errorCount || 0
   )
   const itemRefNew = useRef<HTMLDivElement | null>(null)
   const shakeItem = () => {
@@ -565,14 +576,15 @@ export const UserInputPhoneGen = ({ ...props }) => {
               onChange={(e) => {
                 if (isRequired) {
                   if (isFilled && e.target.value === "") {
-                    dispatch(setUpdateFilledCount(-1))
+                    dispatch(setUpdateFilledCount({ flowId, value: -1 }))
                     setIsFilled(false)
                     setInputValue(e.target.value)
                   } else {
-                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    if (!isFilled) dispatch(setUpdateFilledCount({ flowId, value: 1 }))
                     setInputValue(e.target.value),
                       dispatch(
                         setPreviewScreenData({
+                          flowId: flowId,
                           nodeId: props.nodeId,
                           isArray: false,
                           entity: "inputValue",
@@ -585,6 +597,7 @@ export const UserInputPhoneGen = ({ ...props }) => {
                   setInputValue(e.target.value),
                     dispatch(
                       setPreviewScreenData({
+                        flowId: flowId,
                         nodeId: props.nodeId,
                         isArray: false,
                         entity: "inputValue",

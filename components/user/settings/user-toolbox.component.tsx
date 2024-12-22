@@ -218,6 +218,7 @@ import {
   SliderBarDefaultProps,
   SliderBarGen,
 } from "../slider/user-slider.component"
+import { useParams } from "next/navigation"
 
 function HelperInformation({ infoText }: { infoText: string }) {
   return (
@@ -332,6 +333,7 @@ const HoverCardComponent = ({ title, icon, children }) => {
 }
 
 export const UserToolbox = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
   const APP_URL =
     process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid"
@@ -394,12 +396,14 @@ export const UserToolbox = () => {
      */
   }
   const isHeaderFooterMode = useAppSelector(
-    (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+    (state: RootState) =>
+      state?.screen?.flows[flowId]?.footerMode ||
+      state?.screen?.flows[flowId]?.headerMode
   )
 
-  const screensLength: number = useScreensLength() ?? 0
+  const screensLength: number = useScreensLength(flowId) ?? 0
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   return (
     <div className="text-card-foreground font-poppins" draggable={false}>

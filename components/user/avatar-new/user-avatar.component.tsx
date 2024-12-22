@@ -33,7 +33,7 @@ import Image from "next/image"
 import { env } from "@/env.mjs"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import useScrollPosition from "@/hooks/use-scroll-position"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 
 const ButtonTextLimit = {
   small: 100,
@@ -90,11 +90,9 @@ export const AvatarComponentGen = ({
   nextScreen,
   ...props
 }) => {
-  const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
-  )
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const hasComponentBeforeAvatar = useAppSelector(
-    (state) => state?.screen?.hasComponentBeforeAvatar
+    (state) => state?.screen?.flows[flowId]?.hasComponentBeforeAvatar
   )
 
   return (
@@ -176,14 +174,15 @@ export const UserLogo = ({
   isPreview,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
-  const scrollY = useAppSelector((state) => state?.screen?.scrollY)
+  const scrollY = useAppSelector((state) => state?.screen?.flows[flowId]?.scrollY)
   const isMobileScreen = useMediaQuery("(max-width: 640px)")
   const bodyScrollY = useScrollPosition()
-  const screenData = useAppSelector((state) => state.screen?.screensHeader)
+  const screenData = useAppSelector((state) => state.screen?.flows[flowId]?.screensHeader)
   const lengthOfComp = Object.keys(JSON.parse(screenData)).length
   const hasComponentBeforeAvatar = useAppSelector(
-    (state) => state?.screen?.hasComponentBeforeAvatar
+    (state) => state?.screen?.flows[flowId]?.hasComponentBeforeAvatar
   )
 
   console.log(
@@ -374,6 +373,7 @@ export const AvatarComponent = ({
   const ref = useRef<HTMLDivElement>(null)
   const [displayController, setDisplayController] = React.useState(false)
   const [buttonFullWidth, setButtonFullWidth] = React.useState(size === "full")
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const primaryTextColor = useAppSelector(
     (state) => state.theme?.text?.primaryColor
   )
@@ -388,29 +388,20 @@ export const AvatarComponent = ({
     (state) => state.theme?.general?.secondaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.flows[flowId]?.screens)
   const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
+    (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
   )
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
 
-  const hasComponentBeforeAvatar = useAppSelector(
-    (state) => state?.screen?.hasComponentBeforeAvatar
-  )
-  const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
-  )
-  const backgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
-  const screenData = useAppSelector((state) => state.screen?.screensHeader)
+  const screenData = useAppSelector((state) => state.screen?.flows[flowId]?.screensHeader)
   const lengthOfComp = Object.keys(JSON.parse(screenData)).length
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""

@@ -33,6 +33,7 @@ import {
 import { RootState } from "@/lib/state/flows-state/store"
 import axios from "axios"
 import { ColorInput } from "@/components/color-input"
+import { useParams } from "next/navigation"
 
 export const Img = ({
   alt,
@@ -98,17 +99,18 @@ export const Img = ({
 }
 
 export const LoaderSettings = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
-  const screensLength = useScreensLength()
+  const screenNames = useScreenNames(flowId)
+  const screensLength = useScreensLength(flowId)
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < (screensLength || 0)
             ? selectedScreen + 1
             : selectedScreen

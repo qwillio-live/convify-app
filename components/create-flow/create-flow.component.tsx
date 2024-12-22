@@ -1,9 +1,8 @@
 "use client"
 
-import { clear } from "console"
 import React, { useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { debounce, throttle } from "lodash"
+import { debounce } from "lodash"
 import {
   ArrowRight,
   Check,
@@ -25,8 +24,6 @@ import {
   setCurrentScreenName,
   setEditorLoad,
   setFirstScreenName,
-  setSelectedComponent,
-  setSelectedScreen,
   setValidateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
@@ -85,25 +82,25 @@ enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
 }
-const SaveButton = () => {
-  const {
-    query,
-    query: { node },
-  } = useEditor()
-  const headerId = useAppSelector((state) => state?.screen?.headerId)
-  //screen header id is: HeT6HrWBxJ
-  const nodeTree = node(headerId || "").toNodeTree()
-  nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
-  console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
-  return (
-    <a
-      className="absolute left-3 top-3 z-10 bg-black p-3 text-white"
-      onClick={() => console.log(query.serialize())}
-    >
-      Get JSON
-    </a>
-  )
-}
+// const SaveButton = () => {
+//   const {
+//     query,
+//     query: { node },
+//   } = useEditor()
+//   const headerId = useAppSelector((state) => state?.screen?.headerId)
+//   //screen header id is: HeT6HrWBxJ
+//   const nodeTree = node(headerId || "").toNodeTree()
+//   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
+//   console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
+//   return (
+//     <a
+//       className="absolute left-3 top-3 z-10 bg-black p-3 text-white"
+//       onClick={() => console.log(query.serialize())}
+//     >
+//       Get JSON
+//     </a>
+//   )
+// }
 const AddScreenButton = () => {
   const dispatch = useAppDispatch()
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)
@@ -200,11 +197,6 @@ export function CreateFlowComponent() {
   const headerPosition =
     useAppSelector((state) => state?.theme?.header?.headerPosition) ||
     "relative"
-  const firstScreenName =
-    useAppSelector((state) => state?.screen?.firstScreenName) || ""
-  const editorLoadLength = useAppSelector(
-    (state) => Object.keys(state?.screen?.editorLoad).length
-  )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const router = useRouter()
   const screens = useAppSelector((state: RootState) => state?.screen?.screens)

@@ -26,6 +26,7 @@ import { StyleProperty } from "../types/style.types"
 import { getSortedSelectOptions } from "./useSelectThemePresets"
 import { SelectSettings } from "./user-select.settings"
 import { cn } from "@/lib/utils"
+import { useParams } from "next/navigation"
 
 const SelectSizeValues = {
   small: "250px",
@@ -97,16 +98,21 @@ export const SelectGen = ({
   selectedOptionBackgroundColor,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const [selectedOptionId, setSelectedOptionId] = React.useState<
     string | undefined
   >()
   const [isFilled, setIsFiiled] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen?.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen?.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen?.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen?.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props.selectedOptionId
     }
     return []
@@ -114,10 +120,14 @@ export const SelectGen = ({
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props?.required
     }
     return false
@@ -132,12 +142,16 @@ export const SelectGen = ({
   }, [])
   const alarm = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm || false
   )
   const dispatch = useAppDispatch()
   const counttt = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.errorCount || 0
   )
   const itemRefNew = useRef<HTMLDivElement | null>(null)
   const shakeItem = () => {
@@ -192,6 +206,7 @@ export const SelectGen = ({
         onValueChange={(value) => {
           dispatch(
             setPreviewScreenData({
+              flowId: flowId,
               nodeId: props.nodeId,
               isArray: false,
               newSelections: [value],
@@ -200,7 +215,7 @@ export const SelectGen = ({
           )
           if (!isFilled && isRequired) {
             console.log("diispathving", isFilled)
-            dispatch(setUpdateFilledCount(1))
+            dispatch(setUpdateFilledCount({ flowId, value: 1 }))
             setIsFiiled(true)
           }
           setSelectedOptionId(value)

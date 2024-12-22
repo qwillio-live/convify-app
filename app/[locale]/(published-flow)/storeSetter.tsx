@@ -27,9 +27,10 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   const searchParams = useSearchParams()
   const screen = searchParams?.get("screen") || ""
   const dispatch = useAppDispatch()
-  const state = useAppSelector((state) => state.screen)
   const totalFilled =
-    useAppSelector((state) => state.screen?.filledContent) || []
+    useAppSelector(
+      (state) => state.screen?.flows[flowData.flowId]?.filledContent
+    ) || []
   const index = screenNames.findIndex((screenn) => screenn === screen)
   const VISITED_STORAGE_PREFIX = "visited-"
   const RESPONSE_BUTTON_CLASS = "send-response"
@@ -174,7 +175,7 @@ const FlowStateSetter: React.FC<FlowStateSetterProps> = ({
   useEffect(() => {
     console.log("Selected screen called", index !== -1 ? index : 1)
 
-    dispatch(setSelectedScreen(index))
+    dispatch(setSelectedScreen({ flowId: flowData.flowId, value: index }))
     const stepId = screen
     console.log("StepIDddd", stepId)
     if (stepId) {

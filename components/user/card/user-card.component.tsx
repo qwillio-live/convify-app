@@ -6,18 +6,9 @@ import { useTranslations } from "next-intl"
 import React from "react"
 import styled from "styled-components"
 
-import { Button } from "../button/user-button.component"
-import {
-  Container,
-  ContainerDefaultProps,
-  UserContainerSettings,
-} from "../container/user-container.component"
-import { UserInputCheckbox } from "../input-checkbox/user-input-checkbox.component"
-import { UserInputMail } from "../input-email/user-input-mail.component"
-import { UserInput } from "../input/user-input.component"
 import { Controller } from "../settings/controller.component"
-import { UserText } from "../text/user-text.component"
 import { CardContainerSettings } from "./user-card-settings"
+import { useParams } from "next/navigation"
 
 interface CardOuterStyles {
   fullWidth: boolean
@@ -176,6 +167,7 @@ export const CardContentGen = ({ children, ...props }) => {
   )
 }
 export const CardContent = ({ children, ...props }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const { query } = useEditor()
   const {
     actions: { setProp },
@@ -200,7 +192,7 @@ export const CardContent = ({ children, ...props }) => {
   const t = useTranslations("Components")
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const selectedComponent = useAppSelector(
-    (state) => state?.screen?.selectedComponent
+    (state) => state?.screen?.flows[flowId]?.selectedComponent
   )
   return (
     <div
@@ -265,9 +257,9 @@ export enum CardSizes {
   full = "full",
 }
 const CardSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
+  small: "376px",
+  medium: "800px",
+  large: "1000px",
   full: "100%",
 }
 
@@ -321,7 +313,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   paddingRight: "12",
   paddingBottom: "40",
   radius: "none",
-  flexDirection: "column",
+  flexDirection: "row",
   mobileFlexDirection: "column",
   fillSpace: "1",
   alignItems: "center",
@@ -331,7 +323,7 @@ export const CardContentDefaultProps: CardContentDefaultPropsTypes = {
   flexWrap: "nowrap",
   overflowY: "hidden",
   overflowX: "hidden",
-  gap: 20,
+  gap: 0,
   border: 0,
   borderColor: "transparent",
   size: CardSizes.medium,

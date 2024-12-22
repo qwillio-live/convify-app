@@ -20,13 +20,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { GlobalThemeSettings } from "./global-theme-settings"
 import { NewGlobalThemeSettings } from "@/components/user/settings/global-theme-settings-new"
+import { useParams } from "next/navigation"
 
 export const SettingsPanel = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const selectedComponent = useAppSelector(
-    (state) => state?.screen?.selectedComponent
+    (state) => state?.screen?.flows[flowId]?.selectedComponent
   )
   const { actions, selected, isEnabled, query } = useEditor((state, query) => {
     const currentNodeId = selectedComponent
@@ -94,7 +96,9 @@ export const SettingsPanel = () => {
                   <Button
                     onClick={() => {
                       actions.delete(selected.id),
-                        dispatch(setSelectedComponent("ROOT"))
+                        dispatch(
+                          setSelectedComponent({ flowId, value: "ROOT" })
+                        )
                       if (selected.fieldType === "data") {
                         dispatch(removeField(selected.id))
                       }

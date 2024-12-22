@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useRef,
 } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { debounce } from "lodash"
 // import {
 //   Activity,
@@ -127,6 +127,7 @@ export const IconButtonGen = ({
   nextScreen,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const router = useRouter()
   const dispatch = useAppDispatch()
   // const pathName = usePathname()
@@ -139,21 +140,25 @@ export const IconButtonGen = ({
   const currentScreenTotal =
     useAppSelector(
       (state) =>
-        state?.screen?.screens[state.screen.selectedScreen]?.totalRequired
+        state?.screen?.flows[flowId]?.screens[state.screen.flows[flowId]?.selectedScreen]?.totalRequired
     ) || ""
   const currentScreenFilled =
     useAppSelector(
       (state) =>
-        state?.screen?.screens[state.screen.selectedScreen]?.totalFilled
+        state?.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ]?.totalFilled
     ) || ""
   // const AllScreens = useAppSelector((state) => state?.screen?.screens)
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.screen?.flows[flowId]?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
-  const sc = useAppSelector((state) => state?.screen?.screens || [])
+  const sc = useAppSelector(
+    (state) => state?.screen?.flows[flowId]?.screens || []
+  )
   // const screenValidated =
   //   useAppSelector(
   //     (state: RootState) =>
@@ -215,17 +220,23 @@ export const IconButtonGen = ({
       if (currentScreenFilled === currentScreenTotal) {
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: updatedScreenName,
           })
         )
-        dispatch(getAllFilledAnswers(true))
-        dispatch(setSelectedScreen(index))
+        dispatch(getAllFilledAnswers({ flowId, value: true }))
+        dispatch(setSelectedScreen({ flowId, value: index }))
         handleSearch(updatedScreenName)
       } else {
         console.log("alarm called")
-        dispatch(setAlarm(true))
-        dispatch(setErrorCount((sc[selectedScreen]?.errorCount || 0) + 1))
+        dispatch(setAlarm({ flowId, value: true }))
+        dispatch(
+          setErrorCount({
+            flowId,
+            value: (sc[selectedScreen]?.errorCount || 0) + 1,
+          })
+        )
       }
     }
     // if(screenValidated){
@@ -602,6 +613,7 @@ export const IconButton = ({
     selected: state.events.selected,
     isHovered: state.events.hovered,
   }))
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
@@ -619,10 +631,10 @@ export const IconButton = ({
   //   (state) => state.theme?.general?.secondaryColor
   // )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state) => state?.screen?.screens || [])
+  const screens = useAppSelector((state) => state?.screen?.flows[flowId]?.screens || [])
   const screensLength = screens?.length
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
 
   // const nextScreenName =
@@ -760,7 +772,7 @@ export const IconButton = ({
   const handleNavigateToScreen = () => {
     // console.log("entered validating")
     dispatch(
-      validateScreen({ current: selectedScreen, next: nextScreen.screenName })
+      validateScreen({ flowId: flowId, current: selectedScreen, next: nextScreen.screenName })
     )
 
     // dispatch(navigateToScreen(nextScreen));

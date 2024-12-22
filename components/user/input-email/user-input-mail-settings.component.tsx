@@ -203,10 +203,6 @@ export const UserInputMailSettings = () => {
   const closePopover = () => {
     setPopoverOpen(false)
   }
-  const screensLength = useScreensLength()
-  const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
-  )
 
   useEffect(() => {
     const handleClickOutside = (event) => {

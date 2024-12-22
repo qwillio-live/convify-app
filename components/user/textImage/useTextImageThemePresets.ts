@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { GlobalThemeState } from "@/lib/state/flows-state/features/theme/globalThemeSlice";
-import { IconButtonProps, IconButtonSizes } from "./user-textImage.component";
+import { TextImageProps, TextImageSizes } from "./user-textImage.component";
 import { useAppSelector } from "@/lib/state/flows-state/hooks";
 import { darken, rgba } from "polished";
 import { useTranslations } from "next-intl";
@@ -18,7 +18,7 @@ const useButtonThemePresets = () => {
         children: [
             { text: t("Continue") }]
     }]);
-    const filledPreset: IconButtonProps = {
+    const filledPreset: TextImageProps = {
         secondaryFontFamily: {
             value: "inherit",
             globalStyled: true,
@@ -68,10 +68,10 @@ const useButtonThemePresets = () => {
         justifyContent: "space-between",
         disabled: false,
         enableLink: false,
-        
+
         width: '85%',
         height: "auto",
-        size: IconButtonSizes.medium,
+        size: TextImageSizes.medium,
         split: 6,
         horizontalGap: 20,
         verticalGap: 10,
@@ -115,10 +115,11 @@ const useButtonThemePresets = () => {
         imageSize: 0,
         bothAlign: 'top',
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false,
     };
 
-    const outLinePreset: IconButtonProps = {
+    const outLinePreset: TextImageProps = {
         secondaryFontFamily: {
             value: "inherit",
             globalStyled: true,
@@ -170,7 +171,7 @@ const useButtonThemePresets = () => {
         enableLink: false,
         width: '85%',
         height: "auto",
-        size: IconButtonSizes.medium,
+        size: TextImageSizes.medium,
         cornerRadius: 10,
         horizontalGap: 20,
         verticalGap: 10,
@@ -214,7 +215,8 @@ const useButtonThemePresets = () => {
         Right: 0,
         imageSize: 0,
         uploadedImageUrl: '',
-        uploadedImageMobileUrl: ''
+        uploadedImageMobileUrl: '',
+        showTitle: false,
     };
 
     return { filledPreset, outLinePreset };

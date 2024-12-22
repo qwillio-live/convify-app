@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { useTranslations } from "next-intl"
-import { ComponentProps, Data } from "@/types"
+import { Data } from "@/types"
 
 import { env } from "@/env.mjs"
 import { useNode } from "@/lib/craftjs"
@@ -18,6 +18,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useLogoThemePresets"
 import { LogoSettings } from "./user-logo.settings"
+import { useParams } from "next/navigation"
 
 const ButtonTextLimit = {
   small: 100,
@@ -75,7 +76,8 @@ export const LogoComponentGen = ({
 
   ...props
 }) => {
-  const headerData = useAppSelector((state) => state.screen?.screensHeader)
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
+  const headerData = useAppSelector((state) => state.screen?.flows[flowId]?.screensHeader)
   const avatarContainerColor: Data = JSON.parse(headerData)
 
   // Loop through the data and find the first AvatarComponent
@@ -245,6 +247,7 @@ export const LogoComponent = ({
   borderRad,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -261,15 +264,15 @@ export const LogoComponent = ({
     (state) => state.theme?.general?.primaryColor
   )
   const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
+    (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
   )
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""
@@ -358,7 +361,9 @@ export const LogoComponent = ({
       }
     }
   }, [text, maxLength])
-  const headerData = useAppSelector((state) => state.screen?.screensHeader)
+  const headerData = useAppSelector(
+    (state) => state.screen?.flows[flowId]?.screensHeader
+  )
   const avatarContainerColor: Data = JSON.parse(headerData)
 
   // Loop through the data and find the first AvatarComponent
@@ -499,6 +504,7 @@ export type IconButtonProps = {
   buttonAction: "next-screen" | "custom-action" | "none"
   nextScreen: string
   borderRad: number
+  maxWidth: string
 }
 
 export const LogoDefaultProps: IconButtonProps = {
@@ -555,6 +561,7 @@ export const LogoDefaultProps: IconButtonProps = {
   h: "60px",
   width: "85%",
   height: "auto",
+  maxWidth: "400px",
   size: IconButtonSizes.medium,
   imageSize: 90,
   buttonSize: "medium",
@@ -579,7 +586,7 @@ export const LogoDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: "filled",
-  settingsTab: "content",
+  settingsTab: "design",
   tracking: false,
   trackingEvent: "button_clicked",
   nextScreen: "",

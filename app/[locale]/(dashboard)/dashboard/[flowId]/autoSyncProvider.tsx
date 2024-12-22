@@ -18,13 +18,13 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const localFlowData = useAppSelector((state) => state?.screen)
+  const localFlowData = useAppSelector((state) => state?.screen?.flows[flowId])
   const localFlowSettings = useAppSelector((state) => state?.theme)
 
   // Reference to hold the AbortController for request cancellation
   const abortControllerRef = useRef<AbortController | null>(null)
   const isUpdating =
-    useAppSelector((state) => state?.screen?.isUpdating) || false
+    useAppSelector((state) => state?.screen?.flows[flowId]?.isUpdating) || false
   const getFlowData = async () => {
     try {
       const response = await fetch(`/api/flows/${flowId}`)
@@ -107,10 +107,11 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
             const step = localFlowData.screens.find(
               (s) => s.screenName === name
             )
-            const parsedContent = JSON.parse(step?.screenData)
 
             // Create a Set to keep track of unique content
             if (!step) return null // Skip if step is not found
+
+            const parsedContent = JSON.parse(step.screenData)
 
             // Initialize a unique content Set
             const uniqueContentSet = new Set()

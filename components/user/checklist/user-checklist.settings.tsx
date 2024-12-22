@@ -60,13 +60,15 @@ import { ColorInput } from "@/components/color-input"
 import { Icons } from "@/components/icons"
 import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 import { getTextContentOfEditor } from "@/lib/utils"
+import { useParams } from "next/navigation"
 
 export const ChecklistSettings = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
-  const screensLength = useScreensLength()
+  const screenNames = useScreenNames(flowId)
+  const screensLength = useScreensLength(flowId)
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
 
   const {
