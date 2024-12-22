@@ -59,7 +59,7 @@ import { track } from "@vercel/analytics/react"
 import { RootState } from "@/lib/state/flows-state/store"
 import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { useScreenNames, useScreensLength } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import { Progress } from "@/components/ui/progress-custom"
@@ -250,6 +250,7 @@ export const SliderBarGen = ({
     defaultValue = 50,
     ...props
 }) => {
+    const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
     const router = useRouter()
     const pathName = usePathname()
     const [formValue, setFormValue] = useState<number>(defaultValue);
@@ -257,22 +258,25 @@ export const SliderBarGen = ({
         // router.push(currentUrlWithHash);
     }
     const screensLength = useAppSelector(
-        (state: RootState) => state?.screen?.screens?.length ?? 0
+        (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
     )
     const selectedScreen = useAppSelector(
-        (state: RootState) => state.screen?.selectedScreen ?? 0
+      (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
     )
     const primaryColor = useAppSelector(
         (state) => state.theme?.general?.primaryColor
     )
     const isHeaderFooterMode = useAppSelector(
-        (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+      (state: RootState) =>
+        state?.screen?.flows[flowId]?.footerMode ||
+        state?.screen?.flows[flowId]?.headerMode
     )
     const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
     const selectedScreenName =
-        useAppSelector(
-            (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
-        ) || ""
+      useAppSelector(
+        (state: RootState) =>
+          state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenName
+      ) || ""
     // const mv = useAppSelector(
     //   (state) =>
     //     JSON.parse(state.screen?.screens[state.screen.selectedScreen].screenData)[
@@ -515,6 +519,7 @@ export const SliderBar = ({
     defaultValue = 50,
     ...props
 }) => {
+    const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
     const {
         actions: { setProp },
         connectors: { connect, drag },
@@ -550,40 +555,43 @@ export const SliderBar = ({
         (state) => state.theme?.general?.secondaryColor
     )
     const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-    const screens = useAppSelector((state) => state?.screen?.screens)
+    const screens = useAppSelector((state) => state?.screen?.flows[flowId]?.screens)
     const screensLength = useAppSelector(
-        (state: RootState) => state?.screen?.screens?.length ?? 0
+      (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
     )
     const selectedScreen = useAppSelector(
-        (state: RootState) => state.screen?.selectedScreen ?? 0
+      (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
     )
 
     const nextScreenName =
-        useAppSelector(
-            (state: RootState) =>
-                state?.screen?.screens[
-                    selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-                ]?.screenName
-        ) || ""
+      useAppSelector(
+        (state: RootState) =>
+          state?.screen?.flows[flowId]?.screens[
+            selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+          ]?.screenName
+      ) || ""
     const nextScreenId =
-        useAppSelector(
-            (state: RootState) =>
-                state?.screen?.screens[
-                    selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
-                ]?.screenId
-        ) || ""
+      useAppSelector(
+        (state: RootState) =>
+          state?.screen?.flows[flowId]?.screens[
+            selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
+          ]?.screenId
+      ) || ""
     const selectedScreenName =
-        useAppSelector(
-            (state: RootState) => state?.screen?.screens[selectedScreen]?.screenName
-        ) || ""
+      useAppSelector(
+        (state: RootState) =>
+          state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenName
+      ) || ""
     const isHeaderFooterMode = useAppSelector(
-        (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+      (state: RootState) =>
+        state?.screen?.flows[flowId]?.footerMode ||
+        state?.screen?.flows[flowId]?.headerMode
     )
     const [cardPosition, setCardPosition] = useState(0);
     const sliderRef = useRef<HTMLDivElement | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
 
-    const screenNames = useScreenNames()
+    const screenNames = useScreenNames(flowId)
 
     //editor load needs to be refreshed so that screenName value is re-populated but
     // it is working now because it refers screenId rather then screenName

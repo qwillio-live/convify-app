@@ -193,7 +193,7 @@ const ResponseFlowComponents = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [isAscending, setIsAscending] = useState<boolean>(false)
   const [rows, setRows] = useState<Object[]>([]) // Add state for rows
-  const screens = useAppSelector((state) => state.screen?.screens)
+  const screens = useAppSelector((state) => flowId ? state.screen?.flows[flowId]?.screens : [])
   useEffect(() => {
     const getResponses = async () => {
       setLoading(true)

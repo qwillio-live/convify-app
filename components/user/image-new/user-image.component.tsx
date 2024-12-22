@@ -18,6 +18,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
 import { ImageSettings } from "./user-image.settings"
+import { useParams } from "next/navigation"
 
 const ButtonTextLimit = {
   small: 100,
@@ -257,6 +258,7 @@ export const ImageComponent = ({
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
   }))
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
   const dispatch = useAppDispatch()
   const ref = useRef<HTMLDivElement>(null)
@@ -266,17 +268,17 @@ export const ImageComponent = ({
     (state) => state.theme?.general?.primaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.flows[flowId]?.screens)
   const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
+    (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
   )
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""

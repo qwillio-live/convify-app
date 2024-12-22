@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation"
 import { FormProvider, useForm, useFormContext } from "react-hook-form"
 
 import {
@@ -26,8 +26,9 @@ export default function FlowLayout({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const search = searchParams?.get("screen") || ""
-  const screens = useAppSelector((state) => state?.screen?.screens)
+  const screens = useAppSelector((state) => state?.screen?.flows[flowId]?.screens)
   useEffect(() => {
     if (search !== currentScreenName) {
       dispatch(setCurrentScreenName(search))
@@ -45,7 +46,7 @@ export default function FlowLayout({
     )
     if (index !== -1 && index !== undefined) {
       console.log("-------dispatching---------")
-      dispatch(setSelectedScreen(index))
+      dispatch(setSelectedScreen({ flowId, value: index }))
     } else {
       console.error(
         "Screen not found, index is out of bounds, or screenData is undefined"
@@ -55,44 +56,40 @@ export default function FlowLayout({
   const previewHeaderRef = React.useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = React.useState(90)
 
-  const selectedScreenIdex =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
-  const firstScreenName =
-    useAppSelector((state) => state?.screen?.firstScreenName) || ""
-
   const currentScreenName = useAppSelector(
     (state) => state?.screen?.currentScreenName
   )
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.screen?.flows[flowId]?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
 
   const selectedScreenId = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
+    (state) => state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenId || ""
   )
   const selectedScreenError = useAppSelector(
     (state) =>
-      state?.screen?.screens[selectedScreen]?.screenToggleError || false
+      state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenToggleError || false
   )
 
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
-  const screenHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screenHeader = useAppSelector((state) => state?.screen?.flows[flowId]?.screensHeader)
   const headerPosition =
     useAppSelector((state) => state?.theme?.header?.headerPosition) ||
     "relative"
 
-  const screenFooter = useAppSelector((state) => state?.screen?.screensFooter)
+  const screenFooter = useAppSelector((state) => state?.screen?.flows[flowId]?.screensFooter)
   const headerMode =
-    useAppSelector((state) => state?.screen?.headerMode) || false
+    useAppSelector((state) => state?.screen?.flows[flowId]?.headerMode) || false
   const sf = useAppSelector((state) => state?.screen)
   useEffect(() => {
     dispatch(
       setValidateScreen({
+        flowId: flowId,
         screenId: selectedScreenId,
         screenValidated: false,
         screenToggleError: false,
@@ -115,7 +112,7 @@ export default function FlowLayout({
     }
   }, [headerMode, headerHeight, headerPosition])
   useEffect(() => {
-    dispatch(setTotalRequired(true))
+    dispatch(setTotalRequired({ flowId, value: true }))
   }, [])
   console.log("op", screens, sf, search, selectedScreen)
   if (check) return null

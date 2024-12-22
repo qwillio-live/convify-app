@@ -173,7 +173,7 @@ export default async function PublishedFlows({
           meta={data?.integrations?.metaPixelId}
         />
         {showCookieConsentPopup && <CookieConsentComponent />}
-        <FlowStateSetter flowData={data} screenNames={screenNames} />
+        <FlowStateSetter flowData={{ flowId, ...data }} screenNames={screenNames} />
         <StaticPublishedFile
           data={data}
           screenName={screenName === undefined ? screenNames[0] : screenName}

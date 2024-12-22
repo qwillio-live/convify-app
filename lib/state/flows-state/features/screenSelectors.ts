@@ -2,11 +2,11 @@
 import { RootState } from '../store';
 import { ScreenType } from './placeholderScreensSlice';
 
-export const selectScreenNames = (state: RootState) =>
-  state?.screen?.screens.map((screen:ScreenType) => screen?.screenName);
+export const selectScreenNames = (flowId: string) => (state: RootState) =>
+  state?.[flowId]?.screen?.screens.map((screen:ScreenType) => screen?.screenName);
 
-export const selectScreenDetails = (state: RootState) =>
-  state?.screen?.screens.map((screen: ScreenType) => ({
+export const selectScreenDetails = (flowId: string) => (state: RootState) =>
+  state?.[flowId]?.screen?.screens.map((screen: ScreenType) => ({
     screenId: screen?.screenId,
     screenName: screen?.screenName,
-  }));
+  }))

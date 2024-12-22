@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/context-menu"
 
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
+import { useParams } from "next/navigation"
 
 export const ScreenListItem = ({
   screen,
@@ -32,12 +33,13 @@ export const ScreenListItem = ({
   handleAddScreen,
   handleDeleteScreen,
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const backgroundColor = useAppSelector(
     (state) => state?.theme?.general?.backgroundColor
   )
 
   const selectedScreenIndex = useAppSelector(
-    (state) => state?.screen?.selectedScreen
+    (state) => state?.screen?.flows[flowId]?.selectedScreen
   )
 
   return (

@@ -97,7 +97,6 @@ export const NewGlobalThemeSettings = (props: Props) => {
   const defaultSecondaryTextColor = useAppSelector(
     (state) => state?.newTheme?.defaultText?.secondaryColor
   )
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
 
   const handleApplyTheme = (themeStyles) => {
     dispatch({ type: "APPLY_THEME_AND_CYCLE_SCREENS", payload: themeStyles })

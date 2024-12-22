@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEditor, useNode } from "@craftjs/core"
 import { ArrowUp, GripHorizontal, Move, Trash2 } from "lucide-react"
 import ReactDOM from "react-dom"
@@ -145,16 +145,17 @@ const NewStyledNodeDiv = ({
 export default StyledNodeDiv
 
 export const RenderNode = ({ render }: { render: React.ReactNode }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const dispatch = useAppDispatch()
   const { id } = useNode()
   const selectedComponent = useAppSelector(
-    (state) => state.screen?.selectedComponent
+    (state) => state.screen?.flows[flowId]?.selectedComponent
   )
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const selectedScreen =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+    useAppSelector((state) => state?.screen?.flows[flowId]?.selectedScreen) || 0
   const currentScreenId = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreen]?.screenId
+    (state) => state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenId
   )
   const { actions, query, isActive } = useEditor((_, query) => ({
     isActive: query.getEvent("selected").contains(id),
@@ -194,13 +195,13 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     props: node.data.props,
   }))
   const avatarComponentId = useAppSelector(
-    (state) => state?.screen?.avatarComponentId
+    (state) => state?.screen?.flows[flowId]?.avatarComponentId
   )
   const previousAvatarComponentId = useAppSelector(
-    (state) => state?.screen?.previousAvatarComponentId
+    (state) => state?.screen?.flows[flowId]?.previousAvatarComponentId
   )
   const avatarComponentIds = useAppSelector(
-    (state) => state?.screen?.avatarComponentIds
+    (state) => state?.screen?.flows[flowId]?.avatarComponentIds
   )
   useEffect(() => {
     console.log("isdifs", id)
@@ -216,7 +217,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
   }, [dom, isHover, isSelected, id])
   useEffect(() => {
     if (isSelected) {
-      dispatch(setSelectedComponent(id))
+      dispatch(setSelectedComponent({ flowId, value: id }))
     }
   }, [isSelected])
 
@@ -233,7 +234,7 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
 
   useEffect(() => {
     if (name === "AvatarComponent" && !avatarComponentIds?.includes(id)) {
-      dispatch(addAvatarComponentId(id))
+      dispatch(addAvatarComponentId({ flowId, value: id }))
     }
   }, [name, id, avatarComponentIds, dispatch])
 
@@ -241,11 +242,14 @@ export const RenderNode = ({ render }: { render: React.ReactNode }) => {
     if (fieldType === "data") {
       dispatch(
         addField({
-          fieldId: id,
-          fieldName: name,
-          fieldValue: null,
-          fieldRequired: false,
-          toggleError: false,
+          flowId: flowId,
+          value: {
+            fieldId: id,
+            fieldName: name,
+            fieldValue: null,
+            fieldRequired: false,
+            toggleError: false,
+          },
         })
       )
       // console.log("run here")

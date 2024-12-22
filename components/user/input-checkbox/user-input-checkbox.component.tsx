@@ -21,6 +21,7 @@ import {
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { produceRandomLetters } from "../input-textarea/useInputTextareaThemePresets"
 import { TextEditor } from "@/components/TextEditor"
+import { useParams } from "next/navigation"
 
 export enum UserInputSizes {
   small = "small",
@@ -270,6 +271,7 @@ const Wrapper = styled.div<{
 `
 
 export const UserInputCheckboxGen = ({ ...props }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const [inputValue, setInputValue] = useState("")
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -280,16 +282,21 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   const dispatch = useAppDispatch()
   const fullScreenData = useAppSelector((state) => {
     const screenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[state.screen.flows[flowId]?.selectedScreen]?.screenData
     return screenData ? JSON.parse(screenData) : {}
   })
   const alarm = useAppSelector(
-    (state) => state.screen?.screens[state.screen.selectedScreen]?.alarm
+    (state) =>
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm
   )
   const screenData = fullScreenData[props.nodeId]?.props.inputValue
   const isRequired = useAppSelector((state) => {
     const screenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     return screenData
       ? JSON.parse(screenData)[props.nodeId]?.props?.inputRequired || false
       : false
@@ -300,7 +307,9 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   }, [])
   const counttt = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.errorCount || 0
   )
   const itemRefNew = useRef<HTMLDivElement | null>(null)
   const shakeItem = () => {
@@ -466,11 +475,12 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                       if (isRequired) {
                         if (isFilled) {
                           // If the checkbox is already filled, uncheck it
-                          dispatch(setUpdateFilledCount(-1)) // Decrease filled count
+                          dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Decrease filled count
                           setIsFilled(false) // Update isFilled state
                           setInputValue("false") // Set inputValue to false
                           dispatch(
                             setPreviewScreenData({
+                              flowId: flowId,
                               nodeId: props.nodeId,
                               isArray: false,
                               entity: "inputValue",
@@ -479,11 +489,12 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                           )
                         } else {
                           // If the checkbox is not filled, check it
-                          dispatch(setUpdateFilledCount(1)) // Increase filled count
+                          dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Increase filled count
                           setIsFilled(true) // Update isFilled state
                           setInputValue("true") // Set inputValue to true
                           dispatch(
                             setPreviewScreenData({
+                              flowId: flowId,
                               nodeId: props.nodeId,
                               isArray: false,
                               entity: "inputValue",
@@ -498,6 +509,7 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                           setInputValue(newState ? "true" : "false") // Update inputValue
                           dispatch(
                             setPreviewScreenData({
+                              flowId: flowId,
                               nodeId: props.nodeId,
                               isArray: false,
                               entity: "inputValue",

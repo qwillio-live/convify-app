@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation"
 import hexoid from "hexoid"
 import { debounce } from "lodash"
 import { Pi } from "lucide-react"
@@ -90,6 +90,7 @@ export const PictureChoiceGen = ({
   tracking,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const [selectedChoices, setSelectedChoices] = useState<string[]>(selections)
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   useEffect(() => {
@@ -98,10 +99,14 @@ export const PictureChoiceGen = ({
 
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props?.selections
     }
     return []
@@ -109,10 +114,14 @@ export const PictureChoiceGen = ({
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props?.required
     }
     return false
@@ -129,11 +138,15 @@ export const PictureChoiceGen = ({
 
   const alarm = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm || false
   )
   const counttt = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.errorCount || 0
   )
   const itemRef = useRef<HTMLUListElement | null>(null)
   const shakeItem = () => {
@@ -232,19 +245,20 @@ export const PictureChoiceGen = ({
                           isCountUpdated
                         )
                         if (updatedChoices.length > 0 && !isCountUpdated) {
-                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Dispatch with 1 if there's a selection
                           setIsCountUpdated(true) // Set count updated flag
                         } else if (
                           updatedChoices.length === 0 &&
                           isCountUpdated
                         ) {
-                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Dispatch with -1 if no selection
                           setIsCountUpdated(false) // Reset count updated flag
                         }
                       }
                       // Dispatch action for removing choice
                       dispatch(
                         setPreviewScreenData({
+                          flowId: flowId,
                           nodeId: props.nodeId,
                           newSelections: updatedChoices,
                           entity: "selections",
@@ -258,19 +272,20 @@ export const PictureChoiceGen = ({
                       const updatedChoices = [...prev, choice.id]
                       if (isRequired) {
                         if (updatedChoices.length > 0 && !isCountUpdated) {
-                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Dispatch with 1 if there's a selection
                           setIsCountUpdated(true) // Set count updated flag
                         } else if (
                           updatedChoices.length === 0 &&
                           isCountUpdated
                         ) {
-                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Dispatch with -1 if no selection
                           setIsCountUpdated(false) // Reset count updated flag
                         }
                       }
                       // Dispatch action for adding choice
                       dispatch(
                         setPreviewScreenData({
+                          flowId: flowId,
                           nodeId: props.nodeId,
                           newSelections: updatedChoices,
                           entity: "selections",
@@ -287,12 +302,14 @@ export const PictureChoiceGen = ({
                     : [choice.id]
 
                   dispatch(
-                    setSelectedData(
-                      selectedChoices?.includes(choice.id) ? [] : [choice.id]
-                    )
+                    setSelectedData({
+                      flowId: flowId,
+                      value: selectedChoices?.includes(choice.id) ? [] : [choice.id]
+                    })
                   )
                   dispatch(
                     setPreviewScreenData({
+                      flowId: flowId,
                       nodeId: props.nodeId,
                       newSelections: selectedChoices?.includes(choice.id)
                         ? []
@@ -303,10 +320,10 @@ export const PictureChoiceGen = ({
                   )
                   if (isRequired) {
                     if (newSelection.length > 0 && !isCountUpdated) {
-                      dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                      dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Dispatch with 1 if there's a selection
                       setIsCountUpdated(true) // Set count updated flag
                     } else if (newSelection.length === 0 && isCountUpdated) {
-                      dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                      dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Dispatch with -1 if no selection
                       setIsCountUpdated(false) // Reset count updated flag
                     }
                   }
@@ -699,22 +716,25 @@ const PictureChoiceItem = ({
     // }
   }
 
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const sc = useAppSelector((state) => state?.screen?.flows[flowId]?.screens) || []
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.screen?.flows[flowId]?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
   const alarm = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm || false
   )
   function handleSearch(term: string) {
     const params = new URLSearchParams(searchParams || undefined)
@@ -762,13 +782,14 @@ const PictureChoiceItem = ({
         )
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: updatedScreenName,
           })
         )
         handleSearch(updatedScreenName)
-        dispatch(getAllFilledAnswers(true))
-        dispatch(setSelectedScreen(index))
+        dispatch(getAllFilledAnswers({ flowId, value: true }))
+        dispatch(setSelectedScreen({ flowId, value: index }))
       } else if (newsc !== "none") {
         console.log(
           "navigating pc else.....",
@@ -778,14 +799,15 @@ const PictureChoiceItem = ({
         )
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: newsc,
           })
         )
-        dispatch(getAllFilledAnswers(true))
+        dispatch(getAllFilledAnswers({ flowId, value: true }))
         handleSearch(newsc)
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
-        dispatch(setSelectedScreen(index))
+        dispatch(setSelectedScreen({ flowId, value: index }))
       }
     }
   }

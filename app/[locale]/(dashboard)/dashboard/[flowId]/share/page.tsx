@@ -15,16 +15,11 @@ export default function CreateFlowsPage({
 }: {
   params: { flowId: string; en: string }
 }) {
-  const currentPath = usePathname()
   const flowId = params?.flowId
   const [isPublished, setIsPublished] = useState<boolean>(false)
   const [isPublishedLoading, setIsPublishedLoading] = useState<boolean>(true)
   const [data, setData] = useState<any>({})
   const [error, setError] = useState(false)
-  const router = useRouter()
-  const dispatch = useAppDispatch()
-  const selectedScreen =
-    useAppSelector((state) => state.screen?.selectedScreen) || 0
 
   useEffect(() => {
     if (flowId) {

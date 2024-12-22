@@ -43,6 +43,7 @@ import { Icons } from "@/components/icons"
 import { Controller } from "../settings/controller.component"
 import { UserLogo } from "./user-avatar.component"
 import { ColorInput } from "@/components/color-input"
+import { useParams } from "next/navigation"
 
 export const Img = ({
   alt,
@@ -115,6 +116,7 @@ export const Img = ({
 }
 
 export const AvatarSettings = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const dialogRef = React.useRef<HTMLDivElement>(null)
   const [setUploadedFile, uploadedFile] = React.useState<string | null>(null)
   const [showDialog, setShowDialog] = React.useState<boolean>(false)
@@ -424,7 +426,7 @@ export const AvatarSettings = () => {
     (state) => state?.theme?.general?.backgroundColor
   )
   const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
+    (state) => state?.screen?.flows[flowId]?.avatarBackgroundColor
   )
 
   return (
@@ -578,7 +580,7 @@ export const AvatarSettings = () => {
                 value={containerBackground}
                 handleChange={(e) => {
                   debouncedSetProp("containerBackground", e.target.value)
-                  dispatch(setAvatarBackgroundColor(e.target.value))
+                  dispatch(setAvatarBackgroundColor({ flowId, value: e.target.value }))
                 }}
                 handleRemove={() =>
                   debouncedSetProp("containerBackground", "transparent")

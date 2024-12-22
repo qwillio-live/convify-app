@@ -69,19 +69,21 @@ import {
 import { RootState } from "@/lib/state/flows-state/store"
 import { PicturePicker, PictureTypes } from "@/components/PicturePicker"
 import { ColorInput } from "@/components/color-input"
+import { useParams } from "next/navigation"
 
 export const IconButtonSettings = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
-  const screenNames = useScreenNames()
+  const screenNames = useScreenNames(flowId)
   console.log("SCREEN NAMES: ", screenNames)
-  const screensLength = useScreensLength()
+  const screensLength = useScreensLength(flowId)
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""
@@ -89,7 +91,7 @@ export const IconButtonSettings = () => {
   const nextScreenId =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
         ]?.screenId
     ) || ""
@@ -97,7 +99,7 @@ export const IconButtonSettings = () => {
   const prevScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen - 1 >= 0 ? selectedScreen - 1 : selectedScreen
         ]?.screenName
     ) || ""
@@ -105,8 +107,9 @@ export const IconButtonSettings = () => {
   const prevScreenId =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[selectedScreen - 1 >= 0 ? selectedScreen - 1 : 0]
-          ?.screenId
+        state?.screen?.flows[flowId]?.screens[
+          selectedScreen - 1 >= 0 ? selectedScreen - 1 : 0
+        ]?.screenId
     ) || ""
   const {
     actions: { setProp },

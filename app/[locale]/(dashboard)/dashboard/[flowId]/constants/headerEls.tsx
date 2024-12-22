@@ -42,16 +42,12 @@ const Header = ({ flowId }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState<User>()
-  const localFlowData = useAppSelector((state) => state?.screen)
+  const localFlowData = useAppSelector((state) => state?.screen?.flows[flowId])
   const localFlowSettings = useAppSelector((state) => state?.theme)
   // const flowDomain = env.NEXT_PUBLIC_FLOW_DOMAIN
   const screeenName = useAppSelector(
-    (state) => state?.screen?.screens[state?.screen?.selectedScreen]?.screenName
+    (state) => state?.screen?.flows[flowId]?.screens[state?.screen?.flows[flowId]?.selectedScreen]?.screenName
   )
-  const isUpdating =
-    useAppSelector((state) => state?.screen?.isUpdating) || false
-  const selectedScreen =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
 
   useEffect(() => {
     fetch("/api/users")
@@ -96,7 +92,7 @@ const Header = ({ flowId }) => {
   const publishFlow = async () => {
     try {
       setIsLoading(true)
-      dispatch(setIsUpdating(true))
+      dispatch(setIsUpdating({ flowId, value: true }))
       const steps = localFlowData?.screens
         ? Array.from(
             new Set(localFlowData.screens.map((step) => step.screenName))
@@ -155,7 +151,7 @@ const Header = ({ flowId }) => {
           router.push(`./share`)
         }
         setIsLoading(false)
-        dispatch(setIsUpdating(false))
+        dispatch(setIsUpdating({ flowId, value: false }))
         router.push(`./share`)
       }, 6000)
       // }
@@ -221,7 +217,7 @@ const Header = ({ flowId }) => {
       <div
         className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full"
         onClick={() => {
-          dispatch(setResetTotalFilled(true))
+          dispatch(setResetTotalFilled({ flowId, value: true }))
           revalidateFlow({ tag: "previewFlow" })
         }}
       >

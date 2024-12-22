@@ -38,12 +38,14 @@ import dash_icon from "@/assets/images/dash_icon_new.svg"
 import dash_icon_selected from "@/assets/images/dash_icon_selected.svg"
 import { ColorInput } from "@/components/color-input"
 import { Checkbox } from "@/components/custom-checkbox"
+import { useParams } from "next/navigation"
 
 export const SliderBarSettings = () => {
+    const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
     const t = useTranslations("Components")
-    const screensLength: number = useScreensLength() ?? 0
+    const screensLength: number = useScreensLength(flowId) ?? 0
     const selectedScreen = useAppSelector(
-        (state: RootState) => state.screen?.selectedScreen ?? 0
+        (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
     )
 
     const {
@@ -114,7 +116,9 @@ export const SliderBarSettings = () => {
         throttledSetProp(property, value)
     }
     const isHeaderFooterMode = useAppSelector(
-        (state: RootState) => state?.screen?.footerMode || state?.screen?.headerMode
+      (state: RootState) =>
+        state?.screen?.flows[flowId]?.footerMode ||
+        state?.screen?.flows[flowId]?.headerMode
     )
     const debouncedSetProp = useCallback(
         debounce((property, value) => {

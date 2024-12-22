@@ -97,35 +97,39 @@ import { Links } from "../user/links/user-links.component"
 import { ImageStory } from "../user/image-story/image-story.component"
 import { YoutubeVideo } from "../user/youtube-video/user-youtube-video.component"
 import { SliderBar } from "../user/slider/user-slider.component"
+import { useParams } from "next/navigation"
 
 enum VIEWS {
   MOBILE = "mobile",
   DESKTOP = "desktop",
 }
-const SaveButton = () => {
-  const {
-    query,
-    query: { node },
-  } = useEditor()
-  const headerId = useAppSelector((state) => state?.screen?.headerId)
-  //screen header id is: HeT6HrWBxJ
-  const nodeTree = node(headerId || "").toNodeTree()
-  nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
-  console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
-  return (
-    <a
-      className="absolute left-3 top-3 z-10 bg-black p-3 text-white"
-      onClick={() => console.log(query.serialize())}
-    >
-      Get JSON
-    </a>
-  )
-}
+// const SaveButton = () => {
+//   const {
+//     query,
+//     query: { node },
+//   } = useEditor()
+//   const headerId = useAppSelector((state) => state?.screen?.headerId)
+//   //screen header id is: HeT6HrWBxJ
+//   const nodeTree = node(headerId || "").toNodeTree()
+//   nodeTree.nodes = NodesToSerializedNodes(nodeTree.nodes)
+//   console.log("NODE TREE IS: ", JSON.stringify(nodeTree))
+//   return (
+//     <a
+//       className="absolute left-3 top-3 z-10 bg-black p-3 text-white"
+//       onClick={() => console.log(query.serialize())}
+//     >
+//       Get JSON
+//     </a>
+//   )
+// }
 const AddScreenButton = () => {
+  const { flowId = '' } = useParams<{ flowId: string }>() ?? {}
   const dispatch = useAppDispatch()
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector(
+    (state: RootState) => state?.screen?.flows[flowId]?.screens
+  )
   const selectedScreenIndex = useAppSelector(
-    (state) => state?.screen?.selectedScreen
+    (state) => state?.screen?.flows[flowId]?.selectedScreen
   )
   const t = useTranslations("Components")
 
@@ -138,7 +142,7 @@ const AddScreenButton = () => {
     async (index: number) => {
       if (screens && screens[index]) {
         console.log(index)
-        dispatch(addScreen(index))
+        dispatch(addScreen({ flowId, value: index }))
         await actions.deserialize(JSON.stringify(emptyScreenData))
       } else {
         console.error("screens is undefined or index is out of bounds")
@@ -194,15 +198,15 @@ export function CreateFlowComponent({ flowId }) {
     (state) => state?.theme?.general?.backgroundColor
   )
   const selectedScreen =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
+    useAppSelector((state) => state?.screen?.flows[flowId]?.selectedScreen) || 0
   const selectedScreenId = useAppSelector(
-    (state) => state?.screen?.screens[selectedScreen]?.screenId || ""
+    (state) => state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenId || ""
   )
   // const startScreen = useAppSelector(
   //   (state) => state?.screen?.screens[0]?.screenData || ""
   // )
   const startScreenName = useAppSelector(
-    (state) => state?.screen?.screens[0]?.screenName || ""
+    (state) => state?.screen?.flows[flowId]?.screens[0]?.screenName || ""
   )
   // const screenRoller = useAppSelector((state) => state?.screen?.screenRoller)
   // const avatarComponentId = useAppSelector(
@@ -211,17 +215,17 @@ export function CreateFlowComponent({ flowId }) {
   // const previousAvatarComponentId = useAppSelector(
   //   (state) => state.screen?.previousAvatarComponentId
   // )
-  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader ?? "")
-  const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
-  const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+  const screensHeader = useAppSelector((state) => state?.screen?.flows[flowId]?.screensHeader ?? "")
+  const screensFooter = useAppSelector((state) => state?.screen?.flows[flowId]?.screensFooter)
+  const footerMode = useAppSelector((state) => state?.screen?.flows[flowId]?.footerMode)
   const avatarBackgroundColor = useAppSelector(
-    (state) => state?.screen?.avatarBackgroundColor
+    (state) => state?.screen?.flows[flowId]?.avatarBackgroundColor
   )
 
   // const firstScreen = useAppSelector((state) => state.screen.screens[0])
-  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad || {})
+  const editorLoad = useAppSelector((state) => state?.screen?.flows[flowId]?.editorLoad || {})
   const headerMode = useAppSelector(
-    (state: RootState) => state.screen?.headerMode
+    (state: RootState) => state.screen?.flows[flowId].headerMode
   )
   const headerPosition =
     useAppSelector((state) => state?.theme?.header?.headerPosition) ||
@@ -253,9 +257,6 @@ export function CreateFlowComponent({ flowId }) {
     [dispatch]
   )
 
-  const selectedScreenIdex =
-    useAppSelector((state) => state?.screen?.selectedScreen) || 0
-
   const checkComponentBeforeAvatar = () => {
     const parsedEditor = JSON.parse(screensHeader)
     const container = parsedEditor["ROOT"]
@@ -285,6 +286,7 @@ export function CreateFlowComponent({ flowId }) {
     dispatch(setMobileScreen(false))
     dispatch(
       setValidateScreen({
+        flowId: flowId,
         screenId: selectedScreenId,
         screenValidated: false,
         screenToggleError: false,
@@ -299,12 +301,14 @@ export function CreateFlowComponent({ flowId }) {
 
   useEffect(() => {
     const hasComponentBeforeAvatar = checkComponentBeforeAvatar()
-    dispatch(setComponentBeforeAvatar(hasComponentBeforeAvatar))
+    dispatch(
+      setComponentBeforeAvatar({ flowId, value: hasComponentBeforeAvatar })
+    )
   }, [editorLoad, dispatch])
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const scrollTop = event.currentTarget.scrollTop
-    dispatch(setScrollY(scrollTop))
+    dispatch(setScrollY({ flowId, value: scrollTop }))
   }
 
   const onChangeView = (viewType: VIEWS) => {

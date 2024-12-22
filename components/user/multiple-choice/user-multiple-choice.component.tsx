@@ -19,7 +19,7 @@ import {
 import { debounce } from "lodash"
 import ContentEditable from "react-contenteditable"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import {
@@ -116,15 +116,20 @@ export const MultipleChoiceGen = ({
   tracking,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const [selectedChoices, setSelectedChoices] = useState<string[]>(selections)
 
   const [isCountUpdated, setIsCountUpdated] = useState(false)
   const screenData = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props?.selections
     }
     return []
@@ -134,10 +139,14 @@ export const MultipleChoiceGen = ({
   )
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props?.required
     }
     return false
@@ -151,11 +160,15 @@ export const MultipleChoiceGen = ({
   // }, [])
   const alarm = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm || false
   )
   const counttt = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.errorCount || 0
   )
   const itemRef = useRef<HTMLUListElement | null>(null)
   const shakeItem = () => {
@@ -250,13 +263,13 @@ export const MultipleChoiceGen = ({
                       )
                       if (isRequired) {
                         if (updatedChoices.length > 0 && !isCountUpdated) {
-                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Dispatch with 1 if there's a selection
                           setIsCountUpdated(true) // Set count updated flag
                         } else if (
                           updatedChoices.length === 0 &&
                           isCountUpdated
                         ) {
-                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Dispatch with -1 if no selection
                           setIsCountUpdated(false) // Reset count updated flag
                         }
                       }
@@ -264,6 +277,7 @@ export const MultipleChoiceGen = ({
                       // Dispatch action for removing choice
                       dispatch(
                         setPreviewScreenData({
+                          flowId: flowId,
                           nodeId: props.nodeId,
                           newSelections: updatedChoices,
                           entity: "selections",
@@ -279,19 +293,20 @@ export const MultipleChoiceGen = ({
                         : [choice.id]
                       if (isRequired) {
                         if (updatedChoices.length > 0 && !isCountUpdated) {
-                          dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                          dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Dispatch with 1 if there's a selection
                           setIsCountUpdated(true) // Set count updated flag
                         } else if (
                           updatedChoices.length === 0 &&
                           isCountUpdated
                         ) {
-                          dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                          dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Dispatch with -1 if no selection
                           setIsCountUpdated(false) // Reset count updated flag
                         }
                       }
                       // Dispatch action for adding choice
                       dispatch(
                         setPreviewScreenData({
+                          flowId: flowId,
                           nodeId: props.nodeId,
                           newSelections: updatedChoices,
                           entity: "selections",
@@ -308,12 +323,14 @@ export const MultipleChoiceGen = ({
                     : [choice.id]
 
                   dispatch(
-                    setSelectedData(
-                      selectedChoices?.includes(choice.id) ? [] : [choice.id]
-                    )
+                    setSelectedData({
+                      flowId: flowId,
+                      value: selectedChoices?.includes(choice.id) ? [] : [choice.id]
+                    })
                   )
                   dispatch(
                     setPreviewScreenData({
+                      flowId: flowId,
                       nodeId: props.nodeId,
                       newSelections: selectedChoices?.includes(choice.id)
                         ? []
@@ -324,10 +341,10 @@ export const MultipleChoiceGen = ({
                   )
                   if (isRequired) {
                     if (newSelection.length > 0 && !isCountUpdated) {
-                      dispatch(setUpdateFilledCount(1)) // Dispatch with 1 if there's a selection
+                      dispatch(setUpdateFilledCount({ flowId, value: 1 })) // Dispatch with 1 if there's a selection
                       setIsCountUpdated(true) // Set count updated flag
                     } else if (newSelection.length === 0 && isCountUpdated) {
-                      dispatch(setUpdateFilledCount(-1)) // Dispatch with -1 if no selection
+                      dispatch(setUpdateFilledCount({ flowId, value: -1 })) // Dispatch with -1 if no selection
                       setIsCountUpdated(false) // Reset count updated flag
                     }
                   }
@@ -633,11 +650,14 @@ const MultipleChoiceItem = ({
   selections,
   buttonAction,
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const [choiceValue, setChoiceValue] = useState(choice.value)
   const [isEditing, setIsEditing] = useState(false)
   const alarm = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm || false
   )
   useEffect(() => {
     setChoiceValue(choice.value)
@@ -646,12 +666,13 @@ const MultipleChoiceItem = ({
   const searchParams = useSearchParams()
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const sc =
+    useAppSelector((state) => state?.screen?.flows[flowId]?.screens) || []
   const currentScreenName =
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.screen?.flows[flowId]?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
@@ -693,13 +714,14 @@ const MultipleChoiceItem = ({
         )
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: updatedScreenName,
           })
         )
         handleSearch(updatedScreenName)
-        dispatch(getAllFilledAnswers(true))
-        dispatch(setSelectedScreen(index))
+        dispatch(getAllFilledAnswers({ flowId, value: true }))
+        dispatch(setSelectedScreen({ flowId, value: index }))
       } else if (newsc !== "none") {
         console.log(
           "navigating mc else.....",
@@ -709,14 +731,15 @@ const MultipleChoiceItem = ({
         )
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: newsc,
           })
         )
         handleSearch(newsc)
-        dispatch(getAllFilledAnswers(true))
+        dispatch(getAllFilledAnswers({ flowId, value: true }))
         const index = sc.findIndex((screen) => screen.screenName === newsc) || 0
-        dispatch(setSelectedScreen(index))
+        dispatch(setSelectedScreen({ flowId, value: index }))
       }
     }
   }

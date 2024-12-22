@@ -8,6 +8,7 @@ import styled from "styled-components"
 
 import { Controller } from "../settings/controller.component"
 import { CardContainerSettings } from "./user-card-settings"
+import { useParams } from "next/navigation"
 
 interface CardOuterStyles {
   fullWidth: boolean
@@ -166,6 +167,7 @@ export const CardContentGen = ({ children, ...props }) => {
   )
 }
 export const CardContent = ({ children, ...props }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const { query } = useEditor()
   const {
     actions: { setProp },
@@ -190,7 +192,7 @@ export const CardContent = ({ children, ...props }) => {
   const t = useTranslations("Components")
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
   const selectedComponent = useAppSelector(
-    (state) => state?.screen?.selectedComponent
+    (state) => state?.screen?.flows[flowId]?.selectedComponent
   )
   return (
     <div

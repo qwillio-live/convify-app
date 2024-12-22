@@ -51,6 +51,7 @@ import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
 import { InputIconRenderer } from "./user-input-icon-picker"
 import { UserInputSettings } from "./user-input-settings.component"
+import { useParams } from "next/navigation"
 
 const ICONSTYLES =
   "p-2 w-9 text-gray-400 h-9 shrink-0 focus-visible:ring-0 focus-visible:ring-transparent"
@@ -74,13 +75,17 @@ export enum UserInputSizes {
 }
 
 export const UserInputGen = ({ ...props }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const icon = props.icon
   const dispatch = useAppDispatch()
   const [inputValue, setInputValue] = useState("")
   const t = useTranslations("Components")
   const [isFilled, setIsFilled] = useState(false)
   const fullScreenData = useAppSelector((state) => {
-    const selectedScreen = state.screen?.screens[state.screen.selectedScreen]
+    const selectedScreen =
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]
 
     if (selectedScreen && selectedScreen.screenData) {
       return JSON.parse(selectedScreen.screenData)
@@ -97,10 +102,14 @@ export const UserInputGen = ({ ...props }) => {
 
   const isRequired = useAppSelector((state) => {
     const selectedScreenData =
-      state.screen?.screens[state.screen.selectedScreen]?.screenData
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.screenData
     if (typeof selectedScreenData === "string") {
       return JSON.parse(
-        state.screen?.screens[state.screen.selectedScreen].screenData
+        state.screen?.flows[flowId]?.screens[
+          state.screen.flows[flowId]?.selectedScreen
+        ].screenData
       )[props.nodeId]?.props?.inputRequired
     }
     return false
@@ -119,6 +128,7 @@ export const UserInputGen = ({ ...props }) => {
     }
     dispatch(
       setFieldProp({
+        flowId: flowId,
         screenId: props.parentScreenId,
         fieldId: props.compId,
         fieldName: "fieldValue",
@@ -127,6 +137,7 @@ export const UserInputGen = ({ ...props }) => {
     )
     dispatch(
       setFieldProp({
+        flowId: flowId,
         screenId: props.parentScreenId,
         fieldId: props.compId,
         fieldName: "fieldRequired",
@@ -139,7 +150,7 @@ export const UserInputGen = ({ ...props }) => {
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.screen?.flows[flowId]?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
@@ -147,38 +158,45 @@ export const UserInputGen = ({ ...props }) => {
   const screenValidated =
     useAppSelector(
       (state: RootState) =>
-        state.screen?.screens[selectedScreen]?.screenValidated
+        state.screen?.flows[flowId]?.screens[selectedScreen]?.screenValidated
     ) || false
   const selectedScreenId =
     useAppSelector(
-      (state) => state?.screen?.screens[selectedScreen]?.screenId
+      (state) => state?.screen?.flows[flowId]?.screens[selectedScreen]?.screenId
     ) || ""
   // const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
   // const screenValidated = useAppSelector((state) => state.screen?.screens[selectedScreen]?.screenValidated || false)
   const selectedField = useAppSelector(
     (state) =>
-      state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+      state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+        props.compId
+      ]
   )
   const fieldValue = useAppSelector(
     (state) =>
-      state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
-        ?.fieldValue
+      state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+        props.compId
+      ]?.fieldValue
   )
   const fieldRequired =
     useAppSelector(
       (state) =>
-        state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
-          ?.fieldRequired
+        state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+          props.compId
+        ]?.fieldRequired
     ) || false
   const fieldInScreen = useAppSelector(
     (state) =>
-      state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
+      state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+        props.compId
+      ]
   )
   const toggleError =
     useAppSelector(
       (state) =>
-        state.screen?.screensFieldsList[props.parentScreenId]?.[props.compId]
-          ?.toggleError
+        state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+          props.compId
+        ]?.toggleError
     ) || false
   const fieldError =
     (props.inputRequired &&
@@ -189,7 +207,9 @@ export const UserInputGen = ({ ...props }) => {
     false
   const alarm = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.alarm || false
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.alarm || false
   )
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -209,7 +229,9 @@ export const UserInputGen = ({ ...props }) => {
   }
   const counttt = useAppSelector(
     (state) =>
-      state.screen?.screens[state.screen.selectedScreen]?.errorCount || 0
+      state.screen?.flows[flowId]?.screens[
+        state.screen.flows[flowId]?.selectedScreen
+      ]?.errorCount || 0
   )
   const itemRefNew = useRef<HTMLDivElement | null>(null)
   const shakeItem = () => {
@@ -398,14 +420,15 @@ export const UserInputGen = ({ ...props }) => {
               onChange={(e) => {
                 if (isRequired) {
                   if (isFilled && e.target.value === "") {
-                    dispatch(setUpdateFilledCount(-1))
+                    dispatch(setUpdateFilledCount({ flowId, value: -1 }))
                     setIsFilled(false)
                     setInputValue(e.target.value)
                   } else {
-                    if (!isFilled) dispatch(setUpdateFilledCount(1))
+                    if (!isFilled) dispatch(setUpdateFilledCount({ flowId, value: 1 }))
                     setInputValue(e.target.value),
                       dispatch(
                         setFieldProp({
+                          flowId: flowId,
                           screenId: props.parentScreenId,
                           fieldId: props.nodeId,
                           fieldName: "fieldValue",
@@ -413,6 +436,7 @@ export const UserInputGen = ({ ...props }) => {
                         }),
                         dispatch(
                           setPreviewScreenData({
+                            flowId: flowId,
                             nodeId: props.nodeId,
                             isArray: false,
                             entity: "inputValue",
@@ -426,6 +450,7 @@ export const UserInputGen = ({ ...props }) => {
                   setInputValue(e.target.value),
                     dispatch(
                       setFieldProp({
+                        flowId: flowId,
                         screenId: props.parentScreenId,
                         fieldId: props.nodeId,
                         fieldName: "fieldValue",
@@ -433,6 +458,7 @@ export const UserInputGen = ({ ...props }) => {
                       }),
                       dispatch(
                         setPreviewScreenData({
+                          flowId: flowId,
                           nodeId: props.nodeId,
                           isArray: false,
                           entity: "inputValue",
@@ -686,6 +712,7 @@ export const UserInput = ({ textColor, ...props }) => {
   } = useEditor()
   const dispatch = useAppDispatch()
   const mobileScreen = useAppSelector((state) => state?.theme?.mobileScreen)
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
 
   // const isRoot = node(id).Root(),
   //       isDraggable = node(id).Draggable();
@@ -696,19 +723,25 @@ export const UserInput = ({ textColor, ...props }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const primaryFont = useAppSelector((state) => state?.theme?.text?.primaryFont)
   const selectedScreen = useAppSelector(
-    (state) => state?.screen?.selectedScreen || 0
+    (state) => state?.screen?.flows[flowId]?.selectedScreen || 0
   )
   // const selectedScreenId = useAppSelector((state) => state?.screen?.screens[selectedScreen]?.screenId) || ""
   const screenValidated = useAppSelector(
-    (state) => state.screen?.screens[selectedScreen]?.screenValidated || false
+    (state) =>
+      state.screen?.flows[flowId]?.screens[selectedScreen]?.screenValidated ||
+      false
   )
   const selectedField = useAppSelector(
-    (state) => state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
+    (state) =>
+      state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+        compId
+      ]
   )
   const fieldValue = useAppSelector(
     (state) =>
-      state.screen?.screensFieldsList[props.parentScreenId]?.[compId]
-        ?.fieldValue
+      state.screen?.flows[flowId]?.screensFieldsList[props.parentScreenId]?.[
+        compId
+      ]?.fieldValue
   )
   // const fieldToggleError = useAppSelector((state) => state.screen?.screensFieldsList[selectedScreenId]?.[compId]?.toggleError) || false
   // const fieldRequired =
@@ -734,6 +767,7 @@ export const UserInput = ({ textColor, ...props }) => {
     // dispatch(setFieldProp({fieldId: selectedField?.fieldId, fieldName: 'toggleError', fieldValue: false}))
     dispatch(
       setFieldProp({
+        flowId: flowId,
         screenId: props.parentScreenId,
         fieldId: selectedField?.fieldId,
         fieldName: "fieldValue",
@@ -742,6 +776,7 @@ export const UserInput = ({ textColor, ...props }) => {
     )
     dispatch(
       setFieldProp({
+        flowId: flowId,
         screenId: props.parentScreenId,
         fieldId: selectedField?.fieldId,
         fieldName: "fieldRequired",
@@ -750,6 +785,7 @@ export const UserInput = ({ textColor, ...props }) => {
     )
     dispatch(
       setValidateScreen({
+        flowId: flowId,
         screenId: props.parentScreenId,
         screenValidated: false,
         screenToggleError: false,
@@ -980,6 +1016,7 @@ export const UserInput = ({ textColor, ...props }) => {
                   setProp((props) => (props.inputValue = e.target.value)),
                     dispatch(
                       setFieldProp({
+                        flowId: flowId,
                         screenId: props.parentScreenId,
                         fieldId: compId,
                         fieldName: "fieldValue",

@@ -50,18 +50,31 @@ import emptyScreenData from "@/components/user/screens/empty-screen.json"
 import ResolvedComponentsFromCraftState from "../settings/resolved-components"
 import { useTranslations } from "next-intl"
 import { HelperInformation } from "./screens-list.component-with-flowId"
+import { useParams } from "next/navigation"
 
 const ScreensList = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const t = useTranslations("Components")
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.flows[flowId]?.screens)
   const dispatch = useAppDispatch()
   const selectedScreen = useAppSelector(
-    (state) => state?.screen?.screens[state?.screen?.selectedScreen]
+    (state) =>
+      state?.screen?.flows[flowId]?.screens[
+        state?.screen?.flows[flowId]?.selectedScreen
+      ]
   )
-  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
-  const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
-  const headerMode = useAppSelector((state) => state?.screen?.headerMode)
-  const footerMode = useAppSelector((state) => state?.screen?.footerMode)
+  const screensHeader = useAppSelector(
+    (state) => state?.screen?.flows[flowId]?.screensHeader
+  )
+  const screensFooter = useAppSelector(
+    (state) => state?.screen?.flows[flowId]?.screensFooter
+  )
+  const headerMode = useAppSelector(
+    (state) => state?.screen?.flows[flowId]?.headerMode
+  )
+  const footerMode = useAppSelector(
+    (state) => state?.screen?.flows[flowId]?.footerMode
+  )
 
   const backgroundImage = useAppSelector(
     (state) => state?.theme?.general?.backgroundImage
@@ -71,11 +84,15 @@ const ScreensList = () => {
   )
 
   const selectedScreenIndex = useAppSelector(
-    (state) => state?.screen?.selectedScreen
+    (state) => state?.screen?.flows[flowId]?.selectedScreen
   )
-  const editorLoad = useAppSelector((state) => state?.screen?.editorLoad)
+  const editorLoad = useAppSelector(
+    (state) => state?.screen?.flows[flowId]?.editorLoad
+  )
   const headerFooterMode = useAppSelector(
-    (state) => state?.screen?.headerMode || state?.screen?.footerMode
+    (state) =>
+      state?.screen?.flows[flowId]?.headerMode ||
+      state?.screen?.flows[flowId]?.footerMode
   )
   const { actions } = useEditor((state, query) => ({
     enabled: state.options.enabled,
@@ -118,7 +135,7 @@ const ScreensList = () => {
     } else if (data.length > 0) {
       // If no valid screen is selected, fall back to the first screen
       await actions.deserialize(data[0].screenData)
-      dispatch(setSelectedScreen(0))
+      dispatch(setSelectedScreen({ flowId, value: 0 }))
     }
   }
 
@@ -133,7 +150,7 @@ const ScreensList = () => {
   const handleScreenClick = useCallback(
     async (index: number) => {
       if (screens && screens[index] && screens[index].screenData) {
-        dispatch(setSelectedScreen(index))
+        dispatch(setSelectedScreen({ flowId, value: index }))
         await actions.deserialize(screens[index].screenData || {})
       } else {
         console.error(
@@ -147,7 +164,7 @@ const ScreensList = () => {
   const handleAddScreen = useCallback(
     async (index: number) => {
       if (screens && screens[index]) {
-        dispatch(addScreen(index))
+        dispatch(addScreen({ flowId, value: index }))
         await actions.deserialize(JSON.stringify(emptyScreenData))
       } else {
         console.error("screens is undefined or index is out of bounds")
@@ -159,7 +176,7 @@ const ScreensList = () => {
   const handleDuplicateScreen = useCallback(
     async (index: number) => {
       if (screens) {
-        dispatch(duplicateScreen(index))
+        dispatch(duplicateScreen({ flowId, value: index }))
         await actions.deserialize(screens[index].screenData)
         // })
       }
@@ -170,7 +187,7 @@ const ScreensList = () => {
   const handleDeleteScreen = useCallback(
     async (index: number) => {
       if (screens && selectedScreenIndex !== undefined) {
-        dispatch(deleteScreen(index))
+        dispatch(deleteScreen({ flowId, value: index }))
         if (index === 0) {
           await actions.deserialize(screens[1].screenData)
         } else {
@@ -183,13 +200,13 @@ const ScreensList = () => {
 
   const handleFooterScreenClick = () => {
     // dispatch(setHeaderFooterMode(false));
-    dispatch(setFooterMode(true))
+    dispatch(setFooterMode({ flowId, value: true }))
     actions.deserialize(screensFooter)
   }
 
   const handleHeaderScreenClick = async () => {
     // dispatch(setHeaderFooterMode(false));
-    dispatch(setHeaderMode(true))
+    dispatch(setHeaderMode({ flowId, value: true }))
     await actions.deserialize(screensHeader)
   }
 
@@ -258,7 +275,7 @@ const ScreensList = () => {
       <AccordionItem value="item-2" className="border-t">
         <AccordionTrigger
           className="hover:no-underline"
-          onClick={() => dispatch(setHeaderFooterMode(false))}
+          onClick={() => dispatch(setHeaderFooterMode({ flowId, value: false }))}
         >
           {t("Screens")}
         </AccordionTrigger>
@@ -290,8 +307,8 @@ const ScreensList = () => {
                 id={screen.screenName + screen.screenId}
                 value={screen}
                 onClick={() => {
-                  dispatch(setSelectedComponent("ROOT")),
-                    dispatch(setHeaderFooterMode(false))
+                  dispatch(setSelectedComponent({ flowId, value: "ROOT" })),
+                    dispatch(setHeaderFooterMode({ flowId, value: false }))
                 }}
                 // className="relative"
               >
@@ -399,15 +416,16 @@ const ScreensList = () => {
 }
 
 const EditScreenName = ({ screenId, screenName }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const ref = React.useRef<HTMLInputElement | null>(null)
   const dispatch = useAppDispatch()
   const [editing, setEditing] = React.useState(false)
   const [name, setName] = React.useState(screenName)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.flows[flowId]?.screens)
 
   const handleChange = (inputName) => {
     if (!checkDuplicateName(inputName)) {
-      dispatch(setScreenName({ screenId: screenId, screenName: inputName }))
+      dispatch(setScreenName({ flowId: flowId, screenId: screenId, screenName: inputName }))
       setName(inputName)
       toast.success("Screen name changed successfully")
       setEditing(false)
@@ -461,7 +479,8 @@ const EditScreenName = ({ screenId, screenName }) => {
 }
 
 function DisplayEditor() {
-  const screens = useAppSelector((state) => state?.screen?.screens)
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
+  const screens = useAppSelector((state) => state?.screen?.flows[flowId]?.screens)
 
   return (
     <>

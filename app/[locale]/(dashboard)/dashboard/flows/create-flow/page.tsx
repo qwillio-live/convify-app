@@ -35,7 +35,6 @@ export default function CreateFlowsPage() {
   const dispatch = useAppDispatch();
   const firstScreenName = useAppSelector((state) => state?.screen?.firstScreenName) || "";
 
-
   const [tab, setTab] = useState("create")
 
   const t = useTranslations("CreateFlow")

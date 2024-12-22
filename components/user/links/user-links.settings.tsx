@@ -36,18 +36,20 @@ import { ColorInput } from "@/components/color-input"
 import { LinksPreset, useLinksThemePresets } from "./useLinksThemePresets"
 import { LinksGen } from "./user-links.component"
 import { PRIVACY_URL } from "@/constant"
+import { useParams } from "next/navigation"
 
 
 const APP_URL =
     process.env.NEXT_PUBLIC_DOMAIN_URL || "https://conv-hassan.picreel.bid"
 
 export const LinksSettings = () => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
     const t = useTranslations("Components")
-    const screenNames = useScreenNames()
+    const screenNames = useScreenNames(flowId)
     console.log("SCREEN NAMES: ", screenNames)
-    const screensLength = useScreensLength()
+    const screensLength = useScreensLength(flowId)
     const selectedScreen = useAppSelector(
-        (state: RootState) => state.screen?.selectedScreen ?? 0
+        (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
     )
 
     const { boldPreset, defaultPresets } = useLinksThemePresets()
@@ -405,13 +407,14 @@ export const LinkItemSettings = ({
     index,
     handlePropChangeDebounced,
 }) => {
+    const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
     const t = useTranslations("Components")
     const y = useMotionValue(0)
     const controls = useDragControls()
-    const screenNames = useScreenNames()
-    const screensLength = useScreensLength()
+    const screenNames = useScreenNames(flowId)
+    const screensLength = useScreensLength(flowId)
     const selectedScreen = useAppSelector(
-        (state: RootState) => state.screen?.selectedScreen ?? 0
+        (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
     )
     const {
         actions: { setProp },
@@ -442,7 +445,7 @@ export const LinkItemSettings = ({
     const nextScreenName =
         useAppSelector(
             (state: RootState) =>
-                state?.screen?.screens[
+                state?.screen?.flows[flowId]?.screens[
                     selectedScreen + 1 < (screensLength || 0)
                         ? selectedScreen + 1
                         : selectedScreen
@@ -452,7 +455,7 @@ export const LinkItemSettings = ({
     const nextScreenId =
         useAppSelector(
             (state: RootState) =>
-                state?.screen?.screens[
+                state?.screen?.flows[flowId]?.screens[
                     selectedScreen + 1 < (screensLength || 0) ? selectedScreen + 1 : 0
                 ]?.screenId
         ) || ""

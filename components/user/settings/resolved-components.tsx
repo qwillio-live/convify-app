@@ -91,7 +91,6 @@ const ResolvedComponentsFromCraftState = ({
   const toRender = useMemo(() => {
     try {
       const craftState = JSON.parse(screen)
-      // console.log("Parsed Craft State:", craftState) // Log parsed JSON data
 
       const parsedNodes = {}
 

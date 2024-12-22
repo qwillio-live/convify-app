@@ -31,7 +31,7 @@ import {
   getHoverBackgroundForPreset,
 } from "./useTextImageThemePresets"
 import { TextImageSettings } from "./user-textImage.settings"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { TextEditor } from "@/components/TextEditor"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
@@ -1058,6 +1058,7 @@ export const TextImageComponent = ({
   showTitle,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -1089,17 +1090,17 @@ export const TextImageComponent = ({
     (state) => state.theme?.general?.secondaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state: RootState) => state?.screen?.screens)
+  const screens = useAppSelector((state: RootState) => state?.screen?.flows[flowId]?.screens)
   const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
+    (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
   )
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""

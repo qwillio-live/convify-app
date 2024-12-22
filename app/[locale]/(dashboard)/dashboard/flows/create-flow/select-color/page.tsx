@@ -142,7 +142,6 @@ export default function SelectColor() {
   const defaultSecondaryTextColor = useAppSelector(
     (state) => state?.newTheme?.defaultText?.secondaryColor
   )
-  const screens = useAppSelector((state) => state?.screen?.screens)
 
   console.log("templateid", templateSetting?.templateId)
 

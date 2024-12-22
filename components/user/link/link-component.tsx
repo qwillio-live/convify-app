@@ -53,7 +53,7 @@ import {
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { useScreenNames } from "@/lib/state/flows-state/features/screenHooks"
 import { LineSelectorSettings } from "../lineSeperator/line-seperator-settings"
 import {
@@ -165,6 +165,7 @@ export const LinkButtonGen = ({
   iconType,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const pathname = usePathname()
 
   const searchParams = useSearchParams()
@@ -176,6 +177,7 @@ export const LinkButtonGen = ({
   const handleNavigateToContent = () => {
     dispatch(
       validateScreen({
+        flowId: flowId,
         current: currentScreenName,
         next: nextScreen.screenName,
       })
@@ -439,6 +441,7 @@ export const LinkButton = ({
   iconType,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -470,29 +473,29 @@ export const LinkButton = ({
     (state) => state.theme?.general?.secondaryColor
   )
   const mobileScreen = useAppSelector((state) => state.theme?.mobileScreen)
-  const screens = useAppSelector((state) => state?.screen?.screens)
+  const screens = useAppSelector((state) => state?.screen?.flows[flowId]?.screens)
   const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
+    (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
   )
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
 
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""
   const nextScreenId =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenId
     ) || ""
-  const screenNames = useScreenNames()
+  const screenNames = useScreenNames(flowId)
 
   //editor load needs to be refreshed so that screenName value is re-populated but
   // it is working now because it refers screenId rather then screenName

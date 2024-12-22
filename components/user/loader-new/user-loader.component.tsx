@@ -17,7 +17,7 @@ import {
   setSelectedScreen,
   validateScreen,
 } from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useSearchParams } from "next/navigation"
+import { useParams, useSearchParams } from "next/navigation"
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
 
@@ -75,6 +75,7 @@ export const LoaderComponentGen = ({
   buttonAction,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const primaryColor = useAppSelector(
     (state) => state.theme?.general?.primaryColor
   )
@@ -83,20 +84,21 @@ export const LoaderComponentGen = ({
     useAppSelector((state) => state?.screen?.currentScreenName) || ""
   const selectedScreen = useAppSelector(
     (state) =>
-      state?.screen?.screens.findIndex(
+      state?.screen?.flows[flowId]?.screens.findIndex(
         (screen) => screen.screenName === currentScreenName
       ) || 0
   )
   const isVisible =
     useAppSelector(
       (state) =>
-        state.screen?.screens[
-          state?.screen?.screens.findIndex(
+        state.screen?.flows[flowId]?.screens[
+          state?.screen?.flows[flowId]?.screens.findIndex(
             (screen) => screen.screenName === currentScreenName
           )
         ]?.isVisible
     ) || false
-  const sc = useAppSelector((state) => state?.screen?.screens) || []
+  const sc =
+    useAppSelector((state) => state?.screen?.flows[flowId]?.screens) || []
   const newScreensMapper = {
     "next-screen":
       selectedScreen + 1 < sc.length
@@ -161,23 +163,25 @@ export const LoaderComponentGen = ({
         console.log("entered if")
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: updatedScreenName,
           })
         )
-        dispatch(setSelectedScreen(index))
+        dispatch(setSelectedScreen({ flowId, value: index }))
         handleSearch(updatedScreenName)
       } else if (newsc !== "none" && newsc !== "") {
         console.log("entered else if")
         dispatch(
           validateScreen({
+            flowId: flowId,
             current: currentScreenName,
             next: newsc,
           })
         )
         const newIndex =
           sc.findIndex((screen) => screen.screenName === newsc) || 0
-        dispatch(setSelectedScreen(newIndex))
+        dispatch(setSelectedScreen({ flowId, value: newIndex }))
         handleSearch(newsc)
       }
     } else if (!retry) {
@@ -416,6 +420,7 @@ export const LoaderComponent = ({
   nextScreen,
   ...props
 }) => {
+  const { flowId = "" } = useParams<{ flowId: string }>() ?? {}
   const {
     actions: { setProp },
     connectors: { connect, drag },
@@ -432,16 +437,16 @@ export const LoaderComponent = ({
     (state) => state.theme?.general?.primaryColor
   )
   const screensLength = useAppSelector(
-    (state: RootState) => state?.screen?.screens?.length ?? 0
+    (state: RootState) => state?.screen?.flows[flowId]?.screens?.length ?? 0
   )
   const selectedScreen = useAppSelector(
-    (state: RootState) => state.screen?.selectedScreen ?? 0
+    (state: RootState) => state.screen?.flows[flowId]?.selectedScreen ?? 0
   )
 
   const nextScreenName =
     useAppSelector(
       (state: RootState) =>
-        state?.screen?.screens[
+        state?.screen?.flows[flowId]?.screens[
           selectedScreen + 1 < screensLength ? selectedScreen + 1 : 0
         ]?.screenName
     ) || ""

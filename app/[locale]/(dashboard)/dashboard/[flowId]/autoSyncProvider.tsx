@@ -18,13 +18,13 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const localFlowData = useAppSelector((state) => state?.screen)
+  const localFlowData = useAppSelector((state) => state?.screen?.flows[flowId])
   const localFlowSettings = useAppSelector((state) => state?.theme)
 
   // Reference to hold the AbortController for request cancellation
   const abortControllerRef = useRef<AbortController | null>(null)
   const isUpdating =
-    useAppSelector((state) => state?.screen?.isUpdating) || false
+    useAppSelector((state) => state?.screen?.flows[flowId]?.isUpdating) || false
   const getFlowData = async () => {
     try {
       const response = await fetch(`/api/flows/${flowId}`)
