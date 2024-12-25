@@ -211,7 +211,7 @@ export function CreateFlowComponent({ flowId }) {
   // const previousAvatarComponentId = useAppSelector(
   //   (state) => state.screen?.previousAvatarComponentId
   // )
-  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader)
+  const screensHeader = useAppSelector((state) => state?.screen?.screensHeader ?? "")
   const screensFooter = useAppSelector((state) => state?.screen?.screensFooter)
   const footerMode = useAppSelector((state) => state?.screen?.footerMode)
   const avatarBackgroundColor = useAppSelector(
@@ -346,7 +346,6 @@ export function CreateFlowComponent({ flowId }) {
     }
   }, [headerMode, height, mobileScreen, width])
   const updateMinHeightAndClassName = (data) => {
-    console.log("updating editorload")
     data = JSON.parse(data)
     if (data.ROOT && data.ROOT.props) {
       // Check if the style object exists; if not, create it
@@ -381,12 +380,16 @@ export function CreateFlowComponent({ flowId }) {
       if (headerMode) {
         Object.keys(data).forEach((key) => {
           if (key !== "ROOT") {
-            console.log("data[key]", data[key], avatarBackgroundColor)
             // Directly modify the style for all keys except 'ROOT'
             let og = data[key].props.containerBackground
             data[key].props.containerBackground = avatarBackgroundColor
-            if (data[key].props.background)
-              data[key].props.background.value = avatarBackgroundColor
+            if (data[key].props.background) {
+              if (data[key].props.background.value) {
+                data[key].props.background.value = avatarBackgroundColor
+              } else {
+                data[key].props.background = avatarBackgroundColor
+              }
+            }
           }
         })
       }

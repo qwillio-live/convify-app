@@ -1,28 +1,15 @@
 "use client"
 
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import Image from "next/image"
 import { DefaultImagePlaceholder } from "@/constant"
-import { debounce, throttle } from "lodash"
-import {
-  Activity,
-  Anchor,
-  Aperture,
-  ArrowRight,
-  Disc,
-  DollarSign,
-  Mountain,
-} from "lucide-react"
+import { throttle } from "lodash"
 import { useTranslations } from "next-intl"
-import styled from "styled-components"
 
 import { env } from "@/env.mjs"
 import { useEditor, useNode } from "@/lib/craftjs"
-import { navigateToScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
 import { RootState } from "@/lib/state/flows-state/store"
 import { cn } from "@/lib/utils"
-import { Button as CustomButton } from "@/components/ui/button"
 
 import { Controller } from "../settings/controller.component"
 import { StyleProperty } from "../types/style.types"
@@ -31,54 +18,6 @@ import {
   getHoverBackgroundForPreset,
 } from "./useButtonThemePresets"
 import { ImageSettings } from "./user-image.settings"
-import { setMobileScreen } from "@/lib/state/flows-state/features/theme/globalThemeSlice"
-
-const IconsList = {
-  aperture: (props) => <Aperture {...props} />,
-  activity: (props) => <Activity {...props} />,
-  dollarsign: (props) => <DollarSign {...props} />,
-  anchor: (props) => <Anchor {...props} />,
-  disc: (props) => <Disc {...props} />,
-  mountain: (props) => <Mountain {...props} />,
-  arrowright: (props) => <ArrowRight {...props} />,
-}
-
-const IconGenerator = ({ icon, size, className = "", ...rest }) => {
-  const IconComponent = IconsList[icon]
-
-  if (!IconComponent) {
-    return null // or some default icon or error handling
-  }
-
-  return (
-    <IconComponent className={`shrink-0 ${className}`} size={size} {...rest} />
-  )
-}
-
-const IconButtonSizeValues = {
-  small: "300px",
-  medium: "376px",
-  large: "576px",
-  full: "100%",
-}
-
-const ButtonSizeValues = {
-  small: ".8rem",
-  medium: "1rem",
-  large: "1.2rem",
-}
-const IconSizeValues = {
-  small: 18,
-  medium: 22,
-  large: 26,
-}
-
-const IconButtonMobileSizeValues = {
-  small: "300px",
-  medium: "330px",
-  large: "360px",
-  full: "100%",
-}
 
 const ButtonTextLimit = {
   small: 100,
@@ -160,7 +99,10 @@ export const ImageComponentGen = ({
       >
         <div
           className={cn(
-            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`,
+            {
+              'max-w-full': width === '100%',
+            }
           )}
         >
           {
@@ -376,12 +318,8 @@ export const ImageComponent = ({
         )
       }
     }
-    window.addEventListener("resize", handleResize)
     handleResize()
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-  }, [mobileScreen, picSize])
+  }, [])
 
   useEffect(() => {
     if (mobileScreen && uploadedImageMobileUrl) {
@@ -484,6 +422,8 @@ export const ImageComponent = ({
     [setProp]
   )
 
+  // console.log("JAAMAT", width, height, picSize, size)
+
   return (
     <div
       ref={(ref: any) => connect(drag(ref))}
@@ -515,7 +455,10 @@ export const ImageComponent = ({
         <div
           ref={(ref: any) => connect(drag(ref))}
           className={cn(
-            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`
+            `relative flex flex-row justify-${align} w-full max-w-[calc(100%-22px)] border border-transparent`,
+            {
+              'max-w-full': width === "100%",
+            }
           )}
         >
           {
@@ -597,7 +540,7 @@ export type IconButtonProps = {
   fullWidth: boolean
   maxWidth: string
   preset: string
-  imageSize: number
+  imageSize: string
   settingsTab: string
   buttonSize: string
   tracking: boolean
@@ -656,7 +599,7 @@ export const ImageDefaultProps: IconButtonProps = {
   align: "center",
   url: env.NEXT_PUBLIC_APP_URL,
   src: DefaultImagePlaceholder,
-  radiusCorner: 0,
+  radiusCorner: 15,
   disabled: false,
   enableLink: false,
   width: "100%",
@@ -664,7 +607,7 @@ export const ImageDefaultProps: IconButtonProps = {
   height: "auto",
   size: IconButtonSizes.medium,
   picSize: IconButtonSizes.medium,
-  imageSize: 100,
+  imageSize: '376px',
   buttonSize: "small",
   time: 2,
   text: "Get quote",

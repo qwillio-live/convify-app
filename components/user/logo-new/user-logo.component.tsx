@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react"
 import ConvifyLogo from "@/assets/convify_logo_black.png"
 import { useTranslations } from "next-intl"
-import { ComponentProps, Data } from "@/types"
+import { Data } from "@/types"
 
 import { env } from "@/env.mjs"
 import { useNode } from "@/lib/craftjs"
@@ -499,6 +499,7 @@ export type IconButtonProps = {
   buttonAction: "next-screen" | "custom-action" | "none"
   nextScreen: string
   borderRad: number
+  maxWidth: string
 }
 
 export const LogoDefaultProps: IconButtonProps = {
@@ -555,6 +556,7 @@ export const LogoDefaultProps: IconButtonProps = {
   h: "60px",
   width: "85%",
   height: "auto",
+  maxWidth: "400px",
   size: IconButtonSizes.medium,
   imageSize: 90,
   buttonSize: "medium",
@@ -579,7 +581,7 @@ export const LogoDefaultProps: IconButtonProps = {
   border: 0,
   fullWidth: true,
   preset: "filled",
-  settingsTab: "content",
+  settingsTab: "design",
   tracking: false,
   trackingEvent: "button_clicked",
   nextScreen: "",

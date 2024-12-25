@@ -274,7 +274,6 @@ export const UserInputCheckboxGen = ({ ...props }) => {
   const [isActive, setIsActive] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [checkmarkColor, setCheckmarkColor] = useState("#748BA7")
-  const [checkmarkBorder, setCheckmarkBorder] = useState("#dfdfdf")
   const [containerHover, setContainerHover] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [isFilled, setIsFilled] = useState(false)
@@ -423,6 +422,14 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                 ${alarm && isRequired && !isFilled && "!border-red-600"}
                 `
               )}
+              onMouseEnter={(e) => {
+                e.stopPropagation()
+                setContainerHover(true)
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation()
+                setContainerHover(false)
+              }}
             >
               <div
                 className={`mb-1 flex text-ellipsis text-[14.5px] transition-all duration-200 ease-in-out focus-visible:ring-0 focus-visible:ring-transparent`}
@@ -502,7 +509,11 @@ export const UserInputCheckboxGen = ({ ...props }) => {
                       }
                     }}
                     checkmarkColor={checkmarkColor}
-                    checkmarkBorder={checkmarkBorder}
+                    checkmarkBorder={
+                      containerHover || isFilled
+                        ? props.activeBorderColor.value
+                        : props.borderColor.value
+                    }
                     style={{
                       zIndex: 10,
                     }}
@@ -760,7 +771,11 @@ export const UserInputCheckbox = ({ ...props }) => {
                   isChecked={isChecked}
                   onCheckedChange={handleCheckChange}
                   checkmarkColor={checkmarkColor}
-                  checkmarkBorder={checkmarkBorder}
+                  checkmarkBorder={
+                    props.isActive || containerHover || isChecked
+                      ? props.activeBorderColor.value
+                      : props.borderColor.value
+                  }
                   style={{
                     zIndex: 10,
                   }}

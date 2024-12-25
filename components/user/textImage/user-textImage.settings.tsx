@@ -43,7 +43,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/custom-tabs"
 
 import { Controller } from "../settings/controller.component"
 import { Icons } from "@/components/icons"
-import { IconButtonSizes, UserLogo } from "./user-textImage.component"
+import { UserLogo } from "./user-textImage.component"
 import { ColorInput } from "@/components/color-input"
 
 export const Img = ({
@@ -84,6 +84,7 @@ export const Img = ({
   secondaryFontFamily,
   textColor,
   secTextColor,
+  showTitle,
   ...props
 }) => {
   const {
@@ -143,6 +144,7 @@ export const Img = ({
           height={height}
           src={src}
           textColor={textColor}
+          showTitle={showTitle}
           {...props}
         />
       }
@@ -201,6 +203,7 @@ export const TextImageSettings = () => {
       textFontSize,
       titleFontWeight,
       textFontWeight,
+      showTitle,
     },
   } = useNode((node) => ({
     props: node.data.props,
@@ -499,6 +502,23 @@ export const TextImageSettings = () => {
         <AccordionItem value="content">
           <AccordionTrigger>{t("General")}</AccordionTrigger>
           <AccordionContent className="space-y-6 pt-2">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                value={showTitle}
+                checked={showTitle}
+                onCheckedChange={(e) => {
+                  handlePropChange("showTitle", e)
+                  // setProp((props) => (props.error = !props.error),200)
+                }}
+                id="show-title"
+              />
+              <label
+                htmlFor="show-title"
+                className="text-xs peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {t("Show Title")}
+              </label>
+            </div>
             <div className="space-y-2">
               <Label>{t("Image Position")}</Label>
               <Tabs
@@ -1054,14 +1074,15 @@ export const DefaultPropsTextImg = {
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,
   bothAlign: "start",
-  horizontalGap: 20,
-  verticalGap: 10,
+  horizontalGap: 0,
+  verticalGap: 0,
   titleFontSize: 32,
   textFontSize: 17,
   titleFontWeight: "bold",
   textFontWeight: "normal",
   textColor: "#ffffff",
   secTextColor: "#ffffff",
+  showTitle: false,
 }
 
 Img.craft = {

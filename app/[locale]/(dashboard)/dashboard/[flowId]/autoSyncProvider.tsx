@@ -107,10 +107,11 @@ export const FlowsAutoSaveProvider = ({ children, flowId }) => {
             const step = localFlowData.screens.find(
               (s) => s.screenName === name
             )
-            const parsedContent = JSON.parse(step?.screenData)
 
             // Create a Set to keep track of unique content
             if (!step) return null // Skip if step is not found
+
+            const parsedContent = JSON.parse(step.screenData)
 
             // Initialize a unique content Set
             const uniqueContentSet = new Set()

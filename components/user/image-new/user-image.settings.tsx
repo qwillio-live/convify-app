@@ -222,6 +222,41 @@ export const ImageSettings = () => {
     }
   }
 
+  const loadImageAndSetSrc = (
+    imageUrl: string,
+    attempt = 1,
+    maxAttempts = 10
+  ): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      const onLoad = () => {
+        setProp((props) => {
+          props.src = imageUrl
+          props.uploadedImageUrl = imageUrl
+        })
+        resolve(true)
+      }
+
+      const onError = () => {
+        if (attempt >= maxAttempts) {
+          reject("Image not accessible after maximum retries")
+          return
+        }
+
+        setTimeout(() => {
+          loadImageAndSetSrc(imageUrl, attempt + 1, maxAttempts)
+            .then(resolve)
+            .catch(reject)
+        }, attempt * 1000) // Exponential backoff or any delay strategy
+      }
+
+      img.onload = onLoad
+      img.onerror = onError
+      img.src = imageUrl
+    })
+  }
+
+
   const uploadToS3 = async (imageData, aspectRatio) => {
     const maxWidthMobile = 500
     const maxWidthDesktop = 1000
@@ -275,27 +310,21 @@ export const ImageSettings = () => {
         const mobileImage =
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
-        // Set props with a timeout of 6 seconds
-        setTimeout(() => {
-          if (desktopImage) {
-            setProp((props) => {
-              props.src = desktopImage
-              props.uploadedImageUrl =
-                uploadedImage.data.data[uploadedImage.desktopSize]
-            })
-          }
+        if (desktopImage) {
+          await loadImageAndSetSrc(desktopImage)
+        }
 
-          if (mobileImage) {
-            setProp((props) => {
-              props.uploadedImageMobileUrl = mobileImage
-            })
-          }
-        }, 6000) // 6000 milliseconds = 6 seconds
+        if (mobileImage) {
+          setProp((props) => {
+            props.uploadedImageMobileUrl = mobileImage
+          })
+        }
       }
 
       setIsLoading(false)
     }
   }
+
 
   console.log("src is: ", src)
 
@@ -331,44 +360,19 @@ export const ImageSettings = () => {
   const getCropData = async () => {
     setIsLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
-      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL())
-      setProp(
-        (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
-        1000
-      )
-      // setProp((props) => (props.width = "100%"), 1000)
-      setProp((props) => (props.height = "auto"), 1000)
-      setShowDialog(false)
-      setActiveAspectRatioBtn("source")
-      setProp(
-        (props) =>
-          (props.src = cropperRef.current?.cropper
-            .getCroppedCanvas()
-            .toDataURL()),
-        1000
-      )
       const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas()
       const croppedDataUrl = croppedCanvas.toDataURL()
 
-      // Set crop data immediately
       setCropData(croppedDataUrl)
-
-      // Set props with a timeout of 6 seconds
-      setTimeout(() => {
-        setProp((props) => (props.src = croppedDataUrl))
-        setShowDialog(false)
-        setActiveAspectRatioBtn("source")
-      }, 6000)
+      setProp((props) => (props.src = croppedDataUrl))
+      setShowDialog(false)
+      setActiveAspectRatioBtn("source")
 
       const imageData = croppedCanvas.toDataURL("image/png")
       const blob = base64ToBlob(imageData, "image/png")
       const file = new File([blob], "cropped-image.png", { type: "image/png" })
       const aspectRatio = croppedCanvas.width / croppedCanvas.height
       const uploadedImage = await uploadToS3(file, aspectRatio)
-      console.log("uploadedImage", uploadedImage)
 
       if (uploadedImage) {
         const desktopImage =
@@ -376,26 +380,21 @@ export const ImageSettings = () => {
         const mobileImage =
           uploadedImage.data.data.images[uploadedImage.mobileSize]
 
-        // Set props with a timeout of 6 seconds
-        setTimeout(() => {
-          if (desktopImage) {
-            setProp((props) => {
-              props.src = desktopImage
-              props.uploadedImageUrl = desktopImage
-            })
-          }
+        if (desktopImage) {
+          await loadImageAndSetSrc(desktopImage)
+        }
 
-          if (mobileImage) {
-            setProp((props) => {
-              props.uploadedImageMobileUrl = mobileImage
-            })
-          }
-        }, 6000)
+        if (mobileImage) {
+          setProp((props) => {
+            props.uploadedImageMobileUrl = mobileImage
+          })
+        }
       }
 
       setIsLoading(false)
     }
   }
+
 
   const aspectRatioSource = () => {
     cropperRef.current?.cropper.setAspectRatio(
@@ -424,10 +423,6 @@ export const ImageSettings = () => {
     cropperRef.current?.cropper.setAspectRatio(0.5625)
     setActiveAspectRatioBtn("landscapeo")
   }
-
-  const themeBackgroundColor = useAppSelector(
-    (state) => state?.theme?.general?.backgroundColor
-  )
 
   return (
     <>
@@ -469,7 +464,7 @@ export const ImageSettings = () => {
                 {t("Upload")}
               </span>
             </div>
-            <img src={src} alt={alt} className="w-30" />
+            <img src={src} alt={alt} className="w-30"  />
           </div>
         </CardContent>
       </Card>
@@ -588,7 +583,7 @@ export const ImageSettings = () => {
               <Slider
                 defaultValue={[radiusCorner]}
                 value={[radiusCorner]}
-                max={200}
+                max={15}
                 min={0}
                 step={1}
                 onValueChange={(e) =>
@@ -601,35 +596,33 @@ export const ImageSettings = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="size">{t("Size")}</Label>
                 <span className="text-muted-foreground text-xs">
-                  {imageSize}
+                  {imageSize === "full" ? imageSize : parseInt(imageSize, 10)}
                 </span>
               </div>
               <Slider
-                defaultValue={[imageSize]}
-                value={[imageSize]}
-                max={100}
-                min={0}
+                defaultValue={[imageSize === "full" ? 800 : parseInt(imageSize, 10)]}
+                value={[imageSize === "full" ? 800 : parseInt(imageSize, 10)]}
+                max={800}
+                min={250}
                 step={1}
                 onValueChange={(e) => {
-                  const newWidthPercentage = e[0]
-                  const maxWidthPx = parseInt(maxWidth, 10)
-                  const newWidthPx = (newWidthPercentage / 100) * maxWidthPx
-                  const aspectRatio = parseInt(height, 10) / parseInt(width, 10)
-                  const newHeightPx = newWidthPx * aspectRatio
+                  const newWidthPx = e[0]
+                  let picSize = IconButtonSizes.full
 
-                  // Logging to see the calculated values
-                  console.log("New width percentage:", newWidthPercentage)
-                  console.log("Max width in px:", maxWidthPx)
-                  console.log("New width in px:", newWidthPx)
-                  console.log("Aspect ratio:", aspectRatio)
-                  console.log("New height in px:", newHeightPx)
+                  if (newWidthPx >= 250 && newWidthPx < 376) {
+                    picSize = IconButtonSizes.small
+                  } else if (newWidthPx >= 376 && newWidthPx < 800) {
+                    picSize = IconButtonSizes.medium
+                  } else if (newWidthPx >= 800) {
+                    picSize = IconButtonSizes.large
+                  }
 
                   handlePropChangeDebounced("imageSize", e)
 
                   setProp((props) => {
+                    props.picSize = picSize
                     props.width = `${newWidthPx}px`
-                    // props.height = `${newHeightPx}px`;
-                    props.imageSize = `${newWidthPercentage}`
+                    props.imageSize = `${newWidthPx}px`
                   }, 1000)
                 }}
               />
@@ -667,14 +660,22 @@ export const ImageSettings = () => {
                 value={picSize}
                 defaultValue={picSize}
                 onValueChange={(value) => {
-                  setProp((props) => (props.picSize = value), 1000)
                   const sizeMap = {
+                    small: "250px",
+                    medium: "376px",
+                    large: "800px",
+                    full: "full",
+                  }
+                  setProp((props) => (props.imageSize = sizeMap[value]), 1000)
+                  setProp((props) => (props.width = sizeMap[value] === "full" ? "100%" : sizeMap[value]), 1000)
+                  setProp((props) => (props.picSize = value), 1000)
+                  const maxSizeMap = {
                     small: "400px",
                     medium: "800px",
                     large: "850px",
                     full: "870px",
                   }
-                  setProp((props) => (props.maxWidth = sizeMap[value]), 1000)
+                  setProp((props) => (props.maxWidth = maxSizeMap[value]), 1000)
                 }}
               >
                 <TabsList className="grid w-full grid-cols-4 bg-[#EEEEEE]">
@@ -892,7 +893,7 @@ export const ImageSettings = () => {
 
 export const DefaultPropsImg = {
   alt: "Image",
-  radiusCorner: 0,
+  radiusCorner: 15,
   size: "medium",
   // picSize: IconButtonSizes.medium,
   marginTop: "20px",
@@ -909,7 +910,7 @@ export const DefaultPropsImg = {
   width: "90%",
   height: "auto",
   enableLink: false,
-  imageSize: 100,
+  imageSize: "376px",
   uploadedImageUrl: "",
   uploadedImageMobileUrl: "",
   src: DefaultImagePlaceholder,

@@ -1,36 +1,28 @@
-"use client"
+"use client";
 
-import { memo, useEffect, useState } from "react"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { revalidateFlow } from "@/actions/flow/revalidateFlow"
-import { Eye, Plus } from "lucide-react"
-import { signOut } from "next-auth/react"
-import { useTranslations } from "next-intl"
+import { memo, useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { revalidateFlow } from "@/actions/flow/revalidateFlow";
+import { Eye, Plus } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
-import { env } from "@/env.mjs"
-import {
-  setResetTotalFilled,
-  setSelectedScreen,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId"
-import {
-  setIsUpdating,
-} from "@/lib/state/flows-state/features/placeholderScreensSlice"
-import { Icons } from "@/components/icons"
 
-import { User } from "../../page"
+
+import { env } from "@/env.mjs";
+import { setIsUpdating, setResetTotalFilled, setSelectedScreen } from "@/lib/state/flows-state/features/placeholderScreensSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/state/flows-state/hooks";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { BreadCrumbs } from "@/components/breadcrumbs-with-flowId";
+import { Icons } from "@/components/icons";
+
+
+
+import { User } from "../../page";
+
 
 const clearFlowNamesFromLocalStorage = () => {
   for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -230,7 +222,6 @@ const Header = ({ flowId }) => {
         className="account-settings flex flex-row items-center justify-between gap-2 lg:h-full"
         onClick={() => {
           dispatch(setResetTotalFilled(true))
-          dispatch(setSelectedScreen(selectedScreen))
           revalidateFlow({ tag: "previewFlow" })
         }}
       >

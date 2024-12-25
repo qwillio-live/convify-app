@@ -89,11 +89,12 @@ const useLogoThemePresets = () => {
     bottom: 0,
     left: 0,
     right: 0,
-    imageSize: 0,
-    minWidth: '120px',
+    imageSize: 100,
+    minWidth: '100px',
     w: "",
     h: "",
     borderRad: 0,
+    maxWidth: '300px',
   };
 
   const outLinePreset: IconButtonProps = {
@@ -142,7 +143,7 @@ const useLogoThemePresets = () => {
     disabled: false,
     enableLink: false,
     width: '85%',
-    minWidth: '120px',
+    minWidth: '100px',
     height: "auto",
     size: IconButtonSizes.medium,
     text: t("Continue"),
@@ -177,9 +178,10 @@ const useLogoThemePresets = () => {
     bottom: 0,
     left: 0,
     right: 0,
-    imageSize: 0,
+    imageSize: 100,
     w: "120px",
-    h: "auto"
+    h: "auto",
+    maxWidth: '300px',
   };
 
   return { filledPreset, outLinePreset };
